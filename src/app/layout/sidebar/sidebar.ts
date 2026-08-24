@@ -43,8 +43,17 @@ export class Sidebar {
   selectedModuleId: number | null = null; //Track selected submenu
   constructor(private router: Router, private loginService: LoginService, @Inject(PLATFORM_ID) private platformId: Object) { }
 
+  username: string = '';
+
+  
+
   ngOnInit(): void {
+
+    
     if (isPlatformBrowser(this.platformId)) {
+       this.username =
+      sessionStorage.getItem('username') || '';
+      
       const storedModules = sessionStorage.getItem('modules');
       if (storedModules) {
         this.modules = JSON.parse(storedModules);
@@ -232,6 +241,38 @@ export class Sidebar {
   if (item.route) {
     this.router.navigate([item.route]);
   }
+}
+
+
+getShortName(name: string): string {
+  if (!name) {
+    return '';
+  }
+
+  const parts = name.trim().split(/\s+/);
+
+  if (parts.length === 1) {
+    return parts[0];
+  }
+
+  return `${parts[0]} ${parts[parts.length - 1].charAt(0)}`;
+}
+
+getInitials(name: string): string {
+  if (!name) {
+    return '';
+  }
+
+  const parts = name.trim().split(/\s+/);
+
+  if (parts.length === 1) {
+    return parts[0].substring(0, 2).toUpperCase();
+  }
+
+  return (
+    parts[0].charAt(0) +
+    parts[parts.length - 1].charAt(0)
+  ).toUpperCase();
 }
 
 }

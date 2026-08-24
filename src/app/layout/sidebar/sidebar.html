@@ -35,17 +35,19 @@
   <div class="sidebar-user">
 
     <div class="user-avatar">
-      PS
-    </div>
+    {{ getInitials(username) }}
+  </div>
 
     <div class="user-info">
-      <strong>Priya S.</strong>
+      <small>
+      {{ getShortName(username) }}
+    </small>
       <span>Manager</span>
     </div>
 
     <button type="button" class="more-button" [matMenuTriggerFor]="userMenu">
 
-      <mat-icon>more_vert</mat-icon>
+      <mat-icon>more_vert</mat-icon> 
 
     </button>
 
