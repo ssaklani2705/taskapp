@@ -10,11 +10,7 @@
         <div class="header-title-section">
           <h2>User Management</h2>
 
-          <button
-            type="button"
-            class="collapse-btn"
-            (click)="togglePanel()"
-            [attr.aria-expanded]="isPanelVisible">
+          <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible">
 
             <span>
               {{ isPanelVisible ? '▲' : '▼' }}
@@ -27,9 +23,7 @@
 
 
       <!-- ================= SEARCH PANEL ================= -->
-      <div
-        class="search-panel"
-        *ngIf="isPanelVisible">
+      <div class="search-panel" *ngIf="isPanelVisible">
 
         <div class="search-row">
 
@@ -38,15 +32,12 @@
 
             @if (addPer === 'Y') {
 
-              <button
-                type="button"
-                class="btn-add-user"
-                (click)="addUser()">
+            <button type="button" class="btn-add-user" (click)="addUser()">
 
-                Add New
-                <span class="plus-icon">+</span>
+              Add New
+              <span class="plus-icon">+</span>
 
-              </button>
+            </button>
 
             }
 
@@ -58,19 +49,10 @@
 
             <div class="search-box">
 
-              <input
-                type="text"
-                [(ngModel)]="searchQuery"
-                placeholder="Search by User name / Email id / Mobile No"
-                (keyup.enter)="onSearch()"
-                class="search-input"
-              />
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by User name / Email id / Mobile No"
+                (keyup.enter)="onSearch()" class="search-input" />
 
-              <button
-                type="button"
-                class="search-btn"
-                (click)="onSearch()"
-                title="Search">
+              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
 
                 <i class="fa fa-search"></i>
 
@@ -84,10 +66,7 @@
           <!-- STATUS -->
           <div class="status-wrapper">
 
-            <select
-              class="status-select"
-              [(ngModel)]="selectedStatus"
-              (change)="onStatusChange()">
+            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
 
               <option value="">
                 --All Status--
@@ -113,10 +92,7 @@
           <!-- GO -->
           <div class="go-wrapper">
 
-            <button
-              type="button"
-              class="btn-go"
-              (click)="onSearch()">
+            <button type="button" class="btn-go" (click)="onSearch()">
 
               Go
 
@@ -144,10 +120,7 @@
         <div class="pagination">
 
           <!-- FIRST -->
-          <button
-            type="button"
-            class="pagination-btn first-btn"
-            (click)="goToFirstPage()"
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()"
             [disabled]="currentPage === 1">
 
             « First
@@ -156,11 +129,7 @@
 
 
           <!-- PREVIOUS -->
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPreviousPage()"
-            [disabled]="currentPage === 1">
+          <button type="button" class="pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">
 
             ‹ Prev
 
@@ -168,12 +137,8 @@
 
 
           <!-- PAGE NUMBERS -->
-          <button
-            type="button"
-            class="pagination-btn page-number"
-            *ngFor="let pageNumber of pages()"
-            (click)="goToPage(pageNumber)"
-            [class.active-pagination]="pageNumber === currentPage">
+          <button type="button" class="pagination-btn page-number" *ngFor="let pageNumber of pages()"
+            (click)="goToPage(pageNumber)" [class.active-pagination]="pageNumber === currentPage">
 
             {{ pageNumber }}
 
@@ -181,11 +146,7 @@
 
 
           <!-- NEXT -->
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToNextPage()"
-            [disabled]="currentPage === totalPages">
+          <button type="button" class="pagination-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">
 
             Next ›
 
@@ -193,10 +154,7 @@
 
 
           <!-- LAST -->
-          <button
-            type="button"
-            class="pagination-btn last-btn"
-            (click)="goToLastPage()"
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()"
             [disabled]="currentPage === totalPages">
 
             Last »
@@ -226,9 +184,7 @@
 
 
                 <!-- DYNAMIC COLUMNS -->
-                <th
-                  *ngFor="let col of columns"
-                  [class.sortable-column]="col.sortable"
+                <th *ngFor="let col of columns" [class.sortable-column]="col.sortable"
                   (click)="col.sortable && sortData(col.key)">
 
                   <div class="column-header">
@@ -237,12 +193,9 @@
                       {{ col.label }}
                     </span>
 
-                    <span
-                      *ngIf="col.sortable"
-                      class="sort-icons">
+                    <span *ngIf="col.sortable" class="sort-icons">
 
-                      <span
-                        [class.sort-active]="
+                      <span [class.sort-active]="
                           sortColumn === col.key &&
                           sortDirection === 'asc'
                         ">
@@ -251,8 +204,7 @@
 
                       </span>
 
-                      <span
-                        [class.sort-active]="
+                      <span [class.sort-active]="
                           sortColumn === col.key &&
                           sortDirection === 'desc'
                         ">
@@ -283,9 +235,7 @@
               <!-- LOADING -->
               <tr *ngIf="isLoading">
 
-                <td
-                  [attr.colspan]="columns.length + 2"
-                  class="loading-cell">
+                <td [attr.colspan]="columns.length + 2" class="loading-cell">
 
                   <div class="loading-spinner"></div>
 
@@ -297,12 +247,9 @@
 
 
               <!-- NO RECORDS -->
-              <tr
-                *ngIf="!isLoading && users.length === 0">
+              <tr *ngIf="!isLoading && users.length === 0">
 
-                <td
-                  [attr.colspan]="columns.length + 2"
-                  class="no-records">
+                <td [attr.colspan]="columns.length + 2" class="no-records">
 
                   No users found.
 
@@ -312,19 +259,17 @@
 
 
               <!-- USER RECORDS -->
-              <tr
-                *ngFor="
+              <tr *ngFor="
                   let user of users;
                   let i = index
-                "
-                class="user-row">
+                " class="user-row">
 
 
                 <!-- SERIAL NUMBER -->
                 <td class="serial-number">
 
                   {{
-                    ((currentPage - 1) * size) + i + 1
+                  ((currentPage - 1) * size) + i + 1
                   }}
 
                 </td>
@@ -365,9 +310,7 @@
                 <!-- STATUS -->
                 <td>
 
-                  <span
-                    class="status-badge"
-                    [ngClass]="
+                  <span class="status-badge" [ngClass]="
                       getStatusClass(user.status)
                     ">
 
@@ -385,11 +328,7 @@
 
 
                     <!-- VIEW -->
-                    <button
-                      type="button"
-                      class="action-btn view-btn"
-                      title="View"
-                      (click)="viewUser(user.userId)">
+                    <button type="button" class="action-btn view-btn" title="View" (click)="viewUser(user.userId)">
 
                       <i class="fa fa-search"></i>
 
@@ -397,23 +336,18 @@
 
 
                     <!-- EDIT -->
-                    <ng-container
-                      *ngIf="
+                    <ng-container *ngIf="
                         user.status === 1 ||
                         user.status === 2
                       ">
 
                       @if (editPer === 'Y') {
 
-                        <button
-                          type="button"
-                          class="action-btn edit-btn"
-                          title="Edit"
-                          (click)="editUser(user.userId)">
+                      <button type="button" class="action-btn edit-btn" title="Edit" (click)="editUser(user.userId)">
 
-                          <i class="fa fa-pencil"></i>
+                        <i class="fa fa-pencil"></i>
 
-                        </button>
+                      </button>
 
                       }
 
@@ -421,15 +355,12 @@
                       <!-- DELETE -->
                       @if (deletePer === 'Y') {
 
-                        <button
-                          type="button"
-                          class="action-btn delete-btn"
-                          title="Delete"
-                          (click)="onDeleteUser(user.userId)">
+                      <button type="button" class="action-btn delete-btn" title="Delete"
+                        (click)="onDeleteUser(user.userId)">
 
-                          <i class="fa fa-close"></i>
+                        <i class="fa fa-close"></i>
 
-                        </button>
+                      </button>
 
                       }
 
@@ -532,10 +463,7 @@
             Records per page:
           </span>
 
-          <select
-            [(ngModel)]="size"
-            (change)="onChangeRecordsPerPage()"
-            class="records-select">
+          <select [(ngModel)]="size" (change)="onChangeRecordsPerPage()" class="records-select">
 
             <option [ngValue]="5">
               5

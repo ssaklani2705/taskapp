@@ -98,14 +98,13 @@ export class MyTeam implements OnInit {
   // =========================================================
   // PERMISSIONS
   // =========================================================
-
-  addPer = 'Y';
-
-  editPer = 'Y';
-
-  deletePer = 'Y';
-
-
+  addPer: string = 'N';
+  editPer: string = 'N';
+  deletePer: string = 'N';
+  viewPer: string = 'N';
+  approvePer: string = 'N';
+  adminApprovePer: string = 'N';
+  moduleName: string = '';
   // =========================================================
   // LOADING
   // =========================================================
@@ -175,6 +174,47 @@ export class MyTeam implements OnInit {
 
     this.getUserDetails();
 
+      if (
+          isPlatformBrowser(
+            this.platformId
+          )
+        ) {
+
+          const storedModules =
+            sessionStorage.getItem(
+              'selectedModuleDetail'
+            );
+          // alert(storedModules);
+          if (storedModules) {
+
+            const parsed =
+              JSON.parse(
+                storedModules
+              );
+
+            this.moduleName =
+              parsed.name ?? '';
+
+            this.addPer =
+              parsed.addPer ?? 'N';
+
+            this.editPer =
+              parsed.editPer ?? 'N';
+
+            this.deletePer =
+              parsed.deletePer ?? 'N';
+
+            this.viewPer =
+              parsed.viewPer ?? 'N';
+
+            this.approvePer =
+              parsed.approvePer ?? 'N';
+
+            this.adminApprovePer =
+              parsed.adminApprovePer ?? 'N';
+          }
+        }
+
   }
 
 
@@ -182,142 +222,142 @@ export class MyTeam implements OnInit {
   // GET USERS
   // =========================================================
 
-getUserDetails(): void {
+  getUserDetails(): void {
 
-  this.isLoading = true;
+    this.isLoading = true;
 
-  console.log('GET USERS PARAMS:', {
-    page: this.page,
-    size: this.size,
-    statusIndex: this.statusIndex,
-    search: this.search
-  });
-
-  this.dataprovider
-    .getUserManagementDetails(
-      this.page,
-      this.size,
-      this.statusIndex,
-      this.search
-    )
-    .subscribe({
-
-      next: (response: any) => {
-
-        console.log('API RESPONSE:', response);
-
-        this.apiResponseUserDetails = response;
-
-        // -----------------------------------------
-        // USERS
-        // -----------------------------------------
-
-        this.users = response?.data ?? [];
-
-        console.log('USERS:', this.users);
-        console.log('USERS LENGTH:', this.users.length);
-
-
-        // -----------------------------------------
-        // TOTAL RECORDS
-        // Backend returns totalElements
-        // -----------------------------------------
-
-        this.totalRecords =
-          Number(response?.totalElements ?? 0);
-
-
-        // -----------------------------------------
-        // TOTAL PAGES
-        // -----------------------------------------
-
-        this.totalPages =
-          Math.ceil(
-            this.totalRecords / this.size
-          );
-
-        if (this.totalPages < 1) {
-          this.totalPages = 1;
-        }
-
-
-        // -----------------------------------------
-        // SAFETY CHECK
-        // -----------------------------------------
-
-        if (
-          this.currentPage >
-          this.totalPages
-        ) {
-
-          this.currentPage =
-            this.totalPages;
-
-          this.page =
-            this.currentPage - 1;
-        }
-
-
-        // -----------------------------------------
-        // PROCESS LIST
-        // -----------------------------------------
-
-        if (
-          isPlatformBrowser(this.platformId)
-        ) {
-
-          sessionStorage.setItem(
-            'processList',
-            JSON.stringify(
-              response?.processList ?? []
-            )
-          );
-
-        }
-
-
-        // -----------------------------------------
-        // STOP LOADING
-        // -----------------------------------------
-
-        this.isLoading = false;
-
-        console.log(
-          'LOADING:',
-          this.isLoading
-        );
-
-        console.log(
-          'TOTAL RECORDS:',
-          this.totalRecords
-        );
-
-        console.log(
-          'TOTAL PAGES:',
-          this.totalPages
-        );
-
-      },
-
-      error: (error: any) => {
-
-        console.error(
-          'Error fetching user details:',
-          error
-        );
-
-        this.users = [];
-
-        this.totalRecords = 0;
-
-        this.totalPages = 1;
-
-        this.isLoading = false;
-
-      }
-
+    console.log('GET USERS PARAMS:', {
+      page: this.page,
+      size: this.size,
+      statusIndex: this.statusIndex,
+      search: this.search
     });
-}
+
+    this.dataprovider
+      .getUserManagementDetails(
+        this.page,
+        this.size,
+        this.statusIndex,
+        this.search
+      )
+      .subscribe({
+
+        next: (response: any) => {
+
+          console.log('API RESPONSE:', response);
+
+          this.apiResponseUserDetails = response;
+
+          // -----------------------------------------
+          // USERS
+          // -----------------------------------------
+
+          this.users = response?.data ?? [];
+
+          console.log('USERS:', this.users);
+          console.log('USERS LENGTH:', this.users.length);
+
+
+          // -----------------------------------------
+          // TOTAL RECORDS
+          // Backend returns totalElements
+          // -----------------------------------------
+
+          this.totalRecords =
+            Number(response?.totalElements ?? 0);
+
+
+          // -----------------------------------------
+          // TOTAL PAGES
+          // -----------------------------------------
+
+          this.totalPages =
+            Math.ceil(
+              this.totalRecords / this.size
+            );
+
+          if (this.totalPages < 1) {
+            this.totalPages = 1;
+          }
+
+
+          // -----------------------------------------
+          // SAFETY CHECK
+          // -----------------------------------------
+
+          if (
+            this.currentPage >
+            this.totalPages
+          ) {
+
+            this.currentPage =
+              this.totalPages;
+
+            this.page =
+              this.currentPage - 1;
+          }
+
+
+          // -----------------------------------------
+          // PROCESS LIST
+          // -----------------------------------------
+
+          if (
+            isPlatformBrowser(this.platformId)
+          ) {
+
+            sessionStorage.setItem(
+              'processList',
+              JSON.stringify(
+                response?.processList ?? []
+              )
+            );
+
+          }
+
+
+          // -----------------------------------------
+          // STOP LOADING
+          // -----------------------------------------
+
+          this.isLoading = false;
+
+          console.log(
+            'LOADING:',
+            this.isLoading
+          );
+
+          console.log(
+            'TOTAL RECORDS:',
+            this.totalRecords
+          );
+
+          console.log(
+            'TOTAL PAGES:',
+            this.totalPages
+          );
+
+        },
+
+        error: (error: any) => {
+
+          console.error(
+            'Error fetching user details:',
+            error
+          );
+
+          this.users = [];
+
+          this.totalRecords = 0;
+
+          this.totalPages = 1;
+
+          this.isLoading = false;
+
+        }
+
+      });
+  }
 
 
   // =========================================================
@@ -982,7 +1022,7 @@ getUserDetails(): void {
   // ADD USER
   // =========================================================
 
-   addUser() {
+  addUser() {
 
 
     const filterState = {
@@ -1018,7 +1058,7 @@ getUserDetails(): void {
   //   // ]);
 
   // }
-   viewUser(userId: any) {
+  viewUser(userId: any) {
     // console.log('View', userId);
 
     const filterState = {
@@ -1030,7 +1070,7 @@ getUserDetails(): void {
 
     // Save in sessionStorage (for refresh support)
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
-// alert("in");
+    // alert("in");
     // Pass via router state (no URL params)
     this.router.navigate(['/view-team', userId], {
       state: filterState

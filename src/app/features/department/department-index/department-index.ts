@@ -18,7 +18,7 @@ interface Department {
 }
 @Component({
   selector: 'app-department-index',
-   imports: [
+  imports: [
     CommonModule,
     FormsModule,
     RouterModule,
@@ -29,7 +29,7 @@ interface Department {
 })
 export class DepartmentIndexComponent {
 
-  
+
   // =========================================================
   // DATA
   // =========================================================
@@ -116,22 +116,22 @@ export class DepartmentIndexComponent {
     label: string;
     sortable: boolean;
   }[] = [
-    {
-      key: 'name',
-      label: 'Name',
-      sortable: true,
-    },
-    {
-      key: 'sequence',
-      label: 'Sequence',
-      sortable: true,
-    },
-    {
-      key: 'status',
-      label: 'Status',
-      sortable: true,
-    },
-  ];
+      {
+        key: 'name',
+        label: 'Name',
+        sortable: true,
+      },
+      {
+        key: 'sequence',
+        label: 'Sequence',
+        sortable: true,
+      },
+      {
+        key: 'status',
+        label: 'Status',
+        sortable: true,
+      },
+    ];
 
   // =========================================================
   // CONSTRUCTOR
@@ -148,7 +148,7 @@ export class DepartmentIndexComponent {
     private route: ActivatedRoute,
 
     private sessionService: SessionStorageService,
-  ) {}
+  ) { }
 
   // =========================================================
   // INIT
@@ -192,7 +192,7 @@ export class DepartmentIndexComponent {
             sessionStorage.getItem(
               'selectedModuleDetail'
             );
-// alert(storedModules);
+          // alert(storedModules);
           if (storedModules) {
 
             const parsed =
@@ -275,8 +275,8 @@ export class DepartmentIndexComponent {
           this.selectedStatus =
             this.statusIndex
               ? String(
-                  this.statusIndex
-                )
+                this.statusIndex
+              )
               : '';
         }
 
@@ -750,26 +750,23 @@ export class DepartmentIndexComponent {
       totalRecords === 0
         ? 0
         : (
-            (this.currentPage - 1) *
-              this.recordsPerPage
-          ) + 1;
+          (this.currentPage - 1) *
+          this.recordsPerPage
+        ) + 1;
 
     const endRecord =
       Math.min(
         this.currentPage *
-          this.recordsPerPage,
+        this.recordsPerPage,
         totalRecords
       );
 
-    return `Page ${this.currentPage} of ${
-      this.totalPages
-    }, (${startRecord} - ${endRecord} of ${
-      totalRecords
-    } record${
-      totalRecords > 1
+    return `Page ${this.currentPage} of ${this.totalPages
+      }, (${startRecord} - ${endRecord} of ${totalRecords
+      } record${totalRecords > 1
         ? 's'
         : ''
-    })`;
+      })`;
   }
 
   // =========================================================
@@ -786,7 +783,7 @@ export class DepartmentIndexComponent {
       1,
       Math.ceil(
         total /
-          this.recordsPerPage
+        this.recordsPerPage
       )
     );
   }
