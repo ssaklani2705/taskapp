@@ -1,0 +1,460 @@
+<div class="dashboard">
+
+  <!-- Welcome row -->
+  <div class="welcome-row">
+
+    <div>
+      <h2>
+        Good morning, Priya
+      </h2>
+
+      <p>
+        Here's what's happening with your team today.
+      </p>
+    </div>
+
+    <div class="date-info">
+
+      <mat-icon>
+        calendar_today
+      </mat-icon>
+
+      <span>
+        Thursday, 20 Aug 2026
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- KPI Cards -->
+  <section class="kpi-grid">
+
+    <mat-card
+      class="kpi-card"
+      *ngFor="let kpi of kpis"
+      [class]="kpi.className">
+
+      <div class="kpi-top">
+
+        <span class="kpi-title">
+          {{ kpi.title }}
+        </span>
+
+        <mat-icon>
+          {{ kpi.icon }}
+        </mat-icon>
+
+      </div>
+
+      <div class="kpi-value">
+        {{ kpi.value }}
+        <span
+          *ngIf="kpi.title === 'On-time %'"
+          class="percentage">
+          %
+        </span>
+      </div>
+
+      <div class="kpi-change">
+        {{ kpi.change }}
+      </div>
+
+    </mat-card>
+
+  </section>
+
+
+  <!-- Main dashboard grid -->
+  <section class="dashboard-grid">
+
+
+    <!-- Team Tasks -->
+    <mat-card class="panel task-panel">
+
+      <div class="panel-header">
+
+        <div>
+          <h3>
+            Team tasks
+          </h3>
+
+          <p>
+            Current workload and status
+          </p>
+        </div>
+
+        <button
+          mat-button
+          class="view-all-button">
+
+          View all
+
+          <mat-icon>
+            arrow_forward
+          </mat-icon>
+
+        </button>
+
+      </div>
+
+      <mat-divider></mat-divider>
+
+
+      <div class="task-table-wrapper">
+
+        <table class="task-table">
+
+          <thead>
+            <tr>
+
+              <th>
+                TASK
+              </th>
+
+              <th>
+                OWNER
+              </th>
+
+              <th>
+                STATUS
+              </th>
+
+              <th>
+                ACTION
+              </th>
+
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr *ngFor="let task of tasks">
+
+              <td>
+                <div class="task-name">
+
+                  <span class="task-icon">
+                    <mat-icon>description</mat-icon>
+                  </span>
+
+                  <span>
+                    {{ task.task }}
+                  </span>
+
+                </div>
+              </td>
+
+              <td>
+                <div class="owner">
+
+                  <span class="owner-avatar">
+                    {{ task.owner.charAt(0) }}
+                  </span>
+
+                  {{ task.owner }}
+
+                </div>
+              </td>
+
+              <td>
+                <span
+                  class="status-badge"
+                  [class]="task.statusClass">
+
+                  <span class="status-dot"></span>
+
+                  {{ task.status }}
+
+                </span>
+              </td>
+
+              <td>
+
+                <button
+                  mat-icon-button
+                  class="task-action">
+
+                  <mat-icon>
+                    more_horiz
+                  </mat-icon>
+
+                </button>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </mat-card>
+
+
+    <!-- Right column -->
+    <div class="right-column">
+
+
+      <!-- Approval -->
+      <mat-card class="panel approval-panel">
+
+        <div class="panel-header">
+
+          <div>
+            <h3>
+              Approvals queue
+            </h3>
+
+            <p>
+              Requires your attention
+            </p>
+          </div>
+
+          <span class="count-badge">
+            {{ approvals.length }}
+          </span>
+
+        </div>
+
+        <div class="approval-list">
+
+          <div
+            class="approval-item"
+            *ngFor="let approval of approvals">
+
+            <div class="approval-content">
+
+              <div class="approval-icon">
+                <mat-icon>
+                  description
+                </mat-icon>
+              </div>
+
+              <div>
+
+                <strong>
+                  {{ approval.title }}
+                </strong>
+
+                <span>
+                  Submitted by {{ approval.owner }}
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="approval-actions">
+
+              <button
+                mat-flat-button
+                class="approve-button"
+                (click)="approve(approval)">
+
+                <mat-icon>
+                  check
+                </mat-icon>
+
+                Approve
+
+              </button>
+
+              <button
+                mat-stroked-button
+                class="back-button"
+                (click)="goBack()">
+
+                Back
+
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </mat-card>
+
+
+      <!-- SLA Alerts -->
+      <mat-card class="panel sla-panel">
+
+        <div class="panel-header">
+
+          <div>
+
+            <h3>
+              SLA alerts
+            </h3>
+
+            <p>
+              Items requiring attention
+            </p>
+
+          </div>
+
+          <mat-icon class="notification-icon">
+            notifications_active
+          </mat-icon>
+
+        </div>
+
+
+        <div class="alert-list">
+
+          <div class="sla-alert danger">
+
+            <div class="alert-icon">
+              <mat-icon>
+                priority_high
+              </mat-icon>
+            </div>
+
+            <div class="alert-content">
+
+              <strong>
+                Reconcile A/C — ACME
+              </strong>
+
+              <span>
+                Breached · escalated
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="sla-alert warning">
+
+            <div class="alert-icon">
+              <mat-icon>
+                schedule
+              </mat-icon>
+            </div>
+
+            <div class="alert-content">
+
+              <strong>
+                Tax comp — Hooli
+              </strong>
+
+              <span>
+                Due in 2 hours
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="sla-alert info">
+
+            <div class="alert-icon">
+              <mat-icon>
+                access_time
+              </mat-icon>
+            </div>
+
+            <div class="alert-content">
+
+              <strong>
+                Filing review — ACME
+              </strong>
+
+              <span>
+                Due tomorrow
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </mat-card>
+
+    </div>
+
+  </section>
+
+
+  <!-- Bottom summary -->
+  <section class="summary-grid">
+
+    <mat-card class="summary-card">
+
+      <div class="summary-icon blue">
+        <mat-icon>groups</mat-icon>
+      </div>
+
+      <div>
+        <span>
+          Team productivity
+        </span>
+
+        <strong>
+          87%
+        </strong>
+      </div>
+
+      <div class="summary-progress">
+        <div class="progress-value"></div>
+      </div>
+
+    </mat-card>
+
+
+    <mat-card class="summary-card">
+
+      <div class="summary-icon green">
+        <mat-icon>task_alt</mat-icon>
+      </div>
+
+      <div>
+        <span>
+          Tasks completed
+        </span>
+
+        <strong>
+          64
+        </strong>
+      </div>
+
+      <div class="summary-extra">
+        +12 this month
+      </div>
+
+    </mat-card>
+
+
+    <mat-card class="summary-card">
+
+      <div class="summary-icon orange">
+        <mat-icon>schedule</mat-icon>
+      </div>
+
+      <div>
+        <span>
+          Avg. response time
+        </span>
+
+        <strong>
+          2h 14m
+        </strong>
+      </div>
+
+      <div class="summary-extra">
+        -18% vs last month
+      </div>
+
+    </mat-card>
+
+  </section>
+
+</div>

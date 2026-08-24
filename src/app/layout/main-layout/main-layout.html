@@ -1,0 +1,49 @@
+<div class="layout">
+
+  <!-- FIXED HEADER -->
+  <header class="layout-header">
+
+    <app-header
+      (menuToggle)="toggleSidebar()">
+    </app-header>
+
+  </header>
+
+
+  <!-- BODY -->
+  <div class="layout-body">
+
+    <!-- SIDEBAR -->
+    <aside
+      class="layout-sidebar"
+      [class.sidebar-closed]="!sidebarOpened">
+
+      <app-sidebar
+        [opened]="sidebarOpened">
+      </app-sidebar>
+
+    </aside>
+
+
+    <!-- SCROLLABLE CONTENT -->
+    <main class="layout-content">
+
+      <div class="content-wrapper">
+
+        <router-outlet></router-outlet>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+  <!-- FIXED FOOTER -->
+  <footer class="layout-footer">
+
+    <app-footer></app-footer>
+
+  </footer>
+
+</div>
