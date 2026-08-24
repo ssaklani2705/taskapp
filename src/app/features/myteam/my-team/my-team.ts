@@ -1,26 +1,10 @@
-import {
-  Component,
-  Inject,
-  PLATFORM_ID,
-  OnInit
-} from '@angular/core';
-
-import {
-  isPlatformBrowser,
-  CommonModule
-} from '@angular/common';
-
-import {
-  FormsModule
-} from '@angular/forms';
-
-import {
-  Router
-} from '@angular/router';
+import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { DataProviderService } from '../../../service/data-provider.service';
 
 interface User {
-
   userId: number;
 
   firstName: string;
@@ -30,18 +14,15 @@ interface User {
   mobile: string;
 
   status: number;
-
 }
 
 @Component({
   selector: 'app-my-team',
-  imports: [CommonModule,
-    FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './my-team.html',
   styleUrl: './my-team.scss',
 })
 export class MyTeam implements OnInit {
-
   // =========================================================
   // USER DATA
   // =========================================================
@@ -49,7 +30,6 @@ export class MyTeam implements OnInit {
   users: User[] = [];
 
   apiResponseUserDetails: any;
-
 
   // =========================================================
   // SEARCH
@@ -62,7 +42,6 @@ export class MyTeam implements OnInit {
   selectedStatus = '';
 
   statusIndex = 0;
-
 
   // =========================================================
   // PAGINATION
@@ -78,7 +57,6 @@ export class MyTeam implements OnInit {
 
   totalPages = 1;
 
-
   // =========================================================
   // SORTING
   // =========================================================
@@ -87,13 +65,11 @@ export class MyTeam implements OnInit {
 
   sortDirection: 'asc' | 'desc' = 'asc';
 
-
   // =========================================================
   // PANEL
   // =========================================================
 
   isPanelVisible = true;
-
 
   // =========================================================
   // PERMISSIONS
@@ -105,13 +81,11 @@ export class MyTeam implements OnInit {
 
   deletePer = 'Y';
 
-
   // =========================================================
   // LOADING
   // =========================================================
 
   isLoading = false;
-
 
   // =========================================================
   // SESSION STORAGE KEY
@@ -119,300 +93,202 @@ export class MyTeam implements OnInit {
 
   filterKey = 'userManagementFilter';
 
-
   // =========================================================
   // TABLE COLUMNS
   // =========================================================
 
   columns = [
-
     {
       key: 'firstName',
       label: 'Name',
-      sortable: true
+      sortable: true,
     },
 
     {
       key: 'email',
       label: 'Email Id',
-      sortable: true
+      sortable: true,
     },
 
     {
       key: 'mobile',
       label: 'Mobile No.',
-      sortable: true
+      sortable: true,
     },
 
     {
       key: 'status',
       label: 'Status',
-      sortable: true
-    }
-
+      sortable: true,
+    },
   ];
 
-
   constructor(
-
     private dataprovider: DataProviderService,
 
     private router: Router,
 
     @Inject(PLATFORM_ID)
-    private platformId: Object
-
-  ) { }
-
+    private platformId: Object,
+  ) {}
 
   // =========================================================
   // INIT
   // =========================================================
 
   ngOnInit(): void {
-
     this.restoreFilterState();
 
     this.getUserDetails();
-
   }
-
 
   // =========================================================
   // GET USERS
   // =========================================================
 
-getUserDetails(): void {
+  getUserDetails(): void {
+    this.isLoading = true;
 
-  this.isLoading = true;
-
-  console.log('GET USERS PARAMS:', {
-    page: this.page,
-    size: this.size,
-    statusIndex: this.statusIndex,
-    search: this.search
-  });
-
-  this.dataprovider
-    .getUserManagementDetails(
-      this.page,
-      this.size,
-      this.statusIndex,
-      this.search
-    )
-    .subscribe({
-
-      next: (response: any) => {
-
-        console.log('API RESPONSE:', response);
-
-        this.apiResponseUserDetails = response;
-
-        // -----------------------------------------
-        // USERS
-        // -----------------------------------------
-
-        this.users = response?.data ?? [];
-
-        console.log('USERS:', this.users);
-        console.log('USERS LENGTH:', this.users.length);
-
-
-        // -----------------------------------------
-        // TOTAL RECORDS
-        // Backend returns totalElements
-        // -----------------------------------------
-
-        this.totalRecords =
-          Number(response?.totalElements ?? 0);
-
-
-        // -----------------------------------------
-        // TOTAL PAGES
-        // -----------------------------------------
-
-        this.totalPages =
-          Math.ceil(
-            this.totalRecords / this.size
-          );
-
-        if (this.totalPages < 1) {
-          this.totalPages = 1;
-        }
-
-
-        // -----------------------------------------
-        // SAFETY CHECK
-        // -----------------------------------------
-
-        if (
-          this.currentPage >
-          this.totalPages
-        ) {
-
-          this.currentPage =
-            this.totalPages;
-
-          this.page =
-            this.currentPage - 1;
-        }
-
-
-        // -----------------------------------------
-        // PROCESS LIST
-        // -----------------------------------------
-
-        if (
-          isPlatformBrowser(this.platformId)
-        ) {
-
-          sessionStorage.setItem(
-            'processList',
-            JSON.stringify(
-              response?.processList ?? []
-            )
-          );
-
-        }
-
-
-        // -----------------------------------------
-        // STOP LOADING
-        // -----------------------------------------
-
-        this.isLoading = false;
-
-        console.log(
-          'LOADING:',
-          this.isLoading
-        );
-
-        console.log(
-          'TOTAL RECORDS:',
-          this.totalRecords
-        );
-
-        console.log(
-          'TOTAL PAGES:',
-          this.totalPages
-        );
-
-      },
-
-      error: (error: any) => {
-
-        console.error(
-          'Error fetching user details:',
-          error
-        );
-
-        this.users = [];
-
-        this.totalRecords = 0;
-
-        this.totalPages = 1;
-
-        this.isLoading = false;
-
-      }
-
+    console.log('GET USERS PARAMS:', {
+      page: this.page,
+      size: this.size,
+      statusIndex: this.statusIndex,
+      search: this.search,
     });
-}
 
+    this.dataprovider
+      .getUserManagementDetails(this.page, this.size, this.statusIndex, this.search)
+      .subscribe({
+        next: (response: any) => {
+          console.log('API RESPONSE:', response);
+
+          this.apiResponseUserDetails = response;
+
+          // -----------------------------------------
+          // USERS
+          // -----------------------------------------
+
+          this.users = response?.data ?? [];
+
+          console.log('USERS:', this.users);
+          console.log('USERS LENGTH:', this.users.length);
+
+          // -----------------------------------------
+          // TOTAL RECORDS
+          // Backend returns totalElements
+          // -----------------------------------------
+
+          this.totalRecords = Number(response?.totalElements ?? 0);
+
+          // -----------------------------------------
+          // TOTAL PAGES
+          // -----------------------------------------
+
+          this.totalPages = Math.ceil(this.totalRecords / this.size);
+
+          if (this.totalPages < 1) {
+            this.totalPages = 1;
+          }
+
+          // -----------------------------------------
+          // SAFETY CHECK
+          // -----------------------------------------
+
+          if (this.currentPage > this.totalPages) {
+            this.currentPage = this.totalPages;
+
+            this.page = this.currentPage - 1;
+          }
+
+          // -----------------------------------------
+          // PROCESS LIST
+          // -----------------------------------------
+
+          if (isPlatformBrowser(this.platformId)) {
+            sessionStorage.setItem('processList', JSON.stringify(response?.processList ?? []));
+          }
+
+          // -----------------------------------------
+          // STOP LOADING
+          // -----------------------------------------
+
+          this.isLoading = false;
+
+          console.log('LOADING:', this.isLoading);
+
+          console.log('TOTAL RECORDS:', this.totalRecords);
+
+          console.log('TOTAL PAGES:', this.totalPages);
+        },
+
+        error: (error: any) => {
+          console.error('Error fetching user details:', error);
+
+          this.users = [];
+
+          this.totalRecords = 0;
+
+          this.totalPages = 1;
+
+          this.isLoading = false;
+        },
+      });
+  }
 
   // =========================================================
   // SEARCH
   // =========================================================
 
   onSearch(): void {
+    this.search = this.searchQuery.trim();
 
-    this.search =
-      this.searchQuery
-        .trim();
-
-
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : Number(this.selectedStatus);
-
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
 
     // Reset pagination
     this.currentPage = 1;
 
     this.page = 0;
 
-
     this.saveFilterState();
 
-
     this.getUserDetails();
-
   }
-
 
   // =========================================================
   // STATUS CHANGE
   // =========================================================
 
   onStatusChange(): void {
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
 
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : Number(this.selectedStatus);
-
-
-    this.search =
-      this.searchQuery
-        .trim();
-
+    this.search = this.searchQuery.trim();
 
     // Reset pagination
     this.currentPage = 1;
 
     this.page = 0;
 
-
     this.saveFilterState();
 
-
     this.getUserDetails();
-
   }
-
 
   // =========================================================
   // PAGE NAVIGATION
   // =========================================================
 
   goToPage(pageNumber: number): void {
-
-
     // Invalid page
-    if (
-      pageNumber < 1 ||
-      pageNumber > this.totalPages
-    ) {
-
+    if (pageNumber < 1 || pageNumber > this.totalPages) {
       return;
-
     }
-
 
     // Same page
-    if (
-      pageNumber === this.currentPage
-    ) {
-
+    if (pageNumber === this.currentPage) {
       return;
-
     }
 
-
-    this.currentPage =
-      pageNumber;
-
+    this.currentPage = pageNumber;
 
     /*
      * Backend usually expects zero-based page.
@@ -423,12 +299,9 @@ getUserDetails(): void {
      * page 3 => backend 2
      */
 
-    this.page =
-      pageNumber - 1;
-
+    this.page = pageNumber - 1;
 
     this.saveFilterState();
-
 
     /*
      * IMPORTANT:
@@ -439,557 +312,278 @@ getUserDetails(): void {
      */
 
     this.getUserDetails();
-
   }
-
 
   // =========================================================
   // FIRST PAGE
   // =========================================================
 
   goToFirstPage(): void {
-
-    if (
-      this.currentPage !== 1
-    ) {
-
+    if (this.currentPage !== 1) {
       this.goToPage(1);
-
     }
-
   }
-
 
   // =========================================================
   // PREVIOUS PAGE
   // =========================================================
 
   goToPreviousPage(): void {
-
-    if (
-      this.currentPage > 1
-    ) {
-
-      this.goToPage(
-        this.currentPage - 1
-      );
-
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);
     }
-
   }
-
 
   // =========================================================
   // NEXT PAGE
   // =========================================================
 
   goToNextPage(): void {
-
-    if (
-      this.currentPage <
-      this.totalPages
-    ) {
-
-      this.goToPage(
-        this.currentPage + 1
-      );
-
+    if (this.currentPage < this.totalPages) {
+      this.goToPage(this.currentPage + 1);
     }
-
   }
-
 
   // =========================================================
   // LAST PAGE
   // =========================================================
 
   goToLastPage(): void {
-
-    if (
-      this.currentPage !==
-      this.totalPages
-    ) {
-
-      this.goToPage(
-        this.totalPages
-      );
-
+    if (this.currentPage !== this.totalPages) {
+      this.goToPage(this.totalPages);
     }
-
   }
-
 
   // =========================================================
   // PAGE NUMBERS
   // =========================================================
 
   pages(): number[] {
-
     const pages: number[] = [];
 
-
     // No pages
-    if (
-      this.totalPages <= 0
-    ) {
-
+    if (this.totalPages <= 0) {
       return pages;
-
     }
 
-
     // Five or fewer pages
-    if (
-      this.totalPages <= 5
-    ) {
-
-      for (
-        let i = 1;
-        i <= this.totalPages;
-        i++
-      ) {
-
+    if (this.totalPages <= 5) {
+      for (let i = 1; i <= this.totalPages; i++) {
         pages.push(i);
-
       }
 
       return pages;
-
     }
-
 
     // -----------------------------------------------
     // More than five pages
     // -----------------------------------------------
 
-    let start =
-      Math.max(
-        1,
-        this.currentPage - 2
-      );
+    let start = Math.max(1, this.currentPage - 2);
 
-
-    let end =
-      Math.min(
-        this.totalPages,
-        start + 4
-      );
-
+    let end = Math.min(this.totalPages, start + 4);
 
     // Adjust start when near the end
-    if (
-      end - start < 4
-    ) {
-
-      start =
-        Math.max(
-          1,
-          end - 4
-        );
-
+    if (end - start < 4) {
+      start = Math.max(1, end - 4);
     }
 
-
-    for (
-      let i = start;
-      i <= end;
-      i++
-    ) {
-
+    for (let i = start; i <= end; i++) {
       pages.push(i);
-
     }
-
 
     return pages;
-
   }
-
 
   // =========================================================
   // RECORD SUMMARY
   // =========================================================
 
   get recordSummary(): string {
-
-
-    if (
-      this.totalRecords === 0
-    ) {
-
+    if (this.totalRecords === 0) {
       return 'Page 0 of 0, (0 - 0 of 0 records)';
-
     }
 
+    const start = (this.currentPage - 1) * this.size + 1;
 
-    const start =
-      (
-        (this.currentPage - 1)
-        * this.size
-      ) + 1;
-
-
-    const end =
-      Math.min(
-        this.currentPage * this.size,
-        this.totalRecords
-      );
-
+    const end = Math.min(this.currentPage * this.size, this.totalRecords);
 
     return (
       `Page ${this.currentPage} of ${this.totalPages}, ` +
       `(${start} - ${end} of ${this.totalRecords} records)`
     );
-
   }
-
 
   // =========================================================
   // RECORDS PER PAGE
   // =========================================================
 
   onChangeRecordsPerPage(): void {
+    this.size = Number(this.size);
 
-    this.size =
-      Number(this.size);
-
-
-    if (
-      !this.size ||
-      this.size < 1
-    ) {
-
+    if (!this.size || this.size < 1) {
       this.size = 5;
-
     }
-
 
     // Reset page
     this.currentPage = 1;
 
     this.page = 0;
 
-
     this.saveFilterState();
 
-
     this.getUserDetails();
-
   }
-
 
   // =========================================================
   // SORT
   // =========================================================
 
   sortData(column: string): void {
-
-
     // Same column
-    if (
-      this.sortColumn === column
-    ) {
-
-      this.sortDirection =
-        this.sortDirection === 'asc'
-          ? 'desc'
-          : 'asc';
-
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     }
 
     // New column
     else {
+      this.sortColumn = column;
 
-      this.sortColumn =
-        column;
-
-      this.sortDirection =
-        'asc';
-
+      this.sortDirection = 'asc';
     }
 
+    this.users = [...this.users].sort((a: any, b: any) => {
+      let valueA = a[column];
 
-    this.users =
-      [...this.users].sort(
-        (a: any, b: any) => {
+      let valueB = b[column];
 
-          let valueA =
-            a[column];
+      // Status
+      if (column === 'status') {
+        valueA = Number(valueA);
 
-          let valueB =
-            b[column];
+        valueB = Number(valueB);
+      }
 
+      // Convert null
+      if (valueA === null || valueA === undefined) {
+        valueA = '';
+      }
 
-          // Status
-          if (
-            column === 'status'
-          ) {
+      if (valueB === null || valueB === undefined) {
+        valueB = '';
+      }
 
-            valueA =
-              Number(valueA);
+      // String comparison
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        valueA = valueA.toLowerCase();
 
-            valueB =
-              Number(valueB);
+        valueB = valueB.toLowerCase();
+      }
 
-          }
+      if (valueA < valueB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
 
+      if (valueA > valueB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
 
-          // Convert null
-          if (
-            valueA === null ||
-            valueA === undefined
-          ) {
-
-            valueA = '';
-
-          }
-
-
-          if (
-            valueB === null ||
-            valueB === undefined
-          ) {
-
-            valueB = '';
-
-          }
-
-
-          // String comparison
-          if (
-            typeof valueA === 'string' &&
-            typeof valueB === 'string'
-          ) {
-
-            valueA =
-              valueA.toLowerCase();
-
-            valueB =
-              valueB.toLowerCase();
-
-          }
-
-
-          if (
-            valueA < valueB
-          ) {
-
-            return this.sortDirection === 'asc'
-              ? -1
-              : 1;
-
-          }
-
-
-          if (
-            valueA > valueB
-          ) {
-
-            return this.sortDirection === 'asc'
-              ? 1
-              : -1;
-
-          }
-
-
-          return 0;
-
-        }
-      );
-
+      return 0;
+    });
   }
-
 
   // =========================================================
   // PANEL TOGGLE
   // =========================================================
 
   togglePanel(): void {
-
-    this.isPanelVisible =
-      !this.isPanelVisible;
-
+    this.isPanelVisible = !this.isPanelVisible;
   }
-
 
   // =========================================================
   // SAVE FILTER STATE
   // =========================================================
 
   private saveFilterState(): void {
-
-
-    if (
-      !isPlatformBrowser(
-        this.platformId
-      )
-    ) {
-
+    if (!isPlatformBrowser(this.platformId)) {
       return;
-
     }
 
-
     const filterState = {
+      currentPage: this.currentPage,
 
-      currentPage:
-        this.currentPage,
+      statusIndex: this.statusIndex,
 
-      statusIndex:
-        this.statusIndex,
+      searchText: this.search,
 
-      searchText:
-        this.search,
-
-      size:
-        this.size
-
+      size: this.size,
     };
 
-
-    sessionStorage.setItem(
-      this.filterKey,
-      JSON.stringify(filterState)
-    );
-
+    sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
   }
-
 
   // =========================================================
   // RESTORE FILTER STATE
   // =========================================================
 
   private restoreFilterState(): void {
-
-
-    if (
-      !isPlatformBrowser(
-        this.platformId
-      )
-    ) {
-
+    if (!isPlatformBrowser(this.platformId)) {
       return;
-
     }
 
-
-    const stored =
-      sessionStorage.getItem(
-        this.filterKey
-      );
-
+    const stored = sessionStorage.getItem(this.filterKey);
 
     if (!stored) {
-
       return;
-
     }
-
 
     try {
-
-      const filterState =
-        JSON.parse(stored);
-
+      const filterState = JSON.parse(stored);
 
       // Page
-      if (
-        filterState.currentPage
-      ) {
-
-        this.currentPage =
-          Number(
-            filterState.currentPage
-          );
-
+      if (filterState.currentPage) {
+        this.currentPage = Number(filterState.currentPage);
       }
-
 
       // Backend page
-      this.page =
-        this.currentPage - 1;
-
+      this.page = this.currentPage - 1;
 
       // Status
-      if (
-        filterState.statusIndex !==
-        undefined
-      ) {
-
-        this.statusIndex =
-          Number(
-            filterState.statusIndex
-          );
-
+      if (filterState.statusIndex !== undefined) {
+        this.statusIndex = Number(filterState.statusIndex);
       }
-
 
       // Search
-      if (
-        filterState.searchText !==
-        undefined
-      ) {
+      if (filterState.searchText !== undefined) {
+        this.search = filterState.searchText;
 
-        this.search =
-          filterState.searchText;
-
-        this.searchQuery =
-          filterState.searchText;
-
+        this.searchQuery = filterState.searchText;
       }
-
 
       // Size
-      if (
-        filterState.size
-      ) {
-
-        this.size =
-          Number(
-            filterState.size
-          );
-
+      if (filterState.size) {
+        this.size = Number(filterState.size);
       }
-
 
       // Select status value
-      if (
-        this.statusIndex > 0
-      ) {
-
-        this.selectedStatus =
-          String(
-            this.statusIndex
-          );
-
+      if (this.statusIndex > 0) {
+        this.selectedStatus = String(this.statusIndex);
       }
-
+    } catch (error) {
+      console.error('Error restoring filter state:', error);
     }
-
-    catch (error) {
-
-      console.error(
-        'Error restoring filter state:',
-        error
-      );
-
-    }
-
   }
-
 
   // =========================================================
   // ADD USER
   // =========================================================
 
-   addUser() {
-
-
+  addUser() {
     const filterState = {
       currentPage: this.currentPage,
       statusIndex: this.statusIndex,
       searchText: this.search,
-      size: this.size
+      size: this.size,
     };
 
     // Save in sessionStorage (for refresh support)
@@ -997,11 +591,9 @@ getUserDetails(): void {
 
     // Pass via router state (no URL params)
     this.router.navigate(['/add-team'], {
-      state: filterState
+      state: filterState,
     });
-
   }
-
 
   // =========================================================
   // VIEW USER
@@ -1018,59 +610,45 @@ getUserDetails(): void {
   //   // ]);
 
   // }
-   viewUser(userId: any) {
-    // console.log('View', userId);
-
+  viewUser(userId: any) {
     const filterState = {
       currentPage: this.currentPage,
       statusIndex: this.statusIndex,
       searchText: this.search,
-      size: this.size
+      size: this.size,
     };
 
-    // Save in sessionStorage (for refresh support)
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
-// alert("in");
-    // Pass via router state (no URL params)
+
     this.router.navigate(['/view-team', userId], {
-      state: filterState
+      state: filterState,
     });
   }
-
 
   // =========================================================
   // EDIT USER
   // =========================================================
 
   editUser(userId: any) {
-    // console.log('View', userId);
-
     const filterState = {
       currentPage: this.currentPage,
       statusIndex: this.statusIndex,
       searchText: this.search,
-      size: this.size
+      size: this.size,
     };
 
-    // Save in sessionStorage (for refresh support)
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
 
-    // Pass via router state (no URL params)
     this.router.navigate(['/edit-team', userId], {
-      state: filterState
+      state: filterState,
     });
-
   }
-
 
   // =========================================================
   // DELETE USER
   // =========================================================
 
   onDeleteUser(userId: number): void {
-
-    // Keep your existing delete implementation here.
-
   }
 
   getStatusLabel(status: number | string): string {
@@ -1098,5 +676,4 @@ getUserDetails(): void {
         return 'status-badge';
     }
   }
-
 }

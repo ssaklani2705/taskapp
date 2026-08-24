@@ -1,7 +1,4 @@
-import {
-  Component,
-  Input
-} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,15 +7,11 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './sidebar.html',
-  styleUrl: './sidebar.scss'
+  styleUrl: './sidebar.scss',
 })
 export class Sidebar {
-
   @Input()
   opened = true;
 
@@ -28,43 +21,43 @@ export class Sidebar {
     {
       label: 'Dashboard',
       icon: 'dashboard',
-      route: '/dashboard'
+      route: '/dashboard',
     },
     {
       label: 'My team',
       icon: 'groups',
-      route: '/my-team'
+      route: '/my-team',
     },
     {
       label: 'Tasks',
       icon: 'task_alt',
-      route: '/tasks'
+      route: '/tasks',
     },
     {
       label: 'Clients',
       icon: 'business',
-      route: '/clients'
+      route: '/client-index',
     },
     {
       label: 'Approvals',
       icon: 'fact_check',
-      route: '/approvals'
+      route: '/approvals',
     },
     {
       label: 'Attendance',
       icon: 'event_available',
-      route: '/attendance'
+      route: '/attendance',
     },
     {
       label: 'Helpdesk',
       icon: 'support_agent',
-      route: '/helpdesk'
+      route: '/helpdesk',
     },
     {
       label: 'Reports',
       icon: 'bar_chart',
-      route: '/reports'
-    }
+      route: '/reports',
+    },
   ];
 
   constructor(private router: Router) {}

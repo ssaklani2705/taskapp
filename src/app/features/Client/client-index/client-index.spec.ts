@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Clients } from './clients';
+import { ClientIndex } from './client-index';
 
-describe('Clients', () => {
-  let component: Clients;
-  let fixture: ComponentFixture<Clients>;
+describe('ClientIndex', () => {
+  let component: ClientIndex;
+  let fixture: ComponentFixture<ClientIndex>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Clients],
+      imports: [ClientIndex],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Clients);
+    fixture = TestBed.createComponent(ClientIndex);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

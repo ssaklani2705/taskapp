@@ -25,7 +25,7 @@
           <!-- ADD USER -->
           <div class="add-user-wrapper">
             @if (addPer === 'Y') {
-              <button type="button" class="btn-add-user" (click)="addUser()">
+              <button type="button" class="btn-add-user" (click)="addClient()">
                 Add New
                 <span class="plus-icon">+</span>
               </button>
@@ -38,7 +38,7 @@
               <input
                 type="text"
                 [(ngModel)]="searchQuery"
-                placeholder="Search by User name / Email id / Mobile No"
+                placeholder="Search Client Name / Code / Contact Name / Contact Email"
                 (keyup.enter)="onSearch()"
                 class="search-input"
               />
@@ -47,6 +47,28 @@
                 <i class="fa fa-search"></i>
               </button>
             </div>
+          </div>
+
+          <!-- STATE -->
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="stateId">
+              <option [ngValue]="0">--All States--</option>
+
+              <option *ngFor="let state of states" [ngValue]="state.stateId">
+                {{ state.name }}
+              </option>
+            </select>
+          </div>
+
+          <!-- MANAGER -->
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="managerId">
+              <option [ngValue]="0">--All Managers--</option>
+
+              <option *ngFor="let manager of managers" [ngValue]="manager.userId">
+                {{ manager.firstName }}
+              </option>
+            </select>
           </div>
 
           <!-- STATUS -->
@@ -147,9 +169,7 @@
                   (click)="col.sortable && sortData(col.key)"
                 >
                   <div class="column-header">
-                    <span>
-                      {{ col.label }}
-                    </span>
+                    <span>{{ col.label }}</span>
 
                     <span *ngIf="col.sortable" class="sort-icons">
                       <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'">
@@ -175,46 +195,70 @@
               <tr *ngIf="isLoading">
                 <td [attr.colspan]="columns.length + 2" class="loading-cell">
                   <div class="loading-spinner"></div>
-
-                  Loading users...
+                  Loading clients...
                 </td>
               </tr>
 
               <!-- NO RECORDS -->
-              <tr *ngIf="!isLoading && users.length === 0">
-                <td [attr.colspan]="columns.length + 2" class="no-records">No users found.</td>
+              <tr *ngIf="!isLoading && clients.length === 0">
+                <td [attr.colspan]="columns.length + 2" class="no-records">No clients found.</td>
               </tr>
 
-              <!-- USER RECORDS -->
-              <tr *ngFor="let user of users; let i = index" class="user-row">
+              <!-- CLIENT RECORDS -->
+              <tr *ngFor="let client of clients; let i = index" class="user-row">
                 <!-- SERIAL NUMBER -->
                 <td class="serial-number">
                   {{ (currentPage - 1) * size + i + 1 }}
                 </td>
 
-                <!-- NAME -->
+                <!-- CLIENT NAME -->
                 <td>
                   <span class="user-name">
-                    {{ user.firstName }}
+                    {{ client.name || '-' }}
                   </span>
                 </td>
 
-                <!-- EMAIL -->
+                <!-- CLIENT CODE -->
+                <td>
+                  {{ client.code || '-' }}
+                </td>
+
+                <!-- MANAGER -->
+                <td>
+                  {{ client.managerName || '-' }}
+                </td>
+
+                <!-- STATE -->
+                <td>
+                  {{ client.stateName || '-' }}
+                </td>
+
+                <!-- CONTACT NAME -->
+                <td>
+                  {{ client.contactName || '-' }}
+                </td>
+
+                <!-- CONTACT EMAIL -->
                 <td>
                   <span class="email-text">
-                    {{ user.email }}
+                    {{ client.contactEmail || '-' }}
                   </span>
                 </td>
 
-                <!-- MOBILE -->
+                <!-- CITY -->
                 <td>
-                  {{ user.mobile }}
+                  {{ client.city || '-' }}
+                </td>
+
+                <!-- REGISTRATION DATE -->
+                <td>
+                  {{ client.regdate ? (client.regdate | date: 'dd-MM-yyyy') : '-' }}
                 </td>
 
                 <!-- STATUS -->
                 <td>
-                  <span class="status-badge" [ngClass]="getStatusClass(user.status)">
-                    {{ getStatusLabel(user.status) }}
+                  <span class="status-badge" [ngClass]="getStatusClass(client.status)">
+                    {{ getStatusLabel(client.status) }}
                   </span>
                 </td>
 
@@ -226,19 +270,19 @@
                       type="button"
                       class="action-btn view-btn"
                       title="View"
-                      (click)="viewUser(user.userId)"
+                      (click)="viewClient(client.clientId)"
                     >
                       <i class="fa fa-search"></i>
                     </button>
 
                     <!-- EDIT -->
-                    <ng-container *ngIf="user.status === 1 || user.status === 2">
+                    <ng-container *ngIf="client.status === 1 || client.status === 2">
                       @if (editPer === 'Y') {
                         <button
                           type="button"
                           class="action-btn edit-btn"
                           title="Edit"
-                          (click)="editUser(user.userId)"
+                          (click)="editClient(client.clientId)"
                         >
                           <i class="fa fa-pencil"></i>
                         </button>
@@ -250,7 +294,7 @@
                           type="button"
                           class="action-btn delete-btn"
                           title="Delete"
-                          (click)="onDeleteUser(user.userId)"
+                          (click)="onDeleteUser(client.clientId)"
                         >
                           <i class="fa fa-close"></i>
                         </button>
