@@ -1,0 +1,67 @@
+<div class="sidebar">
+
+  <!-- ================= BRAND ================= -->
+
+  <div class="sidebar-brand">
+
+    <div class="brand-logo">
+      <mat-icon>domain</mat-icon>
+    </div>
+
+    <div class="brand-info">
+      <strong>Society 123</strong>
+      <span>Business Portal</span>
+    </div>
+
+  </div>
+
+  <!-- ================= MENU ================= -->
+
+  <nav class="sidebar-menu">
+
+    <button type="button" class="menu-item" *ngFor="let item of menuItems" [class.active]="activeMenu === item.label"
+      (click)="selectMenu(item)">
+
+      <mat-icon>{{ item.icon }}</mat-icon>
+
+      <span>{{ item.label }}</span>
+
+    </button>
+
+  </nav>
+
+  <!-- ================= USER ================= -->
+
+  <div class="sidebar-user">
+
+    <div class="user-avatar">
+      PS
+    </div>
+
+    <div class="user-info">
+      <strong>Priya S.</strong>
+      <span>Manager</span>
+    </div>
+
+    <button type="button" class="more-button" [matMenuTriggerFor]="userMenu">
+
+      <mat-icon>more_vert</mat-icon>
+
+    </button>
+
+  </div>
+
+</div>
+
+<!-- ================= USER MENU ================= -->
+
+<mat-menu #userMenu="matMenu" class="user-menu" xPosition="before" yPosition="above">
+
+  <!-- User Header -->
+  <!-- Settings -->
+  <!-- Logout -->
+  <button mat-menu-item (click)="onLogout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+</mat-menu>

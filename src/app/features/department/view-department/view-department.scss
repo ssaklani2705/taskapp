@@ -1,0 +1,1080 @@
+/* =========================================================
+   VIEW USER
+   SOCIETY 123 - BUSINESS PORTAL THEME
+========================================================= */
+
+:host {
+
+  /* -------------------------------------------------------
+     MAIN COLORS
+  ------------------------------------------------------- */
+
+  --navy: #19345a;
+  --navy-dark: #152f54;
+  --navy-light: #24466f;
+
+  --primary-blue: #2f6fa3;
+  --primary-blue-dark: #285f8d;
+  --primary-blue-light: #eaf2f8;
+
+  --table-header: #edf4f8;
+  --table-group: #f4f6f8;
+
+  --page-bg: #f8fafc;
+  --white: #ffffff;
+
+  --border: #d5dee7;
+  --border-dark: #c5d0db;
+
+  --text: #17375e;
+  --text-dark: #152f54;
+  --text-muted: #6d8299;
+
+  --success: #17805f;
+  --success-bg: #e5f3ee;
+
+  --danger: #e84a4a;
+  --danger-bg: #fff0f0;
+
+  --warning: #c78b1c;
+
+  display: block;
+
+  width: 100%;
+
+  color: var(--text);
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page-container {
+
+  width: 100%;
+
+  min-height: 100%;
+
+  padding: 24px 36px;
+
+  box-sizing: border-box;
+
+  background: var(--page-bg);
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.main-card,
+.section-card {
+
+  width: 100%;
+
+  margin: 0 0 22px 0;
+
+  padding: 0 !important;
+
+  background: var(--white) !important;
+
+  border: 1px solid var(--border) !important;
+
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+========================================================= */
+
+.page-header {
+
+  min-height: 76px;
+
+  padding: 0 18px !important;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  box-sizing: border-box;
+}
+
+
+/* ---------------------------------------------------------
+   PAGE TITLE
+--------------------------------------------------------- */
+
+.page-title {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: var(--navy);
+
+  font-family: Georgia, 'Times New Roman', serif;
+
+  font-size: 27px;
+
+  font-weight: 700;
+
+  letter-spacing: -0.3px;
+}
+
+
+.page-title mat-icon {
+
+  color: var(--primary-blue);
+
+  width: 27px;
+
+  height: 27px;
+
+  font-size: 27px;
+}
+
+
+/* =========================================================
+   BACK TO INDEX BUTTON
+========================================================= */
+
+.header-action {
+
+  display: flex;
+
+  align-items: center;
+}
+
+
+.back-button {
+
+  height: 38px !important;
+
+  min-width: 130px;
+
+  padding: 0 18px !important;
+
+  border-radius: 4px !important;
+
+  background: var(--navy) !important;
+
+  color: var(--white) !important;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px !important;
+
+  font-weight: 600 !important;
+
+  box-shadow: none !important;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+}
+
+
+.back-button:hover {
+
+  background: var(--navy-dark) !important;
+}
+
+
+.back-button mat-icon {
+
+  width: 18px;
+
+  height: 18px;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   MATERIAL DIVIDER
+========================================================= */
+
+mat-divider {
+
+  border-top-color: var(--border) !important;
+}
+
+
+/* =========================================================
+   USER INFORMATION
+========================================================= */
+
+.user-information {
+
+  padding: 24px 22px !important;
+
+  box-sizing: border-box;
+}
+
+
+.user-info-grid {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  column-gap: 70px;
+
+  row-gap: 18px;
+}
+
+
+.user-column {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 13px;
+}
+
+
+/* =========================================================
+   INFORMATION ROW
+========================================================= */
+
+.info-row {
+
+  display: flex;
+
+  align-items: center;
+
+  min-height: 25px;
+
+  color: var(--text);
+
+  font-family: Arial, sans-serif;
+
+  font-size: 15px;
+
+  line-height: 1.5;
+}
+
+
+.info-label {
+
+  margin-right: 6px;
+
+  color: var(--text-dark);
+
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+
+.info-value {
+
+  color: var(--text);
+
+  font-weight: 400;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   EMAIL
+========================================================= */
+
+.email-text {
+
+  color: #315c84;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   ADMIN PERMISSION
+========================================================= */
+
+.admin-permission {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 1px;
+
+  color: #1b2f45;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 15px;
+}
+
+
+.admin-permission mat-icon {
+
+  width: 22px;
+
+  height: 22px;
+
+  font-size: 22px;
+}
+
+
+/* =========================================================
+   PERMISSION ICON COLORS
+========================================================= */
+
+.permission-yes {
+
+  color: var(--primary-blue) !important;
+}
+
+
+.permission-no {
+
+  color: var(--danger) !important;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-row {
+
+  align-items: center;
+}
+
+
+.status-badge {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 70px;
+
+  height: 34px;
+
+  padding: 0 14px;
+
+  box-sizing: border-box;
+
+  border-radius: 2px;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+
+.status-active {
+
+  color: var(--success) !important;
+
+  background: var(--success-bg);
+
+  border: 1px solid #c7e5d9;
+}
+
+
+.status-inactive {
+
+  color: #986b14 !important;
+
+  background: #fff5dc;
+
+  border: 1px solid #ecd9a7;
+}
+
+
+.status-deleted {
+
+  color: #b93636 !important;
+
+  background: var(--danger-bg);
+
+  border: 1px solid #f2cccc;
+}
+
+
+/* =========================================================
+   SECTION CARD
+========================================================= */
+
+.section-card {
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.section-header {
+
+  min-height: 65px;
+
+  padding: 0 0 !important;
+
+  display: flex;
+
+  align-items: center;
+
+  box-sizing: border-box;
+}
+
+
+.section-title {
+
+  padding-left: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: var(--primary-blue);
+
+  font-family: Arial, sans-serif;
+
+  font-size: 25px;
+
+  font-weight: 700;
+
+  letter-spacing: 0;
+}
+
+
+.section-title mat-icon {
+
+  color: var(--primary-blue);
+
+  width: 25px;
+
+  height: 25px;
+
+  font-size: 25px;
+}
+
+
+/* =========================================================
+   TABLE CONTAINER
+========================================================= */
+
+.table-container {
+
+  padding: 0 !important;
+
+  width: 100%;
+
+  box-sizing: border-box;
+}
+
+
+.permissions-table-wrapper,
+.history-table-wrapper {
+
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+
+/* =========================================================
+   PERMISSIONS TABLE
+========================================================= */
+
+.permissions-table {
+
+  width: 100%;
+
+  min-width: 980px;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+
+  background: var(--white);
+
+  color: var(--text);
+
+  font-family: Arial, sans-serif;
+
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.permissions-table thead th {
+
+  height: 47px;
+
+  padding: 8px 10px;
+
+  background: var(--table-header);
+
+  border: 1px solid var(--border);
+
+  color: #172f4c;
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  font-size: 15px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   TABLE BODY
+========================================================= */
+
+.permissions-table tbody td {
+
+  height: 54px;
+
+  padding: 8px 10px;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  color: var(--text);
+}
+
+
+/* =========================================================
+   MODULE COLUMN
+========================================================= */
+
+.permissions-table th:first-child,
+.permissions-table td:first-child {
+
+  width: 24%;
+}
+
+
+.permissions-table th:not(:first-child),
+.permissions-table td:not(:first-child) {
+
+  width: 10.85%;
+}
+
+
+/* =========================================================
+   ADMIN APPROVAL
+========================================================= */
+
+.permissions-table .admin-column {
+
+  width: 15%;
+}
+
+
+/* =========================================================
+   EXPORT
+========================================================= */
+
+.permissions-table .export-column {
+
+  width: 14%;
+}
+
+
+/* =========================================================
+   GROUP ROW
+========================================================= */
+
+.permissions-table .group-row td {
+
+  height: 43px;
+
+  padding: 0 12px;
+
+  background: var(--table-group);
+
+  color: var(--primary-blue);
+
+  text-align: left;
+
+  font-size: 15px;
+
+  font-weight: 700;
+}
+
+
+.group-row mat-icon {
+
+  width: 19px;
+
+  height: 19px;
+
+  margin-right: 6px;
+
+  color: var(--primary-blue);
+
+  font-size: 19px;
+
+  vertical-align: middle;
+}
+
+
+/* =========================================================
+   MODULE ROW
+========================================================= */
+
+.permissions-table .module-row td {
+
+  transition: background 0.15s ease;
+}
+
+
+.permissions-table .module-row:hover td {
+
+  background: #f8fbfd;
+}
+
+
+/* =========================================================
+   MODULE NAME
+========================================================= */
+
+.module-name {
+
+  text-align: center !important;
+
+  color: #254d74 !important;
+
+  font-size: 15px;
+
+  font-weight: 400;
+}
+
+
+/* =========================================================
+   PERMISSION ICONS
+========================================================= */
+
+.permissions-table td mat-icon {
+
+  width: 23px;
+
+  height: 23px;
+
+  font-size: 23px;
+
+  vertical-align: middle;
+}
+
+
+/* =========================================================
+   ACTION HISTORY
+========================================================= */
+
+.history-table {
+
+  width: 100%;
+
+  min-width: 650px;
+
+  border-collapse: collapse;
+
+  background: var(--white);
+
+  color: var(--text);
+
+  font-family: Arial, sans-serif;
+
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   HISTORY HEADER
+========================================================= */
+
+.history-table thead th {
+
+  height: 47px;
+
+  padding: 8px 15px;
+
+  background: var(--table-header);
+
+  border: 1px solid var(--border);
+
+  color: #172f4c;
+
+  text-align: left;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   HISTORY BODY
+========================================================= */
+
+.history-table tbody td {
+
+  height: 52px;
+
+  padding: 10px 15px;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+
+  color: var(--text);
+
+  vertical-align: middle;
+}
+
+
+.history-table tbody tr:hover td {
+
+  background: #f8fbfd;
+}
+
+
+/* =========================================================
+   ACTION BADGE
+========================================================= */
+
+.action-badge {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 5px 10px;
+
+  border-radius: 3px;
+
+  background: var(--primary-blue-light);
+
+  border: 1px solid #d1e3ef;
+
+  color: var(--primary-blue-dark);
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   NO RECORDS
+========================================================= */
+
+.no-records-box {
+
+  min-height: 95px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  color: var(--text-muted);
+
+  background: var(--white);
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px;
+}
+
+
+.no-records-box mat-icon {
+
+  width: 20px;
+
+  height: 20px;
+
+  font-size: 20px;
+
+  color: var(--primary-blue);
+}
+
+
+/* =========================================================
+   MATERIAL CARD OVERRIDE
+========================================================= */
+
+::ng-deep .mat-mdc-card {
+
+  border-radius: 0 !important;
+
+  box-shadow: none !important;
+}
+
+
+::ng-deep .mat-mdc-card-header {
+
+  padding: 0 !important;
+}
+
+
+::ng-deep .mat-mdc-card-content {
+
+  margin: 0 !important;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+.permissions-table-wrapper::-webkit-scrollbar,
+.history-table-wrapper::-webkit-scrollbar {
+
+  height: 7px;
+}
+
+
+.permissions-table-wrapper::-webkit-scrollbar-track,
+.history-table-wrapper::-webkit-scrollbar-track {
+
+  background: #edf1f4;
+}
+
+
+.permissions-table-wrapper::-webkit-scrollbar-thumb,
+.history-table-wrapper::-webkit-scrollbar-thumb {
+
+  background: #b8c7d4;
+
+  border-radius: 4px;
+}
+
+
+.permissions-table-wrapper::-webkit-scrollbar-thumb:hover,
+.history-table-wrapper::-webkit-scrollbar-thumb:hover {
+
+  background: #8fa5b7;
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .page-container {
+
+    padding: 20px;
+  }
+
+
+  .user-info-grid {
+
+    column-gap: 35px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .page-container {
+
+    padding: 12px;
+  }
+
+
+  .page-header {
+
+    min-height: auto;
+
+    padding: 15px !important;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 14px;
+  }
+
+
+  .page-title {
+
+    font-size: 22px;
+  }
+
+
+  .header-action {
+
+    width: 100%;
+  }
+
+
+  .back-button {
+
+    width: 100%;
+  }
+
+
+  .user-information {
+
+    padding: 18px !important;
+  }
+
+
+  .user-info-grid {
+
+    grid-template-columns: 1fr;
+
+    column-gap: 0;
+
+    row-gap: 18px;
+  }
+
+
+  .info-row {
+
+    align-items: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+
+  .info-label {
+
+    white-space: normal;
+  }
+
+
+  .section-header {
+
+    min-height: 58px;
+
+    padding: 0 15px !important;
+  }
+
+
+  .section-title {
+
+    font-size: 20px;
+  }
+
+
+  .permissions-table {
+
+    min-width: 980px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .page-container {
+
+    padding: 8px;
+  }
+
+
+  .page-title {
+
+    font-size: 19px;
+  }
+
+
+  .page-title mat-icon {
+
+    width: 22px;
+
+    height: 22px;
+
+    font-size: 22px;
+  }
+
+
+  .user-information {
+
+    padding: 15px !important;
+  }
+
+
+  .info-row {
+
+    display: block;
+
+    line-height: 24px;
+  }
+
+
+  .info-label {
+
+    display: inline;
+
+    margin-right: 4px;
+  }
+
+
+  .info-value {
+
+    display: inline;
+  }
+
+
+  .admin-permission {
+
+    align-items: flex-start;
+
+    line-height: 22px;
+  }
+
+
+  .section-title {
+
+    font-size: 17px;
+  }
+
+}

@@ -1,0 +1,895 @@
+/* =========================================================
+   DEPARTMENT ADD / EDIT
+   SOCIETY 123 - BUSINESS PORTAL THEME
+========================================================= */
+
+:host {
+
+  /* -------------------------------------------------------
+     COLORS
+  ------------------------------------------------------- */
+
+  --navy: #19345a;
+  --navy-dark: #152f54;
+  --navy-light: #24466f;
+
+  --primary-blue: #2f6fa3;
+  --primary-blue-dark: #285f8d;
+  --primary-blue-light: #eaf2f8;
+
+  --page-bg: #f8fafc;
+  --white: #ffffff;
+
+  --border: #d5dee7;
+  --border-dark: #c5d0db;
+
+  --text: #17375e;
+  --text-dark: #152f54;
+  --text-muted: #6d8299;
+
+  --success: #17805f;
+  --success-dark: #126a4f;
+  --success-bg: #e5f3ee;
+
+  --danger: #e84a4a;
+  --danger-bg: #fff0f0;
+
+  display: block;
+
+  width: 100%;
+
+  color: var(--text);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page-content-wrapper {
+
+  width: 100%;
+
+  min-height: 100%;
+
+  background: var(--page-bg);
+
+  box-sizing: border-box;
+}
+
+
+.page-content {
+
+  width: 100%;
+
+  padding: 24px 36px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   BOOTSTRAP ROW FIX
+========================================================= */
+
+.row {
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.portlet {
+
+  width: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  background: var(--white);
+
+  border: 1px solid var(--border);
+
+  border-radius: 0;
+
+  box-shadow: none;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PORTLET HEADER
+========================================================= */
+
+.portlet-title {
+
+  min-height: 76px;
+
+  margin: 0;
+
+  padding: 0 18px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  background: var(--white);
+
+  border-bottom: 1px solid var(--border);
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.caption {
+
+  display: flex;
+
+  align-items: center;
+
+  margin: 0;
+
+  padding: 0;
+
+  color: var(--navy);
+}
+
+
+.caption-subject {
+
+  color: var(--navy) !important;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 27px;
+
+  font-weight: 700;
+
+  line-height: 34px;
+
+  letter-spacing: -0.3px;
+
+  text-transform: none !important;
+}
+
+
+/*
+   "Add" / "Edit" text
+*/
+
+.caption-subject > span {
+
+  color: var(--primary-blue);
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   HEADER ACTION
+========================================================= */
+
+.actions {
+
+  display: flex;
+
+  align-items: center;
+
+  margin: 0;
+
+  padding: 0;
+}
+
+
+.actions label {
+
+  margin: 0;
+
+  padding: 0;
+
+  border: none !important;
+
+  background: transparent !important;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+
+.back-to-index {
+
+  min-width: 130px;
+
+  height: 38px;
+
+  padding: 0 18px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--navy);
+
+  border-radius: 4px;
+
+  background: var(--navy);
+
+  color: var(--white) !important;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  line-height: 38px;
+
+  text-decoration: none;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+.back-to-index:hover {
+
+  background: var(--navy-dark);
+
+  border-color: var(--navy-dark);
+
+  color: var(--white) !important;
+
+  text-decoration: none;
+}
+
+
+/* =========================================================
+   PORTLET BODY
+========================================================= */
+
+.portlet-body {
+
+  width: 100%;
+
+  margin: 0;
+
+  padding: 0;
+
+  background: var(--white);
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   FORM BODY
+========================================================= */
+
+.form-body {
+
+  width: 100%;
+
+  padding: 24px 22px 28px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MANDATORY MESSAGE
+========================================================= */
+
+.mandatory_div {
+
+  margin-bottom: 22px;
+
+  padding: 0;
+
+  color: var(--text-muted);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 13px;
+
+  line-height: 20px;
+}
+
+
+.required {
+
+  color: var(--danger);
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   FORM ROW
+========================================================= */
+
+.form-body > form > .form-body > .row {
+
+  margin-left: -10px;
+
+  margin-right: -10px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+========================================================= */
+
+.form-group {
+
+  margin-bottom: 24px;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   LABEL
+========================================================= */
+
+.form-group label {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: var(--text-dark);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 700;
+
+  line-height: 20px;
+}
+
+
+.form-group label .required {
+
+  margin-left: 2px;
+}
+
+
+/* =========================================================
+   FORM CONTROL
+========================================================= */
+
+.form-control {
+
+  width: 100%;
+
+  height: 42px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border-dark);
+
+  border-radius: 2px;
+
+  outline: none;
+
+  background: var(--white);
+
+  color: var(--text-dark);
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 14px;
+
+  line-height: 40px;
+
+  box-shadow: none;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+
+.form-control::placeholder {
+
+  color: #8a9bad;
+
+  opacity: 1;
+}
+
+
+.form-control:hover {
+
+  border-color: #aebdca;
+}
+
+
+.form-control:focus {
+
+  border-color: var(--primary-blue);
+
+  outline: none;
+
+  box-shadow:
+    0 0 0 1px rgba(47, 111, 163, 0.08);
+}
+
+
+/* =========================================================
+   SELECT
+========================================================= */
+
+select.form-control {
+
+  height: 42px;
+
+  padding: 0 12px;
+
+  background-color: var(--white);
+
+  color: var(--text);
+
+  cursor: pointer;
+
+  line-height: normal;
+}
+
+
+/* =========================================================
+   NUMBER INPUT
+========================================================= */
+
+input[type="number"].form-control {
+
+  line-height: normal;
+}
+
+
+/* =========================================================
+   VALIDATION
+========================================================= */
+
+.text-danger {
+
+  margin-top: 6px;
+
+  color: var(--danger) !important;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 12px;
+
+  font-weight: 400;
+
+  line-height: 18px;
+}
+
+
+/* =========================================================
+   INVALID CONTROL
+========================================================= */
+
+.form-control.ng-invalid.ng-touched {
+
+  border-color: #e2a1a1;
+
+  background-color: #fffafa;
+}
+
+
+.form-control.ng-invalid.ng-touched:focus {
+
+  border-color: var(--danger);
+
+  box-shadow:
+    0 0 0 1px rgba(232, 74, 74, 0.08);
+}
+
+
+/* =========================================================
+   VALID CONTROL
+========================================================= */
+
+.form-control.ng-valid.ng-touched {
+
+  border-color: #b9d8cb;
+}
+
+
+/* =========================================================
+   BUTTON AREA
+========================================================= */
+
+.col-md-12.text-center {
+
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding-top: 12px;
+
+  text-align: center;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   COMMON BUTTON
+========================================================= */
+
+.col-md-12.text-center .btn {
+
+  min-width: 95px;
+
+  height: 40px;
+
+  padding: 0 20px;
+
+  margin: 0 3px;
+
+  border-radius: 3px;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  line-height: 38px;
+
+  box-sizing: border-box;
+
+  cursor: pointer;
+
+  box-shadow: none;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+
+/* =========================================================
+   RESET BUTTON
+========================================================= */
+
+.col-md-12.text-center .btn.default {
+
+  border: 1px solid var(--border-dark);
+
+  background: var(--white);
+
+  color: #526b82;
+}
+
+
+.col-md-12.text-center .btn.default:hover {
+
+  border-color: #aebdca;
+
+  background: #f4f7f9;
+
+  color: var(--navy);
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+.col-md-12.text-center .btn.green {
+
+  border: 1px solid var(--primary-blue);
+
+  background: var(--primary-blue);
+
+  color: var(--white);
+}
+
+
+.col-md-12.text-center .btn.green:hover {
+
+  border-color: var(--primary-blue-dark);
+
+  background: var(--primary-blue-dark);
+
+  color: var(--white);
+}
+
+
+/* =========================================================
+   REMOVE OLD METRONIC STYLING
+========================================================= */
+
+.portlet.light,
+.portlet.light.bordered,
+.portlet-fit,
+.portlet-form {
+
+  background: var(--white) !important;
+
+  border-color: var(--border) !important;
+
+  box-shadow: none !important;
+}
+
+
+.caption.font-dark {
+
+  color: var(--navy) !important;
+}
+
+
+.caption-subject.font-green {
+
+  color: var(--navy) !important;
+}
+
+
+/* =========================================================
+   BOOTSTRAP COLUMN SPACING
+========================================================= */
+
+.form-body .col-md-3 {
+
+  padding-left: 10px;
+
+  padding-right: 10px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   OPTIONAL: KEEP FORM WIDTH CLEAN
+========================================================= */
+
+.form-body form {
+
+  width: 100%;
+
+  margin: 0;
+}
+
+
+/* =========================================================
+   DISABLED
+========================================================= */
+
+.form-control:disabled {
+
+  background: #f3f6f8;
+
+  color: #7b8b9c;
+
+  cursor: not-allowed;
+
+  border-color: #dbe2e8;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .page-content {
+
+    padding: 20px;
+  }
+
+
+  .form-body {
+
+    padding: 22px 18px 26px;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - 768px
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .page-content {
+
+    padding: 12px;
+  }
+
+
+  .portlet-title {
+
+    min-height: auto;
+
+    padding: 15px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 14px;
+  }
+
+
+  .caption-subject {
+
+    font-size: 22px;
+
+    line-height: 29px;
+  }
+
+
+  .actions {
+
+    width: 100%;
+  }
+
+
+  .back-to-index {
+
+    width: 100%;
+
+    min-width: 0;
+  }
+
+
+  .form-body {
+
+    padding: 18px 15px 22px;
+  }
+
+
+  .mandatory_div {
+
+    margin-bottom: 18px;
+  }
+
+
+  .form-body .col-md-3 {
+
+    width: 100%;
+
+    padding-left: 10px;
+
+    padding-right: 10px;
+  }
+
+
+  .form-group {
+
+    margin-bottom: 20px;
+  }
+
+
+  .col-md-12.text-center {
+
+    margin-top: 4px;
+
+    padding-top: 8px;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - 480px
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .page-content {
+
+    padding: 8px;
+  }
+
+
+  .portlet-title {
+
+    padding: 14px;
+  }
+
+
+  .caption-subject {
+
+    font-size: 19px;
+
+    line-height: 26px;
+  }
+
+
+  .form-body {
+
+    padding: 16px 12px 20px;
+  }
+
+
+  .form-control {
+
+    height: 40px;
+
+    font-size: 14px;
+  }
+
+
+  select.form-control {
+
+    height: 40px;
+  }
+
+
+  .col-md-12.text-center {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    align-items: stretch;
+  }
+
+
+  .col-md-12.text-center .btn {
+
+    width: 100%;
+
+    margin: 0;
+
+  }
+
+}

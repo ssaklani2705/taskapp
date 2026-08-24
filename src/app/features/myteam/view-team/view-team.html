@@ -1,0 +1,557 @@
+<div class="page-container">
+
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+  <mat-card class="main-card">
+
+    <mat-card-header class="page-header">
+
+      <div class="page-title">
+        <mat-icon>person</mat-icon>
+        <span>VIEW TEAM</span>
+      </div>
+
+      <div class="header-action">
+        <button
+          mat-flat-button
+          class="back-button"
+          type="button"
+          (click)="backToIndexPage()">
+
+          <mat-icon>arrow_back</mat-icon>
+          Back to Index
+
+        </button>
+      </div>
+
+    </mat-card-header>
+
+
+    <mat-divider></mat-divider>
+
+
+    <!-- =====================================================
+         USER INFORMATION
+    ====================================================== -->
+
+    <mat-card-content class="user-information">
+
+      <div class="user-info-grid">
+
+        <!-- LEFT COLUMN -->
+
+        <div class="user-column">
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Name:
+            </span>
+
+            <span class="info-value">
+              {{ user.name || 'NA' }}
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Expiry Date:
+            </span>
+
+            <span class="info-value">
+              {{ user.expiryDate | date:'dd-MM-yyyy' }}
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Telephone Number:
+            </span>
+
+            <span class="info-value">
+              {{ user.telephone || 'NA' }}
+            </span>
+
+          </div>
+
+
+          <!-- ADMIN PERMISSION -->
+
+          <div class="admin-permission">
+
+            <mat-icon
+              [ngClass]="
+                user.permission === 'Y'
+                  ? 'permission-yes'
+                  : 'permission-no'
+              ">
+
+              {{ user.permission === 'Y'
+                ? 'verified_user'
+                : 'close'
+              }}
+
+            </mat-icon>
+
+            <span>
+              Admin Permissions (All modules)
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- RIGHT COLUMN -->
+
+        <div class="user-column">
+
+          <div class="info-row">
+
+            <span class="info-label">
+              User Name (Email):
+            </span>
+
+            <span class="info-value email-text">
+              {{ user.email || 'NA' }}
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Mobile Number:
+            </span>
+
+            <span class="info-value">
+              {{ user.mobile || 'NA' }}
+            </span>
+
+          </div>
+
+
+          <div class="info-row status-row">
+
+            <span class="info-label">
+              Status:
+            </span>
+
+            <span
+              class="status-badge"
+              [ngClass]="getStatusClass(user.status)">
+
+              {{ getStatusText(user.status) }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+
+  <!-- =====================================================
+       RIGHTS AND PERMISSIONS
+  ====================================================== -->
+
+  <mat-card
+    class="section-card"
+    *ngIf="user.permission !== 'Y'">
+
+    <mat-card-header class="section-header">
+
+      <div class="section-title">
+
+        <mat-icon>
+          security
+        </mat-icon>
+
+        <span>
+          RIGHTS AND PERMISSIONS
+        </span>
+
+      </div>
+
+    </mat-card-header>
+
+
+    <mat-divider></mat-divider>
+
+
+    <mat-card-content class="table-container">
+
+      <div class="permissions-table-wrapper">
+
+        <table class="permissions-table">
+
+          <!-- HEADER -->
+
+          <thead>
+
+            <tr>
+
+              <th class="module-column">
+                Module Name
+              </th>
+
+              <th>
+                Add
+              </th>
+
+              <th>
+                Edit
+              </th>
+
+              <th>
+                Delete
+              </th>
+
+              <th>
+                Approve
+              </th>
+
+              <th class="admin-column">
+                Admin Approval
+              </th>
+
+              <th>
+                View Only
+              </th>
+
+              <th class="export-column">
+                Export Excel
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <!-- BODY -->
+
+          <tbody>
+
+            <ng-container
+              *ngFor="let group of permissionGroups">
+
+              <!-- GROUP -->
+
+              <tr class="group-row">
+
+                <td colspan="8">
+
+                  <mat-icon>
+                    folder_open
+                  </mat-icon>
+
+                  <span>
+                    {{ group.name }}
+                  </span>
+
+                </td>
+
+              </tr>
+
+
+              <!-- MODULES -->
+
+              <tr
+                class="module-row"
+                *ngFor="let mod of group.modules">
+
+                <td class="module-name">
+                  {{ mod }}
+                </td>
+
+
+                <!-- ADD -->
+
+                <td>
+
+                  <mat-icon
+                    [ngClass]="
+                      permissions[mod]?.addPer
+                        ? 'permission-yes'
+                        : 'permission-no'
+                    ">
+
+                    {{
+                      permissions[mod]?.addPer
+                        ? 'check'
+                        : 'close'
+                    }}
+
+                  </mat-icon>
+
+                </td>
+
+
+                <!-- EDIT -->
+
+                <td>
+
+                  <mat-icon
+                    [ngClass]="
+                      permissions[mod]?.editPer
+                        ? 'permission-yes'
+                        : 'permission-no'
+                    ">
+
+                    {{
+                      permissions[mod]?.editPer
+                        ? 'check'
+                        : 'close'
+                    }}
+
+                  </mat-icon>
+
+                </td>
+
+
+                <!-- DELETE -->
+
+                <td>
+
+                  <mat-icon
+                    [ngClass]="
+                      permissions[mod]?.deletePer
+                        ? 'permission-yes'
+                        : 'permission-no'
+                    ">
+
+                    {{
+                      permissions[mod]?.deletePer
+                        ? 'check'
+                        : 'close'
+                    }}
+
+                  </mat-icon>
+
+                </td>
+
+
+                <!-- APPROVE -->
+
+                <td>
+
+                  <mat-icon
+                    [ngClass]="
+                      permissions[mod]?.approvePer
+                        ? 'permission-yes'
+                        : 'permission-no'
+                    ">
+
+                    {{
+                      permissions[mod]?.approvePer
+                        ? 'check'
+                        : 'close'
+                    }}
+
+                  </mat-icon>
+
+                </td>
+
+
+                <!-- ADMIN APPROVAL -->
+
+                <td>
+
+                  <mat-icon
+                    [ngClass]="
+                      permissions[mod]?.adminApprovePer
+                        ? 'permission-yes'
+                        : 'permission-no'
+                    ">
+
+                    {{
+                      permissions[mod]?.adminApprovePer
+                        ? 'check'
+                        : 'close'
+                    }}
+
+                  </mat-icon>
+
+                </td>
+
+
+                <!-- VIEW -->
+
+                <td>
+
+                  <mat-icon
+                    [ngClass]="
+                      permissions[mod]?.viewPer
+                        ? 'permission-yes'
+                        : 'permission-no'
+                    ">
+
+                    {{
+                      permissions[mod]?.viewPer
+                        ? 'check'
+                        : 'close'
+                    }}
+
+                  </mat-icon>
+
+                </td>
+
+
+                <!-- EXPORT -->
+
+                <td>
+
+                  <mat-icon
+                    [ngClass]="
+                      permissions[mod]?.exportExcel
+                        ? 'permission-yes'
+                        : 'permission-no'
+                    ">
+
+                    {{
+                      permissions[mod]?.exportExcel
+                        ? 'check'
+                        : 'close'
+                    }}
+
+                  </mat-icon>
+
+                </td>
+
+              </tr>
+
+            </ng-container>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+
+  <!-- =====================================================
+       ACTION HISTORY
+  ====================================================== -->
+
+  <mat-card class="section-card">
+
+    <mat-card-header class="section-header">
+
+      <div class="section-title">
+
+        <mat-icon>
+          history
+        </mat-icon>
+
+        <span>
+          ACTION HISTORY
+        </span>
+
+      </div>
+
+    </mat-card-header>
+
+
+    <mat-divider></mat-divider>
+
+
+    <mat-card-content class="table-container">
+
+
+      <!-- NO RECORDS -->
+
+      <div
+        *ngIf="!hasTransactionHistory"
+        class="no-records-box">
+
+        <mat-icon>
+          info
+        </mat-icon>
+
+        <span>
+          No record(s) found.
+        </span>
+
+      </div>
+
+
+      <!-- HISTORY TABLE -->
+
+      <div
+        *ngIf="hasTransactionHistory"
+        class="history-table-wrapper">
+
+        <table class="history-table">
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Date & Time
+              </th>
+
+              <th>
+                Action
+              </th>
+
+              <th>
+                Performed By
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            <tr
+              *ngFor="let record of transactionhistory">
+
+              <td>
+                {{ record.entryDate }}
+              </td>
+
+              <td>
+
+                <span class="action-badge">
+                  {{ record.action }}
+                </span>
+
+              </td>
+
+              <td>
+                {{ record.name || 'NA' }}
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </mat-card-content>
+
+  </mat-card>
+
+</div>

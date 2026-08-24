@@ -1,0 +1,301 @@
+<div class="page-content-wrapper">
+  <div class="page-content">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="portlet light portlet-fit portlet-form bordered">
+
+          <!-- ===================================================== -->
+          <!-- HEADER -->
+          <!-- ===================================================== -->
+
+          <div class="portlet-title">
+
+            <div class="caption font-dark">
+              <span class="caption-subject font-green sbold uppercase">
+                <span>
+                  {{ isEditMode ? "Edit" : "Add" }}
+                </span>
+                Department
+              </span>
+            </div>
+
+            <div class="actions">
+              <label
+                class="btn btn-transparent dark btn-outline btn-circle btn-sm active"
+              >
+                <a
+                  (click)="backToIndexPage()"
+                  class="back-to-index"
+                >
+                  Back to Index
+                </a>
+              </label>
+            </div>
+
+          </div>
+
+          <!-- ===================================================== -->
+          <!-- BODY -->
+          <!-- ===================================================== -->
+
+          <div class="portlet-body">
+
+            <form
+              #departmentForm="ngForm"
+              (ngSubmit)="onSubmit(departmentForm)"
+              novalidate
+            >
+
+              <div class="form-body">
+
+                <!-- ================================================= -->
+                <!-- MANDATORY MESSAGE -->
+                <!-- ================================================= -->
+
+                <div class="row">
+
+                  <div class="col-md-12 mandatory_div mb_20">
+
+                    <span>
+                      Fields with
+                      <span class="required">*</span>
+                      mark are mandatory
+                    </span>
+
+                  </div>
+
+                </div>
+
+                <!-- ================================================= -->
+                <!-- FORM ROW -->
+                <!-- ================================================= -->
+
+                <div class="row">
+
+                  <!-- =============================================== -->
+                  <!-- DEPARTMENT NAME -->
+                  <!-- =============================================== -->
+
+                  <div class="col-md-3">
+
+                    <div class="form-group">
+
+                      <label class="sbold">
+                        Department
+                        <span class="required">*</span>
+                      </label>
+
+                      <input
+                        class="form-control"
+                        type="text"
+                        placeholder="Enter Department Name"
+                        [(ngModel)]="department.name"
+                        name="name"
+                        required
+                        minlength="2"
+                        maxlength="100"
+                        (input)="
+                          department.name =
+                            capitalizeFirstCharOnly(department.name)
+                        "
+                        #nameCtrl="ngModel"
+                        pattern="^[a-zA-Z0-9\s\.,;:=$\-_\+'&quot;/\\!@`#%&*()?]+$"
+                      />
+
+                      <!-- Required -->
+
+                      <div
+                        class="text-danger"
+                        *ngIf="
+                          nameCtrl.errors?.['required'] &&
+                          nameCtrl.touched
+                        "
+                      >
+                        Department Name is required
+                      </div>
+
+                      <!-- Minimum Length -->
+
+                      <div
+                        class="text-danger"
+                        *ngIf="
+                          nameCtrl.errors?.['minlength'] &&
+                          nameCtrl.touched
+                        "
+                      >
+                        Minimum 2 characters required
+                      </div>
+
+                      <!-- Pattern -->
+
+                      <div
+                        class="text-danger"
+                        *ngIf="
+                          nameCtrl.errors?.['pattern'] &&
+                          nameCtrl.touched
+                        "
+                      >
+                        Only a-z, 0-9, . , ; : = $ - _ + ' " / \ ! &#64; `
+                        # % & * ( ) ? are allowed
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <!-- =============================================== -->
+                  <!-- SEQUENCE -->
+                  <!-- =============================================== -->
+
+                  <div class="col-md-3">
+
+                    <div class="form-group">
+
+                      <label class="sbold">
+                        Sequence
+                        <span class="required">*</span>
+                      </label>
+
+                      <input
+                        class="form-control"
+                        type="number"
+                        placeholder="Enter Sequence"
+                        [(ngModel)]="department.sequence"
+                        name="sequence"
+                        required
+                        min="1"
+                        max="999999"
+                        step="1"
+                        #sequenceCtrl="ngModel"
+                      />
+
+                      <!-- Required -->
+
+                      <div
+                        class="text-danger"
+                        *ngIf="
+                          sequenceCtrl.errors?.['required'] &&
+                          sequenceCtrl.touched
+                        "
+                      >
+                        Sequence is required
+                      </div>
+
+                      <!-- Minimum -->
+
+                      <div
+                        class="text-danger"
+                        *ngIf="
+                          sequenceCtrl.errors?.['min'] &&
+                          sequenceCtrl.touched
+                        "
+                      >
+                        Sequence must be greater than 0
+                      </div>
+
+                      <!-- Maximum -->
+
+                      <div
+                        class="text-danger"
+                        *ngIf="
+                          sequenceCtrl.errors?.['max'] &&
+                          sequenceCtrl.touched
+                        "
+                      >
+                        Sequence cannot be greater than 999999
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <!-- =============================================== -->
+                  <!-- STATUS -->
+                  <!-- =============================================== -->
+
+                  <div
+                    class="col-md-3"
+                    *ngIf="isEditMode"
+                  >
+
+                    <div class="form-group">
+
+                      <label class="sbold">
+                        Status
+                        <span class="required">*</span>
+                      </label>
+
+                      <select
+                        class="form-control"
+                        [(ngModel)]="department.status"
+                        name="status"
+                        required
+                        #statusCtrl="ngModel"
+                      >
+
+                        <option value="">
+                          -- Select here --
+                        </option>
+
+                        <option [ngValue]="1">
+                          Active
+                        </option>
+
+                        <option [ngValue]="2">
+                          Inactive
+                        </option>
+
+                      </select>
+
+                      <div
+                        class="text-danger"
+                        *ngIf="
+                          statusCtrl.errors?.['required'] &&
+                          statusCtrl.touched
+                        "
+                      >
+                        Status is required
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                  <!-- =============================================== -->
+                  <!-- BUTTONS -->
+                  <!-- =============================================== -->
+
+                  <div class="col-md-12 text-center">
+
+                    <button
+                      type="button"
+                      (click)="onReset()"
+                      class="btn default"
+                    >
+                      Reset
+                    </button>
+
+                    &nbsp;
+
+                    <button
+                      type="submit"
+                      class="btn green"
+                    >
+                      Submit
+                    </button>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
