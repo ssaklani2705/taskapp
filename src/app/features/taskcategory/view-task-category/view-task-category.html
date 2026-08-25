@@ -1,182 +1,142 @@
-<div class="page-content-wrapper">
-  <div class="page-content">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="portlet light portlet-fit portlet-form bordered">
+<div class="page-container">
 
-          <!-- Header -->
-          <div class="portlet-title">
-            <div class="caption font-dark">
-              <span class="caption-subject font-green sbold uppercase">
-                <span>view</span> Task Category
-              </span>
-            </div>
+  <!-- ===================================== -->
+  <!-- VIEW TASK CATEGORY -->
+  <!-- ===================================== -->
 
-            <div class="actions">
-              <label
-                class="btn btn-transparent dark btn-outline btn-circle btn-sm active"
-              >
-                <a
-                  (click)="backToIndexPage()"
-                  class="back-to-index"
-                >
-                  Back to Index
-                </a>
-              </label>
-            </div>
-          </div>
+  <mat-card class="view-card">
 
-          <!-- Task Category Details -->
-          <mat-card class="content-info-card">
-            <mat-card-content>
+    <div class="card-header">
 
-              <div class="content-info-grid">
+      <div class="page-title">
+        <mat-icon>category</mat-icon>
+        <span>View Task Category</span>
+      </div>
 
-                <!-- Task Category Name -->
-                <div class="content-info-item">
-                  <span class="label">Name:</span>
-                  <span class="value">
-                    {{ taskCategory.name }}
-                  </span>
-                </div>
+      <button
+        mat-flat-button
+        class="back-button"
+        (click)="backToIndexPage()">
 
-                <!-- Department -->
-                <div class="content-info-item">
-                  <span class="label">Department:</span>
-                  <span class="value">
-                    {{ taskCategory.departmentName || '-' }}
-                  </span>
-                </div>
+        <mat-icon>arrow_back</mat-icon>
+        Back to Index
 
-                <!-- Status -->
-                <div class="content-info-item">
-                  <span class="label">Status:</span>
+      </button>
 
-                  <span
-                    [ngClass]="common.getStatusClass(taskCategory.status)"
-                  >
-                    {{ common.getStatusLabel(taskCategory.status) }}
-                  </span>
-                </div>
+    </div>
 
-              </div>
+    <mat-divider></mat-divider>
 
-            </mat-card-content>
-          </mat-card>
+    <div class="details-section">
 
-          <!-- Action History -->
-          <div class="row">
-            <div class="col-md-12">
+      <div class="details-row">
 
-              <div
-                class="portlet light portlet-fit portlet-form bordered"
-              >
+        <div class="detail-item">
+          <span class="label">Task Category:</span>
+          <span class="value">{{ taskCategory.name }}</span>
+        </div>
 
-                <div class="portlet-title">
-                  <div class="caption font-dark">
-                    <span
-                      class="caption-subject font-green sbold uppercase"
-                    >
-                      Action History
-                    </span>
-                  </div>
-                </div>
+        <div class="detail-item">
+          <span class="label">Department:</span>
+          <span class="value">
+            {{ taskCategory.departmentName || 'NA' }}
+          </span>
+        </div>
 
-                <div class="portlet-body">
-                  <div class="form-body">
+        <div class="detail-item">
+          <span class="label">Status:</span>
 
-                    <table
-                      class="table table-striped table-bordered table-hover table-header-fixed order-column table_align"
-                      width="100%"
-                    >
+          <span
+            class="status-text"
+            [ngClass]="common.getStatusClass(taskCategory.status)">
 
-                      <thead>
-                        <tr>
-                          <th
-                            class="disableicon td_space"
-                            width="4%"
-                          >
-                            #
-                          </th>
+            {{ common.getStatusLabel(taskCategory.status) }}
 
-                          <th
-                            class="td_space"
-                            width="20%"
-                          >
-                            Action By
-                          </th>
-
-                          <th
-                            class="td_space"
-                            width="20%"
-                          >
-                            Updated on
-                          </th>
-
-                          <th
-                            class="td_space"
-                            width="56%"
-                          >
-                            Action
-                          </th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-
-                        <tr
-                          *ngFor="
-                            let history of transactionHistory;
-                            let i = index
-                          "
-                        >
-
-                          <td>
-                            {{ i + 1 }}
-                          </td>
-
-                          <td>
-                            {{ history.name }}
-                          </td>
-
-                          <td>
-                            {{ history.entryDate }}
-                          </td>
-
-                          <td>
-                            {{ history.action }}
-                          </td>
-
-                        </tr>
-
-                        <tr
-                          *ngIf="
-                            !transactionHistory ||
-                            transactionHistory.length === 0
-                          "
-                        >
-                          <td
-                            colspan="4"
-                            class="text-center"
-                          >
-                            No action history found
-                          </td>
-                        </tr>
-
-                      </tbody>
-
-                    </table>
-
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-          </div>
+          </span>
 
         </div>
+
       </div>
+
     </div>
-  </div>
+
+  </mat-card>
+
+
+  <!-- ===================================== -->
+  <!-- ACTION HISTORY -->
+  <!-- ===================================== -->
+
+  <mat-card class="history-card">
+
+    <div class="section-header">
+
+      <div class="section-title">
+        <mat-icon>history</mat-icon>
+        <span>Action History</span>
+      </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="table-wrapper">
+
+      <table
+        class="history-table"
+        *ngIf="transactionHistory?.length">
+
+        <thead>
+
+          <tr>
+            <th width="5%">#</th>
+            <th width="20%">Action By</th>
+            <th width="20%">Updated On</th>
+            <th width="55%">Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let history of transactionHistory;
+              let i = index
+            ">
+
+            <td>{{ i + 1 }}</td>
+
+            <td>{{ history.name }}</td>
+
+            <td>{{ history.entryDate }}</td>
+
+            <td>
+
+              <span class="action-badge">
+
+                {{ history.action }}
+
+              </span>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <div
+        *ngIf="!transactionHistory?.length"
+        class="no-record">
+
+        No action history found
+
+      </div>
+
+    </div>
+
+  </mat-card>
+
 </div>

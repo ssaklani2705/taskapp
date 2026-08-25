@@ -1,0 +1,1054 @@
+/* =========================================================
+   USER PAGE
+   Color scheme matched to VIEW TEAM page
+   ========================================================= */
+
+:host {
+    display: block;
+    width: 100%;
+    color: #193b63;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =========================================================
+   COLOR VARIABLES
+   ========================================================= */
+
+:host {
+    --navy: #1b3b63;
+    --navy-dark: #142f50;
+    --navy-hover: #244c7b;
+
+    --primary-blue: #3378a9;
+    --primary-blue-dark: #28658f;
+
+    --heading-blue: #3378a9;
+    --link-blue: #008fd3;
+
+    --text-navy: #193b63;
+    --text-blue: #416789;
+
+    --border: #dce4ec;
+    --border-dark: #bccbda;
+
+    --table-header: #edf4f8;
+    --table-group: #f4f7f9;
+
+    --white: #ffffff;
+
+    --success-bg: #e7f5ef;
+    --success-border: #b9dfcf;
+    --success-text: #21845d;
+
+    --danger: #d9534f;
+}
+
+
+/* =========================================================
+   MAIN WRAPPER
+   ========================================================= */
+
+.user-page-wrapper {
+    //   width: 100%;
+    //   padding: 6px;
+
+    background: #ffffff;
+    width: 100%;
+    padding: 24px 34px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PORTLET
+   ========================================================= */
+
+.user-portlet {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.user-portlet-title {
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 14px;
+
+    border-bottom: 1px solid var(--border);
+
+    background: #ffffff;
+
+    box-sizing: border-box;
+}
+
+
+.user-title {
+    display: flex;
+    align-items: center;
+}
+
+
+/* =========================================================
+   ADD USER / EDIT USER
+   MATCHES VIEW TEAM NAVY HEADING
+   ========================================================= */
+
+.user-page-title {
+    color: var(--navy) !important;
+
+    font-size: 24px !important;
+
+    font-weight: 700 !important;
+
+    line-height: 1.2;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0;
+
+    font-family: Georgia, "Times New Roman", serif !important;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+   MATCHES VIEW TEAM
+   ========================================================= */
+
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+
+.back-index-btn {
+    height: 44px !important;
+
+    min-width: 176px;
+
+    padding: 0 20px !important;
+
+    border: 0 !important;
+
+    border-radius: 4px !important;
+
+    background: var(--navy) !important;
+
+    color: #ffffff !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    line-height: 1.2;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.back-index-btn:hover {
+    background: var(--navy-hover) !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.user-portlet-body {
+    width: 100%;
+
+    background: #ffffff;
+}
+
+
+.user-form-body {
+    padding: 18px 14px 24px 14px;
+
+    background: #ffffff;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MANDATORY MESSAGE
+   ========================================================= */
+
+.mandatory-message {
+    color: var(--text-navy) !important;
+
+    font-size: 14px !important;
+
+    line-height: 22px;
+
+    margin-bottom: 25px;
+}
+
+
+.required {
+    color: var(--danger) !important;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FORM ROW
+   ========================================================= */
+
+// .user-form-row {
+//   display: grid;
+
+//   grid-template-columns:
+//     repeat(4, minmax(0, 1fr));
+
+//   column-gap: 38px;
+
+//   width: 100%;
+
+//   margin-bottom: 18px;
+
+//   box-sizing: border-box;
+// }
+
+
+/* =========================================================
+   FORM COLUMN
+   ========================================================= */
+
+// .user-form-col {
+//   min-width: 0;
+
+//   width: 100%;
+// }
+
+
+.empty-column {
+    min-height: 1px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.user-form-group {
+    width: 100%;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.user-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 700 !important;
+
+    line-height: 20px;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.user-input {
+    display: block;
+
+    width: 100% !important;
+
+    height: 43px !important;
+
+    min-height: 43px !important;
+
+    padding: 8px 14px !important;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--border-dark) !important;
+
+    border-radius: 2px !important;
+
+    background: #ffffff !important;
+
+    color: var(--text-blue) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 400 !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    outline: none !important;
+
+    box-shadow: none !important;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+.user-input:hover {
+    border-color: #9fb2c4 !important;
+}
+
+
+.user-input:focus {
+    border-color: var(--primary-blue) !important;
+
+    background: #ffffff !important;
+
+    box-shadow:
+        0 0 0 1px rgba(51, 120, 169, 0.12) !important;
+}
+
+
+.user-input::placeholder {
+    color: #8794a2 !important;
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+.user-select {
+    appearance: auto;
+
+    cursor: pointer;
+
+    background-color: #ffffff !important;
+
+    color: var(--text-blue) !important;
+}
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+.user-date-group {
+    display: flex;
+
+    width: 100%;
+
+    height: 43px;
+
+    box-sizing: border-box;
+}
+
+
+.user-date-icon {
+    width: 52px;
+
+    min-width: 52px;
+
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #e7ebef;
+
+    color: #52616e;
+
+    border: 1px solid #d2dbe3;
+
+    border-right: 0;
+
+    box-sizing: border-box;
+}
+
+
+.user-date-icon i {
+    font-size: 16px;
+}
+
+
+.user-date-group .user-date-input {
+    flex: 1;
+
+    width: auto !important;
+
+    border-left: 1px solid var(--border-dark) !important;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.user-error {
+    color: var(--danger) !important;
+
+    font-size: 12px !important;
+
+    margin-top: 5px;
+
+    line-height: 16px;
+}
+
+
+/* =========================================================
+   ADMIN ROW
+   ========================================================= */
+
+.admin-row {
+    width: 100%;
+
+    margin-top: 4px;
+
+    margin-bottom: 20px;
+
+    min-height: 35px;
+
+    display: flex;
+
+    align-items: center;
+}
+
+
+/* =========================================================
+   ADMIN CHECKBOX
+   ========================================================= */
+
+.admin-row mat-checkbox {
+    color: var(--text-navy) !important;
+}
+
+
+.admin-row .mat-mdc-checkbox {
+    --mdc-checkbox-selected-checkmark-color: #ffffff;
+
+    --mdc-checkbox-selected-focus-icon-color: #3378a9;
+
+    --mdc-checkbox-selected-hover-icon-color: #3378a9;
+
+    --mdc-checkbox-selected-icon-color: #3378a9;
+
+    --mdc-checkbox-unselected-icon-color: #5b6269;
+}
+
+
+.admin-row .mdc-form-field {
+    color: var(--text-navy) !important;
+}
+
+
+.admin-row .mdc-label {
+    color: var(--text-navy) !important;
+
+    font-size: 14px !important;
+}
+
+
+/* =========================================================
+   RIGHTS SECTION
+   ========================================================= */
+
+.rights-section {
+    width: 100%;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================================
+   RIGHTS AND PERMISSIONS TITLE
+   MATCHES VIEW TEAM BLUE
+   ========================================================= */
+
+.rights-title {
+    color: var(--heading-blue) !important;
+
+    font-size: 22px !important;
+
+    font-weight: 700 !important;
+
+    text-transform: uppercase;
+
+    line-height: 28px;
+
+    margin-bottom: 18px;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+   ========================================================= */
+
+.permissions-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid var(--border);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.permissions-table {
+    width: 100%;
+
+    min-width: 1000px;
+
+    border-collapse: collapse;
+
+    border-spacing: 0;
+
+    background: #ffffff;
+
+    color: var(--text-navy);
+
+    table-layout: fixed;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+.permissions-table thead th {
+    height: 46px;
+
+    padding: 10px;
+
+    border: 1px solid var(--border) !important;
+
+    background: var(--table-header) !important;
+
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 700 !important;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    box-sizing: border-box;
+}
+
+
+/* First column */
+
+.permissions-table thead th:first-child {
+    color: var(--text-navy) !important;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MODULE COLUMN
+   ========================================================= */
+
+.permissions-table .module-column {
+    width: 19%;
+
+    color: var(--text-navy) !important;
+}
+
+
+/* Other permission columns */
+
+.permissions-table th:not(:first-child) {
+    width: 11.57%;
+}
+
+
+/* =========================================================
+   TABLE BODY
+   ========================================================= */
+
+.permissions-table tbody td {
+    height: 56px;
+
+    padding: 10px;
+
+    border: 1px solid var(--border) !important;
+
+    background: #ffffff !important;
+
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    vertical-align: middle;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   GROUP HEADER
+   ========================================================= */
+
+.permissions-table tbody tr.group-header td {
+    background: var(--table-group) !important;
+
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 600 !important;
+}
+
+
+.permissions-table tbody tr.group-header td:first-child strong {
+    color: var(--primary-blue) !important;
+
+    font-weight: 700 !important;
+}
+
+
+/* =========================================================
+   MODULE NAME
+   ========================================================= */
+
+.permissions-table .module-name {
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 400 !important;
+
+    padding-left: 36px !important;
+}
+
+
+/* =========================================================
+   SELECT ALL
+   ========================================================= */
+
+.select-all-text {
+    color: var(--text-navy) !important;
+
+    font-size: 13px !important;
+
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   MATERIAL CHECKBOX
+   ========================================================= */
+
+.permissions-table mat-checkbox {
+    display: inline-flex;
+
+    align-items: center;
+
+    color: var(--text-navy) !important;
+}
+
+
+.permissions-table .mdc-form-field {
+    color: var(--text-navy) !important;
+}
+
+
+.permissions-table .mdc-label {
+    color: var(--text-navy) !important;
+
+    font-size: 13px !important;
+}
+
+
+/* =========================================================
+   CHECKBOX - SELECTED
+   ========================================================= */
+
+.permissions-table .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__background {
+    background-color: #3378a9 !important;
+
+    border-color: #3378a9 !important;
+}
+
+
+/* =========================================================
+   CHECKBOX - BORDER
+   ========================================================= */
+
+.permissions-table .mdc-checkbox__native-control~.mdc-checkbox__background {
+    border-color: #66727d !important;
+}
+
+
+/* =========================================================
+   CHECKBOX HOVER
+   ========================================================= */
+
+.permissions-table .mat-mdc-checkbox:hover .mdc-checkbox__background {
+    border-color: #3378a9 !important;
+}
+
+
+/* =========================================================
+   BUTTON AREA
+   ========================================================= */
+
+.user-buttons {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 28px;
+}
+
+
+/* =========================================================
+   RESET BUTTON
+   WHITE + NAVY BORDER
+   ========================================================= */
+
+.user-reset-btn {
+    min-width: 90px;
+
+    height: 40px;
+
+    padding: 8px 20px;
+
+    border: 1px solid var(--navy) !important;
+
+    border-radius: 4px !important;
+
+    background: #ffffff !important;
+
+    color: var(--navy) !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.user-reset-btn:hover {
+    background: #eef4f9 !important;
+
+    border-color: var(--navy-hover) !important;
+
+    color: var(--navy-hover) !important;
+}
+
+
+/* =========================================================
+   SUBMIT / UPDATE BUTTON
+   SAME NAVY AS VIEW TEAM BACK BUTTON
+   ========================================================= */
+
+.user-submit-btn {
+    min-width: 90px;
+
+    height: 40px;
+
+    padding: 8px 20px;
+
+    border: 1px solid var(--navy) !important;
+
+    border-radius: 4px !important;
+
+    background: var(--navy) !important;
+
+    color: #ffffff !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.user-submit-btn:hover {
+    background: var(--navy-hover) !important;
+
+    border-color: var(--navy-hover) !important;
+}
+
+
+.user-submit-btn:active {
+    background: var(--navy-dark) !important;
+
+    border-color: var(--navy-dark) !important;
+}
+
+
+.user-submit-btn:disabled {
+    background: #7f91a5 !important;
+
+    border-color: #7f91a5 !important;
+
+    color: #ffffff !important;
+
+    opacity: 0.7;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   OLD BACK-BUTTON CLASS
+   If used elsewhere in this component
+   ========================================================= */
+
+.back-button {
+    height: 38px !important;
+
+    min-width: 130px;
+
+    padding: 0 18px !important;
+
+    border-radius: 4px !important;
+
+    background: var(--navy) !important;
+
+    color: #ffffff !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    box-shadow: none !important;
+
+    display: inline-flex !important;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    border: 0 !important;
+
+    cursor: pointer;
+}
+
+
+.back-button:hover {
+    background: var(--navy-hover) !important;
+}
+
+
+.back-button mat-icon {
+    width: 18px;
+
+    height: 18px;
+
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .user-form-row {
+        column-gap: 20px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    .user-form-row {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        row-gap: 18px;
+
+        column-gap: 20px;
+    }
+
+
+    .empty-column {
+        display: none;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .user-portlet-title {
+        min-height: 55px;
+
+        padding: 8px 10px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+
+    .user-actions {
+        width: 100%;
+    }
+
+
+    .back-index-btn {
+        width: auto;
+
+        min-width: 150px;
+    }
+
+
+    .user-form-body {
+        padding: 15px 10px;
+    }
+
+
+    .user-form-row {
+        grid-template-columns: 1fr;
+
+        row-gap: 15px;
+    }
+
+
+    .user-page-title {
+        font-size: 20px !important;
+    }
+
+
+    .rights-title {
+        font-size: 19px !important;
+
+        line-height: 25px;
+    }
+
+
+    .permissions-table {
+        min-width: 1000px;
+    }
+
+
+    .user-buttons {
+        margin-top: 22px;
+    }
+
+}
+
+
+.user-form-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
+    width: 150%;
+}
+
+.user-form-col {
+    min-width: 0;
+    width: 100%;
+}
+
+.user-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+@media (max-width: 992px) {
+    .user-form-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .user-form-row {
+        grid-template-columns: 1fr;
+    }
+}

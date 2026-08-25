@@ -1,433 +1,397 @@
-<div class="page-content-wrapper">
-  <div class="page-content">
-    <div class="row">
-      <div class="col-md-12 col-xs-12">
-        <div class="portlet light bordered topspace">
-          <div class="portlet-body">
-            <div class="row">
 
-              <!-- Header -->
-              <div class="col-md-6">
-                <a
-                  class="arrows font-green accordion_up user_module"
-                  (click)="togglePanel()"
-                >
-                  <span class="font-green panel-title">
-                    Task Category Master
-                  </span>
-                  <span>{{ isPanelVisible ? "▲" : "▼" }}</span>
-                </a>
-              </div>
+<div class="page-container">
 
-              <!-- Search Panel -->
-              <div
-                class="col-md-12 col-sm-12 col-xs-12 main_search_panel"
-                id="1"
-                style="display: block"
-                *ngIf="isPanelVisible"
-              >
-                <div class="panel-body search_panel">
-                  <div class="row">
+  <div class="main-card">
 
-                    <div class="col-md-12 col-sm-12 col-xs-12">
+    <!-- =========================================================
+         PAGE HEADER
+    ========================================================== -->
+    <div class="page-header">
 
-                      <!-- Add Button -->
-                      <div class="add_btn fl_left r_space m_space null">
-                        @if (addPer === "Y") {
-                          <button
-                            type="button"
-                            (click)="addTaskCategory()"
-                            class="btn sbold green"
-                          >
-                            Add New +
-                          </button>
-                        }
-                      </div>
+      <div class="page-title">
+        <mat-icon>task_alt</mat-icon>
+        <span>Task Category Master</span>
+      </div>
 
-                      <!-- Search -->
-                      <div class="col-md-4 col-sm-5 col-xs-12 m_space">
-                        <div class="chat-form">
-                          <div class="input-cont">
-                            <input
-                              type="text"
-                              [(ngModel)]="searchQuery"
-                              placeholder="Search by Task Category Name"
-                              class="form-control"
-                              (keyup.enter)="onSearch()"
-                            />
-                          </div>
+      <div class="header-action">
+        @if (addPer === 'Y') {
+          <button
+            type="button"
+            class="add-button"
+            (click)="addTaskCategory()">
+            <mat-icon>add</mat-icon>
+            Add New
+          </button>
+        }
+      </div>
 
-                          <div class="btn-cont">
-                            <span class="arrow"></span>
+    </div>
 
-                            <a
-                              (click)="onSearch()"
-                              class="btn blue icn-only"
-                            >
-                              <i class="fa fa-search icon-white"></i>
-                            </a>
-                          </div>
-                        </div>
-                      </div>
+    <mat-divider></mat-divider>
 
-                      <!-- Department Filter -->
-                      <div class="col-md-3 col-sm-6 col-xs-12 m_space">
-                        <select
-                          class="form-control"
-                          [(ngModel)]="selectedDepartment"
-                          (change)="onSearch()"
-                        >
-                          <option value="">--All Department--</option>
+    <!-- =========================================================
+         SEARCH SECTION
+    ========================================================== -->
+    <div class="search-section">
 
-                          <option
-                            *ngFor="let department of departments"
-                            [value]="department.departmentId"
-                          >
-                            {{ department.name }}
-                          </option>
-                        </select>
-                      </div>
+      <div class="search-grid">
 
-                      <!-- Status -->
-                      <div class="col-md-2 col-sm-6 col-xs-12 m_space">
-                        <select
-                          class="form-control"
-                          [(ngModel)]="selectedStatus"
-                          (change)="onSearch()"
-                        >
-                          <option value="">--All Status--</option>
-                          <option value="1">Active</option>
-                          <option value="2">Inactive</option>
-                          <option value="3">Deleted</option>
-                        </select>
-                      </div>
+        <!-- Search -->
+        <div class="search-field search-name">
+          <label>Task Category Name</label>
 
-                      <!-- Go -->
-                      <div class="null fl_left r_space m_space">
-                        <a
-                          (click)="onSearch()"
-                          class="btn blue"
-                        >
-                          Go
-                        </a>
-                      </div>
+          <div class="search-input-wrapper">
+            <input
+              type="text"
+              [(ngModel)]="searchQuery"
+              placeholder="Search by Task Category Name"
+              (keyup.enter)="onSearch()"/>
 
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <button
+              type="button"
+              class="search-button"
+              (click)="onSearch()">
 
-              <!-- Result Section -->
-              <div class="col-md-12 col-sm-12 col-xs-12 mt_30">
+              <mat-icon>search</mat-icon>
 
-                <!-- Top Pagination -->
-                <div class="row">
-
-                  <div
-                    class="col-md-5 col-sm-6 col-xs-12 showing_record"
-                  >
-                    <div
-                      class="dataTables_info showing_result"
-                      role="status"
-                      aria-live="polite"
-                    >
-                      {{ recordSummary }}
-                    </div>
-                  </div>
-
-                  <div class="col-md-7 col-sm-7 col-xs-12">
-                    <div class="pagination">
-
-                      <button
-                        (click)="goToFirstPage()"
-                        [disabled]="currentPage === 1"
-                      >
-                        « First
-                      </button>
-
-                      <button
-                        (click)="goToPage(currentPage - 1)"
-                        [disabled]="currentPage === 1"
-                      >
-                        ‹ Prev
-                      </button>
-
-                      <button
-                        *ngFor="let page of pages()"
-                        (click)="goToPage(page)"
-                        [class.active-pagination]="
-                          page === currentPage
-                        "
-                      >
-                        {{ page }}
-                      </button>
-
-                      <button
-                        (click)="goToPage(currentPage + 1)"
-                        [disabled]="currentPage === totalPages"
-                      >
-                        Next ›
-                      </button>
-
-                      <button
-                        (click)="goToLastPage()"
-                        [disabled]="currentPage === totalPages"
-                      >
-                        Last »
-                      </button>
-
-                    </div>
-                  </div>
-
-                </div>
-
-                <!-- Table -->
-                <div class="table-scrollable">
-
-                  <table
-                    class="table table-striped table-bordered table-hover table-checkable"
-                  >
-
-                    <thead>
-                      <tr>
-
-                        <th width="2%">#</th>
-
-                        <th
-                          *ngFor="let col of columns"
-                          (click)="
-                            col.sortable && sortData(col.key)
-                          "
-                          class="sortable"
-                        >
-                          {{ col.label }}
-
-                          <span
-                            *ngIf="col.sortable"
-                            class="sort-icons"
-                          >
-                            <span
-                              [class.active]="
-                                sortColumn === col.key &&
-                                sortDirection === 'asc'
-                              "
-                            >
-                              ▲
-                            </span>
-
-                            <span
-                              [class.active]="
-                                sortColumn === col.key &&
-                                sortDirection === 'desc'
-                              "
-                            >
-                              ▼
-                            </span>
-                          </span>
-
-                        </th>
-
-                        <th width="15%">
-                          Action
-                        </th>
-
-                      </tr>
-                    </thead>
-
-                    <tbody>
-
-                      <tr
-                        *ngFor="
-                          let taskCategory of paginatedTaskCategories;
-                          let i = index
-                        "
-                      >
-
-                        <!-- Serial Number -->
-                        <td>
-                          {{
-                            (currentPage - 1) *
-                              recordsPerPage +
-                              i +
-                              1
-                          }}
-                        </td>
-
-                        <!-- Department -->
-                        <td class="wrap-text">
-                          {{ taskCategory.departmentName }}
-                        </td>
-
-                        <!-- Name -->
-                        <td class="wrap-text">
-                          {{ taskCategory.name }}
-                        </td>
-
-                        <!-- Status -->
-                        <td>
-                          <span
-                            [ngClass]="
-                              common.getStatusClass(
-                                taskCategory.status
-                              )
-                            "
-                          >
-                            {{
-                              common.getStatusLabel(
-                                taskCategory.status
-                              )
-                            }}
-                          </span>
-                        </td>
-
-                        <!-- Action -->
-                        <td>
-
-                          <!-- View -->
-                          @if (viewPer === "Y") {
-                            <a
-                              (click)="
-                                viewTaskCategory(
-                                  taskCategory.taskcategoryId
-                                )
-                              "
-                              class="btn btn-sm dark btn-outline"
-                              title="View"
-                            >
-                              <i class="fa fa-search"></i>
-                            </a>
-                          }
-
-                          <!-- Edit / Delete -->
-                          <ng-container
-                            *ngIf="
-                              taskCategory.status === 1 ||
-                              taskCategory.status === 2
-                            "
-                          >
-
-                            @if (editPer === "Y") {
-                              <a
-                                (click)="
-                                  editTaskCategory(
-                                    taskCategory.taskcategoryId
-                                  )
-                                "
-                                class="btn btn-sm green btn-outline"
-                                title="Edit"
-                              >
-                                <i class="fa fa-pencil"></i>
-                              </a>
-                            }
-
-                            @if (deletePer === "Y") {
-                              <a
-                                (click)="
-                                  onDeleteTaskCategory(
-                                    taskCategory.taskcategoryId
-                                  )
-                                "
-                                class="btn btn-sm red btn-outline"
-                                title="Delete"
-                              >
-                                <i class="fa fa-close"></i>
-                              </a>
-                            }
-
-                          </ng-container>
-
-                        </td>
-
-                      </tr>
-
-                      <!-- No Data -->
-                      <tr
-                        *ngIf="
-                          !paginatedTaskCategories ||
-                          paginatedTaskCategories.length === 0
-                        "
-                      >
-                        <td
-                          [attr.colspan]="columns.length + 2"
-                          class="text-center"
-                        >
-                          No records found
-                        </td>
-                      </tr>
-
-                    </tbody>
-
-                  </table>
-
-                </div>
-
-                <!-- Bottom Pagination -->
-                <div class="row">
-
-                  <div
-                    class="col-md-5 col-sm-6 col-xs-12 showing_record"
-                  >
-                    <div
-                      class="dataTables_info showing_result"
-                      role="status"
-                      aria-live="polite"
-                    >
-                      {{ recordSummary }}
-                    </div>
-                  </div>
-
-                  <div class="col-md-7 col-sm-7 col-xs-12">
-                    <div class="pagination">
-
-                      <button
-                        (click)="goToFirstPage()"
-                        [disabled]="currentPage === 1"
-                      >
-                        « First
-                      </button>
-
-                      <button
-                        (click)="goToPage(currentPage - 1)"
-                        [disabled]="currentPage === 1"
-                      >
-                        ‹ Prev
-                      </button>
-
-                      <button
-                        *ngFor="let page of pages()"
-                        (click)="goToPage(page)"
-                        [class.active-pagination]="
-                          page === currentPage
-                        "
-                      >
-                        {{ page }}
-                      </button>
-
-                      <button
-                        (click)="goToPage(currentPage + 1)"
-                        [disabled]="currentPage === totalPages"
-                      >
-                        Next ›
-                      </button>
-
-                      <button
-                        (click)="goToLastPage()"
-                        [disabled]="currentPage === totalPages"
-                      >
-                        Last »
-                      </button>
-
-                    </div>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
+            </button>
           </div>
         </div>
+
+        <!-- Department -->
+        <div class="search-field">
+          <label>Department</label>
+
+          <select
+            [(ngModel)]="selectedDepartment"
+            (change)="onSearch()">
+
+            <option value="">-- All Department --</option>
+
+            <option
+              *ngFor="let department of departments"
+              [value]="department.departmentId">
+
+              {{ department.name }}
+
+            </option>
+
+          </select>
+        </div>
+
+        <!-- Status -->
+        <div class="search-field">
+
+          <label>Status</label>
+
+          <select
+            [(ngModel)]="selectedStatus"
+            (change)="onSearch()">
+
+            <option value="">-- All Status --</option>
+            <option value="1">Active</option>
+            <option value="2">Inactive</option>
+            <option value="3">Deleted</option>
+
+          </select>
+
+        </div>
+
+        <!-- Go Button -->
+        <div class="filter-action">
+
+          <button
+            type="button"
+            class="go-button"
+            (click)="onSearch()">
+
+            <mat-icon>search</mat-icon>
+            Go
+
+          </button>
+
+        </div>
+
       </div>
+
     </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- =========================================================
+         TABLE SECTION
+    ========================================================== -->
+
+    <div class="table-section">
+
+      <!-- Top Toolbar -->
+      <div class="table-toolbar">
+
+        <div class="record-summary">
+          {{ recordSummary }}
+        </div>
+
+        <div class="pagination">
+
+          <button
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1">
+
+            « First
+
+          </button>
+
+          <button
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1">
+
+            ‹ Prev
+
+          </button>
+
+          <button
+            *ngFor="let page of pages()"
+            (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage">
+
+            {{ page }}
+
+          </button>
+
+          <button
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages">
+
+            Next ›
+
+          </button>
+
+          <button
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages">
+
+            Last »
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Table -->
+
+      <div class="table-wrapper">
+
+        <table class="designation-table">
+
+          <thead>
+
+            <tr>
+
+              <th class="serial-column">#</th>
+
+              <th
+                *ngFor="let col of columns"
+                [class.sortable]="col.sortable"
+                (click)="col.sortable && sortData(col.key)">
+
+                <span>{{ col.label }}</span>
+
+                <span
+                  *ngIf="col.sortable"
+                  class="sort-icons">
+
+                  <span
+                    [class.active]="
+                    sortColumn === col.key &&
+                    sortDirection === 'asc'">
+
+                    ▲
+
+                  </span>
+
+                  <span
+                    [class.active]="
+                    sortColumn === col.key &&
+                    sortDirection === 'desc'">
+
+                    ▼
+
+                  </span>
+
+                </span>
+
+              </th>
+
+              <th class="action-column">
+                Action
+              </th>
+
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            <tr
+              *ngFor="
+              let taskCategory of paginatedTaskCategories;
+              let i = index">
+
+              <td class="serial-cell">
+                {{
+                  (currentPage - 1) *
+                  recordsPerPage +
+                  i +
+                  1
+                }}
+              </td>
+
+              <td>
+                {{ taskCategory.departmentName }}
+              </td>
+
+              <td>
+                {{ taskCategory.name }}
+              </td>
+
+              <td>
+
+                <span
+                  class="status-badge"
+                  [ngClass]="
+                    common.getStatusClass(
+                      taskCategory.status
+                    )">
+
+                  {{
+                    common.getStatusLabel(
+                      taskCategory.status
+                    )
+                  }}
+
+                </span>
+
+              </td>
+
+              <td class="action-cell">
+
+                @if (viewPer === 'Y') {
+
+                  <button
+                    class="action-button view-button"
+                    (click)="viewTaskCategory(taskCategory.taskcategoryId)">
+
+                    <mat-icon>visibility</mat-icon>
+
+                  </button>
+
+                }
+
+                <ng-container
+                  *ngIf="
+                  taskCategory.status === 1 ||
+                  taskCategory.status === 2">
+
+                  @if (editPer === 'Y') {
+
+                    <button
+                      class="action-button edit-button"
+                      (click)="editTaskCategory(taskCategory.taskcategoryId)">
+
+                      <mat-icon>edit</mat-icon>
+
+                    </button>
+
+                  }
+
+                  @if (deletePer === 'Y') {
+
+                    <button
+                      class="action-button delete-button"
+                      (click)="onDeleteTaskCategory(taskCategory.taskcategoryId)">
+
+                      <mat-icon>delete</mat-icon>
+
+                    </button>
+
+                  }
+
+                </ng-container>
+
+              </td>
+
+            </tr>
+
+            <tr
+              *ngIf="
+              !paginatedTaskCategories ||
+              paginatedTaskCategories.length === 0">
+
+              <td
+                colspan="5"
+                class="no-records">
+
+                <mat-icon>info_outline</mat-icon>
+                <span>No records found</span>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <!-- Bottom Toolbar -->
+
+      <div class="table-toolbar bottom-toolbar">
+
+        <div class="record-summary">
+          {{ recordSummary }}
+        </div>
+
+        <div class="pagination">
+
+          <button
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1">
+            « First
+          </button>
+
+          <button
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1">
+            ‹ Prev
+          </button>
+
+          <button
+            *ngFor="let page of pages()"
+            (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage">
+            {{ page }}
+          </button>
+
+          <button
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages">
+            Next ›
+          </button>
+
+          <button
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages">
+            Last »
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
 </div>

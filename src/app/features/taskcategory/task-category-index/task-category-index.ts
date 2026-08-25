@@ -15,6 +15,8 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
 import { SessionStorageService } from '../../../service/session-storage.service';
+import { MatIcon } from "@angular/material/icon";
+import { MatDivider } from "@angular/material/divider";
 
 
 interface TaskCategory {
@@ -41,6 +43,8 @@ interface Department {
     FormsModule,
     RouterModule,
     MatCardModule,
+    MatIcon,
+    MatDivider
   ],
 
   templateUrl: './task-category-index.html',
@@ -111,7 +115,7 @@ export class IndexTaskCategory {
     private route: ActivatedRoute,
 
     private sessionService: SessionStorageService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -221,8 +225,8 @@ export class IndexTaskCategory {
         this.selectedStatus =
           this.statusIndex
             ? String(
-                this.statusIndex
-              )
+              this.statusIndex
+            )
             : '';
 
         this.searchQuery =
@@ -231,8 +235,8 @@ export class IndexTaskCategory {
         this.selectedDepartment =
           stateData.departmentId
             ? String(
-                stateData.departmentId
-              )
+              stateData.departmentId
+            )
             : '';
       }
 
@@ -322,10 +326,10 @@ export class IndexTaskCategory {
           this.taskCategories = [];
 
           this.apiResponseTaskCategoryDetails =
-            {
-              totalElements: 0,
-              data: [],
-            };
+          {
+            totalElements: 0,
+            data: [],
+          };
         },
       });
   }
@@ -379,7 +383,7 @@ export class IndexTaskCategory {
 
     this.router
       .navigate(
-        ['/task-category-master'],
+        ['/task-category-index'],
         {
           state: state,
         }
@@ -436,7 +440,7 @@ export class IndexTaskCategory {
 
     this.router
       .navigate(
-        ['/task-category-master'],
+        ['/task-category-index'],
         {
           queryParams: {
             currentPage:
@@ -735,21 +739,20 @@ export class IndexTaskCategory {
       totalRecords === 0
         ? 0
         : (this.currentPage - 1) *
-            this.recordsPerPage +
-          1;
+        this.recordsPerPage +
+        1;
 
     const endRecord =
       Math.min(
         this.currentPage *
-          this.recordsPerPage,
+        this.recordsPerPage,
         totalRecords
       );
 
-    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${
-      totalRecords > 1
+    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${totalRecords > 1
         ? 's'
         : ''
-    })`;
+      })`;
   }
 
   /* Total pages */
@@ -763,7 +766,7 @@ export class IndexTaskCategory {
       1,
       Math.ceil(
         total /
-          this.recordsPerPage
+        this.recordsPerPage
       )
     );
   }
@@ -781,39 +784,39 @@ export class IndexTaskCategory {
     sortable: boolean;
   }[] = [
 
-    {
-      key:
-        'departmentName',
+      {
+        key:
+          'departmentName',
 
-      label:
-        'Department',
+        label:
+          'Department',
 
-      sortable:
-        true,
-    },
+        sortable:
+          true,
+      },
 
-    {
-      key:
-        'name',
+      {
+        key:
+          'name',
 
-      label:
-        'Task Category',
+        label:
+          'Task Category',
 
-      sortable:
-        true,
-    },
+        sortable:
+          true,
+      },
 
-    {
-      key:
-        'status',
+      {
+        key:
+          'status',
 
-      label:
-        'Status',
+        label:
+          'Status',
 
-      sortable:
-        true,
-    },
-  ];
+        sortable:
+          true,
+      },
+    ];
 
   sortData(
     column: string
@@ -830,7 +833,7 @@ export class IndexTaskCategory {
 
       this.sortDirection =
         this.sortDirection ===
-        'asc'
+          'asc'
           ? 'desc'
           : 'asc';
 

@@ -13,6 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
+import { MatIcon } from "@angular/material/icon";
+import { MatDivider } from "@angular/material/divider";
 
 @Component({
   selector: 'app-add-task-category',
@@ -23,7 +25,9 @@ import Swal from 'sweetalert2';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-  ],
+    MatIcon,
+    MatDivider
+],
   templateUrl: './add-task-category.html',
   styleUrl: './add-task-category.scss',
 })
@@ -385,7 +389,7 @@ export class AddTaskCategoryComponent implements OnInit {
   backToIndexPage(): void {
 
     this.router.navigate(
-      ['/task-category-master'],
+      ['/task-category-index'],
       {
         queryParams: {
 

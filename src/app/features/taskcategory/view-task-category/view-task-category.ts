@@ -200,7 +200,7 @@ export class ViewTaskCategoryComponent implements OnInit {
   backToIndexPage(): void {
 
     this.router.navigate(
-      ['/task-category-master'],
+      ['/task-category-index'],
       {
         queryParams: {
 
