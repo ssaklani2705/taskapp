@@ -4,7 +4,7 @@
       <!-- ================= HEADER ================= -->
       <div class="page-header">
         <div class="header-title-section">
-          <h2>User Management</h2>
+          <h2>Client Master</h2>
 
           <button
             type="button"
@@ -51,7 +51,7 @@
 
           <!-- STATE -->
           <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="stateId">
+            <select class="status-select" [(ngModel)]="stateId" (change)="onStateChange()">
               <option [ngValue]="0">--All States--</option>
 
               <option *ngFor="let state of states" [ngValue]="state.stateId">
@@ -62,7 +62,7 @@
 
           <!-- MANAGER -->
           <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="managerId">
+            <select class="status-select" [(ngModel)]="managerId" (change)="onManagerChange()">
               <option [ngValue]="0">--All Managers--</option>
 
               <option *ngFor="let manager of managers" [ngValue]="manager.userId">
@@ -70,7 +70,10 @@
               </option>
             </select>
           </div>
+        </div>
 
+        <!-- ================= SECOND ROW ================= -->
+        <div class="filter-row">
           <!-- STATUS -->
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
@@ -87,6 +90,11 @@
           <!-- GO -->
           <div class="go-wrapper">
             <button type="button" class="btn-go" (click)="onSearch()">Go</button>
+          </div>
+
+          <!-- CLEAR -->
+          <div class="clear-wrapper">
+            <!-- <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button> -->
           </div>
         </div>
       </div>
@@ -250,9 +258,9 @@
                   {{ client.city || '-' }}
                 </td>
 
-                <!-- REGISTRATION DATE -->
+                <!-- Start DATE -->
                 <td>
-                  {{ client.regdate ? (client.regdate | date: 'dd-MM-yyyy') : '-' }}
+                  {{ client.startDate || '-' }}
                 </td>
 
                 <!-- STATUS -->

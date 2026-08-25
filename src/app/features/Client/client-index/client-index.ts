@@ -87,14 +87,12 @@ export class ClientIndex {
 
   ngOnInit(): void {
     this.restoreFilterState();
-
+    this.loadStates();
+    this.loadManagers();
     this.getClientDetails();
   }
 
   getClientDetails(): void {
-    const managerId = 0;
-    const stateId = 0;
-
     const clientName = '';
     const clientCode = '';
     const contactName = '';
@@ -105,8 +103,8 @@ export class ClientIndex {
         this.page,
         this.size,
         this.statusIndex,
-        managerId,
-        stateId,
+        this.managerId,
+        this.stateId,
         clientName,
         clientCode,
         contactName,
@@ -138,12 +136,60 @@ export class ClientIndex {
       });
   }
 
+  loadStates(): void {
+    this.dataprovider.getStates().subscribe({
+      next: (response: any) => {
+        console.log('States:', response);
+
+        this.states = response?.data || response || [];
+      },
+      error: (error) => {
+        console.error('Error loading states:', error);
+        this.states = [];
+      },
+    });
+  }
+
+  loadManagers(): void {
+    this.dataprovider.getManagers().subscribe({
+      next: (response: any) => {
+        console.log('Active Managers:', response);
+
+        this.managers = response?.data || response || [];
+      },
+      error: (error) => {
+        console.error('Error loading managers:', error);
+        this.managers = [];
+      },
+    });
+  }
+
+  onStateChange(): void {
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+
+    this.getClientDetails();
+  }
+
+  onManagerChange(): void {
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+
+    this.getClientDetails();
+  }
+
   addClient() {
     const filterState = {
       currentPage: this.currentPage,
       statusIndex: this.statusIndex,
       searchText: this.search,
       size: this.size,
+      stateId: this.stateId,
+      managerId: this.managerId,
     };
 
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
@@ -159,6 +205,8 @@ export class ClientIndex {
       statusIndex: this.statusIndex,
       searchText: this.search,
       size: this.size,
+      stateId: this.stateId,
+      managerId: this.managerId,
     };
 
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
@@ -174,6 +222,8 @@ export class ClientIndex {
       statusIndex: this.statusIndex,
       searchText: this.search,
       size: this.size,
+      stateId: this.stateId,
+      managerId: this.managerId,
     };
 
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
@@ -215,6 +265,8 @@ export class ClientIndex {
       statusIndex: this.statusIndex,
       searchText: this.search,
       size: this.size,
+      stateId: this.stateId,
+      managerId: this.managerId,
     };
 
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
@@ -359,6 +411,14 @@ export class ClientIndex {
         this.size = Number(filterState.size);
       }
 
+      if (filterState.stateId !== undefined) {
+        this.stateId = Number(filterState.stateId);
+      }
+
+      if (filterState.managerId !== undefined) {
+        this.managerId = Number(filterState.managerId);
+      }
+
       if (this.statusIndex > 0) {
         this.selectedStatus = String(this.statusIndex);
       }
@@ -430,8 +490,8 @@ export class ClientIndex {
       sortable: true,
     },
     {
-      key: 'regdate',
-      label: 'Registration Date',
+      key: 'startDate',
+      label: 'Start Date',
       sortable: true,
     },
     {

@@ -4,113 +4,64 @@ import {
   Inject,
   OnInit,
   PLATFORM_ID,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
-
-import {
-  CommonModule,
-  isPlatformBrowser
-} from '@angular/common';
-
-import {
-  ActivatedRoute,
-  Router
-} from '@angular/router';
-
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormBuilder,
   FormGroup,
   FormsModule,
   NgForm,
   ReactiveFormsModule,
-  Validators
+  Validators,
 } from '@angular/forms';
-
-import {
-  MatCheckboxModule
-} from '@angular/material/checkbox';
-
-import {
-  MatButtonModule
-} from '@angular/material/button';
-
-import {
-  MatIconModule
-} from '@angular/material/icon';
-
-import {
-  MatSelectModule
-} from '@angular/material/select';
-
-import {
-  MatInputModule
-} from '@angular/material/input';
-
-import {
-  MatFormFieldModule
-} from '@angular/material/form-field';
-
-import {
-  MatDatepickerModule
-} from '@angular/material/datepicker';
-
-import {
-  MAT_DATE_LOCALE,
-  MatNativeDateModule
-} from '@angular/material/core';
-
-import {
-  DateAdapter
-} from '@angular/material/core';
-
-import {
-  DataProviderService
-} from '../../../service/data-provider.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter } from '@angular/material/core';
+import { DataProviderService } from '../../../service/data-provider.service';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
 declare var $: any;
 @Component({
   selector: 'app-add-team',
   standalone: true,
-
- imports: [
+  imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
   ],
   templateUrl: './add-team.html',
   styleUrl: './add-team.scss',
   encapsulation: ViewEncapsulation.Emulated,
-
   providers: [
     {
       provide: DateAdapter,
-      useClass: MyDateAdapter
+      useClass: MyDateAdapter,
     },
     {
       provide: MAT_DATE_LOCALE,
-      useValue: 'en-GB'
-    }
-  ]
+      useValue: 'en-GB',
+    },
+  ],
 })
 export class AddTeam implements OnInit, AfterViewInit {
-
   userForm!: FormGroup;
 
-  /**
-   * true  = edit
-   * false = add
-   */
   isEditMode = false;
 
   userId = 0;
@@ -136,31 +87,31 @@ export class AddTeam implements OnInit, AfterViewInit {
     'Approve',
     'Admin Approval',
     'View Only',
-    'Export Excel'
+    'Export Excel',
   ];
 
   /**
    * API permission names
    */
   permissionApiMap: any = {
-    'Add': 'addPer',
-    'Edit': 'editPer',
-    'Delete': 'deletePer',
-    'Approve': 'approvePer',
+    Add: 'addPer',
+    Edit: 'editPer',
+    Delete: 'deletePer',
+    Approve: 'approvePer',
     'Admin Approval': 'adminApprovePer',
     'View Only': 'viewPer',
-    'Export Excel': 'exportExcel'
+    'Export Excel': 'exportExcel',
   };
 
   /**
    * Group names
    */
   typeGroupMap: {
-    [key: number]: string
+    [key: number]: string;
   } = {
     1: 'Masters',
     2: 'Activity',
-    3: 'Reports - 1'
+    3: 'Reports - 1',
   };
 
   groupedModules: {
@@ -182,9 +133,8 @@ export class AddTeam implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     @Inject(PLATFORM_ID)
-    private platformId: Object
+    private platformId: Object,
   ) {
-
     const today = new Date();
 
     today.setHours(0, 0, 0, 0);
@@ -199,63 +149,29 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private createForm(): void {
-
     this.userForm = this.fb.group({
+      name: ['', Validators.required],
 
-      name: [
-        '',
-        Validators.required
-      ],
+      email: ['', [Validators.required, Validators.email]],
 
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
+      expiryDate: ['', Validators.required],
 
-      expiryDate: [
-        '',
-        Validators.required
-      ],
+      password: [''],
 
-      password: [
-        ''
-      ],
+      mobile: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
 
-      mobile: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[0-9]{10}$/)
-        ]
-      ],
+      telephone: [''],
 
-      telephone: [
-        ''
-      ],
+      status: [1, Validators.required],
 
-      status: [
-        1,
-        Validators.required
-      ],
-
-      isAdmin: [
-        false
-      ]
-
+      isAdmin: [false],
     });
 
-    this.userForm
-      .get('isAdmin')
-      ?.valueChanges
-      .subscribe((isAdmin: boolean) => {
-
-        if (isAdmin) {
-          this.clearAllPermissions();
-        }
-      });
+    this.userForm.get('isAdmin')?.valueChanges.subscribe((isAdmin: boolean) => {
+      if (isAdmin) {
+        this.clearAllPermissions();
+      }
+    });
   }
 
   // ============================================================
@@ -263,7 +179,6 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   ngOnInit(): void {
-
     if (isPlatformBrowser(this.platformId)) {
       this.createdBy = sessionStorage.getItem('userId');
     }
@@ -273,15 +188,12 @@ export class AddTeam implements OnInit, AfterViewInit {
     const id = this.route.snapshot.paramMap.get('userId');
 
     if (id) {
-
       this.isEditMode = true;
 
       this.userId = Number(id);
 
       this.loadUserDetails();
-
     } else {
-
       this.isEditMode = false;
 
       this.userId = 0;
@@ -295,31 +207,20 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   ngAfterViewInit(): void {
-
     setTimeout(() => {
-
       if ($('#fromDatePicker').length) {
-
         $('#fromDatePicker')
           .datepicker({
             format: 'dd-mm-yyyy',
             autoclose: true,
-            startDate: this.minDate
+            startDate: this.minDate,
           })
           .on('changeDate', (e: any) => {
+            this.userForm.get('expiryDate')?.setValue(e.format('dd-mm-yyyy'));
 
-            this.userForm
-              .get('expiryDate')
-              ?.setValue(
-                e.format('dd-mm-yyyy')
-              );
-
-            this.userForm
-              .get('expiryDate')
-              ?.markAsDirty();
+            this.userForm.get('expiryDate')?.markAsDirty();
           });
       }
-
     }, 100);
   }
 
@@ -328,21 +229,13 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private setupAddMode(): void {
+    this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
 
-    this.userForm
-      .get('password')
-      ?.setValidators([
-        Validators.required,
-        Validators.minLength(6)
-      ]);
-
-    this.userForm
-      .get('password')
-      ?.updateValueAndValidity();
+    this.userForm.get('password')?.updateValueAndValidity();
 
     this.userForm.patchValue({
       status: 1,
-      isAdmin: false
+      isAdmin: false,
     });
 
     /**
@@ -350,11 +243,7 @@ export class AddTeam implements OnInit, AfterViewInit {
      */
     const defaultDate = new Date('2050-12-31');
 
-    this.userForm
-      .get('expiryDate')
-      ?.setValue(
-        this.formatDate(defaultDate)
-      );
+    this.userForm.get('expiryDate')?.setValue(this.formatDate(defaultDate));
 
     /**
      * Load permission master data
@@ -367,136 +256,85 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private loadUserDetails(): void {
-
-    this.dataProvider
-      .getUserManagementDetailsById(this.userId)
-      .subscribe({
-
-        next: (response: any) => {
-
-          if (!response) {
-            alert('User details not found.');
-            this.backToIndexPage();
-            return;
-          }
-
-          /**
-           * Password is optional while editing
-           */
-          this.userForm
-            .get('password')
-            ?.clearValidators();
-
-          this.userForm
-            .get('password')
-            ?.updateValueAndValidity();
-
-          this.userForm.patchValue({
-
-            name: response.firstName || '',
-
-            email: response.email || '',
-
-            mobile: response.mobileNo || '',
-
-            telephone:
-              response.telephone &&
-              response.telephone !== 'NA'
-                ? response.telephone
-                : '',
-
-            expiryDate:
-              this.formatDateToDDMMYYYY(
-                response.expiryDate
-              ),
-
-            status:
-              Number(response.status) || 1,
-
-            isAdmin:
-              response.permission === 'Y'
-          });
-
-          /**
-           * Load permissions returned by API
-           */
-          if (response.module) {
-            this.buildPermissionGroups(
-              response.module
-            );
-          }
-
-        },
-
-        error: (err) => {
-
-          console.error(
-            'Failed to fetch user details',
-            err
-          );
-
-          alert(
-            'Failed to load user details.'
-          );
-
+    this.dataProvider.getUserManagementDetailsById(this.userId).subscribe({
+      next: (response: any) => {
+        if (!response) {
+          alert('User details not found.');
           this.backToIndexPage();
+          return;
         }
-      });
+
+        /**
+         * Password is optional while editing
+         */
+        this.userForm.get('password')?.clearValidators();
+
+        this.userForm.get('password')?.updateValueAndValidity();
+
+        this.userForm.patchValue({
+          name: response.firstName || '',
+
+          email: response.email || '',
+
+          mobile: response.mobileNo || '',
+
+          telephone: response.telephone && response.telephone !== 'NA' ? response.telephone : '',
+
+          expiryDate: this.formatDateToDDMMYYYY(response.expiryDate),
+
+          status: Number(response.status) || 1,
+
+          isAdmin: response.permission === 'Y',
+        });
+
+        /**
+         * Load permissions returned by API
+         */
+        if (response.module) {
+          this.buildPermissionGroups(response.module);
+        }
+      },
+
+      error: (err) => {
+        console.error('Failed to fetch user details', err);
+
+        alert('Failed to load user details.');
+
+        this.backToIndexPage();
+      },
+    });
   }
 
   // ============================================================
   // LOAD PERMISSION MODULES
   // ============================================================
 
-  private loadPermissionModules(
-    rightsAndPermissionId: number
-  ): void {
-
-    this.dataProvider
-      .getUserManagementDetailsById(
-        rightsAndPermissionId
-      )
-      .subscribe({
-
-        next: (response: any) => {
-
-          if (response?.module) {
-
-            this.buildPermissionGroups(
-              response.module
-            );
-          }
-        },
-
-        error: (err) => {
-
-          console.error(
-            'Failed to load permissions',
-            err
-          );
+  private loadPermissionModules(rightsAndPermissionId: number): void {
+    this.dataProvider.getUserManagementDetailsById(rightsAndPermissionId).subscribe({
+      next: (response: any) => {
+        if (response?.module) {
+          this.buildPermissionGroups(response.module);
         }
-      });
+      },
+
+      error: (err) => {
+        console.error('Failed to load permissions', err);
+      },
+    });
   }
 
   // ============================================================
   // BUILD GROUPS
   // ============================================================
 
-  private buildPermissionGroups(
-    modules: any[]
-  ): void {
-
-    const sortedModules = [...modules]
-      .sort(
-        (a, b) => a.type - b.type
-      );
+  private buildPermissionGroups(modules: any[]): void {
+    const sortedModules = [...modules].sort((a, b) => a.type - b.type);
 
     const grouped: {
-      [key: number]: any[]
+      [key: number]: any[];
     } = {};
 
-    sortedModules.forEach(module => {
-
+    sortedModules.forEach((module) => {
       if (!grouped[module.type]) {
         grouped[module.type] = [];
       }
@@ -504,72 +342,49 @@ export class AddTeam implements OnInit, AfterViewInit {
       grouped[module.type].push(module);
     });
 
-    this.groupedModules =
-      Object.keys(grouped)
-        .map(type => ({
-          type: Number(type),
-          modules: grouped[Number(type)]
-        }));
+    this.groupedModules = Object.keys(grouped).map((type) => ({
+      type: Number(type),
+      modules: grouped[Number(type)],
+    }));
 
     this.permissions = {};
 
     this.selectAllRows = {};
 
-    this.groupedModules.forEach(group => {
-
-      const groupName =
-        this.typeGroupMap[group.type];
+    this.groupedModules.forEach((group) => {
+      const groupName = this.typeGroupMap[group.type];
 
       this.selectAllRows[groupName] = {};
 
-      this.permissionActions.forEach(action => {
-
-        this.selectAllRows[groupName][action] =
-          false;
+      this.permissionActions.forEach((action) => {
+        this.selectAllRows[groupName][action] = false;
       });
 
-      group.modules.forEach(module => {
-
-        const moduleName =
-          module.name.trim();
+      group.modules.forEach((module) => {
+        const moduleName = module.name.trim();
 
         this.permissions[moduleName] = {};
 
-        this.permissionActions.forEach(
-          action => {
+        this.permissionActions.forEach((action) => {
+          const apiField = this.permissionApiMap[action];
 
-            const apiField =
-              this.permissionApiMap[action];
-
-            /**
-             * Edit:
-             * Read existing Y/N
-             *
-             * Add:
-             * Default false
-             */
-            this.permissions[moduleName][action] =
-              module[apiField] === 'Y';
-          }
-        );
+          /**
+           * Edit:
+           * Read existing Y/N
+           *
+           * Add:
+           * Default false
+           */
+          this.permissions[moduleName][action] = module[apiField] === 'Y';
+        });
       });
     });
 
     this.initializeSelectAllRows();
 
-    this.originalPermissions =
-      JSON.parse(
-        JSON.stringify(
-          this.permissions
-        )
-      );
+    this.originalPermissions = JSON.parse(JSON.stringify(this.permissions));
 
-    this.originalSelectAllRows =
-      JSON.parse(
-        JSON.stringify(
-          this.selectAllRows
-        )
-      );
+    this.originalSelectAllRows = JSON.parse(JSON.stringify(this.selectAllRows));
   }
 
   // ============================================================
@@ -577,29 +392,16 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private initializeSelectAllRows(): void {
+    this.groupedModules.forEach((group) => {
+      const groupName = this.typeGroupMap[group.type];
 
-    this.groupedModules.forEach(group => {
+      this.permissionActions.forEach((action) => {
+        const allChecked =
+          group.modules.length > 0 &&
+          group.modules.every((module) => this.permissions[module.name.trim()]?.[action] === true);
 
-      const groupName =
-        this.typeGroupMap[group.type];
-
-      this.permissionActions.forEach(
-        action => {
-
-          const allChecked =
-            group.modules.length > 0 &&
-            group.modules.every(
-              module =>
-                this.permissions[
-                  module.name.trim()
-                ]?.[action] === true
-            );
-
-          this.selectAllRows[
-            groupName
-          ][action] = allChecked;
-        }
-      );
+        this.selectAllRows[groupName][action] = allChecked;
+      });
     });
   }
 
@@ -607,85 +409,43 @@ export class AddTeam implements OnInit, AfterViewInit {
   // GROUP SELECT ALL
   // ============================================================
 
-  toggleGroupSelectAll(
-    groupName: string,
-    action: string
-  ): void {
-
-    const group =
-      this.groupedModules.find(
-        g =>
-          this.typeGroupMap[g.type] ===
-          groupName
-      );
+  toggleGroupSelectAll(groupName: string, action: string): void {
+    const group = this.groupedModules.find((g) => this.typeGroupMap[g.type] === groupName);
 
     if (!group) {
       return;
     }
 
-    const newValue =
-      this.selectAllRows[
-        groupName
-      ][action];
+    const newValue = this.selectAllRows[groupName][action];
 
-    const dependentActions = [
-      'Add',
-      'Edit',
-      'Delete',
-      'Approve',
-      'Admin Approval',
-      'Export Excel'
-    ];
+    const dependentActions = ['Add', 'Edit', 'Delete', 'Approve', 'Admin Approval', 'Export Excel'];
 
-    group.modules.forEach(module => {
-
-      const moduleName =
-        module.name.trim();
+    group.modules.forEach((module) => {
+      const moduleName = module.name.trim();
 
       if (!this.permissions[moduleName]) {
         return;
       }
 
-      this.permissions[
-        moduleName
-      ][action] = newValue;
+      this.permissions[moduleName][action] = newValue;
 
       /**
        * Any real permission automatically
        * enables View Only.
        */
-      if (
-        dependentActions.includes(action) &&
-        newValue
-      ) {
-
-        this.permissions[
-          moduleName
-        ]['View Only'] = true;
+      if (dependentActions.includes(action) && newValue) {
+        this.permissions[moduleName]['View Only'] = true;
       }
 
       /**
        * Remove View Only if no other
        * permission remains.
        */
-      if (
-        dependentActions.includes(action) &&
-        !newValue
-      ) {
-
-        const hasOtherPermission =
-          dependentActions.some(
-            a =>
-              this.permissions[
-                moduleName
-              ][a]
-          );
+      if (dependentActions.includes(action) && !newValue) {
+        const hasOtherPermission = dependentActions.some((a) => this.permissions[moduleName][a]);
 
         if (!hasOtherPermission) {
-
-          this.permissions[
-            moduleName
-          ]['View Only'] = false;
+          this.permissions[moduleName]['View Only'] = false;
         }
       }
     });
@@ -697,40 +457,18 @@ export class AddTeam implements OnInit, AfterViewInit {
   // SINGLE PERMISSION
   // ============================================================
 
-  onPermissionChange(
-    moduleName: string,
-    action: string
-  ): void {
-
-    const dependentActions = [
-      'Add',
-      'Edit',
-      'Delete',
-      'Approve',
-      'Admin Approval',
-      'Export Excel'
-    ];
+  onPermissionChange(moduleName: string, action: string): void {
+    const dependentActions = ['Add', 'Edit', 'Delete', 'Approve', 'Admin Approval', 'Export Excel'];
 
     /**
      * View Only checked:
      * remove other permissions.
      */
     if (action === 'View Only') {
-
-      if (
-        this.permissions[
-          moduleName
-        ]['View Only']
-      ) {
-
-        dependentActions.forEach(
-          permission => {
-
-            this.permissions[
-              moduleName
-            ][permission] = false;
-          }
-        );
+      if (this.permissions[moduleName]['View Only']) {
+        dependentActions.forEach((permission) => {
+          this.permissions[moduleName][permission] = false;
+        });
       }
     }
 
@@ -738,19 +476,9 @@ export class AddTeam implements OnInit, AfterViewInit {
      * Any actual permission:
      * View Only automatically checked.
      */
-    if (
-      dependentActions.includes(action)
-    ) {
-
-      if (
-        this.permissions[
-          moduleName
-        ][action]
-      ) {
-
-        this.permissions[
-          moduleName
-        ]['View Only'] = true;
+    if (dependentActions.includes(action)) {
+      if (this.permissions[moduleName][action]) {
+        this.permissions[moduleName]['View Only'] = true;
       }
     }
 
@@ -762,33 +490,16 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private clearAllPermissions(): void {
-
-    Object.keys(
-      this.permissions
-    ).forEach(moduleName => {
-
-      this.permissionActions.forEach(
-        action => {
-
-          this.permissions[
-            moduleName
-          ][action] = false;
-        }
-      );
+    Object.keys(this.permissions).forEach((moduleName) => {
+      this.permissionActions.forEach((action) => {
+        this.permissions[moduleName][action] = false;
+      });
     });
 
-    Object.keys(
-      this.selectAllRows
-    ).forEach(groupName => {
-
-      this.permissionActions.forEach(
-        action => {
-
-          this.selectAllRows[
-            groupName
-          ][action] = false;
-        }
-      );
+    Object.keys(this.selectAllRows).forEach((groupName) => {
+      this.permissionActions.forEach((action) => {
+        this.selectAllRows[groupName][action] = false;
+      });
     });
   }
 
@@ -797,7 +508,6 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   onSubmit(): void {
-
     if (this.isSubmitting) {
       return;
     }
@@ -814,62 +524,40 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     this.isSubmitting = true;
 
-    const formValues =
-      this.userForm.value;
+    const formValues = this.userForm.value;
 
-    let formattedExpiryDate =
-      formValues.expiryDate;
+    let formattedExpiryDate = formValues.expiryDate;
 
     if (formattedExpiryDate) {
-
-      const parts =
-        formattedExpiryDate.split('-');
+      const parts = formattedExpiryDate.split('-');
 
       if (parts.length === 3) {
-
-        formattedExpiryDate =
-          `${parts[2]}-${parts[1]}-${parts[0]}`;
+        formattedExpiryDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
       }
     }
 
     const payload: any = {
+      userId: this.isEditMode ? this.userId : 0,
 
-      userId: this.isEditMode
-        ? this.userId
-        : 0,
+      firstName: formValues.name.trim(),
 
-      firstName:
-        formValues.name.trim(),
+      mobileNo: formValues.mobile,
 
-      mobileNo:
-        formValues.mobile,
+      email: formValues.email.trim().toLowerCase(),
 
-      email:
-        formValues.email
-          .trim()
-          .toLowerCase(),
+      expiryDate: formattedExpiryDate,
 
-      expiryDate:
-        formattedExpiryDate,
+      permission: formValues.isAdmin ? 'Y' : 'N',
 
-      permission:
-        formValues.isAdmin
-          ? 'Y'
-          : 'N',
-
-      status:
-        Number(formValues.status),
+      status: Number(formValues.status),
 
       qcFlag: 0,
 
-      telephone:
-        formValues.telephone || '',
+      telephone: formValues.telephone || '',
 
-      createdBy:
-        this.createdBy,
+      createdBy: this.createdBy,
 
-      module:
-        this.buildModulePermissions()
+      module: this.buildModulePermissions(),
     };
 
     /**
@@ -878,65 +566,36 @@ export class AddTeam implements OnInit, AfterViewInit {
      * Add -> send password
      * Edit -> send only if user entered one
      */
-    if (
-      formValues.password &&
-      formValues.password.trim()
-    ) {
-
-      payload.password =
-        formValues.password;
+    if (formValues.password && formValues.password.trim()) {
+      payload.password = formValues.password;
     }
 
-    this.dataProvider
-      .saveUserManagementDetailsDetail(
-        payload
-      )
-      .subscribe({
+    this.dataProvider.saveUserManagementDetailsDetail(payload).subscribe({
+      next: (response: any) => {
+        this.isSubmitting = false;
 
-        next: (response: any) => {
+        if (response?.success === false) {
+          alert(response.message || 'Operation failed.');
 
-          this.isSubmitting = false;
-
-          if (
-            response?.success === false
-          ) {
-
-            alert(
-              response.message ||
-              'Operation failed.'
-            );
-
-            return;
-          }
-
-          alert(
-            this.isEditMode
-              ? 'User updated successfully!'
-              : 'User saved successfully!'
-          );
-
-          this.backToIndexPage();
-        },
-
-        error: (err) => {
-
-          this.isSubmitting = false;
-
-          console.error(
-            'Save user error:',
-            err
-          );
-
-          alert(
-            err?.error?.message ||
-            (
-              this.isEditMode
-                ? 'Failed to update user.'
-                : 'Failed to save user.'
-            )
-          );
+          return;
         }
-      });
+
+        alert(this.isEditMode ? 'User updated successfully!' : 'User saved successfully!');
+
+        this.backToIndexPage();
+      },
+
+      error: (err) => {
+        this.isSubmitting = false;
+
+        console.error('Save user error:', err);
+
+        alert(
+          err?.error?.message ||
+            (this.isEditMode ? 'Failed to update user.' : 'Failed to save user.'),
+        );
+      },
+    });
   }
 
   // ============================================================
@@ -944,63 +603,31 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private buildModulePermissions(): any[] {
+    return this.groupedModules.flatMap((group) =>
+      group.modules.map((module) => {
+        const moduleName = module.name.trim();
 
-    return this.groupedModules
-      .flatMap(group =>
-        group.modules.map(module => {
+        const permission = this.permissions[moduleName] || {};
 
-          const moduleName =
-            module.name.trim();
+        return {
+          moduleId: module.moduleId?.toString(),
 
-          const permission =
-            this.permissions[
-              moduleName
-            ] || {};
+          addPer: permission['Add'] ? 'Y' : 'N',
 
-          return {
+          editPer: permission['Edit'] ? 'Y' : 'N',
 
-            moduleId:
-              module.moduleId?.toString(),
+          deletePer: permission['Delete'] ? 'Y' : 'N',
 
-            addPer:
-              permission['Add']
-                ? 'Y'
-                : 'N',
+          approvePer: permission['Approve'] ? 'Y' : 'N',
 
-            editPer:
-              permission['Edit']
-                ? 'Y'
-                : 'N',
+          adminApprovePer: permission['Admin Approval'] ? 'Y' : 'N',
 
-            deletePer:
-              permission['Delete']
-                ? 'Y'
-                : 'N',
+          viewPer: permission['View Only'] ? 'Y' : 'N',
 
-            approvePer:
-              permission['Approve']
-                ? 'Y'
-                : 'N',
-
-            adminApprovePer:
-              permission[
-                'Admin Approval'
-              ]
-                ? 'Y'
-                : 'N',
-
-            viewPer:
-              permission['View Only']
-                ? 'Y'
-                : 'N',
-
-            exportExcel:
-              permission['Export Excel']
-                ? 'Y'
-                : 'N'
-          };
-        })
-      );
+          exportExcel: permission['Export Excel'] ? 'Y' : 'N',
+        };
+      }),
+    );
   }
 
   // ============================================================
@@ -1008,24 +635,18 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   onReset(): void {
-
     if (this.isEditMode) {
-
       this.loadUserDetails();
 
       return;
     }
 
     this.userForm.reset({
-
       name: '',
 
       email: '',
 
-      expiryDate:
-        this.formatDate(
-          new Date('2050-12-31')
-        ),
+      expiryDate: this.formatDate(new Date('2050-12-31')),
 
       password: '',
 
@@ -1035,22 +656,12 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       status: 1,
 
-      isAdmin: false
+      isAdmin: false,
     });
 
-    this.permissions =
-      JSON.parse(
-        JSON.stringify(
-          this.originalPermissions
-        )
-      );
+    this.permissions = JSON.parse(JSON.stringify(this.originalPermissions));
 
-    this.selectAllRows =
-      JSON.parse(
-        JSON.stringify(
-          this.originalSelectAllRows
-        )
-      );
+    this.selectAllRows = JSON.parse(JSON.stringify(this.originalSelectAllRows));
   }
 
   // ============================================================
@@ -1058,26 +669,14 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   backToIndexPage(): void {
-
-    this.router.navigate(
-      ['/my-team'],
-      {
-        state: {
-
-          currentPage:
-            this.currentPage,
-
-          statusIndex:
-            this.statusIndex,
-
-          searchText:
-            this.searchText,
-
-          size:
-            this.size
-        }
-      }
-    );
+    this.router.navigate(['/my-team'], {
+      state: {
+        currentPage: this.currentPage,
+        statusIndex: this.statusIndex,
+        searchText: this.searchText,
+        size: this.size,
+      },
+    });
   }
 
   // ============================================================
@@ -1085,28 +684,18 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private readFilterState(): void {
-
     let stateData: any = null;
 
-    const navigation =
-      this.router.getCurrentNavigation();
+    const navigation = this.router.getCurrentNavigation();
 
-    stateData =
-      navigation?.extras?.state;
+    stateData = navigation?.extras?.state;
 
-    if (!stateData &&
-        isPlatformBrowser(this.platformId)) {
-
-      const saved =
-        sessionStorage.getItem(
-          'userFilters'
-        );
+    if (!stateData && isPlatformBrowser(this.platformId)) {
+      const saved = sessionStorage.getItem('userFilters');
 
       if (saved) {
-
         try {
-          stateData =
-            JSON.parse(saved);
+          stateData = JSON.parse(saved);
         } catch {
           stateData = null;
         }
@@ -1114,18 +703,13 @@ export class AddTeam implements OnInit, AfterViewInit {
     }
 
     if (stateData) {
+      this.currentPage = stateData.currentPage ?? 1;
 
-      this.currentPage =
-        stateData.currentPage ?? 1;
+      this.statusIndex = stateData.statusIndex ?? 0;
 
-      this.statusIndex =
-        stateData.statusIndex ?? 0;
+      this.searchText = stateData.searchText ?? '';
 
-      this.searchText =
-        stateData.searchText ?? '';
-
-      this.size =
-        stateData.size ?? 10;
+      this.size = stateData.size ?? 10;
     }
   }
 
@@ -1134,68 +718,34 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   validateExpiryDate(): boolean {
-
-    const value =
-      this.userForm
-        .get('expiryDate')
-        ?.value;
+    const value = this.userForm.get('expiryDate')?.value;
 
     if (!value) {
-
-      alert(
-        'Please select a valid Expiry Date.'
-      );
+      alert('Please select a valid Expiry Date.');
 
       return false;
     }
 
-    const parts =
-      value.split('-').map(Number);
+    const parts = value.split('-').map(Number);
 
     if (parts.length !== 3) {
-
-      alert(
-        'Please select a valid Expiry Date.'
-      );
+      alert('Please select a valid Expiry Date.');
 
       return false;
     }
 
-    const [
-      day,
-      month,
-      year
-    ] = parts;
+    const [day, month, year] = parts;
 
-    const enteredDate =
-      new Date(
-        year,
-        month - 1,
-        day
-      );
+    const enteredDate = new Date(year, month - 1, day);
 
-    enteredDate.setHours(
-      0,
-      0,
-      0,
-      0
-    );
+    enteredDate.setHours(0, 0, 0, 0);
 
-    const min =
-      new Date(this.minDate);
+    const min = new Date(this.minDate);
 
-    min.setHours(
-      0,
-      0,
-      0,
-      0
-    );
+    min.setHours(0, 0, 0, 0);
 
     if (enteredDate < min) {
-
-      alert(
-        'Expiry Date cannot be a past date.'
-      );
+      alert('Expiry Date cannot be a past date.');
 
       return false;
     }
@@ -1208,31 +758,21 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private formatDate(date: Date): string {
+    const day = ('0' + date.getDate()).slice(-2);
 
-    const day =
-      ('0' + date.getDate())
-        .slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
 
-    const month =
-      ('0' + (date.getMonth() + 1))
-        .slice(-2);
-
-    const year =
-      date.getFullYear();
+    const year = date.getFullYear();
 
     return `${day}-${month}-${year}`;
   }
 
-  private formatDateToDDMMYYYY(
-    dateStr: string
-  ): string {
-
+  private formatDateToDDMMYYYY(dateStr: string): string {
     if (!dateStr) {
       return '';
     }
 
-    const date =
-      new Date(dateStr);
+    const date = new Date(dateStr);
 
     if (isNaN(date.getTime())) {
       return '';
@@ -1245,44 +785,24 @@ export class AddTeam implements OnInit, AfterViewInit {
   // INPUT RESTRICTIONS
   // ============================================================
 
-  allowOnlyLetters(
-    event: KeyboardEvent
-  ): void {
+  allowOnlyLetters(event: KeyboardEvent): void {
+    const char = event.key;
 
-    const char =
-      event.key;
-
-    if (
-      !/^[a-zA-Z\s]$/.test(char)
-    ) {
-
+    if (!/^[a-zA-Z\s]$/.test(char)) {
       event.preventDefault();
     }
   }
 
-  allowOnlyNumbers(
-    event: KeyboardEvent
-  ): void {
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.which || event.keyCode;
 
-    const charCode =
-      event.which ||
-      event.keyCode;
-
-    if (
-      charCode < 48 ||
-      charCode > 57
-    ) {
-
+    if (charCode < 48 || charCode > 57) {
       event.preventDefault();
     }
   }
 
-  allowOnlyDateChars(
-    event: KeyboardEvent
-  ): void {
-
-    const char =
-      event.key;
+  allowOnlyDateChars(event: KeyboardEvent): void {
+    const char = event.key;
 
     if (
       !/[0-9\-\/]/.test(char) &&
@@ -1291,12 +811,8 @@ export class AddTeam implements OnInit, AfterViewInit {
       char !== 'Tab' &&
       !event.ctrlKey &&
       !event.metaKey &&
-      ![
-        'ArrowLeft',
-        'ArrowRight'
-      ].includes(char)
+      !['ArrowLeft', 'ArrowRight'].includes(char)
     ) {
-
       event.preventDefault();
     }
   }
@@ -1305,12 +821,8 @@ export class AddTeam implements OnInit, AfterViewInit {
   // STATUS
   // ============================================================
 
-  getStatusLabel(
-    status: number
-  ): string {
-
+  getStatusLabel(status: number): string {
     switch (+status) {
-
       case 1:
         return 'Active';
 

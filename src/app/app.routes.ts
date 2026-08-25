@@ -59,6 +59,21 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/Client/client-index/client-index').then((m) => m.ClientIndex),
       },
+      {
+        path: 'add-client',
+        loadComponent: () =>
+          import('./features/Client/add-client/add-client').then((m) => m.AddClient),
+      },
+      {
+        path: 'edit-client/:clientId',
+        loadComponent: () =>
+          import('./features/Client/add-client/add-client').then((m) => m.AddClient),
+      },
+      {
+        path: 'view-client/:clientId',
+        loadComponent: () =>
+          import('./features/Client/view-client/view-client').then((m) => m.ViewClient),
+      },
     ],
   },
 

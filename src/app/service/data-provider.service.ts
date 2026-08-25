@@ -113,7 +113,7 @@ export class DataProviderService {
     clientCode: any,
     contactName: any,
     contactEmail: any,
-     search: any,
+    search: any,
     sortColumn: string,
     sortDirection: string,
   ): Observable<any> {
@@ -149,6 +149,14 @@ export class DataProviderService {
 
   getClientByClientId(clientId: number) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/getClient/${clientId}`);
+  }
+
+  getStates(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}state/getStates`);
+  }
+
+  getManagers(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/active`);
   }
 
   getClientDetailsByClientId(clientId: number) {
