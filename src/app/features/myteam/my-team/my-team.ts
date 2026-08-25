@@ -30,6 +30,7 @@ interface User {
   mobile: string;
 
   status: number;
+  departmentName:string;
 
 }
 
@@ -41,7 +42,7 @@ interface User {
   styleUrl: './my-team.scss',
 })
 export class MyTeam implements OnInit {
-
+apiResponseDepartmentDetails: any = {};
   // =========================================================
   // USER DATA
   // =========================================================
@@ -140,6 +141,11 @@ export class MyTeam implements OnInit {
     {
       key: 'mobile',
       label: 'Mobile No.',
+      sortable: true
+    },
+    {
+      key: 'departmenname',
+      label: 'Department Name',
       sortable: true
     },
 

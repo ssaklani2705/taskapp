@@ -18,10 +18,7 @@
 
       <div class="user-actions">
 
-        <button
-          type="button"
-          class="back-index-btn"
-          (click)="backToIndexPage()">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
 
           Back to Index
 
@@ -38,10 +35,7 @@
 
     <div class="user-portlet-body">
 
-      <form
-        [formGroup]="userForm"
-        (ngSubmit)="onSubmit()"
-        novalidate>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()" novalidate>
 
         <div class="user-form-body">
 
@@ -78,17 +72,10 @@
                   <span class="required">*</span>
                 </label>
 
-                <input
-                  type="text"
-                  class="user-input"
-                  formControlName="name"
-                  maxlength="100"
-                  (keypress)="allowOnlyLetters($event)"
-                />
+                <input type="text" class="user-input" formControlName="name" maxlength="100"
+                  (keypress)="allowOnlyLetters($event)" />
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     userForm.get('name')?.touched &&
                     userForm.get('name')?.invalid
                   ">
@@ -113,22 +100,14 @@
                   <span class="required">*</span>
                 </label>
 
-                <input
-                  type="email"
-                  class="user-input"
-                  formControlName="email"
-                  maxlength="100"
-                />
+                <input type="email" class="user-input" formControlName="email" maxlength="100" />
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     userForm.get('email')?.touched &&
                     userForm.get('email')?.invalid
                   ">
 
-                  <span
-                    *ngIf="
+                  <span *ngIf="
                       userForm.get('email')?.errors?.['required']
                     ">
 
@@ -136,8 +115,7 @@
 
                   </span>
 
-                  <span
-                    *ngIf="
+                  <span *ngIf="
                       userForm.get('email')?.errors?.['email']
                     ">
 
@@ -163,9 +141,7 @@
                   <span class="required">*</span>
                 </label>
 
-                <div
-                  class="user-date-group"
-                  id="fromDatePicker">
+                <div class="user-date-group" id="fromDatePicker">
 
                   <span class="user-date-icon">
 
@@ -173,19 +149,12 @@
 
                   </span>
 
-                  <input
-                    type="text"
-                    class="user-input user-date-input"
-                    placeholder="DD-MM-YYYY"
-                    formControlName="expiryDate"
-                    readonly
-                  />
+                  <input type="text" class="user-input user-date-input" placeholder="DD-MM-YYYY"
+                    formControlName="expiryDate" readonly />
 
                 </div>
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     userForm.get('expiryDate')?.touched &&
                     userForm.get('expiryDate')?.invalid
                   ">
@@ -208,9 +177,7 @@
                 <label class="user-label">
 
                   Password
-                  <span
-                    class="required"
-                    *ngIf="!isEditMode">
+                  <span class="required" *ngIf="!isEditMode">
 
                     *
 
@@ -218,23 +185,15 @@
 
                 </label>
 
-                <input
-                  type="password"
-                  autocomplete="new-password"
-                  class="user-input"
-                  formControlName="password"
-                  maxlength="20"
-                />
+                <input type="password" autocomplete="new-password" class="user-input" formControlName="password"
+                  maxlength="20" />
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     userForm.get('password')?.touched &&
                     userForm.get('password')?.invalid
                   ">
 
-                  <span
-                    *ngIf="
+                  <span *ngIf="
                       userForm.get('password')?.errors?.['required']
                     ">
 
@@ -242,8 +201,7 @@
 
                   </span>
 
-                  <span
-                    *ngIf="
+                  <span *ngIf="
                       userForm.get('password')?.errors?.['minlength']
                     ">
 
@@ -281,17 +239,10 @@
 
                 </label>
 
-                <input
-                  type="text"
-                  class="user-input"
-                  formControlName="mobile"
-                  maxlength="10"
-                  (keypress)="allowOnlyNumbers($event)"
-                />
+                <input type="text" class="user-input" formControlName="mobile" maxlength="10"
+                  (keypress)="allowOnlyNumbers($event)" />
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     userForm.get('mobile')?.touched &&
                     userForm.get('mobile')?.invalid
                   ">
@@ -317,12 +268,7 @@
 
                 </label>
 
-                <input
-                  type="text"
-                  class="user-input"
-                  formControlName="telephone"
-                  maxlength="15"
-                />
+                <input type="text" class="user-input" formControlName="telephone" maxlength="15" />
 
               </div>
 
@@ -342,9 +288,7 @@
 
                 </label>
 
-                <select
-                  class="user-input user-select"
-                  formControlName="status">
+                <select class="user-input user-select" formControlName="status">
 
                   <option [value]="1">
                     Active
@@ -352,6 +296,32 @@
 
                   <option [value]="2">
                     Inactive
+                  </option>
+
+                </select>
+
+              </div>
+
+            </div>
+            <div class="user-form-col">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Department
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="departmentId">
+
+                  <option [ngValue]="null">
+                    Select Department
+                  </option>
+
+                  <option *ngFor="let dept of departmentList" [ngValue]="dept.departmentId">
+
+                    {{ dept.name }}
+
                   </option>
 
                 </select>
@@ -376,8 +346,7 @@
 
           <div class="admin-row">
 
-            <mat-checkbox
-              formControlName="isAdmin">
+            <mat-checkbox formControlName="isAdmin">
 
               Admin Permissions (All modules)
 
@@ -390,9 +359,7 @@
           <!-- RIGHTS AND PERMISSIONS
           ================================================== -->
 
-          <div
-            class="rights-section"
-            *ngIf="!userForm.get('isAdmin')?.value">
+          <div class="rights-section" *ngIf="!userForm.get('isAdmin')?.value">
 
 
             <!-- Section Heading -->
@@ -419,8 +386,7 @@
                       Module Name
                     </th>
 
-                    <th
-                      *ngFor="
+                    <th *ngFor="
                         let action of permissionActions
                       ">
 
@@ -435,8 +401,7 @@
 
                 <tbody>
 
-                  <ng-container
-                    *ngFor="
+                  <ng-container *ngFor="
                       let group of groupedModules
                     ">
 
@@ -454,21 +419,17 @@
                       </td>
 
 
-                      <td
-                        *ngFor="
+                      <td *ngFor="
                           let action of permissionActions
                         ">
 
-                        <mat-checkbox
-                          [(ngModel)]="
+                        <mat-checkbox [(ngModel)]="
                             selectAllRows[
                               typeGroupMap[group.type]
                             ][action]
-                          "
-                          [ngModelOptions]="{
+                          " [ngModelOptions]="{
                             standalone: true
-                          }"
-                          (change)="
+                          }" (change)="
                             toggleGroupSelectAll(
                               typeGroupMap[group.type],
                               action
@@ -488,8 +449,7 @@
 
                     <!-- MODULE ROWS -->
 
-                    <tr
-                      *ngFor="
+                    <tr *ngFor="
                         let module of group.modules
                       ">
 
@@ -500,19 +460,15 @@
                       </td>
 
 
-                      <td
-                        *ngFor="
+                      <td *ngFor="
                           let action of permissionActions
                         ">
 
-                        <mat-checkbox
-                          [(ngModel)]="
+                        <mat-checkbox [(ngModel)]="
                             permissions[module.name][action]
-                          "
-                          [ngModelOptions]="{
+                          " [ngModelOptions]="{
                             standalone: true
-                          }"
-                          (change)="
+                          }" (change)="
                             onPermissionChange(
                               module.name,
                               action
@@ -542,25 +498,19 @@
 
           <div class="user-buttons">
 
-            <button
-              type="button"
-              class="user-reset-btn"
-              (click)="onReset()">
+            <button type="button" class="user-reset-btn" (click)="onReset()">
 
               Reset
 
             </button>
 
 
-            <button
-              type="submit"
-              class="user-submit-btn"
-              [disabled]="isSubmitting">
+            <button type="submit" class="user-submit-btn" [disabled]="isSubmitting">
 
               {{
-                isSubmitting
-                  ? 'Submitting...'
-                  : (isEditMode ? 'Update' : 'Submit')
+              isSubmitting
+              ? 'Submitting...'
+              : (isEditMode ? 'Update' : 'Submit')
               }}
 
             </button>
