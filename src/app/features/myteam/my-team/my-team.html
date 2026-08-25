@@ -71,12 +71,9 @@
 
           </div>
 
-
           <!-- STATUS -->
           <div class="status-wrapper">
-
             <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
-
               <option value="">
                 --All Status--
               </option>
@@ -312,6 +309,11 @@
                 <td>
 
                   {{ user.mobile }}
+
+                </td>
+                  <td>
+
+                  {{ user.departmentName }}
 
                 </td>
 

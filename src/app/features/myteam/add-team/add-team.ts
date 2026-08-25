@@ -64,7 +64,8 @@ import {
 } from '@angular/material/core';
 
 import {
-  DataProviderService
+  DataProviderService,
+  DepartmentDTO
 } from '../../../service/data-provider.service';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
@@ -73,7 +74,7 @@ declare var $: any;
   selector: 'app-add-team',
   standalone: true,
 
- imports: [
+  imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -158,10 +159,10 @@ export class AddTeam implements OnInit, AfterViewInit {
   typeGroupMap: {
     [key: number]: string
   } = {
-    1: 'Masters',
-    2: 'Activity',
-    3: 'Reports - 1'
-  };
+      1: 'Masters',
+      2: 'Activity',
+      3: 'Reports - 1'
+    };
 
   groupedModules: {
     type: number;
@@ -243,7 +244,8 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       isAdmin: [
         false
-      ]
+      ],
+      departmentId: [null, Validators.required],
 
     });
 
@@ -288,6 +290,8 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       this.setupAddMode();
     }
+
+    this.loadDepartments();
   }
 
   // ============================================================
@@ -401,7 +405,7 @@ export class AddTeam implements OnInit, AfterViewInit {
 
             telephone:
               response.telephone &&
-              response.telephone !== 'NA'
+                response.telephone !== 'NA'
                 ? response.telephone
                 : '',
 
@@ -414,7 +418,8 @@ export class AddTeam implements OnInit, AfterViewInit {
               Number(response.status) || 1,
 
             isAdmin:
-              response.permission === 'Y'
+              response.permission === 'Y',
+            departmentId: response.departmentId || 0
           });
 
           /**
@@ -591,7 +596,7 @@ export class AddTeam implements OnInit, AfterViewInit {
             group.modules.every(
               module =>
                 this.permissions[
-                  module.name.trim()
+                module.name.trim()
                 ]?.[action] === true
             );
 
@@ -625,7 +630,7 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     const newValue =
       this.selectAllRows[
-        groupName
+      groupName
       ][action];
 
     const dependentActions = [
@@ -677,7 +682,7 @@ export class AddTeam implements OnInit, AfterViewInit {
           dependentActions.some(
             a =>
               this.permissions[
-                moduleName
+              moduleName
               ][a]
           );
 
@@ -719,7 +724,7 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       if (
         this.permissions[
-          moduleName
+        moduleName
         ]['View Only']
       ) {
 
@@ -744,7 +749,7 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       if (
         this.permissions[
-          moduleName
+        moduleName
         ][action]
       ) {
 
@@ -831,7 +836,7 @@ export class AddTeam implements OnInit, AfterViewInit {
           `${parts[2]}-${parts[1]}-${parts[0]}`;
       }
     }
-
+    console.log('Department ID:', formValues.departmentId);
     const payload: any = {
 
       userId: this.isEditMode
@@ -860,6 +865,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       status:
         Number(formValues.status),
 
+      departmentId: Number(formValues.departmentId),
       qcFlag: 0,
 
       telephone:
@@ -944,7 +950,6 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private buildModulePermissions(): any[] {
-
     return this.groupedModules
       .flatMap(group =>
         group.modules.map(module => {
@@ -954,7 +959,7 @@ export class AddTeam implements OnInit, AfterViewInit {
 
           const permission =
             this.permissions[
-              moduleName
+            moduleName
             ] || {};
 
           return {
@@ -1095,7 +1100,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       navigation?.extras?.state;
 
     if (!stateData &&
-        isPlatformBrowser(this.platformId)) {
+      isPlatformBrowser(this.platformId)) {
 
       const saved =
         sessionStorage.getItem(
@@ -1324,4 +1329,17 @@ export class AddTeam implements OnInit, AfterViewInit {
         return 'Unknown';
     }
   }
+  departmentList: DepartmentDTO[] = [];
+
+  loadDepartments(): void {
+    this.dataProvider.getActiveDepartments().subscribe({
+      next: (response: DepartmentDTO[]) => {
+        this.departmentList = response;
+      },
+      error: (error) => {
+        console.error('Error loading departments', error);
+      }
+    });
+  }
+
 }

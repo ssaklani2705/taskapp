@@ -36,6 +36,15 @@ interface ApiResponseQuotation<T> {
   data: T;
 }
 
+export interface DepartmentDTO {
+  departmentId?: number;
+  name?: string;
+  sequence?: number;
+  status?: number;
+  userId?: number;
+  regdate?: string;
+  moddate?: string;
+}
 @Injectable({
   providedIn: 'root'
 })
