@@ -1,11 +1,13 @@
 <div class="page-content-wrapper">
+
   <div class="page-content">
 
     <div class="user-management-container">
 
       <!-- =====================================================
-           PAGE HEADER
-           ===================================================== -->
+           HEADER
+      ====================================================== -->
+
       <div class="page-header">
 
         <div class="header-title-section">
@@ -26,37 +28,33 @@
 
         </div>
 
+        <!-- ADD NEW -->
+        @if (addPer === "Y") {
+
+          <button
+            type="button"
+            class="btn-add-user"
+            (click)="addDepartment()"
+          >
+            <span class="plus-icon">+</span>
+            Add New
+          </button>
+
+        }
+
       </div>
 
 
       <!-- =====================================================
            SEARCH PANEL
-           ===================================================== -->
+      ====================================================== -->
+
       <div
         class="search-panel"
         *ngIf="isPanelVisible"
       >
 
         <div class="search-row">
-
-          <!-- ADD BUTTON -->
-          @if (addPer === "Y") {
-
-            <div class="add-user-wrapper">
-
-              <button
-                type="button"
-                class="btn-add-user"
-                (click)="addDepartment()"
-              >
-                Add New
-                <span class="plus-icon">+</span>
-              </button>
-
-            </div>
-
-          }
-
 
           <!-- SEARCH -->
           <div class="search-wrapper">
@@ -134,11 +132,11 @@
 
 
       <!-- =====================================================
-           TOP TABLE SECTION
-           ===================================================== -->
+           TOP PAGINATION
+      ====================================================== -->
+
       <div class="table-top-section">
 
-        <!-- RECORD SUMMARY -->
         <div
           class="record-summary"
           role="status"
@@ -148,7 +146,6 @@
         </div>
 
 
-        <!-- TOP PAGINATION -->
         <div class="pagination">
 
           <button
@@ -160,7 +157,6 @@
             « First
           </button>
 
-
           <button
             type="button"
             class="pagination-btn"
@@ -169,7 +165,6 @@
           >
             ‹ Prev
           </button>
-
 
           <button
             type="button"
@@ -181,7 +176,6 @@
             {{ page }}
           </button>
 
-
           <button
             type="button"
             class="pagination-btn"
@@ -190,7 +184,6 @@
           >
             Next ›
           </button>
-
 
           <button
             type="button"
@@ -208,27 +201,22 @@
 
       <!-- =====================================================
            TABLE
-           ===================================================== -->
+      ====================================================== -->
+
       <div class="table-container">
 
         <div class="table-responsive">
 
           <table class="user-table">
 
-            <!-- =================================================
-                 TABLE HEADER
-                 ================================================= -->
             <thead>
 
               <tr>
 
-                <!-- SERIAL NUMBER -->
                 <th class="serial-column">
                   #
                 </th>
 
-
-                <!-- DYNAMIC COLUMNS -->
                 <th
                   *ngFor="let col of columns"
                   [class.sortable-column]="col.sortable"
@@ -241,8 +229,6 @@
                       {{ col.label }}
                     </span>
 
-
-                    <!-- SORT ICONS -->
                     <span
                       *ngIf="col.sortable"
                       class="sort-icons"
@@ -272,8 +258,6 @@
 
                 </th>
 
-
-                <!-- ACTION -->
                 <th class="action-column">
                   Action
                 </th>
@@ -283,9 +267,6 @@
             </thead>
 
 
-            <!-- =================================================
-                 TABLE BODY
-                 ================================================= -->
             <tbody>
 
               <tr
@@ -296,40 +277,30 @@
                 "
               >
 
-                <!-- # -->
                 <td class="serial-number">
-
                   {{
                     (currentPage - 1) *
-                      recordsPerPage +
-                      i +
-                      1
+                    recordsPerPage +
+                    i +
+                    1
                   }}
-
                 </td>
 
 
-                <!-- DEPARTMENT NAME -->
                 <td>
 
                   <span class="user-name wrap-text">
-
                     {{ department.name }}
-
                   </span>
 
                 </td>
 
 
-                <!-- SEQUENCE -->
                 <td>
-
                   {{ department.sequence }}
-
                 </td>
 
 
-                <!-- STATUS -->
                 <td>
 
                   <span
@@ -340,19 +311,16 @@
                       )
                     "
                   >
-
                     {{
                       common.getStatusLabel(
                         department.status
                       )
                     }}
-
                   </span>
 
                 </td>
 
 
-                <!-- ACTION -->
                 <td>
 
                   <div class="action-buttons">
@@ -367,9 +335,7 @@
                       class="action-btn view-btn"
                       title="View"
                     >
-
-                      <i class="fa fa-search"></i>
-
+                      <i class="fa fa-eye"></i>
                     </a>
 
 
@@ -381,7 +347,6 @@
                       "
                     >
 
-                      <!-- EDIT -->
                       @if (editPer === "Y") {
 
                         <a
@@ -393,15 +358,12 @@
                           class="action-btn edit-btn"
                           title="Edit"
                         >
-
                           <i class="fa fa-pencil"></i>
-
                         </a>
 
                       }
 
 
-                      <!-- DELETE -->
                       @if (deletePer === "Y") {
 
                         <a
@@ -413,9 +375,7 @@
                           class="action-btn delete-btn"
                           title="Delete"
                         >
-
-                          <i class="fa fa-close"></i>
-
+                          <i class="fa fa-trash"></i>
                         </a>
 
                       }
@@ -429,9 +389,8 @@
               </tr>
 
 
-              <!-- =================================================
-                   NO RECORDS
-                   ================================================= -->
+              <!-- NO RECORDS -->
+
               <tr
                 *ngIf="
                   !paginatedDepartments ||
@@ -443,9 +402,7 @@
                   [attr.colspan]="columns.length + 2"
                   class="no-records"
                 >
-
                   No records found.
-
                 </td>
 
               </tr>
@@ -460,23 +417,20 @@
 
 
       <!-- =====================================================
-           BOTTOM SECTION
-           ===================================================== -->
+           BOTTOM PAGINATION
+      ====================================================== -->
+
       <div class="table-bottom-section">
 
-        <!-- RECORD SUMMARY -->
         <div
           class="record-summary"
           role="status"
           aria-live="polite"
         >
-
           {{ recordSummary }}
-
         </div>
 
 
-        <!-- BOTTOM PAGINATION -->
         <div class="pagination">
 
           <button
@@ -488,7 +442,6 @@
             « First
           </button>
 
-
           <button
             type="button"
             class="pagination-btn"
@@ -497,7 +450,6 @@
           >
             ‹ Prev
           </button>
-
 
           <button
             type="button"
@@ -509,7 +461,6 @@
             {{ page }}
           </button>
 
-
           <button
             type="button"
             class="pagination-btn"
@@ -518,7 +469,6 @@
           >
             Next ›
           </button>
-
 
           <button
             type="button"
@@ -536,4 +486,5 @@
     </div>
 
   </div>
+
 </div>

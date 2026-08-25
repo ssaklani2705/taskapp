@@ -18,6 +18,7 @@ import {
   Router
 } from '@angular/router';
 import { DataProviderService } from '../../../service/data-provider.service';
+import { MatIconModule } from '@angular/material/icon';
 
 interface User {
 
@@ -36,7 +37,7 @@ interface User {
 @Component({
   selector: 'app-my-team',
   imports: [CommonModule,
-    FormsModule],
+    FormsModule,MatIconModule],
   templateUrl: './my-team.html',
   styleUrl: './my-team.scss',
 })

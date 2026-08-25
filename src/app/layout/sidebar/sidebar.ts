@@ -139,17 +139,32 @@ export class Sidebar {
         icon: 'groups',
         route: '/department-master'
       },
+       {
+            moduleId: 3,
+
+            label: 'Designation',
+
+            icon: 'badge',
+
+            route: '/designation-master'
+          },
       {
         moduleId: 1,
         label: 'My team',
         icon: 'groups',
         route: '/my-team'
       },
+       {
+        moduleId: 5,
+        label: 'Task Category',
+        icon: 'task_alt',
+        route: '/task-category-index'
+      },
       {
-
+        moduleId: 9,
         label: 'Tasks',
         icon: 'task_alt',
-        route: '/tasks'
+        route: '/task-index'
       },
       {
         moduleId: 8,

@@ -5,21 +5,43 @@
     <div class="user-management-container">
 
       <!-- ================= HEADER ================= -->
-      <div class="page-header">
+     <!-- ================= HEADER ================= -->
+<div class="page-header">
 
-        <div class="header-title-section">
-          <h2>User Management</h2>
+  <div class="header-title-section">
 
-          <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible">
+    <h2>
+       <mat-icon>person</mat-icon>
+      My Team
+    </h2>
 
-            <span>
-              {{ isPanelVisible ? '▲' : '▼' }}
-            </span>
+    <button
+      type="button"
+      class="collapse-btn"
+      (click)="togglePanel()"
+      [attr.aria-expanded]="isPanelVisible"
+      title="Toggle Search Panel"
+    >
+      {{ isPanelVisible ? '▲' : '▼' }}
+    </button>
 
-          </button>
-        </div>
+  </div>
 
-      </div>
+  @if (addPer === 'Y') {
+
+    <button
+      type="button"
+      class="btn-add-user"
+      (click)="addUser()"
+    >
+      <span class="plus-icon">+</span>
+      Add New
+    </button>
+
+  }
+
+</div>
+
 
 
       <!-- ================= SEARCH PANEL ================= -->
@@ -28,20 +50,7 @@
         <div class="search-row">
 
           <!-- ADD USER -->
-          <div class="add-user-wrapper">
-
-            @if (addPer === 'Y') {
-
-            <button type="button" class="btn-add-user" (click)="addUser()">
-
-              Add New
-              <span class="plus-icon">+</span>
-
-            </button>
-
-            }
-
-          </div>
+        
 
 
           <!-- SEARCH -->

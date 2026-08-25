@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { DepartmentIndexComponent } from './features/department/department-index/department-index';
+import { ViewTaskCategoryComponent } from './features/taskcategory/view-task-category/view-task-category';
 
 export const routes: Routes = [
 
@@ -45,6 +46,26 @@ export const routes: Routes = [
        {path: 'add-department',loadComponent: () =>import('./features/department/add-department/add-department').then(m => m.AddDepartmentComponent)},
        {path: 'edit-department/:departmentId',loadComponent: () =>import('./features/department/add-department/add-department').then(m => m.AddDepartmentComponent)},
 
+       //Designation Master
+       {path: 'designation-master',loadComponent: () =>import('./features/designation/designation-index/designation-index').then(m => m.DesignationIndexComponent)},
+       {path: 'view-designation/:designationId',loadComponent: () =>import('./features/designation/view-designation/view-designation').then(m => m.ViewDesignation)},
+       {path: 'add-designation',loadComponent: () =>import('./features/designation/add-designation/add-designation').then(m => m.AddDesignation)},
+       {path: 'edit-designation/:designationId',loadComponent: () =>import('./features/designation/add-designation/add-designation').then(m => m.AddDesignation)},
+       
+        {path: 'task-index',loadComponent: () =>import('./features/task/task-index/task-index').then(m => m.TaskIndex)},
+
+        {path: 'task-category-index',loadComponent: () =>import('./features/taskcategory/task-category-index/task-category-index').then(m => m.IndexTaskCategory)},
+        {path: 'add-task-category',loadComponent: () =>import('./features/taskcategory/add-task-category/add-task-category').then(m => m.AddTaskCategoryComponent)},
+        {path: 'edit-task-category/:taskCategoryId',loadComponent: () =>import('./features/taskcategory/add-task-category/add-task-category').then(m => m.AddTaskCategoryComponent)},
+        {path: 'view-task-category/:taskCategoryId',loadComponent: () =>import('./features/taskcategory/view-task-category/view-task-category').then(m => m.ViewTaskCategoryComponent)},
+
+        
+  // { path: 'designation-master', component: DesignationIndexComponent,canActivate: [ModulePermissionGuard],data: { moduleId: 3,permission: 'view' } },
+  // { path: 'add-designation', component: AddDesignationComponent,canActivate: [ModulePermissionGuard],data: { moduleId: 3,permission: 'add' } },
+  // { path: 'edit-designation/:designationId', component: AddDesignationComponent,canActivate: [ModulePermissionGuard], data: { renderMode: 'csr', moduleId: 3,permission: 'edit'  }},
+  // { path: 'view-designation/:designationId', component: ViewDesignationComponent,canActivate: [ModulePermissionGuard], data: { renderMode: 'csr', moduleId: 3,permission: 'view' }  },
+
+
   // { path: 'department-master', component: DepartmentIndexComponent,canActivate: [ModulePermissionGuard],data: { moduleId: 2,permission: 'view' } },
   // { path: 'add-department', component: AddDepartmentComponent,canActivate: [ModulePermissionGuard],data: { moduleId: 2,permission: 'add' } },
   // { path: 'edit-department/:departmentId', component: AddDepartmentComponent,canActivate: [ModulePermissionGuard], data: { renderMode: 'csr', moduleId: 2,permission: 'edit'  }},
@@ -59,12 +80,12 @@ export const routes: Routes = [
             .then(m => m.Clients)
       },
 
-      {
-        path: 'tasks',
-        loadComponent: () =>
-          import('./features/tasks/tasks')
-            .then(m => m.Tasks)
-      },
+      // {
+      //   path: 'tasks',
+      //   loadComponent: () =>
+      //     import('./features/tasks/tasks')
+      //       .then(m => m.Tasks)
+      // },
 
       {
         path: '',

@@ -4,14 +4,11 @@
       <div class="col-md-12">
         <div class="portlet light portlet-fit portlet-form bordered">
 
-          <!-- Header -->
+          <!-- HEADER -->
           <div class="portlet-title">
             <div class="caption font-dark">
               <span class="caption-subject font-green sbold uppercase">
-                <span>
-                  {{ isEditMode ? "edit" : "add" }}
-                </span>
-                Designation
+                {{ isEditMode ? "Edit" : "Add" }} Task Category
               </span>
             </div>
 
@@ -19,69 +16,106 @@
               <label
                 class="btn btn-transparent dark btn-outline btn-circle btn-sm active"
               >
-                <a
-                  (click)="backToIndexPage()"
-                  class="back-to-index"
-                >
+                <a (click)="backToIndexPage()" class="back-to-index">
                   Back to Index
                 </a>
               </label>
             </div>
           </div>
 
-          <!-- Body -->
+          <!-- BODY -->
           <div class="portlet-body">
 
             <form
-              #designationForm="ngForm"
-              (ngSubmit)="onSubmit(designationForm)"
+              #taskCategoryForm="ngForm"
+              (ngSubmit)="onSubmit(taskCategoryForm)"
               novalidate
             >
 
               <div class="form-body">
 
-                <!-- Mandatory Message -->
+                <!-- Mandatory message -->
                 <div class="row">
                   <div class="col-md-12 mandatory_div mb_20">
                     <span>
-                      Fields with
-                      <span class="required">*</span>
-                      mark are mandatory
+                      Fields with <span class="required">*</span> mark are
+                      mandatory
                     </span>
                   </div>
                 </div>
 
                 <div class="row">
 
-                  <!-- Designation Name -->
-                  <div class="col-md-4">
+                  <!-- Department -->
+                  <div class="col-md-3">
                     <div class="form-group">
 
                       <label class="sbold">
-                        Designation
+                        Department
+                        <span class="required">*</span>
+                      </label>
+
+                      <select
+                        class="form-control"
+                        [(ngModel)]="taskCategory.departmentId"
+                        name="departmentId"
+                        required
+                        #departmentCtrl="ngModel"
+                      >
+
+                        <!-- IMPORTANT: default option -->
+                        <option [ngValue]="null">
+                          -- Select Department --
+                        </option>
+
+                        <option
+                          *ngFor="let department of departments"
+                          [ngValue]="department.departmentId"
+                        >
+                          {{ department.name }}
+                        </option>
+
+                      </select>
+
+                      <div
+                        class="text-danger"
+                        *ngIf="
+                          departmentCtrl.errors?.['required'] &&
+                          departmentCtrl.touched
+                        "
+                      >
+                        Department is required
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <!-- Task Category Name -->
+                  <div class="col-md-3">
+                    <div class="form-group">
+
+                      <label class="sbold">
+                        Task Category
                         <span class="required">*</span>
                       </label>
 
                       <input
                         class="form-control"
                         type="text"
-                        placeholder="Enter Designation Name"
-                        [(ngModel)]="designation.name"
+                        placeholder="Enter Task Category Name"
+                        [(ngModel)]="taskCategory.name"
                         name="name"
                         required
                         minlength="2"
                         maxlength="100"
                         (input)="
-                          designation.name =
-                            capitalizeFirstCharOnly(
-                              designation.name
-                            )
+                          taskCategory.name =
+                            capitalizeFirstCharOnly(taskCategory.name)
                         "
                         #nameCtrl="ngModel"
                         pattern="^[a-zA-Z0-9\s\.,;:=$\-_\+'&quot;/\\!@`#%&*()?]+$"
                       />
 
-                      <!-- Required -->
                       <div
                         class="text-danger"
                         *ngIf="
@@ -89,10 +123,9 @@
                           nameCtrl.touched
                         "
                       >
-                        Designation Name is required
+                        Task Category Name is required
                       </div>
 
-                      <!-- Minimum -->
                       <div
                         class="text-danger"
                         *ngIf="
@@ -103,7 +136,16 @@
                         Minimum 2 characters required
                       </div>
 
-                      <!-- Pattern -->
+                      <div
+                        class="text-danger"
+                        *ngIf="
+                          nameCtrl.errors?.['maxlength'] &&
+                          nameCtrl.touched
+                        "
+                      >
+                        Maximum 100 characters allowed
+                      </div>
+
                       <div
                         class="text-danger"
                         *ngIf="
@@ -111,75 +153,15 @@
                           nameCtrl.touched
                         "
                       >
-                        Only a-z, 0-9, . , ; : = $ - _ + ' " / \
-                        ! &#64; ` # % & * ( ) ? are allowed
+                        Only a-z, 0-9, . , ; : = $ - _ + ' " / \ ! &#64; ` #
+                        % & * ( ) ? are allowed
                       </div>
 
                     </div>
                   </div>
 
-                  <!-- Sequence -->
-                  <div class="col-md-3">
-                    <div class="form-group">
-
-                      <label class="sbold">
-                        Sequence
-                        <span class="required">*</span>
-                      </label>
-
-                      <input
-                        class="form-control"
-                        type="number"
-                        placeholder="Enter Sequence"
-                        [(ngModel)]="designation.sequence"
-                        name="sequence"
-                        required
-                        min="1"
-                        max="999999"
-                        #sequenceCtrl="ngModel"
-                      />
-
-                      <!-- Required -->
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          sequenceCtrl.errors?.['required'] &&
-                          sequenceCtrl.touched
-                        "
-                      >
-                        Sequence is required
-                      </div>
-
-                      <!-- Min -->
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          sequenceCtrl.errors?.['min'] &&
-                          sequenceCtrl.touched
-                        "
-                      >
-                        Sequence must be greater than 0
-                      </div>
-
-                      <!-- Max -->
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          sequenceCtrl.errors?.['max'] &&
-                          sequenceCtrl.touched
-                        "
-                      >
-                        Sequence is too large
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Status -->
-                  <div
-                    class="col-md-3"
-                    *ngIf="isEditMode"
-                  >
+                  <!-- Status - Edit only -->
+                  <div class="col-md-3" *ngIf="isEditMode">
                     <div class="form-group">
 
                       <label class="sbold">
@@ -189,21 +171,21 @@
 
                       <select
                         class="form-control"
-                        [(ngModel)]="designation.status"
+                        [(ngModel)]="taskCategory.status"
                         name="status"
                         required
                         #statusCtrl="ngModel"
                       >
 
-                        <option value="">
-                          -- Select here --
+                        <option [ngValue]="null">
+                          -- Select Status --
                         </option>
 
-                        <option [value]="1">
+                        <option [ngValue]="1">
                           Active
                         </option>
 
-                        <option [value]="2">
+                        <option [ngValue]="2">
                           Inactive
                         </option>
 
@@ -245,13 +227,11 @@
                   </div>
 
                 </div>
-
               </div>
 
             </form>
 
           </div>
-
         </div>
       </div>
     </div>
