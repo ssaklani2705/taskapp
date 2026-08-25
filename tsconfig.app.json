@@ -3,7 +3,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
+<<<<<<< HEAD
     "rootDir": "./src",
+=======
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
     "outDir": "./out-tsc/app",
     "types": []
   },

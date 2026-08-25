@@ -1,0 +1,483 @@
+<div class="page-container">
+
+  <!-- =========================================================
+       MAIN CARD
+  ========================================================== -->
+
+  <div class="main-card">
+
+    <!-- =======================================================
+         PAGE HEADER
+    ======================================================== -->
+
+    <div class="page-header">
+
+      <div class="page-title">
+        <mat-icon>badge</mat-icon>
+        <span>Designation Master</span>
+      </div>
+
+      <div class="header-action">
+
+        @if (addPer === "Y") {
+          <button
+            type="button"
+            class="add-button"
+            (click)="addDesignation()"
+          >
+            <mat-icon>add</mat-icon>
+            Add New
+          </button>
+        }
+
+      </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+
+    <!-- =======================================================
+         SEARCH / FILTER SECTION
+    ======================================================== -->
+
+    <div class="search-section">
+
+      <div class="search-grid">
+
+        <!-- Search -->
+        <div class="search-field search-name">
+
+          <label>
+            Designation Name
+          </label>
+
+          <div class="search-input-wrapper">
+
+            <input
+              type="text"
+              [(ngModel)]="searchQuery"
+              placeholder="Search by Designation Name"
+              (keyup.enter)="onSearch()"
+            />
+
+            <button
+              type="button"
+              class="search-button"
+              (click)="onSearch()"
+              title="Search"
+            >
+              <mat-icon>search</mat-icon>
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- Status -->
+        <div class="search-field">
+
+          <label>
+            Status
+          </label>
+
+          <select
+            [(ngModel)]="selectedStatus"
+            (change)="onSearch()"
+          >
+            <option value="">
+              -- All Status --
+            </option>
+
+            <option value="1">
+              Active
+            </option>
+
+            <option value="2">
+              Inactive
+            </option>
+
+            <option value="3">
+              Deleted
+            </option>
+          </select>
+
+        </div>
+
+
+        <!-- Go -->
+        <div class="filter-action">
+
+          <button
+            type="button"
+            class="go-button"
+            (click)="onSearch()"
+          >
+            <mat-icon>search</mat-icon>
+            Go
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <mat-divider></mat-divider>
+
+
+    <!-- =======================================================
+         TABLE SECTION
+    ======================================================== -->
+
+    <div class="table-section">
+
+      <!-- =====================================================
+           TOP PAGINATION / RECORD SUMMARY
+      ====================================================== -->
+
+      <div class="table-toolbar">
+
+        <div class="record-summary">
+          {{ recordSummary }}
+        </div>
+
+        <div class="pagination">
+
+          <button
+            type="button"
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1"
+          >
+            « First
+          </button>
+
+          <button
+            type="button"
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+          >
+            ‹ Prev
+          </button>
+
+          <button
+            type="button"
+            *ngFor="let page of pages()"
+            (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage"
+          >
+            {{ page }}
+          </button>
+
+          <button
+            type="button"
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
+            Next ›
+          </button>
+
+          <button
+            type="button"
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Last »
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           TABLE
+      ====================================================== -->
+
+      <div class="table-wrapper">
+
+        <table class="designation-table">
+
+          <thead>
+
+            <tr>
+
+              <th class="serial-column">
+                #
+              </th>
+
+              <th
+                *ngFor="let col of columns"
+                [class.sortable]="col.sortable"
+                (click)="
+                  col.sortable &&
+                  sortData(col.key)
+                "
+              >
+
+                <span>
+                  {{ col.label }}
+                </span>
+
+                <span
+                  *ngIf="col.sortable"
+                  class="sort-icons"
+                >
+
+                  <span
+                    [class.active]="
+                      sortColumn === col.key &&
+                      sortDirection === 'asc'
+                    "
+                  >
+                    ▲
+                  </span>
+
+                  <span
+                    [class.active]="
+                      sortColumn === col.key &&
+                      sortDirection === 'desc'
+                    "
+                  >
+                    ▼
+                  </span>
+
+                </span>
+
+              </th>
+
+              <th class="action-column">
+                Action
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            <!-- =================================================
+                 DATA ROWS
+            ================================================== -->
+
+            <tr
+              *ngFor="
+                let designation of paginatedDesignations;
+                let i = index
+              "
+            >
+
+              <!-- Serial -->
+              <td class="serial-cell">
+                {{
+                  (currentPage - 1) *
+                    recordsPerPage +
+                    i +
+                    1
+                }}
+              </td>
+
+
+              <!-- Designation -->
+              <td class="designation-name">
+                {{ designation.name }}
+              </td>
+
+
+              <!-- Sequence -->
+              <td class="sequence-cell">
+                {{ designation.sequence }}
+              </td>
+
+
+              <!-- Status -->
+              <td>
+
+                <span
+                  class="status-badge"
+                  [ngClass]="
+                    common.getStatusClass(
+                      designation.status
+                    )
+                  "
+                >
+                  {{
+                    common.getStatusLabel(
+                      designation.status
+                    )
+                  }}
+                </span>
+
+              </td>
+
+
+              <!-- Actions -->
+              <td class="action-cell">
+
+                <!-- View -->
+
+                <button
+                  type="button"
+                  class="action-button view-button"
+                  title="View"
+                  (click)="
+                    viewDesignation(
+                      designation.desigmationId
+                    )
+                  "
+                >
+                  <mat-icon>visibility</mat-icon>
+                </button>
+
+
+                <!-- Edit / Delete -->
+
+                <ng-container
+                  *ngIf="
+                    designation.status === 1 ||
+                    designation.status === 2
+                  "
+                >
+
+                  @if (editPer === "Y") {
+
+                    <button
+                      type="button"
+                      class="action-button edit-button"
+                      title="Edit"
+                      (click)="
+                        editDesignation(
+                          designation.desigmationId
+                        )
+                      "
+                    >
+                      <mat-icon>edit</mat-icon>
+                    </button>
+
+                  }
+
+
+                  @if (deletePer === "Y") {
+
+                    <button
+                      type="button"
+                      class="action-button delete-button"
+                      title="Delete"
+                      (click)="
+                        onDeleteDesignation(
+                          designation.desigmationId
+                        )
+                      "
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+
+                  }
+
+                </ng-container>
+
+              </td>
+
+            </tr>
+
+
+            <!-- =================================================
+                 NO DATA
+            ================================================== -->
+
+            <tr
+              *ngIf="
+                !paginatedDesignations ||
+                paginatedDesignations.length === 0
+              "
+            >
+
+              <td
+                colspan="5"
+                class="no-records"
+              >
+
+                <mat-icon>
+                  info_outline
+                </mat-icon>
+
+                <span>
+                  No records found
+                </span>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- =====================================================
+           BOTTOM PAGINATION
+      ====================================================== -->
+
+      <div class="table-toolbar bottom-toolbar">
+
+        <div class="record-summary">
+          {{ recordSummary }}
+        </div>
+
+        <div class="pagination">
+
+          <button
+            type="button"
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1"
+          >
+            « First
+          </button>
+
+          <button
+            type="button"
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+          >
+            ‹ Prev
+          </button>
+
+          <button
+            type="button"
+            *ngFor="let page of pages()"
+            (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage"
+          >
+            {{ page }}
+          </button>
+
+          <button
+            type="button"
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
+            Next ›
+          </button>
+
+          <button
+            type="button"
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Last »
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

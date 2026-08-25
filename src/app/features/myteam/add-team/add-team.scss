@@ -1,6 +1,10 @@
 /* =========================================================
    USER PAGE
+<<<<<<< HEAD
    Same color scheme as User Management / View Team page
+=======
+   Color scheme matched to VIEW TEAM page
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
    ========================================================= */
 
 :host {
@@ -12,13 +16,56 @@
 
 
 /* =========================================================
+<<<<<<< HEAD
+=======
+   COLOR VARIABLES
+   ========================================================= */
+
+:host {
+  --navy: #1b3b63;
+  --navy-dark: #142f50;
+  --navy-hover: #244c7b;
+
+  --primary-blue: #3378a9;
+  --primary-blue-dark: #28658f;
+
+  --heading-blue: #3378a9;
+  --link-blue: #008fd3;
+
+  --text-navy: #193b63;
+  --text-blue: #416789;
+
+  --border: #dce4ec;
+  --border-dark: #bccbda;
+
+  --table-header: #edf4f8;
+  --table-group: #f4f7f9;
+
+  --white: #ffffff;
+
+  --success-bg: #e7f5ef;
+  --success-border: #b9dfcf;
+  --success-text: #21845d;
+
+  --danger: #d9534f;
+}
+
+
+/* =========================================================
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
    MAIN WRAPPER
    ========================================================= */
 
 .user-page-wrapper {
   width: 100%;
   padding: 6px;
+<<<<<<< HEAD
   background: #ffffff;
+=======
+
+  background: #ffffff;
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   box-sizing: border-box;
 }
 
@@ -29,8 +76,16 @@
 
 .user-portlet {
   width: 100%;
+<<<<<<< HEAD
   background: #ffffff;
   border: 1px solid #dce4ec;
+=======
+
+  background: #ffffff;
+
+  border: 1px solid var(--border);
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   box-sizing: border-box;
 }
 
@@ -46,9 +101,15 @@
   align-items: center;
   justify-content: space-between;
 
+<<<<<<< HEAD
   padding: 0 14px 0 14px;
 
   border-bottom: 1px solid #dce4ec;
+=======
+  padding: 0 14px;
+
+  border-bottom: 1px solid var(--border);
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   background: #ffffff;
 
@@ -62,6 +123,7 @@
 }
 
 
+<<<<<<< HEAD
 /* ADD USER / EDIT USER */
 
 .user-page-title {
@@ -73,11 +135,36 @@
     font-size: 27px;
     font-weight: 700;
     letter-spacing: -0.3px;
+=======
+/* =========================================================
+   ADD USER / EDIT USER
+   MATCHES VIEW TEAM NAVY HEADING
+   ========================================================= */
+
+.user-page-title {
+  color: var(--navy) !important;
+
+  font-size: 24px !important;
+
+  font-weight: 700 !important;
+
+  line-height: 1.2;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0;
+
+  font-family: Georgia, "Times New Roman", serif !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
 /* =========================================================
    BACK BUTTON
+<<<<<<< HEAD
+=======
+   MATCHES VIEW TEAM
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
    ========================================================= */
 
 .user-actions {
@@ -88,11 +175,16 @@
 
 .back-index-btn {
   height: 44px !important;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   min-width: 176px;
 
   padding: 0 20px !important;
 
   border: 0 !important;
+<<<<<<< HEAD
   border-radius: 4px !important;
 
   background: #1b3b63 !important;
@@ -106,6 +198,29 @@
 
   display: inline-flex;
   align-items: center;
+=======
+
+  border-radius: 4px !important;
+
+  background: var(--navy) !important;
+
+  color: #ffffff !important;
+
+  font-family: Arial, Helvetica, sans-serif !important;
+
+  font-size: 14px !important;
+
+  font-weight: 600 !important;
+
+  line-height: 1.2;
+
+  cursor: pointer;
+
+  display: inline-flex;
+
+  align-items: center;
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   justify-content: center;
 
   transition:
@@ -113,21 +228,35 @@
     box-shadow 0.2s ease;
 }
 
+<<<<<<< HEAD
 .back-index-btn:hover {
   background: #244c7b !important;
+=======
+
+.back-index-btn:hover {
+  background: var(--navy-hover) !important;
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   color: #ffffff !important;
 }
 
 
+<<<<<<< HEAD
  
 
 
+=======
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 /* =========================================================
    BODY
    ========================================================= */
 
 .user-portlet-body {
   width: 100%;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   background: #ffffff;
 }
 
@@ -146,9 +275,15 @@
    ========================================================= */
 
 .mandatory-message {
+<<<<<<< HEAD
   color: #193b63 !important;
 
   font-size: 16px !important;
+=======
+  color: var(--text-navy) !important;
+
+  font-size: 14px !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   line-height: 22px;
 
@@ -157,7 +292,12 @@
 
 
 .required {
+<<<<<<< HEAD
   color: #d63333 !important;
+=======
+  color: var(--danger) !important;
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   font-weight: 700;
 }
 
@@ -188,6 +328,10 @@
 
 .user-form-col {
   min-width: 0;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   width: 100%;
 }
 
@@ -205,6 +349,10 @@
   width: 100%;
 
   margin: 0;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   padding: 0;
 }
 
@@ -218,9 +366,15 @@
 
   margin-bottom: 8px;
 
+<<<<<<< HEAD
   color: #193b63 !important;
 
   font-size: 16px !important;
+=======
+  color: var(--text-navy) !important;
+
+  font-size: 15px !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   font-weight: 700 !important;
 
@@ -247,6 +401,7 @@
 
   box-sizing: border-box;
 
+<<<<<<< HEAD
   border: 1px solid #bccbda !important;
 
   border-radius: 0 !important;
@@ -256,6 +411,17 @@
   color: #416789 !important;
 
   font-size: 16px !important;
+=======
+  border: 1px solid var(--border-dark) !important;
+
+  border-radius: 2px !important;
+
+  background: #ffffff !important;
+
+  color: var(--text-blue) !important;
+
+  font-size: 15px !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   font-weight: 400 !important;
 
@@ -271,18 +437,36 @@
 }
 
 
+<<<<<<< HEAD
 .user-input:focus {
   border-color: #4b7da5 !important;
+=======
+.user-input:hover {
+  border-color: #9fb2c4 !important;
+}
+
+
+.user-input:focus {
+  border-color: var(--primary-blue) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   background: #ffffff !important;
 
   box-shadow:
+<<<<<<< HEAD
     0 0 0 1px rgba(75, 125, 165, 0.08) !important;
+=======
+    0 0 0 1px rgba(51, 120, 169, 0.12) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
 .user-input::placeholder {
   color: #8794a2 !important;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   opacity: 1;
 }
 
@@ -297,6 +481,11 @@
   cursor: pointer;
 
   background-color: #ffffff !important;
+<<<<<<< HEAD
+=======
+
+  color: var(--text-blue) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
@@ -328,11 +517,19 @@
 
   justify-content: center;
 
+<<<<<<< HEAD
   background: #e4e8ed;
 
   color: #66727d;
 
   border: 1px solid #d4dce4;
+=======
+  background: #e7ebef;
+
+  color: #52616e;
+
+  border: 1px solid #d2dbe3;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   border-right: 0;
 
@@ -350,7 +547,11 @@
 
   width: auto !important;
 
+<<<<<<< HEAD
   border-left: 1px solid #bccbda !important;
+=======
+  border-left: 1px solid var(--border-dark) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
@@ -359,7 +560,11 @@
    ========================================================= */
 
 .user-error {
+<<<<<<< HEAD
   color: #d9534f !important;
+=======
+  color: var(--danger) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   font-size: 12px !important;
 
@@ -388,30 +593,60 @@
 }
 
 
+<<<<<<< HEAD
 /* Angular Material checkbox */
 
 .admin-row mat-checkbox {
   color: #193b63 !important;
+=======
+/* =========================================================
+   ADMIN CHECKBOX
+   ========================================================= */
+
+.admin-row mat-checkbox {
+  color: var(--text-navy) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
 .admin-row .mat-mdc-checkbox {
   --mdc-checkbox-selected-checkmark-color: #ffffff;
+<<<<<<< HEAD
   --mdc-checkbox-selected-focus-icon-color: #0868c8;
   --mdc-checkbox-selected-hover-icon-color: #0868c8;
   --mdc-checkbox-selected-icon-color: #0868c8;
+=======
+
+  --mdc-checkbox-selected-focus-icon-color: #3378a9;
+
+  --mdc-checkbox-selected-hover-icon-color: #3378a9;
+
+  --mdc-checkbox-selected-icon-color: #3378a9;
+
+  --mdc-checkbox-unselected-icon-color: #5b6269;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
 .admin-row .mdc-form-field {
+<<<<<<< HEAD
   color: #193b63 !important;
+=======
+  color: var(--text-navy) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
 .admin-row .mdc-label {
+<<<<<<< HEAD
   color: #193b63 !important;
 
   font-size: 13px !important;
+=======
+  color: var(--text-navy) !important;
+
+  font-size: 14px !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
@@ -426,18 +661,34 @@
 }
 
 
+<<<<<<< HEAD
 /* RIGHTS AND PERMISSIONS */
 
 .rights-title {
   color: var(--primary-blue);
 
   font-size: 18px !important;
+=======
+/* =========================================================
+   RIGHTS AND PERMISSIONS TITLE
+   MATCHES VIEW TEAM BLUE
+   ========================================================= */
+
+.rights-title {
+  color: var(--heading-blue) !important;
+
+  font-size: 22px !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   font-weight: 700 !important;
 
   text-transform: uppercase;
 
+<<<<<<< HEAD
   line-height: 25px;
+=======
+  line-height: 28px;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   margin-bottom: 18px;
 
@@ -454,7 +705,11 @@
 
   overflow-x: auto;
 
+<<<<<<< HEAD
   border: 1px solid #dce4ec;
+=======
+  border: 1px solid var(--border);
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   box-sizing: border-box;
 }
@@ -475,7 +730,11 @@
 
   background: #ffffff;
 
+<<<<<<< HEAD
   color: #193b63;
+=======
+  color: var(--text-navy);
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   table-layout: fixed;
 }
@@ -488,6 +747,7 @@
 .permissions-table thead th {
   height: 46px;
 
+<<<<<<< HEAD
   padding: 10px 10px;
 
   border: 1px solid #dce4ec !important;
@@ -501,6 +761,21 @@
   font-weight: 700 !important;
 
   text-align: left;
+=======
+  padding: 10px;
+
+  border: 1px solid var(--border) !important;
+
+  background: var(--table-header) !important;
+
+  color: var(--text-navy) !important;
+
+  font-size: 15px !important;
+
+  font-weight: 700 !important;
+
+  text-align: center;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   vertical-align: middle;
 
@@ -508,8 +783,17 @@
 }
 
 
+<<<<<<< HEAD
 .permissions-table thead th:first-child {
   color: #193b63 !important;
+=======
+/* First column */
+
+.permissions-table thead th:first-child {
+  color: var(--text-navy) !important;
+
+  text-align: center;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
@@ -520,7 +804,11 @@
 .permissions-table .module-column {
   width: 19%;
 
+<<<<<<< HEAD
   color: #193b63 !important;
+=======
+  color: var(--text-navy) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
@@ -540,6 +828,7 @@
 
   padding: 10px;
 
+<<<<<<< HEAD
   border: 1px solid #dce4ec !important;
 
   background: #ffffff !important;
@@ -547,6 +836,15 @@
   color: #193b63 !important;
 
   font-size: 16px !important;
+=======
+  border: 1px solid var(--border) !important;
+
+  background: #ffffff !important;
+
+  color: var(--text-navy) !important;
+
+  font-size: 15px !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   vertical-align: middle;
 
@@ -559,16 +857,30 @@
    ========================================================= */
 
 .permissions-table tbody tr.group-header td {
+<<<<<<< HEAD
   background: #ffffff !important;
 
   color: #193b63 !important;
 
   font-size: 16px !important;
+=======
+  background: var(--table-group) !important;
+
+  color: var(--text-navy) !important;
+
+  font-size: 15px !important;
+
+  font-weight: 600 !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
 .permissions-table tbody tr.group-header td:first-child strong {
+<<<<<<< HEAD
   color: #008fd3 !important;
+=======
+  color: var(--primary-blue) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   font-weight: 700 !important;
 }
@@ -579,11 +891,21 @@
    ========================================================= */
 
 .permissions-table .module-name {
+<<<<<<< HEAD
   color: #193b63 !important;
 
   font-size: 16px !important;
 
   font-weight: 400 !important;
+=======
+  color: var(--text-navy) !important;
+
+  font-size: 15px !important;
+
+  font-weight: 400 !important;
+
+  padding-left: 36px !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
@@ -592,9 +914,15 @@
    ========================================================= */
 
 .select-all-text {
+<<<<<<< HEAD
   color: #193b63 !important;
 
   font-size: 14px !important;
+=======
+  color: var(--text-navy) !important;
+
+  font-size: 13px !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   font-weight: 400 !important;
 }
@@ -609,6 +937,7 @@
 
   align-items: center;
 
+<<<<<<< HEAD
   color: #193b63 !important;
 }
 
@@ -617,10 +946,19 @@
 
 .permissions-table .mdc-form-field {
   color: #193b63 !important;
+=======
+  color: var(--text-navy) !important;
+}
+
+
+.permissions-table .mdc-form-field {
+  color: var(--text-navy) !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
 .permissions-table .mdc-label {
+<<<<<<< HEAD
   color: #193b63 !important;
 
   font-size: 14px !important;
@@ -628,10 +966,22 @@
 
 
 /* Checked checkbox */
+=======
+  color: var(--text-navy) !important;
+
+  font-size: 13px !important;
+}
+
+
+/* =========================================================
+   CHECKBOX - SELECTED
+   ========================================================= */
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
 .permissions-table
 .mat-mdc-checkbox.mat-mdc-checkbox-checked
 .mdc-checkbox__background {
+<<<<<<< HEAD
   background-color: #0868c8 !important;
 
   border-color: #0868c8 !important;
@@ -639,11 +989,37 @@
 
 
 /* Checkbox border */
+=======
+  background-color: #3378a9 !important;
+
+  border-color: #3378a9 !important;
+}
+
+
+/* =========================================================
+   CHECKBOX - BORDER
+   ========================================================= */
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
 .permissions-table
 .mdc-checkbox__native-control
 ~ .mdc-checkbox__background {
+<<<<<<< HEAD
   border-color: #5b6269 !important;
+=======
+  border-color: #66727d !important;
+}
+
+
+/* =========================================================
+   CHECKBOX HOVER
+   ========================================================= */
+
+.permissions-table
+.mat-mdc-checkbox:hover
+.mdc-checkbox__background {
+  border-color: #3378a9 !important;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
 
 
@@ -651,6 +1027,7 @@
    BUTTON AREA
    ========================================================= */
 
+<<<<<<< HEAD
 // .user-buttons {
 //   width: 100%;
 
@@ -700,10 +1077,36 @@
 // }
 .user-reset-btn {
   min-width: 90px;
+=======
+.user-buttons {
+  width: 100%;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 28px;
+}
+
+
+/* =========================================================
+   RESET BUTTON
+   WHITE + NAVY BORDER
+   ========================================================= */
+
+.user-reset-btn {
+  min-width: 90px;
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   height: 40px;
 
   padding: 8px 20px;
 
+<<<<<<< HEAD
   border: 1px solid #1b3b63 !important;
   border-radius: 4px !important;
 
@@ -712,6 +1115,20 @@
 
   font-family: Arial, Helvetica, sans-serif !important;
   font-size: 14px !important;
+=======
+  border: 1px solid var(--navy) !important;
+
+  border-radius: 4px !important;
+
+  background: #ffffff !important;
+
+  color: var(--navy) !important;
+
+  font-family: Arial, Helvetica, sans-serif !important;
+
+  font-size: 14px !important;
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   font-weight: 600 !important;
 
   cursor: pointer;
@@ -725,6 +1142,7 @@
 
 .user-reset-btn:hover {
   background: #eef4f9 !important;
+<<<<<<< HEAD
   border-color: #193b63 !important;
   color: #193b63 !important;
 }
@@ -758,10 +1176,28 @@
 // }
 .user-submit-btn {
   min-width: 90px;
+=======
+
+  border-color: var(--navy-hover) !important;
+
+  color: var(--navy-hover) !important;
+}
+
+
+/* =========================================================
+   SUBMIT / UPDATE BUTTON
+   SAME NAVY AS VIEW TEAM BACK BUTTON
+   ========================================================= */
+
+.user-submit-btn {
+  min-width: 90px;
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   height: 40px;
 
   padding: 8px 20px;
 
+<<<<<<< HEAD
   border: 1px solid #1b3b63 !important;
   border-radius: 4px !important;
 
@@ -770,6 +1206,20 @@
 
   font-family: Arial, Helvetica, sans-serif !important;
   font-size: 14px !important;
+=======
+  border: 1px solid var(--navy) !important;
+
+  border-radius: 4px !important;
+
+  background: var(--navy) !important;
+
+  color: #ffffff !important;
+
+  font-family: Arial, Helvetica, sans-serif !important;
+
+  font-size: 14px !important;
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   font-weight: 600 !important;
 
   cursor: pointer;
@@ -779,6 +1229,7 @@
     border-color 0.2s ease;
 }
 
+<<<<<<< HEAD
 .user-submit-btn:hover {
   background: #244c7b !important;
   border-color: #244c7b !important;
@@ -789,11 +1240,94 @@
   border-color: #7f91a5 !important;
   color: #ffffff !important;
   opacity: 0.7;
+=======
+
+.user-submit-btn:hover {
+  background: var(--navy-hover) !important;
+
+  border-color: var(--navy-hover) !important;
+}
+
+
+.user-submit-btn:active {
+  background: var(--navy-dark) !important;
+
+  border-color: var(--navy-dark) !important;
+}
+
+
+.user-submit-btn:disabled {
+  background: #7f91a5 !important;
+
+  border-color: #7f91a5 !important;
+
+  color: #ffffff !important;
+
+  opacity: 0.7;
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   cursor: not-allowed;
 }
 
 
 /* =========================================================
+<<<<<<< HEAD
+=======
+   OLD BACK-BUTTON CLASS
+   If used elsewhere in this component
+   ========================================================= */
+
+.back-button {
+  height: 38px !important;
+
+  min-width: 130px;
+
+  padding: 0 18px !important;
+
+  border-radius: 4px !important;
+
+  background: var(--navy) !important;
+
+  color: #ffffff !important;
+
+  font-family: Arial, Helvetica, sans-serif !important;
+
+  font-size: 14px !important;
+
+  font-weight: 600 !important;
+
+  box-shadow: none !important;
+
+  display: inline-flex !important;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  border: 0 !important;
+
+  cursor: pointer;
+}
+
+
+.back-button:hover {
+  background: var(--navy-hover) !important;
+}
+
+
+.back-button mat-icon {
+  width: 18px;
+
+  height: 18px;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
    RESPONSIVE
    ========================================================= */
 
@@ -806,6 +1340,13 @@
 }
 
 
+<<<<<<< HEAD
+=======
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 @media (max-width: 992px) {
 
   .user-form-row {
@@ -817,6 +1358,10 @@
     column-gap: 20px;
   }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   .empty-column {
     display: none;
   }
@@ -824,6 +1369,13 @@
 }
 
 
+<<<<<<< HEAD
+=======
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 @media (max-width: 600px) {
 
   .user-portlet-title {
@@ -846,6 +1398,11 @@
 
   .back-index-btn {
     width: auto;
+<<<<<<< HEAD
+=======
+
+    min-width: 150px;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   }
 
 
@@ -862,7 +1419,18 @@
 
 
   .user-page-title {
+<<<<<<< HEAD
     font-size: 18px !important;
+=======
+    font-size: 20px !important;
+  }
+
+
+  .rights-title {
+    font-size: 19px !important;
+
+    line-height: 25px;
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   }
 
 
@@ -870,4 +1438,13 @@
     min-width: 1000px;
   }
 
+<<<<<<< HEAD
 }
+=======
+
+  .user-buttons {
+    margin-top: 22px;
+  }
+
+}
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a

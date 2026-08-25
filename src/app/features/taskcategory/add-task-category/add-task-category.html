@@ -1,0 +1,189 @@
+<div class="user-page-wrapper">
+
+  <div class="user-portlet">
+
+    <!-- HEADER -->
+    <div class="user-portlet-title">
+
+      <div class="user-title">
+        <span class="user-page-title">
+          {{ isEditMode ? 'EDIT TASK CATEGORY' : 'ADD TASK CATEGORY' }}
+        </span>
+      </div>
+
+      <div class="user-actions">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
+
+          Back to Index
+
+        </button>
+      </div>
+
+    </div>
+
+    <!-- BODY -->
+    <div class="user-portlet-body">
+
+      <form #taskCategoryForm="ngForm" (ngSubmit)="onSubmit(taskCategoryForm)" novalidate>
+
+        <div class="user-form-body">
+
+          <!-- Mandatory Message -->
+
+          <div class="mandatory-message">
+            Fields with
+            <span class="required">*</span>
+            mark are mandatory
+          </div>
+
+          <!-- ROW -->
+
+          <div class="user-form-row">
+
+            <!-- Department -->
+
+            <div class="user-form-col">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Department
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" [(ngModel)]="taskCategory.departmentId" name="departmentId"
+                  required #departmentCtrl="ngModel">
+
+                  <option [ngValue]="null">
+                    Select Department
+                  </option>
+
+                  <option *ngFor="let department of departments" [ngValue]="department.departmentId">
+
+                    {{ department.name }}
+
+                  </option>
+
+                </select>
+
+                <div class="user-error" *ngIf="
+                    departmentCtrl.invalid &&
+                    departmentCtrl.touched">
+
+                  Department is required
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Task Category -->
+
+            <div class="user-form-col">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Task Category
+                  <span class="required">*</span>
+                </label>
+
+                <input type="text" class="user-input" placeholder="Enter Task Category Name"
+                  [(ngModel)]="taskCategory.name" name="name" required minlength="2" maxlength="100" #nameCtrl="ngModel"
+                  (input)="
+                    taskCategory.name =
+                    capitalizeFirstCharOnly(taskCategory.name)
+                  ">
+
+                <div class="user-error" *ngIf="
+                    nameCtrl.invalid &&
+                    nameCtrl.touched">
+
+                  <span *ngIf="nameCtrl.errors?.['required']">
+                    Task Category Name is required
+                  </span>
+
+                  <span *ngIf="nameCtrl.errors?.['minlength']">
+                    Minimum 2 characters required
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Status -->
+
+
+
+          </div>
+          <div class="user-form-row">
+            <div class="user-form-col" *ngIf="isEditMode">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Status
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" [(ngModel)]="taskCategory.status" name="status" required
+                  #statusCtrl="ngModel">
+
+                  <option [ngValue]="null">
+                    Select Status
+                  </option>
+
+                  <option [ngValue]="1">
+                    Active
+                  </option>
+
+                  <option [ngValue]="2">
+                    Inactive
+                  </option>
+
+                </select>
+
+                <div class="user-error" *ngIf="
+                    statusCtrl.invalid &&
+                    statusCtrl.touched">
+
+                  Status is required
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- BUTTONS -->
+
+          <div class="user-buttons">
+
+            <button type="button" class="user-reset-btn" (click)="onReset()">
+
+              Reset
+
+            </button>
+
+            <button type="submit" class="user-submit-btn">
+
+              {{ isEditMode ? 'Update' : 'Submit' }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

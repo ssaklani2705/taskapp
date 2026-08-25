@@ -1,0 +1,177 @@
+<div class="user-page-wrapper">
+
+  <div class="user-portlet">
+
+    <!-- HEADER -->
+    <div class="user-portlet-title">
+
+      <div class="user-title">
+        <span class="user-page-title">
+          {{ isEditMode ? 'EDIT DESIGNATION' : 'ADD DESIGNATION' }}
+        </span>
+      </div>
+
+      <div class="user-actions">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
+
+          Back to Index
+
+        </button>
+      </div>
+
+    </div>
+
+    <!-- BODY -->
+    <div class="user-portlet-body">
+
+      <form #designationForm="ngForm" (ngSubmit)="onSubmit(designationForm)" novalidate>
+
+        <div class="user-form-body">
+
+          <!-- Mandatory Message -->
+          <div class="mandatory-message">
+            Fields with
+            <span class="required">*</span>
+            mark are mandatory
+          </div>
+
+          <!-- FORM ROW -->
+          <div class="user-form-row" >
+
+            <!-- Designation -->
+            <div class="user-form-col">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Designation
+                  <span class="required">*</span>
+                </label>
+
+                <input type="text" class="user-input" placeholder="Enter Designation Name"
+                  [(ngModel)]="designation.name" name="name" required minlength="2" maxlength="100"
+                  pattern="^[a-zA-Z0-9\s\.,;:=$\-_\+'&quot;/\\!@`#%&*()?]+$" #nameCtrl="ngModel"
+                  (input)="designation.name = capitalizeFirstCharOnly(designation.name)">
+
+                <div class="user-error" *ngIf="nameCtrl.invalid && nameCtrl.touched">
+
+                  <span *ngIf="nameCtrl.errors?.['required']">
+                    Designation Name is required
+                  </span>
+
+                  <span *ngIf="nameCtrl.errors?.['minlength']">
+                    Minimum 2 characters required
+                  </span>
+
+                  <span *ngIf="nameCtrl.errors?.['pattern']">
+                    Invalid characters entered
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- Sequence -->
+            <div class="user-form-col">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Sequence
+                  <span class="required">*</span>
+                </label>
+
+                <input type="number" class="user-input" placeholder="Enter Sequence" [(ngModel)]="designation.sequence"
+                  name="sequence" required min="1" max="999999" #sequenceCtrl="ngModel">
+
+                <div class="user-error" *ngIf="sequenceCtrl.invalid && sequenceCtrl.touched">
+
+                  <span *ngIf="sequenceCtrl.errors?.['required']">
+                    Sequence is required
+                  </span>
+
+                  <span *ngIf="sequenceCtrl.errors?.['min']">
+                    Sequence must be greater than 0
+                  </span>
+
+                  <span *ngIf="sequenceCtrl.errors?.['max']">
+                    Sequence is too large
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          
+          <div class="user-form-row" style="margin-top: 20px;">
+            <div class="user-form-col" *ngIf="isEditMode">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Status
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" [(ngModel)]="designation.status" name="status" required
+                  #statusCtrl="ngModel">
+
+                  <option [ngValue]="null">
+                    Select Status
+                  </option>
+
+                  <option [ngValue]="1">
+                    Active
+                  </option>
+
+                  <option [ngValue]="2">
+                    Inactive
+                  </option>
+
+                </select>
+
+                <div class="user-error" *ngIf="statusCtrl.invalid && statusCtrl.touched">
+
+                  Status is required
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- BUTTONS -->
+          <div class="user-buttons">
+
+            <button type="button" class="user-reset-btn" (click)="onReset()">
+
+              Reset
+
+            </button>
+
+            <button type="submit" class="user-submit-btn">
+
+              {{ isEditMode ? 'Update' : 'Submit' }}
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>

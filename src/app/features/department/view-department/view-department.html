@@ -1,0 +1,298 @@
+<div class="page-container">
+
+  <!-- =====================================================
+       MAIN DEPARTMENT CARD
+  ====================================================== -->
+
+  <div class="main-card">
+
+    <!-- ===================================================
+         PAGE HEADER
+    ==================================================== -->
+
+    <div class="page-header">
+
+      <div class="page-title">
+
+        <mat-icon>
+          apartment
+        </mat-icon>
+
+        <span>
+          View Department
+        </span>
+
+      </div>
+
+
+      <!-- Back Button -->
+
+      <div class="header-action">
+
+        <button
+          type="button"
+          class="back-button"
+          (click)="backToIndexPage()"
+        >
+
+          <mat-icon>
+            arrow_back
+          </mat-icon>
+
+          <span>
+            Back to Index
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         DIVIDER
+    ==================================================== -->
+
+    <mat-divider></mat-divider>
+
+
+    <!-- ===================================================
+         DEPARTMENT INFORMATION
+    ==================================================== -->
+
+    <div class="user-information">
+
+      <div class="user-info-grid">
+
+
+        <!-- ===============================================
+             LEFT COLUMN
+        ================================================ -->
+
+        <div class="user-column">
+
+          <!-- Department Name -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Name:
+            </span>
+
+            <span class="info-value">
+              {{ department.name }}
+            </span>
+
+          </div>
+
+
+          <!-- Sequence -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Sequence:
+            </span>
+
+            <span class="info-value">
+              {{ department.sequence }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ===============================================
+             RIGHT COLUMN
+        ================================================ -->
+
+        <div class="user-column">
+
+          <!-- Status -->
+
+          <div class="info-row status-row">
+
+            <span class="info-label">
+              Status:
+            </span>
+
+            <span
+              class="status-badge"
+              [ngClass]="
+                common.getStatusClass(
+                  department.status
+                )
+              "
+            >
+              {{ common.getStatusLabel(department.status) }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       ACTION HISTORY CARD
+  ====================================================== -->
+
+  <div class="section-card">
+
+
+    <!-- ===================================================
+         SECTION HEADER
+    ==================================================== -->
+
+    <div class="section-header">
+
+      <div class="section-title">
+
+        <mat-icon>
+          history
+        </mat-icon>
+
+        <span>
+          Action History
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <mat-divider></mat-divider>
+
+
+    <!-- ===================================================
+         HISTORY TABLE
+    ==================================================== -->
+
+    <div class="table-container">
+
+      <div class="history-table-wrapper">
+
+        <table class="history-table">
+
+          <!-- =============================================
+               HEADER
+          ============================================== -->
+
+          <thead>
+
+            <tr>
+
+              <th style="width: 5%;">
+                #
+              </th>
+
+              <th style="width: 20%;">
+                Action By
+              </th>
+
+              <th style="width: 20%;">
+                Updated on
+              </th>
+
+              <th style="width: 55%;">
+                Action
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <!-- =============================================
+               BODY
+          ============================================== -->
+
+          <tbody>
+
+            <tr
+              *ngFor="
+                let history of transactionHistory;
+                let i = index
+              "
+            >
+
+              <!-- Serial Number -->
+
+              <td>
+                {{ i + 1 }}
+              </td>
+
+
+              <!-- Action By -->
+
+              <td>
+                {{ history.name }}
+              </td>
+
+
+              <!-- Updated Date -->
+
+              <td>
+                {{ history.entryDate }}
+              </td>
+
+
+              <!-- Action -->
+
+              <td>
+
+                <span class="action-badge">
+                  {{ history.action }}
+                </span>
+
+              </td>
+
+            </tr>
+
+
+            <!-- =========================================
+                 NO RECORDS
+            ========================================== -->
+
+            <tr
+              *ngIf="
+                !transactionHistory ||
+                transactionHistory.length === 0
+              "
+            >
+
+              <td
+                colspan="4"
+                class="no-records-box"
+              >
+
+                <mat-icon>
+                  info
+                </mat-icon>
+
+                <span>
+                  No action history available
+                </span>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
