@@ -1,0 +1,434 @@
+<mat-sidenav-container class="dashboard-container">
+
+  <!-- SIDEBAR -->
+
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    [opened]="sidenavOpened"
+    class="sidebar"
+  >
+
+    <!-- Logo -->
+
+    <div class="sidebar-logo">
+
+      <mat-icon>travel_explore</mat-icon>
+
+      <span>TRAVEL</span>
+
+    </div>
+
+
+    <mat-divider></mat-divider>
+
+
+    <!-- Navigation -->
+
+    <mat-nav-list>
+
+      @for (item of menuItems; track item.label) {
+
+        <a
+          mat-list-item
+          [class.active-menu]="item.route === '/dashboard'"
+          (click)="navigate(item.route)"
+        >
+
+          <mat-icon matListItemIcon>
+            {{ item.icon }}
+          </mat-icon>
+
+          <span matListItemTitle>
+            {{ item.label }}
+          </span>
+
+        </a>
+
+      }
+
+    </mat-nav-list>
+
+
+    <!-- Bottom -->
+
+    <div class="sidebar-bottom">
+
+      <mat-divider></mat-divider>
+
+      <button
+        mat-list-item
+        class="logout-button"
+        (click)="logout()"
+      >
+
+        <mat-icon>
+          logout
+        </mat-icon>
+
+        <span>
+          Logout
+        </span>
+
+      </button>
+
+    </div>
+
+  </mat-sidenav>
+
+
+  <!-- MAIN -->
+
+  <mat-sidenav-content>
+
+    <!-- TOP TOOLBAR -->
+
+    <mat-toolbar class="top-toolbar">
+
+      <button
+        mat-icon-button
+        (click)="toggleSidenav()"
+        aria-label="Toggle navigation"
+      >
+
+        <mat-icon>
+          menu
+        </mat-icon>
+
+      </button>
+
+
+      <span class="toolbar-title">
+        Dashboard
+      </span>
+
+
+      <span class="toolbar-spacer"></span>
+
+
+      <!-- Notifications -->
+
+      <button
+        mat-icon-button
+        aria-label="Notifications"
+      >
+
+        <mat-icon>
+          notifications
+        </mat-icon>
+
+      </button>
+
+
+      <!-- User -->
+
+      <button
+        mat-button
+        class="user-button"
+      >
+
+        <mat-icon>
+          account_circle
+        </mat-icon>
+
+        <span>
+          {{ username }}
+        </span>
+
+        <mat-icon class="dropdown-icon">
+          expand_more
+        </mat-icon>
+
+      </button>
+
+    </mat-toolbar>
+
+
+    <!-- CONTENT -->
+
+    <main class="dashboard-content">
+
+      <div class="welcome-section">
+
+        <div>
+
+          <h1>
+            Welcome back, {{ username }}!
+          </h1>
+
+          <p>
+            Here's what's happening with your travel platform today.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- STAT CARDS -->
+
+      <div class="stats-grid">
+
+
+        <!-- Hotels -->
+
+        <mat-card class="stat-card">
+
+          <div class="stat-icon hotel-icon">
+
+            <mat-icon>
+              hotel
+            </mat-icon>
+
+          </div>
+
+          <div class="stat-info">
+
+            <span class="stat-label">
+              Hotels
+            </span>
+
+            <strong>
+              0
+            </strong>
+
+            <small>
+              Total hotels
+            </small>
+
+          </div>
+
+        </mat-card>
+
+
+        <!-- Rooms -->
+
+        <mat-card class="stat-card">
+
+          <div class="stat-icon room-icon">
+
+            <mat-icon>
+              bed
+            </mat-icon>
+
+          </div>
+
+          <div class="stat-info">
+
+            <span class="stat-label">
+              Rooms
+            </span>
+
+            <strong>
+              0
+            </strong>
+
+            <small>
+              Total rooms
+            </small>
+
+          </div>
+
+        </mat-card>
+
+
+        <!-- Destinations -->
+
+        <mat-card class="stat-card">
+
+          <div class="stat-icon destination-icon">
+
+            <mat-icon>
+              location_on
+            </mat-icon>
+
+          </div>
+
+          <div class="stat-info">
+
+            <span class="stat-label">
+              Destinations
+            </span>
+
+            <strong>
+              0
+            </strong>
+
+            <small>
+              Available destinations
+            </small>
+
+          </div>
+
+        </mat-card>
+
+
+        <!-- Packages -->
+
+        <mat-card class="stat-card">
+
+          <div class="stat-icon package-icon">
+
+            <mat-icon>
+              luggage
+            </mat-icon>
+
+          </div>
+
+          <div class="stat-info">
+
+            <span class="stat-label">
+              Packages
+            </span>
+
+            <strong>
+              0
+            </strong>
+
+            <small>
+              Travel packages
+            </small>
+
+          </div>
+
+        </mat-card>
+
+      </div>
+
+
+      <!-- QUICK ACTIONS -->
+
+      <section class="section">
+
+        <div class="section-header">
+
+          <div>
+
+            <h2>
+              Quick Actions
+            </h2>
+
+            <p>
+              Manage your travel platform
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="quick-actions">
+
+
+          <button
+            mat-stroked-button
+            (click)="navigate('/hotels')"
+          >
+
+            <mat-icon>
+              hotel
+            </mat-icon>
+
+            Manage Hotels
+
+          </button>
+
+
+          <button
+            mat-stroked-button
+            (click)="navigate('/hotel-rooms')"
+          >
+
+            <mat-icon>
+              bed
+            </mat-icon>
+
+            Manage Rooms
+
+          </button>
+
+
+          <button
+            mat-stroked-button
+            (click)="navigate('/destinations')"
+          >
+
+            <mat-icon>
+              location_on
+            </mat-icon>
+
+            Destinations
+
+          </button>
+
+
+          <button
+            mat-stroked-button
+            (click)="navigate('/travel-packages')"
+          >
+
+            <mat-icon>
+              luggage
+            </mat-icon>
+
+            Travel Packages
+
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- RECENT ACTIVITY -->
+
+      <section class="section">
+
+        <mat-card class="activity-card">
+
+          <div class="activity-header">
+
+            <div>
+
+              <h2>
+                Recent Activity
+              </h2>
+
+              <p>
+                Latest activity on your platform
+              </p>
+
+            </div>
+
+            <mat-icon>
+              history
+            </mat-icon>
+
+          </div>
+
+
+          <div class="empty-state">
+
+            <mat-icon>
+              event_note
+            </mat-icon>
+
+            <h3>
+              No recent activity
+            </h3>
+
+            <p>
+              Your latest activities will appear here.
+            </p>
+
+          </div>
+
+        </mat-card>
+
+      </section>
+
+    </main>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>

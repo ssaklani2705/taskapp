@@ -1,7 +1,10 @@
 import {
   Component,
   EventEmitter,
+<<<<<<< HEAD
+=======
   OnInit,
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
   Output
 } from '@angular/core';
 
@@ -18,22 +21,31 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
+<<<<<<< HEAD
+export class Header {
+=======
 export class Header implements OnInit {
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   @Output()
   menuToggle = new EventEmitter<void>();
 
+<<<<<<< HEAD
+=======
   username: string = '';
 
    ngOnInit(): void {
     this.username =
       sessionStorage.getItem('username') || '';
   }
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 
   toggleMenu(): void {
     this.menuToggle.emit();
   }
 
+<<<<<<< HEAD
+=======
 
   getInitials(name: string): string {
   if (!name) {
@@ -52,4 +64,5 @@ export class Header implements OnInit {
   ).toUpperCase();
 }
 
+>>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 }
