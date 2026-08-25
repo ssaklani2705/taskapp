@@ -1,895 +1,1050 @@
 /* =========================================================
-   DEPARTMENT ADD / EDIT
-   SOCIETY 123 - BUSINESS PORTAL THEME
-========================================================= */
+   USER PAGE
+   Color scheme matched to VIEW TEAM page
+   ========================================================= */
 
 :host {
-
-  /* -------------------------------------------------------
-     COLORS
-  ------------------------------------------------------- */
-
-  --navy: #19345a;
-  --navy-dark: #152f54;
-  --navy-light: #24466f;
-
-  --primary-blue: #2f6fa3;
-  --primary-blue-dark: #285f8d;
-  --primary-blue-light: #eaf2f8;
-
-  --page-bg: #f8fafc;
-  --white: #ffffff;
-
-  --border: #d5dee7;
-  --border-dark: #c5d0db;
-
-  --text: #17375e;
-  --text-dark: #152f54;
-  --text-muted: #6d8299;
-
-  --success: #17805f;
-  --success-dark: #126a4f;
-  --success-bg: #e5f3ee;
-
-  --danger: #e84a4a;
-  --danger-bg: #fff0f0;
-
-  display: block;
-
-  width: 100%;
-
-  color: var(--text);
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+    display: block;
+    width: 100%;
+    color: #193b63;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 
 /* =========================================================
-   PAGE
-========================================================= */
+   COLOR VARIABLES
+   ========================================================= */
 
-.page-content-wrapper {
+:host {
+    --navy: #1b3b63;
+    --navy-dark: #142f50;
+    --navy-hover: #244c7b;
 
-  width: 100%;
+    --primary-blue: #3378a9;
+    --primary-blue-dark: #28658f;
 
-  min-height: 100%;
+    --heading-blue: #3378a9;
+    --link-blue: #008fd3;
 
-  background: var(--page-bg);
+    --text-navy: #193b63;
+    --text-blue: #416789;
 
-  box-sizing: border-box;
+    --border: #dce4ec;
+    --border-dark: #bccbda;
+
+    --table-header: #edf4f8;
+    --table-group: #f4f7f9;
+
+    --white: #ffffff;
+
+    --success-bg: #e7f5ef;
+    --success-border: #b9dfcf;
+    --success-text: #21845d;
+
+    --danger: #d9534f;
 }
-
-
-.page-content {
-
-  width: 100%;
-
-  padding: 24px 36px;
-
-  box-sizing: border-box;
+/* =========================================================
+   MAIN WRAPPER
+   ========================================================= */
+.user-page-wrapper {
+    //   width: 100%;
+    //   padding: 6px;
+    background: #ffffff;
+    width: 100%;
+    padding: 24px 34px;
+    box-sizing: border-box;
 }
 
 
 /* =========================================================
-   BOOTSTRAP ROW FIX
-========================================================= */
+   PORTLET
+   ========================================================= */
 
-.row {
+.user-portlet {
+    width: 100%;
 
-  box-sizing: border-box;
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+
+    box-sizing: border-box;
 }
 
 
 /* =========================================================
-   MAIN CARD
-========================================================= */
+   HEADER
+   ========================================================= */
 
-.portlet {
+.user-portlet-title {
+    min-height: 52px;
 
-  width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-  margin: 0;
+    padding: 0 14px;
 
-  padding: 0;
+    border-bottom: 1px solid var(--border);
 
-  background: var(--white);
+    background: #ffffff;
 
-  border: 1px solid var(--border);
+    box-sizing: border-box;
+}
 
-  border-radius: 0;
 
-  box-shadow: none;
-
-  box-sizing: border-box;
+.user-title {
+    display: flex;
+    align-items: center;
 }
 
 
 /* =========================================================
-   PORTLET HEADER
-========================================================= */
+   ADD USER / EDIT USER
+   MATCHES VIEW TEAM NAVY HEADING
+   ========================================================= */
 
-.portlet-title {
+.user-page-title {
+    color: var(--navy) !important;
 
-  min-height: 76px;
+    font-size: 24px !important;
 
-  margin: 0;
+    font-weight: 700 !important;
 
-  padding: 0 18px;
+    line-height: 1.2;
 
-  display: flex;
+    text-transform: uppercase;
 
-  align-items: center;
+    letter-spacing: 0;
 
-  justify-content: space-between;
-
-  background: var(--white);
-
-  border-bottom: 1px solid var(--border);
-
-  box-sizing: border-box;
-}
-
-
-/* =========================================================
-   TITLE
-========================================================= */
-
-.caption {
-
-  display: flex;
-
-  align-items: center;
-
-  margin: 0;
-
-  padding: 0;
-
-  color: var(--navy);
-}
-
-
-.caption-subject {
-
-  color: var(--navy) !important;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 27px;
-
-  font-weight: 700;
-
-  line-height: 34px;
-
-  letter-spacing: -0.3px;
-
-  text-transform: none !important;
-}
-
-
-/*
-   "Add" / "Edit" text
-*/
-
-.caption-subject > span {
-
-  color: var(--primary-blue);
-
-  font-weight: 700;
-}
-
-
-/* =========================================================
-   HEADER ACTION
-========================================================= */
-
-.actions {
-
-  display: flex;
-
-  align-items: center;
-
-  margin: 0;
-
-  padding: 0;
-}
-
-
-.actions label {
-
-  margin: 0;
-
-  padding: 0;
-
-  border: none !important;
-
-  background: transparent !important;
+    font-family: Georgia, "Times New Roman", serif !important;
 }
 
 
 /* =========================================================
    BACK BUTTON
-========================================================= */
+   MATCHES VIEW TEAM
+   ========================================================= */
 
-.back-to-index {
-
-  min-width: 130px;
-
-  height: 38px;
-
-  padding: 0 18px;
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  box-sizing: border-box;
-
-  border: 1px solid var(--navy);
-
-  border-radius: 4px;
-
-  background: var(--navy);
-
-  color: var(--white) !important;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-  line-height: 38px;
-
-  text-decoration: none;
-
-  cursor: pointer;
-
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease;
+.user-actions {
+    display: flex;
+    align-items: center;
 }
 
 
-.back-to-index:hover {
+.back-index-btn {
+    height: 44px !important;
 
-  background: var(--navy-dark);
+    min-width: 176px;
 
-  border-color: var(--navy-dark);
+    padding: 0 20px !important;
 
-  color: var(--white) !important;
+    border: 0 !important;
 
-  text-decoration: none;
+    border-radius: 4px !important;
+
+    background: var(--navy) !important;
+
+    color: #ffffff !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    line-height: 1.2;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.back-index-btn:hover {
+    background: var(--navy-hover) !important;
+
+    color: #ffffff !important;
 }
 
 
 /* =========================================================
-   PORTLET BODY
-========================================================= */
+   BODY
+   ========================================================= */
 
-.portlet-body {
+.user-portlet-body {
+    width: 100%;
 
-  width: 100%;
-
-  margin: 0;
-
-  padding: 0;
-
-  background: var(--white);
-
-  box-sizing: border-box;
+    background: #ffffff;
 }
 
 
-/* =========================================================
-   FORM BODY
-========================================================= */
+.user-form-body {
+    padding: 18px 14px 24px 14px;
 
-.form-body {
+    background: #ffffff;
 
-  width: 100%;
-
-  padding: 24px 22px 28px;
-
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 
 /* =========================================================
    MANDATORY MESSAGE
-========================================================= */
+   ========================================================= */
 
-.mandatory_div {
+.mandatory-message {
+    color: var(--text-navy) !important;
 
-  margin-bottom: 22px;
+    font-size: 14px !important;
 
-  padding: 0;
+    line-height: 22px;
 
-  color: var(--text-muted);
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  font-size: 13px;
-
-  line-height: 20px;
+    margin-bottom: 25px;
 }
 
 
 .required {
+    color: var(--danger) !important;
 
-  color: var(--danger);
-
-  font-weight: 700;
+    font-weight: 700;
 }
 
 
 /* =========================================================
    FORM ROW
-========================================================= */
+   ========================================================= */
 
-.form-body > form > .form-body > .row {
+// .user-form-row {
+//   display: grid;
 
-  margin-left: -10px;
+//   grid-template-columns:
+//     repeat(4, minmax(0, 1fr));
 
-  margin-right: -10px;
+//   column-gap: 38px;
+
+//   width: 100%;
+
+//   margin-bottom: 18px;
+
+//   box-sizing: border-box;
+// }
+
+
+/* =========================================================
+   FORM COLUMN
+   ========================================================= */
+
+// .user-form-col {
+//   min-width: 0;
+
+//   width: 100%;
+// }
+
+
+.empty-column {
+    min-height: 1px;
 }
 
 
 /* =========================================================
    FORM GROUP
-========================================================= */
+   ========================================================= */
 
-.form-group {
+.user-form-group {
+    width: 100%;
 
-  margin-bottom: 24px;
+    margin: 0;
 
-  padding: 0 10px;
-
-  box-sizing: border-box;
+    padding: 0;
 }
 
 
 /* =========================================================
    LABEL
-========================================================= */
+   ========================================================= */
 
-.form-group label {
+.user-label {
+    display: block;
 
-  display: block;
+    margin-bottom: 8px;
 
-  margin-bottom: 8px;
+    color: var(--text-navy) !important;
 
-  color: var(--text-dark);
+    font-size: 15px !important;
 
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+    font-weight: 700 !important;
 
-  font-size: 14px;
+    line-height: 20px;
 
-  font-weight: 700;
-
-  line-height: 20px;
-}
-
-
-.form-group label .required {
-
-  margin-left: 2px;
+    font-family: Arial, Helvetica, sans-serif !important;
 }
 
 
 /* =========================================================
-   FORM CONTROL
-========================================================= */
+   INPUT
+   ========================================================= */
 
-.form-control {
+.user-input {
+    display: block;
 
-  width: 100%;
+    width: 100% !important;
 
-  height: 42px;
+    height: 43px !important;
 
-  padding: 0 12px;
+    min-height: 43px !important;
 
-  box-sizing: border-box;
+    padding: 8px 14px !important;
 
-  border: 1px solid var(--border-dark);
+    box-sizing: border-box;
 
-  border-radius: 2px;
+    border: 1px solid var(--border-dark) !important;
 
-  outline: none;
+    border-radius: 2px !important;
 
-  background: var(--white);
+    background: #ffffff !important;
 
-  color: var(--text-dark);
+    color: var(--text-blue) !important;
 
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+    font-size: 15px !important;
 
-  font-size: 14px;
+    font-weight: 400 !important;
 
-  line-height: 40px;
+    font-family: Arial, Helvetica, sans-serif !important;
 
-  box-shadow: none;
+    outline: none !important;
 
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
+    box-shadow: none !important;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 
-.form-control::placeholder {
-
-  color: #8a9bad;
-
-  opacity: 1;
+.user-input:hover {
+    border-color: #9fb2c4 !important;
 }
 
 
-.form-control:hover {
+.user-input:focus {
+    border-color: var(--primary-blue) !important;
 
-  border-color: #aebdca;
+    background: #ffffff !important;
+
+    box-shadow:
+        0 0 0 1px rgba(51, 120, 169, 0.12) !important;
 }
 
 
-.form-control:focus {
+.user-input::placeholder {
+    color: #8794a2 !important;
 
-  border-color: var(--primary-blue);
-
-  outline: none;
-
-  box-shadow:
-    0 0 0 1px rgba(47, 111, 163, 0.08);
+    opacity: 1;
 }
 
 
 /* =========================================================
    SELECT
-========================================================= */
+   ========================================================= */
 
-select.form-control {
+.user-select {
+    appearance: auto;
 
-  height: 42px;
+    cursor: pointer;
 
-  padding: 0 12px;
+    background-color: #ffffff !important;
 
-  background-color: var(--white);
-
-  color: var(--text);
-
-  cursor: pointer;
-
-  line-height: normal;
+    color: var(--text-blue) !important;
 }
 
 
 /* =========================================================
-   NUMBER INPUT
-========================================================= */
+   DATE
+   ========================================================= */
 
-input[type="number"].form-control {
+.user-date-group {
+    display: flex;
 
-  line-height: normal;
+    width: 100%;
+
+    height: 43px;
+
+    box-sizing: border-box;
+}
+
+
+.user-date-icon {
+    width: 52px;
+
+    min-width: 52px;
+
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #e7ebef;
+
+    color: #52616e;
+
+    border: 1px solid #d2dbe3;
+
+    border-right: 0;
+
+    box-sizing: border-box;
+}
+
+
+.user-date-icon i {
+    font-size: 16px;
+}
+
+
+.user-date-group .user-date-input {
+    flex: 1;
+
+    width: auto !important;
+
+    border-left: 1px solid var(--border-dark) !important;
 }
 
 
 /* =========================================================
-   VALIDATION
-========================================================= */
+   ERROR
+   ========================================================= */
 
-.text-danger {
+.user-error {
+    color: var(--danger) !important;
 
-  margin-top: 6px;
+    font-size: 12px !important;
 
-  color: var(--danger) !important;
+    margin-top: 5px;
 
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  font-size: 12px;
-
-  font-weight: 400;
-
-  line-height: 18px;
+    line-height: 16px;
 }
 
 
 /* =========================================================
-   INVALID CONTROL
-========================================================= */
+   ADMIN ROW
+   ========================================================= */
 
-.form-control.ng-invalid.ng-touched {
+.admin-row {
+    width: 100%;
 
-  border-color: #e2a1a1;
+    margin-top: 4px;
 
-  background-color: #fffafa;
-}
+    margin-bottom: 20px;
 
+    min-height: 35px;
 
-.form-control.ng-invalid.ng-touched:focus {
+    display: flex;
 
-  border-color: var(--danger);
-
-  box-shadow:
-    0 0 0 1px rgba(232, 74, 74, 0.08);
+    align-items: center;
 }
 
 
 /* =========================================================
-   VALID CONTROL
-========================================================= */
+   ADMIN CHECKBOX
+   ========================================================= */
 
-.form-control.ng-valid.ng-touched {
+.admin-row mat-checkbox {
+    color: var(--text-navy) !important;
+}
 
-  border-color: #b9d8cb;
+
+.admin-row .mat-mdc-checkbox {
+    --mdc-checkbox-selected-checkmark-color: #ffffff;
+
+    --mdc-checkbox-selected-focus-icon-color: #3378a9;
+
+    --mdc-checkbox-selected-hover-icon-color: #3378a9;
+
+    --mdc-checkbox-selected-icon-color: #3378a9;
+
+    --mdc-checkbox-unselected-icon-color: #5b6269;
+}
+
+
+.admin-row .mdc-form-field {
+    color: var(--text-navy) !important;
+}
+
+
+.admin-row .mdc-label {
+    color: var(--text-navy) !important;
+
+    font-size: 14px !important;
+}
+
+
+/* =========================================================
+   RIGHTS SECTION
+   ========================================================= */
+
+.rights-section {
+    width: 100%;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================================
+   RIGHTS AND PERMISSIONS TITLE
+   MATCHES VIEW TEAM BLUE
+   ========================================================= */
+
+.rights-title {
+    color: var(--heading-blue) !important;
+
+    font-size: 22px !important;
+
+    font-weight: 700 !important;
+
+    text-transform: uppercase;
+
+    line-height: 28px;
+
+    margin-bottom: 18px;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+
+/* =========================================================
+   TABLE WRAPPER
+   ========================================================= */
+
+.permissions-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border: 1px solid var(--border);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.permissions-table {
+    width: 100%;
+
+    min-width: 1000px;
+
+    border-collapse: collapse;
+
+    border-spacing: 0;
+
+    background: #ffffff;
+
+    color: var(--text-navy);
+
+    table-layout: fixed;
+}
+
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+.permissions-table thead th {
+    height: 46px;
+
+    padding: 10px;
+
+    border: 1px solid var(--border) !important;
+
+    background: var(--table-header) !important;
+
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 700 !important;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    box-sizing: border-box;
+}
+
+
+/* First column */
+
+.permissions-table thead th:first-child {
+    color: var(--text-navy) !important;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   MODULE COLUMN
+   ========================================================= */
+
+.permissions-table .module-column {
+    width: 19%;
+
+    color: var(--text-navy) !important;
+}
+
+
+/* Other permission columns */
+
+.permissions-table th:not(:first-child) {
+    width: 11.57%;
+}
+
+
+/* =========================================================
+   TABLE BODY
+   ========================================================= */
+
+.permissions-table tbody td {
+    height: 56px;
+
+    padding: 10px;
+
+    border: 1px solid var(--border) !important;
+
+    background: #ffffff !important;
+
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    vertical-align: middle;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   GROUP HEADER
+   ========================================================= */
+
+.permissions-table tbody tr.group-header td {
+    background: var(--table-group) !important;
+
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 600 !important;
+}
+
+
+.permissions-table tbody tr.group-header td:first-child strong {
+    color: var(--primary-blue) !important;
+
+    font-weight: 700 !important;
+}
+
+
+/* =========================================================
+   MODULE NAME
+   ========================================================= */
+
+.permissions-table .module-name {
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 400 !important;
+
+    padding-left: 36px !important;
+}
+
+
+/* =========================================================
+   SELECT ALL
+   ========================================================= */
+
+.select-all-text {
+    color: var(--text-navy) !important;
+
+    font-size: 13px !important;
+
+    font-weight: 400 !important;
+}
+
+
+/* =========================================================
+   MATERIAL CHECKBOX
+   ========================================================= */
+
+.permissions-table mat-checkbox {
+    display: inline-flex;
+
+    align-items: center;
+
+    color: var(--text-navy) !important;
+}
+
+
+.permissions-table .mdc-form-field {
+    color: var(--text-navy) !important;
+}
+
+
+.permissions-table .mdc-label {
+    color: var(--text-navy) !important;
+
+    font-size: 13px !important;
+}
+
+
+/* =========================================================
+   CHECKBOX - SELECTED
+   ========================================================= */
+
+.permissions-table .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__background {
+    background-color: #3378a9 !important;
+
+    border-color: #3378a9 !important;
+}
+
+
+/* =========================================================
+   CHECKBOX - BORDER
+   ========================================================= */
+
+.permissions-table .mdc-checkbox__native-control~.mdc-checkbox__background {
+    border-color: #66727d !important;
+}
+
+
+/* =========================================================
+   CHECKBOX HOVER
+   ========================================================= */
+
+.permissions-table .mat-mdc-checkbox:hover .mdc-checkbox__background {
+    border-color: #3378a9 !important;
 }
 
 
 /* =========================================================
    BUTTON AREA
-========================================================= */
+   ========================================================= */
 
-.col-md-12.text-center {
+.user-buttons {
+    width: 100%;
 
-  width: 100%;
+    display: flex;
 
-  margin-top: 12px;
+    justify-content: center;
 
-  padding-top: 12px;
+    align-items: center;
 
-  text-align: center;
+    gap: 10px;
 
-  box-sizing: border-box;
-}
-
-
-/* =========================================================
-   COMMON BUTTON
-========================================================= */
-
-.col-md-12.text-center .btn {
-
-  min-width: 95px;
-
-  height: 40px;
-
-  padding: 0 20px;
-
-  margin: 0 3px;
-
-  border-radius: 3px;
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-  line-height: 38px;
-
-  box-sizing: border-box;
-
-  cursor: pointer;
-
-  box-shadow: none;
-
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
+    margin-top: 28px;
 }
 
 
 /* =========================================================
    RESET BUTTON
-========================================================= */
+   WHITE + NAVY BORDER
+   ========================================================= */
 
-.col-md-12.text-center .btn.default {
+.user-reset-btn {
+    min-width: 90px;
 
-  border: 1px solid var(--border-dark);
+    height: 40px;
 
-  background: var(--white);
+    padding: 8px 20px;
 
-  color: #526b82;
+    border: 1px solid var(--navy) !important;
+
+    border-radius: 4px !important;
+
+    background: #ffffff !important;
+
+    color: var(--navy) !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
 }
 
 
-.col-md-12.text-center .btn.default:hover {
+.user-reset-btn:hover {
+    background: #eef4f9 !important;
 
-  border-color: #aebdca;
+    border-color: var(--navy-hover) !important;
 
-  background: #f4f7f9;
-
-  color: var(--navy);
-}
-
-
-/* =========================================================
-   SUBMIT BUTTON
-========================================================= */
-
-.col-md-12.text-center .btn.green {
-
-  border: 1px solid var(--primary-blue);
-
-  background: var(--primary-blue);
-
-  color: var(--white);
-}
-
-
-.col-md-12.text-center .btn.green:hover {
-
-  border-color: var(--primary-blue-dark);
-
-  background: var(--primary-blue-dark);
-
-  color: var(--white);
+    color: var(--navy-hover) !important;
 }
 
 
 /* =========================================================
-   REMOVE OLD METRONIC STYLING
-========================================================= */
+   SUBMIT / UPDATE BUTTON
+   SAME NAVY AS VIEW TEAM BACK BUTTON
+   ========================================================= */
 
-.portlet.light,
-.portlet.light.bordered,
-.portlet-fit,
-.portlet-form {
+.user-submit-btn {
+    min-width: 90px;
 
-  background: var(--white) !important;
+    height: 40px;
 
-  border-color: var(--border) !important;
+    padding: 8px 20px;
 
-  box-shadow: none !important;
+    border: 1px solid var(--navy) !important;
+
+    border-radius: 4px !important;
+
+    background: var(--navy) !important;
+
+    color: #ffffff !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
 }
 
 
-.caption.font-dark {
+.user-submit-btn:hover {
+    background: var(--navy-hover) !important;
 
-  color: var(--navy) !important;
+    border-color: var(--navy-hover) !important;
 }
 
 
-.caption-subject.font-green {
+.user-submit-btn:active {
+    background: var(--navy-dark) !important;
 
-  color: var(--navy) !important;
+    border-color: var(--navy-dark) !important;
 }
 
 
-/* =========================================================
-   BOOTSTRAP COLUMN SPACING
-========================================================= */
+.user-submit-btn:disabled {
+    background: #7f91a5 !important;
 
-.form-body .col-md-3 {
+    border-color: #7f91a5 !important;
 
-  padding-left: 10px;
+    color: #ffffff !important;
 
-  padding-right: 10px;
+    opacity: 0.7;
 
-  box-sizing: border-box;
-}
-
-
-/* =========================================================
-   OPTIONAL: KEEP FORM WIDTH CLEAN
-========================================================= */
-
-.form-body form {
-
-  width: 100%;
-
-  margin: 0;
-}
-
-
-/* =========================================================
-   DISABLED
-========================================================= */
-
-.form-control:disabled {
-
-  background: #f3f6f8;
-
-  color: #7b8b9c;
-
-  cursor: not-allowed;
-
-  border-color: #dbe2e8;
+    cursor: not-allowed;
 }
 
 
 /* =========================================================
-   RESPONSIVE - TABLET
-========================================================= */
+   OLD BACK-BUTTON CLASS
+   If used elsewhere in this component
+   ========================================================= */
 
-@media (max-width: 1100px) {
+.back-button {
+    height: 38px !important;
 
-  .page-content {
+    min-width: 130px;
 
-    padding: 20px;
-  }
+    padding: 0 18px !important;
+
+    border-radius: 4px !important;
+
+    background: var(--navy) !important;
+
+    color: #ffffff !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    box-shadow: none !important;
+
+    display: inline-flex !important;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    border: 0 !important;
+
+    cursor: pointer;
+}
 
 
-  .form-body {
+.back-button:hover {
+    background: var(--navy-hover) !important;
+}
 
-    padding: 22px 18px 26px;
-  }
+
+.back-button mat-icon {
+    width: 18px;
+
+    height: 18px;
+
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .user-form-row {
+        column-gap: 20px;
+    }
 
 }
 
 
 /* =========================================================
-   RESPONSIVE - 768px
-========================================================= */
+   TABLET
+   ========================================================= */
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
 
-  .page-content {
+    .user-form-row {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
 
-    padding: 12px;
-  }
+        row-gap: 18px;
 
-
-  .portlet-title {
-
-    min-height: auto;
-
-    padding: 15px;
-
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 14px;
-  }
+        column-gap: 20px;
+    }
 
 
-  .caption-subject {
+    .empty-column {
+        display: none;
+    }
 
-    font-size: 22px;
-
-    line-height: 29px;
-  }
-
-
-  .actions {
-
-    width: 100%;
-  }
+}
 
 
-  .back-to-index {
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
-    width: 100%;
+@media (max-width: 600px) {
 
+    .user-portlet-title {
+        min-height: 55px;
+
+        padding: 8px 10px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+
+    .user-actions {
+        width: 100%;
+    }
+
+
+    .back-index-btn {
+        width: auto;
+
+        min-width: 150px;
+    }
+
+
+    .user-form-body {
+        padding: 15px 10px;
+    }
+
+
+    .user-form-row {
+        grid-template-columns: 1fr;
+
+        row-gap: 15px;
+    }
+
+
+    .user-page-title {
+        font-size: 20px !important;
+    }
+
+
+    .rights-title {
+        font-size: 19px !important;
+
+        line-height: 25px;
+    }
+
+
+    .permissions-table {
+        min-width: 1000px;
+    }
+
+
+    .user-buttons {
+        margin-top: 22px;
+    }
+
+}
+
+
+.user-form-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
+    width: 150%;
+}
+
+.user-form-col {
     min-width: 0;
-  }
-
-
-  .form-body {
-
-    padding: 18px 15px 22px;
-  }
-
-
-  .mandatory_div {
-
-    margin-bottom: 18px;
-  }
-
-
-  .form-body .col-md-3 {
-
     width: 100%;
-
-    padding-left: 10px;
-
-    padding-right: 10px;
-  }
-
-
-  .form-group {
-
-    margin-bottom: 20px;
-  }
-
-
-  .col-md-12.text-center {
-
-    margin-top: 4px;
-
-    padding-top: 8px;
-  }
-
 }
 
-
-/* =========================================================
-   RESPONSIVE - 480px
-========================================================= */
-
-@media (max-width: 480px) {
-
-  .page-content {
-
-    padding: 8px;
-  }
-
-
-  .portlet-title {
-
-    padding: 14px;
-  }
-
-
-  .caption-subject {
-
-    font-size: 19px;
-
-    line-height: 26px;
-  }
-
-
-  .form-body {
-
-    padding: 16px 12px 20px;
-  }
-
-
-  .form-control {
-
-    height: 40px;
-
-    font-size: 14px;
-  }
-
-
-  select.form-control {
-
-    height: 40px;
-  }
-
-
-  .col-md-12.text-center {
-
+.user-buttons {
     display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 25px;
+}
 
-    flex-direction: column;
+@media (max-width: 992px) {
+    .user-form-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
-    gap: 10px;
-
-    align-items: stretch;
-  }
-
-
-  .col-md-12.text-center .btn {
-
-    width: 100%;
-
-    margin: 0;
-
-  }
-
+@media (max-width: 600px) {
+    .user-form-row {
+        grid-template-columns: 1fr;
+    }
 }

@@ -1,8 +1,9 @@
-import { CommonModule } from '@angular/common';
+
+import { MatIcon } from "@angular/material/icon";
 import { Component, OnInit } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
+
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -14,6 +15,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Common } from '../../../classes/common';
 import { DataProviderService } from '../../../service/data-provider.service';
+import { MatCardModule } from "@angular/material/card";
+import { CommonModule, NgClass } from "@angular/common";
 
 @Component({
   selector: 'app-view-designation',
@@ -27,7 +30,8 @@ import { DataProviderService } from '../../../service/data-provider.service';
     MatTableModule,
     MatSortModule,
     MatListModule,
-  ],
+    NgClass
+],
   templateUrl: './view-designation.html',
   styleUrl: './view-designation.scss',
 })

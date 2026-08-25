@@ -1,259 +1,177 @@
-<div class="page-content-wrapper">
-  <div class="page-content">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="portlet light portlet-fit portlet-form bordered">
+<div class="user-page-wrapper">
 
-          <!-- Header -->
-          <div class="portlet-title">
-            <div class="caption font-dark">
-              <span class="caption-subject font-green sbold uppercase">
-                <span>
-                  {{ isEditMode ? "edit" : "add" }}
-                </span>
-                Designation
-              </span>
-            </div>
+  <div class="user-portlet">
 
-            <div class="actions">
-              <label
-                class="btn btn-transparent dark btn-outline btn-circle btn-sm active"
-              >
-                <a
-                  (click)="backToIndexPage()"
-                  class="back-to-index"
-                >
-                  Back to Index
-                </a>
-              </label>
-            </div>
+    <!-- HEADER -->
+    <div class="user-portlet-title">
+
+      <div class="user-title">
+        <span class="user-page-title">
+          {{ isEditMode ? 'EDIT DESIGNATION' : 'ADD DESIGNATION' }}
+        </span>
+      </div>
+
+      <div class="user-actions">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
+
+          Back to Index
+
+        </button>
+      </div>
+
+    </div>
+
+    <!-- BODY -->
+    <div class="user-portlet-body">
+
+      <form #designationForm="ngForm" (ngSubmit)="onSubmit(designationForm)" novalidate>
+
+        <div class="user-form-body">
+
+          <!-- Mandatory Message -->
+          <div class="mandatory-message">
+            Fields with
+            <span class="required">*</span>
+            mark are mandatory
           </div>
 
-          <!-- Body -->
-          <div class="portlet-body">
+          <!-- FORM ROW -->
+          <div class="user-form-row" >
 
-            <form
-              #designationForm="ngForm"
-              (ngSubmit)="onSubmit(designationForm)"
-              novalidate
-            >
+            <!-- Designation -->
+            <div class="user-form-col">
 
-              <div class="form-body">
+              <div class="user-form-group">
 
-                <!-- Mandatory Message -->
-                <div class="row">
-                  <div class="col-md-12 mandatory_div mb_20">
-                    <span>
-                      Fields with
-                      <span class="required">*</span>
-                      mark are mandatory
-                    </span>
-                  </div>
-                </div>
+                <label class="user-label">
+                  Designation
+                  <span class="required">*</span>
+                </label>
 
-                <div class="row">
+                <input type="text" class="user-input" placeholder="Enter Designation Name"
+                  [(ngModel)]="designation.name" name="name" required minlength="2" maxlength="100"
+                  pattern="^[a-zA-Z0-9\s\.,;:=$\-_\+'&quot;/\\!@`#%&*()?]+$" #nameCtrl="ngModel"
+                  (input)="designation.name = capitalizeFirstCharOnly(designation.name)">
 
-                  <!-- Designation Name -->
-                  <div class="col-md-4">
-                    <div class="form-group">
+                <div class="user-error" *ngIf="nameCtrl.invalid && nameCtrl.touched">
 
-                      <label class="sbold">
-                        Designation
-                        <span class="required">*</span>
-                      </label>
+                  <span *ngIf="nameCtrl.errors?.['required']">
+                    Designation Name is required
+                  </span>
 
-                      <input
-                        class="form-control"
-                        type="text"
-                        placeholder="Enter Designation Name"
-                        [(ngModel)]="designation.name"
-                        name="name"
-                        required
-                        minlength="2"
-                        maxlength="100"
-                        (input)="
-                          designation.name =
-                            capitalizeFirstCharOnly(
-                              designation.name
-                            )
-                        "
-                        #nameCtrl="ngModel"
-                        pattern="^[a-zA-Z0-9\s\.,;:=$\-_\+'&quot;/\\!@`#%&*()?]+$"
-                      />
+                  <span *ngIf="nameCtrl.errors?.['minlength']">
+                    Minimum 2 characters required
+                  </span>
 
-                      <!-- Required -->
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          nameCtrl.errors?.['required'] &&
-                          nameCtrl.touched
-                        "
-                      >
-                        Designation Name is required
-                      </div>
-
-                      <!-- Minimum -->
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          nameCtrl.errors?.['minlength'] &&
-                          nameCtrl.touched
-                        "
-                      >
-                        Minimum 2 characters required
-                      </div>
-
-                      <!-- Pattern -->
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          nameCtrl.errors?.['pattern'] &&
-                          nameCtrl.touched
-                        "
-                      >
-                        Only a-z, 0-9, . , ; : = $ - _ + ' " / \
-                        ! &#64; ` # % & * ( ) ? are allowed
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Sequence -->
-                  <div class="col-md-3">
-                    <div class="form-group">
-
-                      <label class="sbold">
-                        Sequence
-                        <span class="required">*</span>
-                      </label>
-
-                      <input
-                        class="form-control"
-                        type="number"
-                        placeholder="Enter Sequence"
-                        [(ngModel)]="designation.sequence"
-                        name="sequence"
-                        required
-                        min="1"
-                        max="999999"
-                        #sequenceCtrl="ngModel"
-                      />
-
-                      <!-- Required -->
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          sequenceCtrl.errors?.['required'] &&
-                          sequenceCtrl.touched
-                        "
-                      >
-                        Sequence is required
-                      </div>
-
-                      <!-- Min -->
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          sequenceCtrl.errors?.['min'] &&
-                          sequenceCtrl.touched
-                        "
-                      >
-                        Sequence must be greater than 0
-                      </div>
-
-                      <!-- Max -->
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          sequenceCtrl.errors?.['max'] &&
-                          sequenceCtrl.touched
-                        "
-                      >
-                        Sequence is too large
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Status -->
-                  <div
-                    class="col-md-3"
-                    *ngIf="isEditMode"
-                  >
-                    <div class="form-group">
-
-                      <label class="sbold">
-                        Status
-                        <span class="required">*</span>
-                      </label>
-
-                      <select
-                        class="form-control"
-                        [(ngModel)]="designation.status"
-                        name="status"
-                        required
-                        #statusCtrl="ngModel"
-                      >
-
-                        <option value="">
-                          -- Select here --
-                        </option>
-
-                        <option [value]="1">
-                          Active
-                        </option>
-
-                        <option [value]="2">
-                          Inactive
-                        </option>
-
-                      </select>
-
-                      <div
-                        class="text-danger"
-                        *ngIf="
-                          statusCtrl.errors?.['required'] &&
-                          statusCtrl.touched
-                        "
-                      >
-                        Status is required
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Buttons -->
-                  <div class="col-md-12 text-center">
-
-                    <button
-                      type="button"
-                      (click)="onReset()"
-                      class="btn default"
-                    >
-                      Reset
-                    </button>
-
-                    &nbsp;
-
-                    <button
-                      type="submit"
-                      class="btn green"
-                    >
-                      Submit
-                    </button>
-
-                  </div>
+                  <span *ngIf="nameCtrl.errors?.['pattern']">
+                    Invalid characters entered
+                  </span>
 
                 </div>
 
               </div>
 
-            </form>
+            </div>
+
+            <!-- Sequence -->
+            <div class="user-form-col">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Sequence
+                  <span class="required">*</span>
+                </label>
+
+                <input type="number" class="user-input" placeholder="Enter Sequence" [(ngModel)]="designation.sequence"
+                  name="sequence" required min="1" max="999999" #sequenceCtrl="ngModel">
+
+                <div class="user-error" *ngIf="sequenceCtrl.invalid && sequenceCtrl.touched">
+
+                  <span *ngIf="sequenceCtrl.errors?.['required']">
+                    Sequence is required
+                  </span>
+
+                  <span *ngIf="sequenceCtrl.errors?.['min']">
+                    Sequence must be greater than 0
+                  </span>
+
+                  <span *ngIf="sequenceCtrl.errors?.['max']">
+                    Sequence is too large
+                  </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          
+          <div class="user-form-row" style="margin-top: 20px;">
+            <div class="user-form-col" *ngIf="isEditMode">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Status
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" [(ngModel)]="designation.status" name="status" required
+                  #statusCtrl="ngModel">
+
+                  <option [ngValue]="null">
+                    Select Status
+                  </option>
+
+                  <option [ngValue]="1">
+                    Active
+                  </option>
+
+                  <option [ngValue]="2">
+                    Inactive
+                  </option>
+
+                </select>
+
+                <div class="user-error" *ngIf="statusCtrl.invalid && statusCtrl.touched">
+
+                  Status is required
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- BUTTONS -->
+          <div class="user-buttons">
+
+            <button type="button" class="user-reset-btn" (click)="onReset()">
+
+              Reset
+
+            </button>
+
+            <button type="submit" class="user-submit-btn">
+
+              {{ isEditMode ? 'Update' : 'Submit' }}
+
+            </button>
 
           </div>
 
         </div>
-      </div>
+
+      </form>
+
     </div>
+
   </div>
+
 </div>

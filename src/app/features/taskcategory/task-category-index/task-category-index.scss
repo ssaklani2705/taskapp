@@ -244,17 +244,9 @@ mat-divider {
 .search-grid {
 
   display: grid;
-
-  grid-template-columns:
-    minmax(280px, 2fr)
-    minmax(180px, 1fr)
-    auto;
-
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 20px;
   align-items: end;
-
-  column-gap: 18px;
-
-  row-gap: 15px;
 }
 
 
