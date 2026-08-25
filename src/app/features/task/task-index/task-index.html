@@ -1,1 +1,491 @@
-<p>task-index works!</p>
+
+<div class="page-content-wrapper">
+
+  <div class="page-content">
+
+    <div class="user-management-container">
+
+      <!-- =====================================================
+           HEADER
+      ====================================================== -->
+
+      <div class="page-header">
+
+        <div class="header-title-section">
+
+          <h2>
+            Task
+          </h2>
+
+          <button
+            type="button"
+            class="collapse-btn"
+            (click)="togglePanel()"
+            [attr.aria-expanded]="isPanelVisible"
+            title="Toggle Search Panel"
+          >
+            {{ isPanelVisible ? "▲" : "▼" }}
+          </button>
+
+        </div>
+
+        <!-- ADD NEW -->
+        @if (addPer === "Y") {
+
+          <button
+            type="button"
+            class="btn-add-user"
+            (click)="addDepartment()"
+          >
+            <span class="plus-icon">+</span>
+            Add New
+          </button>
+
+        }
+
+      </div>
+
+
+      <!-- =====================================================
+           SEARCH PANEL
+      ====================================================== -->
+
+      <div
+        class="search-panel"
+        *ngIf="isPanelVisible"
+      >
+
+        <div class="search-row">
+
+          <!-- SEARCH -->
+          <div class="search-wrapper">
+
+            <div class="search-box">
+
+              <input
+                type="text"
+                [(ngModel)]="searchQuery"
+                placeholder="Search by Department Name"
+                class="search-input"
+                (keyup.enter)="onSearch()"
+              />
+
+              <button
+                type="button"
+                class="search-btn"
+                (click)="onSearch()"
+                title="Search"
+              >
+                <i class="fa fa-search"></i>
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- STATUS -->
+          <div class="status-wrapper">
+
+            <select
+              class="status-select"
+              [(ngModel)]="selectedStatus"
+              (change)="onSearch()"
+            >
+
+              <option value="">
+                --All Status--
+              </option>
+
+              <option value="1">
+                Active
+              </option>
+
+              <option value="2">
+                Inactive
+              </option>
+
+              <option value="3">
+                Deleted
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- GO -->
+          <div class="go-wrapper">
+
+            <button
+              type="button"
+              class="btn-go"
+              (click)="onSearch()"
+            >
+              Go
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           TOP PAGINATION
+      ====================================================== -->
+
+      <div class="table-top-section">
+
+        <div
+          class="record-summary"
+          role="status"
+          aria-live="polite"
+        >
+          {{ recordSummary }}
+        </div>
+
+
+        <div class="pagination">
+
+          <button
+            type="button"
+            class="pagination-btn first-btn"
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1"
+          >
+            « First
+          </button>
+
+          <button
+            type="button"
+            class="pagination-btn"
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+          >
+            ‹ Prev
+          </button>
+
+          <button
+            type="button"
+            class="pagination-btn"
+            *ngFor="let page of pages()"
+            (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage"
+          >
+            {{ page }}
+          </button>
+
+          <button
+            type="button"
+            class="pagination-btn"
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
+            Next ›
+          </button>
+
+          <button
+            type="button"
+            class="pagination-btn last-btn"
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Last »
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           TABLE
+      ====================================================== -->
+
+      <div class="table-container">
+
+        <div class="table-responsive">
+
+          <table class="user-table">
+
+            <thead>
+
+              <tr>
+
+                <th class="serial-column">
+                  #
+                </th>
+
+                <th
+                  *ngFor="let col of columns"
+                  [class.sortable-column]="col.sortable"
+                  (click)="col.sortable && sortData(col.key)"
+                >
+
+                  <div class="column-header">
+
+                    <span>
+                      {{ col.label }}
+                    </span>
+
+                    <span
+                      *ngIf="col.sortable"
+                      class="sort-icons"
+                    >
+
+                      <span
+                        [class.sort-active]="
+                          sortColumn === col.key &&
+                          sortDirection === 'asc'
+                        "
+                      >
+                        ▲
+                      </span>
+
+                      <span
+                        [class.sort-active]="
+                          sortColumn === col.key &&
+                          sortDirection === 'desc'
+                        "
+                      >
+                        ▼
+                      </span>
+
+                    </span>
+
+                  </div>
+
+                </th>
+
+                <th class="action-column">
+                  Action
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              <tr
+                class="user-row"
+                *ngFor="
+                  let department of paginatedDepartments;
+                  let i = index
+                "
+              >
+
+                <td class="serial-number">
+                  {{
+                    (currentPage - 1) *
+                    recordsPerPage +
+                    i +
+                    1
+                  }}
+                </td>
+
+
+                <td>
+
+                  <span class="user-name wrap-text">
+                    {{ department.name }}
+                  </span>
+
+                </td>
+
+
+                <td>
+                  {{ department.sequence }}
+                </td>
+
+
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [ngClass]="
+                      common.getStatusClass(
+                        department.status
+                      )
+                    "
+                  >
+                    {{
+                      common.getStatusLabel(
+                        department.status
+                      )
+                    }}
+                  </span>
+
+                </td>
+
+
+                <td>
+
+                  <div class="action-buttons">
+
+                    <!-- VIEW -->
+                    <a
+                      (click)="
+                        viewDepartment(
+                          department.departmentId
+                        )
+                      "
+                      class="action-btn view-btn"
+                      title="View"
+                    >
+                      <i class="fa fa-eye"></i>
+                    </a>
+
+
+                    <!-- EDIT / DELETE -->
+                    <ng-container
+                      *ngIf="
+                        department.status === 1 ||
+                        department.status === 2
+                      "
+                    >
+
+                      @if (editPer === "Y") {
+
+                        <a
+                          (click)="
+                            editDepartment(
+                              department.departmentId
+                            )
+                          "
+                          class="action-btn edit-btn"
+                          title="Edit"
+                        >
+                          <i class="fa fa-pencil"></i>
+                        </a>
+
+                      }
+
+
+                      @if (deletePer === "Y") {
+
+                        <a
+                          (click)="
+                            onDeleteDepartment(
+                              department.departmentId
+                            )
+                          "
+                          class="action-btn delete-btn"
+                          title="Delete"
+                        >
+                          <i class="fa fa-trash"></i>
+                        </a>
+
+                      }
+
+                    </ng-container>
+
+                  </div>
+
+                </td>
+
+              </tr>
+
+
+              <!-- NO RECORDS -->
+
+              <tr
+                *ngIf="
+                  !paginatedDepartments ||
+                  paginatedDepartments.length === 0
+                "
+              >
+
+                <td
+                  [attr.colspan]="columns.length + 2"
+                  class="no-records"
+                >
+                  No records found.
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+
+      <!-- =====================================================
+           BOTTOM PAGINATION
+      ====================================================== -->
+
+      <div class="table-bottom-section">
+
+        <div
+          class="record-summary"
+          role="status"
+          aria-live="polite"
+        >
+          {{ recordSummary }}
+        </div>
+
+
+        <div class="pagination">
+
+          <button
+            type="button"
+            class="pagination-btn first-btn"
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1"
+          >
+            « First
+          </button>
+
+          <button
+            type="button"
+            class="pagination-btn"
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+          >
+            ‹ Prev
+          </button>
+
+          <button
+            type="button"
+            class="pagination-btn"
+            *ngFor="let page of pages()"
+            (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage"
+          >
+            {{ page }}
+          </button>
+
+          <button
+            type="button"
+            class="pagination-btn"
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
+            Next ›
+          </button>
+
+          <button
+            type="button"
+            class="pagination-btn last-btn"
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Last »
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

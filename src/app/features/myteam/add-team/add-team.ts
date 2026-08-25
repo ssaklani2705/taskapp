@@ -65,7 +65,8 @@ import {
 
 import {
   DataProviderService,
-  DepartmentDTO
+  DepartmentDTO,
+  DesignationDTO
 } from '../../../service/data-provider.service';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
@@ -246,6 +247,7 @@ export class AddTeam implements OnInit, AfterViewInit {
         false
       ],
       departmentId: [null, Validators.required],
+      desigmationId: [null, Validators.required],
 
     });
 
@@ -292,6 +294,7 @@ export class AddTeam implements OnInit, AfterViewInit {
     }
 
     this.loadDepartments();
+    this.loadDesignations();
   }
 
   // ============================================================
@@ -419,7 +422,8 @@ export class AddTeam implements OnInit, AfterViewInit {
 
             isAdmin:
               response.permission === 'Y',
-            departmentId: response.departmentId || 0
+            departmentId: response.departmentId || null,
+desigmationId: response.desigmationId || null
           });
 
           /**
@@ -809,9 +813,31 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     this.userForm.markAllAsTouched();
 
-    if (this.userForm.invalid) {
-      return;
-    }
+     console.log('========== FORM DEBUG ==========');
+  console.log('FORM VALID:', this.userForm.valid);
+  console.log('FORM VALUE:', this.userForm.value);
+
+   Object.keys(this.userForm.controls).forEach(key => {
+    const control = this.userForm.get(key);
+
+    console.log(
+      key,
+      'value:', control?.value,
+      'valid:', control?.valid,
+      'errors:', control?.errors
+    );
+  });
+
+  if (this.userForm.invalid) {
+    console.error('FORM IS INVALID - API WILL NOT BE CALLED');
+    return;
+  }
+
+  console.log('FORM IS VALID - CALLING API');
+
+    // if (this.userForm.invalid) {
+    //   return;
+    // }
 
     if (!this.validateExpiryDate()) {
       return;
@@ -866,6 +892,7 @@ export class AddTeam implements OnInit, AfterViewInit {
         Number(formValues.status),
 
       departmentId: Number(formValues.departmentId),
+      designationId: Number(formValues.desigmationId),
       qcFlag: 0,
 
       telephone:
@@ -1040,7 +1067,9 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       status: 1,
 
-      isAdmin: false
+      isAdmin: false,
+      departmentId: null,
+  desigmationId: null
     });
 
     this.permissions =
@@ -1331,10 +1360,23 @@ export class AddTeam implements OnInit, AfterViewInit {
   }
   departmentList: DepartmentDTO[] = [];
 
+  designationList: DesignationDTO[] = [];
+
   loadDepartments(): void {
     this.dataProvider.getActiveDepartments().subscribe({
       next: (response: DepartmentDTO[]) => {
         this.departmentList = response;
+      },
+      error: (error) => {
+        console.error('Error loading departments', error);
+      }
+    });
+  }
+
+  loadDesignations(): void {
+    this.dataProvider.getActiveDesigmations().subscribe({
+      next: (response: DesignationDTO[]) => {
+        this.designationList = response;
       },
       error: (error) => {
         console.error('Error loading departments', error);

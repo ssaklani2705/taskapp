@@ -24,9 +24,7 @@ import { MatDivider } from "@angular/material/divider";
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSelectModule,
-    MatIcon,
-    MatDivider
+    MatSelectModule
 ],
   templateUrl: './add-task-category.html',
   styleUrl: './add-task-category.scss',

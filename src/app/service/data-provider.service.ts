@@ -45,6 +45,12 @@ export interface DepartmentDTO {
   regdate?: string;
   moddate?: string;
 }
+
+export interface DesignationDTO {
+  desigmationId?: number;
+  name?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -70,6 +76,9 @@ export class DataProviderService {
   getUserManagementDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   }
+  // getUserManagementDetailsById(id: any): Observable<any> {
+  //   return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails/${id}`);
+  // }
   getUserManagementDetailsById(id: any): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails/${id}`);
   }

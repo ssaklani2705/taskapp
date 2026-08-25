@@ -32,6 +32,7 @@ interface User {
 
   status: number;
   departmentName:string;
+  designationName:string;
 
 }
 
@@ -149,7 +150,12 @@ apiResponseDepartmentDetails: any = {};
       label: 'Department Name',
       sortable: true
     },
-
+     {
+      key: 'designationName',
+      label: 'Designation Name',
+      sortable: true
+    },
+      
     {
       key: 'status',
       label: 'Status',

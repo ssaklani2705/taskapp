@@ -1,0 +1,920 @@
+
+:host {
+  display: block;
+  width: 100%;
+
+  --navy: #19345a;
+  --navy-dark: #152f54;
+
+  --primary-blue: #2f6fa3;
+  --primary-blue-dark: #285f8d;
+
+  --page-bg: #f7f9fb;
+  --white: #ffffff;
+
+  --border: #d2dde7;
+  --border-light: #e0e7ed;
+
+  --text: #17375e;
+  --text-muted: #6c8299;
+
+  --success: #17805f;
+  --success-bg: #e5f3ee;
+
+  --danger: #e84a4a;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page-content-wrapper {
+  width: 100%;
+  min-height: 100%;
+  background: var(--page-bg);
+}
+
+.page-content {
+  width: 100%;
+  padding: 24px 34px;
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.user-management-container {
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.page-header {
+  min-height: 94px;
+
+  padding: 0 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid var(--border);
+
+  box-sizing: border-box;
+}
+
+
+.header-title-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.header-title-section h2 {
+  margin: 0;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 27px;
+  line-height: 1.2;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   COLLAPSE BUTTON
+========================================================= */
+
+.collapse-btn {
+  border: 0;
+  background: transparent;
+
+  color: var(--primary-blue);
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  padding: 4px 6px;
+}
+
+
+/* =========================================================
+   SEARCH PANEL
+========================================================= */
+
+.search-panel {
+  width: 100%;
+
+  padding: 24px 25px;
+
+  border-bottom: 1px solid var(--border);
+
+  box-sizing: border-box;
+}
+
+
+.search-row {
+  display: flex;
+  align-items: flex-end;
+
+  width: 100%;
+
+  gap: 22px;
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.add-user-wrapper {
+  flex: 0 0 auto;
+  margin-right: auto;
+}
+
+
+.btn-add-user {
+  height: 38px;
+
+  padding: 0 17px;
+
+  border: 0;
+  border-radius: 4px;
+
+  background: var(--navy);
+  color: #fff;
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+}
+
+
+.btn-add-user:hover {
+  background: var(--navy-dark);
+}
+
+
+.plus-icon {
+  font-size: 19px;
+  line-height: 1;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-wrapper {
+  width: 46%;
+}
+
+
+.search-box {
+  display: flex;
+  width: 100%;
+}
+
+
+.search-input {
+  width: 100%;
+  height: 38px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #c6d3df;
+  border-right: 0;
+
+  border-radius: 3px 0 0 3px;
+
+  background: #fff;
+
+  color: var(--text);
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+
+  outline: none;
+}
+
+
+.search-input::placeholder {
+  color: #7d94aa;
+}
+
+
+.search-input:focus {
+  border-color: var(--primary-blue);
+}
+
+
+.search-btn {
+  width: 52px;
+  height: 38px;
+
+  border: 0;
+
+  border-radius: 0 3px 3px 0;
+
+  background: var(--primary-blue);
+
+  color: #fff;
+
+  cursor: pointer;
+}
+
+
+.search-btn:hover {
+  background: var(--primary-blue-dark);
+}
+
+
+.search-btn i {
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-wrapper {
+  width: 29%;
+}
+
+
+.status-select {
+  width: 100%;
+  height: 38px;
+
+  padding: 0 11px;
+
+  border: 1px solid #c6d3df;
+
+  border-radius: 3px;
+
+  background: #fff;
+
+  color: var(--text);
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+
+  outline: none;
+}
+
+
+.status-select:focus {
+  border-color: var(--primary-blue);
+}
+
+
+/* =========================================================
+   GO BUTTON
+========================================================= */
+
+.go-wrapper {
+  flex: 0 0 auto;
+}
+
+
+.btn-go {
+  height: 38px;
+
+  min-width: 75px;
+
+  padding: 0 15px;
+
+  border: 0;
+  border-radius: 3px;
+
+  background: var(--primary-blue);
+
+  color: #fff;
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+.btn-go:hover {
+  background: var(--primary-blue-dark);
+}
+
+
+/* =========================================================
+   TABLE TOP
+========================================================= */
+
+.table-top-section,
+.table-bottom-section {
+  min-height: 72px;
+
+  padding: 0 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  box-sizing: border-box;
+}
+
+
+.record-summary {
+  color: #58718a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+
+.pagination-btn {
+  min-width: 45px;
+  height: 38px;
+
+  padding: 0 10px;
+
+  border: 1px solid #d9e2ea;
+
+  border-radius: 4px;
+
+  background: #fff;
+
+  color: #71869a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+
+.pagination-btn:disabled {
+  color: #c4ced7;
+
+  background: #fafbfd;
+
+  cursor: not-allowed;
+}
+
+
+.pagination-btn.active-pagination {
+  background: var(--navy);
+
+  border-color: var(--navy);
+
+  color: #fff;
+
+  font-weight: 600;
+}
+
+
+.first-btn,
+.last-btn {
+  min-width: 70px;
+}
+
+
+/* =========================================================
+   TABLE CONTAINER
+========================================================= */
+
+.table-container {
+  width: 100%;
+
+  padding: 0 25px;
+
+  box-sizing: border-box;
+}
+
+
+.table-responsive {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.user-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+
+  background: #fff;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px;
+
+  color: var(--text);
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.user-table thead th {
+  height: 59px;
+
+  padding: 8px 12px;
+
+  box-sizing: border-box;
+
+  background: #edf4f8;
+
+  border: 1px solid var(--border);
+
+  color: #172f4c;
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   TABLE BODY
+========================================================= */
+
+.user-table tbody td {
+  height: 58px;
+
+  padding: 8px 14px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+
+  background: #fff;
+
+  color: var(--text);
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  font-size: 14px;
+}
+
+
+.user-table tbody tr:hover td {
+  background: #f8fbfd;
+}
+
+
+/* =========================================================
+   COLUMN WIDTHS
+========================================================= */
+
+.user-table th.serial-column,
+.user-table td.serial-number {
+  width: 7%;
+}
+
+
+.user-table th:nth-child(2),
+.user-table td:nth-child(2) {
+  width: 40%;
+}
+
+
+.user-table th:nth-child(3),
+.user-table td:nth-child(3) {
+  width: 15%;
+}
+
+
+.user-table th:nth-child(4),
+.user-table td:nth-child(4) {
+  width: 20%;
+}
+
+
+.user-table th.action-column,
+.user-table td:last-child {
+  width: 18%;
+}
+
+
+/* =========================================================
+   COLUMN HEADER
+========================================================= */
+
+.column-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+}
+
+
+.sortable-column {
+  cursor: pointer;
+}
+
+
+.sort-icons {
+  display: inline-flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 0;
+
+  line-height: 7px;
+
+  color: #a8bfd1;
+
+  font-size: 9px;
+}
+
+
+.sort-icons span {
+  height: 7px;
+
+  line-height: 7px;
+}
+
+
+.sort-icons .sort-active {
+  color: var(--primary-blue);
+}
+
+
+/* =========================================================
+   DEPARTMENT NAME
+========================================================= */
+
+.user-name {
+  display: block;
+
+  text-align: left;
+
+  color: #244f78;
+
+  font-size: 14px;
+
+  font-weight: 400;
+}
+
+
+.wrap-text {
+  overflow-wrap: anywhere;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 70px;
+
+  height: 30px;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+
+  border-radius: 2px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+.status-active {
+  color: var(--success) !important;
+
+  background: var(--success-bg);
+
+  border: 1px solid #c7e5d9;
+}
+
+
+.status-inactive {
+  color: #986b14 !important;
+
+  background: #fff5dc;
+
+  border: 1px solid #ecd9a7;
+}
+
+
+.status-deleted {
+  color: #b93636 !important;
+
+  background: #fff0f0;
+
+  border: 1px solid #f2cccc;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.action-buttons {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+}
+
+
+.action-btn {
+  width: 40px;
+  height: 40px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border: 1px solid #cbd8e3;
+
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  text-decoration: none;
+
+  transition: all 0.15s ease;
+}
+
+
+.action-btn i {
+  font-size: 15px;
+}
+
+
+/* VIEW */
+
+.view-btn {
+  color: #2f628c;
+
+  border-color: #b9ccdc;
+}
+
+
+.view-btn:hover {
+  background: #edf5fa;
+}
+
+
+/* EDIT */
+
+.edit-btn {
+  color: #16866d;
+
+  border-color: #b9dfd4;
+}
+
+
+.edit-btn:hover {
+  background: #eef9f5;
+}
+
+
+/* DELETE */
+
+.delete-btn {
+  color: #e84a4a;
+
+  border-color: #efc0c0;
+}
+
+
+.delete-btn:hover {
+  background: #fff2f2;
+}
+
+
+/* =========================================================
+   NO RECORDS
+========================================================= */
+
+.no-records {
+  height: 80px !important;
+
+  color: var(--text-muted) !important;
+
+  text-align: center !important;
+
+  font-size: 14px;
+
+  background: #fff !important;
+}
+
+
+/* =========================================================
+   BOTTOM SECTION
+========================================================= */
+
+.table-bottom-section {
+  margin-top: 18px;
+
+  border-top: 1px solid var(--border);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .page-content {
+    padding: 20px;
+  }
+
+  .search-row {
+    flex-wrap: wrap;
+  }
+
+  .add-user-wrapper {
+    width: 100%;
+  }
+
+  .search-wrapper {
+    width: calc(60% - 10px);
+  }
+
+  .status-wrapper {
+    width: calc(30% - 10px);
+  }
+
+}
+
+
+@media (max-width: 768px) {
+
+  .page-content {
+    padding: 12px;
+  }
+
+  .page-header {
+    min-height: 70px;
+
+    padding: 0 15px;
+  }
+
+  .header-title-section h2 {
+    font-size: 22px;
+  }
+
+  .search-panel {
+    padding: 18px 15px;
+  }
+
+  .search-row {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+  }
+
+  .add-user-wrapper,
+  .search-wrapper,
+  .status-wrapper,
+  .go-wrapper {
+    width: 100%;
+  }
+
+  .btn-add-user,
+  .btn-go {
+    width: 100%;
+  }
+
+  .table-top-section,
+  .table-bottom-section {
+    padding: 15px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 12px;
+  }
+
+  .pagination {
+    width: 100%;
+
+    overflow-x: auto;
+  }
+
+  .table-container {
+    padding: 0 15px;
+  }
+
+  .user-table {
+    min-width: 850px;
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .page-content {
+    padding: 8px;
+  }
+
+  .header-title-section h2 {
+    font-size: 19px;
+  }
+
+  .pagination-btn {
+    min-width: 38px;
+
+    padding: 0 7px;
+
+    font-size: 12px;
+  }
+
+  .first-btn,
+  .last-btn {
+    min-width: 55px;
+  }
+
+}
