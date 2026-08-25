@@ -12,10 +12,7 @@
       </div>
 
       <div class="user-actions">
-        <button
-          type="button"
-          class="back-index-btn"
-          (click)="backToIndexPage()">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
 
           Back to Index
 
@@ -27,10 +24,7 @@
     <!-- BODY -->
     <div class="user-portlet-body">
 
-      <form
-        #taskCategoryForm="ngForm"
-        (ngSubmit)="onSubmit(taskCategoryForm)"
-        novalidate>
+      <form #taskCategoryForm="ngForm" (ngSubmit)="onSubmit(taskCategoryForm)" novalidate>
 
         <div class="user-form-body">
 
@@ -57,20 +51,14 @@
                   <span class="required">*</span>
                 </label>
 
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="taskCategory.departmentId"
-                  name="departmentId"
-                  required
-                  #departmentCtrl="ngModel">
+                <select class="user-input user-select" [(ngModel)]="taskCategory.departmentId" name="departmentId"
+                  required #departmentCtrl="ngModel">
 
                   <option [ngValue]="null">
                     Select Department
                   </option>
 
-                  <option
-                    *ngFor="let department of departments"
-                    [ngValue]="department.departmentId">
+                  <option *ngFor="let department of departments" [ngValue]="department.departmentId">
 
                     {{ department.name }}
 
@@ -78,9 +66,7 @@
 
                 </select>
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     departmentCtrl.invalid &&
                     departmentCtrl.touched">
 
@@ -103,24 +89,14 @@
                   <span class="required">*</span>
                 </label>
 
-                <input
-                  type="text"
-                  class="user-input"
-                  placeholder="Enter Task Category Name"
-                  [(ngModel)]="taskCategory.name"
-                  name="name"
-                  required
-                  minlength="2"
-                  maxlength="100"
-                  #nameCtrl="ngModel"
+                <input type="text" class="user-input" placeholder="Enter Task Category Name"
+                  [(ngModel)]="taskCategory.name" name="name" required minlength="2" maxlength="100" #nameCtrl="ngModel"
                   (input)="
                     taskCategory.name =
                     capitalizeFirstCharOnly(taskCategory.name)
                   ">
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     nameCtrl.invalid &&
                     nameCtrl.touched">
 
@@ -140,9 +116,11 @@
 
             <!-- Status -->
 
-            <div
-              class="user-form-col"
-              *ngIf="isEditMode">
+
+
+          </div>
+          <div class="user-form-row">
+            <div class="user-form-col" *ngIf="isEditMode">
 
               <div class="user-form-group">
 
@@ -151,11 +129,7 @@
                   <span class="required">*</span>
                 </label>
 
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="taskCategory.status"
-                  name="status"
-                  required
+                <select class="user-input user-select" [(ngModel)]="taskCategory.status" name="status" required
                   #statusCtrl="ngModel">
 
                   <option [ngValue]="null">
@@ -172,9 +146,7 @@
 
                 </select>
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     statusCtrl.invalid &&
                     statusCtrl.touched">
 
@@ -185,25 +157,20 @@
               </div>
 
             </div>
-
           </div>
+
 
           <!-- BUTTONS -->
 
           <div class="user-buttons">
 
-            <button
-              type="button"
-              class="user-reset-btn"
-              (click)="onReset()">
+            <button type="button" class="user-reset-btn" (click)="onReset()">
 
               Reset
 
             </button>
 
-            <button
-              type="submit"
-              class="user-submit-btn">
+            <button type="submit" class="user-submit-btn">
 
               {{ isEditMode ? 'Update' : 'Submit' }}
 
