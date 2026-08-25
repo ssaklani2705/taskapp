@@ -217,7 +217,7 @@
 
             <tr
               *ngFor="
-              let taskCategory of paginatedTaskCategories;
+              let rows of paginatedStates;
               let i = index">
 
               <td class="serial-cell">
@@ -230,11 +230,11 @@
               </td>
 
               <td>
-                {{ taskCategory.departmentName }}
+                {{ rows.name }}
               </td>
 
               <td>
-                {{ taskCategory.name }}
+                {{ rows.code }}
               </td>
 
               <td>
@@ -243,12 +243,12 @@
                   class="status-badge"
                   [ngClass]="
                     common.getStatusClass(
-                      taskCategory.status
+                      rows.status
                     )">
 
                   {{
                     common.getStatusLabel(
-                      taskCategory.status
+                      rows.status
                     )
                   }}
 
@@ -262,7 +262,7 @@
 
                   <button
                     class="action-button view-button"
-                    (click)="viewTaskCategory(taskCategory.taskcategoryId)">
+                    (click)="viewTaskCategory(rows.stateId)">
 
                     <mat-icon>visibility</mat-icon>
 
@@ -272,14 +272,14 @@
 
                 <ng-container
                   *ngIf="
-                  taskCategory.status === 1 ||
-                  taskCategory.status === 2">
+                  rows.status === 1 ||
+                  rows.status === 2">
 
                   @if (editPer === 'Y') {
 
                     <button
                       class="action-button edit-button"
-                      (click)="editTaskCategory(taskCategory.taskcategoryId)">
+                      (click)="editTaskCategory(rows.stateId)">
 
                       <mat-icon>edit</mat-icon>
 
@@ -291,7 +291,7 @@
 
                     <button
                       class="action-button delete-button"
-                      (click)="onDeleteTaskCategory(taskCategory.taskcategoryId)">
+                      (click)="onDeleteState(rows.stateId)">
 
                       <mat-icon>delete</mat-icon>
 
@@ -307,8 +307,8 @@
 
             <tr
               *ngIf="
-              !paginatedTaskCategories ||
-              paginatedTaskCategories.length === 0">
+              !paginatedStates ||
+              paginatedStates.length === 0">
 
               <td
                 colspan="5"

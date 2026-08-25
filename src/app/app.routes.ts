@@ -65,24 +65,33 @@ export const routes: Routes = [
       { path: 'edit-state/:stateId', loadComponent: () => import('./features/states/state-add/state-add').then(m => m.StateAdd) },
       { path: 'view-state/:stateId', loadComponent: () => import('./features/states/state-view/state-view').then(m => m.StateView) },
 
-
-
-
-
-      {
-        path: 'clients',
-        loadComponent: () =>
-          import('./features/clients/clients')
-            .then(m => m.Clients)
-      },
-
       // {
       //   path: 'tasks',
       //   loadComponent: () =>
       //     import('./features/tasks/tasks')
       //       .then(m => m.Tasks)
       // },
-
+          // Client
+      {
+        path: 'client-index',
+        loadComponent: () =>
+          import('./features/Client/client-index/client-index').then((m) => m.ClientIndex),
+      },
+      {
+        path: 'add-client',
+        loadComponent: () =>
+          import('./features/Client/add-client/add-client').then((m) => m.AddClient),
+      },
+      {
+        path: 'edit-client/:clientId',
+        loadComponent: () =>
+          import('./features/Client/add-client/add-client').then((m) => m.AddClient),
+      },
+      {
+        path: 'view-client/:clientId',
+        loadComponent: () =>
+          import('./features/Client/view-client/view-client').then((m) => m.ViewClient),
+      },
       {
         path: '',
         redirectTo: 'dashboard',

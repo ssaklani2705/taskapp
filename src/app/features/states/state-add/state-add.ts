@@ -13,11 +13,11 @@ import Swal from 'sweetalert2';
 
 
 export interface State {
-  stateId: number | null;
+  stateId: any
   name: string;
   code: string;
-  status: number | null;
-  userId: number | null;
+  status: any;
+  userId: any
 }
 export interface ApiResponse<T> {
   success: boolean;
@@ -98,6 +98,8 @@ export class StateAdd implements OnInit {
     --------------------------------- */
 
     const stateId = this.route.snapshot.params['stateId'];
+    console.log('Route params:', this.route.snapshot.params);
+    console.log('stateId value:', stateId);
 
     if (stateId) {
       this.isEditMode = true;

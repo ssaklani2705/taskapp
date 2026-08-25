@@ -17,7 +17,7 @@ import { DataProviderService } from '../../../service/data-provider.service';
 
 @Component({
   selector: 'app-state-view',
-  imports: [ CommonModule,
+  imports: [CommonModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -30,7 +30,10 @@ import { DataProviderService } from '../../../service/data-provider.service';
   styleUrl: './state-view.scss',
 })
 export class StateView implements OnInit {
-    taskcategoryId!: number;
+  stateId!: number;
+state: any = {};
+  taskcategoryId!: number;
+
 
   taskCategory: any = {};
 
@@ -50,129 +53,11 @@ export class StateView implements OnInit {
     private route: ActivatedRoute,
     private dataprovider: DataProviderService,
     private router: Router,
-  ) {}
+  ) { }
 
-  ngOnInit(): void {
 
-    /*
-     * Get Task Category ID from URL
-     *
-     * Example:
-     * /view-task-category/10
-     */
-    this.taskcategoryId =
-      +this.route.snapshot.paramMap.get('taskCategoryId')!;
 
-    /*
-     * Get filter/pagination information
-     * from query parameters
-     */
-    const queryParams =
-      this.route.snapshot.queryParamMap;
 
-    this.currentPage =
-      Number(queryParams.get('currentPage')) || 1;
-
-    this.searchText =
-      queryParams.get('searchText') || '';
-
-    this.statusIndex =
-      Number(queryParams.get('statusIndex')) || 0;
-
-    this.departmentId =
-      Number(queryParams.get('departmentId')) || 0;
-
-    this.page =
-      Number(queryParams.get('page')) ||
-      this.currentPage - 1;
-
-    this.size =
-      Number(queryParams.get('size')) || 5;
-
-    /*
-     * Fetch Task Category
-     */
-    this.getTaskCategoryDetails();
-  }
-
-  /**
-   * Get Task Category details by ID
-   */
-  getTaskCategoryDetails(): void {
-
-    this.dataprovider
-      .getTaskCategoryById(this.taskcategoryId)
-      .subscribe({
-        next: (response: any) => {
-
-          if (!response || !response.data) {
-            console.error(
-              'Task Category data not found'
-            );
-            return;
-          }
-
-          const data = response.data;
-
-          /*
-           * Store task category information
-           */
-          this.taskCategory = {
-            taskcategoryId: data.taskcategoryId,
-            departmentId: data.departmentId,
-            departmentName: data.departmentName,
-            name: data.name,
-            status: data.status,
-            userId: data.userId,
-            regdate: data.regdate,
-            moddate: data.moddate,
-          };
-
-          /*
-           * Transaction History
-           */
-          this.transactionHistory =
-            data.transactionHistory || [];
-
-          /*
-           * Sort latest action first
-           */
-          this.transactionHistory =
-            this.transactionHistory.sort(
-              (a: any, b: any) => {
-
-                const dateA =
-                  this.common.parseEntryDate(
-                    a.entryDate
-                  );
-
-                const dateB =
-                  this.common.parseEntryDate(
-                    b.entryDate
-                  );
-
-                return (
-                  dateB.getTime() -
-                  dateA.getTime()
-                );
-              }
-            );
-        },
-
-        error: (err) => {
-
-          console.error(
-            'Failed to fetch task category details',
-            err
-          );
-
-        },
-      });
-  }
-
-  /**
-   * Check whether transaction history exists
-   */
   get hasTransactionHistory(): boolean {
 
     return (
@@ -221,5 +106,97 @@ export class StateView implements OnInit {
         },
       }
     );
+  }
+
+  ngOnInit(): void {
+
+    const stateId = this.route.snapshot.params['stateId'];
+
+    console.log('Route params:', this.route.snapshot.params);
+    console.log('stateId value:', stateId);
+
+    const queryParams = this.route.snapshot.queryParamMap;
+
+    this.currentPage =
+      Number(queryParams.get('currentPage')) || 1;
+
+    this.searchText =
+      queryParams.get('searchText') || '';
+
+    this.statusIndex =
+      Number(queryParams.get('statusIndex')) || 0;
+
+    this.page =
+      Number(queryParams.get('page')) ||
+      this.currentPage - 1;
+
+    this.size =
+      Number(queryParams.get('size')) || 5;
+
+    if (stateId) {
+      this.taskcategoryId = Number(stateId);
+      this.getTaskCategoryDetails();
+    }
+  }
+  getTaskCategoryDetails(): void {
+
+    this.dataprovider
+      .getStateById(this.taskcategoryId)
+      .subscribe({
+
+        next: (response: any) => {
+
+          if (!response || !response.data) {
+            console.error('State data not found');
+            return;
+          }
+
+          const data = response.data;
+
+          this.taskCategory = {
+            stateId: data.stateId,
+            name: data.name,
+            code: data.code,
+            status: data.status,
+            userId: data.userId,
+            registrationDate: data.registrationDate,
+            modificationDate: data.modificationDate
+          };
+
+          // Keep history logic unchanged
+          this.transactionHistory =
+            data.transactionHistory || [];
+
+          this.transactionHistory =
+            this.transactionHistory.sort(
+              (a: any, b: any) => {
+
+                const dateA =
+                  this.common.parseEntryDate(
+                    a.entryDate
+                  );
+
+                const dateB =
+                  this.common.parseEntryDate(
+                    b.entryDate
+                  );
+
+                return (
+                  dateB.getTime() -
+                  dateA.getTime()
+                );
+              }
+            );
+        },
+
+        error: (err) => {
+
+          console.error(
+            'Failed to fetch state details',
+            err
+          );
+
+        },
+      });
   }
 }

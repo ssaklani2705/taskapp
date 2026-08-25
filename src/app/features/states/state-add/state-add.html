@@ -56,8 +56,6 @@
                   [(ngModel)]="state.name"
                   name="name"
                   required
-                  minlength="2"
-                  maxlength="100"
                   #nameCtrl="ngModel"
                   (input)="state.name = capitalizeFirstCharOnly(state.name)">
 

@@ -13,7 +13,9 @@ export const SESSION_KEYS = {
     USER_MODULE_FILTER:'userModuleDetail',
     DEPARTMENT_MASTER_FILTER:'departmentMasterFilter',
     DESIGNATION_MASTER_FILTER:'designationMasterFilter',
-    TASK_CATEGORY_MASTER_FILTER:'taskcategoryMasterFilter'
+    TASK_CATEGORY_MASTER_FILTER:'taskcategoryMasterFilter',
+
+        STATE_FILTER:'stateFilter'
     
 };
 

@@ -170,7 +170,7 @@ export class Sidebar {
         moduleId: 8,
         label: 'Clients',
         icon: 'business',
-        route: '/clients'
+        route: '/client-index'
       },
       {
         label: 'Approvals',
@@ -194,7 +194,7 @@ export class Sidebar {
       },
 
       {
-          moduleId: 8,
+          moduleId: 4,
         label: 'State',
         icon: 'bar_chart',
         route: '/state-index'

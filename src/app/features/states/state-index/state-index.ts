@@ -11,23 +11,12 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import { SessionStorageService } from '../../../service/session-storage.service';
 import Swal from 'sweetalert2';
 import { Common } from '../../../classes/common';
+import { State } from '../state-add/state-add';
 
 
-interface TaskCategory {
-  taskcategoryId: number;
-  departmentId: number;
-  departmentName: string;
-  name: string;
-  status: number;
-  userId?: number;
-  regdate?: any;
-  moddate?: any;
-}
 
-interface Department {
-  departmentId: number;
-  name: string;
-}
+
+
 @Component({
   selector: 'app-state-index',
   imports: [
@@ -43,9 +32,10 @@ interface Department {
   styleUrl: './state-index.scss',
 })
 export class StateIndex {
-  taskCategories: TaskCategory[] = [];
+  states: State[] = [];
 
-  apiResponseTaskCategoryDetails: any = {};
+
+  apiResponseState: any = {};
 
   searchQuery: string = '';
   search: string = '';
@@ -64,10 +54,7 @@ export class StateIndex {
   selectedStatus: string = '';
   statusIndex: number = 0;
 
-  /* Department */
-  selectedDepartment: string = '';
 
-  departments: Department[] = [];
 
   /* Permissions */
   addPer: string = 'N';
@@ -93,7 +80,7 @@ export class StateIndex {
   showHeaderBar: boolean = true;
 
   filterKey =
-    SESSION_KEYS.TASK_CATEGORY_MASTER_FILTER;
+    SESSION_KEYS.STATE_FILTER;
 
   constructor(
     private dataprovider: DataProviderService,
@@ -223,15 +210,10 @@ export class StateIndex {
         this.searchQuery =
           this.search;
 
-        this.selectedDepartment =
-          stateData.departmentId
-            ? String(
-              stateData.departmentId
-            )
-            : '';
+
       }
 
-      this.getDepartments();
+
 
       this.getTaskCategoryDetails();
     });
@@ -244,80 +226,38 @@ export class StateIndex {
       !this.isPanelVisible;
   }
 
-  /* Departments */
-  getDepartments(): void {
 
-    this.dataprovider
-      .getActiveDepartments()
-      .subscribe({
-        next: (response: any) => {
-
-          if (Array.isArray(response)) {
-
-            this.departments =
-              response;
-
-          } else if (
-            response?.data &&
-            Array.isArray(
-              response.data
-            )
-          ) {
-
-            this.departments =
-              response.data;
-
-          } else {
-
-            this.departments = [];
-          }
-        },
-
-        error: (error) => {
-
-          console.error(
-            'Error fetching departments:',
-            error
-          );
-
-          this.departments = [];
-        },
-      });
-  }
-
-  /* Get Task Categories */
   getTaskCategoryDetails(): void {
 
     this.dataprovider
-      .getTaskCategoryDetails(
+      .getStateList(
         this.page,
         this.size,
         this.statusIndex,
-        this.search,
-        this.selectedDepartment
+        this.search
       )
       .subscribe({
 
         next: (response: any) => {
 
-          this.apiResponseTaskCategoryDetails =
-            response;
+          this.apiResponseState =
+            response?.data || {};      // ✅ the inner map: { data, totalElements }
 
-          this.taskCategories =
-            response?.data || [];
+          this.states =
+            response?.data?.data || [];  // ✅ the actual array
+
         },
 
         error: (error) => {
 
           console.error(
-            'Error fetching task category details:',
+            'Error fetching state details:',
             error
           );
 
-          this.taskCategories = [];
+          this.states = [];
 
-          this.apiResponseTaskCategoryDetails =
-          {
+          this.apiResponseState = {
             totalElements: 0,
             data: [],
           };
@@ -326,9 +266,9 @@ export class StateIndex {
   }
 
   /* Current page records */
-  get paginatedTaskCategories(): TaskCategory[] {
+  get paginatedStates(): State[] {
 
-    return this.taskCategories;
+    return this.states;
   }
 
   /* Search */
@@ -357,8 +297,7 @@ export class StateIndex {
       searchText:
         this.search,
 
-      departmentId:
-        this.selectedDepartment,
+
 
       page:
         this.page,
@@ -414,8 +353,7 @@ export class StateIndex {
       searchText:
         this.search,
 
-      departmentId:
-        this.selectedDepartment,
+
 
       page:
         this.page,
@@ -443,8 +381,7 @@ export class StateIndex {
             searchText:
               this.search || '',
 
-            departmentId:
-              this.selectedDepartment || '',
+
 
             page:
               this.page,
@@ -472,94 +409,66 @@ export class StateIndex {
     );
   }
 
-  /* Delete */
-  onDeleteTaskCategory(
-    taskcategoryId: number
-  ): void {
+ onDeleteState(stateId: number): void {
 
-    this.taskCategory.taskcategoryId =
-      taskcategoryId;
+  const payload = {
+    stateId: stateId,
+    userId: this.userId ? Number(this.userId) : null
+  };
 
-    this.taskCategory.userId =
-      this.userId
-        ? Number(this.userId)
-        : null;
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you really want to delete this state?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, keep it'
+  }).then((result) => {
 
-    Swal.fire({
+    if (result.isConfirmed) {
 
-      title:
-        'Are you sure?',
+      this.dataprovider.deleteState(payload)
+        .subscribe({
 
-      text:
-        'Do you really want to delete this task category?',
+          next: (response: any) => {
 
-      icon:
-        'warning',
+            if (response.success) {
 
-      showCancelButton:
-        true,
+              Swal.fire(
+                'Deleted!',
+                response.message,
+                'success'
+              );
 
-      confirmButtonText:
-        'Yes, delete it!',
+              this.getTaskCategoryDetails(); // or loadStateDetails()
 
-      cancelButtonText:
-        'No, keep it',
+            } else {
 
-    }).then((result) => {
+              Swal.fire(
+                'Error',
+                response.message,
+                'error'
+              );
+            }
+          },
 
-      if (
-        result.isConfirmed
-      ) {
+          error: (error) => {
 
-        this.dataprovider
-          .deleteTaskCategory(
-            this.taskCategory
-          )
-          .subscribe({
+            console.error(
+              'Error deleting state:',
+              error
+            );
 
-            next:
-              (response: any) => {
-
-                if (
-                  response.success
-                ) {
-
-                  Swal.fire(
-                    'Deleted!',
-                    response.message,
-                    'success'
-                  );
-
-                  this.getTaskCategoryDetails();
-
-                } else {
-
-                  Swal.fire(
-                    'Error',
-                    response.message,
-                    'error'
-                  );
-                }
-              },
-
-            error:
-              (error) => {
-
-                console.error(
-                  'Error deleting task category:',
-                  error
-                );
-
-                Swal.fire(
-                  'Error',
-                  'Something went wrong while deleting the task category.',
-                  'error'
-                );
-              },
-          });
-      }
-    });
-  }
+            Swal.fire(
+              'Error',
+              'Something went wrong while deleting the state.',
+              'error'
+            );
+          }
+        });
+    }
+  });
+}
 
   /* View */
   viewTaskCategory(
@@ -577,8 +486,7 @@ export class StateIndex {
       searchText:
         this.search,
 
-      departmentId:
-        this.selectedDepartment,
+
 
       size:
         this.size,
@@ -619,8 +527,6 @@ export class StateIndex {
       searchText:
         this.search,
 
-      departmentId:
-        this.selectedDepartment,
 
       size:
         this.size,
@@ -659,8 +565,6 @@ export class StateIndex {
       searchText:
         this.search,
 
-      departmentId:
-        this.selectedDepartment,
 
       size:
         this.size,
@@ -723,7 +627,7 @@ export class StateIndex {
   get recordSummary(): string {
 
     const totalRecords =
-      this.apiResponseTaskCategoryDetails
+      this.apiResponseState
         ?.totalElements || 0;
 
     const startRecord =
@@ -750,7 +654,7 @@ export class StateIndex {
   get totalPages(): number {
 
     const total =
-      this.apiResponseTaskCategoryDetails
+      this.apiResponseState
         ?.totalElements || 0;
 
     return Math.max(
@@ -837,7 +741,7 @@ export class StateIndex {
         'asc';
     }
 
-    this.taskCategories.sort(
+    this.states.sort(
       (
         a: any,
         b: any
