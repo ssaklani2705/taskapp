@@ -84,7 +84,7 @@
 
       <table
         class="history-table"
-        *ngIf="transactionHistory?.length">
+        *ngIf="transactionHistory.length">
 
         <thead>
 
@@ -128,7 +128,7 @@
       </table>
 
       <div
-        *ngIf="!transactionHistory?.length"
+        *ngIf="!transactionHistory.length"
         class="no-record">
 
         No action history found
