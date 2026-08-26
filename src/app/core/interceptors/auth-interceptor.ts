@@ -1,9 +1,4 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-<<<<<<< HEAD
-
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  return next(req);
-=======
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
@@ -37,5 +32,4 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     })
   );
 
->>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
 };

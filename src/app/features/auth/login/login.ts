@@ -45,6 +45,7 @@ import { AuthService } from '../../../core/services/auth';
 
   styleUrl: './login.scss'
 })
+
 export class Login {
 
   private readonly fb = inject(FormBuilder);

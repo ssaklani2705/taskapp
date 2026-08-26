@@ -32,8 +32,6 @@ interface Approval {
 })
 export class Dashboard {
 
-<<<<<<< HEAD
-=======
   username: string = '';
 
    ngOnInit(): void {
@@ -41,7 +39,6 @@ export class Dashboard {
       sessionStorage.getItem('username') || 'Society 123';
   }
 
->>>>>>> 590e00116e228cab563fa3e07925ba38a258884a
     kpis = [
     {
       title: 'Team tasks',
