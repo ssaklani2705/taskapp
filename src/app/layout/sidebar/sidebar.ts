@@ -44,6 +44,7 @@ export class Sidebar {
   constructor(private router: Router, private loginService: LoginService, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   username: string = '';
+  loginType: string = '';
 
 
 

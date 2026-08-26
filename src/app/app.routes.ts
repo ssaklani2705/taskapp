@@ -42,6 +42,13 @@ export const routes: Routes = [
             .then(m => m.Dashboard)
       },
 
+       {
+        path: 'employee-dashboard',
+        loadComponent: () =>
+          import('./features/employee-dashboard/employee-dashboard')
+            .then(m => m.EmployeeDashboard)
+      },
+
       { path: 'my-team', loadComponent: () => import('./features/myteam/my-team/my-team').then(m => m.MyTeam) },
       { path: 'view-team/:userId', loadComponent: () => import('./features/myteam/view-team/view-team').then(m => m.ViewTeam) },
       { path: 'add-team', loadComponent: () => import('./features/myteam/add-team/add-team').then(m => m.AddTeam) },
