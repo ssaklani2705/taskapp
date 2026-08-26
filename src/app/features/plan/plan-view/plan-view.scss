@@ -12,7 +12,7 @@
 
 .view-card,
 .history-card {
-  background-color: white;
+    background-color: white;
   border: 1px solid #d7e0e8;
   box-shadow: none !important;
   border-radius: 0;
@@ -169,4 +169,12 @@
   .back-button {
     width: 100%;
   }
+}
+
+.description-text {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  max-width: 50%;
 }

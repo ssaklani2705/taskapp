@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { LoginService } from '../../service/login.service';
 interface MenuItem {
   moduleId?: number;
-  label: string;  
+  label: string;
   icon?: string;
   route?: string;
   expanded?: boolean;
@@ -35,7 +35,7 @@ interface MenuItem {
 })
 export class Sidebar {
 
-  @Input() 
+  @Input()
   opened = true;
 
   modules: any[] = [];
@@ -44,19 +44,16 @@ export class Sidebar {
   constructor(private router: Router, private loginService: LoginService, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   username: string = '';
-  loginType: string = '';
-  
+
+
 
   ngOnInit(): void {
 
-    
-    if (isPlatformBrowser(this.platformId)) {
-       this.username =
-      sessionStorage.getItem('username') || '';
 
-       this.loginType =
-      sessionStorage.getItem('loginType') || '';
-      
+    if (isPlatformBrowser(this.platformId)) {
+      this.username =
+        sessionStorage.getItem('username') || '';
+
       const storedModules = sessionStorage.getItem('modules');
       if (storedModules) {
         this.modules = JSON.parse(storedModules);
@@ -246,12 +243,21 @@ export class Sidebar {
       },
       {
         moduleId: 3,
+
         label: 'Designation',
+
         icon: 'badge',
+
         route: '/designation-master'
       },
       {
-          moduleId: 5,
+        moduleId: 1,
+        label: 'User Management',
+        icon: 'groups',
+        route: '/my-team'
+      },
+      {
+        moduleId: 5,
         label: 'Task Category',
         icon: 'task_alt',
         route: '/task-category-index'
@@ -268,11 +274,18 @@ export class Sidebar {
         icon: 'business',
         route: '/client-index'
       },
-        {
+      {
         moduleId: 4,
         label: 'State',
         icon: 'bar_chart',
         route: '/state-index'
+      },
+
+      {
+        moduleId: 9,
+        label: 'Plan Master',
+        icon: 'bar_chart',
+        route: '/plan-index'
       },
       {
         label: 'Reports',
@@ -366,58 +379,58 @@ onLogout(): void {
   }
 
   selectMenu(item: MenuItem): void {
-  this.activeMenu = item.label;
+    this.activeMenu = item.label;
 
-  // Set selected module ID
-  this.selectedModuleId = item.moduleId ?? null;
+    // Set selected module ID
+    this.selectedModuleId = item.moduleId ?? null;
 
-  // Get complete module detail from session modules
-  const moduleDetail = this.getModuleDetail(item.moduleId);
+    // Get complete module detail from session modules
+    const moduleDetail = this.getModuleDetail(item.moduleId);
 
-  // Store selected module detail in session
-  if (isPlatformBrowser(this.platformId)) {
-    sessionStorage.setItem(
-      'selectedModuleDetail',
-      JSON.stringify(moduleDetail)
-    );
+    // Store selected module detail in session
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.setItem(
+        'selectedModuleDetail',
+        JSON.stringify(moduleDetail)
+      );
+    }
+
+    // Navigate
+    if (item.route) {
+      this.router.navigate([item.route]);
+    }
   }
 
-  // Navigate
-  if (item.route) {
-    this.router.navigate([item.route]);
-  }
-}
 
+  getShortName(name: string): string {
+    if (!name) {
+      return '';
+    }
 
-getShortName(name: string): string {
-  if (!name) {
-    return '';
-  }
+    const parts = name.trim().split(/\s+/);
 
-  const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) {
+      return parts[0];
+    }
 
-  if (parts.length === 1) {
-    return parts[0];
+    return `${parts[0]} ${parts[parts.length - 1].charAt(0)}`;
   }
 
-  return `${parts[0]} ${parts[parts.length - 1].charAt(0)}`;
-}
+  getInitials(name: string): string {
+    if (!name) {
+      return '';
+    }
 
-getInitials(name: string): string {
-  if (!name) {
-    return '';
+    const parts = name.trim().split(/\s+/);
+
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+
+    return (
+      parts[0].charAt(0) +
+      parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
   }
-
-  const parts = name.trim().split(/\s+/);
-
-  if (parts.length === 1) {
-    return parts[0].substring(0, 2).toUpperCase();
-  }
-
-  return (
-    parts[0].charAt(0) +
-    parts[parts.length - 1].charAt(0)
-  ).toUpperCase();
-}
 
 }
