@@ -17,8 +17,18 @@ import {
 import {
   Router
 } from '@angular/router';
-import { DataProviderService } from '../../../service/data-provider.service';
-import { MatIconModule } from '@angular/material/icon';
+
+import {
+  DataProviderService,
+  DepartmentDTO,
+  DesignationDTO
+} from '../../../service/data-provider.service';
+
+import {
+  MatIconModule
+} from '@angular/material/icon';
+import Swal from 'sweetalert2';
+
 
 interface User {
 
@@ -31,62 +41,94 @@ interface User {
   mobile: string;
 
   status: number;
-  departmentName:string;
-  designationName:string;
+
+  departmentName: string;
+
+  designationName: string;
 
 }
 
+
 @Component({
+
   selector: 'app-my-team',
-  imports: [CommonModule,
-    FormsModule,MatIconModule],
+
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatIconModule
+  ],
+
   templateUrl: './my-team.html',
+
   styleUrl: './my-team.scss',
+
 })
 export class MyTeam implements OnInit {
-apiResponseDepartmentDetails: any = {};
+
+
+  // =========================================================
+  // API RESPONSE
+  // =========================================================
+
+  apiResponseDepartmentDetails: any = {};
+
+  apiResponseUserDetails: any;
+
+
   // =========================================================
   // USER DATA
   // =========================================================
 
   users: User[] = [];
 
-  apiResponseUserDetails: any;
-
 
   // =========================================================
   // SEARCH
   // =========================================================
 
-  searchQuery = '';
+  searchQuery: string = '';
 
-  search = '';
+  search: string = '';
 
-  selectedStatus = '';
+  selectedStatus: string = '';
 
-  statusIndex = 0;
+  statusIndex: number = 0;
+
+
+  // =========================================================
+  // DEPARTMENT / DESIGNATION
+  // =========================================================
+
+  departmentList: DepartmentDTO[] = [];
+
+  designationList: DesignationDTO[] = [];
+
+  selectedDepartmentId: number | null = null;
+
+  selectedDesignationId: number | null = null;
 
 
   // =========================================================
   // PAGINATION
   // =========================================================
 
-  currentPage = 1;
+  currentPage: number = 1;
 
-  page = 0;
+  page: number = 0;
 
-  size = 5;
+  size: number = 5;
 
-  totalRecords = 0;
+  totalRecords: number = 0;
 
-  totalPages = 1;
+  totalPages: number = 1;
 
 
   // =========================================================
   // SORTING
   // =========================================================
 
-  sortColumn = '';
+  sortColumn: string = '';
 
   sortDirection: 'asc' | 'desc' = 'asc';
 
@@ -95,31 +137,40 @@ apiResponseDepartmentDetails: any = {};
   // PANEL
   // =========================================================
 
-  isPanelVisible = true;
+  isPanelVisible: boolean = true;
 
 
   // =========================================================
   // PERMISSIONS
   // =========================================================
+
   addPer: string = 'N';
+
   editPer: string = 'N';
+
   deletePer: string = 'N';
+
   viewPer: string = 'N';
+
   approvePer: string = 'N';
+
   adminApprovePer: string = 'N';
+
   moduleName: string = '';
+
+
   // =========================================================
   // LOADING
   // =========================================================
 
-  isLoading = false;
+  isLoading: boolean = false;
 
 
   // =========================================================
   // SESSION STORAGE KEY
   // =========================================================
 
-  filterKey = 'userManagementFilter';
+  filterKey: string = 'userManagementFilter';
 
 
   // =========================================================
@@ -145,17 +196,19 @@ apiResponseDepartmentDetails: any = {};
       label: 'Mobile No.',
       sortable: true
     },
+
     {
-      key: 'departmenname',
+      key: 'departmentName',
       label: 'Department Name',
       sortable: true
     },
-     {
+
+    {
       key: 'designationName',
       label: 'Designation Name',
       sortable: true
     },
-      
+
     {
       key: 'status',
       label: 'Status',
@@ -164,6 +217,10 @@ apiResponseDepartmentDetails: any = {};
 
   ];
 
+
+  // =========================================================
+  // CONSTRUCTOR
+  // =========================================================
 
   constructor(
 
@@ -174,7 +231,7 @@ apiResponseDepartmentDetails: any = {};
     @Inject(PLATFORM_ID)
     private platformId: Object
 
-  ) { }
+  ) {}
 
 
   // =========================================================
@@ -183,50 +240,87 @@ apiResponseDepartmentDetails: any = {};
 
   ngOnInit(): void {
 
+    /*
+     * First restore all filters
+     */
     this.restoreFilterState();
 
+
+    /*
+     * Load dropdowns
+     */
+    this.loadDepartments();
+
+    this.loadDesignations();
+
+
+    /*
+     * Load users
+     */
     this.getUserDetails();
 
-      if (
-          isPlatformBrowser(
-            this.platformId
-          )
-        ) {
 
-          const storedModules =
-            sessionStorage.getItem(
-              'selectedModuleDetail'
-            );
-          // alert(storedModules);
-          if (storedModules) {
+    /*
+     * Load permissions
+     */
+    if (
+      isPlatformBrowser(this.platformId)
+    ) {
 
-            const parsed =
-              JSON.parse(
-                storedModules
-              );
+      const storedModules =
+        sessionStorage.getItem(
+          'selectedModuleDetail'
+        );
 
-            this.moduleName =
-              parsed.name ?? '';
 
-            this.addPer =
-              parsed.addPer ?? 'N';
+      if (storedModules) {
 
-            this.editPer =
-              parsed.editPer ?? 'N';
+        try {
 
-            this.deletePer =
-              parsed.deletePer ?? 'N';
+          const parsed =
+            JSON.parse(storedModules);
 
-            this.viewPer =
-              parsed.viewPer ?? 'N';
 
-            this.approvePer =
-              parsed.approvePer ?? 'N';
+          this.moduleName =
+            parsed.name ?? '';
 
-            this.adminApprovePer =
-              parsed.adminApprovePer ?? 'N';
-          }
+
+          this.addPer =
+            parsed.addPer ?? 'N';
+
+
+          this.editPer =
+            parsed.editPer ?? 'N';
+
+
+          this.deletePer =
+            parsed.deletePer ?? 'N';
+
+
+          this.viewPer =
+            parsed.viewPer ?? 'N';
+
+
+          this.approvePer =
+            parsed.approvePer ?? 'N';
+
+
+          this.adminApprovePer =
+            parsed.adminApprovePer ?? 'N';
+
         }
+        catch (error) {
+
+          console.error(
+            'Error parsing selectedModuleDetail:',
+            error
+          );
+
+        }
+
+      }
+
+    }
 
   }
 
@@ -239,64 +333,90 @@ apiResponseDepartmentDetails: any = {};
 
     this.isLoading = true;
 
-    console.log('GET USERS PARAMS:', {
-      page: this.page,
-      size: this.size,
-      statusIndex: this.statusIndex,
-      search: this.search
-    });
+
+    console.log(
+      'GET USERS PARAMS:',
+      {
+        page: this.page,
+        size: this.size,
+        statusIndex: this.statusIndex,
+        search: this.search,
+        departmentId: this.selectedDepartmentId,
+        designationId: this.selectedDesignationId
+      }
+    );
+
 
     this.dataprovider
       .getUserManagementDetails(
+
         this.page,
+
         this.size,
+
         this.statusIndex,
-        this.search
+
+        this.search,
+
+        this.selectedDepartmentId,
+
+        this.selectedDesignationId
+
       )
       .subscribe({
 
         next: (response: any) => {
 
-          console.log('API RESPONSE:', response);
+          console.log(
+            'API RESPONSE:',
+            response
+          );
 
-          this.apiResponseUserDetails = response;
 
-          // -----------------------------------------
+          this.apiResponseUserDetails =
+            response;
+
+
+          // =================================================
           // USERS
-          // -----------------------------------------
+          // =================================================
 
-          this.users = response?.data ?? [];
-
-          console.log('USERS:', this.users);
-          console.log('USERS LENGTH:', this.users.length);
+          this.users =
+            response?.data ?? [];
 
 
-          // -----------------------------------------
+          // =================================================
           // TOTAL RECORDS
-          // Backend returns totalElements
-          // -----------------------------------------
+          // =================================================
 
           this.totalRecords =
-            Number(response?.totalElements ?? 0);
+            Number(
+              response?.totalElements ?? 0
+            );
 
 
-          // -----------------------------------------
+          // =================================================
           // TOTAL PAGES
-          // -----------------------------------------
+          // =================================================
 
           this.totalPages =
             Math.ceil(
               this.totalRecords / this.size
             );
 
-          if (this.totalPages < 1) {
+
+          if (
+            this.totalPages < 1
+          ) {
+
             this.totalPages = 1;
+
           }
 
 
-          // -----------------------------------------
-          // SAFETY CHECK
-          // -----------------------------------------
+          // =================================================
+          // PAGE SAFETY
+          // =================================================
 
           if (
             this.currentPage >
@@ -308,49 +428,37 @@ apiResponseDepartmentDetails: any = {};
 
             this.page =
               this.currentPage - 1;
+
           }
 
 
-          // -----------------------------------------
+          // =================================================
           // PROCESS LIST
-          // -----------------------------------------
+          // =================================================
 
           if (
-            isPlatformBrowser(this.platformId)
+            isPlatformBrowser(
+              this.platformId
+            )
           ) {
 
             sessionStorage.setItem(
+
               'processList',
+
               JSON.stringify(
                 response?.processList ?? []
               )
+
             );
 
           }
 
 
-          // -----------------------------------------
-          // STOP LOADING
-          // -----------------------------------------
-
           this.isLoading = false;
 
-          console.log(
-            'LOADING:',
-            this.isLoading
-          );
-
-          console.log(
-            'TOTAL RECORDS:',
-            this.totalRecords
-          );
-
-          console.log(
-            'TOTAL PAGES:',
-            this.totalPages
-          );
-
         },
+
 
         error: (error: any) => {
 
@@ -358,6 +466,7 @@ apiResponseDepartmentDetails: any = {};
             'Error fetching user details:',
             error
           );
+
 
           this.users = [];
 
@@ -370,6 +479,7 @@ apiResponseDepartmentDetails: any = {};
         }
 
       });
+
   }
 
 
@@ -380,8 +490,7 @@ apiResponseDepartmentDetails: any = {};
   onSearch(): void {
 
     this.search =
-      this.searchQuery
-        .trim();
+      this.searchQuery.trim();
 
 
     this.statusIndex =
@@ -390,15 +499,23 @@ apiResponseDepartmentDetails: any = {};
         : Number(this.selectedStatus);
 
 
-    // Reset pagination
+    /*
+     * Reset pagination
+     */
     this.currentPage = 1;
 
     this.page = 0;
 
 
+    /*
+     * Save ALL filters
+     */
     this.saveFilterState();
 
 
+    /*
+     * Load users
+     */
     this.getUserDetails();
 
   }
@@ -417,18 +534,71 @@ apiResponseDepartmentDetails: any = {};
 
 
     this.search =
-      this.searchQuery
-        .trim();
+      this.searchQuery.trim();
 
 
-    // Reset pagination
+    /*
+     * Reset pagination
+     */
     this.currentPage = 1;
 
     this.page = 0;
 
 
+    /*
+     * Save ALL filters
+     */
     this.saveFilterState();
 
+
+    /*
+     * Load users
+     */
+    this.getUserDetails();
+
+  }
+
+
+  // =========================================================
+  // DEPARTMENT / DESIGNATION FILTER
+  // =========================================================
+
+  onDepartmentChange(): void {
+
+    this.currentPage = 1;
+
+    this.page = 0;
+
+    this.search =
+      this.searchQuery.trim();
+
+    this.statusIndex =
+      this.selectedStatus === ''
+        ? 0
+        : Number(this.selectedStatus);
+
+    this.saveFilterState();
+
+    this.getUserDetails();
+
+  }
+
+
+  onDesignationChange(): void {
+
+    this.currentPage = 1;
+
+    this.page = 0;
+
+    this.search =
+      this.searchQuery.trim();
+
+    this.statusIndex =
+      this.selectedStatus === ''
+        ? 0
+        : Number(this.selectedStatus);
+
+    this.saveFilterState();
 
     this.getUserDetails();
 
@@ -439,10 +609,10 @@ apiResponseDepartmentDetails: any = {};
   // PAGE NAVIGATION
   // =========================================================
 
-  goToPage(pageNumber: number): void {
+  goToPage(
+    pageNumber: number
+  ): void {
 
-
-    // Invalid page
     if (
       pageNumber < 1 ||
       pageNumber > this.totalPages
@@ -453,7 +623,6 @@ apiResponseDepartmentDetails: any = {};
     }
 
 
-    // Same page
     if (
       pageNumber === this.currentPage
     ) {
@@ -468,28 +637,14 @@ apiResponseDepartmentDetails: any = {};
 
 
     /*
-     * Backend usually expects zero-based page.
-     *
-     * Angular:
-     * page 1 => backend 0
-     * page 2 => backend 1
-     * page 3 => backend 2
+     * Backend is zero based
      */
-
     this.page =
       pageNumber - 1;
 
 
     this.saveFilterState();
 
-
-    /*
-     * IMPORTANT:
-     *
-     * Don't use router.navigate() here.
-     *
-     * Just call the API.
-     */
 
     this.getUserDetails();
 
@@ -581,7 +736,6 @@ apiResponseDepartmentDetails: any = {};
     const pages: number[] = [];
 
 
-    // No pages
     if (
       this.totalPages <= 0
     ) {
@@ -591,7 +745,6 @@ apiResponseDepartmentDetails: any = {};
     }
 
 
-    // Five or fewer pages
     if (
       this.totalPages <= 5
     ) {
@@ -611,10 +764,6 @@ apiResponseDepartmentDetails: any = {};
     }
 
 
-    // -----------------------------------------------
-    // More than five pages
-    // -----------------------------------------------
-
     let start =
       Math.max(
         1,
@@ -629,7 +778,6 @@ apiResponseDepartmentDetails: any = {};
       );
 
 
-    // Adjust start when near the end
     if (
       end - start < 4
     ) {
@@ -664,7 +812,6 @@ apiResponseDepartmentDetails: any = {};
   // =========================================================
 
   get recordSummary(): string {
-
 
     if (
       this.totalRecords === 0
@@ -717,7 +864,6 @@ apiResponseDepartmentDetails: any = {};
     }
 
 
-    // Reset page
     this.currentPage = 1;
 
     this.page = 0;
@@ -735,10 +881,13 @@ apiResponseDepartmentDetails: any = {};
   // SORT
   // =========================================================
 
-  sortData(column: string): void {
+  sortData(
+    column: string
+  ): void {
 
-
-    // Same column
+    /*
+     * Same column
+     */
     if (
       this.sortColumn === column
     ) {
@@ -750,7 +899,10 @@ apiResponseDepartmentDetails: any = {};
 
     }
 
-    // New column
+
+    /*
+     * New column
+     */
     else {
 
       this.sortColumn =
@@ -764,6 +916,7 @@ apiResponseDepartmentDetails: any = {};
 
     this.users =
       [...this.users].sort(
+
         (a: any, b: any) => {
 
           let valueA =
@@ -773,7 +926,9 @@ apiResponseDepartmentDetails: any = {};
             b[column];
 
 
-          // Status
+          /*
+           * Status
+           */
           if (
             column === 'status'
           ) {
@@ -787,7 +942,9 @@ apiResponseDepartmentDetails: any = {};
           }
 
 
-          // Convert null
+          /*
+           * Null handling
+           */
           if (
             valueA === null ||
             valueA === undefined
@@ -808,7 +965,9 @@ apiResponseDepartmentDetails: any = {};
           }
 
 
-          // String comparison
+          /*
+           * String comparison
+           */
           if (
             typeof valueA === 'string' &&
             typeof valueB === 'string'
@@ -848,6 +1007,7 @@ apiResponseDepartmentDetails: any = {};
           return 0;
 
         }
+
       );
 
   }
@@ -866,24 +1026,12 @@ apiResponseDepartmentDetails: any = {};
 
 
   // =========================================================
-  // SAVE FILTER STATE
+  // GET CURRENT FILTER STATE
   // =========================================================
 
-  private saveFilterState(): void {
+  private getCurrentFilterState(): any {
 
-
-    if (
-      !isPlatformBrowser(
-        this.platformId
-      )
-    ) {
-
-      return;
-
-    }
-
-
-    const filterState = {
+    return {
 
       currentPage:
         this.currentPage,
@@ -895,25 +1043,24 @@ apiResponseDepartmentDetails: any = {};
         this.search,
 
       size:
-        this.size
+        this.size,
+
+      departmentId:
+        this.selectedDepartmentId,
+
+      designationId:
+        this.selectedDesignationId
 
     };
-
-
-    sessionStorage.setItem(
-      this.filterKey,
-      JSON.stringify(filterState)
-    );
 
   }
 
 
   // =========================================================
-  // RESTORE FILTER STATE
+  // SAVE FILTER STATE
   // =========================================================
 
-  private restoreFilterState(): void {
-
+  private saveFilterState(): void {
 
     if (
       !isPlatformBrowser(
@@ -926,132 +1073,321 @@ apiResponseDepartmentDetails: any = {};
     }
 
 
-    const stored =
-      sessionStorage.getItem(
-        this.filterKey
-      );
+    const filterState =
+      this.getCurrentFilterState();
 
 
-    if (!stored) {
+    sessionStorage.setItem(
 
-      return;
+      this.filterKey,
 
-    }
+      JSON.stringify(
+        filterState
+      )
 
-
-    try {
-
-      const filterState =
-        JSON.parse(stored);
-
-
-      // Page
-      if (
-        filterState.currentPage
-      ) {
-
-        this.currentPage =
-          Number(
-            filterState.currentPage
-          );
-
-      }
-
-
-      // Backend page
-      this.page =
-        this.currentPage - 1;
-
-
-      // Status
-      if (
-        filterState.statusIndex !==
-        undefined
-      ) {
-
-        this.statusIndex =
-          Number(
-            filterState.statusIndex
-          );
-
-      }
-
-
-      // Search
-      if (
-        filterState.searchText !==
-        undefined
-      ) {
-
-        this.search =
-          filterState.searchText;
-
-        this.searchQuery =
-          filterState.searchText;
-
-      }
-
-
-      // Size
-      if (
-        filterState.size
-      ) {
-
-        this.size =
-          Number(
-            filterState.size
-          );
-
-      }
-
-
-      // Select status value
-      if (
-        this.statusIndex > 0
-      ) {
-
-        this.selectedStatus =
-          String(
-            this.statusIndex
-          );
-
-      }
-
-    }
-
-    catch (error) {
-
-      console.error(
-        'Error restoring filter state:',
-        error
-      );
-
-    }
+    );
 
   }
+
+
+  // =========================================================
+  // RESTORE FILTER STATE
+  // =========================================================
+
+private restoreFilterState(): void {
+
+  if (!isPlatformBrowser(this.platformId)) {
+    return;
+  }
+
+  const stored = sessionStorage.getItem(this.filterKey);
+
+  if (!stored) {
+    return;
+  }
+
+  try {
+
+    const filterState = JSON.parse(stored);
+
+    // =====================================================
+    // PAGE
+    // =====================================================
+
+    if (
+      filterState.currentPage !== undefined &&
+      filterState.currentPage !== null
+    ) {
+
+      const restoredPage = Number(
+        filterState.currentPage
+      );
+
+      if (
+        Number.isFinite(restoredPage) &&
+        restoredPage >= 1
+      ) {
+
+        this.currentPage = restoredPage;
+
+      } else {
+
+        this.currentPage = 1;
+
+      }
+
+    } else {
+
+      this.currentPage = 1;
+
+    }
+
+    /*
+     * Backend page is 0-based
+     */
+    this.page = this.currentPage - 1;
+
+
+    // =====================================================
+    // STATUS
+    // =====================================================
+
+    if (
+      filterState.statusIndex !== undefined &&
+      filterState.statusIndex !== null
+    ) {
+
+      const restoredStatus = Number(
+        filterState.statusIndex
+      );
+
+      if (Number.isFinite(restoredStatus)) {
+
+        this.statusIndex = restoredStatus;
+
+      } else {
+
+        this.statusIndex = 0;
+
+      }
+
+    } else {
+
+      this.statusIndex = 0;
+
+    }
+
+
+    // =====================================================
+    // SELECTED STATUS
+    // =====================================================
+
+    if (this.statusIndex > 0) {
+
+      this.selectedStatus =
+        String(this.statusIndex);
+
+    } else {
+
+      this.selectedStatus = '';
+
+    }
+
+
+    // =====================================================
+    // SEARCH
+    // =====================================================
+
+    if (
+      filterState.searchText !== undefined &&
+      filterState.searchText !== null
+    ) {
+
+      this.search =
+        String(filterState.searchText);
+
+      this.searchQuery =
+        String(filterState.searchText);
+
+    } else {
+
+      this.search = '';
+      this.searchQuery = '';
+
+    }
+
+
+    // =====================================================
+    // PAGE SIZE
+    // =====================================================
+
+    if (
+      filterState.size !== undefined &&
+      filterState.size !== null
+    ) {
+
+      const restoredSize =
+        Number(filterState.size);
+
+      if (
+        Number.isFinite(restoredSize) &&
+        restoredSize > 0
+      ) {
+
+        this.size = restoredSize;
+
+      }
+
+    }
+
+
+    // =====================================================
+    // DEPARTMENT
+    // =====================================================
+
+    if (
+      filterState.departmentId !== undefined &&
+      filterState.departmentId !== null &&
+      filterState.departmentId !== ''
+    ) {
+
+      const departmentId =
+        Number(filterState.departmentId);
+
+      if (
+        Number.isFinite(departmentId) &&
+        departmentId > 0
+      ) {
+
+        this.selectedDepartmentId =
+          departmentId;
+
+      } else {
+
+        this.selectedDepartmentId = null;
+
+      }
+
+    } else {
+
+      this.selectedDepartmentId = null;
+
+    }
+
+
+    // =====================================================
+    // DESIGNATION
+    // =====================================================
+
+    if (
+      filterState.designationId !== undefined &&
+      filterState.designationId !== null &&
+      filterState.designationId !== ''
+    ) {
+
+      const designationId =
+        Number(filterState.designationId);
+
+      if (
+        Number.isFinite(designationId) &&
+        designationId > 0
+      ) {
+
+        this.selectedDesignationId =
+          designationId;
+
+      } else {
+
+        this.selectedDesignationId = null;
+
+      }
+
+    } else {
+
+      this.selectedDesignationId = null;
+
+    }
+
+
+    // =====================================================
+    // DEBUG
+    // =====================================================
+
+    console.log(
+      'RESTORED FILTER STATE:',
+      {
+        currentPage: this.currentPage,
+        page: this.page,
+        size: this.size,
+        search: this.search,
+        statusIndex: this.statusIndex,
+        selectedStatus: this.selectedStatus,
+        departmentId: this.selectedDepartmentId,
+        designationId: this.selectedDesignationId
+      }
+    );
+
+  }
+  catch (error) {
+
+    console.error(
+      'Error restoring filter state:',
+      error
+    );
+
+    /*
+     * If corrupted JSON is present,
+     * remove it so it doesn't keep causing
+     * the same problem.
+     */
+    sessionStorage.removeItem(this.filterKey);
+
+  }
+
+}
 
 
   // =========================================================
   // ADD USER
   // =========================================================
 
-  addUser() {
+  addUser(): void {
+
+    const filterState =
+      this.getCurrentFilterState();
 
 
-    const filterState = {
-      currentPage: this.currentPage,
-      statusIndex: this.statusIndex,
-      searchText: this.search,
-      size: this.size
-    };
+    /*
+     * Save complete filter state
+     */
+    if (
+      isPlatformBrowser(
+        this.platformId
+      )
+    ) {
 
-    // Save in sessionStorage (for refresh support)
-    sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
+      sessionStorage.setItem(
 
-    // Pass via router state (no URL params)
-    this.router.navigate(['/add-team'], {
-      state: filterState
-    });
+        this.filterKey,
+
+        JSON.stringify(
+          filterState
+        )
+
+      );
+
+    }
+
+
+    /*
+     * Navigate
+     */
+    this.router.navigate(
+      ['/add-team'],
+      {
+        state: filterState
+      }
+    );
 
   }
 
@@ -1060,34 +1396,52 @@ apiResponseDepartmentDetails: any = {};
   // VIEW USER
   // =========================================================
 
-  // viewUser(userId: number): void {
+  viewUser(
+    userId: any
+  ): void {
 
-  //   // Keep your existing implementation here.
+    const filterState =
+      this.getCurrentFilterState();
 
-  //   // Example:
-  //   // this.router.navigate([
-  //   //   '/user-management/view',
-  //   //   userId
-  //   // ]);
 
-  // }
-  viewUser(userId: any) {
-    // console.log('View', userId);
+    /*
+     * Save complete filter state
+     */
+    if (
+      isPlatformBrowser(
+        this.platformId
+      )
+    ) {
 
-    const filterState = {
-      currentPage: this.currentPage,
-      statusIndex: this.statusIndex,
-      searchText: this.search,
-      size: this.size
-    };
+      sessionStorage.setItem(
 
-    // Save in sessionStorage (for refresh support)
-    sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
-    // alert("in");
-    // Pass via router state (no URL params)
-    this.router.navigate(['/view-team', userId], {
-      state: filterState
-    });
+        this.filterKey,
+
+        JSON.stringify(
+          filterState
+        )
+
+      );
+
+    }
+
+
+    /*
+     * Navigate
+     */
+    this.router.navigate(
+
+      [
+        '/view-team',
+        userId
+      ],
+
+      {
+        state: filterState
+      }
+
+    );
+
   }
 
 
@@ -1095,23 +1449,51 @@ apiResponseDepartmentDetails: any = {};
   // EDIT USER
   // =========================================================
 
-  editUser(userId: any) {
-    // console.log('View', userId);
+  editUser(
+    userId: any
+  ): void {
 
-    const filterState = {
-      currentPage: this.currentPage,
-      statusIndex: this.statusIndex,
-      searchText: this.search,
-      size: this.size
-    };
+    const filterState =
+      this.getCurrentFilterState();
 
-    // Save in sessionStorage (for refresh support)
-    sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
 
-    // Pass via router state (no URL params)
-    this.router.navigate(['/edit-team', userId], {
-      state: filterState
-    });
+    /*
+     * Save complete filter state
+     */
+    if (
+      isPlatformBrowser(
+        this.platformId
+      )
+    ) {
+
+      sessionStorage.setItem(
+
+        this.filterKey,
+
+        JSON.stringify(
+          filterState
+        )
+
+      );
+
+    }
+
+
+    /*
+     * Navigate
+     */
+    this.router.navigate(
+
+      [
+        '/edit-team',
+        userId
+      ],
+
+      {
+        state: filterState
+      }
+
+    );
 
   }
 
@@ -1120,36 +1502,245 @@ apiResponseDepartmentDetails: any = {};
   // DELETE USER
   // =========================================================
 
+  // onDeleteUser(
+  //   userId: number
+  // ): void {
+
+  //   /*
+  //    * Keep your existing delete implementation here.
+  //    */
+
+  // }
+
   onDeleteUser(userId: number): void {
 
-    // Keep your existing delete implementation here.
+  const createdBy = Number(
+    sessionStorage.getItem('userId') || 0
+  );
 
+  if (!userId) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Invalid User',
+      text: 'User ID is missing.'
+    });
+
+    return;
   }
 
-  getStatusLabel(status: number | string): string {
+  if (!createdBy) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Session Expired',
+      text: 'Unable to identify the logged-in user.'
+    });
+
+    return;
+  }
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'You want to delete this user?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+    reverseButtons: true
+  }).then((result) => {
+
+    if (!result.isConfirmed) {
+      return;
+    }
+
+    this.dataprovider
+      .deleteUserManagement(userId, String(createdBy))
+      .subscribe({
+
+        next: (response: any) => {
+
+          if (response?.success) {
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Deleted!',
+              text: response.message || 'User deleted successfully.',
+              timer: 1500,
+              showConfirmButton: false
+            });
+
+            // Reload user list
+            this.getUserDetails();
+
+          } else {
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed',
+              text: response?.message || 'Unable to delete user.'
+            });
+
+          }
+
+        },
+
+        error: (error) => {
+
+          console.error(
+            'Delete user error:',
+            error
+          );
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text:
+              error?.error?.message ||
+              'Something went wrong while deleting the user.'
+          });
+
+        }
+
+      });
+
+  });
+}
+
+
+  // =========================================================
+  // STATUS LABEL
+  // =========================================================
+
+  getStatusLabel(
+    status: number | string
+  ): string {
+
     switch (+status) {
+
       case 1:
+
         return 'Active';
+
+
       case 2:
+
         return 'Inactive';
+
+
       case 3:
+
         return 'Deleted';
+
+
       default:
+
         return 'Unknown';
+
     }
+
   }
 
-  getStatusClass(status: number | string): string {
+
+  // =========================================================
+  // STATUS CLASS
+  // =========================================================
+
+  getStatusClass(
+    status: number | string
+  ): string {
+
     switch (+status) {
+
       case 1:
+
         return 'status-badge active';
+
+
       case 2:
+
         return 'status-badge inactive';
+
+
       case 3:
+
         return 'status-badge deleted';
+
+
       default:
+
         return 'status-badge';
+
     }
+
+  }
+
+
+  // =========================================================
+  // LOAD DEPARTMENTS
+  // =========================================================
+
+  loadDepartments(): void {
+
+    this.dataprovider
+      .getActiveDepartments()
+      .subscribe({
+
+        next:
+          (
+            response: DepartmentDTO[]
+          ) => {
+
+            this.departmentList =
+              response;
+
+          },
+
+        error:
+          (error) => {
+
+            console.error(
+              'Error loading departments',
+              error
+            );
+
+          }
+
+      });
+
+  }
+
+
+  // =========================================================
+  // LOAD DESIGNATIONS
+  // =========================================================
+
+  loadDesignations(): void {
+
+    this.dataprovider
+      .getActiveDesigmations()
+      .subscribe({
+
+        next:
+          (
+            response: DesignationDTO[]
+          ) => {
+
+            this.designationList =
+              response;
+
+          },
+
+        error:
+          (error) => {
+
+            console.error(
+              'Error loading designations',
+              error
+            );
+
+          }
+
+      });
+
   }
 
 }

@@ -5,108 +5,160 @@
     <div class="user-management-container">
 
       <!-- ================= HEADER ================= -->
-     <!-- ================= HEADER ================= -->
-<div class="page-header">
+      <!-- ================= HEADER ================= -->
+      <div class="page-header">
 
-  <div class="header-title-section">
+        <div class="header-title-section">
 
-    <h2>
-       <mat-icon>person</mat-icon>
-      My Team
-    </h2>
+          <h2>
+            <mat-icon>person</mat-icon>
+            User Management
+          </h2>
 
-    <button
-      type="button"
-      class="collapse-btn"
-      (click)="togglePanel()"
-      [attr.aria-expanded]="isPanelVisible"
-      title="Toggle Search Panel"
-    >
-      {{ isPanelVisible ? '▲' : '▼' }}
-    </button>
+          <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible"
+            title="Toggle Search Panel">
+            {{ isPanelVisible ? '▲' : '▼' }}
+          </button>
 
-  </div>
+        </div>
 
-  @if (addPer === 'Y') {
+        @if (addPer === 'Y') {
 
-    <button
-      type="button"
-      class="btn-add-user"
-      (click)="addUser()"
-    >
-      <span class="plus-icon">+</span>
-      Add New
-    </button>
+        <button type="button" class="btn-add-user" (click)="addUser()">
+          <span class="plus-icon">+</span>
+          Add New
+        </button>
 
-  }
+        }
 
-</div>
+      </div>
 
 
 
       <!-- ================= SEARCH PANEL ================= -->
       <div class="search-panel" *ngIf="isPanelVisible">
 
-        <div class="search-row">
+      <div class="search-row">
 
-          <!-- ADD USER -->
-        
+  <!-- SEARCH -->
+  <div class="search-wrapper">
 
+    <div class="search-box">
 
-          <!-- SEARCH -->
-          <div class="search-wrapper">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search by User name / Email id / Mobile No"
+        (keyup.enter)="onSearch()"
+        class="search-input" />
 
-            <div class="search-box">
+      <button
+        type="button"
+        class="search-btn"
+        (click)="onSearch()"
+        title="Search">
 
-              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by User name / Email id / Mobile No"
-                (keyup.enter)="onSearch()" class="search-input" />
+        <i class="fa fa-search"></i>
 
-              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
+      </button>
 
-                <i class="fa fa-search"></i>
+    </div>
 
-              </button>
-
-            </div>
-
-          </div>
-
-          <!-- STATUS -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
-              <option value="">
-                --All Status--
-              </option>
-
-              <option value="1">
-                Active
-              </option>
-
-              <option value="2">
-                Inactive
-              </option>
-
-              <option value="3">
-                Deleted
-              </option>
-
-            </select>
-
-          </div>
+  </div>
 
 
-          <!-- GO -->
-          <div class="go-wrapper">
+  <!-- DEPARTMENT -->
+  <div class="department-wrapper">
 
-            <button type="button" class="btn-go" (click)="onSearch()">
+    <select
+      class="status-select"
+      [(ngModel)]="selectedDepartmentId" (change)="onDepartmentChange()">
 
-              Go
+      <option [ngValue]="null">
+        --All Departments--
+      </option>
 
-            </button>
+      <option
+        *ngFor="let department of departmentList"
+        [ngValue]="department.departmentId">
 
-          </div>
+        {{ department.name }}
 
-        </div>
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <!-- DESIGNATION -->
+  <div class="designation-wrapper">
+
+    <select
+      class="status-select"
+      [(ngModel)]="selectedDesignationId"  (change)="onDesignationChange()">
+
+      <option [ngValue]="null">
+        --All Designations--
+      </option>
+
+      <option
+        *ngFor="let designation of designationList"
+        [ngValue]="designation.desigmationId">
+
+        {{ designation.name }}
+
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <!-- STATUS -->
+  <div class="status-wrapper">
+
+    <select
+      class="status-select"
+      [(ngModel)]="selectedStatus"
+      (change)="onStatusChange()">
+
+      <option value="">
+        --All Status--
+      </option>
+
+      <option value="1">
+        Active
+      </option>
+
+      <option value="2">
+        Inactive
+      </option>
+
+      <option value="3">
+        Deleted
+      </option>
+
+    </select>
+
+  </div>
+
+
+  <!-- GO -->
+  <div class="go-wrapper">
+
+    <button
+      type="button"
+      class="btn-go"
+      (click)="onSearch()">
+
+      Go
+
+    </button>
+
+  </div>
+
+</div>
 
       </div>
 
@@ -311,13 +363,13 @@
                   {{ user.mobile }}
 
                 </td>
-                  <td>
+                <td>
 
                   {{ user.departmentName }}
 
                 </td>
 
-                 <td>
+                <td>
 
                   {{ user.designationName }}
 

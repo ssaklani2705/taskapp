@@ -1,5 +1,5 @@
 {
-  "name": "travel-frontend",
+  "name": "taskapp",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",

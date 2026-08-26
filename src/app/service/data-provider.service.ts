@@ -73,9 +73,32 @@ export class DataProviderService {
   }
 
   //User Management
-  getUserManagementDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
-  }
+  // getUserManagementDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
+  //   return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
+  // }
+
+  getUserManagementDetails(
+  page: any,
+  size: any,
+  statusIndex: any,
+  search: any,
+  departmentId: number | null,
+  designationId: number | null
+): Observable<any> {
+
+  return this.http.get(
+    `${environment.apiBaseUrl}admin/getUserManagementDetails` +
+    `?page=${page}` +
+    `&size=${size}` +
+    `&statusIndex=${statusIndex}` +
+    `&search=${encodeURIComponent(search || '')}` +
+    `&departmentId=${departmentId ?? '0'}` +
+    `&designationId=${designationId ?? '0'}`
+  );
+
+}
+
+
   // getUserManagementDetailsById(id: any): Observable<any> {
   //   return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails/${id}`);
   // }
@@ -115,31 +138,6 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}admin/company/${companyId}`);
   }
 
-  //Client Master
-  getClientDetails(page: any, size: any, statusIndex: any, search: any, customerStatusIndex: any, assignedTo: any, clientTypeid: any, isAdmin: any, userId: any, selectedAssignedTo: any, selectedCityName: any, searchBycustomerAndBrocerName: any, sortColumn: string,
-    sortDirection: string, customerId?: any, ContactPersonCustomerId?: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/getClientDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}&customerStatusIndex=${customerStatusIndex}&assignedToIndex=${assignedTo}&clientTypeid=${clientTypeid}&isAdmin=${isAdmin}&userId=${userId}&selectedAssignedTo=${selectedAssignedTo}&sortColumn=${sortColumn}&sortDirection=${sortDirection}
-      &city=${selectedCityName || ''}&cotactPersonAndCompanyName=${searchBycustomerAndBrocerName || ''}&customerId=${customerId || 0}&contactPersonCustomerId=${ContactPersonCustomerId || 0} `);
-  }
-
-  saveClient(client: any): Observable<any> {
-    return this.http.post(`${environment.apiBaseUrl}admin/saveClientDetails`, client);
-  }
-
-  getClientByClientId(clientId: number) {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/getClient/${clientId}`);
-  }
-
-  getClientDetailsByClientId(clientId: number) {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/clientDetails/${clientId}`);
-  }
-  deleteClient(clientId: number, userId: number): Observable<any> {
-    const params = new HttpParams()
-      .set('clientId', clientId)
-      .set('userId', userId);
-
-    return this.http.post(`${environment.apiBaseUrl}admin/deleteClient`, null, { params });
-  }
   saveFollowUp(followUp: any): Observable<any> {
     return this.http.post<any>(`${environment.apiBaseUrl}admin/followup/saveFollowUp`, followUp);
   }
@@ -169,13 +167,6 @@ export class DataProviderService {
       .set('userId', feedback.userId)
       .set('date', feedback.date); // pass as string
     return this.http.post<ApiResponse<Feedback>>(`${environment.apiBaseUrl}admin/feedback/saveFeedback`, null, { params });
-  }
-
-  uploadClientsExcel(formData: FormData) {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}admin/uploadClientsExcel`,
-      formData
-    );
   }
 
   getActiveUsers(): Observable<UserActiveDTO[]> {
@@ -668,24 +659,11 @@ getActiveDepartments(): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/product/${productId}`);
   }
 
-  //State Master
-  getStateList(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/state/getStateList?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
-  }
 
-  // Delete State
-  deleteState(state: any): Observable<any> {
-    return this.http.post(`${environment.apiBaseUrl}admin/state/deleteState`, state);
-  }
 
-  // Get state by ID
-  getStateById(stateId: number): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/state/${stateId}`);
-  }
 
-  saveState(state: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/state/saveState`, state);
-  }
+  
+
 
   // Get state by ID
   getStateDetailById(stateId: number): Observable<any> {
@@ -1332,5 +1310,104 @@ openingbalanceByopeningBalanceId(openingBalanceId: number) {
   getCompanyRegDate() {
   return this.http.get(`${environment.apiBaseUrl}openingbalance/company/reg-date`);
 }
+
+
+getClientDetails(
+    page: any,
+    size: any,
+    status: any,
+    managerId: any,
+    stateId: any,
+    clientName: any,
+    clientCode: any,
+    contactName: any,
+    contactEmail: any,
+    search: any,
+    sortColumn: string,
+    sortDirection: string,
+  ): Observable<any> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('status', status.toString())
+      .set('managerId', managerId.toString())
+      .set('stateId', stateId.toString())
+      .set('sortColumn', sortColumn)
+      .set('sortDirection', sortDirection);
+    if (clientName && clientName.trim() !== '') {
+      params = params.set('clientName', clientName.trim());
+    }
+    if (clientCode && clientCode.trim() !== '') {
+      params = params.set('clientCode', clientCode.trim());
+    }
+    if (contactName && contactName.trim() !== '') {
+      params = params.set('contactName', contactName.trim());
+    }
+    if (contactEmail && contactEmail.trim() !== '') {
+      params = params.set('contactEmail', contactEmail.trim());
+    }
+    if (search && search.trim() !== '') {
+      params = params.set('search', search.trim());
+    }
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/getClientDetails`, { params });
+  }
+
+  saveClient(client: any): Observable<any> {
+    return this.http.post(`${environment.apiBaseUrl}admin/addOrUpdateClient`, client);
+  }
+
+  getClientByClientId(clientId: number) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/getClient/${clientId}`);
+  }
+
+
+  getStates(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/state/getStates`);
+  }
+
+  getManagers(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/active`);
+  }
+
+  getClientDetailsByClientId(clientId: number) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/clientDetails/${clientId}`);
+  }
+
+  deleteClient(clientId: number, userId: number): Observable<any> {
+    const params = new HttpParams()
+      .set('clientId', clientId.toString())
+      .set('userId', userId.toString());
+
+    return this.http.post(`${environment.apiBaseUrl}admin/deleteClient`, null, { params });
+  }
+
+  uploadClientsExcel(file: File, userId: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('userId', userId.toString());
+    return this.http.post<any>(`${environment.apiBaseUrl}/admin/uploadClientsExcel`, formData);
+  }
+
+
+  saveState(state: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/state/addOrUpdate`, state);
+  }
+
+
+
+  getStateList(page: any, size: any, statusIndex: any, search: any): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}admin/state/getStateList?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
+  }
+
+
+  getStateById(stateId: number): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}admin/state/getById/${stateId}`);
+  }
+
+  
+  // Delete State
+  deleteState(state: any): Observable<any> {
+    return this.http.post(`${environment.apiBaseUrl}admin/state/delete`, state);
+  }
 
 }

@@ -1,0 +1,345 @@
+<div class="page-content-wrapper">
+  <div class="page-content">
+    <div class="user-management-container">
+      <!-- ================= HEADER ================= -->
+      <div class="page-header">
+        <div class="header-title-section">
+          <h2>Client Master</h2>
+
+          <button
+            type="button"
+            class="collapse-btn"
+            (click)="togglePanel()"
+            [attr.aria-expanded]="isPanelVisible"
+          >
+            <span>
+              {{ isPanelVisible ? '▲' : '▼' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= SEARCH PANEL ================= -->
+      <div class="search-panel" *ngIf="isPanelVisible">
+        <div class="search-row">
+          <!-- ADD USER -->
+          <div class="add-user-wrapper">
+            @if (addPer === 'Y') {
+              <button type="button" class="btn-add-user" (click)="addClient()">
+                Add New
+                <span class="plus-icon">+</span>
+              </button>
+            }
+          </div>
+
+          <!-- SEARCH -->
+          <div class="search-wrapper">
+            <div class="search-box">
+              <input
+                type="text"
+                [(ngModel)]="searchQuery"
+                placeholder="Search Client Name / Code / Contact Name / Contact Email"
+                (keyup.enter)="onSearch()"
+                class="search-input"
+              />
+
+              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- STATE -->
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="stateId" (change)="onStateChange()">
+              <option [ngValue]="0">--All States--</option>
+
+              <option *ngFor="let state of states" [ngValue]="state.stateId">
+                {{ state.name }}
+              </option>
+            </select>
+          </div>
+
+          <!-- MANAGER -->
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="managerId" (change)="onManagerChange()">
+              <option [ngValue]="0">--All Managers--</option>
+
+              <option *ngFor="let manager of managers" [ngValue]="manager.userId">
+                {{ manager.firstName }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ================= SECOND ROW ================= -->
+        <div class="filter-row">
+          <!-- STATUS -->
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+              <option value="">--All Status--</option>
+
+              <option value="1">Active</option>
+
+              <option value="2">Inactive</option>
+
+              <option value="3">Deleted</option>
+            </select>
+          </div>
+
+          <!-- GO -->
+          <div class="go-wrapper">
+            <button type="button" class="btn-go" (click)="onSearch()">Go</button>
+          </div>
+
+          <!-- CLEAR -->
+          <div class="clear-wrapper">
+            <!-- <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button> -->
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= TABLE HEADER / PAGINATION ================= -->
+      <div class="table-top-section">
+        <!-- RECORD SUMMARY -->
+        <div class="record-summary">
+          {{ recordSummary }}
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pagination">
+          <!-- FIRST -->
+          <button
+            type="button"
+            class="pagination-btn first-btn"
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1"
+          >
+            « First
+          </button>
+
+          <!-- PREVIOUS -->
+          <button
+            type="button"
+            class="pagination-btn"
+            (click)="goToPreviousPage()"
+            [disabled]="currentPage === 1"
+          >
+            ‹ Prev
+          </button>
+
+          <!-- PAGE NUMBERS -->
+          <button
+            type="button"
+            class="pagination-btn page-number"
+            *ngFor="let pageNumber of pages()"
+            (click)="goToPage(pageNumber)"
+            [class.active-pagination]="pageNumber === currentPage"
+          >
+            {{ pageNumber }}
+          </button>
+
+          <!-- NEXT -->
+          <button
+            type="button"
+            class="pagination-btn"
+            (click)="goToNextPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Next ›
+          </button>
+
+          <!-- LAST -->
+          <button
+            type="button"
+            class="pagination-btn last-btn"
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Last »
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= TABLE ================= -->
+      <div class="table-container">
+        <div class="table-responsive">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <!-- NUMBER -->
+                <th class="serial-column">#</th>
+
+                <!-- DYNAMIC COLUMNS -->
+                <th
+                  *ngFor="let col of columns"
+                  [class.sortable-column]="col.sortable"
+                  (click)="col.sortable && sortData(col.key)"
+                >
+                  <div class="column-header">
+                    <span>{{ col.label }}</span>
+
+                    <span *ngIf="col.sortable" class="sort-icons">
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'">
+                        ▲
+                      </span>
+
+                      <span
+                        [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"
+                      >
+                        ▼
+                      </span>
+                    </span>
+                  </div>
+                </th>
+
+                <!-- ACTION -->
+                <th class="action-column">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <!-- LOADING -->
+              <tr *ngIf="isLoading">
+                <td [attr.colspan]="columns.length + 2" class="loading-cell">
+                  <div class="loading-spinner"></div>
+                  Loading clients...
+                </td>
+              </tr>
+
+              <!-- NO RECORDS -->
+              <tr *ngIf="!isLoading && clients.length === 0">
+                <td [attr.colspan]="columns.length + 2" class="no-records">No clients found.</td>
+              </tr>
+
+              <!-- CLIENT RECORDS -->
+              <tr *ngFor="let client of clients; let i = index" class="user-row">
+                <!-- SERIAL NUMBER -->
+                <td class="serial-number">
+                  {{ (currentPage - 1) * size + i + 1 }}
+                </td>
+
+                <!-- CLIENT NAME -->
+                <td>
+                  <span class="user-name">
+                    {{ client.name || '-' }}
+                  </span>
+                </td>
+
+                <!-- CLIENT CODE -->
+                <td>
+                  {{ client.code || '-' }}
+                </td>
+
+                <!-- MANAGER -->
+                <td>
+                  {{ client.managerName || '-' }}
+                </td>
+
+                <!-- STATE -->
+                <td>
+                  {{ client.stateName || '-' }}
+                </td>
+
+                <!-- CONTACT NAME -->
+                <td>
+                  {{ client.contactName || '-' }}
+                </td>
+
+                <!-- CONTACT EMAIL -->
+                <td>
+                  <span class="email-text">
+                    {{ client.contactEmail || '-' }}
+                  </span>
+                </td>
+
+                <!-- CITY -->
+                <td>
+                  {{ client.city || '-' }}
+                </td>
+
+                <!-- Start DATE -->
+                <td>
+                  {{ client.startDate || '-' }}
+                </td>
+
+                <!-- STATUS -->
+                <td>
+                  <span class="status-badge" [ngClass]="getStatusClass(client.status)">
+                    {{ getStatusLabel(client.status) }}
+                  </span>
+                </td>
+
+                <!-- ACTION -->
+                <td>
+                  <div class="action-buttons">
+                    <!-- VIEW -->
+                    <button
+                      type="button"
+                      class="action-btn view-btn"
+                      title="View"
+                      (click)="viewClient(client.clientId)"
+                    >
+                      <i class="fa fa-search"></i>
+                    </button>
+
+                    <!-- EDIT -->
+                    <ng-container *ngIf="client.status === 1 || client.status === 2">
+                      @if (editPer === 'Y') {
+                        <button
+                          type="button"
+                          class="action-btn edit-btn"
+                          title="Edit"
+                          (click)="editClient(client.clientId)"
+                        >
+                          <i class="fa fa-pencil"></i>
+                        </button>
+                      }
+
+                      <!-- DELETE -->
+                      @if (deletePer === 'Y') {
+                        <button
+                          type="button"
+                          class="action-btn delete-btn"
+                          title="Delete"
+                          (click)="onDeleteUser(client.clientId)"
+                        >
+                          <i class="fa fa-close"></i>
+                        </button>
+                      }
+                    </ng-container>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ================= BOTTOM SECTION ================= -->
+      <div class="table-bottom-section">
+        <!-- RECORD SUMMARY -->
+        <div class="record-summary">
+          {{ recordSummary }}
+        </div>
+
+        <!-- RECORDS PER PAGE -->
+        <div class="records-per-page">
+          <span> Records per page: </span>
+
+          <select [(ngModel)]="size" (change)="onChangeRecordsPerPage()" class="records-select">
+            <option [ngValue]="5">5</option>
+
+            <option [ngValue]="10">10</option>
+
+            <option [ngValue]="20">20</option>
+
+            <option [ngValue]="50">50</option>
+
+            <option [ngValue]="100">100</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

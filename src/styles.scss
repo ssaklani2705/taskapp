@@ -1,1 +1,135 @@
-/* You can add global styles to this file, and also import other style files */
+/* =========================================================
+   Angular Material Datepicker
+   ========================================================= */
+
+.mat-datepicker-content {
+  background: #ffffff !important;
+  border: 1px solid #dce4ec !important;
+  border-radius: 4px !important;
+  box-shadow: 0 6px 18px rgba(25, 59, 99, 0.18) !important;
+  overflow: hidden !important;
+}
+
+.mat-calendar {
+  background: #ffffff !important;
+  color: #193b63 !important;
+}
+
+/* Header */
+.mat-calendar-header {
+  background: #1b3b63 !important;
+  color: #ffffff !important;
+}
+
+.mat-calendar-controls {
+  color: #ffffff !important;
+}
+
+.mat-calendar-period-button {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+.mat-calendar-previous-button,
+.mat-calendar-next-button {
+  color: #ffffff !important;
+}
+
+/* Calendar body */
+.mat-calendar-table {
+  background: #ffffff !important;
+}
+
+.mat-calendar-table-header th {
+  color: #66727d !important;
+  font-weight: 600 !important;
+}
+
+/* Normal dates */
+.mat-calendar-body-cell-content {
+  color: #193b63 !important;
+  background: transparent !important;
+  font-weight: 400 !important;
+  border-radius: 50% !important;
+}
+
+/* Hover */
+.mat-calendar-body-cell:hover .mat-calendar-body-cell-content {
+  background: #eef4f9 !important;
+  color: #193b63 !important;
+}
+
+/* TODAY
+   Do NOT give today a background or border.
+   This means today will look like a normal date
+   unless today is actually selected.
+*/
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border: none !important;
+  background: transparent !important;
+}
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected) .mat-calendar-body-cell-content {
+  border: none !important;
+  background: transparent !important;
+  color: #193b63 !important;
+}
+
+/* SELECTED DATE
+   This is the important part.
+*/
+.mat-calendar-body-selected {
+  background: #1b3b63 !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+  border: none !important;
+}
+
+.mat-calendar-body-selected .mat-calendar-body-cell-content {
+  background: #1b3b63 !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+  opacity: 1 !important;
+  border: none !important;
+}
+
+.mat-calendar-body-today.mat-calendar-body-selected {
+  border: none !important;
+  background: #1b3b63 !important;
+  color: #ffffff !important;
+}
+
+.mat-calendar-body-today.mat-calendar-body-selected .mat-calendar-body-cell-content {
+  background: #1b3b63 !important;
+  color: #ffffff !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 50% !important;
+  opacity: 1 !important;
+}
+
+/* Focused/active date when it isn't selected */
+.mat-calendar-body-active:not(.mat-calendar-body-selected) .mat-calendar-body-cell-content {
+  color: #193b63 !important;
+  background: #eef4f9 !important;
+}
+
+/* Disabled dates */
+.mat-calendar-body-disabled .mat-calendar-body-cell-content {
+  color: #b8c0c8 !important;
+  background: transparent !important;
+}
+
+/* Prevent transparent text on selected date */
+.mat-calendar-body-cell-content.mat-focus-indicator {
+  opacity: 1 !important;
+}
+
+/* Overlay */
+.cdk-overlay-pane {
+  background: transparent !important;
+}
+
+.cdk-overlay-pane .mat-datepicker-content {
+  opacity: 1 !important;
+}

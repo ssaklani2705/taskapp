@@ -1,1 +1,142 @@
-<p>state-view works!</p>
+<div class="page-container">
+
+  <!-- ===================================== -->
+  <!-- VIEW TASK CATEGORY -->
+  <!-- ===================================== -->
+
+  <mat-card class="view-card">
+
+    <div class="card-header">
+
+      <div class="page-title">
+        <mat-icon>category</mat-icon>
+        <span>View Task Category</span>
+      </div>
+
+      <button
+        mat-flat-button
+        class="back-button"
+        (click)="backToIndexPage()">
+
+        <mat-icon>arrow_back</mat-icon>
+        Back to Index
+
+      </button>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="details-section">
+
+      <div class="details-row">
+
+        <div class="detail-item">
+          <span class="label">Task Category:</span>
+          <span class="value">{{ taskCategory.name }}</span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Department:</span>
+          <span class="value">
+            {{ taskCategory.code || 'NA' }}
+          </span>
+        </div>
+
+        <div class="detail-item">
+          <span class="label">Status:</span>
+
+          <span
+            class="status-text"
+            [ngClass]="common.getStatusClass(taskCategory.status)">
+
+            {{ common.getStatusLabel(taskCategory.status) }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </mat-card>
+
+
+  <!-- ===================================== -->
+  <!-- ACTION HISTORY -->
+  <!-- ===================================== -->
+
+  <mat-card class="history-card">
+
+    <div class="section-header">
+
+      <div class="section-title">
+        <mat-icon>history</mat-icon>
+        <span>Action History</span>
+      </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="table-wrapper">
+
+      <table
+        class="history-table"
+        *ngIf="transactionHistory.length">
+
+        <thead>
+
+          <tr>
+            <th width="5%">#</th>
+            <th width="20%">Action By</th>
+            <th width="20%">Updated On</th>
+            <th width="55%">Action</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr
+            *ngFor="
+              let history of transactionHistory;
+              let i = index
+            ">
+
+            <td>{{ i + 1 }}</td>
+
+            <td>{{ history.name }}</td>
+
+            <td>{{ history.entryDate }}</td>
+
+            <td>
+
+              <span class="action-badge">
+
+                {{ history.action }}
+
+              </span>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+      <div
+        *ngIf="!transactionHistory.length"
+        class="no-record">
+
+        No action history found
+
+      </div>
+
+    </div>
+
+  </mat-card>
+
+</div>

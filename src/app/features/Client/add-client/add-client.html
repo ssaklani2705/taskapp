@@ -1,0 +1,644 @@
+<div class="user-page-wrapper">
+  <div class="user-portlet">
+    <!-- ========================= -->
+    <!-- HEADER -->
+    <!-- ========================= -->
+
+    <div class="user-portlet-title">
+      <div class="user-title">
+        <span class="user-page-title">
+          {{ isEditMode ? 'EDIT CLIENT' : 'ADD CLIENT' }}
+        </span>
+      </div>
+
+      <div class="user-actions">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
+          Back to Index
+        </button>
+      </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- BODY -->
+    <!-- ========================= -->
+
+    <div class="user-portlet-body">
+      <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="user-form-body">
+          <!-- ========================= -->
+          <!-- MANDATORY MESSAGE -->
+          <!-- ========================= -->
+
+          <div class="mandatory-message">
+            Fields with
+            <span class="required">*</span>
+            mark are mandatory
+          </div>
+
+          <!-- ================================================= -->
+          <!-- ROW 1
+               Client Name | Client Code | PAN | Status
+          ================================================== -->
+
+          <div class="user-form-row">
+            <!-- Client Name -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Client Name
+                  <span class="required">*</span>
+                </label>
+
+                <input type="text" class="user-input" formControlName="name" maxlength="200" />
+
+                <div
+                  class="user-error"
+                  *ngIf="clientForm.get('name')?.touched && clientForm.get('name')?.invalid"
+                >
+                  Client Name is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Client Code -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Client Code
+                  <span class="required">*</span>
+                </label>
+
+                <input type="text" class="user-input" formControlName="code" maxlength="50" />
+
+                <div
+                  class="user-error"
+                  *ngIf="clientForm.get('code')?.touched && clientForm.get('code')?.invalid"
+                >
+                  Client Code is required
+                </div>
+              </div>
+            </div>
+
+            <!-- PAN -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  PAN
+                  <span class="required">*</span>
+                </label>
+
+                <input type="text" class="user-input" formControlName="pan" maxlength="10" />
+                <div
+                  class="user-error"
+                  *ngIf="clientForm.get('pan')?.touched && clientForm.get('pan')?.invalid"
+                >
+                  PAN is required
+                </div>
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('pan')?.touched && clientForm.get('pan')?.errors?.['pattern']
+                  "
+                >
+                  Enter a valid PAN (e.g. GRBPA4562J)
+                </div>
+              </div>
+            </div>
+
+            <!-- Status -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Status
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="status">
+                  <option [value]="1">Active</option>
+                  <option [value]="2">Inactive</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================= -->
+          <!-- ROW 2
+               GST Applicable | GST No | Tax Applicable | State
+          ================================================== -->
+
+          <div class="user-form-row">
+            <!-- GST Flag -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> GST Applicable </label>
+
+                <div class="admin-row">
+                  <mat-checkbox formControlName="gstFlag"></mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <!-- GST Number -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  GST Number
+                  <span class="required" *ngIf="clientForm.get('gstFlag')?.value">*</span>
+                </label>
+
+                <input type="text" class="user-input" formControlName="gstNo" maxlength="15" />
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('gstNo')?.touched &&
+                    clientForm.get('gstNo')?.errors?.['required']
+                  "
+                >
+                  GST Number is required when GST Applicable is selected
+                </div>
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('gstNo')?.touched && clientForm.get('gstNo')?.errors?.['pattern']
+                  "
+                >
+                  Enter a valid GST Number
+                </div>
+              </div>
+            </div>
+
+            <!-- Tax Flag -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Tax Applicable </label>
+
+                <div class="admin-row">
+                  <mat-checkbox formControlName="taxFlag"></mat-checkbox>
+                </div>
+              </div>
+            </div>
+
+            <!-- State -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  State
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="stateId">
+                  <option [ngValue]="null">Select State</option>
+
+                  <option *ngFor="let state of states" [ngValue]="state.stateId">
+                    {{ state.name }}
+                  </option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="clientForm.get('stateId')?.touched && clientForm.get('stateId')?.invalid"
+                >
+                  State is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================= -->
+          <!-- ROW 3
+               Address Line 1 | Address Line 2 | City | Pincode
+          ================================================== -->
+
+          <div class="user-form-row">
+            <!-- Address Line 1 -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Address Line 1
+                  <span class="required">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="user-input"
+                  formControlName="addressLine1"
+                  maxlength="250"
+                />
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('addressLine1')?.touched &&
+                    clientForm.get('addressLine1')?.invalid
+                  "
+                >
+                  Address Line 1 is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Address Line 2 -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Address Line 2 </label>
+
+                <input
+                  type="text"
+                  class="user-input"
+                  formControlName="addressLine2"
+                  maxlength="250"
+                />
+              </div>
+            </div>
+
+            <!-- City -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  City
+                  <span class="required">*</span>
+                </label>
+
+                <input type="text" class="user-input" formControlName="city" maxlength="100" />
+
+                <div
+                  class="user-error"
+                  *ngIf="clientForm.get('city')?.touched && clientForm.get('city')?.invalid"
+                >
+                  City is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Pincode -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Pincode
+                  <span class="required">*</span>
+                </label>
+
+                <input
+                  type="text"
+                  class="user-input"
+                  formControlName="pincode"
+                  maxlength="6"
+                  (keypress)="allowOnlyNumbers($event)"
+                />
+
+                <div
+                  class="user-error"
+                  *ngIf="clientForm.get('pincode')?.touched && clientForm.get('pincode')?.invalid"
+                >
+                  Pincode is required
+                </div>
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('pincode')?.touched &&
+                    clientForm.get('pincode')?.errors?.['pattern']
+                  "
+                >
+                  Enter a valid 6-digit Pincode
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================= -->
+          <!-- ROW 4
+               Location | Contact Name | Contact Email | Manager
+          ================================================== -->
+
+          <div class="user-form-row">
+            <!-- Location -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Location </label>
+
+                <input type="text" class="user-input" formControlName="location" maxlength="200" />
+              </div>
+            </div>
+
+            <!-- Contact Name -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Contact Name<span class="required">*</span> </label>
+
+                <input
+                  type="text"
+                  class="user-input"
+                  formControlName="contactName"
+                  maxlength="200"
+                />
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('contactName')?.touched &&
+                    clientForm.get('contactName')?.errors?.['required']
+                  "
+                >
+                  Contact Name is required
+                </div>
+              </div>
+            </div>
+
+            <!-- Contact Email -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Contact Email<span class="required">*</span> </label>
+
+                <input
+                  type="email"
+                  class="user-input"
+                  formControlName="contactEmail"
+                  maxlength="100"
+                />
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('contactEmail')?.touched &&
+                    clientForm.get('contactEmail')?.errors?.['required']
+                  "
+                >
+                  Contact Email is required
+                </div>
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('contactEmail')?.touched &&
+                    clientForm.get('contactEmail')?.errors?.['email']
+                  "
+                >
+                  Enter a valid email
+                </div>
+              </div>
+            </div>
+
+            <!-- Manager -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Manager
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="managerId">
+                  <option [ngValue]="null">Select Manager</option>
+
+                  <option *ngFor="let manager of managers" [ngValue]="manager.userId">
+                    {{ manager.firstName }}
+                  </option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('managerId')?.touched && clientForm.get('managerId')?.invalid
+                  "
+                >
+                  Manager is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================= -->
+          <!-- ROW 5
+               Emails | Start Date | Monthly Charge | Outstanding
+          ================================================== -->
+
+          <div class="user-form-row">
+            <!-- Emails -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Emails </label>
+
+                <input
+                  type="text"
+                  class="user-input"
+                  formControlName="emails"
+                  maxlength="500"
+                  placeholder="Enter multiple emails"
+                />
+              </div>
+            </div>
+
+            <!-- Start Date -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Start Date<span class="required">*</span> </label>
+
+                <div class="user-date-group">
+                  <span class="user-date-icon" (click)="startDatePicker.open()">
+                    <i class="fa fa-calendar"></i>
+                  </span>
+
+                  <input
+                    matInput
+                    #startDatePickerInput
+                    [matDatepicker]="startDatePicker"
+                    class="user-input user-date-input"
+                    placeholder="DD-MM-YYYY"
+                    formControlName="startDate"
+                    autocomplete="off"
+                  />
+
+                  <mat-datepicker #startDatePicker [startAt]="minDate"></mat-datepicker>
+
+                  <div
+                    class="user-error"
+                    *ngIf="
+                      clientForm.get('startDate')?.touched &&
+                      clientForm.get('startDate')?.errors?.['required']
+                    "
+                  >
+                    Start Date is required
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Monthly Charge -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Monthly Charge </label>
+
+                <input
+                  type="number"
+                  class="user-input"
+                  formControlName="monthlyCharge"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+            </div>
+
+            <!-- Outstanding -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Outstanding </label>
+
+                <input
+                  type="number"
+                  class="user-input"
+                  formControlName="outstanding"
+                  min="0"
+                  step="0.01"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================= -->
+          <!-- ROW 6
+               Contact Person 1 Name | Email |
+               Contact Person 2 Name | Email
+          ================================================== -->
+
+          <div class="user-form-row">
+            <!-- Name 1 -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Contact Person 1 Name </label>
+
+                <input type="text" class="user-input" formControlName="name1" maxlength="200" />
+              </div>
+            </div>
+
+            <!-- Email 1 -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Contact Person 1 Email </label>
+
+                <input type="email" class="user-input" formControlName="emailId1" maxlength="100" />
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('emailId1')?.touched &&
+                    clientForm.get('emailId1')?.errors?.['email']
+                  "
+                >
+                  Enter a valid email
+                </div>
+              </div>
+            </div>
+
+            <!-- Name 2 -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Contact Person 2 Name </label>
+
+                <input type="text" class="user-input" formControlName="name2" maxlength="200" />
+              </div>
+            </div>
+
+            <!-- Email 2 -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Contact Person 2 Email </label>
+
+                <input type="email" class="user-input" formControlName="emailId2" maxlength="100" />
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('emailId2')?.touched &&
+                    clientForm.get('emailId2')?.errors?.['email']
+                  "
+                >
+                  Enter a valid email
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================================================= -->
+          <!-- ROW 7
+               Contact Person 3 Name | Email | Empty | Empty
+          ================================================== -->
+
+          <div class="user-form-row">
+            <!-- Name 3 -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Contact Person 3 Name </label>
+
+                <input type="text" class="user-input" formControlName="name3" maxlength="200" />
+              </div>
+            </div>
+
+            <!-- Email 3 -->
+
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Contact Person 3 Email </label>
+
+                <input type="email" class="user-input" formControlName="emailId3" maxlength="100" />
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('emailId3')?.touched &&
+                    clientForm.get('emailId3')?.errors?.['email']
+                  "
+                >
+                  Enter a valid email
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty -->
+
+            <div class="user-form-col empty-column"></div>
+
+            <!-- Empty -->
+
+            <div class="user-form-col empty-column"></div>
+          </div>
+
+          <!-- ================================================= -->
+          <!-- BUTTONS -->
+          <!-- ================================================= -->
+
+          <div class="user-buttons">
+            <button type="button" class="user-reset-btn" (click)="onReset()">Reset</button>
+
+            <button type="submit" class="user-submit-btn" [disabled]="isSubmitting">
+              {{ isSubmitting ? 'Submitting...' : isEditMode ? 'Update' : 'Submit' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

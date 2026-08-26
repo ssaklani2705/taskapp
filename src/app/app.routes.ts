@@ -59,34 +59,39 @@ export const routes: Routes = [
         {path: 'edit-task-category/:taskCategoryId',loadComponent: () =>import('./features/taskcategory/add-task-category/add-task-category').then(m => m.AddTaskCategoryComponent)},
         {path: 'view-task-category/:taskCategoryId',loadComponent: () =>import('./features/taskcategory/view-task-category/view-task-category').then(m => m.ViewTaskCategoryComponent)},
 
-        
-  // { path: 'designation-master', component: DesignationIndexComponent,canActivate: [ModulePermissionGuard],data: { moduleId: 3,permission: 'view' } },
-  // { path: 'add-designation', component: AddDesignationComponent,canActivate: [ModulePermissionGuard],data: { moduleId: 3,permission: 'add' } },
-  // { path: 'edit-designation/:designationId', component: AddDesignationComponent,canActivate: [ModulePermissionGuard], data: { renderMode: 'csr', moduleId: 3,permission: 'edit'  }},
-  // { path: 'view-designation/:designationId', component: ViewDesignationComponent,canActivate: [ModulePermissionGuard], data: { renderMode: 'csr', moduleId: 3,permission: 'view' }  },
+           { path: 'state-index', loadComponent: () => import('./features/states/state-index/state-index').then(m => m.StateIndex) },
+      { path: 'add-state', loadComponent: () => import('./features/states/state-add/state-add').then(m => m.StateAdd) },
+      { path: 'edit-state/:stateId', loadComponent: () => import('./features/states/state-add/state-add').then(m => m.StateAdd) },
+      { path: 'view-state/:stateId', loadComponent: () => import('./features/states/state-view/state-view').then(m => m.StateView) },
 
 
-  // { path: 'department-master', component: DepartmentIndexComponent,canActivate: [ModulePermissionGuard],data: { moduleId: 2,permission: 'view' } },
-  // { path: 'add-department', component: AddDepartmentComponent,canActivate: [ModulePermissionGuard],data: { moduleId: 2,permission: 'add' } },
-  // { path: 'edit-department/:departmentId', component: AddDepartmentComponent,canActivate: [ModulePermissionGuard], data: { renderMode: 'csr', moduleId: 2,permission: 'edit'  }},
-  // { path: 'view-department/:departmentId', component: ViewDepartmentComponent,canActivate: [ModulePermissionGuard], data: { renderMode: 'csr', moduleId: 2,permission: 'view' }  },
-
-
-
-      {
-        path: 'clients',
+ {
+        path: 'client-index',
         loadComponent: () =>
-          import('./features/clients/clients')
-            .then(m => m.Clients)
+          import('./features/Client/client-index/client-index').then((m) => m.ClientIndex),
       },
-
-      // {
-      //   path: 'tasks',
-      //   loadComponent: () =>
-      //     import('./features/tasks/tasks')
-      //       .then(m => m.Tasks)
-      // },
-
+      {
+        path: 'add-client',
+        loadComponent: () =>
+          import('./features/Client/add-client/add-client').then((m) => m.AddClient),
+      },
+      {
+        path: 'edit-client/:clientId',
+        loadComponent: () =>
+          import('./features/Client/add-client/add-client').then((m) => m.AddClient),
+      },
+      {
+        path: 'view-client/:clientId',
+        loadComponent: () =>
+          import('./features/Client/view-client/view-client').then((m) => m.ViewClient),
+      },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+     
+    
       {
         path: '',
         redirectTo: 'dashboard',

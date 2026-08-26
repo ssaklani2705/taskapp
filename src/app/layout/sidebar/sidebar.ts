@@ -150,7 +150,7 @@ export class Sidebar {
           },
       {
         moduleId: 1,
-        label: 'My team',
+        label: 'User Management',
         icon: 'groups',
         route: '/my-team'
       },
@@ -170,22 +170,13 @@ export class Sidebar {
         moduleId: 8,
         label: 'Clients',
         icon: 'business',
-        route: '/clients'
+        route: '/client-index'
       },
-      {
-        label: 'Approvals',
-        icon: 'fact_check',
-        route: '/approvals'
-      },
-      {
-        label: 'Attendance',
-        icon: 'event_available',
-        route: '/attendance'
-      },
-      {
-        label: 'Helpdesk',
-        icon: 'support_agent',
-        route: '/helpdesk'
+         {
+          moduleId: 4,
+        label: 'State',
+        icon: 'bar_chart',
+        route: '/state-index'
       },
       {
         label: 'Reports',

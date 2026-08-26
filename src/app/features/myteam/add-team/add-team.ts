@@ -217,10 +217,10 @@ export class AddTeam implements OnInit, AfterViewInit {
         ]
       ],
 
-      expiryDate: [
-        '',
-        Validators.required
-      ],
+     expiryDate: [
+  null,
+  Validators.required
+],
 
       password: [
         ''
@@ -266,36 +266,70 @@ export class AddTeam implements OnInit, AfterViewInit {
   // INIT
   // ============================================================
 
+  // ngOnInit(): void {
+
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     this.createdBy = sessionStorage.getItem('userId');
+  //   }
+
+  //   this.readFilterState();
+
+  //   const id = this.route.snapshot.paramMap.get('userId');
+
+  //   if (id) {
+
+  //     this.isEditMode = true;
+
+  //     this.userId = Number(id);
+
+  //     this.loadUserDetails();
+
+  //   } else {
+
+  //     this.isEditMode = false;
+
+  //     this.userId = 0;
+
+  //     this.setupAddMode();
+  //   }
+
+  //   this.loadDepartments();
+  //   this.loadDesignations();
+  // }
+
   ngOnInit(): void {
 
-    if (isPlatformBrowser(this.platformId)) {
-      this.createdBy = sessionStorage.getItem('userId');
-    }
+  if (isPlatformBrowser(this.platformId)) {
+    this.createdBy = sessionStorage.getItem('userId');
+  }
 
-    this.readFilterState();
+  this.readFilterState();
 
-    const id = this.route.snapshot.paramMap.get('userId');
+  const id = this.route.snapshot.paramMap.get('userId');
 
-    if (id) {
+  if (id) {
 
-      this.isEditMode = true;
+    this.isEditMode = true;
+    this.userId = Number(id);
 
-      this.userId = Number(id);
+    // First load dropdowns
+    this.loadDepartments();
+    this.loadDesignations();
 
-      this.loadUserDetails();
+    // Then load user
+    this.loadUserDetails();
 
-    } else {
+  } else {
 
-      this.isEditMode = false;
+    this.isEditMode = false;
+    this.userId = 0;
 
-      this.userId = 0;
-
-      this.setupAddMode();
-    }
+    this.setupAddMode();
 
     this.loadDepartments();
     this.loadDesignations();
   }
+}
 
   // ============================================================
   // AFTER VIEW INIT
@@ -336,38 +370,46 @@ export class AddTeam implements OnInit, AfterViewInit {
 
   private setupAddMode(): void {
 
-    this.userForm
-      .get('password')
-      ?.setValidators([
-        Validators.required,
-        Validators.minLength(6)
-      ]);
+  this.userForm
+    .get('password')
+    ?.setValidators([
+      Validators.required,
+      Validators.minLength(6)
+    ]);
 
-    this.userForm
-      .get('password')
-      ?.updateValueAndValidity();
+  this.userForm
+    .get('password')
+    ?.updateValueAndValidity();
 
-    this.userForm.patchValue({
-      status: 1,
-      isAdmin: false
-    });
 
-    /**
-     * Default expiry date
-     */
-    const defaultDate = new Date('2050-12-31');
+  const defaultDate =
+    new Date(
+      2050,
+      11,
+      31
+    );
 
-    this.userForm
-      .get('expiryDate')
-      ?.setValue(
-        this.formatDate(defaultDate)
-      );
+  defaultDate.setHours(
+    0,
+    0,
+    0,
+    0
+  );
 
-    /**
-     * Load permission master data
-     */
-    this.loadPermissionModules(0);
-  }
+
+  this.userForm.patchValue({
+
+    status: 1,
+
+    isAdmin: false,
+
+    expiryDate: defaultDate
+
+  });
+
+
+  this.loadPermissionModules(0);
+}
 
   // ============================================================
   // EDIT MODE
@@ -380,7 +422,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       .subscribe({
 
         next: (response: any) => {
-
+// alert( response.designationId);
           if (!response) {
             alert('User details not found.');
             this.backToIndexPage();
@@ -398,33 +440,41 @@ export class AddTeam implements OnInit, AfterViewInit {
             .get('password')
             ?.updateValueAndValidity();
 
-          this.userForm.patchValue({
+         this.userForm.patchValue({
 
-            name: response.firstName || '',
+  name:
+    response.firstName || '',
 
-            email: response.email || '',
+  email:
+    response.email || '',
 
-            mobile: response.mobileNo || '',
+  mobile:
+    response.mobileNo || '',
 
-            telephone:
-              response.telephone &&
-                response.telephone !== 'NA'
-                ? response.telephone
-                : '',
+  telephone:
+    response.telephone &&
+    response.telephone !== 'NA'
+      ? response.telephone
+      : '',
 
-            expiryDate:
-              this.formatDateToDDMMYYYY(
-                response.expiryDate
-              ),
+  expiryDate:
+    this.parseExpiryDate(
+      response.expiryDate
+    ),
 
-            status:
-              Number(response.status) || 1,
+  status:
+    Number(response.status) || 1,
 
-            isAdmin:
-              response.permission === 'Y',
-            departmentId: response.departmentId || null,
-desigmationId: response.desigmationId || null
-          });
+  isAdmin:
+    response.permission === 'Y',
+
+  departmentId:
+    response.departmentId || null,
+
+  desigmationId:
+    response.designationId || null
+
+});
 
           /**
            * Load permissions returned by API
@@ -805,172 +855,380 @@ desigmationId: response.desigmationId || null
   // SUBMIT
   // ============================================================
 
-  onSubmit(): void {
+ onSubmit(): void {
 
-    if (this.isSubmitting) {
-      return;
-    }
+  // ============================================================
+  // PREVENT DOUBLE SUBMIT
+  // ============================================================
 
-    this.userForm.markAllAsTouched();
-
-     console.log('========== FORM DEBUG ==========');
-  console.log('FORM VALID:', this.userForm.valid);
-  console.log('FORM VALUE:', this.userForm.value);
-
-   Object.keys(this.userForm.controls).forEach(key => {
-    const control = this.userForm.get(key);
-
-    console.log(
-      key,
-      'value:', control?.value,
-      'valid:', control?.valid,
-      'errors:', control?.errors
-    );
-  });
-
-  if (this.userForm.invalid) {
-    console.error('FORM IS INVALID - API WILL NOT BE CALLED');
+  if (this.isSubmitting) {
     return;
   }
 
-  console.log('FORM IS VALID - CALLING API');
 
-    // if (this.userForm.invalid) {
-    //   return;
-    // }
+  // ============================================================
+  // MARK FORM AS TOUCHED
+  // ============================================================
 
-    if (!this.validateExpiryDate()) {
-      return;
-    }
+  this.userForm.markAllAsTouched();
 
-    this.isSubmitting = true;
 
-    const formValues =
-      this.userForm.value;
+  // ============================================================
+  // FORM DEBUG
+  // ============================================================
 
-    let formattedExpiryDate =
-      formValues.expiryDate;
+  console.log('========== FORM DEBUG ==========');
 
-    if (formattedExpiryDate) {
+  console.log(
+    'FORM VALID:',
+    this.userForm.valid
+  );
 
-      const parts =
-        formattedExpiryDate.split('-');
+  console.log(
+    'FORM VALUE:',
+    this.userForm.value
+  );
 
-      if (parts.length === 3) {
 
-        formattedExpiryDate =
-          `${parts[2]}-${parts[1]}-${parts[0]}`;
-      }
-    }
-    console.log('Department ID:', formValues.departmentId);
-    const payload: any = {
+  Object.keys(
+    this.userForm.controls
+  ).forEach(key => {
 
-      userId: this.isEditMode
+    const control =
+      this.userForm.get(key);
+
+    console.log(
+      key,
+      'value:',
+      control?.value,
+      'valid:',
+      control?.valid,
+      'errors:',
+      control?.errors
+    );
+
+  });
+
+
+  // ============================================================
+  // FORM VALIDATION
+  // ============================================================
+
+  if (this.userForm.invalid) {
+
+    console.error(
+      'FORM IS INVALID - API WILL NOT BE CALLED'
+    );
+
+    return;
+  }
+
+
+  console.log(
+    'FORM IS VALID - CALLING API'
+  );
+
+
+  // ============================================================
+  // EXPIRY DATE VALIDATION
+  // ============================================================
+
+  if (!this.validateExpiryDate()) {
+
+    console.error(
+      'EXPIRY DATE VALIDATION FAILED'
+    );
+
+    return;
+  }
+
+
+  // ============================================================
+  // START SUBMITTING
+  // ============================================================
+
+  this.isSubmitting = true;
+
+
+  // ============================================================
+  // GET FORM VALUES
+  // ============================================================
+
+  const formValues =
+    this.userForm.value;
+
+
+  console.log(
+    'FORM VALUES BEFORE PAYLOAD:',
+    formValues
+  );
+
+
+  // ============================================================
+  // EXPIRY DATE
+  //
+  // Material Datepicker returns a Date object.
+  //
+  // Example:
+  // Sun Dec 31 2050 ...
+  //
+  // API will receive:
+  // 2050-12-31
+  // ============================================================
+
+  const formattedExpiryDate =
+    this.formatDateForApi(
+      formValues.expiryDate
+    );
+
+
+  console.log(
+    'Expiry Date - Date Object:',
+    formValues.expiryDate
+  );
+
+  console.log(
+    'Expiry Date - API Format:',
+    formattedExpiryDate
+  );
+
+
+  // ============================================================
+  // DEPARTMENT / DESIGNATION DEBUG
+  // ============================================================
+
+  console.log(
+    'Department ID:',
+    formValues.departmentId
+  );
+
+  console.log(
+    'Designation ID:',
+    formValues.desigmationId
+  );
+
+
+  // ============================================================
+  // BUILD PAYLOAD
+  // ============================================================
+
+  const payload: any = {
+
+    userId:
+      this.isEditMode
         ? this.userId
         : 0,
 
-      firstName:
-        formValues.name.trim(),
 
-      mobileNo:
-        formValues.mobile,
+    firstName:
+      formValues.name
+        ? formValues.name.trim()
+        : '',
 
-      email:
-        formValues.email
-          .trim()
-          .toLowerCase(),
 
-      expiryDate:
-        formattedExpiryDate,
+    mobileNo:
+      formValues.mobile || '',
 
-      permission:
-        formValues.isAdmin
-          ? 'Y'
-          : 'N',
 
-      status:
-        Number(formValues.status),
+    email:
+      formValues.email
+        ? formValues.email
+            .trim()
+            .toLowerCase()
+        : '',
 
-      departmentId: Number(formValues.departmentId),
-      designationId: Number(formValues.desigmationId),
-      qcFlag: 0,
 
-      telephone:
-        formValues.telephone || '',
-
-      createdBy:
-        this.createdBy,
-
-      module:
-        this.buildModulePermissions()
-    };
-
-    /**
-     * Password:
-     *
-     * Add -> send password
-     * Edit -> send only if user entered one
+    /*
+     * Material Datepicker Date
+     * converted to yyyy-MM-dd
      */
-    if (
-      formValues.password &&
-      formValues.password.trim()
-    ) {
+    expiryDate:
+      formattedExpiryDate,
 
-      payload.password =
-        formValues.password;
-    }
 
-    this.dataProvider
-      .saveUserManagementDetailsDetail(
-        payload
-      )
-      .subscribe({
+    permission:
+      formValues.isAdmin
+        ? 'Y'
+        : 'N',
 
-        next: (response: any) => {
 
-          this.isSubmitting = false;
+    status:
+      Number(
+        formValues.status
+      ),
 
-          if (
-            response?.success === false
-          ) {
 
-            alert(
-              response.message ||
-              'Operation failed.'
-            );
+    departmentId:
+      Number(
+        formValues.departmentId
+      ),
 
-            return;
-          }
 
-          alert(
-            this.isEditMode
-              ? 'User updated successfully!'
-              : 'User saved successfully!'
-          );
+    designationId:
+      Number(
+        formValues.desigmationId
+      ),
 
-          this.backToIndexPage();
-        },
 
-        error: (err) => {
+    qcFlag:
+      0,
 
-          this.isSubmitting = false;
 
-          console.error(
-            'Save user error:',
-            err
-          );
+    telephone:
+      formValues.telephone || '',
 
-          alert(
-            err?.error?.message ||
-            (
-              this.isEditMode
-                ? 'Failed to update user.'
-                : 'Failed to save user.'
-            )
-          );
-        }
-      });
+
+    createdBy:
+      this.createdBy,
+
+
+    module:
+      this.buildModulePermissions()
+
+  };
+
+
+  // ============================================================
+  // PASSWORD
+  //
+  // ADD:
+  //   password is mandatory
+  //
+  // EDIT:
+  //   password is sent only if user entered a new password
+  // ============================================================
+
+  if (
+    formValues.password &&
+    formValues.password.trim()
+  ) {
+
+    payload.password =
+      formValues.password.trim();
+
   }
+
+
+  // ============================================================
+  // FINAL PAYLOAD DEBUG
+  // ============================================================
+
+  console.log(
+    '========== FINAL USER PAYLOAD =========='
+  );
+
+  console.log(
+    JSON.stringify(
+      payload,
+      null,
+      2
+    )
+  );
+
+
+  // ============================================================
+  // API CALL
+  // ============================================================
+
+  this.dataProvider
+    .saveUserManagementDetailsDetail(
+      payload
+    )
+    .subscribe({
+
+      // ========================================================
+      // SUCCESS
+      // ========================================================
+
+      next: (response: any) => {
+
+        this.isSubmitting = false;
+
+
+        console.log(
+          'SAVE USER RESPONSE:',
+          response
+        );
+
+
+        // ======================================================
+        // API RETURNED FAILURE
+        // ======================================================
+
+        if (
+          response?.success === false
+        ) {
+
+          alert(
+            response.message ||
+            'Operation failed.'
+          );
+
+          return;
+        }
+
+
+        // ======================================================
+        // SUCCESS MESSAGE
+        // ======================================================
+
+        alert(
+          this.isEditMode
+            ? 'User updated successfully!'
+            : 'User saved successfully!'
+        );
+
+
+        // ======================================================
+        // BACK TO INDEX
+        // ======================================================
+
+        this.backToIndexPage();
+
+      },
+
+
+      // ========================================================
+      // ERROR
+      // ========================================================
+
+      error: (err) => {
+
+        this.isSubmitting = false;
+
+
+        console.error(
+          'Save user error:',
+          err
+        );
+
+
+        console.error(
+          'HTTP STATUS:',
+          err?.status
+        );
+
+
+        console.error(
+          'ERROR BODY:',
+          err?.error
+        );
+
+
+        alert(
+          err?.error?.message ||
+          (
+            this.isEditMode
+              ? 'Failed to update user.'
+              : 'Failed to save user.'
+          )
+        );
+
+      }
+
+    });
+
+}
 
   // ============================================================
   // BUILD API PERMISSIONS
@@ -1167,75 +1425,95 @@ desigmationId: response.desigmationId || null
   // VALIDATION
   // ============================================================
 
-  validateExpiryDate(): boolean {
+validateExpiryDate(): boolean {
 
-    const value =
-      this.userForm
-        .get('expiryDate')
-        ?.value;
+  const control =
+    this.userForm.get('expiryDate');
 
-    if (!value) {
+  const value =
+    control?.value;
 
-      alert(
-        'Please select a valid Expiry Date.'
-      );
 
-      return false;
-    }
+  if (!value) {
 
-    const parts =
-      value.split('-').map(Number);
-
-    if (parts.length !== 3) {
-
-      alert(
-        'Please select a valid Expiry Date.'
-      );
-
-      return false;
-    }
-
-    const [
-      day,
-      month,
-      year
-    ] = parts;
-
-    const enteredDate =
-      new Date(
-        year,
-        month - 1,
-        day
-      );
-
-    enteredDate.setHours(
-      0,
-      0,
-      0,
-      0
+    console.error(
+      'Expiry Date is empty'
     );
 
-    const min =
-      new Date(this.minDate);
-
-    min.setHours(
-      0,
-      0,
-      0,
-      0
-    );
-
-    if (enteredDate < min) {
-
-      alert(
-        'Expiry Date cannot be a past date.'
-      );
-
-      return false;
-    }
-
-    return true;
+    return false;
   }
+
+
+  if (!(value instanceof Date)) {
+
+    console.error(
+      'Expiry Date is not a Date object:',
+      value
+    );
+
+    return false;
+  }
+
+
+  if (
+    isNaN(
+      value.getTime()
+    )
+  ) {
+
+    console.error(
+      'Expiry Date is invalid:',
+      value
+    );
+
+    return false;
+  }
+
+
+  const selectedDate =
+    new Date(value);
+
+  selectedDate.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+
+  const minimumDate =
+    new Date(this.minDate);
+
+  minimumDate.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+
+  if (
+    selectedDate <
+    minimumDate
+  ) {
+
+    control?.setErrors({
+      ...(control.errors || {}),
+      matDatepickerMin: true
+    });
+
+
+    alert(
+      'Expiry Date cannot be a past date.'
+    );
+
+
+    return false;
+  }
+
+
+  return true;
+}
 
   // ============================================================
   // DATE
@@ -1257,23 +1535,209 @@ desigmationId: response.desigmationId || null
     return `${day}-${month}-${year}`;
   }
 
-  private formatDateToDDMMYYYY(
-    dateStr: string
-  ): string {
+  private parseExpiryDate(value: any): Date | null {
 
-    if (!dateStr) {
-      return '';
-    }
+  if (!value) {
+    return null;
+  }
+
+
+  /* Already Date */
+
+  if (value instanceof Date) {
+
+    const date = new Date(value);
+
+    date.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+    return date;
+  }
+
+
+  const dateString =
+    String(value).trim();
+
+
+  /* =====================================================
+     yyyy-MM-dd
+     Example: 2050-12-31
+     ===================================================== */
+
+  const yyyyMmDd =
+    /^(\d{4})-(\d{2})-(\d{2})$/;
+
+  const yyyyMatch =
+    dateString.match(yyyyMmDd);
+
+
+  if (yyyyMatch) {
+
+    const year =
+      Number(yyyyMatch[1]);
+
+    const month =
+      Number(yyyyMatch[2]);
+
+    const day =
+      Number(yyyyMatch[3]);
+
 
     const date =
-      new Date(dateStr);
+      new Date(
+        year,
+        month - 1,
+        day
+      );
 
-    if (isNaN(date.getTime())) {
-      return '';
-    }
 
-    return this.formatDate(date);
+    date.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+
+    return date;
   }
+
+
+  /* =====================================================
+     dd-MM-yyyy
+     Example: 31-12-2050
+     ===================================================== */
+
+  const ddMmYyyy =
+    /^(\d{2})-(\d{2})-(\d{4})$/;
+
+  const ddMatch =
+    dateString.match(ddMmYyyy);
+
+
+  if (ddMatch) {
+
+    const day =
+      Number(ddMatch[1]);
+
+    const month =
+      Number(ddMatch[2]);
+
+    const year =
+      Number(ddMatch[3]);
+
+
+    const date =
+      new Date(
+        year,
+        month - 1,
+        day
+      );
+
+
+    date.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+
+    return date;
+  }
+
+
+  /* =====================================================
+     yyyy/MM/dd
+     ===================================================== */
+
+  const yyyySlash =
+    /^(\d{4})\/(\d{2})\/(\d{2})$/;
+
+  const slashMatch =
+    dateString.match(yyyySlash);
+
+
+  if (slashMatch) {
+
+    const year =
+      Number(slashMatch[1]);
+
+    const month =
+      Number(slashMatch[2]);
+
+    const day =
+      Number(slashMatch[3]);
+
+
+    const date =
+      new Date(
+        year,
+        month - 1,
+        day
+      );
+
+
+    date.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+
+    return date;
+  }
+
+
+  /* =====================================================
+     Java date string
+     
+     Example:
+     Wed Mar 13 00:00:00 IST 2024
+     ===================================================== */
+
+  let normalized =
+    dateString.replace(
+      ' IST ',
+      ' GMT+0530 '
+    );
+
+
+  const parsed =
+    new Date(normalized);
+
+
+  if (
+    !isNaN(
+      parsed.getTime()
+    )
+  ) {
+
+    parsed.setHours(
+      0,
+      0,
+      0,
+      0
+    );
+
+
+    return parsed;
+  }
+
+
+  console.error(
+    'Unable to parse expiry date:',
+    value
+  );
+
+
+  return null;
+}
 
   // ============================================================
   // INPUT RESTRICTIONS
@@ -1383,5 +1847,49 @@ desigmationId: response.desigmationId || null
       }
     });
   }
+
+private formatDateForApi(
+  date: Date | null
+): string {
+
+  if (!date) {
+    return '';
+  }
+
+  if (!(date instanceof Date)) {
+
+    console.error(
+      'Invalid expiry date:',
+      date
+    );
+
+    return '';
+  }
+
+  if (isNaN(date.getTime())) {
+
+    console.error(
+      'Invalid expiry date:',
+      date
+    );
+
+    return '';
+  }
+
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, '0');
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
 
 }
