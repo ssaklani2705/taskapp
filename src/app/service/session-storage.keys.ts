@@ -25,6 +25,8 @@ export const SESSION_KEYS = {
     DESIGNATION_MASTER_FILTER: 'designationMasterFilter',
 
     TASK_CATEGORY_MASTER_FILTER: 'taskcategoryMasterFilter',
+
+    TASK_MASTER_FILTER: 'taskMasterFilter',
     
     STATE_FILTER:'stateFilter'
 

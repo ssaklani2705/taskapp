@@ -17,20 +17,27 @@
             </span>
           </button>
         </div>
+
+        @if (addPer === 'Y') {
+          <button type="button" class="btn-add-user" (click)="addClient()">
+            Add New
+            <span class="plus-icon">+</span>
+          </button>
+        }
       </div>
 
       <!-- ================= SEARCH PANEL ================= -->
       <div class="search-panel" *ngIf="isPanelVisible">
         <div class="search-row">
           <!-- ADD USER -->
-          <div class="add-user-wrapper">
+          <!-- <div class="add-user-wrapper">
             @if (addPer === 'Y') {
               <button type="button" class="btn-add-user" (click)="addClient()">
                 Add New
                 <span class="plus-icon">+</span>
               </button>
             }
-          </div>
+          </div> -->
 
           <!-- SEARCH -->
           <div class="search-wrapper">
@@ -94,8 +101,29 @@
 
           <!-- CLEAR -->
           <div class="clear-wrapper">
-            <!-- <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button> -->
+            <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button>
           </div>
+
+          @if (addPer === 'Y' || editPer === 'Y') {
+            <button type="button" class="btn-upload-excel" (click)="openUploadModal()">
+              Upload Excel
+              <i class="fa fa-upload"></i>
+            </button>
+          }
+
+          @if (exportExcel === 'Y') {
+            <button type="button" class="btn-upload-excel" (click)="exportToExcel()">
+              Export to Excel
+              <i class="fas fa-file-excel" aria-hidden="true"></i>
+            </button>
+          }
+
+          <a
+            href="assets/templet/Client_Data_Template.xlsx"
+            class="btn-download-template"
+            download="Client_Data_Template.xlsx"
+            >Download Template <i class="fa fa-cloud-download" aria-hidden="true"></i
+          ></a>
         </div>
       </div>
 
@@ -280,7 +308,7 @@
                       title="View"
                       (click)="viewClient(client.clientId)"
                     >
-                      <i class="fa fa-search"></i>
+                      <i class="fa fa-eye"></i>
                     </button>
 
                     <!-- EDIT -->
@@ -304,7 +332,7 @@
                           title="Delete"
                           (click)="onDeleteUser(client.clientId)"
                         >
-                          <i class="fa fa-close"></i>
+                          <i class="fa fa-trash"></i>
                         </button>
                       }
                     </ng-container>
@@ -340,6 +368,111 @@
           </select>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Excel Modal -->
+<!-- ================= UPLOAD EXCEL MODAL ================= -->
+
+<div class="upload-modal-overlay" *ngIf="showUploadModal" (click)="closeUploadModal()">
+  <div class="upload-modal" (click)="$event.stopPropagation()">
+    <!-- HEADER -->
+    <div class="upload-modal-header">
+      <h3>Upload Client Excel</h3>
+
+      <button
+        type="button"
+        class="upload-close-btn"
+        (click)="closeUploadModal()"
+        [disabled]="isUploading"
+      >
+        ×
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div class="upload-modal-body">
+      <div class="upload-form-group">
+        <label for="excelFile">
+          Select Excel File
+          <span class="required">*</span>
+        </label>
+
+        <input
+          #excelFileInput
+          type="file"
+          id="excelFile"
+          class="excel-file-input"
+          accept=".xls,.xlsx"
+          (change)="onFileSelected($event)"
+          [disabled]="isUploading"
+        />
+
+        <div *ngIf="fileError" class="upload-error">
+          {{ fileError }}
+        </div>
+
+        <div *ngIf="selectedFile && !fileError" class="selected-file">
+          <i class="fa fa-file-excel-o"></i>
+
+          <span>
+            {{ selectedFile.name }}
+          </span>
+
+          <button
+            type="button"
+            class="remove-file-btn"
+            (click)="removeSelectedFile()"
+            [disabled]="isUploading"
+          >
+            ×
+          </button>
+        </div>
+      </div>
+
+      <!-- INFORMATION -->
+      <div class="upload-info">
+        <i class="fa fa-info-circle"></i>
+
+        <div>
+          <strong>Excel Upload</strong>
+
+          <p>
+            Upload a client Excel file in the required format. Invalid or duplicate records will be
+            reported separately.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="upload-modal-footer">
+      <button
+        type="button"
+        class="btn-upload-cancel"
+        (click)="closeUploadModal()"
+        [disabled]="isUploading"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn-upload-submit"
+        (click)="submitUpload()"
+        [disabled]="!selectedFile || !!fileError || isUploading"
+      >
+        <span *ngIf="!isUploading">
+          <i class="fa fa-upload"></i>
+          Upload
+        </span>
+
+        <span *ngIf="isUploading">
+          <i class="fa fa-spinner fa-spin"></i>
+          Uploading...
+        </span>
+      </button>
     </div>
   </div>
 </div>

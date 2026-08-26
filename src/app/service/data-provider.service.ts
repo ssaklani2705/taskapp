@@ -1410,4 +1410,78 @@ getClientDetails(
     return this.http.post(`${environment.apiBaseUrl}admin/state/delete`, state);
   }
 
+ getTaskDetails(
+  page: number,
+  size: number,
+  statusIndex: number,
+  search: string,
+  clientId: number,
+  taskCategoryId: number,
+  assignedTo: number,
+  priority: number
+): Observable<any> {
+
+  const params = new HttpParams()
+
+    .set(
+      'page',
+      page.toString()
+    )
+
+    .set(
+      'size',
+      size.toString()
+    )
+
+    .set(
+      'statusIndex',
+      statusIndex.toString()
+    )
+
+    .set(
+      'search',
+      search || ''
+    )
+
+    .set(
+      'clientId',
+      clientId.toString()
+    )
+
+    .set(
+      'taskCategoryId',
+      taskCategoryId.toString()
+    )
+
+    .set(
+      'assignedTo',
+      assignedTo.toString()
+    )
+
+    .set(
+      'priority',
+      priority.toString()
+    );
+
+
+  return this.http.get<any>(
+
+    `${environment.apiBaseUrl}admin/task/getTaskDetails`,
+
+    { params }
+
+  );
+
+}
+
+
+getTaskFilterData(): Observable<any> {
+
+  return this.http.get<any>(
+    `${environment.apiBaseUrl}admin/task/getTaskFilterData`
+  );
+
+}
+
+
 }

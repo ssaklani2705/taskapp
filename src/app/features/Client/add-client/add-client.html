@@ -1,9 +1,5 @@
 <div class="user-page-wrapper">
   <div class="user-portlet">
-    <!-- ========================= -->
-    <!-- HEADER -->
-    <!-- ========================= -->
-
     <div class="user-portlet-title">
       <div class="user-title">
         <span class="user-page-title">
@@ -18,31 +14,16 @@
       </div>
     </div>
 
-    <!-- ========================= -->
-    <!-- BODY -->
-    <!-- ========================= -->
-
     <div class="user-portlet-body">
       <form [formGroup]="clientForm" (ngSubmit)="onSubmit()" novalidate>
         <div class="user-form-body">
-          <!-- ========================= -->
-          <!-- MANDATORY MESSAGE -->
-          <!-- ========================= -->
-
           <div class="mandatory-message">
             Fields with
             <span class="required">*</span>
             mark are mandatory
           </div>
 
-          <!-- ================================================= -->
-          <!-- ROW 1
-               Client Name | Client Code | PAN | Status
-          ================================================== -->
-
           <div class="user-form-row">
-            <!-- Client Name -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -61,8 +42,6 @@
               </div>
             </div>
 
-            <!-- Client Code -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -80,8 +59,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- PAN -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -108,9 +85,7 @@
               </div>
             </div>
 
-            <!-- Status -->
-
-            <div class="user-form-col">
+            <div class="user-form-col" *ngIf="isEditMode">
               <div class="user-form-group">
                 <label class="user-label">
                   Status
@@ -121,18 +96,18 @@
                   <option [value]="1">Active</option>
                   <option [value]="2">Inactive</option>
                 </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="clientForm.get('status')?.touched && clientForm.get('status')?.invalid"
+                >
+                  Status is required
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- ================================================= -->
-          <!-- ROW 2
-               GST Applicable | GST No | Tax Applicable | State
-          ================================================== -->
-
           <div class="user-form-row">
-            <!-- GST Flag -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label"> GST Applicable </label>
@@ -142,8 +117,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- GST Number -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -174,8 +147,6 @@
               </div>
             </div>
 
-            <!-- Tax Flag -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label"> Tax Applicable </label>
@@ -185,8 +156,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- State -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -213,14 +182,7 @@
             </div>
           </div>
 
-          <!-- ================================================= -->
-          <!-- ROW 3
-               Address Line 1 | Address Line 2 | City | Pincode
-          ================================================== -->
-
           <div class="user-form-row">
-            <!-- Address Line 1 -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -247,8 +209,6 @@
               </div>
             </div>
 
-            <!-- Address Line 2 -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label"> Address Line 2 </label>
@@ -261,8 +221,6 @@
                 />
               </div>
             </div>
-
-            <!-- City -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -281,8 +239,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Pincode -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -318,14 +274,7 @@
             </div>
           </div>
 
-          <!-- ================================================= -->
-          <!-- ROW 4
-               Location | Contact Name | Contact Email | Manager
-          ================================================== -->
-
           <div class="user-form-row">
-            <!-- Location -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label"> Location </label>
@@ -333,8 +282,6 @@
                 <input type="text" class="user-input" formControlName="location" maxlength="200" />
               </div>
             </div>
-
-            <!-- Contact Name -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -358,8 +305,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Contact Email -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -393,8 +338,6 @@
               </div>
             </div>
 
-            <!-- Manager -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -422,14 +365,7 @@
             </div>
           </div>
 
-          <!-- ================================================= -->
-          <!-- ROW 5
-               Emails | Start Date | Monthly Charge | Outstanding
-          ================================================== -->
-
           <div class="user-form-row">
-            <!-- Emails -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label"> Emails </label>
@@ -443,8 +379,6 @@
                 />
               </div>
             </div>
-
-            <!-- Start Date -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -480,8 +414,6 @@
               </div>
             </div>
 
-            <!-- Monthly Charge -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label"> Monthly Charge </label>
@@ -495,8 +427,6 @@
                 />
               </div>
             </div>
-
-            <!-- Outstanding -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -513,15 +443,7 @@
             </div>
           </div>
 
-          <!-- ================================================= -->
-          <!-- ROW 6
-               Contact Person 1 Name | Email |
-               Contact Person 2 Name | Email
-          ================================================== -->
-
           <div class="user-form-row">
-            <!-- Name 1 -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label"> Contact Person 1 Name </label>
@@ -529,8 +451,6 @@
                 <input type="text" class="user-input" formControlName="name1" maxlength="200" />
               </div>
             </div>
-
-            <!-- Email 1 -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -550,8 +470,6 @@
               </div>
             </div>
 
-            <!-- Name 2 -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label"> Contact Person 2 Name </label>
@@ -559,8 +477,6 @@
                 <input type="text" class="user-input" formControlName="name2" maxlength="200" />
               </div>
             </div>
-
-            <!-- Email 2 -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -581,14 +497,7 @@
             </div>
           </div>
 
-          <!-- ================================================= -->
-          <!-- ROW 7
-               Contact Person 3 Name | Email | Empty | Empty
-          ================================================== -->
-
           <div class="user-form-row">
-            <!-- Name 3 -->
-
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label"> Contact Person 3 Name </label>
@@ -596,8 +505,6 @@
                 <input type="text" class="user-input" formControlName="name3" maxlength="200" />
               </div>
             </div>
-
-            <!-- Email 3 -->
 
             <div class="user-form-col">
               <div class="user-form-group">
@@ -617,18 +524,9 @@
               </div>
             </div>
 
-            <!-- Empty -->
-
             <div class="user-form-col empty-column"></div>
-
-            <!-- Empty -->
-
             <div class="user-form-col empty-column"></div>
           </div>
-
-          <!-- ================================================= -->
-          <!-- BUTTONS -->
-          <!-- ================================================= -->
 
           <div class="user-buttons">
             <button type="button" class="user-reset-btn" (click)="onReset()">Reset</button>

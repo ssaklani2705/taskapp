@@ -15,6 +15,13 @@ export const routes: Routes = [
         .then(m => m.Login)
   },
 
+  {
+    path: 'manager-login',
+    loadComponent: () =>
+      import('./features/auth/login/manager-login/manager-login')
+        .then(m => m.ManagerLogin)
+  },
+
 
   // ================================
   // MAIN APPLICATION
@@ -33,6 +40,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/dashboard/dashboard')
             .then(m => m.Dashboard)
+      },
+
+      {
+        path: 'employee-dashboard',
+        loadComponent: () =>
+          import('./features/employee-dashboard/employee-dashboard')
+            .then(m => m.EmployeeDashboard)
       },
 
        {path: 'my-team',loadComponent: () =>import('./features/myteam/my-team/my-team').then(m => m.MyTeam)},

@@ -1,1 +1,285 @@
-<p>view-client works!</p>
+<div class="page-container">
+  <div class="main-card">
+    <div class="page-header">
+      <div class="page-title">
+        <mat-icon>apartment</mat-icon>
+        <span>View Client</span>
+      </div>
+
+      <div class="header-action">
+        <button type="button" class="back-button" (click)="backToIndexPage()">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Back to Index</span>
+        </button>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="user-information">
+      <div class="user-info-grid">
+        <div class="user-column">
+          <div class="info-row">
+            <span class="info-label">Client Name:</span>
+            <span class="info-value">
+              {{ client.name || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Client Code:</span>
+            <span class="info-value">
+              {{ client.code || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">PAN:</span>
+            <span class="info-value">
+              {{ client.pan || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">GST No:</span>
+            <span class="info-value">
+              {{ client.gstNo || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">State:</span>
+            <span class="info-value">
+              {{ client.stateName || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">City:</span>
+            <span class="info-value">
+              {{ client.city || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Pincode:</span>
+            <span class="info-value">
+              {{ client.pincode || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">GST Applicable:</span>
+
+            <span class="flag-value" [ngClass]="client.gstFlag === 1 ? 'flag-yes' : 'flag-no'">
+              {{ client.gstFlag === 1 ? '✔️' : '❌' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="user-column">
+          <div class="info-row">
+            <span class="info-label">Contact Name:</span>
+            <span class="info-value">
+              {{ client.contactName || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Contact Email:</span>
+            <span class="info-value">
+              {{ client.contactEmail || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Manager:</span>
+            <span class="info-value">
+              {{ client.managerName || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Start Date:</span>
+            <span class="info-value">
+              {{ client.startDate || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Monthly Charge:</span>
+            <span class="info-value">
+              {{ client.monthlyCharge ?? 0 }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Outstanding:</span>
+            <span class="info-value">
+              {{ client.outstanding ?? 0 }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Tax Applicable:</span>
+
+            <span class="flag-value" [ngClass]="client.taxFlag === 1 ? 'flag-yes' : 'flag-no'">
+              {{ client.taxFlag === 1 ? '✔️' : '❌' }}
+            </span>
+          </div>
+
+          <div class="info-row status-row">
+            <span class="info-label">Status:</span>
+
+            <span class="status-badge" [ngClass]="common.getStatusClass(client.status)">
+              {{ common.getStatusLabel(client.status) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="client-section">
+        <div class="detail-grid">
+          <div class="info-row">
+            <span class="info-label">Address Line 1:</span>
+            <span class="info-value">
+              {{ client.addressLine1 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Address Line 2:</span>
+            <span class="info-value">
+              {{ client.addressLine2 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Location:</span>
+            <span class="info-value">
+              {{ client.location || '-' }}
+            </span>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Emails:</span>
+            <span class="info-value">
+              {{ client.emails || '-' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="client-section">
+        <div class="additional-contact-grid">
+          <div class="contact-card">
+            <div class="contact-title">Contact 1</div>
+            <div class="info-row">
+              <span class="info-label">Name:</span>
+              <span class="info-value">
+                {{ client.name1 || '-' }}
+              </span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Email:</span>
+              <span class="info-value">
+                {{ client.emailId1 || '-' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-title">Contact 2</div>
+            <div class="info-row">
+              <span class="info-label">Name:</span>
+              <span class="info-value">
+                {{ client.name2 || '-' }}
+              </span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Email:</span>
+              <span class="info-value">
+                {{ client.emailId2 || '-' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="contact-card">
+            <div class="contact-title">Contact 3</div>
+            <div class="info-row">
+              <span class="info-label">Name:</span>
+              <span class="info-value">
+                {{ client.name3 || '-' }}
+              </span>
+            </div>
+
+            <div class="info-row">
+              <span class="info-label">Email:</span>
+              <span class="info-value">
+                {{ client.emailId3 || '-' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-title">
+        <mat-icon>history</mat-icon>
+        <span>Action History</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="table-container">
+      <div class="history-table-wrapper">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th style="width: 5%">#</th>
+              <th style="width: 20%">Action By</th>
+              <th style="width: 20%">Updated On</th>
+              <th style="width: 55%">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let history of transactionHistory; let i = index">
+              <td>
+                {{ i + 1 }}
+              </td>
+
+              <td>
+                {{ history.name || '-' }}
+              </td>
+
+              <td>
+                {{ history.entryDate || '-' }}
+              </td>
+
+              <td>
+                <span class="action-badge">
+                  {{ history.action || '-' }}
+                </span>
+              </td>
+            </tr>
+
+            <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
+              <td colspan="4" class="no-records-box">
+                <mat-icon>info</mat-icon>
+
+                <span> No action history available </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

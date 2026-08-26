@@ -3,6 +3,8 @@ import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataProviderService } from '../../../service/data-provider.service';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 
 interface Client {
   clientId: number;
@@ -47,7 +49,7 @@ interface Client {
 })
 export class ClientIndex {
   clients: Client[] = [];
-
+  userId!: number;
   isLoading = false;
 
   currentPage = 1;
@@ -64,6 +66,7 @@ export class ClientIndex {
   addPer = 'Y';
   editPer = 'Y';
   deletePer = 'Y';
+  exportExcel = 'Y';
 
   searchQuery = '';
   search = '';
@@ -78,6 +81,11 @@ export class ClientIndex {
 
   filterKey = 'clientFilter';
 
+  showUploadModal = false;
+  selectedFile: File | null = null;
+  fileError = '';
+  isUploading = false;
+
   constructor(
     private dataprovider: DataProviderService,
     private router: Router,
@@ -86,6 +94,14 @@ export class ClientIndex {
   ) {}
 
   ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedUserId = sessionStorage.getItem('userId');
+
+      if (storedUserId) {
+        this.userId = Number(storedUserId);
+      }
+    }
+
     this.restoreFilterState();
     this.loadStates();
     this.loadManagers();
@@ -182,6 +198,26 @@ export class ClientIndex {
     this.getClientDetails();
   }
 
+  clearFilter(): void {
+    this.searchQuery = '';
+    this.search = '';
+
+    this.selectedStatus = '';
+    this.statusIndex = 0;
+
+    this.stateId = 0;
+    this.managerId = 0;
+
+    this.currentPage = 1;
+    this.page = 0;
+
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem(this.filterKey);
+    }
+
+    this.getClientDetails();
+  }
+
   addClient() {
     const filterState = {
       currentPage: this.currentPage,
@@ -233,7 +269,51 @@ export class ClientIndex {
     });
   }
 
-  onDeleteUser(ClientId: number): void {}
+  onDeleteUser(clientId: number): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to delete this client?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dataprovider.deleteClient(clientId, this.userId).subscribe({
+          next: (response: any) => {
+            if (response?.success) {
+              Swal.fire({
+                title: 'Deleted!',
+                text: response.message || 'Client deleted successfully.',
+                icon: 'success',
+                confirmButtonText: 'OK',
+              }).then(() => {
+                this.getClientDetails();
+              });
+            } else {
+              Swal.fire({
+                title: 'Error',
+                text: response?.message || 'Failed to delete client.',
+                icon: 'error',
+                confirmButtonText: 'OK',
+              });
+            }
+          },
+
+          error: (error) => {
+            console.error('Error deleting client:', error);
+
+            Swal.fire({
+              title: 'Error',
+              text: error?.error?.message || 'Something went wrong while deleting the client.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            });
+          },
+        });
+      }
+    });
+  }
 
   onStatusChange(): void {
     this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
@@ -360,6 +440,291 @@ export class ClientIndex {
     this.saveFilterState();
 
     this.getClientDetails();
+  }
+
+  openUploadModal(): void {
+    this.selectedFile = null;
+    this.fileError = '';
+    this.isUploading = false;
+    this.showUploadModal = true;
+  }
+
+  closeUploadModal(): void {
+    if (this.isUploading) {
+      return;
+    }
+
+    this.showUploadModal = false;
+    this.selectedFile = null;
+    this.fileError = '';
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    this.fileError = '';
+    this.selectedFile = null;
+
+    if (!input.files || input.files.length === 0) {
+      this.fileError = 'Please select an Excel file.';
+      return;
+    }
+
+    const file = input.files[0];
+
+    const validExtensions = ['xls', 'xlsx'];
+
+    const extension = file.name.split('.').pop()?.toLowerCase();
+
+    if (!extension || !validExtensions.includes(extension)) {
+      this.fileError = 'Invalid file type. Only .xls or .xlsx files are allowed.';
+
+      input.value = '';
+
+      return;
+    }
+
+    this.selectedFile = file;
+  }
+
+  removeSelectedFile(): void {
+    this.selectedFile = null;
+    this.fileError = '';
+  }
+
+  submitUpload(): void {
+    if (!this.selectedFile) {
+      this.fileError = 'Excel file is required';
+
+      return;
+    }
+
+    const userId = this.userId;
+
+    if (!userId) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Upload Failed',
+        text: 'User information is missing. Please login again.',
+        confirmButtonColor: '#d33',
+      });
+
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append('file', this.selectedFile, this.selectedFile.name);
+
+    formData.append('userId', String(userId));
+
+    this.isUploading = true;
+    this.fileError = '';
+
+    this.dataprovider.uploadClientsExcel(this.selectedFile, this.userId).subscribe({
+      next: (res: any) => {
+        this.isUploading = false;
+
+        console.log('Client Excel Upload Response:', res);
+
+        if (!res?.success) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Upload Failed',
+            text: res?.message || 'Something went wrong during client upload.',
+            confirmButtonColor: '#d33',
+          });
+
+          return;
+        }
+
+        this.showUploadModal = false;
+        this.selectedFile = null;
+
+        /*
+         * PARTIAL UPLOAD
+         */
+        if (res.downloadFilePath) {
+          const url = res.downloadFilePath;
+
+          Swal.fire({
+            icon: 'warning',
+            title: 'Partial Upload',
+            html: `
+            <p>${res.message || 'Some clients could not be uploaded.'}</p>
+
+            <p>
+              Failed records have been exported.
+            </p>
+
+            <a
+              href="${url}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Download Failed Records
+            </a>
+          `,
+            confirmButtonText: 'OK',
+          }).then(() => {
+            this.getClientDetails();
+          });
+        }
+
+        /*
+         * COMPLETE SUCCESS
+         */
+        else {
+          Swal.fire({
+            icon: 'success',
+            title: 'Upload Successful',
+            text: res.message || 'Clients uploaded successfully!',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#3085d6',
+          }).then(() => {
+            this.getClientDetails();
+          });
+        }
+      },
+
+      error: (error) => {
+        console.error('Client Excel Upload Error:', error);
+
+        this.isUploading = false;
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Upload Error',
+          text:
+            error?.error?.message || 'Upload failed. Please check your Excel file and try again.',
+          confirmButtonColor: '#d33',
+          confirmButtonText: 'OK',
+        });
+      },
+    });
+  }
+
+  exportToExcel(): void {
+    if (this.exportExcel !== 'Y') {
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.dataprovider
+      .getClientDetails(
+        0, // first page
+        999999, // fetch all records
+        this.statusIndex,
+        this.managerId,
+        this.stateId,
+        '', // clientName
+        '', // clientCode
+        '', // contactName
+        '', // contactEmail
+        this.search,
+        this.sortColumn || 'name',
+        this.sortDirection,
+      )
+      .subscribe({
+        next: (response: any) => {
+          this.isLoading = false;
+
+          const allClients: Client[] = response?.data || [];
+
+          if (!allClients.length) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data',
+              text: 'No client data available to export.',
+              confirmButtonText: 'OK',
+            });
+
+            return;
+          }
+
+          const exportData = allClients.map((client: Client, index: number) => ({
+            'Sr No': index + 1,
+            'Client Name': client.name || '',
+            'Client Code': client.code || '',
+            PAN: client.pan || '',
+            'GST Applicable': client.gstFlag ?? '',
+            'GST Number': client.gstNo || '',
+            State: client.stateName || '',
+            'Address Line 1': client.addressLine1 || '',
+            'Address Line 2': client.addressLine2 || '',
+            City: client.city || '',
+            Pincode: client.pincode || '',
+            'Contact Name': client.contactName || '',
+            'Contact Email': client.contactEmail || '',
+            Emails: client.emails || '',
+            'Start Date': client.startDate || '',
+            'Monthly Charge': client.monthlyCharge ?? '',
+            Outstanding: client.outstanding ?? '',
+            'Contact Person 1 Name': client.name1 || '',
+            'Contact Person 1 Email': client.emailId1 || '',
+            'Contact Person 2 Name': client.name2 || '',
+            'Contact Person 2 Email': client.emailId2 || '',
+            'Contact Person 3 Name': client.name3 || '',
+            'Contact Person 3 Email': client.emailId3 || '',
+            Manager: client.managerName || '',
+            'Tax Applicable': client.taxFlag ?? '',
+            Location: client.location || '',
+            Status: this.getStatusLabel(client.status),
+          }));
+
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+          const headers = Object.keys(exportData[0]);
+
+          worksheet['!cols'] = headers.map((header) => {
+            let maxLength = header.length;
+
+            exportData.forEach((row: any) => {
+              const value = row[header];
+
+              if (value !== null && value !== undefined) {
+                maxLength = Math.max(maxLength, String(value).length);
+              }
+            });
+
+            return {
+              wch: Math.min(Math.max(maxLength + 2, 12), 40),
+            };
+          });
+
+          const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, 'Clients');
+
+          const date = new Date().toISOString().slice(0, 10);
+
+          const fileName = `Clients_All_${date}.xlsx`;
+
+          XLSX.writeFile(workbook, fileName);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Export Successful',
+            text: `${allClients.length} client(s) exported successfully.`,
+            confirmButtonText: 'OK',
+          });
+        },
+
+        error: (error) => {
+          this.isLoading = false;
+
+          console.error('Failed to fetch client data for export:', error);
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Export Failed',
+            text: 'Unable to export client data. Please try again.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#d33',
+          });
+        },
+      });
   }
 
   get recordSummary(): string {

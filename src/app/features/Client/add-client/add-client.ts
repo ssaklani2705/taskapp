@@ -127,8 +127,8 @@ export class AddClient implements OnInit {
       gstNo: '',
       taxFlag: false,
 
-      stateId: 0,
-      managerId: 0,
+      stateId: null,
+      managerId: null,
 
       addressLine1: '',
       addressLine2: '',
@@ -175,8 +175,10 @@ export class AddClient implements OnInit {
         ],
       ],
       taxFlag: [false],
-      stateId: [0, [Validators.required, Validators.min(1)]],
-      managerId: [0, [Validators.required, Validators.min(1)]],
+      // stateId: [0, [Validators.required, Validators.min(1)]],
+      stateId: [null, Validators.required],
+      // managerId: [0, [Validators.required, Validators.min(1)]],
+      managerId: [null, Validators.required],
       addressLine1: ['', [Validators.required, Validators.maxLength(500)]],
       addressLine2: ['', Validators.maxLength(500)],
       city: ['', [Validators.required, Validators.maxLength(100)]],
@@ -411,22 +413,54 @@ export class AddClient implements OnInit {
     });
   }
 
+  // parseDate(date: any): Date | null {
+  //   if (!date) {
+  //     return null;
+  //   }
+
+  //   if (date instanceof Date) {
+  //     return date;
+  //   }
+
+  //   if (typeof date === 'string') {
+  //     if (date.includes('T')) {
+  //       const datePart = date.split('T')[0];
+
+  //       const [year, month, day] = datePart.split('-').map(Number);
+
+  //       return new Date(year, month - 1, day);
+  //     }
+
+  //     if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+  //       const [year, month, day] = date.split('-').map(Number);
+
+  //       return new Date(year, month - 1, day);
+  //     }
+
+  //     if (/^\d{2}-\d{2}-\d{4}$/.test(date)) {
+  //       const [day, month, year] = date.split('-').map(Number);
+
+  //       return new Date(year, month - 1, day);
+  //     }
+  //   }
+
+  //   return null;
+  // }
+
   parseDate(date: any): Date | null {
     if (!date) {
       return null;
     }
 
     if (date instanceof Date) {
-      return date;
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
 
     if (typeof date === 'string') {
       if (date.includes('T')) {
-        const datePart = date.split('T')[0];
+        const parsedDate = new Date(date);
 
-        const [year, month, day] = datePart.split('-').map(Number);
-
-        return new Date(year, month - 1, day);
+        return new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate());
       }
 
       if (/^\d{4}-\d{2}-\d{2}$/.test(date)) {

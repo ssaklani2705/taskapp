@@ -1,50 +1,152 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import {
+  Component,
+  Inject,
+  PLATFORM_ID
+} from '@angular/core';
+
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { environment } from '../../../../environments/environment';
-import { Common } from '../../../classes/common';
-import { DataProviderService } from '../../../service/data-provider.service';
-import Swal from 'sweetalert2';
-import { SessionStorageService } from '../../../service/session-storage.service';
-import { SESSION_KEYS } from '../../../service/session-storage.keys';
+import {
+  ActivatedRoute,
+  Router,
+  RouterModule
+} from '@angular/router';
 
-interface Department {
-  departmentId: number;
-  name: string;
-  sequence: number;
+import { environment } from '../../../../environments/environment';
+
+import { Common } from '../../../classes/common';
+
+import {
+  DataProviderService
+} from '../../../service/data-provider.service';
+
+import Swal from 'sweetalert2';
+
+import {
+  SessionStorageService
+} from '../../../service/session-storage.service';
+
+import {
+  SESSION_KEYS
+} from '../../../service/session-storage.keys';
+
+
+interface Task {
+
+  taskId: number;
+
+  clientName: string;
+
+  date: string;
+
+  taskCategoryName: string;
+
+  assignedToName: string;
+
+  priority: number;
+
   status: number;
+
+  title: string;
 }
+
+
+interface Client {
+
+  clientId: number;
+
+  name: string;
+}
+
+
+interface TaskCategory {
+
+  taskcategoryId: number;
+
+  name: string;
+}
+
+
+interface AssignedUser {
+
+  userId: number;
+
+  firstName: string;
+}
+
+
 @Component({
+
   selector: 'app-task-index',
+
   imports: [
     CommonModule,
     FormsModule,
     RouterModule,
     MatCardModule
   ],
+
   templateUrl: './task-index.html',
+
   styleUrl: './task-index.scss',
+
 })
 export class TaskIndex {
+
 
   // =========================================================
   // DATA
   // =========================================================
 
-  departments: Department[] = [];
+  tasks: Task[] = [];
 
-  apiResponseDepartmentDetails: any = {};
+  apiResponseTaskDetails: any = {};
+
+
+  // =========================================================
+  // FILTER MASTER DATA
+  // =========================================================
+
+  clients: Client[] = [];
+
+  taskCategories: TaskCategory[] = [];
+
+  assignedUsers: AssignedUser[] = [];
+
+
+  // =========================================================
+  // SEARCH
+  // =========================================================
 
   searchQuery: string = '';
+
   search: string = '';
+
+
+  // =========================================================
+  // FILTERS
+  // =========================================================
+
+  selectedClient: string = '';
+
+  selectedTaskCategory: string = '';
+
+  selectedAssignedTo: string = '';
+
+  selectedPriority: string = '';
+
+  selectedStatus: string = '';
+
+  statusIndex: number = 0;
+
 
   // =========================================================
   // PAGINATION
   // =========================================================
 
   currentPage: number = 1;
+
   page: number = 0;
 
   recordsPerPage: number =
@@ -53,15 +155,9 @@ export class TaskIndex {
   size: number =
     environment.size;
 
-  // =========================================================
-  // STATUS FILTER
-  // =========================================================
-
-  selectedStatus: string = '';
-  statusIndex: number = 1;
 
   // =========================================================
-  // OTHER VARIABLES
+  // OTHER
   // =========================================================
 
   selectedmodules: any[] = [];
@@ -70,37 +166,46 @@ export class TaskIndex {
 
   common = new Common();
 
-  department: any = {};
+  task: any = {};
 
   userId: any;
+
 
   // =========================================================
   // PERMISSIONS
   // =========================================================
 
   addPer: string = 'N';
+
   editPer: string = 'N';
+
   deletePer: string = 'N';
+
   viewPer: string = 'N';
+
   approvePer: string = 'N';
+
   adminApprovePer: string = 'N';
 
   moduleName: string = '';
 
   showHeaderBar: boolean = true;
 
+
   // =========================================================
   // SESSION FILTER
   // =========================================================
 
   filterKey =
-    SESSION_KEYS.DEPARTMENT_MASTER_FILTER;
+    SESSION_KEYS.TASK_MASTER_FILTER;
+
 
   // =========================================================
   // PANEL
   // =========================================================
 
   isPanelVisible = true;
+
 
   // =========================================================
   // SORT
@@ -110,33 +215,68 @@ export class TaskIndex {
 
   sortDirection: 'asc' | 'desc' = 'asc';
 
+
+  // =========================================================
+  // TABLE COLUMNS
+  // =========================================================
+
   columns: {
     key: string;
     label: string;
     sortable: boolean;
   }[] = [
-      {
-        key: 'name',
-        label: 'Name',
-        sortable: true,
-      },
-      {
-        key: 'sequence',
-        label: 'Sequence',
-        sortable: true,
-      },
-      {
-        key: 'status',
-        label: 'Status',
-        sortable: true,
-      },
-    ];
+
+    {
+      key: 'title',
+      label: 'Title',
+      sortable: true
+    },
+
+    {
+      key: 'clientName',
+      label: 'Client',
+      sortable: true
+    },
+
+    {
+      key: 'date',
+      label: 'Date',
+      sortable: true
+    },
+
+    {
+      key: 'taskCategoryName',
+      label: 'Task Category',
+      sortable: true
+    },
+
+    {
+      key: 'assignedToName',
+      label: 'Assigned To',
+      sortable: true
+    },
+
+    {
+      key: 'priority',
+      label: 'Priority',
+      sortable: true
+    },
+
+    {
+      key: 'status',
+      label: 'Status',
+      sortable: true
+    }
+
+  ];
+
 
   // =========================================================
   // CONSTRUCTOR
   // =========================================================
 
   constructor(
+
     private dataprovider: DataProviderService,
 
     @Inject(PLATFORM_ID)
@@ -147,196 +287,521 @@ export class TaskIndex {
     private route: ActivatedRoute,
 
     private sessionService: SessionStorageService,
+
   ) { }
+
 
   // =========================================================
   // INIT
   // =========================================================
 
-  ngOnInit() {
+  ngOnInit(): void {
 
+    /*
+     * Clear only unrelated filter sessions.
+     *
+     * Do NOT clear TASK_MASTER_FILTER here,
+     * otherwise your pagination/filter state is lost.
+     */
     this.sessionService.clearOtherSessions(
       this.filterKey
     );
 
-    this.route.queryParams.subscribe(
-      (params) => {
 
-        // -----------------------------------------------------
-        // USER ID
-        // -----------------------------------------------------
+    // -------------------------------------------------------
+    // USER ID
+    // -------------------------------------------------------
 
-        if (
-          isPlatformBrowser(
-            this.platformId
-          )
-        ) {
-          this.userId =
-            sessionStorage.getItem(
-              'userId'
-            );
+    if (
+      isPlatformBrowser(this.platformId)
+    ) {
+
+      this.userId =
+        sessionStorage.getItem(
+          'userId'
+        );
+
+    }
+
+
+    // -------------------------------------------------------
+    // PERMISSIONS
+    // -------------------------------------------------------
+
+    if (
+      isPlatformBrowser(this.platformId)
+    ) {
+
+      const storedModules =
+        sessionStorage.getItem(
+          'selectedModuleDetail'
+        );
+
+
+      if (storedModules) {
+
+        try {
+
+          const parsed =
+            JSON.parse(storedModules);
+
+          this.moduleName =
+            parsed.name ?? '';
+
+          this.addPer =
+            parsed.addPer ?? 'N';
+
+          this.editPer =
+            parsed.editPer ?? 'N';
+
+          this.deletePer =
+            parsed.deletePer ?? 'N';
+
+          this.viewPer =
+            parsed.viewPer ?? 'N';
+
+          this.approvePer =
+            parsed.approvePer ?? 'N';
+
+          this.adminApprovePer =
+            parsed.adminApprovePer ?? 'N';
+
+        } catch (error) {
+
+          console.error(
+            'Invalid selectedModuleDetail:',
+            error
+          );
+
         }
 
-        // -----------------------------------------------------
-        // MODULE PERMISSIONS
-        // -----------------------------------------------------
-
-        if (
-          isPlatformBrowser(
-            this.platformId
-          )
-        ) {
-
-          const storedModules =
-            sessionStorage.getItem(
-              'selectedModuleDetail'
-            );
-          // alert(storedModules);
-          if (storedModules) {
-
-            const parsed =
-              JSON.parse(
-                storedModules
-              );
-
-            this.moduleName =
-              parsed.name ?? '';
-
-            this.addPer =
-              parsed.addPer ?? 'N';
-
-            this.editPer =
-              parsed.editPer ?? 'N';
-
-            this.deletePer =
-              parsed.deletePer ?? 'N';
-
-            this.viewPer =
-              parsed.viewPer ?? 'N';
-
-            this.approvePer =
-              parsed.approvePer ?? 'N';
-
-            this.adminApprovePer =
-              parsed.adminApprovePer ?? 'N';
-          }
-        }
-
-        // -----------------------------------------------------
-        // FILTER STATE
-        // -----------------------------------------------------
-
-        let stateData: any = null;
-
-        const nav =
-          this.router.getCurrentNavigation();
-
-        stateData =
-          nav?.extras?.state;
-
-        if (!stateData) {
-
-          const saved =
-            sessionStorage.getItem(
-              this.filterKey
-            );
-
-          if (saved) {
-            stateData =
-              JSON.parse(saved);
-          }
-        }
-
-        if (stateData) {
-
-          this.currentPage =
-            stateData.currentPage || 1;
-
-          this.page =
-            this.currentPage - 1;
-
-          this.statusIndex =
-            stateData.statusIndex || 0;
-
-          this.search =
-            stateData.searchText || '';
-
-          this.size =
-            stateData.size || this.size;
-
-          this.recordsPerPage =
-            this.size;
-
-          // Sync UI
-          this.searchQuery =
-            this.search;
-
-          this.selectedStatus =
-            this.statusIndex
-              ? String(
-                this.statusIndex
-              )
-              : '';
-        }
-
-        // -----------------------------------------------------
-        // GET DATA
-        // -----------------------------------------------------
-
-        this.getDepartmentDetails();
       }
-    );
+
+    }
+
+
+    // -------------------------------------------------------
+    // RESTORE FILTER STATE
+    // -------------------------------------------------------
+
+    this.restoreFilterState();
+
+
+    // -------------------------------------------------------
+    // LOAD FILTER MASTER DATA
+    // -------------------------------------------------------
+
+    this.loadFilterData();
+
+
+    // -------------------------------------------------------
+    // LOAD TASKS
+    // -------------------------------------------------------
+
+    this.getTaskDetails();
+
   }
+
+
+  // =========================================================
+  // RESTORE FILTER STATE
+  // =========================================================
+
+  private restoreFilterState(): void {
+
+    let stateData: any = null;
+
+
+    // First preference: router navigation state
+    const nav =
+      this.router.getCurrentNavigation();
+
+    stateData =
+      nav?.extras?.state;
+
+
+    // Second preference: sessionStorage
+    if (!stateData) {
+
+      const saved =
+        sessionStorage.getItem(
+          this.filterKey
+        );
+
+      if (saved) {
+
+        try {
+
+          stateData =
+            JSON.parse(saved);
+
+        } catch (error) {
+
+          console.error(
+            'Invalid task filter session:',
+            error
+          );
+
+        }
+
+      }
+
+    }
+
+
+    // Nothing saved
+    if (!stateData) {
+
+      this.currentPage = 1;
+
+      this.page = 0;
+
+      this.size =
+        environment.size;
+
+      this.recordsPerPage =
+        this.size;
+
+      this.search = '';
+
+      this.searchQuery = '';
+
+      this.statusIndex = 0;
+
+      this.selectedStatus = '';
+
+      this.selectedClient = '';
+
+      this.selectedTaskCategory = '';
+
+      this.selectedAssignedTo = '';
+
+      this.selectedPriority = '';
+
+      return;
+    }
+
+
+    // -------------------------------------------------------
+    // PAGE
+    // -------------------------------------------------------
+
+    this.currentPage =
+      Number(stateData.currentPage) || 1;
+
+    this.page =
+      this.currentPage - 1;
+
+
+    // -------------------------------------------------------
+    // SIZE
+    // -------------------------------------------------------
+
+    this.size =
+      Number(stateData.size) ||
+      environment.size;
+
+    this.recordsPerPage =
+      this.size;
+
+
+    // -------------------------------------------------------
+    // SEARCH
+    // -------------------------------------------------------
+
+    this.search =
+      stateData.searchText || '';
+
+    this.searchQuery =
+      this.search;
+
+
+    // -------------------------------------------------------
+    // STATUS
+    // -------------------------------------------------------
+
+    this.statusIndex =
+      Number(stateData.statusIndex) || 0;
+
+    this.selectedStatus =
+      this.statusIndex
+        ? String(this.statusIndex)
+        : '';
+
+
+    // -------------------------------------------------------
+    // CLIENT
+    // -------------------------------------------------------
+
+    this.selectedClient =
+      stateData.clientId != null
+        ? String(stateData.clientId)
+        : '';
+
+
+    // -------------------------------------------------------
+    // TASK CATEGORY
+    // -------------------------------------------------------
+
+    this.selectedTaskCategory =
+      stateData.taskCategoryId != null
+        ? String(stateData.taskCategoryId)
+        : '';
+
+
+    // -------------------------------------------------------
+    // ASSIGNED TO
+    // -------------------------------------------------------
+
+    this.selectedAssignedTo =
+      stateData.assignedTo != null
+        ? String(stateData.assignedTo)
+        : '';
+
+
+    // -------------------------------------------------------
+    // PRIORITY
+    // -------------------------------------------------------
+
+    this.selectedPriority =
+      stateData.priority != null
+        ? String(stateData.priority)
+        : '';
+
+  }
+
+
+  // =========================================================
+  // SAVE FILTER STATE
+  // =========================================================
+
+  private saveFilterState(): void {
+
+    const filterState = {
+
+      currentPage:
+        this.currentPage,
+
+      page:
+        this.page,
+
+      size:
+        this.size,
+
+      statusIndex:
+        this.statusIndex,
+
+      searchText:
+        this.search,
+
+      clientId:
+        this.selectedClient
+          ? Number(this.selectedClient)
+          : null,
+
+      taskCategoryId:
+        this.selectedTaskCategory
+          ? Number(this.selectedTaskCategory)
+          : null,
+
+      assignedTo:
+        this.selectedAssignedTo
+          ? Number(this.selectedAssignedTo)
+          : null,
+
+      priority:
+        this.selectedPriority
+          ? Number(this.selectedPriority)
+          : null
+
+    };
+
+
+    if (
+      isPlatformBrowser(this.platformId)
+    ) {
+
+      sessionStorage.setItem(
+
+        this.filterKey,
+
+        JSON.stringify(filterState)
+
+      );
+
+    }
+
+  }
+
+
+  // =========================================================
+  // LOAD FILTER DATA
+  // =========================================================
+
+  private loadFilterData(): void {
+
+    this.dataprovider
+      .getTaskFilterData()
+      .subscribe({
+
+        next: (response: any) => {
+
+          console.log(
+            'TASK FILTER DATA:',
+            response
+          );
+
+
+          this.clients =
+            response.clients || [];
+
+
+          this.taskCategories =
+            response.taskCategories || [];
+
+
+          this.assignedUsers =
+            response.assignedUsers || [];
+
+        },
+
+
+        error: (error) => {
+
+          console.error(
+            'Error loading task filter data:',
+            error
+          );
+
+          this.clients = [];
+
+          this.taskCategories = [];
+
+          this.assignedUsers = [];
+
+        }
+
+      });
+
+  }
+
 
   // =========================================================
   // TOGGLE PANEL
   // =========================================================
 
-  togglePanel() {
+  togglePanel(): void {
+
     this.isPanelVisible =
       !this.isPanelVisible;
+
   }
 
+
   // =========================================================
-  // GET DEPARTMENT DETAILS
+  // GET TASK DETAILS
   // =========================================================
 
-  getDepartmentDetails() {
+  getTaskDetails(): void {
+
+    const clientId =
+      this.selectedClient
+        ? Number(this.selectedClient)
+        : 0;
+
+
+    const taskCategoryId =
+      this.selectedTaskCategory
+        ? Number(this.selectedTaskCategory)
+        : 0;
+
+
+    const assignedTo =
+      this.selectedAssignedTo
+        ? Number(this.selectedAssignedTo)
+        : 0;
+
+
+    const priority =
+      this.selectedPriority
+        ? Number(this.selectedPriority)
+        : 0;
+
 
     this.dataprovider
-      .getDepartmentDetails(
-        this.page,
-        this.size,
-        this.statusIndex,
-        this.search
-      )
-      .subscribe(
-        (response) => {
+      .getTaskDetails(
 
-          this.apiResponseDepartmentDetails =
+        this.page,
+
+        this.size,
+
+        this.statusIndex,
+
+        this.search,
+
+        clientId,
+
+        taskCategoryId,
+
+        assignedTo,
+
+        priority
+
+      )
+      .subscribe({
+
+        next: (response: any) => {
+
+          console.log(
+            'TASK DETAILS RESPONSE:',
+            response
+          );
+
+
+          this.apiResponseTaskDetails =
             response;
 
-          this.departments =
-            response.data;
+
+          this.tasks =
+            response.data || [];
+
         },
 
-        (error) => {
+
+        error: (error) => {
 
           console.error(
-            'Error fetching department details:',
+            'Error fetching task details:',
             error
           );
+
+
+          this.apiResponseTaskDetails = {
+
+            totalElements: 0
+
+          };
+
+
+          this.tasks = [];
+
         }
-      );
+
+      });
+
   }
 
+
   // =========================================================
-  // PAGINATED DEPARTMENTS
+  // PAGINATED TASKS
   // =========================================================
 
-  get paginatedDepartments(): Department[] {
-    return this.departments;
+  get paginatedTasks(): Task[] {
+
+    return this.tasks;
+
   }
+
 
   // =========================================================
   // GO TO PAGE
@@ -344,117 +809,179 @@ export class TaskIndex {
 
   goToPage(
     pageNumber: number
-  ) {
+  ): void {
 
     if (
       pageNumber < 1 ||
       pageNumber > this.totalPages
     ) {
+
       return;
+
     }
+
 
     this.currentPage =
       pageNumber;
 
+
     this.page =
       pageNumber - 1;
 
+
+    this.saveFilterState();
+
+
     this.router
       .navigate(
-        ['/department-master'],
+
+        ['/task-index'],
+
         {
+
           queryParams: {
+
             currentPage:
               this.currentPage,
-
-            statusIndex:
-              this.statusIndex || 0,
-
-            searchText:
-              this.search || '',
 
             page:
               this.page,
 
             size:
-              this.size || 5,
+              this.size,
+
+            statusIndex:
+              this.statusIndex,
+
+            searchText:
+              this.search,
+
+            clientId:
+              this.selectedClient || null,
+
+            taskCategoryId:
+              this.selectedTaskCategory || null,
+
+            assignedTo:
+              this.selectedAssignedTo || null,
+
+            priority:
+              this.selectedPriority || null
+
           },
+
+          replaceUrl: true
+
         }
+
       )
       .then(() => {
 
-        this.getDepartmentDetails();
+        this.getTaskDetails();
 
       });
+
   }
+
 
   // =========================================================
   // FIRST PAGE
   // =========================================================
 
-  goToFirstPage() {
+  goToFirstPage(): void {
 
     this.goToPage(1);
+
   }
+
 
   // =========================================================
   // LAST PAGE
   // =========================================================
 
-  goToLastPage() {
+  goToLastPage(): void {
 
     this.goToPage(
       this.totalPages
     );
+
   }
 
+
   // =========================================================
-  // SEARCH
+  // SEARCH / FILTER
   // =========================================================
 
-  onSearch() {
+  onSearch(): void {
 
     this.search =
-      this.searchQuery.trim();
+      this.searchQuery
+        ? this.searchQuery.trim()
+        : '';
+
 
     this.statusIndex =
       this.selectedStatus === ''
         ? 0
-        : +this.selectedStatus;
+        : Number(this.selectedStatus);
+
 
     this.currentPage = 1;
 
     this.page = 0;
 
+
+    this.saveFilterState();
+
+
     this.router
       .navigate(
-        ['/department-master'],
-        {
-          state: {
 
-            currentPage:
-              this.currentPage,
+        ['/task-index'],
+
+        {
+
+          queryParams: {
+
+            currentPage: 1,
+
+            page: 0,
+
+            size: this.size,
 
             statusIndex:
-              this.statusIndex || 0,
+              this.statusIndex,
 
             searchText:
-              this.search || '',
+              this.search,
 
-            page:
-              this.page,
+            clientId:
+              this.selectedClient || null,
 
-            size:
-              this.size || 5,
+            taskCategoryId:
+              this.selectedTaskCategory || null,
+
+            assignedTo:
+              this.selectedAssignedTo || null,
+
+            priority:
+              this.selectedPriority || null
+
           },
+
+          replaceUrl: true
+
         }
+
       )
       .then(() => {
 
-        this.getDepartmentDetails();
+        this.getTaskDetails();
 
       });
+
   }
+
 
   // =========================================================
   // CHANGE RECORDS PER PAGE
@@ -462,239 +989,301 @@ export class TaskIndex {
 
   onChangeRecordsPerPage(): void {
 
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : +this.selectedStatus;
-
-    this.search =
-      this.searchQuery.trim();
-
-    if (!this.search) {
-
-      this.search = '';
-
-      this.searchQuery = '';
-    }
-
     this.currentPage = 1;
 
     this.page = 0;
 
-    this.getDepartmentDetails();
+
+    this.saveFilterState();
+
+
+    this.getTaskDetails();
+
   }
 
+
   // =========================================================
-  // DELETE DEPARTMENT
+  // DELETE TASK
   // =========================================================
 
-  onDeleteDepartment(
-    departmentId: any
-  ) {
+  onDeleteTask(
+    taskId: number
+  ): void {
 
-    this.department.departmentId =
-      departmentId;
+    // this.task = {
 
-    this.department.userId =
-      this.userId
-        ? Number(this.userId)
-        : null;
+    //   taskId:
 
-    Swal.fire({
+    //     Number(taskId),
 
-      title: 'Are you sure?',
+    //   userId:
 
-      text:
-        'Do you really want to delete this department?',
+    //     this.userId
+    //       ? Number(this.userId)
+    //       : null
 
-      icon: 'warning',
+    // };
 
-      showCancelButton: true,
 
-      confirmButtonText:
-        'Yes, delete it!',
+    // Swal.fire({
 
-      cancelButtonText:
-        'No, keep it',
+    //   title:
+    //     'Are you sure?',
 
-    }).then(
-      (result) => {
+    //   text:
+    //     'Do you really want to delete this task?',
 
-        if (
-          result.isConfirmed
-        ) {
+    //   icon:
+    //     'warning',
 
-          this.dataprovider
-            .deleteDepartment(
-              this.department
-            )
-            .subscribe({
+    //   showCancelButton:
+    //     true,
 
-              next:
-                (response) => {
+    //   confirmButtonText:
+    //     'Yes, delete it!',
 
-                  if (
-                    response.success
-                  ) {
+    //   cancelButtonText:
+    //     'No, keep it',
 
-                    Swal.fire(
-                      'Deleted!',
-                      response.message,
-                      'success'
-                    );
+    // }).then(
+    //   (result) => {
 
-                    this.getDepartmentDetails();
+    //     if (
+    //       result.isConfirmed
+    //     ) {
 
-                  } else {
+    //       this.dataprovider
+    //         .deleteTask(this.task)
+    //         .subscribe({
 
-                    Swal.fire(
-                      'Error',
-                      response.message,
-                      'error'
-                    );
-                  }
-                },
+    //           next:
+    //             (response: any) => {
 
-              error:
-                (error) => {
+    //               if (
+    //                 response.success
+    //               ) {
 
-                  console.error(
-                    'Error deleting department:',
-                    error
-                  );
+    //                 Swal.fire(
 
-                  Swal.fire(
-                    'Error',
-                    'Something went wrong while deleting the department.',
-                    'error'
-                  );
-                },
-            });
+    //                   'Deleted!',
+
+    //                   response.message,
+
+    //                   'success'
+
+    //                 );
+
+
+    //                 this.getTaskDetails();
+
+    //               } else {
+
+    //                 Swal.fire(
+
+    //                   'Error',
+
+    //                   response.message,
+
+    //                   'error'
+
+    //                 );
+
+    //               }
+
+    //             },
+
+
+    //           error:
+    //             (error) => {
+
+    //               console.error(
+    //                 'Error deleting task:',
+    //                 error
+    //               );
+
+
+    //               Swal.fire(
+
+    //                 'Error',
+
+    //                 'Something went wrong while deleting the task.',
+
+    //                 'error'
+
+    //               );
+
+    //             }
+
+    //         });
+
+    //     }
+
+    //   }
+
+    // );
+
+  }
+
+
+  // =========================================================
+  // VIEW TASK
+  // =========================================================
+
+  viewTask(
+    taskId: number
+  ): void {
+
+    this.saveFilterState();
+
+
+    this.router.navigate(
+
+      [
+        '/view-task',
+        taskId
+      ],
+
+      {
+
+        state: {
+
+          currentPage:
+            this.currentPage,
+
+          statusIndex:
+            this.statusIndex,
+
+          searchText:
+            this.search,
+
+          size:
+            this.size,
+
+          clientId:
+            this.selectedClient,
+
+          taskCategoryId:
+            this.selectedTaskCategory,
+
+          assignedTo:
+            this.selectedAssignedTo,
+
+          priority:
+            this.selectedPriority
+
         }
+
       }
+
     );
+
   }
 
+
   // =========================================================
-  // VIEW DEPARTMENT
+  // EDIT TASK
   // =========================================================
 
-  viewDepartment(
-    departmentId: any
-  ) {
+  editTask(
+    taskId: number
+  ): void {
 
-    const filterState = {
+    this.saveFilterState();
 
-      currentPage:
-        this.currentPage,
-
-      statusIndex:
-        this.statusIndex,
-
-      searchText:
-        this.search,
-
-      size:
-        this.size,
-    };
-
-    sessionStorage.setItem(
-      this.filterKey,
-      JSON.stringify(
-        filterState
-      )
-    );
 
     this.router.navigate(
+
       [
-        '/view-department',
-        departmentId
+        '/edit-task',
+        taskId
       ],
+
       {
-        state:
-          filterState
+
+        state: {
+
+          currentPage:
+            this.currentPage,
+
+          statusIndex:
+            this.statusIndex,
+
+          searchText:
+            this.search,
+
+          size:
+            this.size,
+
+          clientId:
+            this.selectedClient,
+
+          taskCategoryId:
+            this.selectedTaskCategory,
+
+          assignedTo:
+            this.selectedAssignedTo,
+
+          priority:
+            this.selectedPriority
+
+        }
+
       }
+
     );
+
   }
 
+
   // =========================================================
-  // EDIT DEPARTMENT
+  // ADD TASK
   // =========================================================
 
-  editDepartment(
-    departmentId: any
-  ) {
+  addTask(): void {
 
-    const filterState = {
+    this.saveFilterState();
 
-      currentPage:
-        this.currentPage,
-
-      statusIndex:
-        this.statusIndex,
-
-      searchText:
-        this.search,
-
-      size:
-        this.size,
-    };
-
-    sessionStorage.setItem(
-      this.filterKey,
-      JSON.stringify(
-        filterState
-      )
-    );
 
     this.router.navigate(
-      [
-        '/edit-department',
-        departmentId
-      ],
+
+      ['/add-task'],
+
       {
-        state:
-          filterState
+
+        state: {
+
+          currentPage:
+            this.currentPage,
+
+          statusIndex:
+            this.statusIndex,
+
+          searchText:
+            this.search,
+
+          size:
+            this.size,
+
+          clientId:
+            this.selectedClient,
+
+          taskCategoryId:
+            this.selectedTaskCategory,
+
+          assignedTo:
+            this.selectedAssignedTo,
+
+          priority:
+            this.selectedPriority
+
+        }
+
       }
+
     );
+
   }
 
-  // =========================================================
-  // ADD DEPARTMENT
-  // =========================================================
-
-  addDepartment() {
-
-    const filterState = {
-
-      currentPage:
-        this.currentPage,
-
-      statusIndex:
-        this.statusIndex,
-
-      searchText:
-        this.search,
-
-      size:
-        this.size,
-    };
-
-    sessionStorage.setItem(
-      this.filterKey,
-      JSON.stringify(
-        filterState
-      )
-    );
-
-    this.router.navigate(
-      ['/add-department'],
-      {
-        state:
-          filterState
-      }
-    );
-  }
 
   // =========================================================
   // PAGE NUMBERS
@@ -705,10 +1294,13 @@ export class TaskIndex {
     const total =
       this.totalPages;
 
+
     const current =
       this.currentPage;
 
+
     const delta = 5;
+
 
     const start =
       Math.max(
@@ -716,24 +1308,32 @@ export class TaskIndex {
         current - delta
       );
 
+
     const end =
       Math.min(
         total,
         current + delta
       );
 
+
     const arr: number[] = [];
+
 
     for (
       let i = start;
       i <= end;
       i++
     ) {
+
       arr.push(i);
+
     }
 
+
     return arr;
+
   }
+
 
   // =========================================================
   // RECORD SUMMARY
@@ -742,31 +1342,38 @@ export class TaskIndex {
   get recordSummary(): string {
 
     const totalRecords =
-      this.apiResponseDepartmentDetails
-        .totalElements || 0;
+      this.apiResponseTaskDetails
+        ?.totalElements || 0;
+
 
     const startRecord =
       totalRecords === 0
+
         ? 0
+
         : (
+
           (this.currentPage - 1) *
           this.recordsPerPage
+
         ) + 1;
+
 
     const endRecord =
       Math.min(
+
         this.currentPage *
         this.recordsPerPage,
+
         totalRecords
+
       );
 
-    return `Page ${this.currentPage} of ${this.totalPages
-      }, (${startRecord} - ${endRecord} of ${totalRecords
-      } record${totalRecords > 1
-        ? 's'
-        : ''
-      })`;
+
+    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${totalRecords > 1 ? 's' : ''})`;
+
   }
+
 
   // =========================================================
   // TOTAL PAGES
@@ -775,20 +1382,28 @@ export class TaskIndex {
   get totalPages(): number {
 
     const total =
-      this.apiResponseDepartmentDetails
-        .totalElements || 0;
+      this.apiResponseTaskDetails
+        ?.totalElements || 0;
+
 
     return Math.max(
+
       1,
+
       Math.ceil(
+
         total /
         this.recordsPerPage
+
       )
+
     );
+
   }
 
+
   // =========================================================
-  // SORT DATA
+  // SORT
   // =========================================================
 
   sortData(
@@ -796,10 +1411,12 @@ export class TaskIndex {
   ): void {
 
     if (!column) {
+
       return;
+
     }
 
-    // Toggle direction
+
     if (
       this.sortColumn === column
     ) {
@@ -816,10 +1433,11 @@ export class TaskIndex {
 
       this.sortDirection =
         'asc';
+
     }
 
-    // Sort
-    this.departments.sort(
+
+    this.tasks.sort(
       (a: any, b: any) => {
 
         let valA =
@@ -828,14 +1446,14 @@ export class TaskIndex {
         let valB =
           b[column];
 
-        // Null / undefined
+
         valA =
           valA ?? '';
 
         valB =
           valB ?? '';
 
-        // Number
+
         if (
           !isNaN(valA) &&
           !isNaN(valB)
@@ -858,7 +1476,9 @@ export class TaskIndex {
             valB
               .toString()
               .toLowerCase();
+
         }
+
 
         if (
           valA < valB
@@ -866,9 +1486,11 @@ export class TaskIndex {
 
           return this.sortDirection ===
             'asc'
-            ? -1
-            : 1;
+              ? -1
+              : 1;
+
         }
+
 
         if (
           valA > valB
@@ -876,12 +1498,72 @@ export class TaskIndex {
 
           return this.sortDirection ===
             'asc'
-            ? 1
-            : -1;
+              ? 1
+              : -1;
+
         }
 
+
         return 0;
+
       }
+
     );
+
   }
+
+
+  // =========================================================
+  // PRIORITY LABEL
+  // =========================================================
+
+  getPriorityLabel(
+    priority: number
+  ): string {
+
+    switch (priority) {
+
+      case 1:
+        return 'High';
+
+      case 2:
+        return 'Medium';
+
+      case 3:
+        return 'Low';
+
+      default:
+        return '-';
+
+    }
+
+  }
+
+
+  // =========================================================
+  // PRIORITY CSS
+  // =========================================================
+
+  getPriorityClass(
+    priority: number
+  ): string {
+
+    switch (priority) {
+
+      case 1:
+        return 'priority-high';
+
+      case 2:
+        return 'priority-medium';
+
+      case 3:
+        return 'priority-low';
+
+      default:
+        return '';
+
+    }
+
+  }
+
 }

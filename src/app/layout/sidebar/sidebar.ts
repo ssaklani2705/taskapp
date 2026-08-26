@@ -44,7 +44,7 @@ export class Sidebar {
   constructor(private router: Router, private loginService: LoginService, @Inject(PLATFORM_ID) private platformId: Object) { }
 
   username: string = '';
-
+  loginType: string = '';
   
 
   ngOnInit(): void {
@@ -53,6 +53,9 @@ export class Sidebar {
     if (isPlatformBrowser(this.platformId)) {
        this.username =
       sessionStorage.getItem('username') || '';
+
+       this.loginType =
+      sessionStorage.getItem('loginType') || '';
       
       const storedModules = sessionStorage.getItem('modules');
       if (storedModules) {
@@ -124,14 +127,116 @@ export class Sidebar {
   }
   activeMenu = 'Dashboard';
 
+  // private getInitialMenu(): MenuItem[] {
+
+  //   return [
+  //     {
+  //       moduleId: -1,
+  //       label: 'Dashboard',
+  //       icon: 'dashboard',
+  //       route: '/dashboard'
+  //     },
+  //     {
+  //       moduleId: 2,
+  //       label: 'Department',
+  //       icon: 'groups',
+  //       route: '/department-master'
+  //     },
+  //      {
+  //           moduleId: 3,
+
+  //           label: 'Designation',
+
+  //           icon: 'badge',
+
+  //           route: '/designation-master'
+  //         },
+  //     {
+  //       moduleId: 1,
+  //       label: 'User Management',
+  //       icon: 'groups',
+  //       route: '/my-team'
+  //     },
+  //      {
+  //       moduleId: 5,
+  //       label: 'Task Category',
+  //       icon: 'task_alt',
+  //       route: '/task-category-index'
+  //     },
+  //     {
+  //       moduleId: 9,
+  //       label: 'Tasks',
+  //       icon: 'task_alt',
+  //       route: '/task-index'
+  //     },
+  //     {
+  //       moduleId: 8,
+  //       label: 'Clients',
+  //       icon: 'business',
+  //       route: '/client-index'
+  //     },
+  //        {
+  //         moduleId: 4,
+  //       label: 'State',
+  //       icon: 'bar_chart',
+  //       route: '/state-index'
+  //     },
+  //     {
+  //       label: 'Reports',
+  //       icon: 'bar_chart',
+  //       route: '/reports'
+  //     }
+  //   ];
+  // }
+
+
   private getInitialMenu(): MenuItem[] {
+
+  if (this.loginType === 'manager') {
 
     return [
       {
         moduleId: -1,
         label: 'Dashboard',
         icon: 'dashboard',
-        route: '/dashboard'
+        route: '/manager-dashboard'
+      },
+      
+      // {
+      //   moduleId: 1,
+      //   label: 'User Management',
+      //   icon: 'groups',
+      //   route: '/my-team'
+      // },
+      // {
+      //   moduleId: 5,
+      //   label: 'Task Category',
+      //   icon: 'task_alt',
+      //   route: '/task-category-index'
+      // },
+      // {
+      //   moduleId: 9,
+      //   label: 'Tasks',
+      //   icon: 'task_alt',
+      //   route: '/task-index'
+      // },
+     
+     
+      // {
+      //   label: 'Reports',
+      //   icon: 'bar_chart',
+      //   route: '/reports'
+      // }
+    ];
+
+  } else {
+
+    return [
+      {
+        moduleId: -1,
+        label: 'Dashboard',
+        icon: 'dashboard',
+        route: '/employee-dashboard'
       },
       {
         moduleId: 2,
@@ -139,23 +244,14 @@ export class Sidebar {
         icon: 'groups',
         route: '/department-master'
       },
-       {
-            moduleId: 3,
-
-            label: 'Designation',
-
-            icon: 'badge',
-
-            route: '/designation-master'
-          },
       {
-        moduleId: 1,
-        label: 'User Management',
-        icon: 'groups',
-        route: '/my-team'
+        moduleId: 3,
+        label: 'Designation',
+        icon: 'badge',
+        route: '/designation-master'
       },
-       {
-        moduleId: 5,
+      {
+          moduleId: 5,
         label: 'Task Category',
         icon: 'task_alt',
         route: '/task-category-index'
@@ -172,8 +268,8 @@ export class Sidebar {
         icon: 'business',
         route: '/client-index'
       },
-         {
-          moduleId: 4,
+        {
+        moduleId: 4,
         label: 'State',
         icon: 'bar_chart',
         route: '/state-index'
@@ -185,6 +281,8 @@ export class Sidebar {
       }
     ];
   }
+}
+
   isParentActive(item: MenuItem): boolean {
     if (!item.children) return false;
     return item.children.some((child) => this.isSubItemActive(child));
@@ -200,27 +298,68 @@ export class Sidebar {
     this.router.navigate(['/settings']);
   }
 
-  onLogout() {
-    const logoutRequest = this.loginService.logout();
+  // onLogout() {
+  //   const logoutRequest = this.loginService.logout();
 
-    if (!logoutRequest) {
-      this.loginService.clearSession();
-      this.router.navigate(['/login']);
-      return;
-    }
+  //   if (!logoutRequest) {
+  //     this.loginService.clearSession();
+  //     this.router.navigate(['/login']);
+  //     return;
+  //   }
 
-    logoutRequest.subscribe({
-      next: () => {
-        this.loginService.clearSession();
-        this.router.navigate(['/login']);
-      },
-      error: () => {
-        this.loginService.clearSession();
-        this.router.navigate(['/login']);
-      }
-    });
+  //   logoutRequest.subscribe({
+  //     next: () => {
+  //       this.loginService.clearSession();
+  //       this.router.navigate(['/login']);
+  //     },
+  //     error: () => {
+  //       this.loginService.clearSession();
+  //       this.router.navigate(['/login']);
+  //     }
+  //   });
+  // }
+onLogout(): void {
+
+  // Get login type BEFORE clearing session
+  const loginType =
+    sessionStorage.getItem('loginType') || 'other';
+
+  const redirectUrl =
+    loginType === 'manager'
+      ? '/manager-login'
+      : '/login';
+
+  const logoutRequest = this.loginService.logout();
+
+  if (!logoutRequest) {
+
+    this.loginService.clearSession();
+
+    this.router.navigate([redirectUrl]);
+
+    return;
   }
 
+  logoutRequest.subscribe({
+
+    next: () => {
+
+      this.loginService.clearSession();
+
+      this.router.navigate([redirectUrl]);
+
+    },
+
+    error: () => {
+
+      this.loginService.clearSession();
+
+      this.router.navigate([redirectUrl]);
+
+    }
+
+  });
+}
 
   getModuleDetail(moduleId: any) {
     return this.modules.find((m) => m.moduleId === moduleId) || null;

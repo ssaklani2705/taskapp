@@ -1,4 +1,3 @@
-
 <div class="page-content-wrapper">
 
   <div class="page-content">
@@ -13,9 +12,7 @@
 
         <div class="header-title-section">
 
-          <h2>
-            Task
-          </h2>
+          <h2>Task</h2>
 
           <button
             type="button"
@@ -29,13 +26,12 @@
 
         </div>
 
-        <!-- ADD NEW -->
         @if (addPer === "Y") {
 
           <button
             type="button"
             class="btn-add-user"
-            (click)="addDepartment()"
+            (click)="addTask()"
           >
             <span class="plus-icon">+</span>
             Add New
@@ -47,7 +43,7 @@
 
 
       <!-- =====================================================
-           SEARCH PANEL
+           SEARCH / FILTER PANEL
       ====================================================== -->
 
       <div
@@ -65,7 +61,7 @@
               <input
                 type="text"
                 [(ngModel)]="searchQuery"
-                placeholder="Search by Department Name"
+                placeholder="Search by Title"
                 class="search-input"
                 (keyup.enter)="onSearch()"
               />
@@ -80,6 +76,111 @@
               </button>
 
             </div>
+
+          </div>
+
+
+          <!-- CLIENT -->
+          <div class="status-wrapper">
+
+            <select
+              class="status-select"
+              [(ngModel)]="selectedClient"
+              (change)="onSearch()"
+            >
+
+              <option value="">
+                --All Clients--
+              </option>
+
+              <option
+                *ngFor="let client of clients"
+                [value]="client.clientId"
+              >
+                {{ client.name }}
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- TASK CATEGORY -->
+          <div class="status-wrapper">
+
+            <select
+              class="status-select"
+              [(ngModel)]="selectedTaskCategory"
+              (change)="onSearch()"
+            >
+
+              <option value="">
+                --All Task Categories--
+              </option>
+
+              <option
+                *ngFor="let category of taskCategories"
+                [value]="category.taskcategoryId"
+              >
+                {{ category.name }}
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- ASSIGNED TO -->
+          <div class="status-wrapper">
+
+            <select
+              class="status-select"
+              [(ngModel)]="selectedAssignedTo"
+              (change)="onSearch()"
+            >
+
+              <option value="">
+                --All Assigned To--
+              </option>
+
+              <option
+                *ngFor="let user of assignedUsers"
+                [value]="user.userId"
+              >
+                {{ user.firstName }}
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- PRIORITY -->
+          <div class="status-wrapper">
+
+            <select
+              class="status-select"
+              [(ngModel)]="selectedPriority"
+              (change)="onSearch()"
+            >
+
+              <option value="">
+                --All Priority--
+              </option>
+
+              <option value="1">
+                High
+              </option>
+
+              <option value="2">
+                Medium
+              </option>
+
+              <option value="3">
+                Low
+              </option>
+
+            </select>
 
           </div>
 
@@ -145,7 +246,6 @@
         >
           {{ recordSummary }}
         </div>
-
 
         <div class="pagination">
 
@@ -273,11 +373,12 @@
               <tr
                 class="user-row"
                 *ngFor="
-                  let department of paginatedDepartments;
+                  let task of paginatedTasks;
                   let i = index
                 "
               >
 
+                <!-- SERIAL -->
                 <td class="serial-number">
                   {{
                     (currentPage - 1) *
@@ -288,100 +389,118 @@
                 </td>
 
 
+                <!-- TITLE -->
+                <td>
+                  <span class="wrap-text">
+                    {{ task.title || '-' }}
+                  </span>
+                </td>
+
+
+                <!-- CLIENT -->
+                <td>
+                  <span class="wrap-text">
+                    {{ task.clientName || '-' }}
+                  </span>
+                </td>
+
+
+                <!-- DATE -->
+                <td>
+                  {{
+                    task.date
+                      ? (task.date | date:'dd-MM-yyyy')
+                      : '-'
+                  }}
+                </td>
+
+
+                <!-- TASK CATEGORY -->
+                <td>
+                  <span class="wrap-text">
+                    {{ task.taskCategoryName || '-' }}
+                  </span>
+                </td>
+
+
+                <!-- ASSIGNED TO -->
+                <td>
+                  <span class="wrap-text">
+                    {{ task.assignedToName || '-' }}
+                  </span>
+                </td>
+
+
+                <!-- PRIORITY -->
                 <td>
 
-                  <span class="user-name wrap-text">
-                    {{ department.name }}
+                  <span
+                    class="priority-badge"
+                    [ngClass]="getPriorityClass(task.priority)"
+                  >
+                    {{ getPriorityLabel(task.priority) }}
                   </span>
 
                 </td>
 
 
-                <td>
-                  {{ department.sequence }}
-                </td>
-
-
+                <!-- STATUS -->
                 <td>
 
                   <span
                     class="status-badge"
-                    [ngClass]="
-                      common.getStatusClass(
-                        department.status
-                      )
-                    "
+                    [ngClass]="common.getStatusClass(task.status)"
                   >
                     {{
-                      common.getStatusLabel(
-                        department.status
-                      )
+                      common.getStatusLabel(task.status)
                     }}
                   </span>
 
                 </td>
 
 
+                <!-- ACTION -->
                 <td>
 
                   <div class="action-buttons">
 
-                    <!-- VIEW -->
-                    <a
-                      (click)="
-                        viewDepartment(
-                          department.departmentId
-                        )
-                      "
-                      class="action-btn view-btn"
-                      title="View"
-                    >
-                      <i class="fa fa-eye"></i>
-                    </a>
+                    @if (viewPer === "Y") {
+
+                      <a
+                        (click)="viewTask(task.taskId)"
+                        class="action-btn view-btn"
+                        title="View"
+                      >
+                        <i class="fa fa-eye"></i>
+                      </a>
+
+                    }
 
 
-                    <!-- EDIT / DELETE -->
-                    <ng-container
-                      *ngIf="
-                        department.status === 1 ||
-                        department.status === 2
-                      "
-                    >
+                    @if (editPer === "Y") {
 
-                      @if (editPer === "Y") {
+                      <a
+                        (click)="editTask(task.taskId)"
+                        class="action-btn edit-btn"
+                        title="Edit"
+                      >
+                        <i class="fa fa-pencil"></i>
+                      </a>
 
-                        <a
-                          (click)="
-                            editDepartment(
-                              department.departmentId
-                            )
-                          "
-                          class="action-btn edit-btn"
-                          title="Edit"
-                        >
-                          <i class="fa fa-pencil"></i>
-                        </a>
-
-                      }
+                    }
 
 
-                      @if (deletePer === "Y") {
+                    @if (deletePer === "Y") {
 
-                        <a
-                          (click)="
-                            onDeleteDepartment(
-                              department.departmentId
-                            )
-                          "
-                          class="action-btn delete-btn"
-                          title="Delete"
-                        >
-                          <i class="fa fa-trash"></i>
-                        </a>
+                      <a
+                        (click)="onDeleteTask(task.taskId)"
+                        class="action-btn delete-btn"
+                        title="Delete"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </a>
 
-                      }
-
-                    </ng-container>
+                    }
 
                   </div>
 
@@ -394,8 +513,8 @@
 
               <tr
                 *ngIf="
-                  !paginatedDepartments ||
-                  paginatedDepartments.length === 0
+                  !paginatedTasks ||
+                  paginatedTasks.length === 0
                 "
               >
 
@@ -430,7 +549,6 @@
         >
           {{ recordSummary }}
         </div>
-
 
         <div class="pagination">
 
