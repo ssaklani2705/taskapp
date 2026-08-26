@@ -1410,4 +1410,31 @@ getClientDetails(
     return this.http.post(`${environment.apiBaseUrl}admin/state/delete`, state);
   }
 
+
+
+
+
+
+
+  savePlan(plan: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/plan/add_or_Update`, plan);
+  }
+
+
+
+  getPlanList(page: any, size: any, statusIndex: any, search: any): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}admin/plan/plan_list?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
+  }
+
+
+  getPlanById(planId: number): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}admin/plan/get_by_Id/${planId}`);
+  }
+
+  
+  // Delete State
+  deletePlan(plan: any): Observable<any> {
+    return this.http.post(`${environment.apiBaseUrl}admin/plan/delete`, plan);
+  }
+
 }

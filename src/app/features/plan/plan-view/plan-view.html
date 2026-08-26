@@ -9,14 +9,11 @@
     <div class="card-header">
 
       <div class="page-title">
-        <mat-icon>category</mat-icon>
-        <span>View State</span>
+
+        <span>View Plan Master</span>
       </div>
 
-      <button
-        mat-flat-button
-        class="back-button"
-        (click)="backToIndexPage()">
+      <button mat-flat-button class="back-button" (click)="backToIndexPage()">
 
         <mat-icon>arrow_back</mat-icon>
         Back to Index
@@ -32,30 +29,39 @@
       <div class="details-row">
 
         <div class="detail-item">
-          <span class="label">State Name:</span>
-          <span class="value">{{ taskCategory.name }}</span>
+          <span class="label">Plan Name:</span>
+          <span class="value">{{ plan.name }}</span>
         </div>
 
         <div class="detail-item">
-          <span class="label">State Code:</span>
+          <span class="label">Plan Rate:</span>
           <span class="value">
-            {{ taskCategory.code || 'NA' }}
+            {{ plan.rate || 'NA' }}
           </span>
         </div>
+
+       
 
         <div class="detail-item">
           <span class="label">Status:</span>
 
-          <span
-            class="status-text"
-            [ngClass]="common.getStatusClass(taskCategory.status)">
+          <span class="status-text" [ngClass]="common.getStatusClass(plan.status)">
 
-            {{ common.getStatusLabel(taskCategory.status) }}
+            {{ common.getStatusLabel(plan.status) }}
 
           </span>
 
         </div>
 
+      </div>
+
+      <div class="detail-row" style="margin-top: 10px;">
+         <div class="detail-item description-text">
+          <span class="label">Description:</span>
+          <span class="value">
+            {{ plan.description || 'NA' }}
+          </span>
+        </div>
       </div>
 
     </div>
@@ -82,9 +88,7 @@
 
     <div class="table-wrapper">
 
-      <table
-        class="history-table"
-        *ngIf="transactionHistory.length">
+      <table class="history-table" *ngIf="transactionHistory.length">
 
         <thead>
 
@@ -99,8 +103,7 @@
 
         <tbody>
 
-          <tr
-            *ngFor="
+          <tr *ngFor="
               let history of transactionHistory;
               let i = index
             ">
@@ -127,9 +130,7 @@
 
       </table>
 
-      <div
-        *ngIf="!transactionHistory.length"
-        class="no-record">
+      <div *ngIf="!transactionHistory.length" class="no-record">
 
         No action history found
 

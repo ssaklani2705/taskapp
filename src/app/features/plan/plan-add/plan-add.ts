@@ -10,12 +10,13 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 
 
-export interface State {
-  stateId: any
+export interface Plan {
+  planId: any;
   name: string;
-  code: string;
+  rate: any;
+  description: string;
   status: any;
-  userId: any
+  userId: any;
 }
 export interface ApiResponse<T> {
   success: boolean;
@@ -23,7 +24,7 @@ export interface ApiResponse<T> {
   data: T;
 }
 @Component({
-  selector: 'app-state-add',
+  selector: 'app-plan-add',
   standalone: true,
   imports: [
     CommonModule,
@@ -33,20 +34,21 @@ export interface ApiResponse<T> {
     MatButtonModule,
     MatSelectModule,
   ],
-  templateUrl: './state-add.html',
-  styleUrl: './state-add.scss',
+  templateUrl: './plan-add.html',
+  styleUrl: './plan-add.scss',
 })
-export class StateAdd implements OnInit {
+export class PlanAdd implements OnInit {
 
-  state: State = {
-    stateId: null,
+  plan: Plan = {
+    planId: null,
     name: '',
-    code: '',
+    rate: null,
+    description: '',
     status: null,
     userId: null,
   };
 
-  originalState: State = { ...this.state };
+  originalPlan: Plan = { ...this.plan };
 
   userId: string | null = null;
 
@@ -93,26 +95,26 @@ export class StateAdd implements OnInit {
        Check Edit Mode
     --------------------------------- */
 
-    const stateId = this.route.snapshot.params['stateId'];
-    console.log('Route params:', this.route.snapshot.params);
-    console.log('stateId value:', stateId);
+    const planId = this.route.snapshot.params['planId'];
 
-    if (stateId) {
+
+    if (planId) {
       this.isEditMode = true;
 
-      this.dataprovider.getStateById(stateId).subscribe({
+      this.dataprovider.getPlanById(planId).subscribe({
 
-        next: (res: ApiResponse<State>) => {
+        next: (res: ApiResponse<Plan>) => {
           if (res && res.data) {
-            this.state = {
-              stateId: res.data.stateId,
+            this.plan = {
+              planId: res.data.planId,
               name: res.data.name,
-              code: res.data.code,
+              rate: res.data.rate,
+              description: res.data.description,
               status: res.data.status,
               userId: res.data.userId,
             };
 
-            this.originalState = { ...this.state };
+            this.originalPlan = { ...this.plan };
           }
         },
 
@@ -129,12 +131,7 @@ export class StateAdd implements OnInit {
      CAPITALIZE FIRST CHARACTER
   ========================================= */
 
-  capitalizeFirstCharOnly(value: string): string {
-    if (!value) {
-      return '';
-    }
-    return value.charAt(0).toUpperCase() + value.slice(1);
-  }
+
 
   /* =========================================
      SUBMIT
@@ -148,12 +145,12 @@ export class StateAdd implements OnInit {
     }
 
     /* User ID */
-    this.state.userId = this.userId ? Number(this.userId) : null;
+    this.plan.userId = this.userId ? Number(this.userId) : null;
 
     /* Save */
-    this.dataprovider.saveState(this.state).subscribe({
+    this.dataprovider.savePlan(this.plan).subscribe({
 
-      next: (response: ApiResponse<State>) => {
+      next: (response: ApiResponse<Plan>) => {
         if (response.success) {
           Swal.fire('Success', response.message, 'success');
           this.backToIndexPage();
@@ -188,14 +185,15 @@ export class StateAdd implements OnInit {
 
     if (this.isEditMode) {
 
-      this.state = { ...this.originalState };
+      this.plan = { ...this.originalPlan };
 
     } else {
 
-      this.state = {
-        stateId: null,
+      this.plan = {
+        planId: null,
         name: '',
-        code: '',
+        rate: null,
+        description: '',
         status: null,
         userId: null,
       };
@@ -210,7 +208,7 @@ export class StateAdd implements OnInit {
 
   backToIndexPage(): void {
 
-    this.router.navigate(['/state-index'], {
+    this.router.navigate(['/plan-index'], {
       queryParams: {
         currentPage: this.currentPage,
         statusIndex: this.statusIndex,
@@ -219,5 +217,22 @@ export class StateAdd implements OnInit {
         size: this.size || 5,
       },
     });
+  }
+
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const key = event.key;
+
+    // Allow digits
+    if (/^[0-9]$/.test(key)) {
+      return;
+    }
+
+    // Allow only one decimal point
+    if (key === '.' && !(event.target as HTMLInputElement).value.includes('.')) {
+      return;
+    }
+
+    event.preventDefault();
   }
 }

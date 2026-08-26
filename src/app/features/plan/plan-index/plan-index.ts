@@ -11,14 +11,16 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import { SessionStorageService } from '../../../service/session-storage.service';
 import Swal from 'sweetalert2';
 import { Common } from '../../../classes/common';
-import { State } from '../state-add/state-add';
+import { Plan } from '../plan-add/plan-add';
+
+
 
 
 
 
 
 @Component({
-  selector: 'app-state-index',
+  selector: 'app-plan-index',
   imports: [
     CommonModule,
     FormsModule,
@@ -28,14 +30,13 @@ import { State } from '../state-add/state-add';
     MatDivider
   ],
 
-  templateUrl: './state-index.html',
-  styleUrl: './state-index.scss',
+  templateUrl: './plan-index.html',
+  styleUrl: './plan-index.scss',
 })
-export class StateIndex {
-  states: State[] = [];
+export class PlanIndex {
+ plans: Plan[] = [];
 
-
-  apiResponseState: any = {};
+  apiResponsePlan: any = {};
 
   searchQuery: string = '';
   search: string = '';
@@ -80,7 +81,7 @@ export class StateIndex {
   showHeaderBar: boolean = true;
 
   filterKey =
-    SESSION_KEYS.STATE_FILTER;
+    SESSION_KEYS.PLAN_FILTER;
 
   constructor(
     private dataprovider: DataProviderService,
@@ -215,7 +216,7 @@ export class StateIndex {
 
 
 
-      this.getTaskCategoryDetails();
+      this.getPlanDetails();
     });
   }
 
@@ -227,10 +228,10 @@ export class StateIndex {
   }
 
 
-  getTaskCategoryDetails(): void {
+  getPlanDetails(): void {
 
     this.dataprovider
-      .getStateList(
+      .getPlanList(
         this.page,
         this.size,
         this.statusIndex,
@@ -240,10 +241,10 @@ export class StateIndex {
 
         next: (response: any) => {
 
-          this.apiResponseState =
+          this.apiResponsePlan =
             response?.data || {};      // ✅ the inner map: { data, totalElements }
 
-          this.states =
+          this.plans =
             response?.data?.data || [];  // ✅ the actual array
 
         },
@@ -255,9 +256,9 @@ export class StateIndex {
             error
           );
 
-          this.states = [];
+          this.plans = [];
 
-          this.apiResponseState = {
+          this.apiResponsePlan = {
             totalElements: 0,
             data: [],
           };
@@ -266,9 +267,9 @@ export class StateIndex {
   }
 
   /* Current page records */
-  get paginatedStates(): State[] {
+  get paginatedPlans(): Plan[] {
 
-    return this.states;
+    return this.plans;
   }
 
   /* Search */
@@ -313,14 +314,14 @@ export class StateIndex {
 
     this.router
       .navigate(
-        ['/state-index'],
+        ['/plan-index'],
         {
           state: state,
         }
       )
       .then(() => {
 
-        this.getTaskCategoryDetails();
+        this.getPlanDetails();
       });
   }
 
@@ -369,7 +370,7 @@ export class StateIndex {
 
     this.router
       .navigate(
-        ['/state-index'],
+        ['/plan-index'],
         {
           queryParams: {
             currentPage:
@@ -393,7 +394,7 @@ export class StateIndex {
       )
       .then(() => {
 
-        this.getTaskCategoryDetails();
+        this.getPlanDetails();
       });
   }
 
@@ -409,70 +410,70 @@ export class StateIndex {
     );
   }
 
- onDeleteState(stateId: number): void {
+  onDeletePlan(planId: number): void {
 
-  const payload = {
-    stateId: stateId,
-    userId: this.userId ? Number(this.userId) : null
-  };
+    const payload = {
+      planId: planId,
+      userId: this.userId ? Number(this.userId) : null
+    };
 
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'Do you really want to delete this state?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'No, keep it'
-  }).then((result) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to delete this state?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
 
-    if (result.isConfirmed) {
+      if (result.isConfirmed) {
 
-      this.dataprovider.deleteState(payload)
-        .subscribe({
+        this.dataprovider.deletePlan(payload)
+          .subscribe({
 
-          next: (response: any) => {
+            next: (response: any) => {
 
-            if (response.success) {
+              if (response.success) {
 
-              Swal.fire(
-                'Deleted!',
-                response.message,
-                'success'
+                Swal.fire(
+                  'Deleted!',
+                  response.message,
+                  'success'
+                );
+
+                this.getPlanDetails(); // or loadStateDetails()
+
+              } else {
+
+                Swal.fire(
+                  'Error',
+                  response.message,
+                  'error'
+                );
+              }
+            },
+
+            error: (error) => {
+
+              console.error(
+                'Error deleting state:',
+                error
               );
-
-              this.getTaskCategoryDetails(); // or loadStateDetails()
-
-            } else {
 
               Swal.fire(
                 'Error',
-                response.message,
+                'Something went wrong while deleting the state.',
                 'error'
               );
             }
-          },
-
-          error: (error) => {
-
-            console.error(
-              'Error deleting state:',
-              error
-            );
-
-            Swal.fire(
-              'Error',
-              'Something went wrong while deleting the state.',
-              'error'
-            );
-          }
-        });
-    }
-  });
-}
+          });
+      }
+    });
+  }
 
   /* View */
-  viewTaskCategory(
-    stateId: number
+  viewPlan(
+    planId: number
   ): void {
 
     const filterState = {
@@ -501,8 +502,8 @@ export class StateIndex {
 
     this.router.navigate(
       [
-        '/view-state',
-        stateId,
+        '/view-plan',
+        planId,
       ],
       {
         state:
@@ -512,8 +513,8 @@ export class StateIndex {
   }
 
   /* Edit */
-  editTaskCategory(
-    stateId: number
+  editPlan(
+    planId: number
   ): void {
 
     const filterState = {
@@ -541,8 +542,8 @@ export class StateIndex {
 
     this.router.navigate(
       [
-        '/edit-state',
-        stateId,
+        '/edit-plan',
+        planId,
       ],
       {
         state:
@@ -552,7 +553,7 @@ export class StateIndex {
   }
 
   /* Add */
-  addState(): void {
+  addPlan(): void {
 
     const filterState = {
 
@@ -578,7 +579,7 @@ export class StateIndex {
     );
 
     this.router.navigate(
-      ['/add-state'],
+      ['/add-plan'],
       {
         state:
           filterState,
@@ -627,7 +628,7 @@ export class StateIndex {
   get recordSummary(): string {
 
     const totalRecords =
-      this.apiResponseState
+      this.apiResponsePlan
         ?.totalElements || 0;
 
     const startRecord =
@@ -654,7 +655,7 @@ export class StateIndex {
   get totalPages(): number {
 
     const total =
-      this.apiResponseState
+      this.apiResponsePlan
         ?.totalElements || 0;
 
     return Math.max(
@@ -678,28 +679,28 @@ export class StateIndex {
     label: string;
     sortable: boolean;
   }[] = [
-{
-        key:
-          'code',
 
-        label:
-          'State Code',
-
-        sortable:
-          true,
-      },
       {
         key:
-          'stateName',
+          'planName',
 
         label:
-          'StateName',
+          'PlanName',
 
         sortable:
           true,
       },
 
-      
+      {
+        key:
+          'rate',
+
+        label:
+          'Rate',
+
+        sortable:
+          true,
+      },
 
       {
         key:
@@ -741,7 +742,7 @@ export class StateIndex {
         'asc';
     }
 
-    this.states.sort(
+    this.plans.sort(
       (
         a: any,
         b: any
