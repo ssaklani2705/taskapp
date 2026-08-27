@@ -131,7 +131,7 @@
                   
 
                   <input matInput [matDatepicker]="picker" class="user-input user-date-input" [(ngModel)]="task.date"
-                    name="date" required placeholder="DD-MM-YYYY" autocomplete="off" />
+                    name="date" required placeholder="DD-MM-YYYY" autocomplete="off" [min]="today"/>
 
                   <mat-datepicker #picker></mat-datepicker>
 
@@ -225,41 +225,52 @@
             <!-- PDF -->
             <div class="user-form-col">
 
-              <div class="user-form-group">
+  <div class="user-form-group">
 
-                <label class="user-label">
-                  PDF File
-                </label>
+    <label class="user-label">
+      PDF File <span class="file-limit">
+    (Maximum 5 MB)
+  </span>
+    </label>
 
-                <input type="file" class="user-input file-input" accept=".pdf,application/pdf"
-                  (change)="onPdfSelected($event)">
+    <input
+      #pdfInput
+      type="file"
+      class="user-input file-input"
+      accept=".pdf,application/pdf"
+      (change)="onPdfSelected($event)"
+    >
 
-                <div class="selected-file" *ngIf="pdfFileName">
+    <div
+      class="selected-file"
+      *ngIf="pdfFileName"
+    >
+      {{ pdfFileName }}
+    </div>
 
-                  {{ pdfFileName }}
+    <div
+      class="existing-file"
+      *ngIf="
+        isEditMode &&
+        task.fileName1 &&
+        !pdfFile
+      "
+    >
+      Existing:
+      {{ task.fileName1 }}
+    </div>
 
-                </div>
+    <div
+      class="user-error"
+      *ngIf="pdfError"
+    >
+      {{ pdfError }}
+    </div>
 
-                <div class="existing-file" *ngIf="
-                    isEditMode &&
-                    task.fileName1 &&
-                    !pdfFile
-                  ">
+  </div>
 
-                  Existing:
-                  {{ task.fileName1 }}
+</div>
 
-                </div>
-
-                <div class="user-error" *ngIf="pdfError">
-
-                  {{ pdfError }}
-
-                </div>
-
-              </div>
-
-            </div>
 
           </div>
 
@@ -271,43 +282,53 @@
           <div class="user-form-row">
 
             <!-- ZIP -->
-            <div class="user-form-col">
+           <div class="user-form-col">
 
-              <div class="user-form-group">
+  <div class="user-form-group">
 
-                <label class="user-label">
-                  ZIP File
-                </label>
+    <label class="user-label">
+      ZIP File <span class="file-limit">
+    (Maximum 5 MB)
+  </span>
+    </label>
 
-                <input type="file" class="user-input file-input" accept=".zip,application/zip"
-                  (change)="onZipSelected($event)">
+    <input
+      #zipInput
+      type="file"
+      class="user-input file-input"
+      accept=".zip,application/zip"
+      (change)="onZipSelected($event)"
+    >
 
-                <div class="selected-file" *ngIf="zipFileName">
+    <div
+      class="selected-file"
+      *ngIf="zipFileName"
+    >
+      {{ zipFileName }}
+    </div>
 
-                  {{ zipFileName }}
+    <div
+      class="existing-file"
+      *ngIf="
+        isEditMode &&
+        task.fileName2 &&
+        !zipFile
+      "
+    >
+      Existing:
+      {{ task.fileName2 }}
+    </div>
 
-                </div>
+    <div
+      class="user-error"
+      *ngIf="zipError"
+    >
+      {{ zipError }}
+    </div>
 
-                <div class="existing-file" *ngIf="
-                    isEditMode &&
-                    task.fileName2 &&
-                    !zipFile
-                  ">
+  </div>
 
-                  Existing:
-                  {{ task.fileName2 }}
-
-                </div>
-
-                <div class="user-error" *ngIf="zipError">
-
-                  {{ zipError }}
-
-                </div>
-
-              </div>
-
-            </div>
+</div>
 
 
             <!-- ASSIGNED TO -->

@@ -214,6 +214,65 @@
 
           </div>
 
+    <!-- FROM DATE -->
+<div class="status-wrapper date-filter-wrapper">
+
+  <div class="date-filter-input">
+
+    <input
+      matInput
+      [matDatepicker]="fromPicker"
+      [(ngModel)]="fromDate"
+      name="fromDate"
+      placeholder="From Date"
+      class="date-input"
+      autocomplete="off"
+      readonly
+    />
+
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="fromPicker">
+    </mat-datepicker-toggle>
+
+    <mat-datepicker
+      #fromPicker>
+    </mat-datepicker>
+
+  </div>
+
+</div>
+
+
+<!-- TO DATE -->
+<div class="status-wrapper date-filter-wrapper">
+
+  <div class="date-filter-input">
+
+    <input
+      matInput
+      [matDatepicker]="toPicker"
+      [(ngModel)]="toDate"
+      name="toDate"
+      placeholder="To Date"
+      class="date-input"
+      autocomplete="off"
+      readonly
+      [min]="fromDate"
+    />
+
+    <mat-datepicker-toggle
+      matSuffix
+      [for]="toPicker">
+    </mat-datepicker-toggle>
+
+    <mat-datepicker
+      #toPicker>
+    </mat-datepicker>
+
+  </div>
+
+</div>
 
           <!-- GO -->
           <div class="go-wrapper">
