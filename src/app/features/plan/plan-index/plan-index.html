@@ -75,6 +75,19 @@
             Go
 
           </button>
+          &nbsp;
+          <!-- Clear -->
+      <button
+        type="button"
+        class="btn-clear"
+        (click)="clearFilters()"
+        title="Clear Filters">
+
+        <!-- <mat-icon>clear</mat-icon> -->
+        Clear
+
+      </button>
+
 
         </div>
 
@@ -136,151 +149,240 @@
 
       <!-- Table -->
 
-      <div class="table-wrapper">
+     <div class="table-wrapper">
 
-        <table class="designation-table">
+  <table class="designation-table">
 
-          <thead>
+    <thead>
+      <tr>
 
-            <tr>
+        <th class="serial-column">
+          #
+        </th>
 
-              <th class="serial-column">#</th>
+        <th
+          *ngFor="let col of columns"
+          [class.sortable]="col.sortable"
+          (click)="col.sortable && sortData(col.key)"
+        >
 
-              <th *ngFor="let col of columns" [class.sortable]="col.sortable"
-                (click)="col.sortable && sortData(col.key)">
+          <div class="column-header">
 
-                <span>{{ col.label }}</span>
+            <span>
+              {{ col.label }}
+            </span>
 
-                <span *ngIf="col.sortable" class="sort-icons">
+            <span
+              *ngIf="col.sortable"
+              class="sort-icons"
+            >
 
-                  <span [class.active]="
-                    sortColumn === col.key &&
-                    sortDirection === 'asc'">
+              <span
+                [class.active]="
+                  sortColumn === col.key &&
+                  sortDirection === 'asc'
+                "
+              >
+                ▲
+              </span>
 
-                    ▲
+              <span
+                [class.active]="
+                  sortColumn === col.key &&
+                  sortDirection === 'desc'
+                "
+              >
+                ▼
+              </span>
 
-                  </span>
+            </span>
 
-                  <span [class.active]="
-                    sortColumn === col.key &&
-                    sortDirection === 'desc'">
+          </div>
 
-                    ▼
+        </th>
 
-                  </span>
+        <th class="action-column">
+          Action
+        </th>
 
-                </span>
+      </tr>
+    </thead>
 
-              </th>
 
-              <th class="action-column">
-                Action
-              </th>
+    <tbody>
 
-            </tr>
+      <tr
+        *ngFor="
+          let rows of paginatedPlans;
+          let i = index
+        "
+      >
 
-          </thead>
+        <!-- SERIAL -->
+        <td class="serial-cell">
 
-          <tbody>
+          {{
+            (currentPage - 1) *
+            recordsPerPage +
+            i +
+            1
+          }}
 
-            <tr *ngFor="
-              let rows of paginatedPlans;
-              let i = index">
+        </td>
 
-              <td class="serial-cell">
-                {{
-                (currentPage - 1) *
-                recordsPerPage +
-                i +
-                1
-                }}
-              </td>
 
-              <td>
-                {{ rows.name }}
-              </td>
-              <td>{{rows.description}}</td>
-              <td>
-                {{ rows.rate }}
-              </td>
+        <!-- PLAN NAME -->
+        <td class="plan-name-cell">
 
-              <td>
+          <span class="cell-text">
+            {{ rows.name || '-' }}
+          </span>
 
-                <span class="status-badge" [ngClass]="
-                    common.getStatusClass(
-                      rows.status
-                    )">
+        </td>
 
-                  {{
-                  common.getStatusLabel(
-                  rows.status
-                  )
-                  }}
 
-                </span>
+        <!-- DESCRIPTION -->
+        <td class="description-cell">
 
-              </td>
+          <span
+            class="description-text"
+            [title]="rows.description || ''"
+          >
+            {{ rows.description || '-' }}
+          </span>
 
-              <td class="action-cell">
+        </td>
 
-                @if (viewPer === 'Y') {
 
-                <button class="action-button view-button" (click)="viewPlan(rows.planId)">
+        <!-- RATE -->
+        <td class="rate-cell">
 
-                  <mat-icon>visibility</mat-icon>
+          {{ rows.rate ?? '-' }}
 
-                </button>
+        </td>
 
-                }
 
-                <ng-container *ngIf="
-                  rows.status === 1 ||
-                  rows.status === 2">
+        <!-- STATUS -->
+        <td class="status-cell">
 
-                  @if (editPer === 'Y') {
+          <span
+            class="status-badge"
+            [ngClass]="
+              common.getStatusClass(rows.status)
+            "
+          >
 
-                  <button class="action-button edit-button" (click)="editPlan(rows.planId)">
+            {{
+              common.getStatusLabel(rows.status)
+            }}
 
-                    <mat-icon>edit</mat-icon>
+          </span>
 
-                  </button>
+        </td>
 
-                  }
 
-                  @if (deletePer === 'Y') {
+        <!-- ACTION -->
+        <td class="action-cell">
 
-                  <button class="action-button delete-button" (click)="onDeletePlan(rows.planId)">
+          @if (viewPer === 'Y') {
 
-                    <mat-icon>delete</mat-icon>
+            <button
+              type="button"
+              class="action-button view-button"
+              (click)="viewPlan(rows.planId)"
+              title="View"
+            >
 
-                  </button>
+              <mat-icon>
+                visibility
+              </mat-icon>
 
-                  }
+            </button>
 
-                </ng-container>
+          }
 
-              </td>
 
-            </tr>
+          <ng-container
+            *ngIf="
+              rows.status === 1 ||
+              rows.status === 2
+            "
+          >
 
-            <tr *ngIf="
-              !paginatedPlans ||
-              paginatedPlans.length === 0">
+            @if (editPer === 'Y') {
 
-              <td colspan="5" class="no-records">
+              <button
+                type="button"
+                class="action-button edit-button"
+                (click)="editPlan(rows.planId)"
+                title="Edit"
+              >
 
-                <mat-icon>info_outline</mat-icon>
-                <span>No records found</span>
+                <mat-icon>
+                  edit
+                </mat-icon>
 
-              </td>
+              </button>
 
-            </tr>
+            }
 
-          </tbody>
 
-        </table>
+            @if (deletePer === 'Y') {
 
-      </div>
+              <button
+                type="button"
+                class="action-button delete-button"
+                (click)="onDeletePlan(rows.planId)"
+                title="Delete"
+              >
+
+                <mat-icon>
+                  delete
+                </mat-icon>
+
+              </button>
+
+            }
+
+          </ng-container>
+
+        </td>
+
+      </tr>
+
+
+      <!-- NO RECORDS -->
+
+      <tr
+        *ngIf="
+          !paginatedPlans ||
+          paginatedPlans.length === 0
+        "
+      >
+
+        <td
+          colspan="6"
+          class="no-records"
+        >
+
+          <mat-icon>
+            info_outline
+          </mat-icon>
+
+          <span>
+            No records found
+          </span>
+
+        </td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+
 
       <!-- Bottom Toolbar -->
 

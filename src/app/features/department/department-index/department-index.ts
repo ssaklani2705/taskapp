@@ -885,4 +885,15 @@ export class DepartmentIndexComponent {
       }
     );
   }
+
+  clearFilters(): void {
+
+  this.searchQuery = '';
+  this.selectedStatus = '';
+
+  this.currentPage = 1;
+
+  this.onSearch();
+}
+
 }

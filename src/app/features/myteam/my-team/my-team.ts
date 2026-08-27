@@ -1743,4 +1743,36 @@ private restoreFilterState(): void {
 
   }
 
+  // =========================================================
+// CLEAR FILTERS
+// =========================================================
+
+clearFilters(): void {
+
+  // Clear search
+  this.searchQuery = '';
+  this.search = '';
+
+  // Clear department
+  this.selectedDepartmentId = null;
+
+  // Clear designation
+  this.selectedDesignationId = null;
+
+  // Clear status
+  this.selectedStatus = '';
+
+  // Reset status index if you are using it
+  this.statusIndex = 0;
+
+  // Reset pagination
+  this.currentPage = 1;
+  this.page = 0;
+
+  // Reload the first page with cleared filters
+  this.onSearch();
+
+}
+
+
 }
