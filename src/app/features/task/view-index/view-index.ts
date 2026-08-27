@@ -936,43 +936,66 @@ export class ViewIndex implements OnInit {
   // DOWNLOAD FILE
   // =========================================================
 
-  downloadFile(
-    fileName: string | null | undefined
-  ): void {
+//   downloadFile(
+//     fileName: string | null | undefined
+//   ): void {
 
-    if (!fileName) {
+//     if (!fileName) {
 
-      return;
+//       return;
 
-    }
-
-
-    console.log(
-      'Download file:',
-      fileName
-    );
+//     }
 
 
-    // -------------------------------------------------------
-    // IMPORTANT:
-    // Change this URL according to your backend.
-    // -------------------------------------------------------
-
-    // const fileUrl =
-    //   `/api/task/download/${encodeURIComponent(fileName)}`;
-
-     const fileUrl =
-    `${environment.baseurluploaded}task/pdf/${encodeURIComponent(fileName)}`;
+//     console.log(
+//       'Download file:',
+//       fileName
+//     );
 
 
+//     // -------------------------------------------------------
+//     // IMPORTANT:
+//     // Change this URL according to your backend.
+//     // -------------------------------------------------------
 
-    window.open(
-      fileUrl,
-      '_blank'
-    );
+//     // const fileUrl =
+//     //   `/api/task/download/${encodeURIComponent(fileName)}`;
 
+//      const fileUrl =
+//     `${environment.baseurluploaded}task/pdf/${encodeURIComponent(fileName)}`;
+// alert(fileUrl);
+
+
+//     window.open(
+//       fileUrl,
+//       '_blank'
+//     );
+
+//   }
+downloadFile(
+  fileName: string | null | undefined,
+  fileType: 'pdf' | 'zip'
+): void {
+
+  if (!fileName) {
+    return;
   }
 
+  let folder = '';
+
+  if (fileType === 'pdf') {
+    folder = 'task/pdf/';
+  } else if (fileType === 'zip') {
+    folder = 'task/zip/';
+  }
+
+  const fileUrl =
+    `${environment.baseurluploaded}${folder}${encodeURIComponent(fileName)}`;
+
+  console.log('Download/View URL:', fileUrl);
+
+  window.open(fileUrl, '_blank');
+}
 
   // =========================================================
   // CHECK FILE EXISTS
@@ -997,7 +1020,7 @@ export class ViewIndex implements OnInit {
   backToIndexPage(): void {
 
     this.router.navigate(
-      ['/task'],
+      ['/task-index'],
       {
         queryParams: {
 

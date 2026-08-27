@@ -12,7 +12,6 @@ import {
   FormBuilder,
   FormGroup,
   FormsModule,
-  NgForm,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';

@@ -1006,123 +1006,123 @@ export class TaskIndex {
   // DELETE TASK
   // =========================================================
 
-  onDeleteTask(
-    taskId: number
-  ): void {
+  // onDeleteTask(
+  //   taskId: number
+  // ): void {
 
-    // this.task = {
+  //   // this.task = {
 
-    //   taskId:
+  //   //   taskId:
 
-    //     Number(taskId),
+  //   //     Number(taskId),
 
-    //   userId:
+  //   //   userId:
 
-    //     this.userId
-    //       ? Number(this.userId)
-    //       : null
+  //   //     this.userId
+  //   //       ? Number(this.userId)
+  //   //       : null
 
-    // };
-
-
-    // Swal.fire({
-
-    //   title:
-    //     'Are you sure?',
-
-    //   text:
-    //     'Do you really want to delete this task?',
-
-    //   icon:
-    //     'warning',
-
-    //   showCancelButton:
-    //     true,
-
-    //   confirmButtonText:
-    //     'Yes, delete it!',
-
-    //   cancelButtonText:
-    //     'No, keep it',
-
-    // }).then(
-    //   (result) => {
-
-    //     if (
-    //       result.isConfirmed
-    //     ) {
-
-    //       this.dataprovider
-    //         .deleteTask(this.task)
-    //         .subscribe({
-
-    //           next:
-    //             (response: any) => {
-
-    //               if (
-    //                 response.success
-    //               ) {
-
-    //                 Swal.fire(
-
-    //                   'Deleted!',
-
-    //                   response.message,
-
-    //                   'success'
-
-    //                 );
+  //   // };
 
 
-    //                 this.getTaskDetails();
+  //   // Swal.fire({
 
-    //               } else {
+  //   //   title:
+  //   //     'Are you sure?',
 
-    //                 Swal.fire(
+  //   //   text:
+  //   //     'Do you really want to delete this task?',
 
-    //                   'Error',
+  //   //   icon:
+  //   //     'warning',
 
-    //                   response.message,
+  //   //   showCancelButton:
+  //   //     true,
 
-    //                   'error'
+  //   //   confirmButtonText:
+  //   //     'Yes, delete it!',
 
-    //                 );
+  //   //   cancelButtonText:
+  //   //     'No, keep it',
 
-    //               }
+  //   // }).then(
+  //   //   (result) => {
 
-    //             },
+  //   //     if (
+  //   //       result.isConfirmed
+  //   //     ) {
+
+  //   //       this.dataprovider
+  //   //         .deleteTask(this.task)
+  //   //         .subscribe({
+
+  //   //           next:
+  //   //             (response: any) => {
+
+  //   //               if (
+  //   //                 response.success
+  //   //               ) {
+
+  //   //                 Swal.fire(
+
+  //   //                   'Deleted!',
+
+  //   //                   response.message,
+
+  //   //                   'success'
+
+  //   //                 );
 
 
-    //           error:
-    //             (error) => {
+  //   //                 this.getTaskDetails();
 
-    //               console.error(
-    //                 'Error deleting task:',
-    //                 error
-    //               );
+  //   //               } else {
+
+  //   //                 Swal.fire(
+
+  //   //                   'Error',
+
+  //   //                   response.message,
+
+  //   //                   'error'
+
+  //   //                 );
+
+  //   //               }
+
+  //   //             },
 
 
-    //               Swal.fire(
+  //   //           error:
+  //   //             (error) => {
 
-    //                 'Error',
+  //   //               console.error(
+  //   //                 'Error deleting task:',
+  //   //                 error
+  //   //               );
 
-    //                 'Something went wrong while deleting the task.',
 
-    //                 'error'
+  //   //               Swal.fire(
 
-    //               );
+  //   //                 'Error',
 
-    //             }
+  //   //                 'Something went wrong while deleting the task.',
 
-    //         });
+  //   //                 'error'
 
-    //     }
+  //   //               );
 
-    //   }
+  //   //             }
 
-    // );
+  //   //         });
 
-  }
+  //   //     }
+
+  //   //   }
+
+  //   // );
+
+  // }
 
 
   // =========================================================
@@ -1565,5 +1565,135 @@ export class TaskIndex {
     }
 
   }
+
+  // =========================================================
+// CLEAR FILTERS
+// =========================================================
+
+clearFilters(): void {
+
+  // Clear search
+  this.searchQuery = '';
+  this.search = '';
+
+  // Clear dropdown filters
+  this.selectedClient = '';
+  this.selectedTaskCategory = '';
+  this.selectedAssignedTo = '';
+  this.selectedPriority = '';
+  this.selectedStatus = '';
+
+  // Reset status
+  this.statusIndex = 0;
+
+  // Reset pagination
+  this.currentPage = 1;
+  this.page = 0;
+
+  // Reset sorting
+  this.sortColumn = '';
+  this.sortDirection = 'asc';
+
+  // Save cleared filter state
+  this.saveFilterState();
+
+  // Update URL and reload data
+  this.router.navigate(
+    ['/task-index'],
+    {
+      queryParams: {
+        currentPage: 1,
+        page: 0,
+        size: this.size,
+        statusIndex: 0,
+        searchText: '',
+        clientId: null,
+        taskCategoryId: null,
+        assignedTo: null,
+        priority: null
+      },
+      replaceUrl: true
+    }
+  ).then(() => {
+
+    this.getTaskDetails();
+
+  });
+
+}
+
+
+onDeleteTask(taskId: number): void {
+
+  this.task = {
+    taskId: Number(taskId),
+    createdBy: this.userId
+      ? Number(this.userId)
+      : null
+  };
+
+  Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you really want to delete this task?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'No, keep it',
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#6c757d'
+  }).then((result) => {
+
+    if (result.isConfirmed) {
+
+      this.dataprovider
+        .deleteTask(this.task)
+        .subscribe({
+
+          next: (response: any) => {
+
+            if (response.success) {
+
+              Swal.fire(
+                'Deleted!',
+                response.message,
+                'success'
+              );
+
+              this.getTaskDetails();
+
+            } else {
+
+              Swal.fire(
+                'Error',
+                response.message,
+                'error'
+              );
+
+            }
+
+          },
+
+          error: (error) => {
+
+            console.error(
+              'Error deleting task:',
+              error
+            );
+
+            Swal.fire(
+              'Error',
+              'Something went wrong while deleting the task.',
+              'error'
+            );
+
+          }
+
+        });
+
+    }
+
+  });
+}
+
 
 }

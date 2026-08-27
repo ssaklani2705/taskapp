@@ -11,11 +11,13 @@ import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataProviderService } from '../../../service/data-provider.service';
 import { Common } from '../../../classes/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-view-client',
   imports: [
     CommonModule,
+    FormsModule,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -35,6 +37,13 @@ export class ViewClient {
 
   transactionHistory: any[] = [];
   common = new Common();
+
+  managers: any[] = [];
+
+  showChangeManagerModal = false;
+  selectedManagerId: number | null = null;
+  managerValidationError = false;
+  isChangingManager = false;
 
   currentPage = 1;
   searchText = '';
@@ -81,6 +90,83 @@ export class ViewClient {
         this.transactionHistory = [];
       },
     });
+  }
+
+  loadManagers(): void {
+    this.dataprovider.getManagers().subscribe({
+      next: (response: any) => {
+        this.managers = response?.data || response || [];
+      },
+
+      error: (error) => {
+        console.error('Error loading managers:', error);
+        this.managers = [];
+      },
+    });
+  }
+
+  changeManager(): void {
+    this.managerValidationError = false;
+
+    if (!this.selectedManagerId) {
+      this.managerValidationError = true;
+      return;
+    }
+
+    if (this.selectedManagerId === Number(this.client?.managerId)) {
+      alert('Please select a different manager.');
+      return;
+    }
+
+    this.isChangingManager = true;
+
+    this.dataprovider.changeClientManager(this.clientId, this.selectedManagerId).subscribe({
+      next: (response: any) => {
+        console.log('Change manager response:', response);
+
+        this.isChangingManager = false;
+
+        if (response?.success === false) {
+          alert(response.message || 'Failed to change manager.');
+          return;
+        }
+
+        alert('Manager changed successfully.');
+
+        this.showChangeManagerModal = false;
+        this.selectedManagerId = null;
+
+        this.getClientDetails();
+      },
+
+      error: (error) => {
+        this.isChangingManager = false;
+
+        console.error('Change manager error:', error);
+
+        alert(error?.error?.message || 'Failed to change manager.');
+      },
+    });
+  }
+
+  openChangeManagerModal(): void {
+    this.managerValidationError = false;
+
+    this.selectedManagerId = this.client?.managerId ? Number(this.client.managerId) : null;
+
+    this.loadManagers();
+
+    this.showChangeManagerModal = true;
+  }
+
+  closeChangeManagerModal(): void {
+    if (this.isChangingManager) {
+      return;
+    }
+
+    this.showChangeManagerModal = false;
+    this.selectedManagerId = null;
+    this.managerValidationError = false;
   }
 
   get hasTransactionHistory(): boolean {

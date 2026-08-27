@@ -103,6 +103,16 @@
             <span class="info-label">Start Date:</span>
             <span class="info-value">
               {{ client.startDate || '-' }}
+
+              <button
+                type="button"
+                class="change-manager-button"
+                (click)="openChangeManagerModal()"
+                matTooltip="Change Manager"
+              >
+                <mat-icon>edit</mat-icon>
+                <span>Change</span>
+              </button>
             </span>
           </div>
 
@@ -280,6 +290,98 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Change Manager Modal -->
+ <!-- Change Manager Modal -->
+<div
+  class="modal-overlay"
+  *ngIf="showChangeManagerModal"
+  (click)="closeChangeManagerModal()"
+>
+  <div
+    class="change-manager-modal"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-header">
+      <div class="modal-title">
+        <mat-icon>manage_accounts</mat-icon>
+        <span>Change Manager</span>
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-button"
+        (click)="closeChangeManagerModal()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="modal-body">
+      <div class="current-manager">
+        <span class="modal-label">Current Manager</span>
+
+        <span class="current-manager-name">
+          {{ client.managerName || '-' }}
+        </span>
+      </div>
+
+      <div class="user-form-group">
+        <label class="user-label">
+          New Manager
+          <span class="required">*</span>
+        </label>
+
+        <select
+          class="user-input user-select"
+          [(ngModel)]="selectedManagerId"
+        >
+          <option [ngValue]="null">Select Manager</option>
+
+          <option
+            *ngFor="let manager of managers"
+            [ngValue]="manager.userId"
+          >
+            {{ manager.firstName }}
+          </option>
+        </select>
+
+        <div
+          class="user-error"
+          *ngIf="managerValidationError"
+        >
+          Please select a manager
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-cancel-button"
+        (click)="closeChangeManagerModal()"
+        [disabled]="isChangingManager"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="modal-save-button"
+        (click)="changeManager()"
+        [disabled]="isChangingManager"
+      >
+        <mat-icon *ngIf="!isChangingManager">save</mat-icon>
+
+        <span>
+          {{ isChangingManager ? 'Updating...' : 'Change Manager' }}
+        </span>
+      </button>
     </div>
   </div>
 </div>

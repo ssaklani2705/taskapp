@@ -1522,4 +1522,25 @@ getTaskById(taskId: number) {
   );
 }
 
+changeClientManager(clientId: number, managerId: number) {
+    return this.http.put<any>(`${environment.apiBaseUrl}admin/client/${clientId}/manager`, {
+      managerId: managerId,
+    });
+  }
+
+  deleteTask(task: any) {
+
+  const params = {
+    taskId: task.taskId,
+    createdBy: task.createdBy
+  };
+
+  return this.http.post<any>(
+    `${environment.apiBaseUrl}admin/task/deleteTask`,
+    null,
+    { params }
+  );
+}
+
+
 }

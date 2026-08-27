@@ -667,3 +667,175 @@ mat-divider {
     font-size: 17px;
   }
 }
+
+//
+.manager-row {
+  align-items: center;
+}
+
+.manager-value {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.change-manager-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  padding: 3px 7px;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  border-radius: 4px;
+}
+
+.change-manager-button mat-icon {
+  font-size: 17px;
+  width: 17px;
+  height: 17px;
+}
+
+.change-manager-button:hover {
+  background: #f1f5f9;
+}
+
+////
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 1000;
+
+  padding: 20px;
+}
+
+.change-manager-modal {
+  width: 100%;
+  max-width: 480px;
+
+  background: #fff;
+  border-radius: 10px;
+
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px 20px;
+}
+
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-close-button {
+  border: none;
+  background: transparent;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 5px;
+
+  border-radius: 50%;
+}
+
+.modal-close-button:hover {
+  background: #f1f5f9;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.current-manager {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  margin-bottom: 20px;
+
+  padding: 12px;
+
+  background: #f8fafc;
+  border-radius: 6px;
+}
+
+.modal-label {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.current-manager-name {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  padding: 15px 20px;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+.modal-cancel-button,
+.modal-save-button {
+  min-height: 38px;
+
+  padding: 0 16px;
+
+  border-radius: 5px;
+
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.modal-cancel-button {
+  border: 1px solid #d1d5db;
+  background: #fff;
+}
+
+.modal-save-button {
+  border: none;
+  background: #2563eb;
+  color: #fff;
+}
+
+.modal-save-button:disabled,
+.modal-cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
