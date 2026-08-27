@@ -1509,5 +1509,11 @@ getTaskDetails(
 
 }
 
+saveTask(formData: FormData) {
+  return this.http.post<any>(
+    `${environment.apiBaseUrl}admin/task/saveTask`,
+    formData
+  );
+}
 
 }

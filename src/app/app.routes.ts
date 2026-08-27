@@ -67,6 +67,9 @@ export const routes: Routes = [
       { path: 'edit-designation/:designationId', loadComponent: () => import('./features/designation/add-designation/add-designation').then(m => m.AddDesignation) },
 
       { path: 'task-index', loadComponent: () => import('./features/task/task-index/task-index').then(m => m.TaskIndex) },
+      { path: 'add-task', loadComponent: () => import('./features/task/add-index/add-index').then(m => m.AddIndexComponent) },
+      { path: 'edit-task/:taskId', loadComponent: () => import('./features/task/add-index/add-index').then(m => m.AddIndexComponent) },
+      
 
       { path: 'task-category-index', loadComponent: () => import('./features/taskcategory/task-category-index/task-category-index').then(m => m.IndexTaskCategory) },
       { path: 'add-task-category', loadComponent: () => import('./features/taskcategory/add-task-category/add-task-category').then(m => m.AddTaskCategoryComponent) },

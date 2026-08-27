@@ -264,7 +264,7 @@ export class Sidebar {
         route: '/task-category-index'
       },
       {
-        moduleId: 9,
+        moduleId: 10,
         label: 'Tasks',
         icon: 'task_alt',
         route: '/task-index'
