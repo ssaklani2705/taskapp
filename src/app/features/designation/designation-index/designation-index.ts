@@ -148,25 +148,25 @@ export class DesignationIndexComponent {
     sortable: boolean;
   }[] = [
 
-    {
-      key: 'name',
-      label: 'Name',
-      sortable: true,
-    },
+      {
+        key: 'name',
+        label: 'Name',
+        sortable: true,
+      },
 
-    {
-      key: 'sequence',
-      label: 'Sequence',
-      sortable: true,
-    },
+      {
+        key: 'sequence',
+        label: 'Sequence',
+        sortable: true,
+      },
 
-    {
-      key: 'status',
-      label: 'Status',
-      sortable: true,
-    },
+      {
+        key: 'status',
+        label: 'Status',
+        sortable: true,
+      },
 
-  ];
+    ];
 
   // =========================================================
   // CONSTRUCTOR
@@ -183,7 +183,7 @@ export class DesignationIndexComponent {
     private route: ActivatedRoute,
 
     private sessionService: SessionStorageService,
-  ) {}
+  ) { }
 
   // =========================================================
   // INIT
@@ -195,139 +195,81 @@ export class DesignationIndexComponent {
       this.filterKey
     );
 
-    this.route.queryParams.subscribe(
-      (params) => {
+    // USER ID
+    if (isPlatformBrowser(this.platformId)) {
 
-        // ---------------------------------------------------
-        // USER ID
-        // ---------------------------------------------------
+      this.userId =
+        sessionStorage.getItem('userId');
 
-        if (
-          isPlatformBrowser(
-            this.platformId
-          )
-        ) {
+    }
 
-          this.userId =
-            sessionStorage.getItem(
-              'userId'
-            );
+    // PERMISSIONS
+    if (isPlatformBrowser(this.platformId)) {
 
-        }
+      const storedModules =
+        sessionStorage.getItem(
+          'selectedModuleDetail'
+        );
 
-        // ---------------------------------------------------
-        // PERMISSIONS
-        // ---------------------------------------------------
+      if (storedModules) {
 
-        if (
-          isPlatformBrowser(
-            this.platformId
-          )
-        ) {
+        const parsed =
+          JSON.parse(storedModules);
 
-          const storedModules =
-            sessionStorage.getItem(
-              'selectedModuleDetail'
-            );
+        this.moduleName =
+          parsed.name ?? '';
 
-          if (storedModules) {
+        this.addPer =
+          parsed.addPer ?? 'N';
 
-            const parsed =
-              JSON.parse(
-                storedModules
-              );
+        this.editPer =
+          parsed.editPer ?? 'N';
 
-            this.moduleName =
-              parsed.name ?? '';
+        this.deletePer =
+          parsed.deletePer ?? 'N';
 
-            this.addPer =
-              parsed.addPer ?? 'N';
+        this.viewPer =
+          parsed.viewPer ?? 'N';
 
-            this.editPer =
-              parsed.editPer ?? 'N';
+        this.approvePer =
+          parsed.approvePer ?? 'N';
 
-            this.deletePer =
-              parsed.deletePer ?? 'N';
-
-            this.viewPer =
-              parsed.viewPer ?? 'N';
-
-            this.approvePer =
-              parsed.approvePer ?? 'N';
-
-            this.adminApprovePer =
-              parsed.adminApprovePer ?? 'N';
-          }
-        }
-
-        // ---------------------------------------------------
-        // RESTORE FILTER STATE
-        // ---------------------------------------------------
-
-        let stateData: any = null;
-
-        const nav =
-          this.router.getCurrentNavigation();
-
-        stateData =
-          nav?.extras?.state;
-
-        if (!stateData) {
-
-          const saved =
-            sessionStorage.getItem(
-              this.filterKey
-            );
-
-          if (saved) {
-
-            stateData =
-              JSON.parse(saved);
-
-          }
-        }
-
-        if (stateData) {
-
-          this.currentPage =
-            stateData.currentPage || 1;
-
-          this.page =
-            this.currentPage - 1;
-
-          this.statusIndex =
-            stateData.statusIndex || 0;
-
-          this.search =
-            stateData.searchText || '';
-
-          this.size =
-            stateData.size || this.size;
-
-          this.recordsPerPage =
-            this.size;
-
-          // Sync UI
-
-          this.searchQuery =
-            this.search;
-
-          this.selectedStatus =
-            this.statusIndex
-              ? String(
-                  this.statusIndex
-                )
-              : '';
-        }
-
-        // ---------------------------------------------------
-        // GET DATA
-        // ---------------------------------------------------
-
-        this.getDesignationDetails();
-
+        this.adminApprovePer =
+          parsed.adminApprovePer ?? 'N';
       }
-    );
+    }
+
+    // RESTORE FILTERS FROM URL
+    this.route.queryParams.subscribe(params => {
+
+      this.currentPage =
+        +(params['currentPage'] || 1);
+
+      this.page =
+        +(params['page'] || (this.currentPage - 1));
+
+      this.size =
+        +(params['size'] || environment.size);
+
+      this.searchQuery =
+        params['searchText'] || '';
+
+      this.search =
+        this.searchQuery;
+
+      this.statusIndex =
+        +(params['statusIndex'] || 0);
+
+      this.selectedStatus =
+        this.statusIndex > 0
+          ? String(this.statusIndex)
+          : '';
+
+      this.recordsPerPage =
+        this.size;
+
+      this.getDesignationDetails();
+    });
   }
 
   // =========================================================
@@ -481,41 +423,30 @@ export class DesignationIndexComponent {
         : +this.selectedStatus;
 
     this.currentPage = 1;
-
     this.page = 0;
 
-    this.router
-      .navigate(
-        ['/designation-master'],
-        {
+    this.router.navigate(
+      ['/designation-master'],
+      {
+        queryParams: {
 
-          state: {
+          currentPage:
+            this.currentPage,
 
-            currentPage:
-              this.currentPage,
+          statusIndex:
+            this.statusIndex,
 
-            statusIndex:
-              this.statusIndex || 0,
+          searchText:
+            this.search,
 
-            searchText:
-              this.search || '',
+          page:
+            this.page,
 
-            page:
-              this.page,
-
-            size:
-              this.size || 5,
-
-          },
-
+          size:
+            this.size
         }
-      )
-      .then(() => {
-
-        this.getDesignationDetails();
-
-      });
-
+      }
+    );
   }
 
   // =========================================================
@@ -629,10 +560,13 @@ export class DesignationIndexComponent {
         this.statusIndex,
 
       searchText:
-        this.search,
+        this.searchQuery.trim(),
+
+      page:
+        this.page,
 
       size:
-        this.size,
+        this.size
 
     };
 
@@ -649,7 +583,7 @@ export class DesignationIndexComponent {
         desigmationId,
       ],
       {
-        state: filterState,
+        queryParams: filterState,
       }
     );
 
@@ -713,11 +647,13 @@ export class DesignationIndexComponent {
         this.statusIndex,
 
       searchText:
-        this.search,
+        this.searchQuery.trim(),
+
+      page:
+        this.page,
 
       size:
-        this.size,
-
+        this.size
     };
 
     sessionStorage.setItem(
@@ -730,7 +666,7 @@ export class DesignationIndexComponent {
     this.router.navigate(
       ['/add-designation'],
       {
-        state: filterState,
+        queryParams: filterState,
       }
     );
 
@@ -792,26 +728,23 @@ export class DesignationIndexComponent {
       totalRecords === 0
         ? 0
         : (
-            (this.currentPage - 1) *
-              this.recordsPerPage
-          ) + 1;
+          (this.currentPage - 1) *
+          this.recordsPerPage
+        ) + 1;
 
     const endRecord =
       Math.min(
         this.currentPage *
-          this.recordsPerPage,
+        this.recordsPerPage,
         totalRecords
       );
 
-    return `Page ${this.currentPage} of ${
-      this.totalPages
-    }, (${startRecord} - ${endRecord} of ${
-      totalRecords
-    } record${
-      totalRecords > 1
+    return `Page ${this.currentPage} of ${this.totalPages
+      }, (${startRecord} - ${endRecord} of ${totalRecords
+      } record${totalRecords > 1
         ? 's'
         : ''
-    })`;
+      })`;
 
   }
 
@@ -829,7 +762,7 @@ export class DesignationIndexComponent {
       1,
       Math.ceil(
         total /
-          this.recordsPerPage
+        this.recordsPerPage
       )
     );
 
