@@ -984,9 +984,9 @@ downloadFile(
   let folder = '';
 
   if (fileType === 'pdf') {
-    folder = 'task/pdf/';
+    folder = 'tasks/pdf/';
   } else if (fileType === 'zip') {
-    folder = 'task/zip/';
+    folder = 'tasks/zip/';
   }
 
   const fileUrl =
