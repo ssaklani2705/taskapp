@@ -297,3 +297,17 @@
   }
 
 }
+
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-logo {
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+}
+
+

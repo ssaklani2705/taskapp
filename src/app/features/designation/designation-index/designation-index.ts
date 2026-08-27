@@ -520,19 +520,18 @@ export class DesignationIndexComponent {
 
             },
 
-            error: (error) => {
+            error: (err) => {
+              console.error('error:', err);
 
-              console.error(
-                'Error deleting designation:',
-                error
-              );
+              const message =
+                err?.error?.message ||
+                'Something went wrong';
 
-              Swal.fire(
-                'Error',
-                'Something went wrong while deleting the designation.',
-                'error'
-              );
-
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: message
+              });
             },
 
           });
@@ -880,4 +879,15 @@ export class DesignationIndexComponent {
     );
 
   }
+
+  clearFilters(): void {
+
+    this.searchQuery = '';
+    this.selectedStatus = '';
+
+    this.currentPage = 1;
+
+    this.onSearch();
+  }
+
 }

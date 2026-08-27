@@ -109,6 +109,17 @@
             Go
 
           </button>
+          &nbsp;  
+           <!-- Clear -->
+            <button
+              type="button"
+              class="btn-clear"
+              (click)="clearFilters()">
+
+              <!-- <mat-icon>clear</mat-icon> -->
+              Clear
+
+            </button>
 
         </div>
 
@@ -248,12 +259,13 @@
               </td>
 
               <td>
+                {{ taskCategory.name }}
+              </td>
+
+               <td>
                 {{ taskCategory.departmentName }}
               </td>
 
-              <td>
-                {{ taskCategory.name }}
-              </td>
 
               <td>
 

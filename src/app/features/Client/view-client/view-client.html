@@ -54,6 +54,14 @@
             </span>
           </div>
 
+          <!--  -->
+          <div class="info-row">
+            <span class="info-label">Plan:</span>
+            <span class="info-value">
+              {{ client.planName || '-' }}
+            </span>
+          </div>
+
           <div class="info-row">
             <span class="info-label">City:</span>
             <span class="info-value">
@@ -92,17 +100,13 @@
             </span>
           </div>
 
-          <div class="info-row">
+          <div class="info-row manager-row">
             <span class="info-label">Manager:</span>
-            <span class="info-value">
-              {{ client.managerName || '-' }}
-            </span>
-          </div>
 
-          <div class="info-row">
-            <span class="info-label">Start Date:</span>
-            <span class="info-value">
-              {{ client.startDate || '-' }}
+            <div class="manager-value">
+              <span class="info-value">
+                {{ client.managerName || '-' }}
+              </span>
 
               <button
                 type="button"
@@ -113,6 +117,13 @@
                 <mat-icon>edit</mat-icon>
                 <span>Change</span>
               </button>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <span class="info-label">Start Date:</span>
+            <span class="info-value">
+              {{ client.startDate || '-' }}
             </span>
           </div>
 
@@ -295,26 +306,26 @@
 </div>
 
 <!-- Change Manager Modal -->
- <!-- Change Manager Modal -->
-<div
-  class="modal-overlay"
-  *ngIf="showChangeManagerModal"
-  (click)="closeChangeManagerModal()"
->
-  <div
-    class="change-manager-modal"
-    (click)="$event.stopPropagation()"
-  >
+<div class="modal-overlay" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
+  <div class="change-manager-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-title">
-        <mat-icon>manage_accounts</mat-icon>
-        <span>Change Manager</span>
+        <div class="modal-title-icon">
+          <mat-icon>manage_accounts</mat-icon>
+        </div>
+
+        <div>
+          <div class="modal-title-text">Change Manager</div>
+          <div class="modal-subtitle">Update the manager assigned to this client</div>
+        </div>
       </div>
 
       <button
         type="button"
         class="modal-close-button"
         (click)="closeChangeManagerModal()"
+        [disabled]="isChangingManager"
+        aria-label="Close"
       >
         <mat-icon>close</mat-icon>
       </button>
@@ -323,39 +334,50 @@
     <mat-divider></mat-divider>
 
     <div class="modal-body">
-      <div class="current-manager">
-        <span class="modal-label">Current Manager</span>
+      <div class="client-reference">
+        <div class="client-reference-icon">
+          <mat-icon>business</mat-icon>
+        </div>
 
-        <span class="current-manager-name">
-          {{ client.managerName || '-' }}
-        </span>
+        <div class="client-reference-content">
+          <span class="client-reference-label">Client</span>
+          <span class="client-reference-name">
+            {{ client.name || '-' }}
+          </span>
+        </div>
       </div>
 
-      <div class="user-form-group">
-        <label class="user-label">
+      <div class="manager-information">
+        <div class="manager-info-item">
+          <span class="modal-field-label">Current Manager</span>
+
+          <span class="current-manager-name">
+            {{ client.managerName || '-' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="manager-form-group">
+        <label class="modal-field-label">
           New Manager
           <span class="required">*</span>
         </label>
 
         <select
-          class="user-input user-select"
+          class="manager-select"
           [(ngModel)]="selectedManagerId"
+          [disabled]="isChangingManager"
         >
           <option [ngValue]="null">Select Manager</option>
 
-          <option
-            *ngFor="let manager of managers"
-            [ngValue]="manager.userId"
-          >
+          <option *ngFor="let manager of managers" [ngValue]="manager.userId">
             {{ manager.firstName }}
           </option>
         </select>
 
-        <div
-          class="user-error"
-          *ngIf="managerValidationError"
-        >
-          Please select a manager
+        <div class="manager-validation-error" *ngIf="managerValidationError">
+          <mat-icon>error_outline</mat-icon>
+          <span>Please select a manager</span>
         </div>
       </div>
     </div>
@@ -376,7 +398,9 @@
         (click)="changeManager()"
         [disabled]="isChangingManager"
       >
-        <mat-icon *ngIf="!isChangingManager">save</mat-icon>
+        <mat-icon>
+          {{ isChangingManager ? 'hourglass_top' : 'save' }}
+        </mat-icon>
 
         <span>
           {{ isChangingManager ? 'Updating...' : 'Change Manager' }}

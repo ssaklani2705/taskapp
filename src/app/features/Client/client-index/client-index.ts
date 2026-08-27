@@ -34,6 +34,8 @@ interface Client {
   emailId3: string;
   managerId: number;
   managerName: string;
+  planId: number;
+  planName: string;
   userId: number;
   regdate: string;
   moddate: string;
@@ -75,6 +77,7 @@ export class ClientIndex {
 
   stateId = 0;
   managerId = 0;
+  planId = 0;
 
   states: any[] = [];
   managers: any[] = [];
@@ -670,6 +673,7 @@ export class ClientIndex {
             Manager: client.managerName || '',
             'Tax Applicable': client.taxFlag ?? '',
             Location: client.location || '',
+            Plan: client.planName || '',
             Status: this.getStatusLabel(client.status),
           }));
 
@@ -837,6 +841,11 @@ export class ClientIndex {
     {
       key: 'stateName',
       label: 'State',
+      sortable: true,
+    },
+    {
+      key: 'planName',
+      label: 'Plan',
       sortable: true,
     },
     {

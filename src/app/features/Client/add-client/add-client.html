@@ -524,6 +524,30 @@
               </div>
             </div>
 
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Plan
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="planId">
+                  <option [ngValue]="null">Select Plan</option>
+
+                  <option *ngFor="let plan of plans" [ngValue]="plan.planId">
+                    {{ plan.name }}
+                  </option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="clientForm.get('planId')?.touched && clientForm.get('planId')?.invalid"
+                >
+                  Plan is required
+                </div>
+              </div>
+            </div>
+
             <div class="user-form-col empty-column"></div>
             <div class="user-form-col empty-column"></div>
           </div>

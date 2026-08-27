@@ -40,43 +40,7 @@
 
           <div class="user-form-row">
 
-            <!-- Department -->
-
-            <div class="user-form-col">
-
-              <div class="user-form-group">
-
-                <label class="user-label">
-                  Department
-                  <span class="required">*</span>
-                </label>
-
-                <select class="user-input user-select" [(ngModel)]="taskCategory.departmentId" name="departmentId"
-                  required #departmentCtrl="ngModel">
-
-                  <option [ngValue]="null">
-                    Select Department
-                  </option>
-
-                  <option *ngFor="let department of departments" [ngValue]="department.departmentId">
-
-                    {{ department.name }}
-
-                  </option>
-
-                </select>
-
-                <div class="user-error" *ngIf="
-                    departmentCtrl.invalid &&
-                    departmentCtrl.touched">
-
-                  Department is required
-
-                </div>
-
-              </div>
-
-            </div>
+         
 
             <!-- Task Category -->
 
@@ -107,6 +71,45 @@
                   <span *ngIf="nameCtrl.errors?.['minlength']">
                     Minimum 2 characters required
                   </span>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+               <!-- Department -->
+
+            <div class="user-form-col">
+
+              <div class="user-form-group">
+
+                <label class="user-label">
+                  Department
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" [(ngModel)]="taskCategory.departmentId" name="departmentId"
+                  required #departmentCtrl="ngModel">
+
+                  <option [ngValue]="null">
+                    Select Department
+                  </option>
+
+                  <option *ngFor="let department of departments" [ngValue]="department.departmentId">
+
+                    {{ department.name }}
+
+                  </option>
+
+                </select>
+
+                <div class="user-error" *ngIf="
+                    departmentCtrl.invalid &&
+                    departmentCtrl.touched">
+
+                  Department is required
 
                 </div>
 

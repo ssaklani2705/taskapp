@@ -784,16 +784,7 @@ export class IndexTaskCategory {
     sortable: boolean;
   }[] = [
 
-      {
-        key:
-          'departmentName',
-
-        label:
-          'Department',
-
-        sortable:
-          true,
-      },
+     
 
       {
         key:
@@ -801,6 +792,17 @@ export class IndexTaskCategory {
 
         label:
           'Task Category',
+
+        sortable:
+          true,
+      },
+
+       {
+        key:
+          'departmentName',
+
+        label:
+          'Department',
 
         sortable:
           true,
@@ -912,4 +914,20 @@ export class IndexTaskCategory {
       }
     );
   }
+
+
+  clearFilters(): void {
+
+  this.searchQuery = '';
+  this.selectedDepartment = '';
+  this.selectedStatus = '';
+
+  // Reset pagination
+  this.currentPage = 1;
+
+  // Reload all records
+  this.onSearch();
+}
+
+
 }

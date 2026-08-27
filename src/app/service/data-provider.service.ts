@@ -1542,5 +1542,8 @@ changeClientManager(clientId: number, managerId: number) {
   );
 }
 
+getPlan(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/plan/getPlan`);
+  }
 
 }

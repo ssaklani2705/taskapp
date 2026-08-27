@@ -719,4 +719,15 @@ export class StateIndex {
       }
     );
   }
+
+  clearFilters(): void {
+
+  this.searchQuery = '';
+  this.selectedStatus = '';
+
+  this.currentPage = 1;
+
+  this.onSearch();
+}
+
 }
