@@ -781,3 +781,39 @@ input.mat-mdc-input-element {
     }
 
 }
+
+
+
+.user-date-group {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+.user-date-input {
+    flex: 1;
+    border-left: 0 !important;
+}
+
+.user-date-icon {
+    width: 52px;
+    min-width: 52px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e4e8ed;
+    color: #66727d;
+    border: 1px solid #d4dce4;
+    border-right: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.user-date-icon {
+    border-radius: 2px 0 0 2px;
+}
+
+.user-date-input {
+    border-radius: 0 2px 2px 0 !important;
+}

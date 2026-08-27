@@ -13,10 +13,7 @@
 
       <div class="user-actions">
 
-        <button
-          type="button"
-          class="back-index-btn"
-          (click)="backToIndexPage()">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
 
           Back to Index
 
@@ -30,10 +27,7 @@
     <!-- BODY -->
     <div class="user-portlet-body">
 
-      <form
-        #taskForm="ngForm"
-        (ngSubmit)="onSubmit(taskForm)"
-        novalidate>
+      <form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)" novalidate>
 
         <div class="user-form-body">
 
@@ -63,20 +57,10 @@
                   <span class="required">*</span>
                 </label>
 
-                <input
-                  type="text"
-                  class="user-input"
-                  placeholder="Enter Task Title"
-                  [(ngModel)]="task.title"
-                  name="title"
-                  required
-                  minlength="2"
-                  maxlength="100"
-                  #titleCtrl="ngModel">
+                <input type="text" class="user-input" placeholder="Enter Task Title" [(ngModel)]="task.title"
+                  name="title" required minlength="2" maxlength="100" #titleCtrl="ngModel">
 
-                <div
-                  class="user-error"
-                  *ngIf="titleCtrl.invalid && titleCtrl.touched">
+                <div class="user-error" *ngIf="titleCtrl.invalid && titleCtrl.touched">
 
                   <span *ngIf="titleCtrl.errors?.['required']">
                     Title is required
@@ -103,20 +87,14 @@
                   <span class="required">*</span>
                 </label>
 
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="task.clientId"
-                  name="clientId"
-                  required
+                <select class="user-input user-select" [(ngModel)]="task.clientId" name="clientId" required
                   #clientCtrl="ngModel">
 
                   <option [ngValue]="null">
                     Select Client
                   </option>
 
-                  <option
-                    *ngFor="let client of clients"
-                    [ngValue]="client.clientId">
+                  <option *ngFor="let client of clients" [ngValue]="client.clientId">
 
                     {{ client.name }}
 
@@ -124,9 +102,7 @@
 
                 </select>
 
-                <div
-                  class="user-error"
-                  *ngIf="clientCtrl.invalid && clientCtrl.touched">
+                <div class="user-error" *ngIf="clientCtrl.invalid && clientCtrl.touched">
 
                   Client is required
 
@@ -143,32 +119,27 @@
               <div class="user-form-group">
 
                 <label class="user-label">
-                  Date
-                  <span class="required">*</span>
+                  Date <span class="required">*</span>
                 </label>
 
-                <mat-form-field
-                  appearance="outline"
-                  class="task-date-field">
+                <div class="user-date-group">
 
-                  <input
-                    matInput
-                    [matDatepicker]="picker"
-                    [(ngModel)]="task.date"
-                    name="date"
-                    required
-                    placeholder="Select Date">
+                  <span class="user-date-icon" (click)="picker.open()">
+                    <i class="fa fa-calendar"></i>
+                  </span>
 
-                  <mat-datepicker-toggle
-                    matIconSuffix
-                    [for]="picker">
-                  </mat-datepicker-toggle>
+                  
 
-                  <mat-datepicker
-                    #picker>
-                  </mat-datepicker>
+                  <input matInput [matDatepicker]="picker" class="user-input user-date-input" [(ngModel)]="task.date"
+                    name="date" required placeholder="DD-MM-YYYY" autocomplete="off" />
 
-                </mat-form-field>
+                  <mat-datepicker #picker></mat-datepicker>
+
+                  <div class="user-error" *ngIf="taskForm?.submitted && !task.date">
+                    Date is required
+                  </div>
+
+                </div>
 
               </div>
 
@@ -193,20 +164,14 @@
                   <span class="required">*</span>
                 </label>
 
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="task.taskCategoryId"
-                  name="taskCategoryId"
-                  required
+                <select class="user-input user-select" [(ngModel)]="task.taskCategoryId" name="taskCategoryId" required
                   #categoryCtrl="ngModel">
 
                   <option [ngValue]="null">
                     Select Task Category
                   </option>
 
-                  <option
-                    *ngFor="let category of taskCategories"
-                    [ngValue]="category.taskcategoryId">
+                  <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
 
                     {{ category.name }}
 
@@ -214,9 +179,7 @@
 
                 </select>
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     categoryCtrl.invalid &&
                     categoryCtrl.touched
                   ">
@@ -240,19 +203,12 @@
                   <span class="required">*</span>
                 </label>
 
-                <textarea
-                  class="user-input user-textarea"
-                  placeholder="Enter Task Description"
-                  [(ngModel)]="task.description"
-                  name="description"
-                  required
-                  maxlength="5000"
+                <textarea class="user-input user-textarea" placeholder="Enter Task Description"
+                  [(ngModel)]="task.description" name="description" required maxlength="5000"
                   #descriptionCtrl="ngModel">
                 </textarea>
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     descriptionCtrl.invalid &&
                     descriptionCtrl.touched
                   ">
@@ -275,23 +231,16 @@
                   PDF File
                 </label>
 
-                <input
-                  type="file"
-                  class="user-input file-input"
-                  accept=".pdf,application/pdf"
+                <input type="file" class="user-input file-input" accept=".pdf,application/pdf"
                   (change)="onPdfSelected($event)">
 
-                <div
-                  class="selected-file"
-                  *ngIf="pdfFileName">
+                <div class="selected-file" *ngIf="pdfFileName">
 
                   {{ pdfFileName }}
 
                 </div>
 
-                <div
-                  class="existing-file"
-                  *ngIf="
+                <div class="existing-file" *ngIf="
                     isEditMode &&
                     task.fileName1 &&
                     !pdfFile
@@ -302,9 +251,7 @@
 
                 </div>
 
-                <div
-                  class="user-error"
-                  *ngIf="pdfError">
+                <div class="user-error" *ngIf="pdfError">
 
                   {{ pdfError }}
 
@@ -332,23 +279,16 @@
                   ZIP File
                 </label>
 
-                <input
-                  type="file"
-                  class="user-input file-input"
-                  accept=".zip,application/zip"
+                <input type="file" class="user-input file-input" accept=".zip,application/zip"
                   (change)="onZipSelected($event)">
 
-                <div
-                  class="selected-file"
-                  *ngIf="zipFileName">
+                <div class="selected-file" *ngIf="zipFileName">
 
                   {{ zipFileName }}
 
                 </div>
 
-                <div
-                  class="existing-file"
-                  *ngIf="
+                <div class="existing-file" *ngIf="
                     isEditMode &&
                     task.fileName2 &&
                     !zipFile
@@ -359,9 +299,7 @@
 
                 </div>
 
-                <div
-                  class="user-error"
-                  *ngIf="zipError">
+                <div class="user-error" *ngIf="zipError">
 
                   {{ zipError }}
 
@@ -382,20 +320,14 @@
                   <span class="required">*</span>
                 </label>
 
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="task.assignedTo"
-                  name="assignedTo"
-                  required
+                <select class="user-input user-select" [(ngModel)]="task.assignedTo" name="assignedTo" required
                   #assignedCtrl="ngModel">
 
                   <option [ngValue]="null">
                     Select User
                   </option>
 
-                  <option
-                    *ngFor="let user of users"
-                    [ngValue]="user.userId">
+                  <option *ngFor="let user of users" [ngValue]="user.userId">
 
                     {{ user.firstName }}
 
@@ -403,9 +335,7 @@
 
                 </select>
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     assignedCtrl.invalid &&
                     assignedCtrl.touched
                   ">
@@ -429,11 +359,7 @@
                   <span class="required">*</span>
                 </label>
 
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="task.priority"
-                  name="priority"
-                  required
+                <select class="user-input user-select" [(ngModel)]="task.priority" name="priority" required
                   #priorityCtrl="ngModel">
 
                   <option [ngValue]="null">
@@ -454,9 +380,7 @@
 
                 </select>
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     priorityCtrl.invalid &&
                     priorityCtrl.touched
                   ">
@@ -476,9 +400,7 @@
                ROW 4 - STATUS ONLY UPDATE
           ====================================================== -->
 
-          <div
-            class="user-form-row status-row"
-            *ngIf="isEditMode">
+          <div class="user-form-row status-row" *ngIf="isEditMode">
 
             <div class="user-form-col">
 
@@ -489,11 +411,7 @@
                   <span class="required">*</span>
                 </label>
 
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="task.status"
-                  name="status"
-                  required
+                <select class="user-input user-select" [(ngModel)]="task.status" name="status" required
                   #statusCtrl="ngModel">
 
                   <option [ngValue]="null">
@@ -514,9 +432,7 @@
 
                 </select>
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     statusCtrl.invalid &&
                     statusCtrl.touched
                   ">
@@ -538,19 +454,13 @@
 
           <div class="user-buttons">
 
-            <button
-              type="button"
-              class="user-reset-btn"
-              (click)="onReset()">
+            <button type="button" class="user-reset-btn" (click)="onReset()">
 
               Reset
 
             </button>
 
-            <button
-              type="submit"
-              class="user-submit-btn"
-              [disabled]="
+            <button type="submit" class="user-submit-btn" [disabled]="
                 taskForm.invalid ||
                 pdfError ||
                 zipError
