@@ -1,1 +1,595 @@
-<p>view-index works!</p>
+<div class="page-container">
+
+  <!-- =====================================================
+       MAIN TASK CARD
+  ====================================================== -->
+
+  <div class="main-card">
+
+    <!-- ===================================================
+         PAGE HEADER
+    ==================================================== -->
+
+    <div class="page-header">
+
+      <div class="page-title">
+
+        <mat-icon>
+          task_alt
+        </mat-icon>
+
+        <span>
+          View Task
+        </span>
+
+      </div>
+
+      <!-- Back Button -->
+
+      <div class="header-action">
+
+        <button
+          type="button"
+          class="back-button"
+          (click)="backToIndexPage()">
+
+          <mat-icon>
+            arrow_back
+          </mat-icon>
+
+          <span>
+            Back to Index
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+
+    <!-- ===================================================
+         TASK INFORMATION
+    ==================================================== -->
+
+    <div class="user-information">
+
+      <div class="user-info-grid">
+
+        <!-- ===============================================
+             LEFT COLUMN
+        ================================================ -->
+
+        <div class="user-column">
+
+          <!-- Task ID -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Task ID:
+            </span>
+
+            <span class="info-value">
+              {{ task.taskId || '-' }}
+            </span>
+
+          </div>
+
+
+          <!-- Title -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Title:
+            </span>
+
+            <span class="info-value">
+              {{ task.title || '-' }}
+            </span>
+
+          </div>
+
+
+          <!-- Client -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Client:
+            </span>
+
+            <span class="info-value">
+              {{ getClientName(task.clientId) }}
+            </span>
+
+          </div>
+
+
+          <!-- Task Category -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Task Category:
+            </span>
+
+            <span class="info-value">
+              {{ getTaskCategoryName(task.taskCategoryId) }}
+            </span>
+
+          </div>
+
+
+          <!-- Date -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Date:
+            </span>
+
+            <span class="info-value">
+              {{ formatDate(task.date) }}
+            </span>
+
+          </div>
+
+
+          <!-- Priority -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Priority:
+            </span>
+
+            <span
+              class="priority-badge"
+              [ngClass]="getPriorityClass(task.priority)">
+
+              {{ getPriorityLabel(task.priority) }}
+
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- ===============================================
+             RIGHT COLUMN
+        ================================================ -->
+
+        <div class="user-column">
+
+          <!-- Assigned To -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Assigned To:
+            </span>
+
+            <span class="info-value">
+              {{ getUserName(task.assignedTo) }}
+            </span>
+
+          </div>
+
+
+          <!-- Added By -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Added By:
+            </span>
+
+            <span class="info-value">
+              {{ getUserName(task.addedBy) }}
+            </span>
+
+          </div>
+
+
+          <!-- Status -->
+
+          <div class="info-row status-row">
+
+            <span class="info-label">
+              Status:
+            </span>
+
+            <span
+              class="status-badge"
+              [ngClass]="getStatusClass(task.status)">
+
+              {{ getStatusLabel(task.status) }}
+
+            </span>
+
+          </div>
+
+
+          <!-- Registration Date -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Created On:
+            </span>
+
+            <span class="info-value">
+              {{ formatDateTime(task.regdate) }}
+            </span>
+
+          </div>
+
+
+          <!-- Modified Date -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Updated On:
+            </span>
+
+            <span class="info-value">
+              {{ formatDateTime(task.moddate) }}
+            </span>
+
+          </div>
+
+
+          <!-- Close Remarks -->
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Close Remarks:
+            </span>
+
+            <span class="info-value remarks-value">
+              {{ task.closeRemarks || '-' }}
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================
+           DESCRIPTION
+      ==================================================== -->
+
+      <div class="description-section">
+
+        <div class="description-label">
+          Description:
+        </div>
+
+        <div class="description-value">
+
+          {{ task.description || '-' }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       ATTACHMENTS CARD
+  ====================================================== -->
+
+  <div class="section-card">
+
+    <div class="section-header">
+
+      <div class="section-title">
+
+        <mat-icon>
+          attach_file
+        </mat-icon>
+
+        <span>
+          Attachments
+        </span>
+
+      </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+
+    <div class="attachment-container">
+
+      <!-- FILE 1 -->
+
+      <div
+        class="attachment-row"
+        *ngIf="task.fileName1">
+
+        <div class="attachment-info">
+
+          <mat-icon>
+            picture_as_pdf
+          </mat-icon>
+
+          <span>
+            {{ task.fileName1 }}
+          </span>
+
+        </div>
+
+        <button
+          type="button"
+          class="view-file-button"
+          (click)="downloadFile(task.fileName1)">
+
+          <mat-icon>
+            visibility
+          </mat-icon>
+
+          View
+
+        </button>
+
+      </div>
+
+
+      <!-- FILE 2 -->
+
+      <div
+        class="attachment-row"
+        *ngIf="task.fileName2">
+
+        <div class="attachment-info">
+
+          <mat-icon>
+            folder_zip
+          </mat-icon>
+
+          <span>
+            {{ task.fileName2 }}
+          </span>
+
+        </div>
+
+        <button
+          type="button"
+          class="view-file-button"
+          (click)="downloadFile(task.fileName2)">
+
+          <mat-icon>
+            visibility
+          </mat-icon>
+
+          View
+
+        </button>
+
+      </div>
+
+
+      <!-- FILE 3 -->
+
+      <div
+        class="attachment-row"
+        *ngIf="task.fileName3">
+
+        <div class="attachment-info">
+
+          <mat-icon>
+            insert_drive_file
+          </mat-icon>
+
+          <span>
+            {{ task.fileName3 }}
+          </span>
+
+        </div>
+
+        <button
+          type="button"
+          class="view-file-button"
+          (click)="downloadFile(task.fileName3)">
+
+          <mat-icon>
+            visibility
+          </mat-icon>
+
+          View
+
+        </button>
+
+      </div>
+
+
+      <!-- FILE 4 -->
+
+      <div
+        class="attachment-row"
+        *ngIf="task.fileName4">
+
+        <div class="attachment-info">
+
+          <mat-icon>
+            insert_drive_file
+          </mat-icon>
+
+          <span>
+            {{ task.fileName4 }}
+          </span>
+
+        </div>
+
+        <button
+          type="button"
+          class="view-file-button"
+          (click)="downloadFile(task.fileName4)">
+
+          <mat-icon>
+            visibility
+          </mat-icon>
+
+          View
+
+        </button>
+
+      </div>
+
+
+      <!-- NO FILES -->
+
+      <div
+        class="no-files"
+        *ngIf="!hasAttachments">
+
+        <mat-icon>
+          info
+        </mat-icon>
+
+        <span>
+          No attachments available
+        </span>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       ACTION HISTORY CARD
+  ====================================================== -->
+
+  <div class="section-card">
+
+    <div class="section-header">
+
+      <div class="section-title">
+
+        <mat-icon>
+          history
+        </mat-icon>
+
+        <span>
+          Action History
+        </span>
+
+      </div>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+
+    <div class="table-container">
+
+      <div class="history-table-wrapper">
+
+        <table class="history-table">
+
+          <thead>
+
+            <tr>
+
+              <th style="width: 5%;">
+                #
+              </th>
+
+              <th style="width: 20%;">
+                Action By
+              </th>
+
+              <th style="width: 20%;">
+                Updated On
+              </th>
+
+              <th style="width: 55%;">
+                Action
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            <tr
+              *ngFor="
+                let history of transactionHistory;
+                let i = index
+              ">
+
+              <td>
+                {{ i + 1 }}
+              </td>
+
+              <td>
+                {{ history.name || '-' }}
+              </td>
+
+              <td>
+                {{ history.entryDate || '-' }}
+              </td>
+
+              <td>
+
+                <span class="action-badge">
+                  {{ history.action || '-' }}
+                </span>
+
+              </td>
+
+            </tr>
+
+
+            <!-- NO HISTORY -->
+
+            <tr
+              *ngIf="
+                !transactionHistory ||
+                transactionHistory.length === 0
+              ">
+
+              <td
+                colspan="4"
+                class="no-records-box">
+
+                <mat-icon>
+                  info
+                </mat-icon>
+
+                <span>
+                  No action history available
+                </span>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

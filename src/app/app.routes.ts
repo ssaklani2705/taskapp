@@ -69,7 +69,8 @@ export const routes: Routes = [
       { path: 'task-index', loadComponent: () => import('./features/task/task-index/task-index').then(m => m.TaskIndex) },
       { path: 'add-task', loadComponent: () => import('./features/task/add-index/add-index').then(m => m.AddIndexComponent) },
       { path: 'edit-task/:taskId', loadComponent: () => import('./features/task/add-index/add-index').then(m => m.AddIndexComponent) },
-      
+      { path: 'view-task/:taskId', loadComponent: () => import('./features/task/view-index/view-index').then(m => m.ViewIndex) },
+
 
       { path: 'task-category-index', loadComponent: () => import('./features/taskcategory/task-category-index/task-category-index').then(m => m.IndexTaskCategory) },
       { path: 'add-task-category', loadComponent: () => import('./features/taskcategory/add-task-category/add-task-category').then(m => m.AddTaskCategoryComponent) },

@@ -292,54 +292,54 @@ export class AddIndexComponent implements OnInit {
 
   loadTask(taskId: any): void {
 
-    // this.dataprovider
-    //   .getTaskById(taskId)
-    //   .subscribe({
+    this.dataprovider
+      .getTaskById(taskId)
+      .subscribe({
 
-    //     next: (res: any) => {
+        next: (res: any) => {
 
-    //       if (res && res.data) {
+          if (res && res.data) {
 
-    //         this.task = {
-    //           ...res.data
-    //         };
-
-
-    //         this.originalTask = {
-    //           ...res.data
-    //         };
+            this.task = {
+              ...res.data
+            };
 
 
-    //         // Convert API date to Date
-    //         if (this.task.date) {
+            this.originalTask = {
+              ...res.data
+            };
 
-    //           this.task.date =
-    //             new Date(
-    //               this.task.date
-    //             );
 
-    //         }
+            // Convert API date to Date
+            if (this.task.date) {
 
-    //       }
+              this.task.date =
+                new Date(
+                  this.task.date
+                );
 
-    //     },
+            }
 
-    //     error: (error: any) => {
+          }
 
-    //       console.error(
-    //         'Error fetching task:',
-    //         error
-    //       );
+        },
 
-    //       Swal.fire(
-    //         'Error',
-    //         'Unable to load task details.',
-    //         'error'
-    //       );
+        error: (error: any) => {
 
-    //     }
+          console.error(
+            'Error fetching task:',
+            error
+          );
 
-    //   });
+          Swal.fire(
+            'Error',
+            'Unable to load task details.',
+            'error'
+          );
+
+        }
+
+      });
 
   }
 

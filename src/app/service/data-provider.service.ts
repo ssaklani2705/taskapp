@@ -1516,4 +1516,10 @@ saveTask(formData: FormData) {
   );
 }
 
+getTaskById(taskId: number) {
+  return this.http.get(
+    `${environment.apiBaseUrl}admin/task/getTaskDetailsById?taskId=${taskId}`
+  );
+}
+
 }
