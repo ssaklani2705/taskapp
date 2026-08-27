@@ -14,13 +14,8 @@
 
           <h2>Task</h2>
 
-          <button
-            type="button"
-            class="collapse-btn"
-            (click)="togglePanel()"
-            [attr.aria-expanded]="isPanelVisible"
-            title="Toggle Search Panel"
-          >
+          <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible"
+            title="Toggle Search Panel">
             {{ isPanelVisible ? "▲" : "▼" }}
           </button>
 
@@ -28,14 +23,10 @@
 
         @if (addPer === "Y") {
 
-          <button
-            type="button"
-            class="btn-add-user"
-            (click)="addTask()"
-          >
-            <span class="plus-icon">+</span>
-            Add New
-          </button>
+        <button type="button" class="btn-add-user" (click)="addTask()">
+          <span class="plus-icon">+</span>
+          Add New
+        </button>
 
         }
 
@@ -46,10 +37,7 @@
            SEARCH / FILTER PANEL
       ====================================================== -->
 
-      <div
-        class="search-panel"
-        *ngIf="isPanelVisible"
-      >
+      <div class="search-panel" *ngIf="isPanelVisible">
 
         <div class="search-row">
 
@@ -58,20 +46,10 @@
 
             <div class="search-box">
 
-              <input
-                type="text"
-                [(ngModel)]="searchQuery"
-                placeholder="Search by Title"
-                class="search-input"
-                (keyup.enter)="onSearch()"
-              />
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Title" class="search-input"
+                (keyup.enter)="onSearch()" />
 
-              <button
-                type="button"
-                class="search-btn"
-                (click)="onSearch()"
-                title="Search"
-              >
+              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
                 <i class="fa fa-search"></i>
               </button>
 
@@ -83,20 +61,13 @@
           <!-- CLIENT -->
           <div class="status-wrapper">
 
-            <select
-              class="status-select"
-              [(ngModel)]="selectedClient"
-              (change)="onSearch()"
-            >
+            <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
 
               <option value="">
                 --All Clients--
               </option>
 
-              <option
-                *ngFor="let client of clients"
-                [value]="client.clientId"
-              >
+              <option *ngFor="let client of clients" [value]="client.clientId">
                 {{ client.name }}
               </option>
 
@@ -108,20 +79,13 @@
           <!-- TASK CATEGORY -->
           <div class="status-wrapper">
 
-            <select
-              class="status-select"
-              [(ngModel)]="selectedTaskCategory"
-              (change)="onSearch()"
-            >
+            <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()">
 
               <option value="">
                 --All Task Categories--
               </option>
 
-              <option
-                *ngFor="let category of taskCategories"
-                [value]="category.taskcategoryId"
-              >
+              <option *ngFor="let category of taskCategories" [value]="category.taskcategoryId">
                 {{ category.name }}
               </option>
 
@@ -133,20 +97,13 @@
           <!-- ASSIGNED TO -->
           <div class="status-wrapper">
 
-            <select
-              class="status-select"
-              [(ngModel)]="selectedAssignedTo"
-              (change)="onSearch()"
-            >
+            <select class="status-select" [(ngModel)]="selectedAssignedTo" (change)="onSearch()">
 
               <option value="">
                 --All Assigned To--
               </option>
 
-              <option
-                *ngFor="let user of assignedUsers"
-                [value]="user.userId"
-              >
+              <option *ngFor="let user of assignedUsers" [value]="user.userId">
                 {{ user.firstName }}
               </option>
 
@@ -158,11 +115,7 @@
           <!-- PRIORITY -->
           <div class="status-wrapper">
 
-            <select
-              class="status-select"
-              [(ngModel)]="selectedPriority"
-              (change)="onSearch()"
-            >
+            <select class="status-select" [(ngModel)]="selectedPriority" (change)="onSearch()">
 
               <option value="">
                 --All Priority--
@@ -188,11 +141,7 @@
           <!-- STATUS -->
           <div class="status-wrapper">
 
-            <select
-              class="status-select"
-              [(ngModel)]="selectedStatus"
-              (change)="onSearch()"
-            >
+            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
 
               <option value="">
                 --All Status--
@@ -277,22 +226,13 @@
           <!-- GO -->
           <div class="go-wrapper">
 
-            <button
-              type="button"
-              class="btn-go"
-              (click)="onSearch()"
-            >
+            <button type="button" class="btn-go" (click)="onSearch()">
               Go
             </button>
-&nbsp;
-            <button
-    type="button"
-    class="btn-clear"
-    (click)="clearFilters()"
-    title="Clear Filters"
-  >
-    Clear
-  </button>
+            &nbsp;
+            <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
+              Clear
+            </button>
 
           </div>
 
@@ -307,59 +247,34 @@
 
       <div class="table-top-section">
 
-        <div
-          class="record-summary"
-          role="status"
-          aria-live="polite"
-        >
+        <div class="record-summary" role="status" aria-live="polite">
           {{ recordSummary }}
         </div>
 
         <div class="pagination">
 
-          <button
-            type="button"
-            class="pagination-btn first-btn"
-            (click)="goToFirstPage()"
-            [disabled]="currentPage === 1"
-          >
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()"
+            [disabled]="currentPage === 1">
             « First
           </button>
 
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPage(currentPage - 1)"
-            [disabled]="currentPage === 1"
-          >
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1">
             ‹ Prev
           </button>
 
-          <button
-            type="button"
-            class="pagination-btn"
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button type="button" class="pagination-btn" *ngFor="let page of pages()" (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
 
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPage(currentPage + 1)"
-            [disabled]="currentPage === totalPages"
-          >
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages">
             Next ›
           </button>
 
-          <button
-            type="button"
-            class="pagination-btn last-btn"
-            (click)="goToLastPage()"
-            [disabled]="currentPage === totalPages"
-          >
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages">
             Last »
           </button>
 
@@ -386,11 +301,8 @@
                   #
                 </th>
 
-                <th
-                  *ngFor="let col of columns"
-                  [class.sortable-column]="col.sortable"
-                  (click)="col.sortable && sortData(col.key)"
-                >
+                <th *ngFor="let col of columns" [class.sortable-column]="col.sortable"
+                  (click)="col.sortable && sortData(col.key)">
 
                   <div class="column-header">
 
@@ -398,26 +310,19 @@
                       {{ col.label }}
                     </span>
 
-                    <span
-                      *ngIf="col.sortable"
-                      class="sort-icons"
-                    >
+                    <span *ngIf="col.sortable" class="sort-icons">
 
-                      <span
-                        [class.sort-active]="
+                      <span [class.sort-active]="
                           sortColumn === col.key &&
                           sortDirection === 'asc'
-                        "
-                      >
+                        ">
                         ▲
                       </span>
 
-                      <span
-                        [class.sort-active]="
+                      <span [class.sort-active]="
                           sortColumn === col.key &&
                           sortDirection === 'desc'
-                        "
-                      >
+                        ">
                         ▼
                       </span>
 
@@ -438,21 +343,18 @@
 
             <tbody>
 
-              <tr
-                class="user-row"
-                *ngFor="
+              <tr class="user-row" *ngFor="
                   let task of paginatedTasks;
                   let i = index
-                "
-              >
+                ">
 
                 <!-- SERIAL -->
                 <td class="serial-number">
                   {{
-                    (currentPage - 1) *
-                    recordsPerPage +
-                    i +
-                    1
+                  (currentPage - 1) *
+                  recordsPerPage +
+                  i +
+                  1
                   }}
                 </td>
 
@@ -476,9 +378,9 @@
                 <!-- DATE -->
                 <td>
                   {{
-                    task.date
-                      ? (task.date | date:'dd-MM-yyyy')
-                      : '-'
+                  task.date
+                  ? (task.date | date:'dd-MM-yyyy')
+                  : '-'
                   }}
                 </td>
 
@@ -502,10 +404,7 @@
                 <!-- PRIORITY -->
                 <td>
 
-                  <span
-                    class="priority-badge"
-                    [ngClass]="getPriorityClass(task.priority)"
-                  >
+                  <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
                     {{ getPriorityLabel(task.priority) }}
                   </span>
 
@@ -515,12 +414,9 @@
                 <!-- STATUS -->
                 <td>
 
-                  <span
-                    class="status-badge"
-                    [ngClass]="common.getStatusClass(task.status)"
-                  >
+                  <span class="status-badge" [ngClass]="common.getStatusClass(task.status)">
                     {{
-                      common.getStatusLabel(task.status)
+                    common.getStatusLabel(task.status)
                     }}
                   </span>
 
@@ -573,17 +469,12 @@
 
               <!-- NO RECORDS -->
 
-              <tr
-                *ngIf="
+              <tr *ngIf="
                   !paginatedTasks ||
                   paginatedTasks.length === 0
-                "
-              >
+                ">
 
-                <td
-                  [attr.colspan]="columns.length + 2"
-                  class="no-records"
-                >
+                <td [attr.colspan]="columns.length + 2" class="no-records">
                   No records found.
                 </td>
 
@@ -604,59 +495,34 @@
 
       <div class="table-bottom-section">
 
-        <div
-          class="record-summary"
-          role="status"
-          aria-live="polite"
-        >
+        <div class="record-summary" role="status" aria-live="polite">
           {{ recordSummary }}
         </div>
 
         <div class="pagination">
 
-          <button
-            type="button"
-            class="pagination-btn first-btn"
-            (click)="goToFirstPage()"
-            [disabled]="currentPage === 1"
-          >
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()"
+            [disabled]="currentPage === 1">
             « First
           </button>
 
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPage(currentPage - 1)"
-            [disabled]="currentPage === 1"
-          >
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1">
             ‹ Prev
           </button>
 
-          <button
-            type="button"
-            class="pagination-btn"
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button type="button" class="pagination-btn" *ngFor="let page of pages()" (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
 
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPage(currentPage + 1)"
-            [disabled]="currentPage === totalPages"
-          >
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages">
             Next ›
           </button>
 
-          <button
-            type="button"
-            class="pagination-btn last-btn"
-            (click)="goToLastPage()"
-            [disabled]="currentPage === totalPages"
-          >
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages">
             Last »
           </button>
 

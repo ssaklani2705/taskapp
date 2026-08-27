@@ -34,7 +34,7 @@ import { Plan } from '../plan-add/plan-add';
   styleUrl: './plan-index.scss',
 })
 export class PlanIndex {
- plans: Plan[] = [];
+  plans: Plan[] = [];
 
   apiResponsePlan: any = {};
 
@@ -98,128 +98,55 @@ export class PlanIndex {
 
   ngOnInit(): void {
 
-    this.sessionService.clearOtherSessions(
-      this.filterKey
-    );
+    this.sessionService.clearOtherSessions(this.filterKey);
 
-    this.route.queryParams.subscribe(() => {
+    // User ID
+    if (isPlatformBrowser(this.platformId)) {
+      this.userId = sessionStorage.getItem('userId');
+    }
 
-      /* User ID */
-      if (
-        isPlatformBrowser(
-          this.platformId
-        )
-      ) {
-        this.userId =
-          sessionStorage.getItem(
-            'userId'
-          );
+    // Permissions
+    if (isPlatformBrowser(this.platformId)) {
+
+      const storedModules =
+        sessionStorage.getItem('selectedModuleDetail');
+
+      if (storedModules) {
+
+        const parsed = JSON.parse(storedModules);
+
+        this.moduleName = parsed.name ?? '';
+        this.addPer = parsed.addPer ?? 'N';
+        this.editPer = parsed.editPer ?? 'N';
+        this.deletePer = parsed.deletePer ?? 'N';
+        this.viewPer = parsed.viewPer ?? 'N';
+        this.approvePer = parsed.approvePer ?? 'N';
+        this.adminApprovePer = parsed.adminApprovePer ?? 'N';
       }
+    }
 
-      /* Permissions */
-      if (
-        isPlatformBrowser(
-          this.platformId
-        )
-      ) {
+    // Restore from URL
+    this.route.queryParams.subscribe(params => {
 
-        const storedModules =
-          sessionStorage.getItem(
-            'selectedModuleDetail'
-          );
+      this.currentPage = +(params['currentPage'] || 1);
+      this.page = +(params['page'] || (this.currentPage - 1));
+      this.size = +(params['size'] || environment.size);
 
-        if (storedModules) {
+      this.searchQuery = params['searchText'] || '';
+      this.search = this.searchQuery;
 
-          const parsed =
-            JSON.parse(
-              storedModules
-            );
+      this.statusIndex = +(params['statusIndex'] || 0);
 
-          this.moduleName =
-            parsed.name ?? '';
+      this.selectedStatus =
+        this.statusIndex > 0
+          ? String(this.statusIndex)
+          : '';
 
-          this.addPer =
-            parsed.addPer ?? 'N';
-
-          this.editPer =
-            parsed.editPer ?? 'N';
-
-          this.deletePer =
-            parsed.deletePer ?? 'N';
-
-          this.viewPer =
-            parsed.viewPer ?? 'N';
-
-          this.approvePer =
-            parsed.approvePer ?? 'N';
-
-          this.adminApprovePer =
-            parsed.adminApprovePer ?? 'N';
-        }
-      }
-
-      /* Restore filter state */
-      let stateData: any = null;
-
-      const nav =
-        this.router.getCurrentNavigation();
-
-      stateData =
-        nav?.extras?.state;
-
-      if (!stateData) {
-
-        const saved =
-          sessionStorage.getItem(
-            this.filterKey
-          );
-
-        if (saved) {
-
-          stateData =
-            JSON.parse(saved);
-        }
-      }
-
-      if (stateData) {
-
-        this.currentPage =
-          stateData.currentPage || 1;
-
-        this.page =
-          this.currentPage - 1;
-
-        this.statusIndex =
-          stateData.statusIndex || 0;
-
-        this.search =
-          stateData.searchText || '';
-
-        this.size =
-          stateData.size || this.size;
-
-        this.recordsPerPage =
-          this.size;
-
-        this.selectedStatus =
-          this.statusIndex
-            ? String(
-              this.statusIndex
-            )
-            : '';
-
-        this.searchQuery =
-          this.search;
-
-
-      }
-
-
+      this.recordsPerPage = this.size;
 
       this.getPlanDetails();
     });
   }
-
   /* Panel */
   togglePanel(): void {
 
@@ -297,8 +224,6 @@ export class PlanIndex {
 
       searchText:
         this.search,
-
-
 
       page:
         this.page,
@@ -483,12 +408,7 @@ export class PlanIndex {
 
       statusIndex:
         this.statusIndex,
-
-      searchText:
-        this.search,
-
-
-
+      searchText: this.searchQuery.trim(),
       size:
         this.size,
     };
@@ -506,8 +426,7 @@ export class PlanIndex {
         planId,
       ],
       {
-        state:
-          filterState,
+        queryParams: filterState
       }
     );
   }
@@ -525,10 +444,7 @@ export class PlanIndex {
       statusIndex:
         this.statusIndex,
 
-      searchText:
-        this.search,
-
-
+      searchText: this.searchQuery.trim(),
       size:
         this.size,
     };
@@ -546,8 +462,7 @@ export class PlanIndex {
         planId,
       ],
       {
-        state:
-          filterState,
+        queryParams: filterState
       }
     );
   }
@@ -563,10 +478,7 @@ export class PlanIndex {
       statusIndex:
         this.statusIndex,
 
-      searchText:
-        this.search,
-
-
+      searchText: this.searchQuery.trim(),
       size:
         this.size,
     };
@@ -581,8 +493,7 @@ export class PlanIndex {
     this.router.navigate(
       ['/add-plan'],
       {
-        state:
-          filterState,
+        queryParams: filterState
       }
     );
   }

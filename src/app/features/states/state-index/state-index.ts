@@ -101,122 +101,79 @@ export class StateIndex {
       this.filterKey
     );
 
-    this.route.queryParams.subscribe(() => {
+    /* User ID */
+    if (isPlatformBrowser(this.platformId)) {
+      this.userId = sessionStorage.getItem('userId');
+    }
 
-      /* User ID */
-      if (
-        isPlatformBrowser(
-          this.platformId
-        )
-      ) {
-        this.userId =
-          sessionStorage.getItem(
-            'userId'
-          );
+    /* Permissions */
+    if (isPlatformBrowser(this.platformId)) {
+
+      const storedModules =
+        sessionStorage.getItem(
+          'selectedModuleDetail'
+        );
+
+      if (storedModules) {
+
+        const parsed =
+          JSON.parse(storedModules);
+
+        this.moduleName =
+          parsed.name ?? '';
+
+        this.addPer =
+          parsed.addPer ?? 'N';
+
+        this.editPer =
+          parsed.editPer ?? 'N';
+
+        this.deletePer =
+          parsed.deletePer ?? 'N';
+
+        this.viewPer =
+          parsed.viewPer ?? 'N';
+
+        this.approvePer =
+          parsed.approvePer ?? 'N';
+
+        this.adminApprovePer =
+          parsed.adminApprovePer ?? 'N';
       }
+    }
 
-      /* Permissions */
-      if (
-        isPlatformBrowser(
-          this.platformId
-        )
-      ) {
+    /* Restore filters from URL */
+    this.route.queryParams.subscribe(params => {
 
-        const storedModules =
-          sessionStorage.getItem(
-            'selectedModuleDetail'
-          );
+      this.currentPage =
+        +(params['currentPage'] || 1);
 
-        if (storedModules) {
+      this.page =
+        +(params['page'] || (this.currentPage - 1));
 
-          const parsed =
-            JSON.parse(
-              storedModules
-            );
+      this.size =
+        +(params['size'] || environment.size);
 
-          this.moduleName =
-            parsed.name ?? '';
+      this.searchQuery =
+        params['searchText'] || '';
 
-          this.addPer =
-            parsed.addPer ?? 'N';
+      this.search =
+        this.searchQuery;
 
-          this.editPer =
-            parsed.editPer ?? 'N';
+      this.statusIndex =
+        +(params['statusIndex'] || 0);
 
-          this.deletePer =
-            parsed.deletePer ?? 'N';
+      this.selectedStatus =
+        this.statusIndex > 0
+          ? String(this.statusIndex)
+          : '';
 
-          this.viewPer =
-            parsed.viewPer ?? 'N';
-
-          this.approvePer =
-            parsed.approvePer ?? 'N';
-
-          this.adminApprovePer =
-            parsed.adminApprovePer ?? 'N';
-        }
-      }
-
-      /* Restore filter state */
-      let stateData: any = null;
-
-      const nav =
-        this.router.getCurrentNavigation();
-
-      stateData =
-        nav?.extras?.state;
-
-      if (!stateData) {
-
-        const saved =
-          sessionStorage.getItem(
-            this.filterKey
-          );
-
-        if (saved) {
-
-          stateData =
-            JSON.parse(saved);
-        }
-      }
-
-      if (stateData) {
-
-        this.currentPage =
-          stateData.currentPage || 1;
-
-        this.page =
-          this.currentPage - 1;
-
-        this.statusIndex =
-          stateData.statusIndex || 0;
-
-        this.search =
-          stateData.searchText || '';
-
-        this.size =
-          stateData.size || this.size;
-
-        this.recordsPerPage =
-          this.size;
-
-        this.selectedStatus =
-          this.statusIndex
-            ? String(
-              this.statusIndex
-            )
-            : '';
-
-        this.searchQuery =
-          this.search;
-
-
-      }
-
-
+      this.recordsPerPage =
+        this.size;
 
       this.getTaskCategoryDetails();
     });
+
   }
 
   /* Panel */
@@ -287,35 +244,21 @@ export class StateIndex {
     this.page = 0;
 
     const state = {
-
-      currentPage:
-        this.currentPage,
-
-      statusIndex:
-        this.statusIndex,
-
-      searchText:
-        this.search,
-
-
-
-      page:
-        this.page,
-
-      size:
-        this.size,
+      currentPage: this.currentPage,
+      statusIndex: this.statusIndex,
+      searchText: this.searchQuery.trim(),
+      page: this.page,
+      size: this.size
     };
-
     this.sessionService.setItem(
       this.filterKey,
       JSON.stringify(state)
     );
-
     this.router
       .navigate(
         ['/state-index'],
         {
-          state: state,
+          queryParams: state,
         }
       )
       .then(() => {
@@ -409,66 +352,66 @@ export class StateIndex {
     );
   }
 
- onDeleteState(stateId: number): void {
+  onDeleteState(stateId: number): void {
 
-  const payload = {
-    stateId: stateId,
-    userId: this.userId ? Number(this.userId) : null
-  };
+    const payload = {
+      stateId: stateId,
+      userId: this.userId ? Number(this.userId) : null
+    };
 
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'Do you really want to delete this state?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'No, keep it'
-  }).then((result) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to delete this state?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then((result) => {
 
-    if (result.isConfirmed) {
+      if (result.isConfirmed) {
 
-      this.dataprovider.deleteState(payload)
-        .subscribe({
+        this.dataprovider.deleteState(payload)
+          .subscribe({
 
-          next: (response: any) => {
+            next: (response: any) => {
 
-            if (response.success) {
+              if (response.success) {
 
-              Swal.fire(
-                'Deleted!',
-                response.message,
-                'success'
+                Swal.fire(
+                  'Deleted!',
+                  response.message,
+                  'success'
+                );
+
+                this.getTaskCategoryDetails(); // or loadStateDetails()
+
+              } else {
+
+                Swal.fire(
+                  'Error',
+                  response.message,
+                  'error'
+                );
+              }
+            },
+
+            error: (error) => {
+
+              console.error(
+                'Error deleting state:',
+                error
               );
-
-              this.getTaskCategoryDetails(); // or loadStateDetails()
-
-            } else {
 
               Swal.fire(
                 'Error',
-                response.message,
+                'Something went wrong while deleting the state.',
                 'error'
               );
             }
-          },
-
-          error: (error) => {
-
-            console.error(
-              'Error deleting state:',
-              error
-            );
-
-            Swal.fire(
-              'Error',
-              'Something went wrong while deleting the state.',
-              'error'
-            );
-          }
-        });
-    }
-  });
-}
+          });
+      }
+    });
+  }
 
   /* View */
   viewTaskCategory(
@@ -476,20 +419,11 @@ export class StateIndex {
   ): void {
 
     const filterState = {
-
-      currentPage:
-        this.currentPage,
-
-      statusIndex:
-        this.statusIndex,
-
-      searchText:
-        this.search,
-
-
-
-      size:
-        this.size,
+      currentPage: this.currentPage,
+      statusIndex: this.statusIndex,
+      searchText: this.searchQuery.trim(),
+      page: this.page,
+      size: this.size
     };
 
     this.sessionService.setItem(
@@ -505,8 +439,7 @@ export class StateIndex {
         stateId,
       ],
       {
-        state:
-          filterState,
+        queryParams: filterState
       }
     );
   }
@@ -517,19 +450,11 @@ export class StateIndex {
   ): void {
 
     const filterState = {
-
-      currentPage:
-        this.currentPage,
-
-      statusIndex:
-        this.statusIndex,
-
-      searchText:
-        this.search,
-
-
-      size:
-        this.size,
+      currentPage: this.currentPage,
+      statusIndex: this.statusIndex,
+      searchText: this.searchQuery.trim(),
+      page: this.page,
+      size: this.size
     };
 
     this.sessionService.setItem(
@@ -545,8 +470,7 @@ export class StateIndex {
         stateId,
       ],
       {
-        state:
-          filterState,
+        queryParams: filterState
       }
     );
   }
@@ -555,37 +479,25 @@ export class StateIndex {
   addState(): void {
 
     const filterState = {
-
-      currentPage:
-        this.currentPage,
-
-      statusIndex:
-        this.statusIndex,
-
-      searchText:
-        this.search,
-
-
-      size:
-        this.size,
+      currentPage: this.currentPage,
+      statusIndex: this.statusIndex,
+      searchText: this.searchQuery.trim(),
+      page: this.page,
+      size: this.size
     };
 
     this.sessionService.setItem(
       this.filterKey,
-      JSON.stringify(
-        filterState
-      )
+      JSON.stringify(filterState)
     );
 
     this.router.navigate(
       ['/add-state'],
       {
-        state:
-          filterState,
+        queryParams: filterState
       }
     );
   }
-
   /* Page numbers */
   pages(): number[] {
 
@@ -678,7 +590,7 @@ export class StateIndex {
     label: string;
     sortable: boolean;
   }[] = [
-{
+      {
         key:
           'code',
 
@@ -699,7 +611,7 @@ export class StateIndex {
           true,
       },
 
-      
+
 
       {
         key:
