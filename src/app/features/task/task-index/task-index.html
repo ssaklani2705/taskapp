@@ -469,51 +469,45 @@
 
 
                 <!-- ACTION -->
-                <td>
+                <!-- ACTION -->
+<td>
+  <div class="action-buttons">
 
-                  <div class="action-buttons">
+    <!-- VIEW -->
+    @if (viewPer === "Y") {
+      <a
+        (click)="viewTask(task.taskId)"
+        class="action-btn view-btn"
+        title="View"
+      >
+        <i class="fa fa-eye"></i>
+      </a>
+    }
 
-                    @if (viewPer === "Y") {
+    <!-- EDIT - Hide when status = 3 -->
+    @if (editPer === "Y" && task.status !== 3) {
+      <a
+        (click)="editTask(task.taskId)"
+        class="action-btn edit-btn"
+        title="Edit"
+      >
+        <i class="fa fa-pencil"></i>
+      </a>
+    }
 
-                      <a
-                        (click)="viewTask(task.taskId)"
-                        class="action-btn view-btn"
-                        title="View"
-                      >
-                        <i class="fa fa-eye"></i>
-                      </a>
+    <!-- DELETE - Hide when status = 3 -->
+    @if (deletePer === "Y" && task.status !== 3) {
+      <a
+        (click)="onDeleteTask(task.taskId)"
+        class="action-btn delete-btn"
+        title="Delete"
+      >
+        <i class="fa fa-trash"></i>
+      </a>
+    }
 
-                    }
-
-
-                    @if (editPer === "Y") {
-
-                      <a
-                        (click)="editTask(task.taskId)"
-                        class="action-btn edit-btn"
-                        title="Edit"
-                      >
-                        <i class="fa fa-pencil"></i>
-                      </a>
-
-                    }
-
-
-                    @if (deletePer === "Y") {
-
-                      <a
-                        (click)="onDeleteTask(task.taskId)"
-                        class="action-btn delete-btn"
-                        title="Delete"
-                      >
-                        <i class="fa fa-trash"></i>
-                      </a>
-
-                    }
-
-                  </div>
-
-                </td>
+  </div>
+</td>
 
               </tr>
 

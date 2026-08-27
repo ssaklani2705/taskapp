@@ -72,6 +72,7 @@ export class AddClient implements OnInit {
 
   states: any[] = [];
   managers: any[] = [];
+  plans: any[] = [];
 
   minDate: Date = new Date();
 
@@ -99,6 +100,7 @@ export class AddClient implements OnInit {
 
     this.loadStates();
     this.loadManagers();
+    this.loadPlan();
 
     const id = this.route.snapshot.paramMap.get('clientId');
 
@@ -128,6 +130,7 @@ export class AddClient implements OnInit {
 
       stateId: null,
       managerId: null,
+      planId: null,
 
       addressLine1: '',
       addressLine2: '',
@@ -174,9 +177,8 @@ export class AddClient implements OnInit {
         ],
       ],
       taxFlag: [false],
-      // stateId: [0, [Validators.required, Validators.min(1)]],
       stateId: [null, Validators.required],
-      // managerId: [0, [Validators.required, Validators.min(1)]],
+      planId: [null, Validators.required],
       managerId: [null, Validators.required],
       addressLine1: ['', [Validators.required, Validators.maxLength(500)]],
       addressLine2: ['', Validators.maxLength(500)],
@@ -275,6 +277,8 @@ export class AddClient implements OnInit {
 
       taxFlag: Number(formValues.taxFlag || 0),
       location: formValues.location?.trim() || '',
+
+      planId: Number(formValues.planId || 0),
     };
 
     console.log('Client payload:', payload);
@@ -343,6 +347,18 @@ export class AddClient implements OnInit {
     });
   }
 
+  loadPlan(): void {
+    this.dataProvider.getPlan().subscribe({
+      next: (response: any) => {
+        this.plans = response?.data || response || [];
+      },
+      error: (error) => {
+        console.error('Error loading managers:', error);
+        this.plans = [];
+      },
+    });
+  }
+
   allowOnlyNumbers(event: KeyboardEvent): void {
     const charCode = event.which || event.keyCode;
 
@@ -377,6 +393,7 @@ export class AddClient implements OnInit {
 
           stateId: client.stateId ?? 0,
           managerId: client.managerId ?? 0,
+          planId: client.planId ?? 0,
 
           addressLine1: client.addressLine1 ?? '',
           addressLine2: client.addressLine2 ?? '',
