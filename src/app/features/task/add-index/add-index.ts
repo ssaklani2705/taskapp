@@ -7,7 +7,8 @@ import {
   Component,
   Inject,
   OnInit,
-  PLATFORM_ID
+  PLATFORM_ID,
+  ViewEncapsulation
 } from '@angular/core';
 
 import {
@@ -31,6 +32,8 @@ import {
 } from '@angular/material/input';
 
 import {
+  DateAdapter,
+  MAT_DATE_LOCALE,
   MatNativeDateModule
 } from '@angular/material/core';
 
@@ -48,6 +51,7 @@ import {
 } from '../../../service/data-provider.service';
 
 import Swal from 'sweetalert2';
+import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
 
 @Component({
@@ -68,7 +72,18 @@ import Swal from 'sweetalert2';
 
   templateUrl: './add-index.html',
 
-  styleUrl: './add-index.scss'
+  styleUrl: './add-index.scss',
+  encapsulation: ViewEncapsulation.Emulated,
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MyDateAdapter,
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB',
+    },
+  ],
 })
 
 

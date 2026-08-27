@@ -221,18 +221,12 @@ export class PlanAdd implements OnInit {
 
 
   allowOnlyNumbers(event: KeyboardEvent): void {
+    
     const key = event.key;
-
     // Allow digits
     if (/^[0-9]$/.test(key)) {
       return;
     }
-
-    // Allow only one decimal point
-    if (key === '.' && !(event.target as HTMLInputElement).value.includes('.')) {
-      return;
-    }
-
     event.preventDefault();
   }
 }

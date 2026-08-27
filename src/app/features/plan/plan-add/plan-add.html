@@ -78,7 +78,7 @@
                 </label>
 
                 <input type="text" class="user-input" placeholder="Enter Plan Rate" [(ngModel)]="plan.rate"
-                  name="rate" required min="0" #rateCtrl="ngModel"   (keypress)="allowOnlyNumbers($event)" maxlength="5">
+                  name="rate" required min="0" #rateCtrl="ngModel"   (keypress)="allowOnlyNumbers($event)" maxlength="7">
 
                 <div class="user-error" *ngIf="rateCtrl.invalid && rateCtrl.touched">
 

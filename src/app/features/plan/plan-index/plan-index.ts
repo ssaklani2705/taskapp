@@ -685,12 +685,21 @@ export class PlanIndex {
           'planName',
 
         label:
-          'PlanName',
+          'Plan Name',
 
         sortable:
           true,
       },
+      {
+        key:
+          'description',
 
+        label:
+          'Description',
+
+        sortable:
+          true,
+      },
       {
         key:
           'rate',
