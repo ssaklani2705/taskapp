@@ -30,6 +30,9 @@ import {
 import {
   SESSION_KEYS
 } from '../../../service/session-storage.keys';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
 
 interface Task {
@@ -49,6 +52,8 @@ interface Task {
   status: number;
 
   title: string;
+
+  taskStatus: number;
 }
 
 
@@ -84,12 +89,24 @@ interface AssignedUser {
     CommonModule,
     FormsModule,
     RouterModule,
-    MatCardModule
+    MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
 
   templateUrl: './task-index.html',
 
   styleUrl: './task-index.scss',
+   providers: [
+    {
+      provide: DateAdapter,
+      useClass: MyDateAdapter,
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB',
+    },
+  ],
 
 })
 export class TaskIndex {
@@ -261,7 +278,11 @@ export class TaskIndex {
       label: 'Priority',
       sortable: true
     },
-
+    {
+      key: 'taskStatus',
+      label: 'Task Status',
+      sortable: true
+    },
     {
       key: 'status',
       label: 'Status',
@@ -407,232 +428,282 @@ export class TaskIndex {
   // RESTORE FILTER STATE
   // =========================================================
 
-  private restoreFilterState(): void {
+ private restoreFilterState(): void {
 
-    let stateData: any = null;
-
-
-    // First preference: router navigation state
-    const nav =
-      this.router.getCurrentNavigation();
-
-    stateData =
-      nav?.extras?.state;
+  let stateData: any = null;
 
 
-    // Second preference: sessionStorage
-    if (!stateData) {
+  // -------------------------------------------------------
+  // FIRST: ROUTER NAVIGATION STATE
+  // -------------------------------------------------------
 
-      const saved =
-        sessionStorage.getItem(
-          this.filterKey
+  const nav =
+    this.router.getCurrentNavigation();
+
+  stateData =
+    nav?.extras?.state;
+
+
+  // -------------------------------------------------------
+  // SECOND: SESSION STORAGE
+  // -------------------------------------------------------
+
+  if (!stateData) {
+
+    const saved =
+      sessionStorage.getItem(
+        this.filterKey
+      );
+
+    if (saved) {
+
+      try {
+
+        stateData =
+          JSON.parse(saved);
+
+      } catch (error) {
+
+        console.error(
+          'Invalid task filter session:',
+          error
         );
-
-      if (saved) {
-
-        try {
-
-          stateData =
-            JSON.parse(saved);
-
-        } catch (error) {
-
-          console.error(
-            'Invalid task filter session:',
-            error
-          );
-
-        }
 
       }
 
     }
 
-
-    // Nothing saved
-    if (!stateData) {
-
-      this.currentPage = 1;
-
-      this.page = 0;
-
-      this.size =
-        environment.size;
-
-      this.recordsPerPage =
-        this.size;
-
-      this.search = '';
-
-      this.searchQuery = '';
-
-      this.statusIndex = 0;
-
-      this.selectedStatus = '';
-
-      this.selectedClient = '';
-
-      this.selectedTaskCategory = '';
-
-      this.selectedAssignedTo = '';
-
-      this.selectedPriority = '';
-
-      return;
-    }
+  }
 
 
-    // -------------------------------------------------------
-    // PAGE
-    // -------------------------------------------------------
+  // -------------------------------------------------------
+  // NOTHING SAVED
+  // -------------------------------------------------------
 
-    this.currentPage =
-      Number(stateData.currentPage) || 1;
+  if (!stateData) {
 
-    this.page =
-      this.currentPage - 1;
+    this.currentPage = 1;
 
-
-    // -------------------------------------------------------
-    // SIZE
-    // -------------------------------------------------------
+    this.page = 0;
 
     this.size =
-      Number(stateData.size) ||
       environment.size;
 
     this.recordsPerPage =
       this.size;
 
+    this.search = '';
 
-    // -------------------------------------------------------
-    // SEARCH
-    // -------------------------------------------------------
+    this.searchQuery = '';
 
-    this.search =
-      stateData.searchText || '';
+    this.statusIndex = 0;
 
-    this.searchQuery =
-      this.search;
+    this.selectedStatus = '';
 
+    this.selectedClient = '';
 
-    // -------------------------------------------------------
-    // STATUS
-    // -------------------------------------------------------
+    this.selectedTaskCategory = '';
 
-    this.statusIndex =
-      Number(stateData.statusIndex) || 0;
+    this.selectedAssignedTo = '';
 
-    this.selectedStatus =
-      this.statusIndex
-        ? String(this.statusIndex)
-        : '';
+    this.selectedPriority = '';
 
+    this.fromDate = null;
 
-    // -------------------------------------------------------
-    // CLIENT
-    // -------------------------------------------------------
+    this.toDate = null;
 
-    this.selectedClient =
-      stateData.clientId != null
-        ? String(stateData.clientId)
-        : '';
-
-
-    // -------------------------------------------------------
-    // TASK CATEGORY
-    // -------------------------------------------------------
-
-    this.selectedTaskCategory =
-      stateData.taskCategoryId != null
-        ? String(stateData.taskCategoryId)
-        : '';
-
-
-    // -------------------------------------------------------
-    // ASSIGNED TO
-    // -------------------------------------------------------
-
-    this.selectedAssignedTo =
-      stateData.assignedTo != null
-        ? String(stateData.assignedTo)
-        : '';
-
-
-    // -------------------------------------------------------
-    // PRIORITY
-    // -------------------------------------------------------
-
-    this.selectedPriority =
-      stateData.priority != null
-        ? String(stateData.priority)
-        : '';
-
+    return;
   }
+
+
+  // -------------------------------------------------------
+  // PAGE
+  // -------------------------------------------------------
+
+  this.currentPage =
+    Number(stateData.currentPage) || 1;
+
+  this.page =
+    this.currentPage - 1;
+
+
+  // -------------------------------------------------------
+  // SIZE
+  // -------------------------------------------------------
+
+  this.size =
+    Number(stateData.size) ||
+    environment.size;
+
+  this.recordsPerPage =
+    this.size;
+
+
+  // -------------------------------------------------------
+  // SEARCH
+  // -------------------------------------------------------
+
+  this.search =
+    stateData.searchText || '';
+
+  this.searchQuery =
+    this.search;
+
+
+  // -------------------------------------------------------
+  // STATUS
+  // -------------------------------------------------------
+
+  this.statusIndex =
+    Number(stateData.statusIndex) || 0;
+
+  this.selectedStatus =
+    this.statusIndex
+      ? String(this.statusIndex)
+      : '';
+
+
+  // -------------------------------------------------------
+  // CLIENT
+  // -------------------------------------------------------
+
+  this.selectedClient =
+    stateData.clientId != null
+      ? String(stateData.clientId)
+      : '';
+
+
+  // -------------------------------------------------------
+  // TASK CATEGORY
+  // -------------------------------------------------------
+
+  this.selectedTaskCategory =
+    stateData.taskCategoryId != null
+      ? String(stateData.taskCategoryId)
+      : '';
+
+
+  // -------------------------------------------------------
+  // ASSIGNED TO
+  // -------------------------------------------------------
+
+  this.selectedAssignedTo =
+    stateData.assignedTo != null
+      ? String(stateData.assignedTo)
+      : '';
+
+
+  // -------------------------------------------------------
+  // PRIORITY
+  // -------------------------------------------------------
+
+  this.selectedPriority =
+    stateData.priority != null
+      ? String(stateData.priority)
+      : '';
+
+
+  // -------------------------------------------------------
+  // FROM DATE
+  // -------------------------------------------------------
+
+  this.fromDate =
+    stateData.fromDate
+      ? new Date(
+          stateData.fromDate + 'T00:00:00'
+        )
+      : null;
+
+
+  // -------------------------------------------------------
+  // TO DATE
+  // -------------------------------------------------------
+
+  this.toDate =
+    stateData.toDate
+      ? new Date(
+          stateData.toDate + 'T00:00:00'
+        )
+      : null;
+
+
+  console.log(
+    'Restored From Date:',
+    this.fromDate
+  );
+
+  console.log(
+    'Restored To Date:',
+    this.toDate
+  );
+
+}
 
 
   // =========================================================
   // SAVE FILTER STATE
   // =========================================================
 
-  private saveFilterState(): void {
+ private saveFilterState(): void {
 
-    const filterState = {
+  const filterState = {
 
-      currentPage:
-        this.currentPage,
+    currentPage:
+      this.currentPage,
 
-      page:
-        this.page,
+    page:
+      this.page,
 
-      size:
-        this.size,
+    size:
+      this.size,
 
-      statusIndex:
-        this.statusIndex,
+    statusIndex:
+      this.statusIndex,
 
-      searchText:
-        this.search,
+    searchText:
+      this.search,
 
-      clientId:
-        this.selectedClient
-          ? Number(this.selectedClient)
-          : null,
+    clientId:
+      this.selectedClient
+        ? Number(this.selectedClient)
+        : null,
 
-      taskCategoryId:
-        this.selectedTaskCategory
-          ? Number(this.selectedTaskCategory)
-          : null,
+    taskCategoryId:
+      this.selectedTaskCategory
+        ? Number(this.selectedTaskCategory)
+        : null,
 
-      assignedTo:
-        this.selectedAssignedTo
-          ? Number(this.selectedAssignedTo)
-          : null,
+    assignedTo:
+      this.selectedAssignedTo
+        ? Number(this.selectedAssignedTo)
+        : null,
 
-      priority:
-        this.selectedPriority
-          ? Number(this.selectedPriority)
-          : null
+    priority:
+      this.selectedPriority
+        ? Number(this.selectedPriority)
+        : null,
 
-    };
+    fromDate:
+      this.formatDateForApi(this.fromDate),
+
+    toDate:
+      this.formatDateForApi(this.toDate)
+
+  };
 
 
-    if (
-      isPlatformBrowser(this.platformId)
-    ) {
+  if (
+    isPlatformBrowser(this.platformId)
+  ) {
 
-      sessionStorage.setItem(
-
-        this.filterKey,
-
-        JSON.stringify(filterState)
-
-      );
-
-    }
+    sessionStorage.setItem(
+      this.filterKey,
+      JSON.stringify(filterState)
+    );
 
   }
 
+}
 
   // =========================================================
   // LOAD FILTER DATA
@@ -704,92 +775,92 @@ export class TaskIndex {
 
   getTaskDetails(): void {
 
-    const clientId =
-      this.selectedClient
-        ? Number(this.selectedClient)
-        : 0;
+  const clientId =
+    this.selectedClient
+      ? Number(this.selectedClient)
+      : 0;
+
+  const taskCategoryId =
+    this.selectedTaskCategory
+      ? Number(this.selectedTaskCategory)
+      : 0;
+
+  const assignedTo =
+    this.selectedAssignedTo
+      ? Number(this.selectedAssignedTo)
+      : 0;
+
+  const priority =
+    this.selectedPriority
+      ? Number(this.selectedPriority)
+      : 0;
+
+  const fromDate =
+    this.formatDateForApi(this.fromDate);
+
+  const toDate =
+    this.formatDateForApi(this.toDate);
 
 
-    const taskCategoryId =
-      this.selectedTaskCategory
-        ? Number(this.selectedTaskCategory)
-        : 0;
+  this.dataprovider
+    .getTaskDetails(
 
+      this.page,
 
-    const assignedTo =
-      this.selectedAssignedTo
-        ? Number(this.selectedAssignedTo)
-        : 0;
+      this.size,
 
+      this.statusIndex,
 
-    const priority =
-      this.selectedPriority
-        ? Number(this.selectedPriority)
-        : 0;
+      this.search,
 
+      clientId,
 
-    this.dataprovider
-      .getTaskDetails(
+      taskCategoryId,
 
-        this.page,
+      assignedTo,
 
-        this.size,
+      priority,
 
-        this.statusIndex,
+      fromDate,
 
-        this.search,
+      toDate
 
-        clientId,
+    )
+    .subscribe({
 
-        taskCategoryId,
+      next: (response: any) => {
 
-        assignedTo,
+        console.log(
+          'TASK DETAILS RESPONSE:',
+          response
+        );
 
-        priority
+        this.apiResponseTaskDetails =
+          response;
 
-      )
-      .subscribe({
+        this.tasks =
+          response.data || [];
 
-        next: (response: any) => {
+      },
 
-          console.log(
-            'TASK DETAILS RESPONSE:',
-            response
-          );
+      error: (error) => {
 
+        console.error(
+          'Error fetching task details:',
+          error
+        );
 
-          this.apiResponseTaskDetails =
-            response;
+        this.apiResponseTaskDetails = {
+          totalElements: 0
+        };
 
+        this.tasks = [];
 
-          this.tasks =
-            response.data || [];
+      }
 
-        },
+    });
 
-
-        error: (error) => {
-
-          console.error(
-            'Error fetching task details:',
-            error
-          );
-
-
-          this.apiResponseTaskDetails = {
-
-            totalElements: 0
-
-          };
-
-
-          this.tasks = [];
-
-        }
-
-      });
-
-  }
+}
 
 
   // =========================================================
@@ -839,36 +910,42 @@ export class TaskIndex {
 
         {
 
-          queryParams: {
+         queryParams: {
 
-            currentPage:
-              this.currentPage,
+  currentPage:
+    this.currentPage,
 
-            page:
-              this.page,
+  page:
+    this.page,
 
-            size:
-              this.size,
+  size:
+    this.size,
 
-            statusIndex:
-              this.statusIndex,
+  statusIndex:
+    this.statusIndex,
 
-            searchText:
-              this.search,
+  searchText:
+    this.search,
 
-            clientId:
-              this.selectedClient || null,
+  clientId:
+    this.selectedClient || null,
 
-            taskCategoryId:
-              this.selectedTaskCategory || null,
+  taskCategoryId:
+    this.selectedTaskCategory || null,
 
-            assignedTo:
-              this.selectedAssignedTo || null,
+  assignedTo:
+    this.selectedAssignedTo || null,
 
-            priority:
-              this.selectedPriority || null
+  priority:
+    this.selectedPriority || null,
 
-          },
+  fromDate:
+    this.formatDateForApi(this.fromDate) || null,
+
+  toDate:
+    this.formatDateForApi(this.toDate) || null
+
+},
 
           replaceUrl: true
 
@@ -912,76 +989,177 @@ export class TaskIndex {
   // SEARCH / FILTER
   // =========================================================
 
+  // onSearch(): void {
+
+  //   this.search =
+  //     this.searchQuery
+  //       ? this.searchQuery.trim()
+  //       : '';
+
+
+  //   this.statusIndex =
+  //     this.selectedStatus === ''
+  //       ? 0
+  //       : Number(this.selectedStatus);
+
+
+  //   this.currentPage = 1;
+
+  //   this.page = 0;
+
+
+  //   this.saveFilterState();
+
+
+  //   this.router
+  //     .navigate(
+
+  //       ['/task-index'],
+
+  //       {
+
+  //         queryParams: {
+
+  //           currentPage: 1,
+
+  //           page: 0,
+
+  //           size: this.size,
+
+  //           statusIndex:
+  //             this.statusIndex,
+
+  //           searchText:
+  //             this.search,
+
+  //           clientId:
+  //             this.selectedClient || null,
+
+  //           taskCategoryId:
+  //             this.selectedTaskCategory || null,
+
+  //           assignedTo:
+  //             this.selectedAssignedTo || null,
+
+  //           priority:
+  //             this.selectedPriority || null
+
+  //         },
+
+  //         replaceUrl: true
+
+  //       }
+
+  //     )
+  //     .then(() => {
+
+  //       this.getTaskDetails();
+
+  //     });
+
+  // }
+
   onSearch(): void {
 
-    this.search =
-      this.searchQuery
-        ? this.searchQuery.trim()
-        : '';
+  this.search =
+    this.searchQuery
+      ? this.searchQuery.trim()
+      : '';
+
+  this.statusIndex =
+    this.selectedStatus === ''
+      ? 0
+      : Number(this.selectedStatus);
 
 
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : Number(this.selectedStatus);
+  this.currentPage = 1;
+  this.page = 0;
 
 
-    this.currentPage = 1;
+  const fromDate =
+    this.formatDateForApi(this.fromDate);
 
-    this.page = 0;
+  const toDate =
+    this.formatDateForApi(this.toDate);
 
 
-    this.saveFilterState();
+  this.saveFilterState();
 
 
-    this.router
-      .navigate(
+  this.router
+    .navigate(
+      ['/task-index'],
+      {
+        queryParams: {
 
-        ['/task-index'],
+          currentPage: 1,
 
-        {
+          page: 0,
 
-          queryParams: {
+          size: this.size,
 
-            currentPage: 1,
+          statusIndex:
+            this.statusIndex,
 
-            page: 0,
+          searchText:
+            this.search,
 
-            size: this.size,
+          clientId:
+            this.selectedClient || null,
 
-            statusIndex:
-              this.statusIndex,
+          taskCategoryId:
+            this.selectedTaskCategory || null,
 
-            searchText:
-              this.search,
+          assignedTo:
+            this.selectedAssignedTo || null,
 
-            clientId:
-              this.selectedClient || null,
+          priority:
+            this.selectedPriority || null,
 
-            taskCategoryId:
-              this.selectedTaskCategory || null,
+          fromDate:
+            fromDate || null,
 
-            assignedTo:
-              this.selectedAssignedTo || null,
+          toDate:
+            toDate || null
 
-            priority:
-              this.selectedPriority || null
+        },
 
-          },
+        replaceUrl: true
 
-          replaceUrl: true
+      }
+    )
+    .then(() => {
 
-        }
+      this.getTaskDetails();
 
-      )
-      .then(() => {
+    });
 
-        this.getTaskDetails();
+}
 
-      });
+private formatDateForApi(
+  date: Date | null
+): string {
 
+  if (!date) {
+    return '';
   }
 
+  const year =
+    date.getFullYear();
+
+  const month =
+    String(
+      date.getMonth() + 1
+    ).padStart(2, '0');
+
+  const day =
+    String(
+      date.getDate()
+    ).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+
+}
 
   // =========================================================
   // CHANGE RECORDS PER PAGE
@@ -1129,55 +1307,53 @@ export class TaskIndex {
   // VIEW TASK
   // =========================================================
 
-  viewTask(
-    taskId: number
-  ): void {
+ viewTask(taskId: number): void {
 
-    this.saveFilterState();
+  this.saveFilterState();
 
+  this.router.navigate(
+    [
+      '/view-task',
+      taskId
+    ],
+    {
+      state: {
 
-    this.router.navigate(
+        currentPage:
+          this.currentPage,
 
-      [
-        '/view-task',
-        taskId
-      ],
+        statusIndex:
+          this.statusIndex,
 
-      {
+        searchText:
+          this.search,
 
-        state: {
+        size:
+          this.size,
 
-          currentPage:
-            this.currentPage,
+        clientId:
+          this.selectedClient,
 
-          statusIndex:
-            this.statusIndex,
+        taskCategoryId:
+          this.selectedTaskCategory,
 
-          searchText:
-            this.search,
+        assignedTo:
+          this.selectedAssignedTo,
 
-          size:
-            this.size,
+        priority:
+          this.selectedPriority,
 
-          clientId:
-            this.selectedClient,
+        fromDate:
+          this.formatDateForApi(this.fromDate),
 
-          taskCategoryId:
-            this.selectedTaskCategory,
-
-          assignedTo:
-            this.selectedAssignedTo,
-
-          priority:
-            this.selectedPriority
-
-        }
+        toDate:
+          this.formatDateForApi(this.toDate)
 
       }
+    }
+  );
 
-    );
-
-  }
+}
 
 
   // =========================================================
@@ -1224,7 +1400,12 @@ export class TaskIndex {
             this.selectedAssignedTo,
 
           priority:
-            this.selectedPriority
+            this.selectedPriority,
+            fromDate:
+  this.formatDateForApi(this.fromDate),
+
+toDate:
+  this.formatDateForApi(this.toDate)
 
         }
 
@@ -1274,7 +1455,12 @@ export class TaskIndex {
             this.selectedAssignedTo,
 
           priority:
-            this.selectedPriority
+            this.selectedPriority,
+            fromDate:
+  this.formatDateForApi(this.fromDate),
+
+toDate:
+  this.formatDateForApi(this.toDate)
 
         }
 
@@ -1583,6 +1769,10 @@ clearFilters(): void {
   this.selectedPriority = '';
   this.selectedStatus = '';
 
+  // Clear dates
+  this.fromDate = null;
+  this.toDate = null;
+
   // Reset status
   this.statusIndex = 0;
 
@@ -1597,22 +1787,38 @@ clearFilters(): void {
   // Save cleared filter state
   this.saveFilterState();
 
-  // Update URL and reload data
+
   this.router.navigate(
     ['/task-index'],
     {
       queryParams: {
+
         currentPage: 1,
+
         page: 0,
+
         size: this.size,
+
         statusIndex: 0,
+
         searchText: '',
+
         clientId: null,
+
         taskCategoryId: null,
+
         assignedTo: null,
-        priority: null
+
+        priority: null,
+
+        fromDate: null,
+
+        toDate: null
+
       },
+
       replaceUrl: true
+
     }
   ).then(() => {
 
@@ -1621,7 +1827,6 @@ clearFilters(): void {
   });
 
 }
-
 
 onDeleteTask(taskId: number): void {
 
@@ -1695,5 +1900,9 @@ onDeleteTask(taskId: number): void {
   });
 }
 
+
+fromDate: Date | null = null;
+
+toDate: Date | null = null;
 
 }

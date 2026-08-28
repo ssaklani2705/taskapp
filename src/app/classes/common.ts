@@ -13,6 +13,18 @@ export class Common {
     }
   }
 
+   getTaskStatusLabel(status: number | string): string {
+    switch (+status) {
+      case 1:
+        return 'Pending';
+      case 2:
+        return 'Close';
+      case 3:
+        return 'complete';
+      default:
+        return 'Unknown';
+    }
+  }
 
 
   getStatusClass(status: number | string): string {

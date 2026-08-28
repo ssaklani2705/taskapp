@@ -1453,7 +1453,9 @@ getTaskDetails(
   clientId: number,
   taskCategoryId: number,
   assignedTo: number,
-  priority: number
+  priority: number,
+  fromDate: string,
+  toDate: string
 ): Observable<any> {
 
   const params = new HttpParams()
@@ -1496,15 +1498,30 @@ getTaskDetails(
     .set(
       'priority',
       priority.toString()
+    )
+
+    .set(
+      'fromDate',
+      fromDate || ''
+    )
+
+    .set(
+      'toDate',
+      toDate || ''
     );
 
 
+  console.log(
+    'Task API Params:',
+    params.toString()
+  );
+
+
   return this.http.get<any>(
-
     `${environment.apiBaseUrl}admin/task/getTaskDetails`,
-
-    { params }
-
+    {
+      params
+    }
   );
 
 }

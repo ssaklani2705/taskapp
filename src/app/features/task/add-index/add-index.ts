@@ -5,9 +5,11 @@ import {
 
 import {
   Component,
+  ElementRef,
   Inject,
   OnInit,
   PLATFORM_ID,
+  ViewChild,
   ViewEncapsulation
 } from '@angular/core';
 
@@ -89,6 +91,15 @@ import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
 export class AddIndexComponent implements OnInit {
 
+@ViewChild('pdfInput')
+pdfInput!: ElementRef<HTMLInputElement>;
+
+@ViewChild('zipInput')
+zipInput!: ElementRef<HTMLInputElement>;
+
+today: Date = new Date();
+
+readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
   // ============================================================
   // TASK
@@ -456,125 +467,236 @@ export class AddIndexComponent implements OnInit {
   // PDF
   // ============================================================
 
-  onPdfSelected(
-    event: Event
-  ): void {
+  // onPdfSelected(
+  //   event: Event
+  // ): void {
 
-    this.pdfError = '';
+  //   this.pdfError = '';
 
-    this.pdfFile = null;
+  //   this.pdfFile = null;
 
-    this.pdfFileName = '';
-
-
-    const input =
-      event.target as HTMLInputElement;
+  //   this.pdfFileName = '';
 
 
-    if (
-      !input.files ||
-      input.files.length === 0
-    ) {
-
-      return;
-
-    }
+  //   const input =
+  //     event.target as HTMLInputElement;
 
 
-    const file =
-      input.files[0];
+  //   if (
+  //     !input.files ||
+  //     input.files.length === 0
+  //   ) {
+
+  //     return;
+
+  //   }
 
 
-    const extension =
-      file.name
-        .split('.')
-        .pop()
-        ?.toLowerCase();
+  //   const file =
+  //     input.files[0];
 
 
-    if (
-      extension !== 'pdf'
-    ) {
-
-      this.pdfError =
-        'Only PDF files are allowed.';
-
-      input.value = '';
-
-      return;
-
-    }
+  //   const extension =
+  //     file.name
+  //       .split('.')
+  //       .pop()
+  //       ?.toLowerCase();
 
 
-    this.pdfFile = file;
+  //   if (
+  //     extension !== 'pdf'
+  //   ) {
 
-    this.pdfFileName =
-      file.name;
+  //     this.pdfError =
+  //       'Only PDF files are allowed.';
 
+  //     input.value = '';
+
+  //     return;
+
+  //   }
+
+
+  //   this.pdfFile = file;
+
+  //   this.pdfFileName =
+  //     file.name;
+
+  // }
+onPdfSelected(event: Event): void {
+
+  const input =
+    event.target as HTMLInputElement;
+
+  const file =
+    input.files?.[0];
+
+  // Reset previous values
+  this.pdfError = '';
+  this.pdfFile = null;
+  this.pdfFileName = '';
+
+  if (!file) {
+    return;
   }
 
+  // Validate file type
+  const isPdf =
+    file.type === 'application/pdf' ||
+    file.name.toLowerCase().endsWith('.pdf');
+
+  if (!isPdf) {
+
+    this.pdfError =
+      'Please select a valid PDF file.';
+
+    input.value = '';
+
+    return;
+  }
+
+  // Validate file size
+  if (
+    file.size >
+    this.MAX_FILE_SIZE
+  ) {
+
+    this.pdfError =
+      'PDF file size must not exceed 5 MB.';
+
+    input.value = '';
+
+    return;
+  }
+
+  // Valid file
+  this.pdfFile =
+    file;
+
+  this.pdfFileName =
+    file.name;
+
+  this.pdfError = '';
+
+}
 
   // ============================================================
   // ZIP
   // ============================================================
 
-  onZipSelected(
-    event: Event
-  ): void {
+  // onZipSelected(
+  //   event: Event
+  // ): void {
 
-    this.zipError = '';
+  //   this.zipError = '';
 
-    this.zipFile = null;
+  //   this.zipFile = null;
 
-    this.zipFileName = '';
-
-
-    const input =
-      event.target as HTMLInputElement;
+  //   this.zipFileName = '';
 
 
-    if (
-      !input.files ||
-      input.files.length === 0
-    ) {
-
-      return;
-
-    }
+  //   const input =
+  //     event.target as HTMLInputElement;
 
 
-    const file =
-      input.files[0];
+  //   if (
+  //     !input.files ||
+  //     input.files.length === 0
+  //   ) {
+
+  //     return;
+
+  //   }
 
 
-    const extension =
-      file.name
-        .split('.')
-        .pop()
-        ?.toLowerCase();
+  //   const file =
+  //     input.files[0];
 
 
-    if (
-      extension !== 'zip'
-    ) {
-
-      this.zipError =
-        'Only ZIP files are allowed.';
-
-      input.value = '';
-
-      return;
-
-    }
+  //   const extension =
+  //     file.name
+  //       .split('.')
+  //       .pop()
+  //       ?.toLowerCase();
 
 
-    this.zipFile = file;
+  //   if (
+  //     extension !== 'zip'
+  //   ) {
 
-    this.zipFileName =
-      file.name;
+  //     this.zipError =
+  //       'Only ZIP files are allowed.';
 
+  //     input.value = '';
+
+  //     return;
+
+  //   }
+
+
+  //   this.zipFile = file;
+
+  //   this.zipFileName =
+  //     file.name;
+
+  // }
+onZipSelected(event: Event): void {
+
+  const input =
+    event.target as HTMLInputElement;
+
+  const file =
+    input.files?.[0];
+
+  // Reset previous values
+  this.zipError = '';
+  this.zipFile = null;
+  this.zipFileName = '';
+
+  if (!file) {
+    return;
   }
 
+  // Validate file type
+  const isZip =
+    file.type === 'application/zip' ||
+    file.type === 'application/x-zip-compressed' ||
+    file.name.toLowerCase().endsWith('.zip');
+
+  if (!isZip) {
+
+    this.zipError =
+      'Please select a valid ZIP file.';
+
+    input.value = '';
+
+    return;
+  }
+
+  // Validate file size
+  if (
+    file.size >
+    this.MAX_FILE_SIZE
+  ) {
+
+    this.zipError =
+      'ZIP file size must not exceed 5 MB.';
+
+    input.value = '';
+
+    return;
+  }
+
+  // Valid file
+  this.zipFile =
+    file;
+
+  this.zipFileName =
+    file.name;
+
+  this.zipError = '';
+
+}
 
   // ============================================================
   // SUBMIT
@@ -809,70 +931,82 @@ export class AddIndexComponent implements OnInit {
 
   onReset(): void {
 
-    if (this.isEditMode) {
+  if (this.isEditMode) {
 
-      this.task = {
-        ...this.originalTask
-      };
+    this.task = {
+      ...this.originalTask
+    };
 
+    if (this.task.date) {
 
-      if (this.task.date) {
-
-        this.task.date =
-          new Date(
-            this.task.date
-          );
-
-      }
+      this.task.date =
+        new Date(
+          this.task.date
+        );
 
     }
 
-    else {
+  } else {
 
-      this.task = {
+    this.task = {
 
-        taskId: null,
+      taskId: null,
 
-        title: '',
+      title: '',
 
-        clientId: null,
+      clientId: null,
 
-        date: null,
+      date: null,
 
-        taskCategoryId: null,
+      taskCategoryId: null,
 
-        description: '',
+      description: '',
 
-        assignedTo: null,
+      assignedTo: null,
 
-        priority: null,
+      priority: null,
 
-        status: 1,
+      status: 1,
 
-        addedBy: null,
+      addedBy: null,
 
-        fileName1: null,
+      fileName1: null,
 
-        fileName2: null
+      fileName2: null
 
-      };
-
-    }
-
-
-    this.pdfFile = null;
-
-    this.zipFile = null;
-
-    this.pdfFileName = '';
-
-    this.zipFileName = '';
-
-    this.pdfError = '';
-
-    this.zipError = '';
+    };
 
   }
+
+
+  // Clear Angular variables
+  this.pdfFile = null;
+
+  this.zipFile = null;
+
+  this.pdfFileName = '';
+
+  this.zipFileName = '';
+
+  this.pdfError = '';
+
+  this.zipError = '';
+
+
+  // Clear actual file input
+  if (this.pdfInput) {
+
+    this.pdfInput.nativeElement.value = '';
+
+  }
+
+  if (this.zipInput) {
+
+    this.zipInput.nativeElement.value = '';
+
+  }
+
+}
 
 
   // ============================================================
