@@ -42,7 +42,8 @@ import {
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
-import { MatIconModule } from '@angular/material/icon';
+//import { MatIconModule } from '@angular/material/icon';
+
 import { MatDividerModule } from '@angular/material/divider';
 
 
