@@ -1585,7 +1585,7 @@ export class DataProviderService {
   updateTaskDetails(formData: FormData): Observable<any> {
 
     return this.http.post(
-      `${environment.apiBaseUrl}/admin/task/update_task_status`,
+      `${environment.apiBaseUrl}admin/task/update_task_status`,
       formData
     );
 

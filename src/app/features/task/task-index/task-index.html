@@ -28,7 +28,7 @@
           Add New
         </button>
 
-        
+
 
         }
 
@@ -395,7 +395,8 @@
 
 
                   <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task.taskId)"
-                    matTooltip="Change Manager"    [disabled]="task.taskStatus === 2">
+                    [ngClass]="task.taskStatus === 2 ? 'task-status-closed' : 'task-status-pending'"
+                    matTooltip="Change Manager" [disabled]="task.taskStatus === 2">
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
                     }}
@@ -430,8 +431,8 @@
                     </a>
                     }
 
-    <!-- EDIT - Hide when status = 3 -->
-    <!-- @if (editPer === "Y" && task.status !== 3) {
+                    <!-- EDIT - Hide when status = 3 -->
+                    <!-- @if (editPer === "Y" && task.status !== 3) {
       <a
         (click)="editTask(task.taskId)"
         class="action-btn edit-btn"
@@ -441,8 +442,8 @@
       </a>
     } -->
 
-    <!-- DELETE - Hide when status = 3 -->
-    <!-- @if (deletePer === "Y" && task.status !== 3) {
+                    <!-- DELETE - Hide when status = 3 -->
+                    <!-- @if (deletePer === "Y" && task.status !== 3) {
       <a
         (click)="onDeleteTask(task.taskId)"
         class="action-btn delete-btn"
@@ -452,51 +453,39 @@
       </a>
     } -->
 
-    <!-- EDIT -->
-  @if (
-  editPer === "Y"
-  && task.status !== 3
-  && (
-    isAdmin === "Y"
-    || isTaskOwner(task)
-  )
-) {
-  <a
-    (click)="editTask(task.taskId)"
-    class="action-btn edit-btn"
-    title="Edit"
-  >
-    <i class="fa fa-pencil"></i>
-  </a>
-}
+                    <!-- EDIT -->
+                    @if (
+                    editPer === "Y"
+                    && task.status !== 3
+                    && (
+                    isAdmin === "Y"
+                    || isTaskOwner(task)
+                    )
+                    ) {
+                    <a (click)="editTask(task.taskId)" class="action-btn edit-btn" title="Edit">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    }
 
 
-<!-- DELETE -->
-@if (
-  deletePer === "Y"
-  && task.status !== 3
-  && (
-    isAdmin === "Y"
-    || isTaskOwner(task)
-  )
-) {
-  <a
-    (click)="onDeleteTask(task.taskId)"
-    class="action-btn delete-btn"
-    title="Delete"
-  >
-    <i class="fa fa-trash"></i>
-  </a>
-}
+                    <!-- DELETE -->
+                    @if (
+                    deletePer === "Y"
+                    && task.status !== 3
+                    && (
+                    isAdmin === "Y"
+                    || isTaskOwner(task)
+                    )
+                    ) {
+                    <a (click)="onDeleteTask(task.taskId)" class="action-btn delete-btn" title="Delete">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                    }
 
-<!-- NOTES -->
-<a
-  (click)="openTaskNotes(task)"
-  class="action-btn note-btn"
-  title="Notes"
->
-  <i class="fa fa-sticky-note"></i>
-</a>
+                    <!-- NOTES -->
+                    <a (click)="openTaskNotes(task)" class="action-btn note-btn" title="Notes">
+                      <i class="fa fa-sticky-note"></i>
+                    </a>
 
                   </div>
                 </td>
@@ -580,15 +569,8 @@
      TASK NOTES MODAL
 ====================================================== -->
 
-<div
-  class="modal-overlay"
-  *ngIf="showTaskNotesModal"
-  (click)="closeTaskNotesModal()"
->
-  <div
-    class="task-notes-modal"
-    (click)="$event.stopPropagation()"
-  >
+<div class="modal-overlay" *ngIf="showTaskNotesModal" (click)="closeTaskNotesModal()">
+  <div class="task-notes-modal" (click)="$event.stopPropagation()">
 
     <!-- HEADER -->
     <div class="modal-header">
@@ -611,12 +593,7 @@
 
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeTaskNotesModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeTaskNotesModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
 
@@ -640,12 +617,7 @@
         </div>
 
         <!-- ADD NOTE BUTTON -->
-        <button
-          type="button"
-          class="add-note-modal-button"
-          *ngIf="!isAddingNote"
-          (click)="startAddingNote()"
-        >
+        <button type="button" class="add-note-modal-button" *ngIf="!isAddingNote" (click)="startAddingNote()">
           <mat-icon>add</mat-icon>
           Add Note
         </button>
@@ -658,23 +630,15 @@
            Only shown after clicking Add Note
       ================================================== -->
 
-      <div
-        class="add-note-form"
-        *ngIf="isAddingNote"
-      >
+      <div class="add-note-form" *ngIf="isAddingNote">
 
         <label class="modal-field-label">
           Notes
           <span class="required">*</span>
         </label>
 
-        <textarea
-          class="task-notes-textarea"
-          [(ngModel)]="taskNote"
-          placeholder="Enter your note..."
-          rows="5"
-          maxlength="2000"
-        ></textarea>
+        <textarea class="task-notes-textarea" [(ngModel)]="taskNote" placeholder="Enter your note..." rows="5"
+          maxlength="2000"></textarea>
 
 
         <div class="notes-form-footer">
@@ -685,21 +649,13 @@
 
           <div class="note-form-buttons">
 
-            <button
-              type="button"
-              class="modal-cancel-button"
-              (click)="cancelAddingNote()"
-              [disabled]="isSavingTaskNote"
-            >
+            <button type="button" class="modal-cancel-button" (click)="cancelAddingNote()"
+              [disabled]="isSavingTaskNote">
               Cancel
             </button>
 
-            <button
-              type="button"
-              class="modal-save-button"
-              (click)="saveTaskNote()"
-              [disabled]="isSavingTaskNote || !taskNote.trim()"
-            >
+            <button type="button" class="modal-save-button" (click)="saveTaskNote()"
+              [disabled]="isSavingTaskNote || !taskNote.trim()">
 
               <mat-icon>
                 send
@@ -724,19 +680,13 @@
 
 
         <!-- NO NOTES -->
-        <div
-          class="no-notes"
-          *ngIf="!taskNotes || taskNotes.length === 0"
-        >
+        <div class="no-notes" *ngIf="!taskNotes || taskNotes.length === 0">
           No notes added yet.
         </div>
 
 
         <!-- NOTES -->
-        <div
-          class="task-note-item"
-          *ngFor="let note of taskNotes"
-        >
+        <div class="task-note-item" *ngFor="let note of taskNotes">
 
           <div class="task-note-header">
 
@@ -780,12 +730,7 @@
     <!-- FOOTER -->
     <div class="modal-footer">
 
-      <button
-        type="button"
-        class="modal-cancel-button"
-        (click)="closeTaskNotesModal()"
-        [disabled]="isSavingTaskNote"
-      >
+      <button type="button" class="modal-cancel-button" (click)="closeTaskNotesModal()" [disabled]="isSavingTaskNote">
         Close
       </button>
 
@@ -794,3 +739,91 @@
   </div>
 </div>
 
+<div class="modal-overlay" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
+  <div class="change-manager-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-title-icon">
+          <mat-icon>manage_accounts</mat-icon>
+        </div>
+
+        <div>
+          <div class="modal-title-text">Upload Task Files</div>
+          <div class="modal-subtitle">Add a description and attach files</div>
+        </div>
+      </div>
+
+      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="modal-body">
+
+      <!-- TASK ID (hidden) -->
+      <input type="hidden" name="taskId" [(ngModel)]="task.taskId" />
+
+      <!-- DESCRIPTION -->
+      <div class="manager-form-group">
+        <label class="modal-field-label">
+          Description
+          <span class="required">*</span>
+        </label>
+
+        <textarea class="manager-select" rows="4" [(ngModel)]="taskDescription" [disabled]="isChangingManager"
+          placeholder="Enter description"></textarea>
+
+        <div class="manager-validation-error" *ngIf="descriptionValidationError">
+          <mat-icon>error_outline</mat-icon>
+          <span>Please enter a description</span>
+        </div>
+      </div>
+
+      <!-- ZIP FILE UPLOAD -->
+      <div class="manager-form-group">
+        <label class="modal-field-label">
+          Zip File
+        </label>
+
+        <input type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"
+          (change)="onFileOneSelected($event)" />
+
+        <span class="current-manager-name" *ngIf="fileOneName">
+          {{ fileOneName }}
+        </span>
+      </div>
+
+      <!-- NORMAL FILE UPLOAD -->
+      <div class="manager-form-group">
+        <label class="modal-field-label">
+          File
+        </label>
+
+        <input type="file" class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+
+        <span class="current-manager-name" *ngIf="fileTwoName">
+          {{ fileTwoName }}
+        </span>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()"
+        [disabled]="isChangingManager">
+        Cancel
+      </button>
+
+      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
+        <mat-icon>
+          {{ isChangingManager ? 'hourglass_top' : 'save' }}
+        </mat-icon>
+        <span>
+          {{ isChangingManager ? 'Updating...' : 'Submit' }}
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
