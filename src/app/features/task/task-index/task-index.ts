@@ -52,6 +52,8 @@ interface Task {
   status: number;
 
   title: string;
+
+  taskStatus: number;
 }
 
 
@@ -276,7 +278,11 @@ export class TaskIndex {
       label: 'Priority',
       sortable: true
     },
-
+    {
+      key: 'taskStatus',
+      label: 'Task Status',
+      sortable: true
+    },
     {
       key: 'status',
       label: 'Status',
@@ -422,194 +428,216 @@ export class TaskIndex {
   // RESTORE FILTER STATE
   // =========================================================
 
-  private restoreFilterState(): void {
+ private restoreFilterState(): void {
 
-    let stateData: any = null;
-
-
-    // -------------------------------------------------------
-// FROM DATE
-// -------------------------------------------------------
-
-this.fromDate =
-  stateData.fromDate
-    ? new Date(
-        stateData.fromDate + 'T00:00:00'
-      )
-    : null;
+  let stateData: any = null;
 
 
-// -------------------------------------------------------
-// TO DATE
-// -------------------------------------------------------
+  // -------------------------------------------------------
+  // FIRST: ROUTER NAVIGATION STATE
+  // -------------------------------------------------------
 
-this.toDate =
-  stateData.toDate
-    ? new Date(
-        stateData.toDate + 'T00:00:00'
-      )
-    : null;
-    // First preference: router navigation state
-    const nav =
-      this.router.getCurrentNavigation();
+  const nav =
+    this.router.getCurrentNavigation();
 
-    stateData =
-      nav?.extras?.state;
+  stateData =
+    nav?.extras?.state;
 
 
-    // Second preference: sessionStorage
-    if (!stateData) {
+  // -------------------------------------------------------
+  // SECOND: SESSION STORAGE
+  // -------------------------------------------------------
 
-      const saved =
-        sessionStorage.getItem(
-          this.filterKey
+  if (!stateData) {
+
+    const saved =
+      sessionStorage.getItem(
+        this.filterKey
+      );
+
+    if (saved) {
+
+      try {
+
+        stateData =
+          JSON.parse(saved);
+
+      } catch (error) {
+
+        console.error(
+          'Invalid task filter session:',
+          error
         );
-
-      if (saved) {
-
-        try {
-
-          stateData =
-            JSON.parse(saved);
-
-        } catch (error) {
-
-          console.error(
-            'Invalid task filter session:',
-            error
-          );
-
-        }
 
       }
 
     }
 
-
-    // Nothing saved
-   if (!stateData) {
-
-  this.currentPage = 1;
-
-  this.page = 0;
-
-  this.size =
-    environment.size;
-
-  this.recordsPerPage =
-    this.size;
-
-  this.search = '';
-
-  this.searchQuery = '';
-
-  this.statusIndex = 0;
-
-  this.selectedStatus = '';
-
-  this.selectedClient = '';
-
-  this.selectedTaskCategory = '';
-
-  this.selectedAssignedTo = '';
-
-  this.selectedPriority = '';
-
-  this.fromDate = null;
-
-  this.toDate = null;
-
-  return;
-}
+  }
 
 
-    // -------------------------------------------------------
-    // PAGE
-    // -------------------------------------------------------
+  // -------------------------------------------------------
+  // NOTHING SAVED
+  // -------------------------------------------------------
 
-    this.currentPage =
-      Number(stateData.currentPage) || 1;
+  if (!stateData) {
 
-    this.page =
-      this.currentPage - 1;
+    this.currentPage = 1;
 
-
-    // -------------------------------------------------------
-    // SIZE
-    // -------------------------------------------------------
+    this.page = 0;
 
     this.size =
-      Number(stateData.size) ||
       environment.size;
 
     this.recordsPerPage =
       this.size;
 
+    this.search = '';
 
-    // -------------------------------------------------------
-    // SEARCH
-    // -------------------------------------------------------
+    this.searchQuery = '';
 
-    this.search =
-      stateData.searchText || '';
+    this.statusIndex = 0;
 
-    this.searchQuery =
-      this.search;
+    this.selectedStatus = '';
 
+    this.selectedClient = '';
 
-    // -------------------------------------------------------
-    // STATUS
-    // -------------------------------------------------------
+    this.selectedTaskCategory = '';
 
-    this.statusIndex =
-      Number(stateData.statusIndex) || 0;
+    this.selectedAssignedTo = '';
 
-    this.selectedStatus =
-      this.statusIndex
-        ? String(this.statusIndex)
-        : '';
+    this.selectedPriority = '';
 
+    this.fromDate = null;
 
-    // -------------------------------------------------------
-    // CLIENT
-    // -------------------------------------------------------
+    this.toDate = null;
 
-    this.selectedClient =
-      stateData.clientId != null
-        ? String(stateData.clientId)
-        : '';
-
-
-    // -------------------------------------------------------
-    // TASK CATEGORY
-    // -------------------------------------------------------
-
-    this.selectedTaskCategory =
-      stateData.taskCategoryId != null
-        ? String(stateData.taskCategoryId)
-        : '';
-
-
-    // -------------------------------------------------------
-    // ASSIGNED TO
-    // -------------------------------------------------------
-
-    this.selectedAssignedTo =
-      stateData.assignedTo != null
-        ? String(stateData.assignedTo)
-        : '';
-
-
-    // -------------------------------------------------------
-    // PRIORITY
-    // -------------------------------------------------------
-
-    this.selectedPriority =
-      stateData.priority != null
-        ? String(stateData.priority)
-        : '';
-
+    return;
   }
+
+
+  // -------------------------------------------------------
+  // PAGE
+  // -------------------------------------------------------
+
+  this.currentPage =
+    Number(stateData.currentPage) || 1;
+
+  this.page =
+    this.currentPage - 1;
+
+
+  // -------------------------------------------------------
+  // SIZE
+  // -------------------------------------------------------
+
+  this.size =
+    Number(stateData.size) ||
+    environment.size;
+
+  this.recordsPerPage =
+    this.size;
+
+
+  // -------------------------------------------------------
+  // SEARCH
+  // -------------------------------------------------------
+
+  this.search =
+    stateData.searchText || '';
+
+  this.searchQuery =
+    this.search;
+
+
+  // -------------------------------------------------------
+  // STATUS
+  // -------------------------------------------------------
+
+  this.statusIndex =
+    Number(stateData.statusIndex) || 0;
+
+  this.selectedStatus =
+    this.statusIndex
+      ? String(this.statusIndex)
+      : '';
+
+
+  // -------------------------------------------------------
+  // CLIENT
+  // -------------------------------------------------------
+
+  this.selectedClient =
+    stateData.clientId != null
+      ? String(stateData.clientId)
+      : '';
+
+
+  // -------------------------------------------------------
+  // TASK CATEGORY
+  // -------------------------------------------------------
+
+  this.selectedTaskCategory =
+    stateData.taskCategoryId != null
+      ? String(stateData.taskCategoryId)
+      : '';
+
+
+  // -------------------------------------------------------
+  // ASSIGNED TO
+  // -------------------------------------------------------
+
+  this.selectedAssignedTo =
+    stateData.assignedTo != null
+      ? String(stateData.assignedTo)
+      : '';
+
+
+  // -------------------------------------------------------
+  // PRIORITY
+  // -------------------------------------------------------
+
+  this.selectedPriority =
+    stateData.priority != null
+      ? String(stateData.priority)
+      : '';
+
+
+  // -------------------------------------------------------
+  // FROM DATE
+  // -------------------------------------------------------
+
+  this.fromDate =
+    stateData.fromDate
+      ? new Date(
+          stateData.fromDate + 'T00:00:00'
+        )
+      : null;
+
+
+  // -------------------------------------------------------
+  // TO DATE
+  // -------------------------------------------------------
+
+  this.toDate =
+    stateData.toDate
+      ? new Date(
+          stateData.toDate + 'T00:00:00'
+        )
+      : null;
+
+
+  console.log(
+    'Restored From Date:',
+    this.fromDate
+  );
+
+  console.log(
+    'Restored To Date:',
+    this.toDate
+  );
+
+}
 
 
   // =========================================================
@@ -882,36 +910,42 @@ this.toDate =
 
         {
 
-          queryParams: {
+         queryParams: {
 
-            currentPage:
-              this.currentPage,
+  currentPage:
+    this.currentPage,
 
-            page:
-              this.page,
+  page:
+    this.page,
 
-            size:
-              this.size,
+  size:
+    this.size,
 
-            statusIndex:
-              this.statusIndex,
+  statusIndex:
+    this.statusIndex,
 
-            searchText:
-              this.search,
+  searchText:
+    this.search,
 
-            clientId:
-              this.selectedClient || null,
+  clientId:
+    this.selectedClient || null,
 
-            taskCategoryId:
-              this.selectedTaskCategory || null,
+  taskCategoryId:
+    this.selectedTaskCategory || null,
 
-            assignedTo:
-              this.selectedAssignedTo || null,
+  assignedTo:
+    this.selectedAssignedTo || null,
 
-            priority:
-              this.selectedPriority || null
+  priority:
+    this.selectedPriority || null,
 
-          },
+  fromDate:
+    this.formatDateForApi(this.fromDate) || null,
+
+  toDate:
+    this.formatDateForApi(this.toDate) || null
+
+},
 
           replaceUrl: true
 
@@ -1366,7 +1400,12 @@ private formatDateForApi(
             this.selectedAssignedTo,
 
           priority:
-            this.selectedPriority
+            this.selectedPriority,
+            fromDate:
+  this.formatDateForApi(this.fromDate),
+
+toDate:
+  this.formatDateForApi(this.toDate)
 
         }
 
@@ -1416,7 +1455,12 @@ private formatDateForApi(
             this.selectedAssignedTo,
 
           priority:
-            this.selectedPriority
+            this.selectedPriority,
+            fromDate:
+  this.formatDateForApi(this.fromDate),
+
+toDate:
+  this.formatDateForApi(this.toDate)
 
         }
 

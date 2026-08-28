@@ -607,10 +607,18 @@
 }
 
 
-/* Status */
+/* Task Status */
 
 .user-table th:nth-child(8),
 .user-table td:nth-child(8) {
+  width: 7%;
+}
+
+
+/* Status */
+
+.user-table th:nth-child(9),
+.user-table td:nth-child(9) {
   width: 7%;
 }
 
@@ -619,7 +627,7 @@
 
 .user-table th.action-column,
 .user-table td:last-child {
-  width: 17%;
+  width: 15%;
 }
 
 
