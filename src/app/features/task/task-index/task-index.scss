@@ -371,9 +371,7 @@
   z-index: 2;
 }
 
-.date-filter-input
-.mat-datepicker-toggle
-button {
+.date-filter-input .mat-datepicker-toggle button {
   width: 38px;
   height: 38px;
 
@@ -387,16 +385,12 @@ button {
   justify-content: center;
 }
 
-.date-filter-input
-.mat-datepicker-toggle
-.mat-mdc-button-touch-target {
+.date-filter-input .mat-datepicker-toggle .mat-mdc-button-touch-target {
   width: 38px;
   height: 38px;
 }
 
-.date-filter-input
-.mat-datepicker-toggle
-.mat-icon {
+.date-filter-input .mat-datepicker-toggle .mat-icon {
   font-size: 20px;
 
   width: 20px;
@@ -407,9 +401,7 @@ button {
   color: #000;
 }
 
-.date-filter-input
-.mat-datepicker-toggle:hover
-.mat-icon {
+.date-filter-input .mat-datepicker-toggle:hover .mat-icon {
   color: #2563eb;
 }
 
@@ -756,6 +748,11 @@ button {
 /* =========================================================
    TASK TABLE COLUMN WIDTHS
 ========================================================= */
+/* =========================================================
+   TASK TABLE COLUMN WIDTHS
+   PERMANENT / BALANCED
+   TOTAL = 100%
+========================================================= */
 
 .user-table th.serial-column,
 .user-table td.serial-number {
@@ -764,48 +761,121 @@ button {
 
 .user-table th:nth-child(2),
 .user-table td:nth-child(2) {
-  width: 18%;
+  width: 13%;
 }
 
 .user-table th:nth-child(3),
 .user-table td:nth-child(3) {
-  width: 12%;
+  width: 10%;
 }
 
 .user-table th:nth-child(4),
 .user-table td:nth-child(4) {
-  width: 9%;
+  width: 8%;
 }
 
 .user-table th:nth-child(5),
 .user-table td:nth-child(5) {
-  width: 14%;
+  width: 12%;
 }
 
 .user-table th:nth-child(6),
 .user-table td:nth-child(6) {
-  width: 12%;
+  width: 11%;
 }
 
+/* PRIORITY */
 .user-table th:nth-child(7),
 .user-table td:nth-child(7) {
-  width: 6%;
+  width: 7%;
 }
 
+/* TASK STATUS */
 .user-table th:nth-child(8),
 .user-table td:nth-child(8) {
-  width: 7%;
+  width: 9%;
 }
 
+/* STATUS */
 .user-table th:nth-child(9),
 .user-table td:nth-child(9) {
-  width: 7%;
+  width: 10%;
 }
+
+/* ACTION */
+.user-table th.action-column,
+.user-table td:last-child {
+  width: 19%;
+}
+
+
+/* =========================================================
+   IMPORTANT COLUMNS - NEVER WRAP
+========================================================= */
+
+.user-table th:nth-child(7),
+.user-table td:nth-child(7),
+
+.user-table th:nth-child(8),
+.user-table td:nth-child(8),
+
+.user-table th:nth-child(9),
+.user-table td:nth-child(9),
 
 .user-table th.action-column,
 .user-table td:last-child {
-  width: 15%;
+  white-space: nowrap;
 }
+
+
+/* =========================================================
+   PRIORITY
+========================================================= */
+
+.user-table tbody td:nth-child(7) {
+  white-space: nowrap;
+  text-align: center;
+}
+
+
+/* =========================================================
+   TASK STATUS
+========================================================= */
+
+.user-table tbody td:nth-child(8) {
+  white-space: nowrap;
+  text-align: center;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.user-table tbody td:nth-child(9) {
+  white-space: nowrap;
+  text-align: center;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.user-table tbody td:last-child {
+  white-space: nowrap;
+  text-align: center;
+}
+
+.action-buttons {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  flex-wrap: nowrap;
+}
+
 
 
 /* =========================================================
@@ -1143,8 +1213,7 @@ button {
     display: grid;
 
     grid-template-columns:
-      minmax(180px, 1.5fr)
-      repeat(3, minmax(140px, 1fr));
+      minmax(180px, 1.5fr) repeat(3, minmax(140px, 1fr));
 
     gap: 12px;
   }
@@ -1247,9 +1316,7 @@ button {
     height: 42px;
   }
 
-  .date-filter-input
-  .mat-datepicker-toggle
-  button {
+  .date-filter-input .mat-datepicker-toggle button {
     width: 42px;
     height: 42px;
   }
@@ -2233,10 +2300,10 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 :host {
-    display: block;
-    width: 100%;
-    color: #193b63;
-    font-family: Arial, Helvetica, sans-serif;
+  display: block;
+  width: 100%;
+  color: #193b63;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 
@@ -2245,32 +2312,32 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 :host {
-    --navy: #1b3b63;
-    --navy-dark: #142f50;
-    --navy-hover: #244c7b;
+  --navy: #1b3b63;
+  --navy-dark: #142f50;
+  --navy-hover: #244c7b;
 
-    --primary-blue: #3378a9;
-    --primary-blue-dark: #28658f;
+  --primary-blue: #3378a9;
+  --primary-blue-dark: #28658f;
 
-    --heading-blue: #3378a9;
-    --link-blue: #008fd3;
+  --heading-blue: #3378a9;
+  --link-blue: #008fd3;
 
-    --text-navy: #193b63;
-    --text-blue: #416789;
+  --text-navy: #193b63;
+  --text-blue: #416789;
 
-    --border: #dce4ec;
-    --border-dark: #bccbda;
+  --border: #dce4ec;
+  --border-dark: #bccbda;
 
-    --table-header: #edf4f8;
-    --table-group: #f4f7f9;
+  --table-header: #edf4f8;
+  --table-group: #f4f7f9;
 
-    --white: #ffffff;
+  --white: #ffffff;
 
-    --success-bg: #e7f5ef;
-    --success-border: #b9dfcf;
-    --success-text: #21845d;
+  --success-bg: #e7f5ef;
+  --success-border: #b9dfcf;
+  --success-text: #21845d;
 
-    --danger: #d9534f;
+  --danger: #d9534f;
 }
 
 
@@ -2279,10 +2346,10 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-page-wrapper {
-    background: #ffffff;
-    width: 100%;
-    padding: 24px 34px;
-    box-sizing: border-box;
+  background: #ffffff;
+  width: 100%;
+  padding: 24px 34px;
+  box-sizing: border-box;
 }
 
 
@@ -2291,10 +2358,10 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-portlet {
-    width: 100%;
-    background: #ffffff;
-    border: 1px solid var(--border);
-    box-sizing: border-box;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-sizing: border-box;
 }
 
 
@@ -2303,42 +2370,42 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-portlet-title {
-    min-height: 52px;
+  min-height: 52px;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    padding: 0 14px;
+  padding: 0 14px;
 
-    border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
 
-    background: #ffffff;
+  background: #ffffff;
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
 .user-title {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 
 .user-page-title {
-    color: var(--navy) !important;
+  color: var(--navy) !important;
 
-    font-size: 24px !important;
+  font-size: 24px !important;
 
-    font-weight: 700 !important;
+  font-weight: 700 !important;
 
-    line-height: 1.2;
+  line-height: 1.2;
 
-    text-transform: uppercase;
+  text-transform: uppercase;
 
-    letter-spacing: 0;
+  letter-spacing: 0;
 
-    font-family: Georgia, "Times New Roman", serif !important;
+  font-family: Georgia, "Times New Roman", serif !important;
 }
 
 
@@ -2347,51 +2414,51 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-actions {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 
 .back-index-btn {
-    height: 44px !important;
+  height: 44px !important;
 
-    min-width: 176px;
+  min-width: 176px;
 
-    padding: 0 20px !important;
+  padding: 0 20px !important;
 
-    border: 0 !important;
+  border: 0 !important;
 
-    border-radius: 4px !important;
+  border-radius: 4px !important;
 
-    background: var(--navy) !important;
+  background: var(--navy) !important;
 
-    color: #ffffff !important;
+  color: #ffffff !important;
 
-    font-family: Arial, Helvetica, sans-serif !important;
+  font-family: Arial, Helvetica, sans-serif !important;
 
-    font-size: 14px !important;
+  font-size: 14px !important;
 
-    font-weight: 600 !important;
+  font-weight: 600 !important;
 
-    line-height: 1.2;
+  line-height: 1.2;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    display: inline-flex;
+  display: inline-flex;
 
-    align-items: center;
+  align-items: center;
 
-    justify-content: center;
+  justify-content: center;
 
-    transition:
-        background-color 0.2s ease,
-        box-shadow 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 
 .back-index-btn:hover {
-    background: var(--navy-hover) !important;
-    color: #ffffff !important;
+  background: var(--navy-hover) !important;
+  color: #ffffff !important;
 }
 
 
@@ -2400,17 +2467,17 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-portlet-body {
-    width: 100%;
-    background: #ffffff;
+  width: 100%;
+  background: #ffffff;
 }
 
 
 .user-form-body {
-    padding: 18px 14px 24px 14px;
+  padding: 18px 14px 24px 14px;
 
-    background: #ffffff;
+  background: #ffffff;
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
@@ -2419,20 +2486,20 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .mandatory-message {
-    color: var(--text-navy) !important;
+  color: var(--text-navy) !important;
 
-    font-size: 14px !important;
+  font-size: 14px !important;
 
-    line-height: 22px;
+  line-height: 22px;
 
-    margin-bottom: 25px;
+  margin-bottom: 25px;
 }
 
 
 .required {
-    color: var(--danger) !important;
+  color: var(--danger) !important;
 
-    font-weight: 700;
+  font-weight: 700;
 }
 
 
@@ -2441,18 +2508,18 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-form-row {
-    display: grid;
+  display: grid;
 
-    grid-template-columns:
-        repeat(3, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
 
-    gap: 30px;
+  gap: 30px;
 
-    width: 100%;
+  width: 100%;
 
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 
@@ -2461,9 +2528,9 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-form-col {
-    min-width: 0;
+  min-width: 0;
 
-    width: 100%;
+  width: 100%;
 }
 
 
@@ -2472,11 +2539,11 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-form-group {
-    width: 100%;
+  width: 100%;
 
-    margin: 0;
+  margin: 0;
 
-    padding: 0;
+  padding: 0;
 }
 
 
@@ -2485,19 +2552,19 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-label {
-    display: block;
+  display: block;
 
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 
-    color: var(--text-navy) !important;
+  color: var(--text-navy) !important;
 
-    font-size: 15px !important;
+  font-size: 15px !important;
 
-    font-weight: 700 !important;
+  font-weight: 700 !important;
 
-    line-height: 20px;
+  line-height: 20px;
 
-    font-family: Arial, Helvetica, sans-serif !important;
+  font-family: Arial, Helvetica, sans-serif !important;
 }
 
 
@@ -2506,61 +2573,61 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-input {
-    display: block;
+  display: block;
 
-    width: 100% !important;
+  width: 100% !important;
 
-    height: 43px !important;
+  height: 43px !important;
 
-    min-height: 43px !important;
+  min-height: 43px !important;
 
-    padding: 8px 14px !important;
+  padding: 8px 14px !important;
 
-    box-sizing: border-box;
+  box-sizing: border-box;
 
-    border: 1px solid var(--border-dark) !important;
+  border: 1px solid var(--border-dark) !important;
 
-    border-radius: 2px !important;
+  border-radius: 2px !important;
 
-    background: #ffffff !important;
+  background: #ffffff !important;
 
-    color: var(--text-blue) !important;
+  color: var(--text-blue) !important;
 
-    font-size: 15px !important;
+  font-size: 15px !important;
 
-    font-weight: 400 !important;
+  font-weight: 400 !important;
 
-    font-family: Arial, Helvetica, sans-serif !important;
+  font-family: Arial, Helvetica, sans-serif !important;
 
-    outline: none !important;
+  outline: none !important;
 
-    box-shadow: none !important;
+  box-shadow: none !important;
 
-    transition:
-        border-color 0.15s ease,
-        box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 
 .user-input:hover {
-    border-color: #9fb2c4 !important;
+  border-color: #9fb2c4 !important;
 }
 
 
 .user-input:focus {
-    border-color: var(--primary-blue) !important;
+  border-color: var(--primary-blue) !important;
 
-    background: #ffffff !important;
+  background: #ffffff !important;
 
-    box-shadow:
-        0 0 0 1px rgba(51, 120, 169, 0.12) !important;
+  box-shadow:
+    0 0 0 1px rgba(51, 120, 169, 0.12) !important;
 }
 
 
 .user-input::placeholder {
-    color: #8794a2 !important;
+  color: #8794a2 !important;
 
-    opacity: 1;
+  opacity: 1;
 }
 
 
@@ -2569,13 +2636,13 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-select {
-    appearance: auto;
+  appearance: auto;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    background-color: #ffffff !important;
+  background-color: #ffffff !important;
 
-    color: var(--text-blue) !important;
+  color: var(--text-blue) !important;
 }
 
 
@@ -2584,15 +2651,15 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .user-textarea {
-    height: 100px !important;
+  height: 100px !important;
 
-    min-height: 100px !important;
+  min-height: 100px !important;
 
-    resize: vertical !important;
+  resize: vertical !important;
 
-    line-height: 22px;
+  line-height: 22px;
 
-    padding-top: 9px !important;
+  padding-top: 9px !important;
 }
 
 
@@ -2601,72 +2668,67 @@ button.btn-add-user .plus-icon {
    ========================================================= */
 
 .task-date-field {
-    display: block;
+  display: block;
 
-    width: 100%;
+  width: 100%;
 
-    height: 43px;
+  height: 43px;
 
-    margin: 0;
+  margin: 0;
 
-    padding: 0;
+  padding: 0;
 }
 
 
 .task-date-field .mat-mdc-text-field-wrapper {
-    height: 43px !important;
+  height: 43px !important;
 
-    padding: 0 !important;
+  padding: 0 !important;
 
-    background: #ffffff !important;
+  background: #ffffff !important;
 
-    border-radius: 2px !important;
+  border-radius: 2px !important;
 }
 
 
-.task-date-field
-.mat-mdc-form-field-flex {
-    height: 43px !important;
+.task-date-field .mat-mdc-form-field-flex {
+  height: 43px !important;
 }
 
 
-.task-date-field
-.mat-mdc-form-field-infix {
-    min-height: 43px !important;
+.task-date-field .mat-mdc-form-field-infix {
+  min-height: 43px !important;
 
-    height: 43px !important;
+  height: 43px !important;
 
-    padding-top: 9px !important;
+  padding-top: 9px !important;
 
-    padding-bottom: 9px !important;
+  padding-bottom: 9px !important;
 }
 
 
-.task-date-field
-.mat-mdc-form-field-subscript-wrapper {
-    display: none !important;
+.task-date-field .mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
 }
 
 
-.task-date-field
-input.mat-mdc-input-element {
-    color: var(--text-blue) !important;
+.task-date-field input.mat-mdc-input-element {
+  color: var(--text-blue) !important;
 
-    font-size: 15px !important;
+  font-size: 15px !important;
 
-    font-family: Arial, Helvetica, sans-serif !important;
+  font-family: Arial, Helvetica, sans-serif !important;
 }
 
 
-.task-date-field
-.mat-mdc-icon-button {
-    width: 40px !important;
+.task-date-field .mat-mdc-icon-button {
+  width: 40px !important;
 
-    height: 40px !important;
+  height: 40px !important;
 
-    padding: 8px !important;
+  padding: 8px !important;
 
-    color: #52616e !important;
+  color: #52616e !important;
 }
 
 
@@ -2675,39 +2737,39 @@ input.mat-mdc-input-element {
    ========================================================= */
 
 .file-input {
-    padding: 7px 10px !important;
+  padding: 7px 10px !important;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    font-size: 14px !important;
+  font-size: 14px !important;
 }
 
 
 .file-input::file-selector-button {
-    height: 30px;
+  height: 30px;
 
-    margin-right: 10px;
+  margin-right: 10px;
 
-    padding: 0 12px;
+  padding: 0 12px;
 
-    border: 1px solid var(--border-dark);
+  border: 1px solid var(--border-dark);
 
-    border-radius: 3px;
+  border-radius: 3px;
 
-    background: #edf4f8;
+  background: #edf4f8;
 
-    color: var(--text-navy);
+  color: var(--text-navy);
 
-    font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 
-    font-size: 13px;
+  font-size: 13px;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 
 
 .file-input::file-selector-button:hover {
-    background: #e2edf4;
+  background: #e2edf4;
 }
 
 
@@ -2716,15 +2778,15 @@ input.mat-mdc-input-element {
    ========================================================= */
 
 .selected-file {
-    margin-top: 6px;
+  margin-top: 6px;
 
-    color: var(--text-blue);
+  color: var(--text-blue);
 
-    font-size: 12px;
+  font-size: 12px;
 
-    line-height: 17px;
+  line-height: 17px;
 
-    overflow-wrap: anywhere;
+  overflow-wrap: anywhere;
 }
 
 
@@ -2733,15 +2795,15 @@ input.mat-mdc-input-element {
    ========================================================= */
 
 .existing-file {
-    margin-top: 6px;
+  margin-top: 6px;
 
-    color: #3378a9;
+  color: #3378a9;
 
-    font-size: 12px;
+  font-size: 12px;
 
-    line-height: 17px;
+  line-height: 17px;
 
-    overflow-wrap: anywhere;
+  overflow-wrap: anywhere;
 }
 
 
@@ -2750,13 +2812,13 @@ input.mat-mdc-input-element {
    ========================================================= */
 
 .user-error {
-    color: var(--danger) !important;
+  color: var(--danger) !important;
 
-    font-size: 12px !important;
+  font-size: 12px !important;
 
-    margin-top: 5px;
+  margin-top: 5px;
 
-    line-height: 16px;
+  line-height: 16px;
 }
 
 
@@ -2765,7 +2827,7 @@ input.mat-mdc-input-element {
    ========================================================= */
 
 .status-row {
-    margin-top: 4px;
+  margin-top: 4px;
 }
 
 
@@ -2774,17 +2836,17 @@ input.mat-mdc-input-element {
    ========================================================= */
 
 .user-buttons {
-    width: 100%;
+  width: 100%;
 
-    display: flex;
+  display: flex;
 
-    justify-content: center;
+  justify-content: center;
 
-    align-items: center;
+  align-items: center;
 
-    gap: 12px;
+  gap: 12px;
 
-    margin-top: 25px;
+  margin-top: 25px;
 }
 
 
@@ -2793,41 +2855,41 @@ input.mat-mdc-input-element {
    ========================================================= */
 
 .user-reset-btn {
-    min-width: 90px;
+  min-width: 90px;
 
-    height: 40px;
+  height: 40px;
 
-    padding: 8px 20px;
+  padding: 8px 20px;
 
-    border: 1px solid var(--navy) !important;
+  border: 1px solid var(--navy) !important;
 
-    border-radius: 4px !important;
+  border-radius: 4px !important;
 
-    background: #ffffff !important;
+  background: #ffffff !important;
 
-    color: var(--navy) !important;
+  color: var(--navy) !important;
 
-    font-family: Arial, Helvetica, sans-serif !important;
+  font-family: Arial, Helvetica, sans-serif !important;
 
-    font-size: 14px !important;
+  font-size: 14px !important;
 
-    font-weight: 600 !important;
+  font-weight: 600 !important;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 
 .user-reset-btn:hover {
-    background: #eef4f9 !important;
+  background: #eef4f9 !important;
 
-    border-color: var(--navy-hover) !important;
+  border-color: var(--navy-hover) !important;
 
-    color: var(--navy-hover) !important;
+  color: var(--navy-hover) !important;
 }
 
 
@@ -2836,58 +2898,58 @@ input.mat-mdc-input-element {
    ========================================================= */
 
 .user-submit-btn {
-    min-width: 90px;
+  min-width: 90px;
 
-    height: 40px;
+  height: 40px;
 
-    padding: 8px 20px;
+  padding: 8px 20px;
 
-    border: 1px solid var(--navy) !important;
+  border: 1px solid var(--navy) !important;
 
-    border-radius: 4px !important;
+  border-radius: 4px !important;
 
-    background: var(--navy) !important;
+  background: var(--navy) !important;
 
-    color: #ffffff !important;
+  color: #ffffff !important;
 
-    font-family: Arial, Helvetica, sans-serif !important;
+  font-family: Arial, Helvetica, sans-serif !important;
 
-    font-size: 14px !important;
+  font-size: 14px !important;
 
-    font-weight: 600 !important;
+  font-weight: 600 !important;
 
-    cursor: pointer;
+  cursor: pointer;
 
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 
 .user-submit-btn:hover {
-    background: var(--navy-hover) !important;
+  background: var(--navy-hover) !important;
 
-    border-color: var(--navy-hover) !important;
+  border-color: var(--navy-hover) !important;
 }
 
 
 .user-submit-btn:active {
-    background: var(--navy-dark) !important;
+  background: var(--navy-dark) !important;
 
-    border-color: var(--navy-dark) !important;
+  border-color: var(--navy-dark) !important;
 }
 
 
 .user-submit-btn:disabled {
-    background: #7f91a5 !important;
+  background: #7f91a5 !important;
 
-    border-color: #7f91a5 !important;
+  border-color: #7f91a5 !important;
 
-    color: #ffffff !important;
+  color: #ffffff !important;
 
-    opacity: 0.7;
+  opacity: 0.7;
 
-    cursor: not-allowed;
+  cursor: not-allowed;
 }
 
 
@@ -2897,9 +2959,9 @@ input.mat-mdc-input-element {
 
 @media (max-width: 1200px) {
 
-    .user-form-row {
-        gap: 20px;
-    }
+  .user-form-row {
+    gap: 20px;
+  }
 
 }
 
@@ -2910,14 +2972,14 @@ input.mat-mdc-input-element {
 
 @media (max-width: 992px) {
 
-    .user-form-row {
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+  .user-form-row {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
 
-        row-gap: 18px;
+    row-gap: 18px;
 
-        column-gap: 20px;
-    }
+    column-gap: 20px;
+  }
 
 }
 
@@ -2928,58 +2990,58 @@ input.mat-mdc-input-element {
 
 @media (max-width: 600px) {
 
-    .user-page-wrapper {
-        padding: 12px;
-    }
+  .user-page-wrapper {
+    padding: 12px;
+  }
 
 
-    .user-portlet-title {
-        min-height: 55px;
+  .user-portlet-title {
+    min-height: 55px;
 
-        padding: 8px 10px;
+    padding: 8px 10px;
 
-        flex-direction: column;
+    flex-direction: column;
 
-        align-items: flex-start;
+    align-items: flex-start;
 
-        gap: 10px;
-    }
-
-
-    .user-actions {
-        width: 100%;
-    }
+    gap: 10px;
+  }
 
 
-    .back-index-btn {
-        width: auto;
-
-        min-width: 150px;
-    }
+  .user-actions {
+    width: 100%;
+  }
 
 
-    .user-form-body {
-        padding: 15px 10px;
-    }
+  .back-index-btn {
+    width: auto;
+
+    min-width: 150px;
+  }
 
 
-    .user-form-row {
-        grid-template-columns: 1fr;
-
-        row-gap: 15px;
-
-        gap: 15px;
-    }
+  .user-form-body {
+    padding: 15px 10px;
+  }
 
 
-    .user-page-title {
-        font-size: 20px !important;
-    }
+  .user-form-row {
+    grid-template-columns: 1fr;
+
+    row-gap: 15px;
+
+    gap: 15px;
+  }
 
 
-    .user-buttons {
-        margin-top: 22px;
-    }
+  .user-page-title {
+    font-size: 20px !important;
+  }
+
+
+  .user-buttons {
+    margin-top: 22px;
+  }
 
 }
 
@@ -2990,62 +3052,62 @@ input.mat-mdc-input-element {
 
 @media (max-width: 400px) {
 
-    .user-page-wrapper {
-        padding: 8px;
-    }
+  .user-page-wrapper {
+    padding: 8px;
+  }
 
 
-    .back-index-btn {
-        width: 100%;
-    }
+  .back-index-btn {
+    width: 100%;
+  }
 
 
-    .user-buttons {
-        flex-direction: column;
-    }
+  .user-buttons {
+    flex-direction: column;
+  }
 
 
-    .user-reset-btn,
-    .user-submit-btn {
-        width: 100%;
-    }
+  .user-reset-btn,
+  .user-submit-btn {
+    width: 100%;
+  }
 
 }
 
 
 
 .user-date-group {
-    display: flex;
-    align-items: stretch;
-    width: 100%;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
 }
 
 .user-date-input {
-    flex: 1;
-    border-left: 0 !important;
+  flex: 1;
+  border-left: 0 !important;
 }
 
 .user-date-icon {
-    width: 52px;
-    min-width: 52px;
-    height: 43px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #e4e8ed;
-    color: #66727d;
-    border: 1px solid #d4dce4;
-    border-right: 0;
-    box-sizing: border-box;
-    cursor: pointer;
+  width: 52px;
+  min-width: 52px;
+  height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e4e8ed;
+  color: #66727d;
+  border: 1px solid #d4dce4;
+  border-right: 0;
+  box-sizing: border-box;
+  cursor: pointer;
 }
 
 .user-date-icon {
-    border-radius: 2px 0 0 2px;
+  border-radius: 2px 0 0 2px;
 }
 
 .user-date-input {
-    border-radius: 0 2px 2px 0 !important;
+  border-radius: 0 2px 2px 0 !important;
 }
 
 
@@ -3502,7 +3564,7 @@ textarea.manager-select::placeholder {
   color: #9aa9b8;
 }
 
-.modal-body .manager-form-group + .manager-form-group {
+.modal-body .manager-form-group+.manager-form-group {
   margin-top: 18px;
 }
 
@@ -3510,12 +3572,14 @@ textarea.manager-select::placeholder {
   background-color: #b0b8c4;
   cursor: not-allowed;
 }
+
 .change-manager-button:disabled {
   background-color: #0d3b66;
   color: #ffffff;
   cursor: not-allowed;
   opacity: 1;
 }
+
 .change-manager-button:disabled {
   background-color: #14416f;
   color: #ffffff;
@@ -3561,4 +3625,64 @@ textarea.manager-select::placeholder {
   color: #ffffff;
   cursor: not-allowed;
   opacity: 1;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 82px;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.status-badge.active,
+.status-badge.status-active,
+.status-active {
+  background: #e6f4ee;
+  color: #287d5e;
+  border: 1px solid #c8e7da;
+}
+
+.status-badge.inactive,
+.status-badge.status-inactive,
+.status-inactive {
+  background: #fff5df;
+  color: #a87308;
+  border: 1px solid #f0d99e;
+}
+
+.status-badge.deleted,
+.status-badge.status-deleted {
+  background: #fbeaea;
+  color: #b8403d;
+  border: 1px solid #efcaca;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-btn {
+  width: 38px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 1px;
+  background: var(--white);
+  font-size: 14px;
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
