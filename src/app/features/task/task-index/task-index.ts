@@ -1,4 +1,13 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+
+
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import {
   Component,
   Inject,
@@ -91,13 +100,21 @@ interface AssignedUser {
     RouterModule,
     MatCardModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    MatSortModule,
+    MatListModule
   ],
 
   templateUrl: './task-index.html',
 
   styleUrl: './task-index.scss',
-   providers: [
+  providers: [
     {
       provide: DateAdapter,
       useClass: MyDateAdapter,
@@ -243,53 +260,53 @@ export class TaskIndex {
     sortable: boolean;
   }[] = [
 
-    {
-      key: 'title',
-      label: 'Title',
-      sortable: true
-    },
+      {
+        key: 'title',
+        label: 'Title',
+        sortable: true
+      },
 
-    {
-      key: 'clientName',
-      label: 'Client',
-      sortable: true
-    },
+      {
+        key: 'clientName',
+        label: 'Client',
+        sortable: true
+      },
 
-    {
-      key: 'date',
-      label: 'Date',
-      sortable: true
-    },
+      {
+        key: 'date',
+        label: 'Date',
+        sortable: true
+      },
 
-    {
-      key: 'taskCategoryName',
-      label: 'Task Category',
-      sortable: true
-    },
+      {
+        key: 'taskCategoryName',
+        label: 'Task Category',
+        sortable: true
+      },
 
-    {
-      key: 'assignedToName',
-      label: 'Assigned To',
-      sortable: true
-    },
+      {
+        key: 'assignedToName',
+        label: 'Assigned To',
+        sortable: true
+      },
 
-    {
-      key: 'priority',
-      label: 'Priority',
-      sortable: true
-    },
-    {
-      key: 'taskStatus',
-      label: 'Task Status',
-      sortable: true
-    },
-    {
-      key: 'status',
-      label: 'Status',
-      sortable: true
-    }
+      {
+        key: 'priority',
+        label: 'Priority',
+        sortable: true
+      },
+      {
+        key: 'taskStatus',
+        label: 'Task Status',
+        sortable: true
+      },
+      {
+        key: 'status',
+        label: 'Status',
+        sortable: true
+      }
 
-  ];
+    ];
 
 
   // =========================================================
@@ -428,282 +445,282 @@ export class TaskIndex {
   // RESTORE FILTER STATE
   // =========================================================
 
- private restoreFilterState(): void {
+  private restoreFilterState(): void {
 
-  let stateData: any = null;
-
-
-  // -------------------------------------------------------
-  // FIRST: ROUTER NAVIGATION STATE
-  // -------------------------------------------------------
-
-  const nav =
-    this.router.getCurrentNavigation();
-
-  stateData =
-    nav?.extras?.state;
+    let stateData: any = null;
 
 
-  // -------------------------------------------------------
-  // SECOND: SESSION STORAGE
-  // -------------------------------------------------------
+    // -------------------------------------------------------
+    // FIRST: ROUTER NAVIGATION STATE
+    // -------------------------------------------------------
 
-  if (!stateData) {
+    const nav =
+      this.router.getCurrentNavigation();
 
-    const saved =
-      sessionStorage.getItem(
-        this.filterKey
-      );
+    stateData =
+      nav?.extras?.state;
 
-    if (saved) {
 
-      try {
+    // -------------------------------------------------------
+    // SECOND: SESSION STORAGE
+    // -------------------------------------------------------
 
-        stateData =
-          JSON.parse(saved);
+    if (!stateData) {
 
-      } catch (error) {
-
-        console.error(
-          'Invalid task filter session:',
-          error
+      const saved =
+        sessionStorage.getItem(
+          this.filterKey
         );
+
+      if (saved) {
+
+        try {
+
+          stateData =
+            JSON.parse(saved);
+
+        } catch (error) {
+
+          console.error(
+            'Invalid task filter session:',
+            error
+          );
+
+        }
 
       }
 
     }
 
-  }
+
+    // -------------------------------------------------------
+    // NOTHING SAVED
+    // -------------------------------------------------------
+
+    if (!stateData) {
+
+      this.currentPage = 1;
+
+      this.page = 0;
+
+      this.size =
+        environment.size;
+
+      this.recordsPerPage =
+        this.size;
+
+      this.search = '';
+
+      this.searchQuery = '';
+
+      this.statusIndex = 0;
+
+      this.selectedStatus = '';
+
+      this.selectedClient = '';
+
+      this.selectedTaskCategory = '';
+
+      this.selectedAssignedTo = '';
+
+      this.selectedPriority = '';
+
+      this.fromDate = null;
+
+      this.toDate = null;
+
+      return;
+    }
 
 
-  // -------------------------------------------------------
-  // NOTHING SAVED
-  // -------------------------------------------------------
+    // -------------------------------------------------------
+    // PAGE
+    // -------------------------------------------------------
 
-  if (!stateData) {
+    this.currentPage =
+      Number(stateData.currentPage) || 1;
 
-    this.currentPage = 1;
+    this.page =
+      this.currentPage - 1;
 
-    this.page = 0;
+
+    // -------------------------------------------------------
+    // SIZE
+    // -------------------------------------------------------
 
     this.size =
+      Number(stateData.size) ||
       environment.size;
 
     this.recordsPerPage =
       this.size;
 
-    this.search = '';
 
-    this.searchQuery = '';
+    // -------------------------------------------------------
+    // SEARCH
+    // -------------------------------------------------------
 
-    this.statusIndex = 0;
+    this.search =
+      stateData.searchText || '';
 
-    this.selectedStatus = '';
-
-    this.selectedClient = '';
-
-    this.selectedTaskCategory = '';
-
-    this.selectedAssignedTo = '';
-
-    this.selectedPriority = '';
-
-    this.fromDate = null;
-
-    this.toDate = null;
-
-    return;
-  }
+    this.searchQuery =
+      this.search;
 
 
-  // -------------------------------------------------------
-  // PAGE
-  // -------------------------------------------------------
+    // -------------------------------------------------------
+    // STATUS
+    // -------------------------------------------------------
 
-  this.currentPage =
-    Number(stateData.currentPage) || 1;
+    this.statusIndex =
+      Number(stateData.statusIndex) || 0;
 
-  this.page =
-    this.currentPage - 1;
-
-
-  // -------------------------------------------------------
-  // SIZE
-  // -------------------------------------------------------
-
-  this.size =
-    Number(stateData.size) ||
-    environment.size;
-
-  this.recordsPerPage =
-    this.size;
+    this.selectedStatus =
+      this.statusIndex
+        ? String(this.statusIndex)
+        : '';
 
 
-  // -------------------------------------------------------
-  // SEARCH
-  // -------------------------------------------------------
+    // -------------------------------------------------------
+    // CLIENT
+    // -------------------------------------------------------
 
-  this.search =
-    stateData.searchText || '';
-
-  this.searchQuery =
-    this.search;
-
-
-  // -------------------------------------------------------
-  // STATUS
-  // -------------------------------------------------------
-
-  this.statusIndex =
-    Number(stateData.statusIndex) || 0;
-
-  this.selectedStatus =
-    this.statusIndex
-      ? String(this.statusIndex)
-      : '';
+    this.selectedClient =
+      stateData.clientId != null
+        ? String(stateData.clientId)
+        : '';
 
 
-  // -------------------------------------------------------
-  // CLIENT
-  // -------------------------------------------------------
+    // -------------------------------------------------------
+    // TASK CATEGORY
+    // -------------------------------------------------------
 
-  this.selectedClient =
-    stateData.clientId != null
-      ? String(stateData.clientId)
-      : '';
-
-
-  // -------------------------------------------------------
-  // TASK CATEGORY
-  // -------------------------------------------------------
-
-  this.selectedTaskCategory =
-    stateData.taskCategoryId != null
-      ? String(stateData.taskCategoryId)
-      : '';
+    this.selectedTaskCategory =
+      stateData.taskCategoryId != null
+        ? String(stateData.taskCategoryId)
+        : '';
 
 
-  // -------------------------------------------------------
-  // ASSIGNED TO
-  // -------------------------------------------------------
+    // -------------------------------------------------------
+    // ASSIGNED TO
+    // -------------------------------------------------------
 
-  this.selectedAssignedTo =
-    stateData.assignedTo != null
-      ? String(stateData.assignedTo)
-      : '';
-
-
-  // -------------------------------------------------------
-  // PRIORITY
-  // -------------------------------------------------------
-
-  this.selectedPriority =
-    stateData.priority != null
-      ? String(stateData.priority)
-      : '';
+    this.selectedAssignedTo =
+      stateData.assignedTo != null
+        ? String(stateData.assignedTo)
+        : '';
 
 
-  // -------------------------------------------------------
-  // FROM DATE
-  // -------------------------------------------------------
+    // -------------------------------------------------------
+    // PRIORITY
+    // -------------------------------------------------------
 
-  this.fromDate =
-    stateData.fromDate
-      ? new Date(
+    this.selectedPriority =
+      stateData.priority != null
+        ? String(stateData.priority)
+        : '';
+
+
+    // -------------------------------------------------------
+    // FROM DATE
+    // -------------------------------------------------------
+
+    this.fromDate =
+      stateData.fromDate
+        ? new Date(
           stateData.fromDate + 'T00:00:00'
         )
-      : null;
+        : null;
 
 
-  // -------------------------------------------------------
-  // TO DATE
-  // -------------------------------------------------------
+    // -------------------------------------------------------
+    // TO DATE
+    // -------------------------------------------------------
 
-  this.toDate =
-    stateData.toDate
-      ? new Date(
+    this.toDate =
+      stateData.toDate
+        ? new Date(
           stateData.toDate + 'T00:00:00'
         )
-      : null;
+        : null;
 
 
-  console.log(
-    'Restored From Date:',
-    this.fromDate
-  );
+    console.log(
+      'Restored From Date:',
+      this.fromDate
+    );
 
-  console.log(
-    'Restored To Date:',
-    this.toDate
-  );
+    console.log(
+      'Restored To Date:',
+      this.toDate
+    );
 
-}
+  }
 
 
   // =========================================================
   // SAVE FILTER STATE
   // =========================================================
 
- private saveFilterState(): void {
+  private saveFilterState(): void {
 
-  const filterState = {
+    const filterState = {
 
-    currentPage:
-      this.currentPage,
+      currentPage:
+        this.currentPage,
 
-    page:
-      this.page,
+      page:
+        this.page,
 
-    size:
-      this.size,
+      size:
+        this.size,
 
-    statusIndex:
-      this.statusIndex,
+      statusIndex:
+        this.statusIndex,
 
-    searchText:
-      this.search,
+      searchText:
+        this.search,
 
-    clientId:
-      this.selectedClient
-        ? Number(this.selectedClient)
-        : null,
+      clientId:
+        this.selectedClient
+          ? Number(this.selectedClient)
+          : null,
 
-    taskCategoryId:
-      this.selectedTaskCategory
-        ? Number(this.selectedTaskCategory)
-        : null,
+      taskCategoryId:
+        this.selectedTaskCategory
+          ? Number(this.selectedTaskCategory)
+          : null,
 
-    assignedTo:
-      this.selectedAssignedTo
-        ? Number(this.selectedAssignedTo)
-        : null,
+      assignedTo:
+        this.selectedAssignedTo
+          ? Number(this.selectedAssignedTo)
+          : null,
 
-    priority:
-      this.selectedPriority
-        ? Number(this.selectedPriority)
-        : null,
+      priority:
+        this.selectedPriority
+          ? Number(this.selectedPriority)
+          : null,
 
-    fromDate:
-      this.formatDateForApi(this.fromDate),
+      fromDate:
+        this.formatDateForApi(this.fromDate),
 
-    toDate:
-      this.formatDateForApi(this.toDate)
+      toDate:
+        this.formatDateForApi(this.toDate)
 
-  };
+    };
 
 
-  if (
-    isPlatformBrowser(this.platformId)
-  ) {
+    if (
+      isPlatformBrowser(this.platformId)
+    ) {
 
-    sessionStorage.setItem(
-      this.filterKey,
-      JSON.stringify(filterState)
-    );
+      sessionStorage.setItem(
+        this.filterKey,
+        JSON.stringify(filterState)
+      );
+
+    }
 
   }
-
-}
 
   // =========================================================
   // LOAD FILTER DATA
@@ -775,92 +792,92 @@ export class TaskIndex {
 
   getTaskDetails(): void {
 
-  const clientId =
-    this.selectedClient
-      ? Number(this.selectedClient)
-      : 0;
+    const clientId =
+      this.selectedClient
+        ? Number(this.selectedClient)
+        : 0;
 
-  const taskCategoryId =
-    this.selectedTaskCategory
-      ? Number(this.selectedTaskCategory)
-      : 0;
+    const taskCategoryId =
+      this.selectedTaskCategory
+        ? Number(this.selectedTaskCategory)
+        : 0;
 
-  const assignedTo =
-    this.selectedAssignedTo
-      ? Number(this.selectedAssignedTo)
-      : 0;
+    const assignedTo =
+      this.selectedAssignedTo
+        ? Number(this.selectedAssignedTo)
+        : 0;
 
-  const priority =
-    this.selectedPriority
-      ? Number(this.selectedPriority)
-      : 0;
+    const priority =
+      this.selectedPriority
+        ? Number(this.selectedPriority)
+        : 0;
 
-  const fromDate =
-    this.formatDateForApi(this.fromDate);
+    const fromDate =
+      this.formatDateForApi(this.fromDate);
 
-  const toDate =
-    this.formatDateForApi(this.toDate);
+    const toDate =
+      this.formatDateForApi(this.toDate);
 
 
-  this.dataprovider
-    .getTaskDetails(
+    this.dataprovider
+      .getTaskDetails(
 
-      this.page,
+        this.page,
 
-      this.size,
+        this.size,
 
-      this.statusIndex,
+        this.statusIndex,
 
-      this.search,
+        this.search,
 
-      clientId,
+        clientId,
 
-      taskCategoryId,
+        taskCategoryId,
 
-      assignedTo,
+        assignedTo,
 
-      priority,
+        priority,
 
-      fromDate,
+        fromDate,
 
-      toDate
+        toDate
 
-    )
-    .subscribe({
+      )
+      .subscribe({
 
-      next: (response: any) => {
+        next: (response: any) => {
 
-        console.log(
-          'TASK DETAILS RESPONSE:',
-          response
-        );
+          console.log(
+            'TASK DETAILS RESPONSE:',
+            response
+          );
 
-        this.apiResponseTaskDetails =
-          response;
+          this.apiResponseTaskDetails =
+            response;
 
-        this.tasks =
-          response.data || [];
+          this.tasks =
+            response.data || [];
 
-      },
+        },
 
-      error: (error) => {
+        error: (error) => {
 
-        console.error(
-          'Error fetching task details:',
-          error
-        );
+          console.error(
+            'Error fetching task details:',
+            error
+          );
 
-        this.apiResponseTaskDetails = {
-          totalElements: 0
-        };
+          this.apiResponseTaskDetails = {
+            totalElements: 0
+          };
 
-        this.tasks = [];
+          this.tasks = [];
 
-      }
+        }
 
-    });
+      });
 
-}
+  }
 
 
   // =========================================================
@@ -910,42 +927,42 @@ export class TaskIndex {
 
         {
 
-         queryParams: {
+          queryParams: {
 
-  currentPage:
-    this.currentPage,
+            currentPage:
+              this.currentPage,
 
-  page:
-    this.page,
+            page:
+              this.page,
 
-  size:
-    this.size,
+            size:
+              this.size,
 
-  statusIndex:
-    this.statusIndex,
+            statusIndex:
+              this.statusIndex,
 
-  searchText:
-    this.search,
+            searchText:
+              this.search,
 
-  clientId:
-    this.selectedClient || null,
+            clientId:
+              this.selectedClient || null,
 
-  taskCategoryId:
-    this.selectedTaskCategory || null,
+            taskCategoryId:
+              this.selectedTaskCategory || null,
 
-  assignedTo:
-    this.selectedAssignedTo || null,
+            assignedTo:
+              this.selectedAssignedTo || null,
 
-  priority:
-    this.selectedPriority || null,
+            priority:
+              this.selectedPriority || null,
 
-  fromDate:
-    this.formatDateForApi(this.fromDate) || null,
+            fromDate:
+              this.formatDateForApi(this.fromDate) || null,
 
-  toDate:
-    this.formatDateForApi(this.toDate) || null
+            toDate:
+              this.formatDateForApi(this.toDate) || null
 
-},
+          },
 
           replaceUrl: true
 
@@ -1061,105 +1078,105 @@ export class TaskIndex {
 
   onSearch(): void {
 
-  this.search =
-    this.searchQuery
-      ? this.searchQuery.trim()
-      : '';
+    this.search =
+      this.searchQuery
+        ? this.searchQuery.trim()
+        : '';
 
-  this.statusIndex =
-    this.selectedStatus === ''
-      ? 0
-      : Number(this.selectedStatus);
-
-
-  this.currentPage = 1;
-  this.page = 0;
+    this.statusIndex =
+      this.selectedStatus === ''
+        ? 0
+        : Number(this.selectedStatus);
 
 
-  const fromDate =
-    this.formatDateForApi(this.fromDate);
-
-  const toDate =
-    this.formatDateForApi(this.toDate);
+    this.currentPage = 1;
+    this.page = 0;
 
 
-  this.saveFilterState();
+    const fromDate =
+      this.formatDateForApi(this.fromDate);
+
+    const toDate =
+      this.formatDateForApi(this.toDate);
 
 
-  this.router
-    .navigate(
-      ['/task-index'],
-      {
-        queryParams: {
+    this.saveFilterState();
 
-          currentPage: 1,
 
-          page: 0,
+    this.router
+      .navigate(
+        ['/task-index'],
+        {
+          queryParams: {
 
-          size: this.size,
+            currentPage: 1,
 
-          statusIndex:
-            this.statusIndex,
+            page: 0,
 
-          searchText:
-            this.search,
+            size: this.size,
 
-          clientId:
-            this.selectedClient || null,
+            statusIndex:
+              this.statusIndex,
 
-          taskCategoryId:
-            this.selectedTaskCategory || null,
+            searchText:
+              this.search,
 
-          assignedTo:
-            this.selectedAssignedTo || null,
+            clientId:
+              this.selectedClient || null,
 
-          priority:
-            this.selectedPriority || null,
+            taskCategoryId:
+              this.selectedTaskCategory || null,
 
-          fromDate:
-            fromDate || null,
+            assignedTo:
+              this.selectedAssignedTo || null,
 
-          toDate:
-            toDate || null
+            priority:
+              this.selectedPriority || null,
 
-        },
+            fromDate:
+              fromDate || null,
 
-        replaceUrl: true
+            toDate:
+              toDate || null
 
-      }
-    )
-    .then(() => {
+          },
 
-      this.getTaskDetails();
+          replaceUrl: true
 
-    });
+        }
+      )
+      .then(() => {
 
-}
+        this.getTaskDetails();
 
-private formatDateForApi(
-  date: Date | null
-): string {
+      });
 
-  if (!date) {
-    return '';
   }
 
-  const year =
-    date.getFullYear();
+  private formatDateForApi(
+    date: Date | null
+  ): string {
 
-  const month =
-    String(
-      date.getMonth() + 1
-    ).padStart(2, '0');
+    if (!date) {
+      return '';
+    }
 
-  const day =
-    String(
-      date.getDate()
-    ).padStart(2, '0');
+    const year =
+      date.getFullYear();
 
-  return `${year}-${month}-${day}`;
+    const month =
+      String(
+        date.getMonth() + 1
+      ).padStart(2, '0');
 
-}
+    const day =
+      String(
+        date.getDate()
+      ).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+
+  }
 
   // =========================================================
   // CHANGE RECORDS PER PAGE
@@ -1307,53 +1324,53 @@ private formatDateForApi(
   // VIEW TASK
   // =========================================================
 
- viewTask(taskId: number): void {
+  viewTask(taskId: number): void {
 
-  this.saveFilterState();
+    this.saveFilterState();
 
-  this.router.navigate(
-    [
-      '/view-task',
-      taskId
-    ],
-    {
-      state: {
+    this.router.navigate(
+      [
+        '/view-task',
+        taskId
+      ],
+      {
+        state: {
 
-        currentPage:
-          this.currentPage,
+          currentPage:
+            this.currentPage,
 
-        statusIndex:
-          this.statusIndex,
+          statusIndex:
+            this.statusIndex,
 
-        searchText:
-          this.search,
+          searchText:
+            this.search,
 
-        size:
-          this.size,
+          size:
+            this.size,
 
-        clientId:
-          this.selectedClient,
+          clientId:
+            this.selectedClient,
 
-        taskCategoryId:
-          this.selectedTaskCategory,
+          taskCategoryId:
+            this.selectedTaskCategory,
 
-        assignedTo:
-          this.selectedAssignedTo,
+          assignedTo:
+            this.selectedAssignedTo,
 
-        priority:
-          this.selectedPriority,
+          priority:
+            this.selectedPriority,
 
-        fromDate:
-          this.formatDateForApi(this.fromDate),
+          fromDate:
+            this.formatDateForApi(this.fromDate),
 
-        toDate:
-          this.formatDateForApi(this.toDate)
+          toDate:
+            this.formatDateForApi(this.toDate)
 
+        }
       }
-    }
-  );
+    );
 
-}
+  }
 
 
   // =========================================================
@@ -1401,11 +1418,11 @@ private formatDateForApi(
 
           priority:
             this.selectedPriority,
-            fromDate:
-  this.formatDateForApi(this.fromDate),
+          fromDate:
+            this.formatDateForApi(this.fromDate),
 
-toDate:
-  this.formatDateForApi(this.toDate)
+          toDate:
+            this.formatDateForApi(this.toDate)
 
         }
 
@@ -1456,11 +1473,11 @@ toDate:
 
           priority:
             this.selectedPriority,
-            fromDate:
-  this.formatDateForApi(this.fromDate),
+          fromDate:
+            this.formatDateForApi(this.fromDate),
 
-toDate:
-  this.formatDateForApi(this.toDate)
+          toDate:
+            this.formatDateForApi(this.toDate)
 
         }
 
@@ -1672,8 +1689,8 @@ toDate:
 
           return this.sortDirection ===
             'asc'
-              ? -1
-              : 1;
+            ? -1
+            : 1;
 
         }
 
@@ -1684,8 +1701,8 @@ toDate:
 
           return this.sortDirection ===
             'asc'
-              ? 1
-              : -1;
+            ? 1
+            : -1;
 
         }
 
@@ -1753,156 +1770,348 @@ toDate:
   }
 
   // =========================================================
-// CLEAR FILTERS
-// =========================================================
+  // CLEAR FILTERS
+  // =========================================================
 
-clearFilters(): void {
+  clearFilters(): void {
 
-  // Clear search
-  this.searchQuery = '';
-  this.search = '';
+    // Clear search
+    this.searchQuery = '';
+    this.search = '';
 
-  // Clear dropdown filters
-  this.selectedClient = '';
-  this.selectedTaskCategory = '';
-  this.selectedAssignedTo = '';
-  this.selectedPriority = '';
-  this.selectedStatus = '';
+    // Clear dropdown filters
+    this.selectedClient = '';
+    this.selectedTaskCategory = '';
+    this.selectedAssignedTo = '';
+    this.selectedPriority = '';
+    this.selectedStatus = '';
 
-  // Clear dates
-  this.fromDate = null;
-  this.toDate = null;
+    // Clear dates
+    this.fromDate = null;
+    this.toDate = null;
 
-  // Reset status
-  this.statusIndex = 0;
+    // Reset status
+    this.statusIndex = 0;
 
-  // Reset pagination
-  this.currentPage = 1;
-  this.page = 0;
+    // Reset pagination
+    this.currentPage = 1;
+    this.page = 0;
 
-  // Reset sorting
-  this.sortColumn = '';
-  this.sortDirection = 'asc';
+    // Reset sorting
+    this.sortColumn = '';
+    this.sortDirection = 'asc';
 
-  // Save cleared filter state
-  this.saveFilterState();
+    // Save cleared filter state
+    this.saveFilterState();
 
 
-  this.router.navigate(
-    ['/task-index'],
-    {
-      queryParams: {
+    this.router.navigate(
+      ['/task-index'],
+      {
+        queryParams: {
 
-        currentPage: 1,
+          currentPage: 1,
 
-        page: 0,
+          page: 0,
 
-        size: this.size,
+          size: this.size,
 
-        statusIndex: 0,
+          statusIndex: 0,
 
-        searchText: '',
+          searchText: '',
 
-        clientId: null,
+          clientId: null,
 
-        taskCategoryId: null,
+          taskCategoryId: null,
 
-        assignedTo: null,
+          assignedTo: null,
 
-        priority: null,
+          priority: null,
 
-        fromDate: null,
+          fromDate: null,
 
-        toDate: null
+          toDate: null
 
-      },
+        },
 
-      replaceUrl: true
+        replaceUrl: true
 
-    }
-  ).then(() => {
+      }
+    ).then(() => {
 
-    this.getTaskDetails();
+      this.getTaskDetails();
 
-  });
+    });
 
-}
+  }
 
-onDeleteTask(taskId: number): void {
+  onDeleteTask(taskId: number): void {
 
-  this.task = {
-    taskId: Number(taskId),
-    createdBy: this.userId
-      ? Number(this.userId)
-      : null
-  };
+    this.task = {
+      taskId: Number(taskId),
+      createdBy: this.userId
+        ? Number(this.userId)
+        : null
+    };
 
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'Do you really want to delete this task?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'No, keep it',
-    confirmButtonColor: '#d33',
-    cancelButtonColor: '#6c757d'
-  }).then((result) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to delete this task?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#6c757d'
+    }).then((result) => {
 
-    if (result.isConfirmed) {
+      if (result.isConfirmed) {
 
-      this.dataprovider
-        .deleteTask(this.task)
-        .subscribe({
+        this.dataprovider
+          .deleteTask(this.task)
+          .subscribe({
 
-          next: (response: any) => {
+            next: (response: any) => {
 
-            if (response.success) {
+              if (response.success) {
 
-              Swal.fire(
-                'Deleted!',
-                response.message,
-                'success'
+                Swal.fire(
+                  'Deleted!',
+                  response.message,
+                  'success'
+                );
+
+                this.getTaskDetails();
+
+              } else {
+
+                Swal.fire(
+                  'Error',
+                  response.message,
+                  'error'
+                );
+
+              }
+
+            },
+
+            error: (error) => {
+
+              console.error(
+                'Error deleting task:',
+                error
               );
-
-              this.getTaskDetails();
-
-            } else {
 
               Swal.fire(
                 'Error',
-                response.message,
+                'Something went wrong while deleting the task.',
                 'error'
               );
 
             }
 
-          },
+          });
 
-          error: (error) => {
+      }
 
-            console.error(
-              'Error deleting task:',
-              error
-            );
+    });
+  }
 
-            Swal.fire(
-              'Error',
-              'Something went wrong while deleting the task.',
-              'error'
-            );
 
-          }
+  fromDate: Date | null = null;
 
-        });
+  toDate: Date | null = null;
 
+
+
+  // =========================================================
+  // CHANGE MANAGER / TASK FILES MODAL
+  // =========================================================
+
+  showChangeManagerModal = false;
+  isChangingManager = false;
+
+  taskDescription: string = '';
+  descriptionValidationError = false;
+
+  fileOne: File | null = null;
+  fileOneName: string = '';
+
+  fileTwo: File | null = null;
+  fileTwoName: string = '';
+
+
+  openChangeManagerModal(taskId: any): void {
+    console.log("sssssssss" + taskId);
+    this.descriptionValidationError = false;
+
+
+    this.task = {
+      taskId: taskId
+    };
+
+
+    console.log("{ == }" + JSON.stringify(this.task));
+
+    this.taskDescription = '';
+
+    this.fileOne = null;
+    this.fileOneName = '';
+
+    this.fileTwo = null;
+    this.fileTwoName = '';
+
+    this.showChangeManagerModal = true;
+
+  }
+
+
+  closeChangeManagerModal(): void {
+
+    if (this.isChangingManager) {
+      return;
     }
 
-  });
-}
+    this.showChangeManagerModal = false;
+
+    this.taskDescription = '';
+
+    this.fileOne = null;
+    this.fileOneName = '';
+
+    this.fileTwo = null;
+    this.fileTwoName = '';
+
+    this.descriptionValidationError = false;
+
+  }
+
+  private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
+  onFileOneSelected(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+
+      const file = input.files[0];
+
+      // ZIP validation
+      if (!file.name.toLowerCase().endsWith('.zip')) {
+        Swal.fire('Error', 'Only ZIP files are allowed.', 'error');
+
+        input.value = '';
+        this.fileOne = null;
+        this.fileOneName = '';
+        return;
+      }
+
+      if (file.size > this.MAX_FILE_SIZE) {
+        Swal.fire('Error', 'ZIP file size must not exceed 5 MB.', 'error');
+
+        input.value = '';
+        this.fileOne = null;
+        this.fileOneName = '';
+        return;
+      }
+
+      this.fileOne = file;
+      this.fileOneName = file.name;
+
+    } else {
+      this.fileOne = null;
+      this.fileOneName = '';
+    }
+  }
+
+  onFileTwoSelected(event: Event): void {
+
+    const input = event.target as HTMLInputElement;
+
+    if (input.files && input.files.length > 0) {
+
+      const file = input.files[0];
+
+      // PDF validation
+      if (!file.name.toLowerCase().endsWith('.pdf')) {
+        Swal.fire('Error', 'Only PDF files are allowed.', 'error');
+
+        input.value = '';
+        this.fileTwo = null;
+        this.fileTwoName = '';
+        return;
+      }
+
+      if (file.size > this.MAX_FILE_SIZE) {
+        Swal.fire('Error', 'PDF file size must not exceed 5 MB.', 'error');
+
+        input.value = '';
+        this.fileTwo = null;
+        this.fileTwoName = '';
+        return;
+      }
+
+      this.fileTwo = file;
+      this.fileTwoName = file.name;
+
+    } else {
+      this.fileTwo = null;
+      this.fileTwoName = '';
+    }
+  }
+
+  changeManager(): void {
+
+    if (!this.taskDescription || !this.taskDescription.trim()) {
+      this.descriptionValidationError = true;
+      return;
+    }
+
+    this.descriptionValidationError = false;
+    this.isChangingManager = true;
+
+    const formData = new FormData();
+    for (const pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
 
 
-fromDate: Date | null = null;
+    formData.append('taskId', String(this.task.taskId));
+    formData.append('description', this.taskDescription.trim());
 
-toDate: Date | null = null;
+    if (this.fileTwo) {
+      formData.append('fileName1', this.fileTwo, this.fileTwo.name);   // normal file → fileName1 (pdf)
+    }
+
+    if (this.fileOne) {
+      formData.append('fileName2', this.fileOne, this.fileOne.name);   // zip file → fileName2
+    }
+
+    this.dataprovider.updateTaskDetails(formData).subscribe({
+
+      next: (response: any) => {
+
+        this.isChangingManager = false;
+
+        if (response.success) {
+          Swal.fire('Updated!', response.message, 'success');
+          this.showChangeManagerModal = false;
+          this.getTaskDetails();
+        } else {
+          Swal.fire('Error', response.message, 'error');
+        }
+
+      },
+
+      error: (error) => {
+        this.isChangingManager = false;
+        console.error('Full error:', error);          // add this
+        console.error('Backend message:', error?.error?.message);  // and this
+        Swal.fire('Error', error?.error?.message || 'Something went wrong while updating the task.', 'error');
+      }
+
+    });
+
+  }
 
 }

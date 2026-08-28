@@ -78,25 +78,25 @@ export class DataProviderService {
   // }
 
   getUserManagementDetails(
-  page: any,
-  size: any,
-  statusIndex: any,
-  search: any,
-  departmentId: number | null,
-  designationId: number | null
-): Observable<any> {
+    page: any,
+    size: any,
+    statusIndex: any,
+    search: any,
+    departmentId: number | null,
+    designationId: number | null
+  ): Observable<any> {
 
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/getUserManagementDetails` +
-    `?page=${page}` +
-    `&size=${size}` +
-    `&statusIndex=${statusIndex}` +
-    `&search=${encodeURIComponent(search || '')}` +
-    `&departmentId=${departmentId ?? '0'}` +
-    `&designationId=${designationId ?? '0'}`
-  );
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/getUserManagementDetails` +
+      `?page=${page}` +
+      `&size=${size}` +
+      `&statusIndex=${statusIndex}` +
+      `&search=${encodeURIComponent(search || '')}` +
+      `&departmentId=${departmentId ?? '0'}` +
+      `&designationId=${designationId ?? '0'}`
+    );
 
-}
+  }
 
 
   // getUserManagementDetailsById(id: any): Observable<any> {
@@ -335,154 +335,154 @@ export class DataProviderService {
   }
 
   getDepartmentDetails(
-  page: number,
-  size: number,
-  statusIndex: number,
-  search: string,
-): Observable<any> {
-  const params = {
-    page: page.toString(),
-    size: size.toString(),
-    statusIndex: statusIndex.toString(),
-    search: search || '',
-  };
+    page: number,
+    size: number,
+    statusIndex: number,
+    search: string,
+  ): Observable<any> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+      statusIndex: statusIndex.toString(),
+      search: search || '',
+    };
 
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/department/getDepartmentDetails`,
-    { params },
-  );
-}
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/department/getDepartmentDetails`,
+      { params },
+    );
+  }
 
-saveDepartment(
-  department: any,
-): Observable<any> {
+  saveDepartment(
+    department: any,
+  ): Observable<any> {
 
-  return this.http.post(
-    `${environment.apiBaseUrl}admin/department/saveDepartment`,
-    department,
-  );
-}
+    return this.http.post(
+      `${environment.apiBaseUrl}admin/department/saveDepartment`,
+      department,
+    );
+  }
 
-getDepartmentById(
-  departmentId: any,
-): Observable<any> {
+  getDepartmentById(
+    departmentId: any,
+  ): Observable<any> {
 
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/department/${departmentId}`,
-  );
-}
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/department/${departmentId}`,
+    );
+  }
 
-deleteDepartment(department: any): Observable<any> {
-  return this.http.post(
-    `${environment.apiBaseUrl}admin/department/deleteDepartment`,
-    department
-  );
-}
+  deleteDepartment(department: any): Observable<any> {
+    return this.http.post(
+      `${environment.apiBaseUrl}admin/department/deleteDepartment`,
+      department
+    );
+  }
 
-getDesigmationDetails(
-  page: any,
-  size: any,
-  statusIndex: any,
-  search: any,
-): Observable<any> {
+  getDesigmationDetails(
+    page: any,
+    size: any,
+    statusIndex: any,
+    search: any,
+  ): Observable<any> {
 
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/designation/getDesignationDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
-  );
-}
-
-
-getDesigmationById(
-  designationId: any,
-): Observable<any> {
-
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/designation/${designationId}`,
-  );
-}
-
-saveDesigmation(
-  desigmation: any,
-): Observable<any> {
-
-  return this.http.post(
-    `${environment.apiBaseUrl}admin/designation/saveDesignation`,
-    desigmation,
-  );
-}
-
-deleteDesigmation(
-  desigmation: any,
-): Observable<any> {
-
-  return this.http.post(
-    `${environment.apiBaseUrl}admin/designation/deleteDesignation`,
-    desigmation,
-  );
-}
-
-getActiveDesigmations(): Observable<any> {
-
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/designation/active`,
-  );
-}
-
-//Task Category
-getTaskCategoryDetails(
-  page: any,
-  size: any,
-  statusIndex: any,
-  search: any,
-  departmentId: any
-): Observable<any> {
-
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/taskcategory/getTaskCategoryDetails` +
-    `?page=${page}` +
-    `&size=${size}` +
-    `&statusIndex=${statusIndex}` +
-    `&search=${encodeURIComponent(search || '')}` +
-    `&departmentId=${departmentId || 0}`
-  );
-}
-
-getTaskCategoryById(
-  taskcategoryId: number,
-): Observable<any> {
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/taskcategory/${taskcategoryId}`,
-  );
-}
-saveTaskCategory(
-  taskCategory: any,
-): Observable<any> {
-  return this.http.post(
-    `${environment.apiBaseUrl}admin/taskcategory/saveTaskCategory`,
-    taskCategory,
-  );
-}
-deleteTaskCategory(
-  taskCategory: any,
-): Observable<any> {
-  return this.http.post(
-    `${environment.apiBaseUrl}admin/taskcategory/deleteTaskCategory`,
-    taskCategory,
-  );
-}
-getActiveTaskCategories(): Observable<any> {
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/taskcategory/active`,
-  );
-}
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/designation/getDesignationDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
+    );
+  }
 
 
-getActiveDepartments(): Observable<any> {
+  getDesigmationById(
+    designationId: any,
+  ): Observable<any> {
 
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/department/active`
-  );
-}
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/designation/${designationId}`,
+    );
+  }
+
+  saveDesigmation(
+    desigmation: any,
+  ): Observable<any> {
+
+    return this.http.post(
+      `${environment.apiBaseUrl}admin/designation/saveDesignation`,
+      desigmation,
+    );
+  }
+
+  deleteDesigmation(
+    desigmation: any,
+  ): Observable<any> {
+
+    return this.http.post(
+      `${environment.apiBaseUrl}admin/designation/deleteDesignation`,
+      desigmation,
+    );
+  }
+
+  getActiveDesigmations(): Observable<any> {
+
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/designation/active`,
+    );
+  }
+
+  //Task Category
+  getTaskCategoryDetails(
+    page: any,
+    size: any,
+    statusIndex: any,
+    search: any,
+    departmentId: any
+  ): Observable<any> {
+
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/taskcategory/getTaskCategoryDetails` +
+      `?page=${page}` +
+      `&size=${size}` +
+      `&statusIndex=${statusIndex}` +
+      `&search=${encodeURIComponent(search || '')}` +
+      `&departmentId=${departmentId || 0}`
+    );
+  }
+
+  getTaskCategoryById(
+    taskcategoryId: number,
+  ): Observable<any> {
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/taskcategory/${taskcategoryId}`,
+    );
+  }
+  saveTaskCategory(
+    taskCategory: any,
+  ): Observable<any> {
+    return this.http.post(
+      `${environment.apiBaseUrl}admin/taskcategory/saveTaskCategory`,
+      taskCategory,
+    );
+  }
+  deleteTaskCategory(
+    taskCategory: any,
+  ): Observable<any> {
+    return this.http.post(
+      `${environment.apiBaseUrl}admin/taskcategory/deleteTaskCategory`,
+      taskCategory,
+    );
+  }
+  getActiveTaskCategories(): Observable<any> {
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/taskcategory/active`,
+    );
+  }
+
+
+  getActiveDepartments(): Observable<any> {
+
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/department/active`
+    );
+  }
 
 
 
@@ -493,7 +493,7 @@ getActiveDepartments(): Observable<any> {
     );
   }
 
-  
+
 
   deleteUnit(unit: any): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(
@@ -662,7 +662,7 @@ getActiveDepartments(): Observable<any> {
 
 
 
-  
+
 
 
   // Get state by ID
@@ -822,7 +822,7 @@ getActiveDepartments(): Observable<any> {
       .set('search', search || '')
 
       .set('priority', priority)
-    
+
       .set('productionStatus', productionStatus);
 
 
@@ -1098,7 +1098,7 @@ getActiveDepartments(): Observable<any> {
 
 
   eletePoDetailsById(poDetailId: number, createdBy: string): Observable<any> {
-    const params = new HttpParams().set('deletedBy', createdBy); 
+    const params = new HttpParams().set('deletedBy', createdBy);
     const url = `${environment.apiBaseUrl}purchase/deletePoDetailsById/${poDetailId}`;
 
     return this.http.post(url, null, { params });
@@ -1283,13 +1283,13 @@ getActiveDepartments(): Observable<any> {
   }
 
   saveOpeningBalance(data: any) {
-  return this.http.post(
-    `${environment.apiBaseUrl}openingbalance/save`,
-    data
-  );
-}
+    return this.http.post(
+      `${environment.apiBaseUrl}openingbalance/save`,
+      data
+    );
+  }
 
-openingbalanceByopeningBalanceId(openingBalanceId: number) {
+  openingbalanceByopeningBalanceId(openingBalanceId: number) {
     return this.http.get(`${environment.apiBaseUrl}openingbalance/getOpeningBalanceById/${openingBalanceId}`);
   }
 
@@ -1308,11 +1308,11 @@ openingbalanceByopeningBalanceId(openingBalanceId: number) {
   }
 
   getCompanyRegDate() {
-  return this.http.get(`${environment.apiBaseUrl}openingbalance/company/reg-date`);
-}
+    return this.http.get(`${environment.apiBaseUrl}openingbalance/company/reg-date`);
+  }
 
 
-getClientDetails(
+  getClientDetails(
     page: any,
     size: any,
     status: any,
@@ -1404,7 +1404,7 @@ getClientDetails(
     return this.http.get(`${environment.apiBaseUrl}admin/state/getById/${stateId}`);
   }
 
-  
+
   // Delete State
   deleteState(state: any): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}admin/state/delete`, state);
@@ -1431,7 +1431,7 @@ getClientDetails(
     return this.http.get(`${environment.apiBaseUrl}admin/plan/get_by_Id/${planId}`);
   }
 
-  
+
   // Delete State
   deletePlan(plan: any): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}admin/plan/delete`, plan);
@@ -1439,107 +1439,107 @@ getClientDetails(
 
   getTaskFilterData(): Observable<any> {
 
-  return this.http.get<any>(
-    `${environment.apiBaseUrl}admin/task/getTaskFilterData`
-  );
+    return this.http.get<any>(
+      `${environment.apiBaseUrl}admin/task/getTaskFilterData`
+    );
 
-}
+  }
 
-getTaskDetails(
-  page: number,
-  size: number,
-  statusIndex: number,
-  search: string,
-  clientId: number,
-  taskCategoryId: number,
-  assignedTo: number,
-  priority: number,
-  fromDate: string,
-  toDate: string
-): Observable<any> {
+  getTaskDetails(
+    page: number,
+    size: number,
+    statusIndex: number,
+    search: string,
+    clientId: number,
+    taskCategoryId: number,
+    assignedTo: number,
+    priority: number,
+    fromDate: string,
+    toDate: string
+  ): Observable<any> {
 
-  const params = new HttpParams()
+    const params = new HttpParams()
 
-    .set(
-      'page',
-      page.toString()
-    )
+      .set(
+        'page',
+        page.toString()
+      )
 
-    .set(
-      'size',
-      size.toString()
-    )
+      .set(
+        'size',
+        size.toString()
+      )
 
-    .set(
-      'statusIndex',
-      statusIndex.toString()
-    )
+      .set(
+        'statusIndex',
+        statusIndex.toString()
+      )
 
-    .set(
-      'search',
-      search || ''
-    )
+      .set(
+        'search',
+        search || ''
+      )
 
-    .set(
-      'clientId',
-      clientId.toString()
-    )
+      .set(
+        'clientId',
+        clientId.toString()
+      )
 
-    .set(
-      'taskCategoryId',
-      taskCategoryId.toString()
-    )
+      .set(
+        'taskCategoryId',
+        taskCategoryId.toString()
+      )
 
-    .set(
-      'assignedTo',
-      assignedTo.toString()
-    )
+      .set(
+        'assignedTo',
+        assignedTo.toString()
+      )
 
-    .set(
-      'priority',
-      priority.toString()
-    )
+      .set(
+        'priority',
+        priority.toString()
+      )
 
-    .set(
-      'fromDate',
-      fromDate || ''
-    )
+      .set(
+        'fromDate',
+        fromDate || ''
+      )
 
-    .set(
-      'toDate',
-      toDate || ''
+      .set(
+        'toDate',
+        toDate || ''
+      );
+
+
+    console.log(
+      'Task API Params:',
+      params.toString()
     );
 
 
-  console.log(
-    'Task API Params:',
-    params.toString()
-  );
+    return this.http.get<any>(
+      `${environment.apiBaseUrl}admin/task/getTaskDetails`,
+      {
+        params
+      }
+    );
 
+  }
 
-  return this.http.get<any>(
-    `${environment.apiBaseUrl}admin/task/getTaskDetails`,
-    {
-      params
-    }
-  );
+  saveTask(formData: FormData) {
+    return this.http.post<any>(
+      `${environment.apiBaseUrl}admin/task/saveTask`,
+      formData
+    );
+  }
 
-}
+  getTaskById(taskId: number) {
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/task/getTaskDetailsById?taskId=${taskId}`
+    );
+  }
 
-saveTask(formData: FormData) {
-  return this.http.post<any>(
-    `${environment.apiBaseUrl}admin/task/saveTask`,
-    formData
-  );
-}
-
-getTaskById(taskId: number) {
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/task/getTaskDetailsById?taskId=${taskId}`
-  );
-}
-
-changeClientManager(clientId: number, managerId: number) {
+  changeClientManager(clientId: number, managerId: number) {
     return this.http.put<any>(`${environment.apiBaseUrl}admin/client/${clientId}/manager`, {
       managerId: managerId,
     });
@@ -1547,20 +1547,27 @@ changeClientManager(clientId: number, managerId: number) {
 
   deleteTask(task: any) {
 
-  const params = {
-    taskId: task.taskId,
-    createdBy: task.createdBy
-  };
+    const params = {
+      taskId: task.taskId,
+      createdBy: task.createdBy
+    };
 
-  return this.http.post<any>(
-    `${environment.apiBaseUrl}admin/task/deleteTask`,
-    null,
-    { params }
-  );
-}
+    return this.http.post<any>(
+      `${environment.apiBaseUrl}admin/task/deleteTask`,
+      null,
+      { params }
+    );
+  }
 
-getPlan(): Observable<any> {
+  getPlan(): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/plan/getPlan`);
   }
 
+
+  updateTaskDetails(formData: FormData): Observable<any> {
+    return this.http.post(
+      `${environment.apiBaseUrl}admin/task/update_task_status`,
+      formData
+    );
+  }
 }

@@ -163,65 +163,42 @@
 
           </div>
 
-    <!-- FROM DATE -->
-<div class="status-wrapper date-filter-wrapper">
+          <!-- FROM DATE -->
+          <div class="status-wrapper date-filter-wrapper">
 
-  <div class="date-filter-input">
+            <div class="date-filter-input">
 
-    <input
-      matInput
-      [matDatepicker]="fromPicker"
-      [(ngModel)]="fromDate"
-      name="fromDate"
-      placeholder="From Date"
-      class="date-input"
-      autocomplete="off"
-      readonly
-    />
+              <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" name="fromDate"
+                placeholder="From Date" class="date-input" autocomplete="off" readonly />
 
-    <mat-datepicker-toggle
-      matSuffix
-      [for]="fromPicker">
-    </mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="fromPicker">
+              </mat-datepicker-toggle>
 
-    <mat-datepicker
-      #fromPicker>
-    </mat-datepicker>
+              <mat-datepicker #fromPicker>
+              </mat-datepicker>
 
-  </div>
+            </div>
 
-</div>
+          </div>
 
 
-<!-- TO DATE -->
-<div class="status-wrapper date-filter-wrapper">
+          <!-- TO DATE -->
+          <div class="status-wrapper date-filter-wrapper">
 
-  <div class="date-filter-input">
+            <div class="date-filter-input">
 
-    <input
-      matInput
-      [matDatepicker]="toPicker"
-      [(ngModel)]="toDate"
-      name="toDate"
-      placeholder="To Date"
-      class="date-input"
-      autocomplete="off"
-      readonly
-      [min]="fromDate"
-    />
+              <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" name="toDate" placeholder="To Date"
+                class="date-input" autocomplete="off" readonly [min]="fromDate" />
 
-    <mat-datepicker-toggle
-      matSuffix
-      [for]="toPicker">
-    </mat-datepicker-toggle>
+              <mat-datepicker-toggle matSuffix [for]="toPicker">
+              </mat-datepicker-toggle>
 
-    <mat-datepicker
-      #toPicker>
-    </mat-datepicker>
+              <mat-datepicker #toPicker>
+              </mat-datepicker>
 
-  </div>
+            </div>
 
-</div>
+          </div>
 
           <!-- GO -->
           <div class="go-wrapper">
@@ -413,11 +390,14 @@
                 <!-- TASK STATUS -->
                 <td>
 
-                  <span class="status-badge" [ngClass]="common.getStatusClass(task.taskStatus)">
+
+
+                  <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task.taskId)"
+                    matTooltip="Change Manager"    [disabled]="task.taskStatus === 2">
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
                     }}
-                  </span>
+                  </button>
 
                 </td>
 
@@ -431,49 +411,39 @@
                     }}
                   </span>
 
+
+
                 </td>
 
 
                 <!-- ACTION -->
                 <!-- ACTION -->
-<td>
-  <div class="action-buttons">
+                <td>
+                  <div class="action-buttons">
 
-    <!-- VIEW -->
-    @if (viewPer === "Y") {
-      <a
-        (click)="viewTask(task.taskId)"
-        class="action-btn view-btn"
-        title="View"
-      >
-        <i class="fa fa-eye"></i>
-      </a>
-    }
+                    <!-- VIEW -->
+                    @if (viewPer === "Y") {
+                    <a (click)="viewTask(task.taskId)" class="action-btn view-btn" title="View">
+                      <i class="fa fa-eye"></i>
+                    </a>
+                    }
 
-    <!-- EDIT - Hide when status = 3 -->
-    @if (editPer === "Y" && task.status !== 3) {
-      <a
-        (click)="editTask(task.taskId)"
-        class="action-btn edit-btn"
-        title="Edit"
-      >
-        <i class="fa fa-pencil"></i>
-      </a>
-    }
+                    <!-- EDIT - Hide when status = 3 -->
+                    @if (editPer === "Y" && task.status !== 3) {
+                    <a (click)="editTask(task.taskId)" class="action-btn edit-btn" title="Edit">
+                      <i class="fa fa-pencil"></i>
+                    </a>
+                    }
 
-    <!-- DELETE - Hide when status = 3 -->
-    @if (deletePer === "Y" && task.status !== 3) {
-      <a
-        (click)="onDeleteTask(task.taskId)"
-        class="action-btn delete-btn"
-        title="Delete"
-      >
-        <i class="fa fa-trash"></i>
-      </a>
-    }
+                    <!-- DELETE - Hide when status = 3 -->
+                    @if (deletePer === "Y" && task.status !== 3) {
+                    <a (click)="onDeleteTask(task.taskId)" class="action-btn delete-btn" title="Delete">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                    }
 
-  </div>
-</td>
+                  </div>
+                </td>
 
               </tr>
 
@@ -545,4 +515,90 @@
 
   </div>
 
+</div>
+<div class="modal-overlay" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
+  <div class="change-manager-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-title-icon">
+          <mat-icon>manage_accounts</mat-icon>
+        </div>
+
+        <div>
+          <div class="modal-title-text">Change Task Status</div>
+         
+        </div>
+      </div>
+
+      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="modal-body">
+          <input type="hidden" name="taskId" [(ngModel)]="task.taskId" />
+      
+      <!-- DESCRIPTION -->
+      <div class="manager-form-group">
+        <label class="modal-field-label">
+          Description
+          <span class="required">*</span>
+        </label>
+
+        <textarea class="manager-select" rows="4" [(ngModel)]="taskDescription" [disabled]="isChangingManager"
+          placeholder="Enter description" maxlength="300"></textarea>
+
+        <div class="manager-validation-error" *ngIf="descriptionValidationError">
+          <mat-icon>error_outline</mat-icon>
+          <span>Please enter a description</span>
+        </div>
+      </div>
+
+      <!-- ZIP FILE UPLOAD -->
+      <div class="manager-form-group">
+        <label class="modal-field-label">
+          Zip File
+        </label>
+
+        <input type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"
+          (change)="onFileOneSelected($event)" />
+
+        <span class="current-manager-name" *ngIf="fileOneName">
+          {{ fileOneName }}
+        </span>
+      </div>
+
+      <!-- NORMAL FILE UPLOAD -->
+      <div class="manager-form-group">
+        <label class="modal-field-label">
+          File
+        </label>
+
+        <input type="file" class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+
+        <span class="current-manager-name" *ngIf="fileTwoName">
+          {{ fileTwoName }}
+        </span>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()"
+        [disabled]="isChangingManager">
+        Cancel
+      </button>
+
+      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
+        <mat-icon>
+          {{ isChangingManager ? 'hourglass_top' : 'save' }}
+        </mat-icon>
+        <span>
+          {{ isChangingManager ? 'Updating...' : 'Submit' }}
+        </span>
+      </button>
+    </div>
+  </div>
 </div>
