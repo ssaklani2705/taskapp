@@ -1445,3 +1445,784 @@ button.btn-add-user .plus-icon {
   font-size: 19px !important;
   line-height: 1 !important;
 }
+
+
+//note model css
+/* =========================================================
+   NOTES ACTION BUTTON
+========================================================= */
+/* =========================================================
+   MODAL OVERLAY
+========================================================= */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(15, 23, 42, 0.48);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  box-sizing: border-box;
+
+  z-index: 9999;
+
+  overflow: hidden;
+}
+
+
+/* =========================================================
+   TASK NOTES MODAL
+========================================================= */
+
+.task-notes-modal {
+  width: 730px;
+  max-width: calc(100vw - 40px);
+
+  /* IMPORTANT */
+  height: 70vh;
+  max-height: 700px;
+  min-height: 400px;
+
+  background: #ffffff;
+
+  border-radius: 8px;
+
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.22);
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+
+  animation: taskNotesModalOpen 0.18s ease-out;
+}
+
+
+/* =========================================================
+   HEADER - FIXED
+========================================================= */
+
+.task-notes-modal .modal-header {
+  flex: 0 0 82px;
+
+  height: 82px;
+  min-height: 82px;
+
+  padding: 16px 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.modal-title {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+}
+
+
+.modal-title-icon {
+  width: 42px;
+  height: 42px;
+
+  min-width: 42px;
+
+  border-radius: 7px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eef4f9;
+
+  color: #2f6fa3;
+}
+
+
+.note-modal-icon {
+  background: #f3edff;
+  color: #7c3aed;
+}
+
+
+.modal-title-icon mat-icon {
+  font-size: 22px;
+
+  width: 22px;
+  height: 22px;
+}
+
+
+.modal-title-text {
+  color: #19345a;
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+
+.modal-subtitle {
+  margin-top: 4px;
+
+  color: #718096;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+========================================================= */
+
+.modal-close-button {
+  width: 38px;
+  height: 38px;
+
+  min-width: 38px;
+
+  border: 0;
+
+  background: transparent;
+
+  color: #64748b;
+
+  border-radius: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  flex: 0 0 auto;
+}
+
+
+.modal-close-button:hover {
+  background: #f1f5f9;
+
+  color: #334155;
+}
+
+
+.modal-close-button mat-icon {
+  font-size: 21px;
+
+  width: 21px;
+  height: 21px;
+}
+
+
+/* =========================================================
+   BODY - ONLY THIS AREA SCROLLS
+========================================================= */
+
+.task-notes-modal .modal-body {
+  flex: 1 1 auto;
+
+  /*
+   * VERY IMPORTANT
+   * Allows flex child to shrink instead of pushing footer
+   */
+  min-height: 0 !important;
+
+  width: 100%;
+
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+  background: #ffffff;
+}
+
+
+/* Scrollbar */
+
+.task-notes-modal .modal-body::-webkit-scrollbar {
+  width: 7px;
+}
+
+.task-notes-modal .modal-body::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+.task-notes-modal .modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+
+  border-radius: 10px;
+}
+
+.task-notes-modal .modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+/* =========================================================
+   PREVIOUS NOTES HEADER
+========================================================= */
+
+.previous-notes-header {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 14px;
+
+  box-sizing: border-box;
+}
+
+
+.previous-notes-title {
+  color: #19345a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   ADD NOTE BUTTON
+========================================================= */
+
+.add-note-modal-button {
+  height: 36px;
+
+  padding: 0 13px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 6px;
+
+  border: 0;
+
+  border-radius: 4px;
+
+  background: #19345a;
+
+  color: #ffffff;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  flex: 0 0 auto;
+}
+
+
+.add-note-modal-button:hover {
+  background: #152f54;
+}
+
+
+.add-note-modal-button mat-icon {
+  width: 17px;
+
+  height: 17px;
+
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   ADD NOTE FORM
+========================================================= */
+
+.add-note-form {
+  width: 100%;
+
+  margin-bottom: 24px;
+
+  padding: 16px;
+
+  background: #f8fafc;
+
+  border: 1px solid #dce5ed;
+
+  border-radius: 6px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   TEXTAREA
+========================================================= */
+
+.task-notes-textarea {
+  display: block;
+
+  width: 100%;
+
+  min-height: 120px;
+
+  max-height: 220px;
+
+  padding: 12px 13px;
+
+  box-sizing: border-box;
+
+  resize: vertical;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 5px;
+
+  background: #ffffff;
+
+  color: #334155;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  outline: none;
+}
+
+
+.task-notes-textarea::placeholder {
+  color: #94a3b8;
+}
+
+
+.task-notes-textarea:focus {
+  border-color: #2f6fa3;
+
+  box-shadow:
+    0 0 0 2px rgba(47, 111, 163, 0.10);
+}
+
+
+/* =========================================================
+   FORM FOOTER
+========================================================= */
+
+.notes-form-footer {
+  margin-top: 8px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+
+.notes-character-count {
+  color: #94a3b8;
+
+  font-size: 11px;
+}
+
+
+.note-form-buttons {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+}
+
+
+/* =========================================================
+   NOTES LIST
+========================================================= */
+
+.notes-list {
+  width: 100%;
+}
+
+
+.task-note-item {
+  width: 100%;
+
+  padding: 15px 0;
+
+  border-top: 1px solid #e2e8f0;
+
+  box-sizing: border-box;
+}
+
+
+.task-note-item:first-child {
+  border-top: 0;
+}
+
+
+.task-note-header {
+  display: flex;
+
+  align-items: center;
+}
+
+
+.note-creator {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+
+/* =========================================================
+   AVATAR
+========================================================= */
+
+.note-avatar {
+  width: 40px;
+  height: 40px;
+
+  min-width: 40px;
+
+  flex: 0 0 40px;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #ffffff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  text-transform: uppercase;
+
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+
+.note-creator-info {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+
+  min-width: 0;
+}
+
+
+.note-creator-name {
+  color: #334155;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+.note-timestamp {
+  color: #94a3b8;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   NOTE CONTENT
+========================================================= */
+
+.task-note-content {
+  margin-top: 9px;
+
+  padding-left: 50px;
+
+  color: #475569;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  white-space: pre-wrap;
+
+  overflow-wrap: break-word;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   NO NOTES
+========================================================= */
+
+.no-notes {
+  padding: 20px;
+
+  text-align: center;
+
+  color: #94a3b8;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 5px;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   FOOTER - FIXED
+========================================================= */
+
+.task-notes-modal .modal-footer {
+  flex: 0 0 70px;
+
+  height: 70px;
+
+  min-height: 70px;
+
+  padding: 14px 22px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.modal-cancel-button {
+  height: 38px;
+
+  padding: 0 17px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 4px;
+
+  background: #ffffff;
+
+  color: #475569;
+
+  font-size: 13px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+}
+
+
+.modal-cancel-button:hover {
+  background: #f8fafc;
+}
+
+
+.modal-save-button {
+  height: 38px;
+
+  padding: 0 18px;
+
+  border: 0;
+
+  border-radius: 4px;
+
+  background: #19345a;
+
+  color: #ffffff;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+.modal-save-button:hover {
+  background: #152f54;
+}
+
+
+.modal-save-button:disabled,
+.modal-cancel-button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+.modal-save-button mat-icon {
+  font-size: 17px;
+
+  width: 17px;
+
+  height: 17px;
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+@keyframes taskNotesModalOpen {
+
+  from {
+    opacity: 0;
+
+    transform: translateY(-10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform: translateY(0) scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .modal-overlay {
+    padding: 10px;
+  }
+
+  .task-notes-modal {
+    width: 100%;
+
+    max-width: 100%;
+
+    height: calc(100vh - 20px);
+
+    max-height: calc(100vh - 20px);
+
+    min-height: 350px;
+  }
+
+  .task-notes-modal .modal-header {
+    flex-basis: 72px;
+
+    height: 72px;
+
+    min-height: 72px;
+
+    padding: 12px 16px;
+  }
+
+  .task-notes-modal .modal-body {
+    padding: 18px 16px;
+  }
+
+  .task-notes-modal .modal-footer {
+    flex-basis: 64px;
+
+    height: 64px;
+
+    min-height: 64px;
+
+    padding: 12px 16px;
+  }
+
+  .modal-title-text {
+    font-size: 18px;
+  }
+
+  .modal-subtitle {
+    font-size: 11px;
+
+    max-width: 220px;
+  }
+
+  .task-note-content {
+    padding-left: 0;
+  }
+
+}

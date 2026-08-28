@@ -60,12 +60,19 @@ export class Sidebar {
         this.modules = JSON.parse(storedModules);
       }
 
+      const loginType =
+    sessionStorage.getItem('loginType') || 'other';
+
+    this.loginType = loginType;
+
       // Restore previously selected submenu from session
       const storedSelected = sessionStorage.getItem('selectedModuleDetail');
       if (storedSelected) {
         const parsed = JSON.parse(storedSelected);
         this.selectedModuleId = parsed?.moduleId || null;
       }
+
+
     }
 
     const allowedModuleIds = this.modules.map((m) => m.moduleId);
@@ -197,34 +204,16 @@ export class Sidebar {
         moduleId: -1,
         label: 'Dashboard',
         icon: 'dashboard',
-        route: '/manager-dashboard'
+        route: '/dashboard'
+      },
+       {
+        moduleId: 10,
+        label: 'Tasks',
+        icon: 'task_alt',
+        route: '/task-index'
       },
       
-      // {
-      //   moduleId: 1,
-      //   label: 'User Management',
-      //   icon: 'groups',
-      //   route: '/my-team'
-      // },
-      // {
-      //   moduleId: 5,
-      //   label: 'Task Category',
-      //   icon: 'task_alt',
-      //   route: '/task-category-index'
-      // },
-      // {
-      //   moduleId: 9,
-      //   label: 'Tasks',
-      //   icon: 'task_alt',
-      //   route: '/task-index'
-      // },
      
-     
-      // {
-      //   label: 'Reports',
-      //   icon: 'bar_chart',
-      //   route: '/reports'
-      // }
     ];
 
   } else {
@@ -271,7 +260,7 @@ export class Sidebar {
       },
       {
         moduleId: 8,
-        label: 'Clients',
+        label: 'Client',
         icon: 'business',
         route: '/client-index'
       },

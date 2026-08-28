@@ -273,7 +273,8 @@ export class AddClient implements OnInit {
 
       managerId: Number(formValues.managerId || 0),
 
-      userId: Number(formValues.userId || 0),
+      // userId: Number(formValues.userId || 0),
+      userId: this.userId,
 
       taxFlag: Number(formValues.taxFlag || 0),
       location: formValues.location?.trim() || '',

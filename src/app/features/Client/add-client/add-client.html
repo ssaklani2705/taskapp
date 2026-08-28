@@ -24,6 +24,38 @@
           </div>
 
           <div class="user-form-row">
+<div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Manager
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="managerId">
+                  <option [ngValue]="null">Select Manager</option>
+
+                  <option *ngFor="let manager of managers" [ngValue]="manager.userId">
+                    {{ manager.firstName }}
+                  </option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    clientForm.get('managerId')?.touched && clientForm.get('managerId')?.invalid
+                  "
+                >
+                  Manager is required
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="user-form-row">
+
+
+
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -338,31 +370,7 @@
               </div>
             </div>
 
-            <div class="user-form-col">
-              <div class="user-form-group">
-                <label class="user-label">
-                  Manager
-                  <span class="required">*</span>
-                </label>
-
-                <select class="user-input user-select" formControlName="managerId">
-                  <option [ngValue]="null">Select Manager</option>
-
-                  <option *ngFor="let manager of managers" [ngValue]="manager.userId">
-                    {{ manager.firstName }}
-                  </option>
-                </select>
-
-                <div
-                  class="user-error"
-                  *ngIf="
-                    clientForm.get('managerId')?.touched && clientForm.get('managerId')?.invalid
-                  "
-                >
-                  Manager is required
-                </div>
-              </div>
-            </div>
+            
           </div>
 
           <div class="user-form-row">

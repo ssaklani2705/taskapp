@@ -105,6 +105,7 @@ export class ClientIndex {
       }
     }
 
+    this.statusIndex=1;
     this.restoreFilterState();
     this.loadStates();
     this.loadManagers();

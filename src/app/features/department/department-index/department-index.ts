@@ -556,20 +556,19 @@ export class DepartmentIndexComponent {
                   }
                 },
 
-              error:
-                (error) => {
+              error: (err) => {
+                console.error('error:', err);
 
-                  console.error(
-                    'Error deleting department:',
-                    error
-                  );
+                const message =
+                  err?.error?.message ||
+                  'Something went wrong';
 
-                  Swal.fire(
-                    'Error',
-                    'Something went wrong while deleting the department.',
-                    'error'
-                  );
-                },
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: message
+                });
+              },
             });
         }
       }
@@ -888,12 +887,12 @@ export class DepartmentIndexComponent {
 
   clearFilters(): void {
 
-  this.searchQuery = '';
-  this.selectedStatus = '';
+    this.searchQuery = '';
+    this.selectedStatus = '';
 
-  this.currentPage = 1;
+    this.currentPage = 1;
 
-  this.onSearch();
-}
+    this.onSearch();
+  }
 
 }

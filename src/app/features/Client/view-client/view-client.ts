@@ -51,6 +51,11 @@ export class ViewClient {
   page = 0;
   size = 5;
 
+   addPer = 'N';
+  editPer = 'N';
+  deletePer = 'N';
+  exportExcel = 'N';
+
   constructor(
     private route: ActivatedRoute,
     private dataprovider: DataProviderService,

@@ -1455,7 +1455,9 @@ getTaskDetails(
   assignedTo: number,
   priority: number,
   fromDate: string,
-  toDate: string
+  toDate: string,
+  isAdmin: string,
+  userId: any
 ): Observable<any> {
 
   const params = new HttpParams()
@@ -1508,7 +1510,11 @@ getTaskDetails(
     .set(
       'toDate',
       toDate || ''
-    );
+    )
+    
+    .set('isAdmin',isAdmin|| '')
+    
+    .set('userId',userId|| '');
 
 
   console.log(
@@ -1562,5 +1568,18 @@ changeClientManager(clientId: number, managerId: number) {
 getPlan(): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/plan/getPlan`);
   }
+
+  addTaskNote(request: any): Observable<any> {
+  return this.http.post<any>(
+    `${environment.apiBaseUrl}admin/taskNote/add`,
+    request
+  );
+}
+
+getTaskNotes(taskId: number): Observable<any> {
+  return this.http.get<any>(
+    `${environment.apiBaseUrl}admin/taskNote/getByTaskId/${taskId}`
+  );
+}
 
 }
