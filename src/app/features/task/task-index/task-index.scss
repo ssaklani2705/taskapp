@@ -1393,3 +1393,55 @@ button {
     width: 1100px;
   }
 }
+
+
+
+/* ADD NEW BUTTON */
+button.btn-add-user {
+  height: 46px !important;
+  min-width: 140px !important;
+
+  padding: 0 18px !important;
+
+  background: #19345a !important;
+  color: #ffffff !important;
+
+  border: none !important;
+  border-radius: 4px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 7px !important;
+
+  font-family: Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+
+  cursor: pointer !important;
+  box-shadow: none !important;
+}
+
+button.btn-add-user:hover {
+  background: #152f54 !important;
+  color: #ffffff !important;
+}
+
+button.btn-add-user:focus {
+  background: #19345a !important;
+  color: #ffffff !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+button.btn-add-user:active {
+  background: #102746 !important;
+  color: #ffffff !important;
+}
+
+button.btn-add-user .plus-icon {
+  color: #ffffff !important;
+  font-size: 19px !important;
+  line-height: 1 !important;
+}
