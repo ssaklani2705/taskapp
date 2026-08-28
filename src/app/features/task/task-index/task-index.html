@@ -28,6 +28,8 @@
           Add New
         </button>
 
+        
+
         }
 
       </div>
@@ -428,19 +430,73 @@
                     </a>
                     }
 
-                    <!-- EDIT - Hide when status = 3 -->
-                    @if (editPer === "Y" && task.status !== 3) {
-                    <a (click)="editTask(task.taskId)" class="action-btn edit-btn" title="Edit">
-                      <i class="fa fa-pencil"></i>
-                    </a>
-                    }
+    <!-- EDIT - Hide when status = 3 -->
+    <!-- @if (editPer === "Y" && task.status !== 3) {
+      <a
+        (click)="editTask(task.taskId)"
+        class="action-btn edit-btn"
+        title="Edit"
+      >
+        <i class="fa fa-pencil"></i>
+      </a>
+    } -->
 
-                    <!-- DELETE - Hide when status = 3 -->
-                    @if (deletePer === "Y" && task.status !== 3) {
-                    <a (click)="onDeleteTask(task.taskId)" class="action-btn delete-btn" title="Delete">
-                      <i class="fa fa-trash"></i>
-                    </a>
-                    }
+    <!-- DELETE - Hide when status = 3 -->
+    <!-- @if (deletePer === "Y" && task.status !== 3) {
+      <a
+        (click)="onDeleteTask(task.taskId)"
+        class="action-btn delete-btn"
+        title="Delete"
+      >
+        <i class="fa fa-trash"></i>
+      </a>
+    } -->
+
+    <!-- EDIT -->
+  @if (
+  editPer === "Y"
+  && task.status !== 3
+  && (
+    isAdmin === "Y"
+    || isTaskOwner(task)
+  )
+) {
+  <a
+    (click)="editTask(task.taskId)"
+    class="action-btn edit-btn"
+    title="Edit"
+  >
+    <i class="fa fa-pencil"></i>
+  </a>
+}
+
+
+<!-- DELETE -->
+@if (
+  deletePer === "Y"
+  && task.status !== 3
+  && (
+    isAdmin === "Y"
+    || isTaskOwner(task)
+  )
+) {
+  <a
+    (click)="onDeleteTask(task.taskId)"
+    class="action-btn delete-btn"
+    title="Delete"
+  >
+    <i class="fa fa-trash"></i>
+  </a>
+}
+
+<!-- NOTES -->
+<a
+  (click)="openTaskNotes(task)"
+  class="action-btn note-btn"
+  title="Notes"
+>
+  <i class="fa fa-sticky-note"></i>
+</a>
 
                   </div>
                 </td>
@@ -516,89 +572,225 @@
   </div>
 
 </div>
-<div class="modal-overlay" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
-  <div class="change-manager-modal" (click)="$event.stopPropagation()">
+
+
+
+
+<!-- =====================================================
+     TASK NOTES MODAL
+====================================================== -->
+
+<div
+  class="modal-overlay"
+  *ngIf="showTaskNotesModal"
+  (click)="closeTaskNotesModal()"
+>
+  <div
+    class="task-notes-modal"
+    (click)="$event.stopPropagation()"
+  >
+
+    <!-- HEADER -->
     <div class="modal-header">
+
       <div class="modal-title">
-        <div class="modal-title-icon">
-          <mat-icon>manage_accounts</mat-icon>
+
+        <div class="modal-title-icon note-modal-icon">
+          <mat-icon>sticky_note_2</mat-icon>
         </div>
 
         <div>
-          <div class="modal-title-text">Change Task Status</div>
-         
+          <div class="modal-title-text">
+            Task Notes
+          </div>
+
+          <div class="modal-subtitle">
+            Notes for {{ selectedTask?.title || '-' }}
+          </div>
         </div>
+
       </div>
 
-      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" aria-label="Close">
+      <button
+        type="button"
+        class="modal-close-button"
+        (click)="closeTaskNotesModal()"
+        aria-label="Close"
+      >
         <mat-icon>close</mat-icon>
       </button>
+
     </div>
 
     <mat-divider></mat-divider>
 
+
+    <!-- BODY -->
     <div class="modal-body">
-          <input type="hidden" name="taskId" [(ngModel)]="task.taskId" />
-      
-      <!-- DESCRIPTION -->
-      <div class="manager-form-group">
+
+
+      <!-- =================================================
+           PREVIOUS NOTES HEADER
+      ================================================== -->
+
+      <div class="previous-notes-header">
+
+        <div class="previous-notes-title">
+          Previous Notes
+        </div>
+
+        <!-- ADD NOTE BUTTON -->
+        <button
+          type="button"
+          class="add-note-modal-button"
+          *ngIf="!isAddingNote"
+          (click)="startAddingNote()"
+        >
+          <mat-icon>add</mat-icon>
+          Add Note
+        </button>
+
+      </div>
+
+
+      <!-- =================================================
+           ADD NOTE FORM
+           Only shown after clicking Add Note
+      ================================================== -->
+
+      <div
+        class="add-note-form"
+        *ngIf="isAddingNote"
+      >
+
         <label class="modal-field-label">
-          Description
+          Notes
           <span class="required">*</span>
         </label>
 
-        <textarea class="manager-select" rows="4" [(ngModel)]="taskDescription" [disabled]="isChangingManager"
-          placeholder="Enter description" maxlength="300"></textarea>
+        <textarea
+          class="task-notes-textarea"
+          [(ngModel)]="taskNote"
+          placeholder="Enter your note..."
+          rows="5"
+          maxlength="2000"
+        ></textarea>
 
-        <div class="manager-validation-error" *ngIf="descriptionValidationError">
-          <mat-icon>error_outline</mat-icon>
-          <span>Please enter a description</span>
+
+        <div class="notes-form-footer">
+
+          <span class="notes-character-count">
+            {{ taskNote.length || 0 }} / 2000
+          </span>
+
+          <div class="note-form-buttons">
+
+            <button
+              type="button"
+              class="modal-cancel-button"
+              (click)="cancelAddingNote()"
+              [disabled]="isSavingTaskNote"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              class="modal-save-button"
+              (click)="saveTaskNote()"
+              [disabled]="isSavingTaskNote || !taskNote.trim()"
+            >
+
+              <mat-icon>
+                send
+              </mat-icon>
+
+              {{ isSavingTaskNote ? 'Submitting...' : 'Submit' }}
+
+            </button>
+
+          </div>
+
         </div>
+
       </div>
 
-      <!-- ZIP FILE UPLOAD -->
-      <div class="manager-form-group">
-        <label class="modal-field-label">
-          Zip File
-        </label>
 
-        <input type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"
-          (change)="onFileOneSelected($event)" />
+      <!-- =================================================
+           PREVIOUS NOTES LIST
+      ================================================== -->
 
-        <span class="current-manager-name" *ngIf="fileOneName">
-          {{ fileOneName }}
-        </span>
-      </div>
+      <div class="notes-list">
 
-      <!-- NORMAL FILE UPLOAD -->
-      <div class="manager-form-group">
-        <label class="modal-field-label">
-          File
-        </label>
 
-        <input type="file" class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+        <!-- NO NOTES -->
+        <div
+          class="no-notes"
+          *ngIf="!taskNotes || taskNotes.length === 0"
+        >
+          No notes added yet.
+        </div>
 
-        <span class="current-manager-name" *ngIf="fileTwoName">
-          {{ fileTwoName }}
-        </span>
+
+        <!-- NOTES -->
+        <div
+          class="task-note-item"
+          *ngFor="let note of taskNotes"
+        >
+
+          <div class="task-note-header">
+
+            <div class="note-creator">
+
+              <div class="note-avatar" [style.background-color]="getCreatorColor(note.creatorName)">
+                {{ getCreatorInitial(note.creatorName) }}
+              </div>
+
+              <div class="note-creator-info">
+
+                <div class="note-creator-name">
+                  {{ note.creatorName || '-' }}
+                </div>
+
+                <div class="note-timestamp">
+                  {{ note.timestamp | date:'dd MMM yyyy, hh:mm a' }}
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="task-note-content">
+            {{ note.note }}
+          </div>
+
+        </div>
+
       </div>
 
     </div>
 
+
+    <mat-divider></mat-divider>
+
+
+    <!-- FOOTER -->
     <div class="modal-footer">
-      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()"
-        [disabled]="isChangingManager">
-        Cancel
+
+      <button
+        type="button"
+        class="modal-cancel-button"
+        (click)="closeTaskNotesModal()"
+        [disabled]="isSavingTaskNote"
+      >
+        Close
       </button>
 
-      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
-        <mat-icon>
-          {{ isChangingManager ? 'hourglass_top' : 'save' }}
-        </mat-icon>
-        <span>
-          {{ isChangingManager ? 'Updating...' : 'Submit' }}
-        </span>
-      </button>
     </div>
+
   </div>
 </div>
+

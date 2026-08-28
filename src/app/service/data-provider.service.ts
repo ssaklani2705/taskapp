@@ -1445,18 +1445,20 @@ export class DataProviderService {
 
   }
 
-  getTaskDetails(
-    page: number,
-    size: number,
-    statusIndex: number,
-    search: string,
-    clientId: number,
-    taskCategoryId: number,
-    assignedTo: number,
-    priority: number,
-    fromDate: string,
-    toDate: string
-  ): Observable<any> {
+getTaskDetails(
+  page: number,
+  size: number,
+  statusIndex: number,
+  search: string,
+  clientId: number,
+  taskCategoryId: number,
+  assignedTo: number,
+  priority: number,
+  fromDate: string,
+  toDate: string,
+  isAdmin: string,
+  userId: any
+): Observable<any> {
 
     const params = new HttpParams()
 
@@ -1505,10 +1507,14 @@ export class DataProviderService {
         fromDate || ''
       )
 
-      .set(
-        'toDate',
-        toDate || ''
-      );
+    .set(
+      'toDate',
+      toDate || ''
+    )
+    
+    .set('isAdmin',isAdmin|| '')
+    
+    .set('userId',userId|| '');
 
 
     console.log(
@@ -1563,11 +1569,17 @@ export class DataProviderService {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/plan/getPlan`);
   }
 
+  addTaskNote(request: any): Observable<any> {
+  return this.http.post<any>(
+    `${environment.apiBaseUrl}admin/taskNote/add`,
+    request
+  );
+}
 
-  updateTaskDetails(formData: FormData): Observable<any> {
-    return this.http.post(
-      `${environment.apiBaseUrl}admin/task/update_task_status`,
-      formData
-    );
-  }
+getTaskNotes(taskId: number): Observable<any> {
+  return this.http.get<any>(
+    `${environment.apiBaseUrl}admin/taskNote/getByTaskId/${taskId}`
+  );
+}
+
 }

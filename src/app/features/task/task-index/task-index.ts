@@ -42,6 +42,8 @@ import {
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 interface Task {
@@ -63,6 +65,8 @@ interface Task {
   title: string;
 
   taskStatus: number;
+
+  addedBy: String;
 }
 
 
@@ -101,14 +105,8 @@ interface AssignedUser {
     MatCardModule,
     MatDatepickerModule,
     MatNativeDateModule,
-
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
     MatIconModule,
-    MatTableModule,
-    MatSortModule,
-    MatListModule
+    MatDividerModule
   ],
 
   templateUrl: './task-index.html',
@@ -203,6 +201,8 @@ export class TaskIndex {
   task: any = {};
 
   userId: any;
+
+  isAdmin: any;
 
 
   // =========================================================
@@ -357,6 +357,11 @@ export class TaskIndex {
       this.userId =
         sessionStorage.getItem(
           'userId'
+        );
+
+         this.isAdmin =
+        sessionStorage.getItem(
+          'isAdmin'
         );
 
     }
@@ -840,7 +845,9 @@ export class TaskIndex {
 
         fromDate,
 
-        toDate
+      toDate,
+      this.isAdmin,
+      this.userId
 
       )
       .subscribe({
@@ -1920,7 +1927,171 @@ export class TaskIndex {
 
   fromDate: Date | null = null;
 
-  toDate: Date | null = null;
+toDate: Date | null = null;
+
+isTaskOwner(task: any): boolean {
+  return Number(task.addedBy) === Number(this.userId);
+}
+
+//for model note
+showTaskNotesModal = false;
+
+isAddingNote = false;
+
+selectedTask: any = null;
+
+taskNote = '';
+
+taskNotes: any[] = [];
+
+isSavingTaskNote = false;
+
+
+openTaskNotes(task: any): void {
+
+  this.selectedTask = task;
+
+  // Initially DON'T show add form
+  this.isAddingNote = false;
+
+  this.taskNote = '';
+
+  this.showTaskNotesModal = true;
+
+  // Load previous notes
+  this.loadTaskNotes(task.taskId);
+}
+
+loadTaskNotes(taskId: number): void {
+
+  this.dataprovider.getTaskNotes(taskId).subscribe({
+    next: (response: any[]) => {
+
+      console.log('Task notes:', response);
+
+      this.taskNotes = response || [];
+    },
+
+    error: (error) => {
+
+      console.error('Error loading task notes:', error);
+
+      this.taskNotes = [];
+    }
+  });
+
+}
+
+
+startAddingNote(): void {
+
+  this.isAddingNote = true;
+
+  this.taskNote = '';
+}
+
+cancelAddingNote(): void {
+
+  this.isAddingNote = false;
+
+  this.taskNote = '';
+}
+
+closeTaskNotesModal(): void {
+
+  if (this.isSavingTaskNote) {
+    return;
+  }
+
+  this.showTaskNotesModal = false;
+
+  this.selectedTask = null;
+
+  this.taskNote = '';
+}
+
+
+saveTaskNote(): void {
+
+  if (!this.taskNote?.trim()) {
+    return;
+  }
+
+  if (!this.selectedTask?.taskId) {
+    return;
+  }
+
+  this.isSavingTaskNote = true;
+
+  const request = {
+    taskId: this.selectedTask.taskId,
+    note: this.taskNote.trim(),
+    userId: this.userId
+  };
+
+  this.dataprovider.addTaskNote(request).subscribe({
+
+    next: () => {
+
+      this.taskNote = '';
+
+      // Hide Add Note form after successful submit
+      this.isAddingNote = false;
+
+      this.isSavingTaskNote = false;
+
+      // Reload previous notes
+      this.loadTaskNotes(this.selectedTask.taskId);
+    },
+
+    error: (error) => {
+
+      console.error('Error saving task note', error);
+
+      this.isSavingTaskNote = false;
+    }
+
+  });
+}
+
+getCreatorInitial(name: string): string {
+  if (!name || !name.trim()) {
+    return '?';
+  }
+
+  return name.trim().charAt(0).toUpperCase();
+}
+
+getCreatorColor(name: string): string {
+
+  if (!name || !name.trim()) {
+    return '#64748b';
+  }
+
+  const colors = [
+    '#2563eb', // Blue
+    '#7c3aed', // Purple
+    '#db2777', // Pink
+    '#dc2626', // Red
+    '#ea580c', // Orange
+    '#16a34a', // Green
+    '#0891b2', // Cyan
+    '#4f46e5', // Indigo
+    '#ca8a04', // Yellow
+    '#0f766e'  // Teal
+  ];
+
+  let hash = 0;
+
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const index = Math.abs(hash) % colors.length;
+
+  return colors[index];
+}
+
 
 
 
