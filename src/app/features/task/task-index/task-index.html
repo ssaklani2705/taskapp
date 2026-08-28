@@ -413,7 +413,7 @@
                 <!-- TASK STATUS -->
                 <td>
 
-                  <span class="status-badge" [ngClass]="common.getStatusClass(task.+)">
+                  <span class="status-badge" [ngClass]="common.getStatusClass(task.taskStatus)">
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
                     }}
