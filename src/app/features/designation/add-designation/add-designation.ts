@@ -503,5 +503,13 @@ export class AddDesignation
     );
 
   }
-
+ allowOnlyNumbers(event: KeyboardEvent): void {
+    
+    const key = event.key;
+    // Allow digits
+    if (/^[0-9]$/.test(key)) {
+      return;
+    }
+    event.preventDefault();
+  }
 }
