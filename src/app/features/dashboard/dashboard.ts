@@ -48,7 +48,7 @@ export class Dashboard {
       change: '+8 this week'
     },
     {
-      title: 'Pending approval',
+      title: 'Pending Task',
       value: 7,
       icon: 'pending_actions',
       className: 'orange',
