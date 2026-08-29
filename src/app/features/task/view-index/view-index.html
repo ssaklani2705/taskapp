@@ -195,6 +195,24 @@
 
           </div>
 
+          <!-- Task Status -->
+
+          <div class="info-row status-row">
+
+            <span class="info-label">
+              Task Status:
+            </span>
+
+            <span
+              class="status-badge"
+              [ngClass]="common.getStatusLabel(task.status)">
+
+              {{ common.getTaskStatusLabel(task.status) }}
+
+            </span>
+
+          </div>
+
 
           <!-- Status -->
 
@@ -206,9 +224,9 @@
 
             <span
               class="status-badge"
-              [ngClass]="getStatusClass(task.status)">
+              [ngClass]="common.getStatusClass(task.status)">
 
-              {{ getStatusLabel(task.status) }}
+              {{ common.getStatusLabel(task.status) }}
 
             </span>
 
