@@ -209,10 +209,19 @@
                 --All Task Status--
               </option>
               <option value="1">
-                Pending
+                Assigned
               </option>
               <option value="2">
-                Closed
+                Assignee Closure
+              </option>
+              <option value="3">
+                Re-Open
+              </option>
+              <option value="4">
+                Assignee Re-Closure
+              </option>
+              <option value="5">
+                Assignor Closure
               </option>
             </select>
           </div>
@@ -410,8 +419,8 @@
 
 
                   <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task.taskId)"
-                    [ngClass]="task.taskStatus === 2 ? 'task-status-closed' : 'task-status-pending'"
-                    matTooltip="Change Manager" [disabled]="task.taskStatus === 2">
+                    [ngClass]="common.getTaskStatusClass(task.taskStatus)"
+                    matTooltip="Change Manager" [disabled]="task.taskStatus === 5">
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
                     }}

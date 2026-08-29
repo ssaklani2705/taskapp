@@ -13,14 +13,18 @@ export class Common {
     }
   }
 
-   getTaskStatusLabel(status: number | string): string {
+  getTaskStatusLabel(status: number | string): string {
     switch (+status) {
       case 1:
-        return 'Pending';
+        return 'Assigned';
       case 2:
-        return 'Close';
+        return 'Assignee Closure';
       case 3:
-        return 'complete';
+        return 'Re-Open';
+      case 4:
+        return 'Re-Closure';
+      case 5:
+        return 'Closure';
       default:
         return 'Unknown';
     }
@@ -40,7 +44,24 @@ export class Common {
     }
   }
 
-  
+    getTaskStatusClass(status: number | string): string {
+    switch (+status) {
+      case 1:
+        return 'status-badge active';
+      case 2:
+        return 'status-badge inactive';
+      case 3:
+        return 'status-badge deleted';
+         case 4:
+        return 'status-badge active';
+         case 5:
+        return 'status-badge active';
+      default:
+        return 'status-badge';
+    }
+  }
+
+
 
 
   getFollowUpStatusLabel(status: number): string {

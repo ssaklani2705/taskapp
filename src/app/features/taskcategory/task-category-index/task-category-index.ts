@@ -123,8 +123,14 @@ export class IndexTaskCategory {
       this.filterKey
     );
 
-    this.route.queryParams.subscribe(() => {
-
+    this.route.queryParams.subscribe(params => {
+      this.currentPage = +(params['currentPage'] || 1);
+      this.statusIndex = +(params['statusIndex'] || 0);
+      this.search = params['searchText'] || '';
+      this.selectedDepartment = params['departmentId'] || '';
+      this.page = +(params['page'] || (this.currentPage - 1));
+      this.size = +(params['size'] || 5);
+      this.searchQuery = this.search;
       /* User ID */
       if (
         isPlatformBrowser(
@@ -202,7 +208,7 @@ export class IndexTaskCategory {
         }
       }
 
-      if (stateData) {
+      if (stateData && !params['searchText'] && !params['statusIndex'] && !params['departmentId']) {
 
         this.currentPage =
           stateData.currentPage || 1;
@@ -356,24 +362,12 @@ export class IndexTaskCategory {
     this.page = 0;
 
     const state = {
-
-      currentPage:
-        this.currentPage,
-
-      statusIndex:
-        this.statusIndex,
-
-      searchText:
-        this.search,
-
-      departmentId:
-        this.selectedDepartment,
-
-      page:
-        this.page,
-
-      size:
-        this.size,
+      currentPage: this.currentPage,
+      statusIndex: this.statusIndex,
+      searchText: this.search,
+      departmentId: this.selectedDepartment,
+      page: this.page,
+      size: this.size
     };
 
     this.sessionService.setItem(
@@ -385,7 +379,7 @@ export class IndexTaskCategory {
       .navigate(
         ['/task-category-index'],
         {
-          state: state,
+          queryParams: state,
         }
       )
       .then(() => {
@@ -553,17 +547,16 @@ export class IndexTaskCategory {
 
             error:
               (error) => {
+                console.error('error:', error);
+                const message =
+                  error?.error?.message ||
+                  'Something went wrong';
 
-                console.error(
-                  'Error deleting task category:',
-                  error
-                );
-
-                Swal.fire(
-                  'Error',
-                  'Something went wrong while deleting the task category.',
-                  'error'
-                );
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: message
+                });
               },
           });
       }
@@ -606,7 +599,7 @@ export class IndexTaskCategory {
         taskcategoryId,
       ],
       {
-        state:
+        queryParams:
           filterState,
       }
     );
@@ -648,7 +641,7 @@ export class IndexTaskCategory {
         taskcategoryId,
       ],
       {
-        state:
+        queryParams:
           filterState,
       }
     );
@@ -685,7 +678,7 @@ export class IndexTaskCategory {
     this.router.navigate(
       ['/add-task-category'],
       {
-        state:
+        queryParams:
           filterState,
       }
     );
@@ -750,8 +743,8 @@ export class IndexTaskCategory {
       );
 
     return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${totalRecords > 1
-        ? 's'
-        : ''
+      ? 's'
+      : ''
       })`;
   }
 
@@ -784,7 +777,7 @@ export class IndexTaskCategory {
     sortable: boolean;
   }[] = [
 
-     
+
 
       {
         key:
@@ -797,7 +790,7 @@ export class IndexTaskCategory {
           true,
       },
 
-       {
+      {
         key:
           'departmentName',
 
@@ -918,16 +911,16 @@ export class IndexTaskCategory {
 
   clearFilters(): void {
 
-  this.searchQuery = '';
-  this.selectedDepartment = '';
-  this.selectedStatus = '';
+    this.searchQuery = '';
+    this.selectedDepartment = '';
+    this.selectedStatus = '';
 
-  // Reset pagination
-  this.currentPage = 1;
+    // Reset pagination
+    this.currentPage = 1;
 
-  // Reload all records
-  this.onSearch();
-}
+    // Reload all records
+    this.onSearch();
+  }
 
 
 }

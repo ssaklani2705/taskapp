@@ -25,7 +25,7 @@ import { MatDivider } from "@angular/material/divider";
     MatInputModule,
     MatButtonModule,
     MatSelectModule
-],
+  ],
   templateUrl: './add-task-category.html',
   styleUrl: './add-task-category.scss',
 })
@@ -39,7 +39,7 @@ export class AddTaskCategoryComponent implements OnInit {
   };
 
   originalTaskCategory: any = {};
-
+  departmentId = 0;
   departments: any[] = [];
 
   userId: any;
@@ -59,7 +59,7 @@ export class AddTaskCategoryComponent implements OnInit {
     private dataprovider: DataProviderService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
 
@@ -67,24 +67,14 @@ export class AddTaskCategoryComponent implements OnInit {
        Get pagination/filter parameters
     --------------------------------- */
 
-    const queryParams =
-      this.route.snapshot.queryParamMap;
-
-    this.currentPage =
-      Number(queryParams.get('currentPage')) || 1;
-
-    this.searchText =
-      queryParams.get('searchText') || '';
-
-    this.statusIndex =
-      Number(queryParams.get('statusIndex')) || 0;
-
-    this.page =
-      Number(queryParams.get('page')) ||
-      this.currentPage - 1;
-
-    this.size =
-      Number(queryParams.get('size')) || 5;
+    this.route.queryParams.subscribe(params => {
+      this.currentPage = +(params['currentPage'] || 1);
+      this.searchText = params['searchText'] || '';
+      this.statusIndex = +(params['statusIndex'] || 0);
+      this.departmentId = +(params['departmentId'] || '');
+      this.page = +(params['page'] || 0);
+      this.size = +(params['size'] || 5);
+    });
 
 
     /* --------------------------------
@@ -400,6 +390,7 @@ export class AddTaskCategoryComponent implements OnInit {
           searchText:
             this.searchText,
 
+          departmentId: this.departmentId || '',
           page:
             this.page,
 
