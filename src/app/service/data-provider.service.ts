@@ -1457,7 +1457,8 @@ export class DataProviderService {
     fromDate: string,
     toDate: string,
     isAdmin: string,
-    userId: any
+    userId: any,
+    taskStatusId:any
   ): Observable<any> {
 
     const params = new HttpParams()
@@ -1514,8 +1515,11 @@ export class DataProviderService {
 
       .set('isAdmin', isAdmin || '')
 
-      .set('userId', userId || '');
-
+      .set('userId', userId || '')
+      .set(
+        'taskStatusId',
+        taskStatusId.toString()
+      )
 
     console.log(
       'Task API Params:',

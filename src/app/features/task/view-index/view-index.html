@@ -204,11 +204,9 @@
             </span>
 
             <span
-              class="status-badge"
-              [ngClass]="common.getStatusLabel(task.status)">
-
-              {{ common.getTaskStatusLabel(task.status) }}
-
+              class="change-manager-button"
+              [ngClass]="common.getStatusClass(task.taskStatus)">
+              {{ common.getTaskStatusLabel(task.taskStatus) }}
             </span>
 
           </div>

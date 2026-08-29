@@ -303,7 +303,8 @@ readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
         fileName1: null,
 
-        fileName2: null
+        fileName2: null,
+        taskStatusId:null
 
       };
 

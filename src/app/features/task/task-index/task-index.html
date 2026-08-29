@@ -202,6 +202,21 @@
 
           </div>
 
+          <div class="status-wrapper">
+
+            <select class="status-select" [(ngModel)]="selectedTaskStatus" (change)="onSearch()">
+              <option value="">
+                --All Task Status--
+              </option>
+              <option value="1">
+                Completed
+              </option>
+              <option value="2">
+                Close
+              </option>
+            </select>
+          </div>
+
           <!-- GO -->
           <div class="go-wrapper">
 

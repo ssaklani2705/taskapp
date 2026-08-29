@@ -3568,61 +3568,35 @@ textarea.manager-select::placeholder {
   margin-top: 18px;
 }
 
-.change-manager-button:disabled {
-  background-color: #b0b8c4;
-  cursor: not-allowed;
-}
-
-.change-manager-button:disabled {
-  background-color: #0d3b66;
-  color: #ffffff;
-  cursor: not-allowed;
-  opacity: 1;
-}
-
-.change-manager-button:disabled {
-  background-color: #14416f;
-  color: #ffffff;
-  cursor: not-allowed;
-  opacity: 0.85;
-}
-
 .change-manager-button {
-  background-color: #0d3b66;
-  color: #ffffff;
   border: none;
   border-radius: 4px;
   padding: 6px 14px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  min-width: 70px;
-  transition: all 0.3s ease;
-}
-
-.change-manager-button:hover {
-  background-color: #0a2f52;
+  transition: 0.2s;
 }
 
 .change-manager-button:active {
   transform: scale(0.98);
 }
 
-/* PENDING — active, clickable */
-.change-manager-button.task-status-pending {
-  background-color: #0d3b66;
-  color: #ffffff;
+/* Pending - Yellow */
+.task-status-pending {
+  background-color: #ffc107;
+  color: #000;
 }
 
-.change-manager-button.task-status-pending:hover {
-  background-color: #0a2f52;
+.task-status-pending:hover {
+  background-color: #e0a800;
 }
 
-/* CLOSED — disabled, still dark blue not grey */
-.change-manager-button.task-status-closed,
-.change-manager-button:disabled {
-  background-color: #0d3b66;
-  color: #ffffff;
+/* Closed - Green */
+.task-status-closed,
+.change-manager-button.task-status-closed:disabled {
+  background-color: #28a745;
+  color: #fff;
   cursor: not-allowed;
   opacity: 1;
 }

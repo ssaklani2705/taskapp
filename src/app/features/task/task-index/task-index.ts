@@ -1,7 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -162,6 +160,7 @@ export class TaskIndex {
   // =========================================================
 
   selectedClient: string = '';
+  selectedTaskStatus: string = '';
 
   selectedTaskCategory: string = '';
 
@@ -360,7 +359,7 @@ export class TaskIndex {
           'userId'
         );
 
-         this.isAdmin =
+      this.isAdmin =
         sessionStorage.getItem(
           'isAdmin'
         );
@@ -530,6 +529,7 @@ export class TaskIndex {
       this.selectedAssignedTo = '';
 
       this.selectedPriority = '';
+      this.selectedTaskStatus = ''
 
       this.fromDate = null;
 
@@ -710,7 +710,9 @@ export class TaskIndex {
         this.formatDateForApi(this.fromDate),
 
       toDate:
-        this.formatDateForApi(this.toDate)
+        this.formatDateForApi(this.toDate),
+      taskStatusId:
+        this.selectedTaskStatus || null,
 
     };
 
@@ -824,6 +826,10 @@ export class TaskIndex {
     const toDate =
       this.formatDateForApi(this.toDate);
 
+    const taskStatusId =
+      this.selectedTaskStatus
+        ? Number(this.selectedTaskStatus)
+        : 0;
 
     this.dataprovider
       .getTaskDetails(
@@ -846,9 +852,10 @@ export class TaskIndex {
 
         fromDate,
 
-      toDate,
-      this.isAdmin,
-      this.userId
+        toDate,
+        this.isAdmin,
+        this.userId,
+        taskStatusId
 
       )
       .subscribe({
@@ -968,7 +975,9 @@ export class TaskIndex {
               this.formatDateForApi(this.fromDate) || null,
 
             toDate:
-              this.formatDateForApi(this.toDate) || null
+              this.formatDateForApi(this.toDate) || null,
+            taskStatusId:
+              this.selectedTaskStatus || null,
 
           },
 
@@ -1145,7 +1154,11 @@ export class TaskIndex {
               fromDate || null,
 
             toDate:
-              toDate || null
+              toDate || null,
+
+            taskStatusId:
+              this.selectedTaskStatus || null,
+
 
           },
 
@@ -1372,7 +1385,8 @@ export class TaskIndex {
             this.formatDateForApi(this.fromDate),
 
           toDate:
-            this.formatDateForApi(this.toDate)
+            this.formatDateForApi(this.toDate),
+          taskStatusId: this.selectedTaskStatus
 
         }
       }
@@ -1430,7 +1444,8 @@ export class TaskIndex {
             this.formatDateForApi(this.fromDate),
 
           toDate:
-            this.formatDateForApi(this.toDate)
+            this.formatDateForApi(this.toDate),
+          taskStatusId: this.selectedTaskStatus
 
         }
 
@@ -1485,7 +1500,8 @@ export class TaskIndex {
             this.formatDateForApi(this.fromDate),
 
           toDate:
-            this.formatDateForApi(this.toDate)
+            this.formatDateForApi(this.toDate),
+          taskStatusId: this.selectedTaskStatus
 
         }
 
@@ -1793,6 +1809,7 @@ export class TaskIndex {
     this.selectedAssignedTo = '';
     this.selectedPriority = '';
     this.selectedStatus = '';
+    this.selectedTaskStatus = '';
 
     // Clear dates
     this.fromDate = null;
@@ -1838,7 +1855,8 @@ export class TaskIndex {
 
           fromDate: null,
 
-          toDate: null
+          toDate: null,
+          taskStatusId: 0
 
         },
 
@@ -1928,170 +1946,170 @@ export class TaskIndex {
 
   fromDate: Date | null = null;
 
-toDate: Date | null = null;
+  toDate: Date | null = null;
 
-isTaskOwner(task: any): boolean {
-  return Number(task.addedBy) === Number(this.userId);
-}
-
-//for model note
-showTaskNotesModal = false;
-
-isAddingNote = false;
-
-selectedTask: any = null;
-
-taskNote = '';
-
-taskNotes: any[] = [];
-
-isSavingTaskNote = false;
-
-
-openTaskNotes(task: any): void {
-
-  this.selectedTask = task;
-
-  // Initially DON'T show add form
-  this.isAddingNote = false;
-
-  this.taskNote = '';
-
-  this.showTaskNotesModal = true;
-
-  // Load previous notes
-  this.loadTaskNotes(task.taskId);
-}
-
-loadTaskNotes(taskId: number): void {
-
-  this.dataprovider.getTaskNotes(taskId).subscribe({
-    next: (response: any[]) => {
-
-      console.log('Task notes:', response);
-
-      this.taskNotes = response || [];
-    },
-
-    error: (error) => {
-
-      console.error('Error loading task notes:', error);
-
-      this.taskNotes = [];
-    }
-  });
-
-}
-
-
-startAddingNote(): void {
-
-  this.isAddingNote = true;
-
-  this.taskNote = '';
-}
-
-cancelAddingNote(): void {
-
-  this.isAddingNote = false;
-
-  this.taskNote = '';
-}
-
-closeTaskNotesModal(): void {
-
-  if (this.isSavingTaskNote) {
-    return;
+  isTaskOwner(task: any): boolean {
+    return Number(task.addedBy) === Number(this.userId);
   }
 
-  this.showTaskNotesModal = false;
+  //for model note
+  showTaskNotesModal = false;
 
-  this.selectedTask = null;
+  isAddingNote = false;
 
-  this.taskNote = '';
-}
+  selectedTask: any = null;
+
+  taskNote = '';
+
+  taskNotes: any[] = [];
+
+  isSavingTaskNote = false;
 
 
-saveTaskNote(): void {
+  openTaskNotes(task: any): void {
 
-  if (!this.taskNote?.trim()) {
-    return;
+    this.selectedTask = task;
+
+    // Initially DON'T show add form
+    this.isAddingNote = false;
+
+    this.taskNote = '';
+
+    this.showTaskNotesModal = true;
+
+    // Load previous notes
+    this.loadTaskNotes(task.taskId);
   }
 
-  if (!this.selectedTask?.taskId) {
-    return;
+  loadTaskNotes(taskId: number): void {
+
+    this.dataprovider.getTaskNotes(taskId).subscribe({
+      next: (response: any[]) => {
+
+        console.log('Task notes:', response);
+
+        this.taskNotes = response || [];
+      },
+
+      error: (error) => {
+
+        console.error('Error loading task notes:', error);
+
+        this.taskNotes = [];
+      }
+    });
+
   }
 
-  this.isSavingTaskNote = true;
 
-  const request = {
-    taskId: this.selectedTask.taskId,
-    note: this.taskNote.trim(),
-    userId: this.userId
-  };
+  startAddingNote(): void {
 
-  this.dataprovider.addTaskNote(request).subscribe({
+    this.isAddingNote = true;
 
-    next: () => {
+    this.taskNote = '';
+  }
 
-      this.taskNote = '';
+  cancelAddingNote(): void {
 
-      // Hide Add Note form after successful submit
-      this.isAddingNote = false;
+    this.isAddingNote = false;
 
-      this.isSavingTaskNote = false;
+    this.taskNote = '';
+  }
 
-      // Reload previous notes
-      this.loadTaskNotes(this.selectedTask.taskId);
-    },
+  closeTaskNotesModal(): void {
 
-    error: (error) => {
-
-      console.error('Error saving task note', error);
-
-      this.isSavingTaskNote = false;
+    if (this.isSavingTaskNote) {
+      return;
     }
 
-  });
-}
+    this.showTaskNotesModal = false;
 
-getCreatorInitial(name: string): string {
-  if (!name || !name.trim()) {
-    return '?';
+    this.selectedTask = null;
+
+    this.taskNote = '';
   }
 
-  return name.trim().charAt(0).toUpperCase();
-}
 
-getCreatorColor(name: string): string {
+  saveTaskNote(): void {
 
-  if (!name || !name.trim()) {
-    return '#64748b';
+    if (!this.taskNote?.trim()) {
+      return;
+    }
+
+    if (!this.selectedTask?.taskId) {
+      return;
+    }
+
+    this.isSavingTaskNote = true;
+
+    const request = {
+      taskId: this.selectedTask.taskId,
+      note: this.taskNote.trim(),
+      userId: this.userId
+    };
+
+    this.dataprovider.addTaskNote(request).subscribe({
+
+      next: () => {
+
+        this.taskNote = '';
+
+        // Hide Add Note form after successful submit
+        this.isAddingNote = false;
+
+        this.isSavingTaskNote = false;
+
+        // Reload previous notes
+        this.loadTaskNotes(this.selectedTask.taskId);
+      },
+
+      error: (error) => {
+
+        console.error('Error saving task note', error);
+
+        this.isSavingTaskNote = false;
+      }
+
+    });
   }
 
-  const colors = [
-    '#2563eb', // Blue
-    '#7c3aed', // Purple
-    '#db2777', // Pink
-    '#dc2626', // Red
-    '#ea580c', // Orange
-    '#16a34a', // Green
-    '#0891b2', // Cyan
-    '#4f46e5', // Indigo
-    '#ca8a04', // Yellow
-    '#0f766e'  // Teal
-  ];
+  getCreatorInitial(name: string): string {
+    if (!name || !name.trim()) {
+      return '?';
+    }
 
-  let hash = 0;
-
-  for (let i = 0; i < name.length; i++) {
-    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    return name.trim().charAt(0).toUpperCase();
   }
 
-  const index = Math.abs(hash) % colors.length;
+  getCreatorColor(name: string): string {
 
-  return colors[index];
-}
+    if (!name || !name.trim()) {
+      return '#64748b';
+    }
+
+    const colors = [
+      '#2563eb', // Blue
+      '#7c3aed', // Purple
+      '#db2777', // Pink
+      '#dc2626', // Red
+      '#ea580c', // Orange
+      '#16a34a', // Green
+      '#0891b2', // Cyan
+      '#4f46e5', // Indigo
+      '#ca8a04', // Yellow
+      '#0f766e'  // Teal
+    ];
+
+    let hash = 0;
+
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const index = Math.abs(hash) % colors.length;
+
+    return colors[index];
+  }
 
 
 
@@ -2262,9 +2280,7 @@ getCreatorColor(name: string): string {
     this.dataprovider.updateTaskDetails(formData).subscribe({
 
       next: (response: any) => {
-
         this.isChangingManager = false;
-
         if (response.success) {
           Swal.fire('Updated!', response.message, 'success');
           this.showChangeManagerModal = false;
@@ -2272,9 +2288,7 @@ getCreatorColor(name: string): string {
         } else {
           Swal.fire('Error', response.message, 'error');
         }
-
       },
-
       error: (error) => {
         this.isChangingManager = false;
         console.error('Full error:', error);          // add this
