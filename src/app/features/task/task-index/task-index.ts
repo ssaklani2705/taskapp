@@ -44,6 +44,8 @@ import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
 import { MatDividerModule } from '@angular/material/divider';
 
+import * as XLSX from 'xlsx';
+
 
 interface Task {
 
@@ -66,6 +68,8 @@ interface Task {
   taskStatus: number;
 
   addedBy: String;
+
+  assignedTo: string;
 }
 
 
@@ -220,6 +224,8 @@ export class TaskIndex {
   approvePer: string = 'N';
 
   adminApprovePer: string = 'N';
+
+  exportExcelPer = 'Y';
 
   moduleName: string = '';
 
@@ -408,6 +414,12 @@ export class TaskIndex {
 
           this.adminApprovePer =
             parsed.adminApprovePer ?? 'N';
+
+            this.adminApprovePer =
+            parsed.adminApprovePer ?? 'N';
+
+              this.exportExcelPer =
+            parsed.exportExcel ?? 'N';
 
         } catch (error) {
 
@@ -1952,6 +1964,16 @@ export class TaskIndex {
     return Number(task.addedBy) === Number(this.userId);
   }
 
+  isTaskAssignedToUser(task: any): boolean {
+  return (
+    Number(task.status) !== 3 &&
+    (
+      Number(task.assignedTo) === Number(this.userId) ||
+      Number(task.addedBy) === Number(this.userId)
+    )
+  );
+}
+
   //for model note
   showTaskNotesModal = false;
 
@@ -2299,5 +2321,116 @@ export class TaskIndex {
     });
 
   }
+
+
+  exportToExcel(): void {
+
+  // Make sure there is data
+  if (!this.tasks || this.tasks.length === 0) {
+    console.warn('No tasks available for export.');
+    return;
+  }
+
+  const exportData = this.tasks.map((task: any, index: number) => {
+
+    return {
+      '#': index + 1,
+
+      'Title': task.title || '-',
+
+      'Client': task.clientName || '-',
+
+      'Date': task.date
+        ? this.formatExcelDate(task.date)
+        : '-',
+
+      'Task Category': task.taskCategoryName || '-',
+
+      'Assigned To': task.assignedToName || '-',
+
+      'Priority': this.getPriorityLabel(task.priority),
+
+      'Task Status': this.common.getTaskStatusLabel(
+        task.taskStatus
+      ),
+
+      'Status': this.common.getStatusLabel(
+        task.status
+      )
+    };
+
+  });
+
+
+  // Create worksheet
+  const worksheet: XLSX.WorkSheet =
+    XLSX.utils.json_to_sheet(exportData);
+
+
+  // Set column widths
+  worksheet['!cols'] = [
+    { wch: 6 },    // #
+    { wch: 35 },   // Title
+    { wch: 25 },   // Client
+    { wch: 15 },   // Date
+    { wch: 25 },   // Task Category
+    { wch: 25 },   // Assigned To
+    { wch: 15 },   // Priority
+    { wch: 20 },   // Task Status
+    { wch: 15 }    // Status
+  ];
+
+
+  // Create workbook
+  const workbook: XLSX.WorkBook =
+    XLSX.utils.book_new();
+
+
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    'Tasks'
+  );
+
+
+  // Generate file name
+  const today = new Date();
+
+  const dateString =
+    `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+
+  // Download Excel
+  XLSX.writeFile(
+    workbook,
+    `Tasks_${dateString}.xlsx`
+  );
+}
+
+private formatExcelDate(date: any): string {
+
+  if (!date) {
+    return '-';
+  }
+
+  const parsedDate = new Date(date);
+
+  if (isNaN(parsedDate.getTime())) {
+    return '-';
+  }
+
+  const day = String(
+    parsedDate.getDate()
+  ).padStart(2, '0');
+
+  const month = String(
+    parsedDate.getMonth() + 1
+  ).padStart(2, '0');
+
+  const year = parsedDate.getFullYear();
+
+  return `${day}-${month}-${year}`;
+}
+
 
 }

@@ -267,23 +267,23 @@
 }
 
 
-.brand-content h1 span::after {
-  content: '';
+// .brand-content h1 span::after {
+//   content: '';
 
-  position: absolute;
+//   position: absolute;
 
-  left: 0;
-  right: 0;
-  bottom: -3px;
+//   left: 0;
+//   right: 0;
+//   bottom: -3px;
 
-  height: 3px;
+//   height: 3px;
 
-  background: #d9a03a;
+//   background: #d9a03a;
 
-  opacity: 0.65;
+//   opacity: 0.65;
 
-  border-radius: 5px;
-}
+//   border-radius: 5px;
+// }
 
 
 .brand-content > p {
