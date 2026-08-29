@@ -3660,3 +3660,40 @@ textarea.manager-select::placeholder {
     color 0.15s ease,
     border-color 0.15s ease;
 }
+
+
+.btn-export-excel {
+  height: 38px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 5px;
+
+  /* Export Blue */
+  background: #2563eb;
+
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 8px;
+  transition: all 0.2s ease;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  &:hover {
+    background: #1d4ed8;
+    color: #fff;
+  }
+
+  &:active {
+    background: #1e40af;
+    transform: translateY(1px);
+  }
+
+  i {
+    font-size: 16px;
+  }
+}

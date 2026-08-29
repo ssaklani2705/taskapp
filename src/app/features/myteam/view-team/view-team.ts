@@ -278,7 +278,13 @@ export class ViewTeam  implements OnInit {
               response?.isAdmin === 'Y',
 
             permission:
-              response?.permission
+              response?.permission,
+
+            departmentName:
+              response?.departmentName,
+
+            designationName:
+              response?.designationName,
 
           };
 
