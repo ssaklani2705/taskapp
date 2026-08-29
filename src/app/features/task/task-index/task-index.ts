@@ -1,7 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -162,6 +160,7 @@ export class TaskIndex {
   // =========================================================
 
   selectedClient: string = '';
+  selectedTaskStatus:string = '';
 
   selectedTaskCategory: string = '';
 
@@ -530,6 +529,7 @@ export class TaskIndex {
       this.selectedAssignedTo = '';
 
       this.selectedPriority = '';
+      this.selectedTaskStatus =''
 
       this.fromDate = null;
 
@@ -710,7 +710,9 @@ export class TaskIndex {
         this.formatDateForApi(this.fromDate),
 
       toDate:
-        this.formatDateForApi(this.toDate)
+        this.formatDateForApi(this.toDate),
+         taskStatusId:
+              this.selectedTaskStatus || null,
 
     };
 
@@ -824,6 +826,10 @@ export class TaskIndex {
     const toDate =
       this.formatDateForApi(this.toDate);
 
+      const taskStatusId =
+      this.selectedTaskStatus
+        ? Number(this.selectedTaskStatus)
+        : 0;
 
     this.dataprovider
       .getTaskDetails(
@@ -848,7 +854,8 @@ export class TaskIndex {
 
       toDate,
       this.isAdmin,
-      this.userId
+      this.userId,
+      taskStatusId
 
       )
       .subscribe({
@@ -968,7 +975,9 @@ export class TaskIndex {
               this.formatDateForApi(this.fromDate) || null,
 
             toDate:
-              this.formatDateForApi(this.toDate) || null
+              this.formatDateForApi(this.toDate) || null,
+               taskStatusId:
+              this.selectedTaskStatus || null,
 
           },
 
@@ -1145,7 +1154,10 @@ export class TaskIndex {
               fromDate || null,
 
             toDate:
-              toDate || null
+              toDate || null,
+
+                taskStatusId:
+              this.selectedTaskStatus || null,
 
           },
 
@@ -2262,9 +2274,7 @@ getCreatorColor(name: string): string {
     this.dataprovider.updateTaskDetails(formData).subscribe({
 
       next: (response: any) => {
-
         this.isChangingManager = false;
-
         if (response.success) {
           Swal.fire('Updated!', response.message, 'success');
           this.showChangeManagerModal = false;
@@ -2272,9 +2282,7 @@ getCreatorColor(name: string): string {
         } else {
           Swal.fire('Error', response.message, 'error');
         }
-
       },
-
       error: (error) => {
         this.isChangingManager = false;
         console.error('Full error:', error);          // add this
