@@ -41,42 +41,25 @@ import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker
 import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 //import { MatIconModule } from '@angular/material/icon';
-
 import { MatDividerModule } from '@angular/material/divider';
-
 import * as XLSX from 'xlsx';
-
-
 interface Task {
-
   taskId: number;
-
   clientName: string;
-
   date: string;
-
   taskCategoryName: string;
-
   assignedToName: string;
-
   priority: number;
-
   status: number;
-
   title: string;
-
   taskStatus: number;
-
   addedBy: String;
-
   assignedTo: string;
 }
 
 
 interface Client {
-
   clientId: number;
-
   name: string;
 }
 
@@ -415,10 +398,10 @@ export class TaskIndex {
           this.adminApprovePer =
             parsed.adminApprovePer ?? 'N';
 
-            this.adminApprovePer =
+          this.adminApprovePer =
             parsed.adminApprovePer ?? 'N';
 
-              this.exportExcelPer =
+          this.exportExcelPer =
             parsed.exportExcel ?? 'N';
 
         } catch (error) {
@@ -1965,14 +1948,14 @@ export class TaskIndex {
   }
 
   isTaskAssignedToUser(task: any): boolean {
-  return (
-    Number(task.status) !== 3 &&
-    (
-      Number(task.assignedTo) === Number(this.userId) ||
-      Number(task.addedBy) === Number(this.userId)
-    )
-  );
-}
+    return (
+      Number(task.status) !== 3 &&
+      (
+        Number(task.assignedTo) === Number(this.userId) ||
+        Number(task.addedBy) === Number(this.userId)
+      )
+    );
+  }
 
   //for model note
   showTaskNotesModal = false;
@@ -2153,13 +2136,14 @@ export class TaskIndex {
   fileTwoName: string = '';
 
 
-  openChangeManagerModal(taskId: any): void {
-    console.log("sssssssss" + taskId);
+  openChangeManagerModal(taskObject: any): void {
+    console.log("sssssssss" + taskObject);
     this.descriptionValidationError = false;
-
+    
 
     this.task = {
-      taskId: taskId
+      taskId: taskObject.taskId,
+      taskStatus:taskObject.taskStatus
     };
 
 
@@ -2271,6 +2255,7 @@ export class TaskIndex {
       this.fileTwoName = '';
     }
   }
+  selectedTaskStatusId: number = 5;
 
   changeManager(): void {
 
@@ -2288,6 +2273,7 @@ export class TaskIndex {
     }
 
 
+    formData.append('selectedTaskStatusId', String(this.selectedTaskStatusId));
     formData.append('taskId', String(this.task.taskId));
     formData.append('description', this.taskDescription.trim());
 
@@ -2296,8 +2282,9 @@ export class TaskIndex {
     }
 
     if (this.fileOne) {
-      formData.append('fileName2', this.fileOne, this.fileOne.name);   // zip file → fileName2
+      formData.append('fileName2', this.fileOne, this.fileOne.name);
     }
+
 
     this.dataprovider.updateTaskDetails(formData).subscribe({
 
@@ -2325,112 +2312,111 @@ export class TaskIndex {
 
   exportToExcel(): void {
 
-  // Make sure there is data
-  if (!this.tasks || this.tasks.length === 0) {
-    console.warn('No tasks available for export.');
-    return;
+    // Make sure there is data
+    if (!this.tasks || this.tasks.length === 0) {
+      console.warn('No tasks available for export.');
+      return;
+    }
+
+    const exportData = this.tasks.map((task: any, index: number) => {
+
+      return {
+        '#': index + 1,
+
+        'Title': task.title || '-',
+
+        'Client': task.clientName || '-',
+
+        'Date': task.date
+          ? this.formatExcelDate(task.date)
+          : '-',
+
+        'Task Category': task.taskCategoryName || '-',
+
+        'Assigned To': task.assignedToName || '-',
+
+        'Priority': this.getPriorityLabel(task.priority),
+
+        'Task Status': this.common.getTaskStatusLabel(
+          task.taskStatus
+        ),
+
+        'Status': this.common.getStatusLabel(
+          task.status
+        )
+      };
+
+    });
+
+
+    // Create worksheet
+    const worksheet: XLSX.WorkSheet =
+      XLSX.utils.json_to_sheet(exportData);
+
+
+    // Set column widths
+    worksheet['!cols'] = [
+      { wch: 6 },    // #
+      { wch: 35 },   // Title
+      { wch: 25 },   // Client
+      { wch: 15 },   // Date
+      { wch: 25 },   // Task Category
+      { wch: 25 },   // Assigned To
+      { wch: 15 },   // Priority
+      { wch: 20 },   // Task Status
+      { wch: 15 }    // Status
+    ];
+
+
+    // Create workbook
+    const workbook: XLSX.WorkBook =
+      XLSX.utils.book_new();
+
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      'Tasks'
+    );
+
+
+    // Generate file name
+    const today = new Date();
+
+    const dateString =
+      `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+
+    // Download Excel
+    XLSX.writeFile(
+      workbook,
+      `Tasks_${dateString}.xlsx`
+    );
   }
 
-  const exportData = this.tasks.map((task: any, index: number) => {
+  private formatExcelDate(date: any): string {
 
-    return {
-      '#': index + 1,
+    if (!date) {
+      return '-';
+    }
 
-      'Title': task.title || '-',
+    const parsedDate = new Date(date);
 
-      'Client': task.clientName || '-',
+    if (isNaN(parsedDate.getTime())) {
+      return '-';
+    }
 
-      'Date': task.date
-        ? this.formatExcelDate(task.date)
-        : '-',
+    const day = String(
+      parsedDate.getDate()
+    ).padStart(2, '0');
 
-      'Task Category': task.taskCategoryName || '-',
+    const month = String(
+      parsedDate.getMonth() + 1
+    ).padStart(2, '0');
 
-      'Assigned To': task.assignedToName || '-',
+    const year = parsedDate.getFullYear();
 
-      'Priority': this.getPriorityLabel(task.priority),
-
-      'Task Status': this.common.getTaskStatusLabel(
-        task.taskStatus
-      ),
-
-      'Status': this.common.getStatusLabel(
-        task.status
-      )
-    };
-
-  });
-
-
-  // Create worksheet
-  const worksheet: XLSX.WorkSheet =
-    XLSX.utils.json_to_sheet(exportData);
-
-
-  // Set column widths
-  worksheet['!cols'] = [
-    { wch: 6 },    // #
-    { wch: 35 },   // Title
-    { wch: 25 },   // Client
-    { wch: 15 },   // Date
-    { wch: 25 },   // Task Category
-    { wch: 25 },   // Assigned To
-    { wch: 15 },   // Priority
-    { wch: 20 },   // Task Status
-    { wch: 15 }    // Status
-  ];
-
-
-  // Create workbook
-  const workbook: XLSX.WorkBook =
-    XLSX.utils.book_new();
-
-
-  XLSX.utils.book_append_sheet(
-    workbook,
-    worksheet,
-    'Tasks'
-  );
-
-
-  // Generate file name
-  const today = new Date();
-
-  const dateString =
-    `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-
-  // Download Excel
-  XLSX.writeFile(
-    workbook,
-    `Tasks_${dateString}.xlsx`
-  );
-}
-
-private formatExcelDate(date: any): string {
-
-  if (!date) {
-    return '-';
+    return `${day}-${month}-${year}`;
   }
-
-  const parsedDate = new Date(date);
-
-  if (isNaN(parsedDate.getTime())) {
-    return '-';
-  }
-
-  const day = String(
-    parsedDate.getDate()
-  ).padStart(2, '0');
-
-  const month = String(
-    parsedDate.getMonth() + 1
-  ).padStart(2, '0');
-
-  const year = parsedDate.getFullYear();
-
-  return `${day}-${month}-${year}`;
-}
-
 
 }

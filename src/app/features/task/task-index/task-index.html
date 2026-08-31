@@ -237,12 +237,12 @@
               Clear
             </button>
 
-             @if (exportExcelPer === 'Y') {
+            @if (exportExcelPer === 'Y') {
             <button type="button" class="btn-export-excel" (click)="exportToExcel()">
               Export to Excel
               <i class="fas fa-file-excel" aria-hidden="true"></i>
             </button>
-          }
+            }
 
           </div>
 
@@ -422,17 +422,22 @@
 
                 <!-- TASK STATUS -->
                 <td>
+                  <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
+                    [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Manager" [disabled]="
+                   
+    task.taskStatus == 5 ||
 
+    (task.addedBy == userId &&
+      (task.taskStatus == 1 || task.taskStatus == 3)) ||
 
-
-                  <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task.taskId)"
-                    [ngClass]="common.getTaskStatusClass(task.taskStatus)"
-                    matTooltip="Change Manager" [disabled]="task.taskStatus === 5">
+    (task.assignedTo == userId &&
+      (task.taskStatus == 2 || task.taskStatus == 4))
+                    
+                      ">
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
                     }}
                   </button>
-
                 </td>
 
 
@@ -462,7 +467,7 @@
                     </a>
                     }
 
-                    
+
 
                     <!-- EDIT -->
                     @if (
@@ -477,7 +482,7 @@
                       <i class="fa fa-pencil"></i>
                     </a>
                     }
-<!-- {{task.assignedTo }} {{task.addedBy }} {{userId }} -->
+                    <!-- {{task.assignedTo }} {{task.addedBy }} {{userId }} -->
 
                     <!-- DELETE -->
                     @if (
@@ -495,13 +500,10 @@
 
                     <!-- NOTES -->
                     @if (isTaskAssignedToUser(task)) {
-                    <a
-                      (click)="openTaskNotes(task)"
-                      class="action-btn note-btn"
-                      title="Notes">
+                    <a (click)="openTaskNotes(task)" class="action-btn note-btn" title="Notes">
                       <i class="fa fa-sticky-note"></i>
                     </a>
-                  }
+                    }
 
                   </div>
                 </td>
@@ -781,6 +783,27 @@
       <!-- TASK ID (hidden) -->
       <input type="hidden" name="taskId" [(ngModel)]="task.taskId" />
 
+      <div class="manager-form-group" *ngIf="task?.taskStatus == 2">
+        <label class="modal-field-label">
+          Status
+          <span class="required">*</span>
+        </label>
+
+        <div class="status-radio-group">
+          <label class="radio-label">
+            <input type="radio" name="taskStatus" [value]="5" [(ngModel)]="selectedTaskStatusId"
+              [disabled]="isChangingManager">
+            Assignor Closure
+          </label>
+
+          <label class="radio-label">
+            <input type="radio" name="taskStatus" [value]="3" [(ngModel)]="selectedTaskStatusId"
+              [disabled]="isChangingManager">
+            Re-Open
+          </label>
+        </div>
+      </div>
+
       <!-- DESCRIPTION -->
       <div class="manager-form-group">
         <label class="modal-field-label">
@@ -823,6 +846,10 @@
           {{ fileTwoName }}
         </span>
       </div>
+
+
+
+
 
     </div>
 
