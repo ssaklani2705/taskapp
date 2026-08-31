@@ -1109,4 +1109,21 @@ downloadFile(
     this.task?.fileName4
   );
 }
+
+getTaskStatusClass(status: number | string): string {
+    switch (+status) {
+      case 1:
+        return 'status-badge active';
+      case 2:
+        return 'status-badge inactive';
+      case 3:
+        return 'status-badge deleted';
+      case 4:
+        return 'status-badge active';
+      case 5:
+        return 'status-badge active';
+      default:
+        return 'status-badge';
+    }
+  }
 }

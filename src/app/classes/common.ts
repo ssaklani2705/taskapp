@@ -44,7 +44,7 @@ export class Common {
     }
   }
 
-    getTaskStatusClass(status: number | string): string {
+  getTaskStatusClass(status: number | string): string {
     switch (+status) {
       case 1:
         return 'status-badge active';
@@ -52,9 +52,9 @@ export class Common {
         return 'status-badge inactive';
       case 3:
         return 'status-badge deleted';
-         case 4:
+      case 4:
         return 'status-badge active';
-         case 5:
+      case 5:
         return 'status-badge active';
       default:
         return 'status-badge';
