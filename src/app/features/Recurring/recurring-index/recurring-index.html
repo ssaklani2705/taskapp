@@ -4,7 +4,7 @@
       <!-- ================= HEADER ================= -->
       <div class="page-header">
         <div class="header-title-section">
-          <h2>Client Master</h2>
+          <h2>Recurring Master</h2>
 
           <button
             type="button"
@@ -19,7 +19,7 @@
         </div>
 
         @if (addPer === 'Y') {
-          <button type="button" class="btn-add-user" (click)="addClient()">
+          <button type="button" class="btn-add-user" (click)="addRecurring()">
             Add New
             <span class="plus-icon">+</span>
           </button>
@@ -35,7 +35,7 @@
               <input
                 type="text"
                 [(ngModel)]="searchQuery"
-                placeholder="Search Client Name / Code / Contact Name / Contact Email"
+                placeholder="Search Title and Description"
                 (keyup.enter)="onSearch()"
                 class="search-input"
               />
@@ -46,40 +46,56 @@
             </div>
           </div>
 
-          <!-- STATE -->
+          <!-- CLIENT NAME -->
           <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="stateId" (change)="onStateChange()">
-              <option [ngValue]="0">--All States--</option>
+            <select
+              class="status-select"
+              [(ngModel)]="selectedClientId"
+              (change)="onFilterChange()"
+            >
+              <option [ngValue]="0">--All Clients--</option>
 
-              <option *ngFor="let state of states" [ngValue]="state.stateId">
-                {{ state.name }}
+              <option *ngFor="let client of clients" [ngValue]="client.clientId">
+                {{ client.name }}
               </option>
             </select>
           </div>
 
-          <!-- MANAGER -->
+          <!-- TYPE -->
           <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="managerId" (change)="onManagerChange()">
-              <option [ngValue]="0">--All Society Managers--</option>
+            <select class="status-select" [(ngModel)]="selectedType" (change)="onFilterChange()">
+              <option [ngValue]="0">--All Type--</option>
+              <option [ngValue]="1">Daily</option>
+              <option [ngValue]="2">Weekly</option>
+              <option [ngValue]="3">Monthly</option>
+              <option [ngValue]="4">Yearly</option>
+            </select>
+          </div>
 
-              <option *ngFor="let manager of managers" [ngValue]="manager.userId">
-                {{ manager.firstName }}
+          <!-- TASK CATEGORY -->
+          <div class="status-wrapper">
+            <select
+              class="status-select"
+              [(ngModel)]="selectedTaskCatId"
+              (change)="onFilterChange()"
+            >
+              <option [ngValue]="0">--All Task Categories--</option>
+
+              <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
+                {{ category.name }}
               </option>
             </select>
           </div>
         </div>
 
         <!-- ================= SECOND ROW ================= -->
-         <div class="filter-row">
+        <div class="filter-row">
           <!-- STATUS -->
           <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
               <option value="">--All Status--</option>
-
               <option value="1">Active</option>
-
               <option value="2">Inactive</option>
-
               <option value="3">Deleted</option>
             </select>
           </div>
@@ -93,27 +109,6 @@
           <div class="clear-wrapper">
             <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button>
           </div>
-
-          @if (addPer === 'Y' || editPer === 'Y') {
-            <button type="button" class="btn-upload-excel" (click)="openUploadModal()">
-              Upload Excel
-              <i class="fa fa-upload"></i>
-            </button>
-          }
-
-          @if (exportExcel === 'Y') {
-            <button type="button" class="btn-export-excel" (click)="exportToExcel()">
-              Export to Excel
-              <i class="fas fa-file-excel" aria-hidden="true"></i>
-            </button>
-          }
-
-          <a
-            href="https://app.webelement.cc/taskapp/assets/template/Client.xlsx"
-            class="btn-download-template"
-            download="Client_Data_Template.xlsx"
-            >Download Template <i class="fa fa-cloud-download" aria-hidden="true"></i
-          ></a>
         </div>
       </div>
 
@@ -221,17 +216,17 @@
               <tr *ngIf="isLoading">
                 <td [attr.colspan]="columns.length + 2" class="loading-cell">
                   <div class="loading-spinner"></div>
-                  Loading clients...
+                  Loading recurrings...
                 </td>
               </tr>
 
               <!-- NO RECORDS -->
-              <tr *ngIf="!isLoading && clients.length === 0">
-                <td [attr.colspan]="columns.length + 2" class="no-records">No clients found.</td>
+              <tr *ngIf="!isLoading && recurring.length === 0">
+                <td [attr.colspan]="columns.length + 2" class="no-records">No recurrings found.</td>
               </tr>
 
               <!-- CLIENT RECORDS -->
-              <tr *ngFor="let client of clients; let i = index" class="user-row">
+              <tr *ngFor="let item of recurring; let i = index" class="user-row">
                 <!-- SERIAL NUMBER -->
                 <td class="serial-number">
                   {{ (currentPage - 1) * size + i + 1 }}
@@ -240,56 +235,29 @@
                 <!-- CLIENT NAME -->
                 <td>
                   <span class="user-name">
-                    {{ client.name || '-' }}
+                    {{ item.clientName || '-' }}
                   </span>
                 </td>
 
-                <!-- CLIENT CODE -->
+                <!-- Title -->
                 <td>
-                  {{ client.code || '-' }}
+                  {{ item.title || '-' }}
                 </td>
 
-                <!-- MANAGER -->
+                <!-- Type -->
                 <td>
-                  {{ client.managerName || '-' }}
+                  {{ getTypeLabel(item.type) }}
                 </td>
 
-                <!-- STATE -->
+                <!-- Task Category -->
                 <td>
-                  {{ client.stateName || '-' }}
-                </td>
-
-                <!-- Plan -->
-                 <td>
-                  {{ client.planName || '-' }}
-                </td>
-
-                <!-- CONTACT NAME -->
-                <td>
-                  {{ client.contactName || '-' }}
-                </td>
-
-                <!-- CONTACT EMAIL -->
-                <td>
-                  <span class="email-text">
-                    {{ client.contactEmail || '-' }}
-                  </span>
-                </td>
-
-                <!-- CITY -->
-                <td>
-                  {{ client.city || '-' }}
-                </td>
-
-                <!-- Start DATE -->
-                <td>
-                  {{ client.startDate || '-' }}
+                  {{ item.taskCatName || '-' }}
                 </td>
 
                 <!-- STATUS -->
                 <td>
-                  <span class="status-badge" [ngClass]="getStatusClass(client.status)">
-                    {{ getStatusLabel(client.status) }}
+                  <span class="status-badge" [ngClass]="getStatusClass(item.status)">
+                    {{ getStatusLabel(item.status) }}
                   </span>
                 </td>
 
@@ -301,19 +269,19 @@
                       type="button"
                       class="action-btn view-btn"
                       title="View"
-                      (click)="viewClient(client.clientId)"
+                      (click)="viewRecurring(item.recurringId)"
                     >
                       <i class="fa fa-eye"></i>
                     </button>
 
                     <!-- EDIT -->
-                    <ng-container *ngIf="client.status === 1 || client.status === 2">
+                    <ng-container *ngIf="item.status === 1 || item.status === 2">
                       @if (editPer === 'Y') {
                         <button
                           type="button"
                           class="action-btn edit-btn"
                           title="Edit"
-                          (click)="editClient(client.clientId)"
+                          (click)="editRecurring(item.recurringId)"
                         >
                           <i class="fa fa-pencil"></i>
                         </button>
@@ -325,7 +293,7 @@
                           type="button"
                           class="action-btn delete-btn"
                           title="Delete"
-                          (click)="onDeleteUser(client.clientId)"
+                          (click)="onDeleteUser(item.recurringId)"
                         >
                           <i class="fa fa-trash"></i>
                         </button>
@@ -340,7 +308,7 @@
       </div>
 
       <!-- ================= BOTTOM SECTION ================= -->
-      <div class="table-top-section">
+     <div class="table-top-section">
         <!-- RECORD SUMMARY -->
         <div class="record-summary">
           {{ recordSummary }}
@@ -400,111 +368,6 @@
           </button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- Upload Excel Modal -->
-<!-- ================= UPLOAD EXCEL MODAL ================= -->
-
-<div class="upload-modal-overlay" *ngIf="showUploadModal" (click)="closeUploadModal()">
-  <div class="upload-modal" (click)="$event.stopPropagation()">
-    <!-- HEADER -->
-    <div class="upload-modal-header">
-      <h3>Upload Client Excel</h3>
-
-      <button
-        type="button"
-        class="upload-close-btn"
-        (click)="closeUploadModal()"
-        [disabled]="isUploading"
-      >
-        ×
-      </button>
-    </div>
-
-    <!-- BODY -->
-    <div class="upload-modal-body">
-      <div class="upload-form-group">
-        <label for="excelFile">
-          Select Excel File
-          <span class="required">*</span>
-        </label>
-
-        <input
-          #excelFileInput
-          type="file"
-          id="excelFile"
-          class="excel-file-input"
-          accept=".xls,.xlsx"
-          (change)="onFileSelected($event)"
-          [disabled]="isUploading"
-        />
-
-        <div *ngIf="fileError" class="upload-error">
-          {{ fileError }}
-        </div>
-
-        <div *ngIf="selectedFile && !fileError" class="selected-file">
-          <i class="fa fa-file-excel-o"></i>
-
-          <span>
-            {{ selectedFile.name }}
-          </span>
-
-          <button
-            type="button"
-            class="remove-file-btn"
-            (click)="removeSelectedFile()"
-            [disabled]="isUploading"
-          >
-            ×
-          </button>
-        </div>
-      </div>
-
-      <!-- INFORMATION -->
-      <div class="upload-info">
-        <i class="fa fa-info-circle"></i>
-
-        <div>
-          <strong>Excel Upload</strong>
-
-          <p>
-            Upload a client Excel file in the required format. Invalid or duplicate records will be
-            reported separately.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- FOOTER -->
-    <div class="upload-modal-footer">
-      <button
-        type="button"
-        class="btn-upload-cancel"
-        (click)="closeUploadModal()"
-        [disabled]="isUploading"
-      >
-        Cancel
-      </button>
-
-      <button
-        type="button"
-        class="btn-upload-submit"
-        (click)="submitUpload()"
-        [disabled]="!selectedFile || !!fileError || isUploading"
-      >
-        <span *ngIf="!isUploading">
-          <i class="fa fa-upload"></i>
-          Upload
-        </span>
-
-        <span *ngIf="isUploading">
-          <i class="fa fa-spinner fa-spin"></i>
-          Uploading...
-        </span>
-      </button>
     </div>
   </div>
 </div>

@@ -66,31 +66,39 @@ export class ViewTaskCategoryComponent implements OnInit {
     this.taskcategoryId =
       +this.route.snapshot.paramMap.get('taskCategoryId')!;
 
-    /*
-     * Get filter/pagination information
-     * from query parameters
-     */
-    const queryParams =
-      this.route.snapshot.queryParamMap;
+    // /*
+    //  * Get filter/pagination information
+    //  * from query parameters
+    //  */
+    // const queryParams =
+    //   this.route.snapshot.queryParamMap;
 
-    this.currentPage =
-      Number(queryParams.get('currentPage')) || 1;
+    // this.currentPage =
+    //   Number(queryParams.get('currentPage')) || 1;
 
-    this.searchText =
-      queryParams.get('searchText') || '';
+    // this.searchText =
+    //   queryParams.get('searchText') || '';
 
-    this.statusIndex =
-      Number(queryParams.get('statusIndex')) || 0;
+    // this.statusIndex =
+    //   Number(queryParams.get('statusIndex')) || 0;
 
-    this.departmentId =
-      Number(queryParams.get('departmentId')) || 0;
+    // this.departmentId =
+    //   Number(queryParams.get('departmentId')) || "";
 
-    this.page =
-      Number(queryParams.get('page')) ||
-      this.currentPage - 1;
+    // this.page =
+    //   Number(queryParams.get('page')) ||
+    //   this.currentPage - 1;
 
-    this.size =
-      Number(queryParams.get('size')) || 5;
+    // this.size =
+    //   Number(queryParams.get('size')) || 5;
+     this.route.queryParams.subscribe(params => {
+      this.currentPage = +(params['currentPage'] || 1);
+      this.searchText = params['searchText'] || '';
+      this.statusIndex = +(params['statusIndex'] || 0);
+      this.departmentId = +(params['departmentId'] || '');
+      this.page = +(params['page'] || 0);
+      this.size = +(params['size'] || 5);
+    });
 
     /*
      * Fetch Task Category
@@ -214,7 +222,7 @@ export class ViewTaskCategoryComponent implements OnInit {
             this.searchText,
 
           departmentId:
-            this.departmentId,
+            this.departmentId || "",
 
           page:
             this.page,

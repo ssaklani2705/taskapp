@@ -54,6 +54,7 @@ import {
 
 import Swal from 'sweetalert2';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
@@ -69,7 +70,8 @@ import { MyDateAdapter } from '../../../classes/my-date-adapter';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    MatSelectModule
+    MatSelectModule,
+    MatIconModule
   ],
 
   templateUrl: './add-index.html',

@@ -107,46 +107,135 @@
 /* ==================================== */
 /* TABLE */
 /* ==================================== */
+/* =========================================================
+   TABLE WRAPPER
+========================================================= */
 
 .table-wrapper {
+  width: 100%;
   overflow-x: auto;
 }
 
+
+/* =========================================================
+   HISTORY TABLE
+========================================================= */
+
 .history-table {
   width: 100%;
+
+  min-width: 600px;
+
   border-collapse: collapse;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 13px;
 }
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
 
 .history-table th {
+  height: 36px;
+
   background: #eef3f7;
+
   color: #163f70;
+
   font-weight: 700;
+
+  font-size: 13px;
+
   text-align: left;
-  padding: 16px 18px;
+
+  padding: 5px 10px;
+
   border: 1px solid #d7e0e8;
+
+  vertical-align: middle;
 }
+
+
+/* =========================================================
+   TABLE BODY
+========================================================= */
 
 .history-table td {
-  padding: 18px;
+  height: 36px;
+
+  padding: 5px 10px;
+
   border: 1px solid #d7e0e8;
+
   color: #163f70;
+
+  font-size: 13px;
+
+  vertical-align: middle;
 }
+
+
+/* =========================================================
+   ROW HOVER
+========================================================= */
+
+.history-table tbody tr:hover td {
+  background: #f8fbfd;
+}
+
+
+/* =========================================================
+   ACTION BADGE
+========================================================= */
 
 .action-badge {
-  display: inline-block;
-  padding: 7px 14px;
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  padding: 3px 7px;
+
   background: #edf4f8;
+
   border: 1px solid #c9d9e7;
-  border-radius: 4px;
+
+  border-radius: 3px;
+
   color: #215d95;
+
+  font-size: 11px;
+
+  line-height: 15px;
+
   font-weight: 600;
+
+  white-space: nowrap;
 }
 
+
+/* =========================================================
+   NO RECORD
+========================================================= */
+
 .no-record {
-  padding: 25px;
+  min-height: 50px;
+
+  padding: 8px;
+
   text-align: center;
+
   color: #777;
+
+  font-size: 13px;
+
+  vertical-align: middle;
 }
+
 
 /* ==================================== */
 /* MOBILE */
@@ -178,3 +267,68 @@
   word-break: break-word;
   max-width: 50%;
 }
+
+
+
+
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 82px;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.status-badge.active,
+.status-badge.status-active,
+.status-active {
+  background: #e6f4ee;
+  color: #287d5e;
+  border: 1px solid #c8e7da;
+}
+
+.status-badge.inactive,
+.status-badge.status-inactive,
+.status-inactive {
+  background: #fff5df;
+  color: #a87308;
+  border: 1px solid #f0d99e;
+}
+
+.status-badge.deleted,
+.status-badge.status-deleted {
+  background: #fbeaea;
+  color: #b8403d;
+  border: 1px solid #efcaca;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-btn {
+  width: 38px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 1px;
+  background: var(--white);
+  font-size: 14px;
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+

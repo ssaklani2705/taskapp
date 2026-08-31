@@ -1,5 +1,6 @@
 <div class="page-container">
   <div class="main-card">
+    <!-- Page Header -->
     <div class="page-header">
       <div class="page-title">
         <mat-icon>apartment</mat-icon>
@@ -17,102 +18,262 @@
     <mat-divider></mat-divider>
 
     <div class="user-information">
-      <div class="user-info-grid">
-        <div class="user-column">
-          <div class="info-row">
-            <span class="info-label">Client Name:</span>
+      <!-- ========================================================= -->
+      <!-- ROW 1 - MANAGER -->
+      <!-- ========================================================= -->
+      <div class="manager-section">
+        <div class="info-row manager-row">
+          <span class="field-label">Society Manager:</span>
+
+          <div class="manager-value">
             <span class="info-value">
+              {{ client.managerName || '-' }}
+            </span>
+
+            <button
+              *ngIf="client.status !== 3"
+              type="button"
+              class="change-manager-button"
+              (click)="openChangeManagerModal()"
+              matTooltip="Change Manager"
+            >
+              <mat-icon>edit</mat-icon>
+              <span>Change</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- CLIENT DETAILS -->
+      <!-- ========================================================= -->
+      <div class="details-section">
+        <div class="section-heading">
+          <span>Client Details</span>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="details-grid">
+          <div class="info-field">
+            <span class="field-label">Client Name:</span>
+            <span class="field-value">
               {{ client.name || '-' }}
             </span>
           </div>
 
-          <div class="info-row">
-            <span class="info-label">Client Code:</span>
-            <span class="info-value">
+          <div class="info-field">
+            <span class="field-label">Client Code:</span>
+            <span class="field-value">
               {{ client.code || '-' }}
             </span>
           </div>
 
-          <div class="info-row">
-            <span class="info-label">PAN:</span>
-            <span class="info-value">
+          <div class="info-field">
+            <span class="field-label">PAN:</span>
+            <span class="field-value">
               {{ client.pan || '-' }}
             </span>
           </div>
 
-          <div class="info-row">
-            <span class="info-label">GST No:</span>
-            <span class="info-value">
-              {{ client.gstNo || '-' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">State:</span>
-            <span class="info-value">
-              {{ client.stateName || '-' }}
-            </span>
-          </div>
-
-          <!--  -->
-          <div class="info-row">
-            <span class="info-label">Plan:</span>
-            <span class="info-value">
-              {{ client.planName || '-' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">City:</span>
-            <span class="info-value">
-              {{ client.city || '-' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">Pincode:</span>
-            <span class="info-value">
-              {{ client.pincode || '-' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">GST Applicable:</span>
-
+          <div class="info-field">
+            <span class="field-label">GST Applicable:</span>
             <span class="flag-value" [ngClass]="client.gstFlag === 1 ? 'flag-yes' : 'flag-no'">
               {{ client.gstFlag === 1 ? '✔️' : '❌' }}
             </span>
           </div>
+
+          <!-- Row 3 -->
+          <div class="info-field">
+            <span class="field-label">GST Number:</span>
+            <span class="field-value">
+              {{ client.gstNo || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Tax Payable:</span>
+            <span class="flag-value" [ngClass]="client.taxFlag === 1 ? 'flag-yes' : 'flag-no'">
+              {{ client.taxFlag === 1 ? '✔️' : '❌' }}
+            </span>
+          </div>
+
+          <div class="empty-field"></div>
+          <div class="empty-field"></div>
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- ADDRESS DETAILS -->
+      <!-- ========================================================= -->
+      <div class="details-section">
+        <div class="section-heading">
+          <span>Address Details</span>
         </div>
 
-        <div class="user-column">
-          <div class="info-row">
-            <span class="info-label">Contact Name:</span>
-            <span class="info-value">
+        <div class="details-grid">
+          <!-- Row 4 -->
+          <div class="info-field">
+            <span class="field-label">Address Line 1:</span>
+            <span class="field-value">
+              {{ client.addressLine1 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Address Line 2:</span>
+            <span class="field-value">
+              {{ client.addressLine2 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">City:</span>
+            <span class="field-value">
+              {{ client.city || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">State:</span>
+            <span class="field-value">
+              {{ client.stateName || '-' }}
+            </span>
+          </div>
+
+          <!-- Row 5 -->
+          <div class="info-field">
+            <span class="field-label">Location:</span>
+            <span class="field-value">
+              {{ client.location || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Pincode:</span>
+            <span class="field-value">
+              {{ client.pincode || '-' }}
+            </span>
+          </div>
+
+          <div class="empty-field"></div>
+          <div class="empty-field"></div>
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- CONTACT DETAILS -->
+      <!-- ========================================================= -->
+      <div class="details-section">
+        <div class="section-heading">
+          <span>Contact Details</span>
+        </div>
+
+        <div class="details-grid">
+          <!-- Row 6 -->
+          <div class="info-field">
+            <span class="field-label">Contact Name:</span>
+            <span class="field-value">
               {{ client.contactName || '-' }}
             </span>
           </div>
 
-          <div class="info-row">
-            <span class="info-label">Contact Email:</span>
-            <span class="info-value">
+          <div class="info-field">
+            <span class="field-label">Contact Email:</span>
+            <span class="field-value email-text">
               {{ client.contactEmail || '-' }}
             </span>
           </div>
 
-          <div class="info-row manager-row">
-            <span class="info-label">Manager:</span>
+          <div class="info-field">
+            <span class="field-label">Contact Person 1 Name:</span>
+            <span class="field-value">
+              {{ client.name1 || '-' }}
+            </span>
+          </div>
 
-            <div class="manager-value">
-              <span class="info-value">
-                {{ client.managerName || '-' }}
+          <div class="info-field">
+            <span class="field-label">Contact Person 1 Email:</span>
+            <span class="field-value email-text">
+              {{ client.emailId1 || '-' }}
+            </span>
+          </div>
+
+          <!-- Row 7 -->
+          <div class="info-field">
+            <span class="field-label">Contact Person 2 Name:</span>
+            <span class="field-value">
+              {{ client.name2 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Contact Person 2 Email:</span>
+            <span class="field-value email-text">
+              {{ client.emailId2 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Contact Person 3 Name:</span>
+            <span class="field-value">
+              {{ client.name3 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Contact Person 3 Email:</span>
+            <span class="field-value email-text">
+              {{ client.emailId3 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Other Emails:</span>
+            <span class="field-value email-text">
+              {{ client.emails || '-' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- OTHER DETAILS -->
+      <!-- ========================================================= -->
+      <div class="details-section">
+        <div class="section-heading">
+          <span>Other Details</span>
+        </div>
+
+        <div class="details-grid">
+          <!-- Row 9 -->
+          <div class="info-field">
+            <span class="field-label">Start Date:</span>
+            <span class="field-value">
+              {{ client.startDate || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Plan:</span>
+            <span class="field-value">
+              {{ client.planName || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field outstanding-field">
+            <span class="field-label">Outstanding:</span>
+
+            <div class="outstanding-value">
+              <span class="field-value">
+                {{ client.outstanding ?? 0 }}
               </span>
 
               <button
+                *ngIf="client.status !== 3"
                 type="button"
-                class="change-manager-button"
-                (click)="openChangeManagerModal()"
-                matTooltip="Change Manager"
+                class="change-outstanding-button"
+                (click)="openChangeOutstandingModal()"
+                matTooltip="Change Outstanding"
               >
                 <mat-icon>edit</mat-icon>
                 <span>Change</span>
@@ -120,37 +281,8 @@
             </div>
           </div>
 
-          <div class="info-row">
-            <span class="info-label">Start Date:</span>
-            <span class="info-value">
-              {{ client.startDate || '-' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">Monthly Charge:</span>
-            <span class="info-value">
-              {{ client.monthlyCharge ?? 0 }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">Outstanding:</span>
-            <span class="info-value">
-              {{ client.outstanding ?? 0 }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">Tax Applicable:</span>
-
-            <span class="flag-value" [ngClass]="client.taxFlag === 1 ? 'flag-yes' : 'flag-no'">
-              {{ client.taxFlag === 1 ? '✔️' : '❌' }}
-            </span>
-          </div>
-
-          <div class="info-row status-row">
-            <span class="info-label">Status:</span>
+          <div class="info-field status-field">
+            <span class="field-label">Status:</span>
 
             <span class="status-badge" [ngClass]="common.getStatusClass(client.status)">
               {{ common.getStatusLabel(client.status) }}
@@ -158,96 +290,12 @@
           </div>
         </div>
       </div>
-
-      <div class="client-section">
-        <div class="detail-grid">
-          <div class="info-row">
-            <span class="info-label">Address Line 1:</span>
-            <span class="info-value">
-              {{ client.addressLine1 || '-' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">Address Line 2:</span>
-            <span class="info-value">
-              {{ client.addressLine2 || '-' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">Location:</span>
-            <span class="info-value">
-              {{ client.location || '-' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label">Emails:</span>
-            <span class="info-value">
-              {{ client.emails || '-' }}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="client-section">
-        <div class="additional-contact-grid">
-          <div class="contact-card">
-            <div class="contact-title">Contact 1</div>
-            <div class="info-row">
-              <span class="info-label">Name:</span>
-              <span class="info-value">
-                {{ client.name1 || '-' }}
-              </span>
-            </div>
-
-            <div class="info-row">
-              <span class="info-label">Email:</span>
-              <span class="info-value">
-                {{ client.emailId1 || '-' }}
-              </span>
-            </div>
-          </div>
-
-          <div class="contact-card">
-            <div class="contact-title">Contact 2</div>
-            <div class="info-row">
-              <span class="info-label">Name:</span>
-              <span class="info-value">
-                {{ client.name2 || '-' }}
-              </span>
-            </div>
-
-            <div class="info-row">
-              <span class="info-label">Email:</span>
-              <span class="info-value">
-                {{ client.emailId2 || '-' }}
-              </span>
-            </div>
-          </div>
-
-          <div class="contact-card">
-            <div class="contact-title">Contact 3</div>
-            <div class="info-row">
-              <span class="info-label">Name:</span>
-              <span class="info-value">
-                {{ client.name3 || '-' }}
-              </span>
-            </div>
-
-            <div class="info-row">
-              <span class="info-label">Email:</span>
-              <span class="info-value">
-                {{ client.emailId3 || '-' }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
+  <!-- ============================================================= -->
+  <!-- ACTION HISTORY - KEPT AS IT IS -->
+  <!-- ============================================================= -->
   <div class="section-card">
     <div class="section-header">
       <div class="section-title">
@@ -294,8 +342,7 @@
             <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
               <td colspan="4" class="no-records-box">
                 <mat-icon>info</mat-icon>
-
-                <span> No action history available </span>
+                <span>No action history available</span>
               </td>
             </tr>
           </tbody>
@@ -305,7 +352,10 @@
   </div>
 </div>
 
-<!-- Change Manager Modal -->
+<!-- ================================================================ -->
+<!-- CHANGE MANAGER MODAL - KEEP YOUR EXISTING MODAL BELOW THIS LINE -->
+<!-- ================================================================ -->
+
 <div class="modal-overlay" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
   <div class="change-manager-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
@@ -315,7 +365,8 @@
         </div>
 
         <div>
-          <div class="modal-title-text">Change Manager</div>
+          <div class="modal-title-text">Change Society Manager</div>
+
           <div class="modal-subtitle">Update the manager assigned to this client</div>
         </div>
       </div>
@@ -340,7 +391,8 @@
         </div>
 
         <div class="client-reference-content">
-          <span class="client-reference-label">Client</span>
+          <span class="client-reference-label"> Client </span>
+
           <span class="client-reference-name">
             {{ client.name || '-' }}
           </span>
@@ -349,7 +401,7 @@
 
       <div class="manager-information">
         <div class="manager-info-item">
-          <span class="modal-field-label">Current Manager</span>
+          <span class="modal-field-label"> Current Society Manager </span>
 
           <span class="current-manager-name">
             {{ client.managerName || '-' }}
@@ -359,7 +411,7 @@
 
       <div class="manager-form-group">
         <label class="modal-field-label">
-          New Manager
+          Change Society Manager
           <span class="required">*</span>
         </label>
 
@@ -368,7 +420,7 @@
           [(ngModel)]="selectedManagerId"
           [disabled]="isChangingManager"
         >
-          <option [ngValue]="null">Select Manager</option>
+          <option [ngValue]="null">Select Society Manager</option>
 
           <option *ngFor="let manager of managers" [ngValue]="manager.userId">
             {{ manager.firstName }}
@@ -377,7 +429,7 @@
 
         <div class="manager-validation-error" *ngIf="managerValidationError">
           <mat-icon>error_outline</mat-icon>
-          <span>Please select a manager</span>
+          <span>Please select a society manager</span>
         </div>
       </div>
     </div>
@@ -403,7 +455,119 @@
         </mat-icon>
 
         <span>
-          {{ isChangingManager ? 'Updating...' : 'Change Manager' }}
+          {{ isChangingManager ? 'Updating...' : 'Change Society Manager' }}
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- CHANGE OUTSTANDING MODAL -->
+<!-- ================================================================ -->
+
+<div
+  class="modal-overlay"
+  *ngIf="showChangeOutstandingModal"
+  (click)="closeChangeOutstandingModal()"
+>
+  <div class="change-manager-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-title-icon">
+          <mat-icon>payments</mat-icon>
+        </div>
+
+        <div>
+          <div class="modal-title-text">Change Outstanding</div>
+          <div class="modal-subtitle">Update the outstanding amount for this client</div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-button"
+        (click)="closeChangeOutstandingModal()"
+        [disabled]="isChangingOutstanding"
+        aria-label="Close"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="modal-body">
+      <div class="client-reference">
+        <div class="client-reference-icon">
+          <mat-icon>business</mat-icon>
+        </div>
+
+        <div class="client-reference-content">
+          <span class="client-reference-label"> Client </span>
+
+          <span class="client-reference-name">
+            {{ client.name || '-' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="manager-information">
+        <div class="manager-info-item">
+          <span class="modal-field-label"> Current Outstanding </span>
+
+          <span class="current-manager-name">
+            {{ client.outstanding ?? 0 }}
+          </span>
+        </div>
+      </div>
+
+      <div class="manager-form-group">
+        <label class="modal-field-label">
+          New Outstanding
+          <span class="required">*</span>
+        </label>
+
+        <input
+          type="number"
+          class="manager-select"
+          [(ngModel)]="newOutstanding"
+          min="0"
+          step="0.01"
+          [disabled]="isChangingOutstanding"
+          placeholder="Enter outstanding amount"
+        />
+
+        <div class="manager-validation-error" *ngIf="outstandingValidationError">
+          <mat-icon>error_outline</mat-icon>
+
+          <span> Please enter a valid outstanding amount </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-cancel-button"
+        (click)="closeChangeOutstandingModal()"
+        [disabled]="isChangingOutstanding"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="modal-save-button"
+        (click)="updateOutstanding()"
+        [disabled]="isChangingOutstanding"
+      >
+        <mat-icon>
+          {{ isChangingOutstanding ? 'hourglass_top' : 'save' }}
+        </mat-icon>
+
+        <span>
+          {{ isChangingOutstanding ? 'Updating...' : 'Change Outstanding' }}
         </span>
       </button>
     </div>

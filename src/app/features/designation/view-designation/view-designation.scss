@@ -230,25 +230,17 @@ mat-divider {
 
 
 .user-info-grid {
-
   display: grid;
 
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
 
-  column-gap: 70px;
+  column-gap: 50px;
 
-  row-gap: 18px;
+  align-items: center;
+
+  width: 100%;
 }
 
-
-.user-column {
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 13px;
-}
 
 
 /* =========================================================
@@ -702,15 +694,14 @@ mat-divider {
 }
 
 
-/* =========================================================
-   ACTION HISTORY
-========================================================= */
+ /* =========================================================
+    ACTION HISTORY
+ ========================================================= */
 
 .history-table {
-
   width: 100%;
 
-  min-width: 650px;
+  min-width: 600px;
 
   border-collapse: collapse;
 
@@ -720,7 +711,7 @@ mat-divider {
 
   font-family: Arial, sans-serif;
 
-  font-size: 15px;
+  font-size: 13px;
 }
 
 
@@ -729,10 +720,9 @@ mat-divider {
 ========================================================= */
 
 .history-table thead th {
+  height: 38px;
 
-  height: 47px;
-
-  padding: 8px 15px;
+  padding: 6px 10px;
 
   background: var(--table-header);
 
@@ -741,6 +731,10 @@ mat-divider {
   color: #172f4c;
 
   text-align: left;
+
+  vertical-align: middle;
+
+  font-size: 13px;
 
   font-weight: 700;
 }
@@ -751,10 +745,9 @@ mat-divider {
 ========================================================= */
 
 .history-table tbody td {
+  height: 38px;
 
-  height: 52px;
-
-  padding: 10px 15px;
+  padding: 6px 10px;
 
   background: var(--white);
 
@@ -763,11 +756,16 @@ mat-divider {
   color: var(--text);
 
   vertical-align: middle;
+
+  font-size: 13px;
 }
 
 
-.history-table tbody tr:hover td {
+/* =========================================================
+   ROW HOVER
+========================================================= */
 
+.history-table tbody tr:hover td {
   background: #f8fbfd;
 }
 
@@ -777,12 +775,12 @@ mat-divider {
 ========================================================= */
 
 .action-badge {
-
   display: inline-flex;
 
   align-items: center;
+  justify-content: center;
 
-  padding: 5px 10px;
+  padding: 3px 7px;
 
   border-radius: 3px;
 
@@ -792,9 +790,13 @@ mat-divider {
 
   color: var(--primary-blue-dark);
 
-  font-size: 13px;
+  font-size: 11px;
+
+  line-height: 16px;
 
   font-weight: 600;
+
+  white-space: nowrap;
 }
 
 
@@ -803,8 +805,7 @@ mat-divider {
 ========================================================= */
 
 .no-records-box {
-
-  min-height: 95px;
+  min-height: 60px;
 
   display: flex;
 
@@ -812,7 +813,7 @@ mat-divider {
 
   justify-content: center;
 
-  gap: 8px;
+  gap: 6px;
 
   color: var(--text-muted);
 
@@ -820,20 +821,20 @@ mat-divider {
 
   font-family: Arial, sans-serif;
 
-  font-size: 14px;
+  font-size: 13px;
 }
 
 
 .no-records-box mat-icon {
+  width: 18px;
 
-  width: 20px;
+  height: 18px;
 
-  height: 20px;
-
-  font-size: 20px;
+  font-size: 18px;
 
   color: var(--primary-blue);
 }
+
 
 
 /* =========================================================
@@ -1080,3 +1081,66 @@ mat-divider {
   }
 
 }
+
+
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 82px;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.status-badge.active,
+.status-badge.status-active,
+.status-active {
+  background: #e6f4ee;
+  color: #287d5e;
+  border: 1px solid #c8e7da;
+}
+
+.status-badge.inactive,
+.status-badge.status-inactive,
+.status-inactive {
+  background: #fff5df;
+  color: #a87308;
+  border: 1px solid #f0d99e;
+}
+
+.status-badge.deleted,
+.status-badge.status-deleted {
+  background: #fbeaea;
+  color: #b8403d;
+  border: 1px solid #efcaca;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-btn {
+  width: 38px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 1px;
+  background: var(--white);
+  font-size: 14px;
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+

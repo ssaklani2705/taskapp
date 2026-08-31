@@ -8,6 +8,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
+import { MatIconModule } from '@angular/material/icon';
 
 
 export interface Plan {
@@ -33,6 +34,7 @@ export interface ApiResponse<T> {
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
+    MatIconModule
   ],
   templateUrl: './plan-add.html',
   styleUrl: './plan-add.scss',

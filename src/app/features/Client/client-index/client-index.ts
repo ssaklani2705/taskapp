@@ -5,6 +5,8 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
+import { SESSION_KEYS } from '../../../service/session-storage.keys';
+import { SessionStorageService } from '../../../service/session-storage.service';
 
 interface Client {
   clientId: number;
@@ -65,10 +67,15 @@ export class ClientIndex {
 
   isPanelVisible = true;
 
-  addPer = 'Y';
-  editPer = 'Y';
-  deletePer = 'Y';
-  exportExcel = 'Y';
+  addPer: string = 'N';
+  editPer: string = 'N';
+  deletePer: string = 'N';
+  viewPer: string = 'N';
+  approvePer: string = 'N';
+  adminApprovePer: string = 'N';
+  moduleName: string = '';
+  showHeaderBar: boolean = true;
+  exportExcel: string = 'N';
 
   searchQuery = '';
   search = '';
@@ -82,7 +89,7 @@ export class ClientIndex {
   states: any[] = [];
   managers: any[] = [];
 
-  filterKey = 'clientFilter';
+  filterKey = SESSION_KEYS.CLIENT_MASTER_FILTER;
 
   showUploadModal = false;
   selectedFile: File | null = null;
@@ -94,9 +101,12 @@ export class ClientIndex {
     private router: Router,
     @Inject(PLATFORM_ID)
     private platformId: Object,
+    private sessionService: SessionStorageService,
   ) {}
 
   ngOnInit(): void {
+    this.sessionService.clearOtherSessions(this.filterKey);
+
     if (isPlatformBrowser(this.platformId)) {
       const storedUserId = sessionStorage.getItem('userId');
 
@@ -105,7 +115,27 @@ export class ClientIndex {
       }
     }
 
-    this.statusIndex=1;
+    if (isPlatformBrowser(this.platformId)) {
+      const storedModules = sessionStorage.getItem('selectedModuleDetail');
+
+      if (storedModules) {
+        try {
+          const parsed = JSON.parse(storedModules);
+
+          this.moduleName = parsed.name ?? '';
+          this.addPer = parsed.addPer ?? 'N';
+          this.editPer = parsed.editPer ?? 'N';
+          this.deletePer = parsed.deletePer ?? 'N';
+          this.viewPer = parsed.viewPer ?? 'N';
+          this.approvePer = parsed.approvePer ?? 'N';
+          this.adminApprovePer = parsed.adminApprovePer ?? 'N';
+          this.exportExcel = parsed.exportExcel ?? 'N';
+        } catch (error) {
+          console.error('Invalid selectedModuleDetail:', error);
+        }
+      }
+    }
+
     this.restoreFilterState();
     this.loadStates();
     this.loadManagers();
@@ -649,32 +679,31 @@ export class ClientIndex {
 
           const exportData = allClients.map((client: Client, index: number) => ({
             'Sr No': index + 1,
+            'Society Manager': client.managerName || '',
             'Client Name': client.name || '',
             'Client Code': client.code || '',
             PAN: client.pan || '',
             'GST Applicable': client.gstFlag ?? '',
             'GST Number': client.gstNo || '',
-            State: client.stateName || '',
+            'Tax Payable': client.taxFlag ?? '',
             'Address Line 1': client.addressLine1 || '',
             'Address Line 2': client.addressLine2 || '',
             City: client.city || '',
+            State: client.stateName || '',
+            Location: client.location || '',
             Pincode: client.pincode || '',
             'Contact Name': client.contactName || '',
             'Contact Email': client.contactEmail || '',
-            Emails: client.emails || '',
-            'Start Date': client.startDate || '',
-            'Monthly Charge': client.monthlyCharge ?? '',
-            Outstanding: client.outstanding ?? '',
             'Contact Person 1 Name': client.name1 || '',
             'Contact Person 1 Email': client.emailId1 || '',
             'Contact Person 2 Name': client.name2 || '',
             'Contact Person 2 Email': client.emailId2 || '',
             'Contact Person 3 Name': client.name3 || '',
             'Contact Person 3 Email': client.emailId3 || '',
-            Manager: client.managerName || '',
-            'Tax Applicable': client.taxFlag ?? '',
-            Location: client.location || '',
+            Emails: client.emails || '',
+            'Start Date': client.startDate || '',
             Plan: client.planName || '',
+            Outstanding: client.outstanding ?? '',
             Status: this.getStatusLabel(client.status),
           }));
 
@@ -836,7 +865,7 @@ export class ClientIndex {
     },
     {
       key: 'managerName',
-      label: 'Manager',
+      label: 'Society Manager',
       sortable: true,
     },
     {

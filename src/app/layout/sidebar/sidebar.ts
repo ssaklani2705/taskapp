@@ -206,6 +206,12 @@ export class Sidebar {
         icon: 'dashboard',
         route: '/dashboard'
       },
+      {
+        moduleId: 11,
+        label: 'Recurring Master',
+        icon: 'bar_chart',
+        route: '/recurring-index'
+      },
        {
         moduleId: 10,
         label: 'Tasks',
@@ -277,6 +283,8 @@ export class Sidebar {
         icon: 'bar_chart',
         route: '/plan-index'
       },
+
+      
       {
         label: 'Reports',
         icon: 'bar_chart',
@@ -392,19 +400,19 @@ onLogout(): void {
   }
 
 
-  getShortName(name: string): string {
-    if (!name) {
-      return '';
-    }
+  // getShortName(name: string): string {
+  //   if (!name) {
+  //     return '';
+  //   }
 
-    const parts = name.trim().split(/\s+/);
+  //   const parts = name.trim().split(/\s+/);
 
-    if (parts.length === 1) {
-      return parts[0];
-    }
+  //   if (parts.length === 1) {
+  //     return parts[0];
+  //   }
 
-    return `${parts[0]} ${parts[parts.length - 1].charAt(0)}`;
-  }
+  //   return `${parts[0]} ${parts[parts.length - 1].charAt(0)}`;
+  // }
 
   getInitials(name: string): string {
     if (!name) {
@@ -422,5 +430,33 @@ onLogout(): void {
       parts[parts.length - 1].charAt(0)
     ).toUpperCase();
   }
+
+  getShortName(name: string): string {
+  if (!name) {
+    return '';
+  }
+
+  const parts = name.trim().split(/\s+/);
+
+  if (parts.length === 1) {
+    return parts[0];
+  }
+
+  const lastName = parts[parts.length - 1];
+
+  // Two-word name: S. Saklani
+  if (parts.length === 2) {
+    return `${parts[0].charAt(0).toUpperCase()}. ${lastName}`;
+  }
+
+  // Three or more words: A.C. Thakur
+  const initials = parts
+    .slice(0, -1)
+    .map(part => part.charAt(0).toUpperCase())
+    .join('.');
+
+  return `${initials}. ${lastName}`;
+}
+
 
 }

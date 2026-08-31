@@ -1,1238 +1,610 @@
-/* =========================================================
-   VIEW TASK
-   SOCIETY 123 - BUSINESS PORTAL THEME
-========================================================= */
-
 :host {
-
   --navy: #19345a;
   --navy-dark: #152f54;
   --navy-light: #24466f;
-
   --primary-blue: #2f6fa3;
   --primary-blue-dark: #285f8d;
   --primary-blue-light: #eaf2f8;
-
   --table-header: #edf4f8;
   --table-group: #f4f6f8;
-
   --page-bg: #f8fafc;
   --white: #ffffff;
-
   --border: #d5dee7;
   --border-dark: #c5d0db;
-
   --text: #17375e;
   --text-dark: #152f54;
   --text-muted: #6d8299;
-
   --success: #17805f;
   --success-bg: #e5f3ee;
-
   --danger: #e84a4a;
   --danger-bg: #fff0f0;
-
   --warning: #c78b1c;
   --warning-bg: #fff5dc;
-
   display: block;
-
   width: 100%;
-
   color: var(--text);
 }
 
-
-/* =========================================================
-   PAGE
-========================================================= */
-
 .page-container {
-
   width: 100%;
-
   min-height: 100%;
-
   padding: 24px 36px;
-
   box-sizing: border-box;
-
   background: var(--page-bg);
 }
 
-
-/* =========================================================
-   CARDS
-========================================================= */
-
 .main-card,
 .section-card {
-
   width: 100%;
-
   margin: 0 0 22px 0;
-
   padding: 0 !important;
-
   background: var(--white) !important;
-
   border: 1px solid var(--border) !important;
-
   border-radius: 0 !important;
-
   box-shadow: none !important;
-
   box-sizing: border-box;
-
 }
-
-
-/* =========================================================
-   HEADER
-========================================================= */
 
 .page-header {
-
   min-height: 76px;
-
   padding: 0 18px !important;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   box-sizing: border-box;
-
 }
-
-
-/* =========================================================
-   PAGE TITLE
-========================================================= */
 
 .page-title {
-
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
   color: var(--navy);
-
-  font-family:
-    Georgia,
-    'Times New Roman',
-    serif;
-
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 27px;
-
   font-weight: 700;
-
   letter-spacing: -0.3px;
-
 }
-
 
 .page-title mat-icon {
-
   color: var(--primary-blue);
-
   width: 27px;
-
   height: 27px;
-
   font-size: 27px;
-
 }
-
-
-/* =========================================================
-   BACK BUTTON
-========================================================= */
 
 .header-action {
-
   display: flex;
-
   align-items: center;
-
 }
-
 
 .back-button {
-
   height: 38px !important;
-
   min-width: 130px;
-
   padding: 0 18px !important;
-
   border-radius: 4px !important;
-
   border: none;
-
   background: var(--navy) !important;
-
   color: var(--white) !important;
-
   font-family: Arial, sans-serif;
-
   font-size: 14px !important;
-
   font-weight: 600 !important;
-
   box-shadow: none !important;
-
   display: inline-flex !important;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 5px;
-
   cursor: pointer;
-
 }
-
 
 .back-button:hover {
-
   background: var(--navy-dark) !important;
-
 }
-
 
 .back-button mat-icon {
-
   width: 18px;
-
   height: 18px;
-
   font-size: 18px;
-
 }
-
-
-/* =========================================================
-   DIVIDER
-========================================================= */
 
 mat-divider {
-
-  border-top-color:
-    var(--border) !important;
-
+  border-top-color: var(--border) !important;
 }
-
-
-/* =========================================================
-   INFORMATION
-========================================================= */
 
 .user-information {
-
   padding: 24px 22px !important;
-
   box-sizing: border-box;
-
 }
-
 
 .user-info-grid {
-
   display: grid;
-
   grid-template-columns: 1fr 1fr;
-
   column-gap: 70px;
-
   row-gap: 18px;
-
 }
-
 
 .user-column {
-
   display: flex;
-
   flex-direction: column;
-
   gap: 13px;
-
 }
-
-
-/* =========================================================
-   INFORMATION ROW
-========================================================= */
 
 .info-row {
-
   display: flex;
-
   align-items: center;
-
   min-height: 27px;
-
   color: var(--text);
-
   font-family: Arial, sans-serif;
-
   font-size: 15px;
-
   line-height: 1.5;
-
 }
-
 
 .info-label {
-
   margin-right: 7px;
-
   color: var(--text-dark);
-
   font-weight: 700;
-
   white-space: nowrap;
-
 }
-
 
 .info-value {
-
   color: var(--text);
-
   font-weight: 400;
-
   word-break: break-word;
-
 }
-
 
 .remarks-value {
-
   max-width: 500px;
-
 }
-
-
-/* =========================================================
-   STATUS
-========================================================= */
 
 .status-row {
-
   align-items: center;
-
 }
-
 
 .status-badge {
-
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   min-width: 75px;
-
   height: 32px;
-
   padding: 0 13px;
-
   box-sizing: border-box;
-
   border-radius: 3px;
-
   font-family: Arial, sans-serif;
-
   font-size: 13px;
-
   font-weight: 600;
-
 }
-
 
 .status-active {
-
   color: var(--success) !important;
-
   background: var(--success-bg);
-
   border: 1px solid #c7e5d9;
-
 }
-
 
 .status-inactive {
-
   color: #986b14 !important;
-
   background: var(--warning-bg);
-
   border: 1px solid #ecd9a7;
-
 }
-
 
 .status-closed {
-
   color: #b93636 !important;
-
   background: var(--danger-bg);
-
   border: 1px solid #f2cccc;
-
 }
-
 
 .status-default {
-
   color: var(--text-muted);
-
   background: #f3f5f7;
-
   border: 1px solid var(--border);
-
 }
-
-
-/* =========================================================
-   PRIORITY
-========================================================= */
 
 .priority-badge {
-
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   min-width: 75px;
-
   height: 32px;
-
   padding: 0 13px;
-
   border-radius: 3px;
-
   font-family: Arial, sans-serif;
-
   font-size: 13px;
-
   font-weight: 600;
-
 }
-
 
 .priority-high {
-
   color: #b93636;
-
   background: #fff0f0;
-
   border: 1px solid #f2cccc;
-
 }
-
 
 .priority-medium {
-
   color: #986b14;
-
   background: #fff5dc;
-
   border: 1px solid #ecd9a7;
-
 }
-
 
 .priority-low {
-
   color: var(--success);
-
   background: var(--success-bg);
-
   border: 1px solid #c7e5d9;
-
 }
-
 
 .priority-default {
-
   color: var(--text-muted);
-
   background: #f3f5f7;
-
   border: 1px solid var(--border);
-
 }
-
-
-/* =========================================================
-   DESCRIPTION
-========================================================= */
 
 .description-section {
-
   margin-top: 24px;
-
   padding-top: 20px;
-
   border-top: 1px solid var(--border);
-
 }
-
 
 .description-label {
-
   margin-bottom: 8px;
-
   color: var(--text-dark);
-
   font-family: Arial, sans-serif;
-
   font-size: 15px;
-
   font-weight: 700;
-
 }
-
 
 .description-value {
-
   min-height: 70px;
-
   padding: 14px 16px;
-
   box-sizing: border-box;
-
   background: #f8fafc;
-
   border: 1px solid var(--border);
-
   color: var(--text);
-
   font-family: Arial, sans-serif;
-
   font-size: 15px;
-
   line-height: 1.6;
-
   white-space: pre-wrap;
-
   word-break: break-word;
-
 }
-
-
-/* =========================================================
-   SECTION HEADER
-========================================================= */
 
 .section-header {
-
   min-height: 65px;
-
   padding: 0 18px !important;
-
   display: flex;
-
   align-items: center;
-
   box-sizing: border-box;
-
 }
-
 
 .section-title {
-
   display: flex;
-
   align-items: center;
-
   gap: 9px;
-
   color: var(--primary-blue);
-
   font-family: Arial, sans-serif;
-
   font-size: 23px;
-
   font-weight: 700;
-
 }
-
 
 .section-title mat-icon {
-
   color: var(--primary-blue);
-
   width: 25px;
-
   height: 25px;
-
   font-size: 25px;
-
 }
-
-
-/* =========================================================
-   ATTACHMENTS
-========================================================= */
 
 .attachment-container {
-
   width: 100%;
-
   box-sizing: border-box;
-
 }
-
 
 .attachment-row {
-
   min-height: 62px;
-
   padding: 10px 18px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
   box-sizing: border-box;
-
   border-bottom: 1px solid var(--border);
-
 }
-
 
 .attachment-row:last-child {
-
   border-bottom: none;
-
 }
-
 
 .attachment-info {
-
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
   color: var(--text);
-
   font-family: Arial, sans-serif;
-
   font-size: 14px;
-
   word-break: break-word;
-
 }
-
 
 .attachment-info mat-icon {
-
   color: var(--primary-blue);
-
   width: 22px;
-
   height: 22px;
-
   font-size: 22px;
-
 }
-
 
 .view-file-button {
-
   height: 34px;
-
   padding: 0 13px;
-
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 5px;
-
   border: 1px solid var(--primary-blue);
-
   border-radius: 3px;
-
   background: var(--white);
-
   color: var(--primary-blue);
-
   font-family: Arial, sans-serif;
-
   font-size: 13px;
-
   font-weight: 600;
-
   cursor: pointer;
-
 }
-
 
 .view-file-button:hover {
-
   background: var(--primary-blue-light);
-
 }
-
 
 .view-file-button mat-icon {
-
   width: 17px;
-
   height: 17px;
-
   font-size: 17px;
-
 }
-
-
-/* =========================================================
-   NO FILES
-========================================================= */
 
 .no-files {
-
   min-height: 90px;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   gap: 8px;
-
   color: var(--text-muted);
-
   font-family: Arial, sans-serif;
-
   font-size: 14px;
-
 }
-
 
 .no-files mat-icon {
-
   width: 20px;
-
   height: 20px;
-
   font-size: 20px;
-
   color: var(--primary-blue);
-
 }
 
-
-/* =========================================================
-   TABLE CONTAINER
-========================================================= */
-
-/* =========================================================
-   TABLE CONTAINER
-========================================================= */
-
 .table-container {
-
   padding: 0 !important;
-
   width: 100%;
-
   box-sizing: border-box;
 }
 
-
-/* =========================================================
-   HISTORY TABLE WRAPPER
-========================================================= */
-
 .history-table-wrapper {
-
   width: 100%;
-
   overflow-x: auto;
 }
 
-
-/* =========================================================
-   HISTORY TABLE
-========================================================= */
-
 .history-table {
-
   width: 100%;
-
-  min-width: 600px;
-
+  min-width: 650px;
   border-collapse: collapse;
-
   background: var(--white);
-
   color: var(--text);
-
   font-family: Arial, sans-serif;
-
-  font-size: 13px;
+  font-size: 15px;
 }
 
-
-/* =========================================================
-   TABLE HEADER
-========================================================= */
-
 .history-table thead th {
-
-  height: 38px;
-
-  padding: 5px 10px;
-
+  height: 47px;
+  padding: 8px 15px;
   background: var(--table-header);
-
   border: 1px solid var(--border);
-
   color: #172f4c;
-
   text-align: left;
-
   vertical-align: middle;
-
-  font-size: 13px;
-
   font-weight: 700;
 }
 
-
-/* =========================================================
-   TABLE BODY
-========================================================= */
-
 .history-table tbody td {
-
-  height: 38px;
-
-  padding: 5px 10px;
-
+  height: 52px;
+  padding: 10px 15px;
   background: var(--white);
-
   border: 1px solid var(--border);
-
   color: var(--text);
-
   vertical-align: middle;
-
-  font-size: 13px;
 }
 
-
 .history-table tbody tr:hover td {
-
   background: #f8fbfd;
 }
 
-
-/* =========================================================
-   ACTION BADGE
-========================================================= */
-
 .action-badge {
-
   display: inline-flex;
-
   align-items: center;
-
-  justify-content: center;
-
-  padding: 3px 7px;
-
+  padding: 5px 10px;
   border-radius: 3px;
-
   background: var(--primary-blue-light);
-
   border: 1px solid #d1e3ef;
-
   color: var(--primary-blue-dark);
-
-  font-size: 11px;
-
-  line-height: 16px;
-
+  font-size: 13px;
   font-weight: 600;
-
-  white-space: nowrap;
 }
-
-
-/* =========================================================
-   NO RECORDS
-========================================================= */
 
 .no-records-box {
-
-  min-height: 60px;
-
-  padding: 8px !important;
-
+  min-height: 95px;
   text-align: center !important;
-
-  vertical-align: middle !important;
-
   color: var(--text-muted) !important;
-
   background: var(--white) !important;
-
   font-family: Arial, sans-serif;
-
-  font-size: 13px;
+  font-size: 14px;
 }
-
 
 .no-records-box mat-icon {
-
-  width: 18px;
-
-  height: 18px;
-
-  margin-right: 6px;
-
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
   vertical-align: middle;
-
   color: var(--primary-blue);
-
-  font-size: 18px;
 }
-
-
-/* =========================================================
-   MATERIAL OVERRIDE
-========================================================= */
 
 ::ng-deep .mat-mdc-card {
-
   border-radius: 0 !important;
-
   box-shadow: none !important;
-
 }
-
 
 ::ng-deep .mat-mdc-card-header {
-
   padding: 0 !important;
-
 }
-
 
 ::ng-deep .mat-mdc-card-content {
-
   margin: 0 !important;
-
 }
-
-
-/* =========================================================
-   SCROLLBAR
-========================================================= */
 
 .history-table-wrapper::-webkit-scrollbar {
-
   height: 7px;
-
 }
-
 
 .history-table-wrapper::-webkit-scrollbar-track {
-
   background: #edf1f4;
-
 }
-
 
 .history-table-wrapper::-webkit-scrollbar-thumb {
-
   background: #b8c7d4;
-
   border-radius: 4px;
-
 }
-
 
 .history-table-wrapper::-webkit-scrollbar-thumb:hover {
-
   background: #8fa5b7;
-
 }
-
-
-/* =========================================================
-   TABLET
-========================================================= */
 
 @media (max-width: 1100px) {
-
   .page-container {
-
     padding: 20px;
-
   }
-
 
   .user-info-grid {
-
     column-gap: 35px;
-
   }
-
 }
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
 
 @media (max-width: 768px) {
-
   .page-container {
-
     padding: 12px;
-
   }
-
 
   .page-header {
-
     min-height: auto;
-
     padding: 15px !important;
-
     flex-direction: column;
-
     align-items: flex-start;
-
     gap: 14px;
-
   }
-
 
   .page-title {
-
     font-size: 22px;
-
   }
-
 
   .header-action {
-
     width: 100%;
-
   }
-
 
   .back-button {
-
     width: 100%;
-
   }
-
 
   .user-information {
-
     padding: 18px !important;
-
   }
-
 
   .user-info-grid {
-
     grid-template-columns: 1fr;
-
     column-gap: 0;
-
     row-gap: 18px;
-
   }
-
 
   .info-row {
-
     align-items: flex-start;
-
     flex-wrap: wrap;
-
   }
-
 
   .info-label {
-
     white-space: normal;
-
   }
-
 
   .remarks-value {
-
     max-width: none;
-
   }
-
 
   .section-header {
-
     min-height: 58px;
-
     padding: 0 15px !important;
-
   }
-
 
   .section-title {
-
     font-size: 20px;
-
   }
-
 
   .attachment-row {
-
     align-items: flex-start;
-
     gap: 12px;
-
   }
-
 
   .attachment-info {
-
     flex: 1;
-
   }
-
 }
 
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
 @media (max-width: 480px) {
-
   .page-container {
-
     padding: 8px;
-
   }
-
 
   .page-title {
-
     font-size: 19px;
-
   }
-
 
   .page-title mat-icon {
-
     width: 22px;
-
     height: 22px;
-
     font-size: 22px;
-
   }
-
 
   .user-information {
-
     padding: 15px !important;
-
   }
-
 
   .info-row {
-
     display: block;
-
     line-height: 24px;
-
   }
-
 
   .info-label {
-
     display: inline;
-
     margin-right: 4px;
-
   }
-
 
   .info-value {
-
     display: inline;
-
   }
-
 
   .status-badge,
   .priority-badge {
-
     margin-top: 3px;
-
   }
-
 
   .description-section {
-
     margin-top: 18px;
-
     padding-top: 15px;
-
   }
-
 
   .section-title {
-
     font-size: 17px;
-
   }
-
 
   .attachment-row {
-
     flex-direction: column;
-
     align-items: stretch;
-
   }
-
 
   .view-file-button {
-
     width: 100%;
-
   }
-
 }
-
-
 
 
 

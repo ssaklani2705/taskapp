@@ -699,7 +699,6 @@ mat-divider {
   vertical-align: middle;
 }
 
-
 /* =========================================================
    ACTION HISTORY
 ========================================================= */
@@ -708,7 +707,7 @@ mat-divider {
 
   width: 100%;
 
-  min-width: 650px;
+  min-width: 600px;
 
   border-collapse: collapse;
 
@@ -718,7 +717,7 @@ mat-divider {
 
   font-family: Arial, sans-serif;
 
-  font-size: 15px;
+  font-size: 13px;
 }
 
 
@@ -728,9 +727,9 @@ mat-divider {
 
 .history-table thead th {
 
-  height: 47px;
+  height: 38px;
 
-  padding: 8px 15px;
+  padding: 5px 10px;
 
   background: var(--table-header);
 
@@ -739,6 +738,10 @@ mat-divider {
   color: #172f4c;
 
   text-align: left;
+
+  vertical-align: middle;
+
+  font-size: 13px;
 
   font-weight: 700;
 }
@@ -750,9 +753,9 @@ mat-divider {
 
 .history-table tbody td {
 
-  height: 52px;
+  height: 38px;
 
-  padding: 10px 15px;
+  padding: 5px 10px;
 
   background: var(--white);
 
@@ -761,6 +764,8 @@ mat-divider {
   color: var(--text);
 
   vertical-align: middle;
+
+  font-size: 13px;
 }
 
 
@@ -780,7 +785,9 @@ mat-divider {
 
   align-items: center;
 
-  padding: 5px 10px;
+  justify-content: center;
+
+  padding: 3px 7px;
 
   border-radius: 3px;
 
@@ -790,9 +797,13 @@ mat-divider {
 
   color: var(--primary-blue-dark);
 
-  font-size: 13px;
+  font-size: 11px;
+
+  line-height: 16px;
 
   font-weight: 600;
+
+  white-space: nowrap;
 }
 
 
@@ -802,7 +813,7 @@ mat-divider {
 
 .no-records-box {
 
-  min-height: 95px;
+  min-height: 60px;
 
   display: flex;
 
@@ -810,7 +821,7 @@ mat-divider {
 
   justify-content: center;
 
-  gap: 8px;
+  gap: 6px;
 
   color: var(--text-muted);
 
@@ -818,20 +829,21 @@ mat-divider {
 
   font-family: Arial, sans-serif;
 
-  font-size: 14px;
+  font-size: 13px;
 }
 
 
 .no-records-box mat-icon {
 
-  width: 20px;
+  width: 18px;
 
-  height: 20px;
+  height: 18px;
 
-  font-size: 20px;
+  font-size: 18px;
 
   color: var(--primary-blue);
 }
+
 
 
 /* =========================================================

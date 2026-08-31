@@ -29,7 +29,8 @@ export const SESSION_KEYS = {
     TASK_MASTER_FILTER: 'taskMasterFilter',
     
     STATE_FILTER:'stateFilter',
-    PLAN_FILTER:'planFilter'
+    PLAN_FILTER:'planFilter',
+    RECURRING_FILTER:'recurringFilter'
 
 
 };
