@@ -165,6 +165,30 @@
 
           </div>
 
+          <div class="status-wrapper">
+
+            <select class="status-select" [(ngModel)]="selectedTaskStatus" (change)="onSearch()">
+              <option value="">
+                --All Task Status--
+              </option>
+              <option value="1">
+                Assigned
+              </option>
+              <option value="2">
+                Assignee Closure
+              </option>
+              <option value="3">
+                Re-Open
+              </option>
+              <option value="4">
+                Assignee Re-Closure
+              </option>
+              <option value="5">
+                Assignor Closure
+              </option>
+            </select>
+          </div>
+
           <!-- FROM DATE -->
           <div class="status-wrapper date-filter-wrapper">
 
@@ -202,29 +226,7 @@
 
           </div>
 
-          <div class="status-wrapper">
-
-            <select class="status-select" [(ngModel)]="selectedTaskStatus" (change)="onSearch()">
-              <option value="">
-                --All Task Status--
-              </option>
-              <option value="1">
-                Assigned
-              </option>
-              <option value="2">
-                Assignee Closure
-              </option>
-              <option value="3">
-                Re-Open
-              </option>
-              <option value="4">
-                Assignee Re-Closure
-              </option>
-              <option value="5">
-                Assignor Closure
-              </option>
-            </select>
-          </div>
+          
 
           <!-- GO -->
           <div class="go-wrapper">
@@ -308,7 +310,7 @@
               <tr>
 
                 <th class="serial-column">
-                  #
+                  Sr. No.
                 </th>
 
                 <th *ngFor="let col of columns" [class.sortable-column]="col.sortable"

@@ -269,7 +269,7 @@
 
             <!-- Department -->
 
-            <div class="user-form-col">
+            <!-- <div class="user-form-col">
 
               <div class="user-form-group">
 
@@ -303,12 +303,12 @@
 
               </div>
 
-            </div>
+            </div> -->
 
 
             <!-- Designation -->
 
-            <div class="user-form-col">
+            <!-- <div class="user-form-col">
 
               <div class="user-form-group">
 
@@ -342,7 +342,95 @@
 
               </div>
 
-            </div>
+            </div> -->
+
+
+            <!-- Department -->
+
+<div class="user-form-col">
+
+  <div class="user-form-group">
+
+    <label class="user-label">
+      Department
+      <span class="required">*</span>
+    </label>
+
+    <select
+      class="user-input user-select"
+      formControlName="departmentId"
+    >
+
+      <option [ngValue]="null">
+        Select Department
+      </option>
+
+      <option
+        *ngFor="let dept of departmentList"
+        [ngValue]="dept.departmentId"
+      >
+        {{ dept.name }}
+      </option>
+
+    </select>
+
+    <div
+      class="user-error"
+      *ngIf="
+        userForm.get('departmentId')?.touched &&
+        userForm.get('departmentId')?.hasError('required')
+      "
+    >
+      Department is required
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- Designation -->
+
+<div class="user-form-col">
+
+  <div class="user-form-group">
+
+    <label class="user-label">
+      Designation
+      <span class="required">*</span>
+    </label>
+
+    <select
+      class="user-input user-select"
+      formControlName="desigmationId"
+    >
+
+      <option [ngValue]="null">
+        Select Designation
+      </option>
+
+      <option
+        *ngFor="let design of designationList"
+        [ngValue]="design.desigmationId"
+      >
+        {{ design.name }}
+      </option>
+
+    </select>
+
+    <div
+      class="user-error"
+      *ngIf="
+        userForm.get('desigmationId')?.touched &&
+        userForm.get('desigmationId')?.hasError('required')
+      "
+    >
+      Designation is required
+    </div>
+
+  </div>
+
+</div>
 
           </div>
 

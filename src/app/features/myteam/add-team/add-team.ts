@@ -312,6 +312,11 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.isEditMode = true;
     this.userId = Number(id);
 
+    // this.isEditMode = true;
+
+  this.userForm.get('departmentId')?.disable();
+  this.userForm.get('desigmationId')?.disable();
+
     // First load dropdowns
     this.loadDepartments();
     this.loadDesignations();
@@ -855,7 +860,385 @@ export class AddTeam implements OnInit, AfterViewInit {
   // SUBMIT
   // ============================================================
 
- onSubmit(): void {
+//  onSubmit(): void {
+
+//   // ============================================================
+//   // PREVENT DOUBLE SUBMIT
+//   // ============================================================
+
+//   if (this.isSubmitting) {
+//     return;
+//   }
+
+
+//   // ============================================================
+//   // MARK FORM AS TOUCHED
+//   // ============================================================
+
+//   this.userForm.markAllAsTouched();
+
+
+//   // ============================================================
+//   // FORM DEBUG
+//   // ============================================================
+
+//   console.log('========== FORM DEBUG ==========');
+
+//   console.log(
+//     'FORM VALID:',
+//     this.userForm.valid
+//   );
+
+//   console.log(
+//     'FORM VALUE:',
+//     this.userForm.value
+//   );
+
+
+//   Object.keys(
+//     this.userForm.controls
+//   ).forEach(key => {
+
+//     const control =
+//       this.userForm.get(key);
+
+//     console.log(
+//       key,
+//       'value:',
+//       control?.value,
+//       'valid:',
+//       control?.valid,
+//       'errors:',
+//       control?.errors
+//     );
+
+//   });
+
+
+//   // ============================================================
+//   // FORM VALIDATION
+//   // ============================================================
+
+//   if (this.userForm.invalid) {
+
+//     console.error(
+//       'FORM IS INVALID - API WILL NOT BE CALLED'
+//     );
+
+//     return;
+//   }
+
+
+//   console.log(
+//     'FORM IS VALID - CALLING API'
+//   );
+
+
+//   // ============================================================
+//   // EXPIRY DATE VALIDATION
+//   // ============================================================
+
+//   if (!this.validateExpiryDate()) {
+
+//     console.error(
+//       'EXPIRY DATE VALIDATION FAILED'
+//     );
+
+//     return;
+//   }
+
+
+//   // ============================================================
+//   // START SUBMITTING
+//   // ============================================================
+
+//   this.isSubmitting = true;
+
+
+//   // ============================================================
+//   // GET FORM VALUES
+//   // ============================================================
+
+//   const formValues =
+//     this.userForm.value;
+
+
+//   console.log(
+//     'FORM VALUES BEFORE PAYLOAD:',
+//     formValues
+//   );
+
+
+//   // ============================================================
+//   // EXPIRY DATE
+//   //
+//   // Material Datepicker returns a Date object.
+//   //
+//   // Example:
+//   // Sun Dec 31 2050 ...
+//   //
+//   // API will receive:
+//   // 2050-12-31
+//   // ============================================================
+
+//   const formattedExpiryDate =
+//     this.formatDateForApi(
+//       formValues.expiryDate
+//     );
+
+
+//   console.log(
+//     'Expiry Date - Date Object:',
+//     formValues.expiryDate
+//   );
+
+//   console.log(
+//     'Expiry Date - API Format:',
+//     formattedExpiryDate
+//   );
+
+
+//   // ============================================================
+//   // DEPARTMENT / DESIGNATION DEBUG
+//   // ============================================================
+
+//   console.log(
+//     'Department ID:',
+//     formValues.departmentId
+//   );
+
+//   console.log(
+//     'Designation ID:',
+//     formValues.desigmationId
+//   );
+
+
+//   // ============================================================
+//   // BUILD PAYLOAD
+//   // ============================================================
+
+//   const payload: any = {
+
+//     userId:
+//       this.isEditMode
+//         ? this.userId
+//         : 0,
+
+
+//     firstName:
+//       formValues.name
+//         ? formValues.name.trim()
+//         : '',
+
+
+//     mobileNo:
+//       formValues.mobile || '',
+
+
+//     email:
+//       formValues.email
+//         ? formValues.email
+//             .trim()
+//             .toLowerCase()
+//         : '',
+
+
+//     /*
+//      * Material Datepicker Date
+//      * converted to yyyy-MM-dd
+//      */
+//     expiryDate:
+//       formattedExpiryDate,
+
+
+//     permission:
+//       formValues.isAdmin
+//         ? 'Y'
+//         : 'N',
+
+
+//     status:
+//       Number(
+//         formValues.status
+//       ),
+
+
+//     departmentId:
+//       Number(
+//         formValues.departmentId
+//       ),
+
+
+//     designationId:
+//       Number(
+//         formValues.desigmationId
+//       ),
+
+
+//     qcFlag:
+//       0,
+
+
+//     telephone:
+//       formValues.telephone || '',
+
+
+//     createdBy:
+//       this.createdBy,
+
+
+//     module:
+//       this.buildModulePermissions()
+
+//   };
+
+
+//   // ============================================================
+//   // PASSWORD
+//   //
+//   // ADD:
+//   //   password is mandatory
+//   //
+//   // EDIT:
+//   //   password is sent only if user entered a new password
+//   // ============================================================
+
+//   if (
+//     formValues.password &&
+//     formValues.password.trim()
+//   ) {
+
+//     payload.password =
+//       formValues.password.trim();
+
+//   }
+
+
+//   // ============================================================
+//   // FINAL PAYLOAD DEBUG
+//   // ============================================================
+
+//   console.log(
+//     '========== FINAL USER PAYLOAD =========='
+//   );
+
+//   console.log(
+//     JSON.stringify(
+//       payload,
+//       null,
+//       2
+//     )
+//   );
+
+
+//   // ============================================================
+//   // API CALL
+//   // ============================================================
+
+//   this.dataProvider
+//     .saveUserManagementDetailsDetail(
+//       payload
+//     )
+//     .subscribe({
+
+//       // ========================================================
+//       // SUCCESS
+//       // ========================================================
+
+//       next: (response: any) => {
+
+//         this.isSubmitting = false;
+
+
+//         console.log(
+//           'SAVE USER RESPONSE:',
+//           response
+//         );
+
+
+//         // ======================================================
+//         // API RETURNED FAILURE
+//         // ======================================================
+
+//         if (
+//           response?.success === false
+//         ) {
+
+//           alert(
+//             response.message ||
+//             'Operation failed.'
+//           );
+
+//           return;
+//         }
+
+
+//         // ======================================================
+//         // SUCCESS MESSAGE
+//         // ======================================================
+
+//         alert(
+//           this.isEditMode
+//             ? 'User updated successfully!'
+//             : 'User saved successfully!'
+//         );
+
+
+//         // ======================================================
+//         // BACK TO INDEX
+//         // ======================================================
+
+//         this.backToIndexPage();
+
+//       },
+
+
+//       // ========================================================
+//       // ERROR
+//       // ========================================================
+
+//       error: (err) => {
+
+//         this.isSubmitting = false;
+
+
+//         console.error(
+//           'Save user error:',
+//           err
+//         );
+
+
+//         console.error(
+//           'HTTP STATUS:',
+//           err?.status
+//         );
+
+
+//         console.error(
+//           'ERROR BODY:',
+//           err?.error
+//         );
+
+
+//         alert(
+//           err?.error?.message ||
+//           (
+//             this.isEditMode
+//               ? 'Failed to update user.'
+//               : 'Failed to save user.'
+//           )
+//         );
+
+//       }
+
+//     });
+
+// }
+
+/**
+ * Submit User
+ */
+onSubmit(): void {
 
   // ============================================================
   // PREVENT DOUBLE SUBMIT
@@ -889,6 +1272,11 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.userForm.value
   );
 
+  console.log(
+    'FORM RAW VALUE:',
+    this.userForm.getRawValue()
+  );
+
 
   Object.keys(
     this.userForm.controls
@@ -903,6 +1291,8 @@ export class AddTeam implements OnInit, AfterViewInit {
       control?.value,
       'valid:',
       control?.valid,
+      'disabled:',
+      control?.disabled,
       'errors:',
       control?.errors
     );
@@ -952,14 +1342,21 @@ export class AddTeam implements OnInit, AfterViewInit {
 
   // ============================================================
   // GET FORM VALUES
+  //
+  // IMPORTANT:
+  //
+  // getRawValue() includes disabled controls.
+  //
+  // This is required because Department and Designation
+  // are disabled during EDIT mode.
   // ============================================================
 
   const formValues =
-    this.userForm.value;
+    this.userForm.getRawValue();
 
 
   console.log(
-    'FORM VALUES BEFORE PAYLOAD:',
+    'FORM RAW VALUES BEFORE PAYLOAD:',
     formValues
   );
 
@@ -967,13 +1364,8 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
   // EXPIRY DATE
   //
-  // Material Datepicker returns a Date object.
-  //
-  // Example:
-  // Sun Dec 31 2050 ...
-  //
-  // API will receive:
-  // 2050-12-31
+  // Material Datepicker Date
+  // converted to yyyy-MM-dd
   // ============================================================
 
   const formattedExpiryDate =
@@ -1032,16 +1424,12 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     email:
       formValues.email
-        ? formValues.email
-            .trim()
-            .toLowerCase()
+        ? formValues.email.trim().toLowerCase()
         : '',
 
 
-    /*
-     * Material Datepicker Date
-     * converted to yyyy-MM-dd
-     */
+    // Material Datepicker Date
+    // converted to yyyy-MM-dd
     expiryDate:
       formattedExpiryDate,
 
@@ -1058,6 +1446,9 @@ export class AddTeam implements OnInit, AfterViewInit {
       ),
 
 
+    // IMPORTANT:
+    // getRawValue() ensures these values are available
+    // even when controls are disabled.
     departmentId:
       Number(
         formValues.departmentId
@@ -1092,10 +1483,10 @@ export class AddTeam implements OnInit, AfterViewInit {
   // PASSWORD
   //
   // ADD:
-  //   password is mandatory
+  //   Password can be sent.
   //
   // EDIT:
-  //   password is sent only if user entered a new password
+  //   Password is sent only when user enters a new password.
   // ============================================================
 
   if (
@@ -1229,6 +1620,7 @@ export class AddTeam implements OnInit, AfterViewInit {
     });
 
 }
+
 
   // ============================================================
   // BUILD API PERMISSIONS

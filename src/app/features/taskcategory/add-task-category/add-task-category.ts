@@ -13,7 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
-import { MatIcon } from "@angular/material/icon";
+import { MatIcon, MatIconModule } from "@angular/material/icon";
 import { MatDivider } from "@angular/material/divider";
 
 @Component({
@@ -24,7 +24,8 @@ import { MatDivider } from "@angular/material/divider";
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatSelectModule
+    MatSelectModule,
+    MatIconModule
   ],
   templateUrl: './add-task-category.html',
   styleUrl: './add-task-category.scss',

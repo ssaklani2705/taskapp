@@ -1,0 +1,198 @@
+<div class="page-container">
+  <div class="main-card">
+    <!-- ================= HEADER ================= -->
+    <div class="page-header">
+      <div class="page-title">
+        <mat-icon>event_repeat</mat-icon>
+
+        <span>View Recurring</span>
+      </div>
+
+      <div class="header-action">
+        <button type="button" class="back-button" (click)="backToIndexPage()">
+          <mat-icon>arrow_back</mat-icon>
+
+          <span>Back to Index</span>
+        </button>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- ================= RECURRING INFORMATION ================= -->
+    <div class="user-information">
+      <div *ngIf="loading" class="loading-container">
+        <div class="loading-spinner"></div>
+        <span>Loading recurring details...</span>
+      </div>
+
+      <ng-container *ngIf="!loading && recurring">
+        <div class="user-info-grid">
+          <!-- ================= LEFT COLUMN ================= -->
+          <div class="user-column">
+            <!-- TITLE -->
+            <div class="info-row">
+              <span class="info-label">Title:</span>
+
+              <span class="info-value">
+                {{ recurring.title || '-' }}
+              </span>
+            </div>
+
+            <!-- CLIENT -->
+            <div class="info-row">
+              <span class="info-label">Client:</span>
+
+              <span class="info-value">
+                {{ recurring.clientName || '-' }}
+              </span>
+            </div>
+
+            <!-- TASK CATEGORY -->
+            <div class="info-row">
+              <span class="info-label">Task Category:</span>
+
+              <span class="info-value">
+                {{ recurring.taskCatName || '-' }}
+              </span>
+            </div>
+
+            <!-- TYPE -->
+            <div class="info-row">
+              <span class="info-label">Type:</span>
+
+              <span class="info-value">
+                {{ getTypeLabel(recurring.type) }}
+              </span>
+            </div>
+
+            <!-- SCHEDULE -->
+            <div class="info-row">
+              <span class="info-label">Schedule:</span>
+
+              <span class="info-value">
+                {{ getSchedule() }}
+              </span>
+            </div>
+          </div>
+
+          <!-- ================= RIGHT COLUMN ================= -->
+          <div class="user-column">
+            <!-- STATUS -->
+            <div class="info-row status-row">
+              <span class="info-label">Status:</span>
+
+              <span class="status-badge" [ngClass]="getStatusClass(recurring.status)">
+                {{ getStatusLabel(recurring.status) }}
+              </span>
+            </div>
+
+            <!-- DAY -->
+            <div class="info-row" *ngIf="recurring.type === 2">
+              <span class="info-label">Day:</span>
+
+              <span class="info-value">
+                {{ getDayLabel(recurring.day) }}
+              </span>
+            </div>
+
+            <!-- DATE -->
+            <div class="info-row" *ngIf="recurring.type === 3 || recurring.type === 4">
+              <span class="info-label">Date:</span>
+
+              <span class="info-value">
+                {{ recurring.date || '-' }}
+              </span>
+            </div>
+
+            <!-- MONTH -->
+            <div class="info-row" *ngIf="recurring.type === 4">
+              <span class="info-label">Month:</span>
+
+              <span class="info-value">
+                {{ getMonthLabel(recurring.month) }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= DESCRIPTION ================= -->
+        <div class="description-section">
+          <div class="description-label">Description:</div>
+
+          <div class="description-value">
+            {{ recurring.description || '-' }}
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- ================= NO DATA ================= -->
+      <div *ngIf="!loading && !recurring" class="no-records-box">
+        <mat-icon>info</mat-icon>
+
+        <span> Recurring details not available. </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= ACTION HISTORY ================= -->
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-title">
+        <mat-icon>history</mat-icon>
+
+        <span>Action History</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="table-container">
+      <div class="history-table-wrapper">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th style="width: 5%">#</th>
+
+              <th style="width: 20%">Action By</th>
+
+              <th style="width: 20%">Updated On</th>
+
+              <th style="width: 55%">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let history of transactionHistory; let i = index">
+              <td>
+                {{ i + 1 }}
+              </td>
+
+              <td>
+                {{ history.name || '-' }}
+              </td>
+
+              <td>
+                {{ history.entryDate || '-' }}
+              </td>
+
+              <td>
+                <span class="action-badge">
+                  {{ history.action || '-' }}
+                </span>
+              </td>
+            </tr>
+
+            <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
+              <td colspan="4" class="no-records-box">
+                <mat-icon>info</mat-icon>
+
+                <span> No action history available </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

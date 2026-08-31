@@ -83,6 +83,8 @@ export const routes: Routes = [
       { path: 'view-state/:stateId', loadComponent: () => import('./features/states/state-view/state-view').then(m => m.StateView) },
 
 
+
+
       {
         path: 'client-index',
         loadComponent: () =>
@@ -102,6 +104,31 @@ export const routes: Routes = [
         path: 'view-client/:clientId',
         loadComponent: () =>
           import('./features/Client/view-client/view-client').then((m) => m.ViewClient),
+      },
+
+
+      // Recurring
+      {
+        path: 'recurring-index',
+        loadComponent: () =>
+          import('./features/Recurring/recurring-index/recurring-index').then(
+            (m) => m.RecurringIndex,
+          ),
+      },
+      {
+        path: 'add-recurring',
+        loadComponent: () =>
+          import('./features/Recurring/add-recurring/add-recurring').then((m) => m.AddRecurring),
+      },
+      {
+        path: 'edit-recurring/:recurringId',
+        loadComponent: () =>
+          import('./features/Recurring/add-recurring/add-recurring').then((m) => m.AddRecurring),
+      },
+      {
+        path: 'view-recurring/:recurringId',
+        loadComponent: () =>
+          import('./features/Recurring/view-recurring/view-recurring').then((m) => m.ViewRecurring),
       },
       {
         path: '',

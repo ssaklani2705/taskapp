@@ -124,13 +124,35 @@ export class IndexTaskCategory {
     );
 
     this.route.queryParams.subscribe(params => {
-      this.currentPage = +(params['currentPage'] || 1);
-      this.statusIndex = +(params['statusIndex'] || 0);
-      this.search = params['searchText'] || '';
-      this.selectedDepartment = params['departmentId'] || '';
-      this.page = +(params['page'] || (this.currentPage - 1));
-      this.size = +(params['size'] || 5);
-      this.searchQuery = this.search;
+     this.currentPage =
+  +(params['currentPage'] || 1);
+
+this.statusIndex =
+  +(params['statusIndex'] || 0);
+
+this.selectedStatus =
+  this.statusIndex === 0
+    ? ''
+    : String(this.statusIndex);
+
+this.search =
+  params['searchText'] || '';
+
+this.searchQuery =
+  this.search;
+
+this.selectedDepartment =
+  params['departmentId'] || '';
+
+this.page =
+  +(params['page'] ?? (this.currentPage - 1));
+
+this.size =
+  +(params['size'] || 5);
+
+this.recordsPerPage =
+  this.size;
+
       /* User ID */
       if (
         isPlatformBrowser(
@@ -208,43 +230,49 @@ export class IndexTaskCategory {
         }
       }
 
-      if (stateData && !params['searchText'] && !params['statusIndex'] && !params['departmentId']) {
+     
+      if (
+  stateData &&
+  !params['searchText'] &&
+  !params['statusIndex'] &&
+  !params['departmentId']
+) {
 
-        this.currentPage =
-          stateData.currentPage || 1;
+  this.currentPage =
+    stateData.currentPage || 1;
 
-        this.page =
-          this.currentPage - 1;
+  this.page =
+    stateData.page ??
+    (this.currentPage - 1);
 
-        this.statusIndex =
-          stateData.statusIndex || 0;
+  this.statusIndex =
+    Number(
+      stateData.statusIndex || 0
+    );
 
-        this.search =
-          stateData.searchText || '';
+  this.selectedStatus =
+    this.statusIndex === 0
+      ? ''
+      : String(this.statusIndex);
 
-        this.size =
-          stateData.size || this.size;
+  this.search =
+    stateData.searchText || '';
 
-        this.recordsPerPage =
-          this.size;
+  this.searchQuery =
+    this.search;
 
-        this.selectedStatus =
-          this.statusIndex
-            ? String(
-              this.statusIndex
-            )
-            : '';
+  this.size =
+    stateData.size || this.size;
 
-        this.searchQuery =
-          this.search;
+  this.recordsPerPage =
+    this.size;
 
-        this.selectedDepartment =
-          stateData.departmentId
-            ? String(
-              stateData.departmentId
-            )
-            : '';
-      }
+  this.selectedDepartment =
+    stateData.departmentId
+      ? String(stateData.departmentId)
+      : '';
+}
+
 
       this.getDepartments();
 
@@ -349,119 +377,150 @@ export class IndexTaskCategory {
   /* Search */
   onSearch(): void {
 
-    this.search =
-      this.searchQuery.trim();
+  // ============================================================
+  // SEARCH
+  // ============================================================
 
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : +this.selectedStatus;
+  this.search =
+    this.searchQuery
+      ? this.searchQuery.trim()
+      : '';
 
-    this.currentPage = 1;
 
-    this.page = 0;
+  // ============================================================
+  // STATUS
+  // ============================================================
 
-    const state = {
-      currentPage: this.currentPage,
-      statusIndex: this.statusIndex,
-      searchText: this.search,
-      departmentId: this.selectedDepartment,
-      page: this.page,
-      size: this.size
-    };
+  this.statusIndex =
+    this.selectedStatus === ''
+      ? 0
+      : Number(this.selectedStatus);
 
-    this.sessionService.setItem(
-      this.filterKey,
-      JSON.stringify(state)
-    );
 
-    this.router
-      .navigate(
-        ['/task-category-index'],
-        {
-          queryParams: state,
-        }
-      )
-      .then(() => {
+  // ============================================================
+  // RESET PAGE
+  // ============================================================
 
-        this.getTaskCategoryDetails();
-      });
-  }
+  this.currentPage = 1;
+
+  this.page = 0;
+
+
+  // ============================================================
+  // FILTER STATE
+  // ============================================================
+
+  const state = {
+
+    currentPage:
+      this.currentPage,
+
+    statusIndex:
+      this.statusIndex,
+
+    searchText:
+      this.search,
+
+    departmentId:
+      this.selectedDepartment || '',
+
+    page:
+      this.page,
+
+    size:
+      this.size
+  };
+
+
+  // ============================================================
+  // SAVE FILTER STATE
+  // ============================================================
+
+  this.sessionService.setItem(
+    this.filterKey,
+    JSON.stringify(state)
+  );
+
+
+  // ============================================================
+  // NAVIGATE
+  // ============================================================
+
+  this.router
+    .navigate(
+      ['/task-category-index'],
+      {
+        queryParams: state
+      }
+    )
+    .then(() => {
+
+      this.getTaskCategoryDetails();
+
+    });
+
+}
+
 
   /* Pagination */
-  goToPage(
-    pageNumber: number
-  ): void {
+ goToPage(pageNumber: number): void {
 
-    if (
-      pageNumber < 1 ||
-      pageNumber > this.totalPages
-    ) {
-      return;
-    }
-
-    this.currentPage =
-      pageNumber;
-
-    this.page =
-      pageNumber - 1;
-
-    const state = {
-
-      currentPage:
-        this.currentPage,
-
-      statusIndex:
-        this.statusIndex,
-
-      searchText:
-        this.search,
-
-      departmentId:
-        this.selectedDepartment,
-
-      page:
-        this.page,
-
-      size:
-        this.size,
-    };
-
-    this.sessionService.setItem(
-      this.filterKey,
-      JSON.stringify(state)
-    );
-
-    this.router
-      .navigate(
-        ['/task-category-index'],
-        {
-          queryParams: {
-            currentPage:
-              this.currentPage,
-
-            statusIndex:
-              this.statusIndex || 0,
-
-            searchText:
-              this.search || '',
-
-            departmentId:
-              this.selectedDepartment || '',
-
-            page:
-              this.page,
-
-            size:
-              this.size || 5,
-          },
-        }
-      )
-      .then(() => {
-
-        this.getTaskCategoryDetails();
-      });
+  if (
+    pageNumber < 1 ||
+    pageNumber > this.totalPages
+  ) {
+    return;
   }
+
+
+  this.currentPage =
+    pageNumber;
+
+  this.page =
+    pageNumber - 1;
+
+
+  const state = {
+
+    currentPage:
+      this.currentPage,
+
+    statusIndex:
+      this.statusIndex,
+
+    searchText:
+      this.search,
+
+    departmentId:
+      this.selectedDepartment || '',
+
+    page:
+      this.page,
+
+    size:
+      this.size
+  };
+
+
+  this.sessionService.setItem(
+    this.filterKey,
+    JSON.stringify(state)
+  );
+
+
+  this.router.navigate(
+    ['/task-category-index'],
+    {
+      queryParams: state
+    }
+  ).then(() => {
+
+    this.getTaskCategoryDetails();
+
+  });
+
+}
+
 
   goToFirstPage(): void {
 

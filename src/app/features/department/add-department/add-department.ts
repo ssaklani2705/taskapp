@@ -40,6 +40,7 @@ import {
 } from '../../../service/data-provider.service';
 
 import Swal from 'sweetalert2';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
@@ -52,6 +53,7 @@ import Swal from 'sweetalert2';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
+    MatIconModule
   ],
 
   templateUrl: './add-department.html',

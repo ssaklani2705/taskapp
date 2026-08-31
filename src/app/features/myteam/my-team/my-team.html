@@ -246,7 +246,7 @@
 
                 <!-- NUMBER -->
                 <th class="serial-column">
-                  #
+                  Sr. No.
                 </th>
 
 
@@ -408,7 +408,7 @@
                     <!-- VIEW -->
                     <button type="button" class="action-btn view-btn" title="View" (click)="viewUser(user.userId)">
 
-                      <i class="fa fa-search"></i>
+                      <i class="fa fa-eye"></i>
 
                     </button>
 
@@ -436,7 +436,7 @@
                       <button type="button" class="action-btn delete-btn" title="Delete"
                         (click)="onDeleteUser(user.userId)">
 
-                        <i class="fa fa-close"></i>
+                        <i class="fa fa-trash"></i>
 
                       </button>
 
@@ -460,8 +460,7 @@
 
 
       <!-- ================= BOTTOM SECTION ================= -->
-      <div class="table-bottom-section">
-
+      <div class="table-top-section">
 
         <!-- RECORD SUMMARY -->
         <div class="record-summary">
@@ -472,12 +471,10 @@
 
 
         <!-- PAGINATION -->
-        <!-- <div class="pagination">
+        <div class="pagination">
 
-          <button
-            type="button"
-            class="pagination-btn first-btn"
-            (click)="goToFirstPage()"
+          <!-- FIRST -->
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()"
             [disabled]="currentPage === 1">
 
             « First
@@ -485,85 +482,38 @@
           </button>
 
 
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPreviousPage()"
-            [disabled]="currentPage === 1">
+          <!-- PREVIOUS -->
+          <button type="button" class="pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">
 
             ‹ Prev
 
           </button>
 
 
-          <button
-            type="button"
-            class="pagination-btn page-number"
-            *ngFor="let pageNumber of pages()"
-            (click)="goToPage(pageNumber)"
-            [class.active-pagination]="
-              pageNumber === currentPage
-            ">
+          <!-- PAGE NUMBERS -->
+          <button type="button" class="pagination-btn page-number" *ngFor="let pageNumber of pages()"
+            (click)="goToPage(pageNumber)" [class.active-pagination]="pageNumber === currentPage">
 
             {{ pageNumber }}
 
           </button>
 
 
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToNextPage()"
-            [disabled]="currentPage === totalPages">
+          <!-- NEXT -->
+          <button type="button" class="pagination-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">
 
             Next ›
 
           </button>
 
 
-          <button
-            type="button"
-            class="pagination-btn last-btn"
-            (click)="goToLastPage()"
+          <!-- LAST -->
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()"
             [disabled]="currentPage === totalPages">
 
             Last »
 
           </button>
-
-        </div> -->
-
-
-        <!-- RECORDS PER PAGE -->
-        <div class="records-per-page">
-
-          <span>
-            Records per page:
-          </span>
-
-          <select [(ngModel)]="size" (change)="onChangeRecordsPerPage()" class="records-select">
-
-            <option [ngValue]="5">
-              5
-            </option>
-
-            <option [ngValue]="10">
-              10
-            </option>
-
-            <option [ngValue]="20">
-              20
-            </option>
-
-            <option [ngValue]="50">
-              50
-            </option>
-
-            <option [ngValue]="100">
-              100
-            </option>
-
-          </select>
 
         </div>
 

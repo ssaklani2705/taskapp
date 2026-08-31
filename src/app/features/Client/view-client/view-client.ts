@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DataProviderService } from '../../../service/data-provider.service';
 import { Common } from '../../../classes/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view-client',
@@ -32,6 +33,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class ViewClient {
   clientId!: number;
+  userId!: number;
 
   client: any = {};
 
@@ -51,18 +53,28 @@ export class ViewClient {
   page = 0;
   size = 5;
 
-   addPer = 'N';
-  editPer = 'N';
-  deletePer = 'N';
-  exportExcel = 'N';
+  showChangeOutstandingModal = false;
+  newOutstanding: number | null = null;
+  isChangingOutstanding = false;
+  outstandingValidationError = false;
 
   constructor(
     private route: ActivatedRoute,
     private dataprovider: DataProviderService,
     private router: Router,
+    @Inject(PLATFORM_ID)
+    private platformId: Object,
   ) {}
 
   ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const storedUserId = sessionStorage.getItem('userId');
+
+      if (storedUserId) {
+        this.userId = Number(storedUserId);
+      }
+    }
+
     this.clientId = +this.route.snapshot.paramMap.get('clientId')!;
 
     const queryParams = this.route.snapshot.queryParamMap;
@@ -119,29 +131,51 @@ export class ViewClient {
     }
 
     if (this.selectedManagerId === Number(this.client?.managerId)) {
-      alert('Please select a different manager.');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Invalid Selection',
+        text: 'Please select a different manager.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#f0ad4e',
+      });
+
       return;
     }
 
     this.isChangingManager = true;
 
-    this.dataprovider.changeClientManager(this.clientId, this.selectedManagerId).subscribe({
+    this.dataprovider.changeClientManager(this.clientId, this.selectedManagerId,this.userId).subscribe({
       next: (response: any) => {
         console.log('Change manager response:', response);
 
         this.isChangingManager = false;
 
         if (response?.success === false) {
-          alert(response.message || 'Failed to change manager.');
+          Swal.fire({
+            icon: 'error',
+            title: 'Change Failed',
+            text: response.message || 'Failed to change manager.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#d33',
+          });
+
           return;
         }
 
-        alert('Manager changed successfully.');
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Manager changed successfully.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#3085d6',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.showChangeManagerModal = false;
+            this.selectedManagerId = null;
 
-        this.showChangeManagerModal = false;
-        this.selectedManagerId = null;
-
-        this.getClientDetails();
+            this.getClientDetails();
+          }
+        });
       },
 
       error: (error) => {
@@ -149,15 +183,24 @@ export class ViewClient {
 
         console.error('Change manager error:', error);
 
-        alert(error?.error?.message || 'Failed to change manager.');
+        Swal.fire({
+          icon: 'error',
+          title: 'Change Failed',
+          text: error?.error?.message || 'Failed to change manager.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#d33',
+        });
       },
     });
   }
 
   openChangeManagerModal(): void {
-    this.managerValidationError = false;
+    if (Number(this.client?.status) === 3) {
+      return;
+    }
 
-    this.selectedManagerId = this.client?.managerId ? Number(this.client.managerId) : null;
+    this.managerValidationError = false;
+    this.selectedManagerId = null;
 
     this.loadManagers();
 
@@ -172,6 +215,122 @@ export class ViewClient {
     this.showChangeManagerModal = false;
     this.selectedManagerId = null;
     this.managerValidationError = false;
+  }
+
+  openChangeOutstandingModal(): void {
+    this.newOutstanding =
+      this.client?.outstanding !== null && this.client?.outstanding !== undefined
+        ? Number(this.client.outstanding)
+        : 0;
+
+    this.outstandingValidationError = false;
+
+    this.showChangeOutstandingModal = true;
+  }
+
+  closeChangeOutstandingModal(): void {
+    if (this.isChangingOutstanding) {
+      return;
+    }
+
+    this.showChangeOutstandingModal = false;
+    this.outstandingValidationError = false;
+    this.newOutstanding = null;
+  }
+  
+  updateOutstanding(): void {
+    this.outstandingValidationError = false;
+
+    if (
+      this.newOutstanding === null ||
+      this.newOutstanding === undefined ||
+      Number.isNaN(Number(this.newOutstanding)) ||
+      Number(this.newOutstanding) < 0
+    ) {
+      this.outstandingValidationError = true;
+      return;
+    }
+
+    if (!this.client?.clientId) {
+      return;
+    }
+
+    if (!this.client?.managerId) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Manager information is not available for this client.',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    this.isChangingOutstanding = true;
+
+    const outstanding = Number(this.newOutstanding);
+    const managerId = Number(this.client.managerId);
+    const userId = Number(this.userId);
+
+
+    console.log('Updating outstanding:', {
+      clientId: this.client.clientId,
+      outstanding: outstanding,
+      managerId: managerId,
+      // userId: this.userId
+
+    });
+
+    this.dataprovider
+      .updateClientOutstanding(this.client.clientId, outstanding, managerId,userId)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Update Outstanding Response:', response);
+
+          this.isChangingOutstanding = false;
+
+          if (response?.success === true) {
+            // Update the current value immediately
+            this.client.outstanding = outstanding;
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Updated',
+              text: response.message || 'Outstanding updated successfully.',
+              timer: 1500,
+              showConfirmButton: false,
+            }).then(() => {
+              // Close modal
+              this.closeChangeOutstandingModal();
+
+              // Refresh client details + action history
+              this.getClientDetails();
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Unable to Update',
+              text: response?.message || 'Failed to update outstanding.',
+              confirmButtonText: 'OK',
+            });
+          }
+        },
+
+        error: (error) => {
+          console.error('Error updating outstanding:', error);
+
+          this.isChangingOutstanding = false;
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text:
+              error?.error?.message ||
+              error?.error ||
+              'Something went wrong while updating outstanding.',
+            confirmButtonText: 'OK',
+          });
+        },
+      });
   }
 
   get hasTransactionHistory(): boolean {

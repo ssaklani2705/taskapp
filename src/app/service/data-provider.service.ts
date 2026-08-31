@@ -1549,9 +1549,10 @@ export class DataProviderService {
     );
   }
 
-  changeClientManager(clientId: number, managerId: number) {
+  changeClientManager(clientId: number, managerId: number,userId: number) {
     return this.http.put<any>(`${environment.apiBaseUrl}admin/client/${clientId}/manager`, {
       managerId: managerId,
+      userId: userId
     });
   }
 
@@ -1594,4 +1595,99 @@ export class DataProviderService {
     );
 
   }
+
+  getRecurringClients(userId: number) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/getRecurringClients`, {
+      params: {
+        userId: userId,
+      },
+    });
+  }
+
+  addOrUpdateRecurring(data: any, userId: number) {
+    return this.http.post<any>(`${environment.apiBaseUrl}admin/addOrUpdateRecurring`, data, {
+      params: {
+        userId: userId,
+      },
+    });
+  }
+
+  getRecurringById(recurringId: number, userId: number) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/getRecurringById/${recurringId}`, {
+      params: {
+        userId: userId,
+      },
+    });
+  }
+
+
+  getRecurringDetails(
+    page: number,
+    size: number,
+    status: number = 0,
+    search: string = '',
+    clientId: number = 0,
+    type: number = 0,
+    taskCatId: number = 0,
+    sortColumn: string = 'title',
+    sortDirection: string = 'asc',
+    userId: number,
+  ) {
+    const params: any = {
+      page: page,
+      size: size,
+      status: status,
+      clientId: clientId,
+      type: type,
+      taskCatId: taskCatId,
+      sortColumn: sortColumn,
+      sortDirection: sortDirection,
+      userId: userId,
+    };
+
+    if (search && search.trim() !== '') {
+      params.search = search.trim();
+    }
+
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/getRecurringDetails`, { params });
+  }
+
+  deleteRecurring(recurringId: number, userId: number) {
+    return this.http.post<any>(`${environment.apiBaseUrl}admin/deleteRecurring`, null, {
+      params: {
+        recurringId: recurringId,
+        userId: userId,
+      },
+    });
+  }
+
+  getTaskCategories() {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/active`);
+  }
+
+  getRecurringDetailsById(recurringId: number, userId: number) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/recurringDetails/${recurringId}`, {
+      params: {
+        userId: userId,
+      },
+    });
+  }
+
+  updateClientOutstanding(clientId: number, outstanding: number, managerId: number,userId: number) {
+    return this.http.post<any>(
+      `${environment.apiBaseUrl}admin/updateClientOutstanding`,
+      {
+        clientId: clientId,
+        outstanding: outstanding,
+        userId: userId
+      },
+      {
+        params: {
+          managerId: managerId,
+          
+        },
+      },
+    );
+  }
+
 }

@@ -1,0 +1,392 @@
+<div class="user-page-wrapper">
+  <div class="user-portlet">
+    <!-- ================= HEADER ================= -->
+    <div class="user-portlet-title">
+      <div class="user-title">
+        <span class="user-page-title">
+          {{ isEditMode ? 'EDIT RECURRING' : 'ADD RECURRING' }}
+        </span>
+      </div>
+
+      <div class="user-actions">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
+          <mat-icon>
+            arrow_back
+          </mat-icon>
+          Back to Index
+        </button>
+      </div>
+    </div>
+
+    <!-- ================= BODY ================= -->
+    <div class="user-portlet-body">
+      <form [formGroup]="recurringForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="user-form-body">
+          <!-- REQUIRED MESSAGE -->
+          <div class="mandatory-message">
+            Fields with
+            <span class="required">*</span>
+            mark are mandatory
+          </div>
+
+          <!-- ================= ROW 1 ================= -->
+          <div class="user-form-row">
+            <!-- CLIENT -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Client Name
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="clientId">
+                  <option [ngValue]="null">Select Client</option>
+
+                  <option *ngFor="let client of clients" [ngValue]="client.clientId">
+                    {{ client.name }}
+                  </option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    recurringForm.get('clientId')?.touched && recurringForm.get('clientId')?.invalid
+                  "
+                >
+                  Client Name is required
+                </div>
+              </div>
+            </div>
+
+            <!-- TITLE -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Title
+                  <span class="required">*</span>
+                </label>
+
+                <input type="text" class="user-input" formControlName="title" maxlength="500" />
+
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('title')?.touched && recurringForm.get('title')?.invalid"
+                >
+                  Title is required
+                </div>
+              </div>
+            </div>
+
+            <!-- STATUS -->
+            <div class="user-form-col" *ngIf="isEditMode">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Status
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="status">
+                  <option [ngValue]="1">Active</option>
+
+                  <option [ngValue]="2">Inactive</option>
+
+                  <option [ngValue]="3">Deleted</option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    recurringForm.get('status')?.touched && recurringForm.get('status')?.invalid
+                  "
+                >
+                  Status is required
+                </div>
+              </div>
+            </div>
+
+            <!-- EMPTY COLUMN -->
+            <div class="user-form-col empty-column" *ngIf="!isEditMode"></div>
+
+            <!-- FOURTH COLUMN -->
+            <div class="user-form-col empty-column" *ngIf="isEditMode"></div>
+          </div>
+
+          <!-- ================= ROW 2 - DESCRIPTION ================= -->
+          <div class="user-form-row">
+            <div class="user-form-col full-width">
+              <div class="user-form-group">
+                <label class="user-label"> Description </label>
+
+                <textarea
+                  class="user-input user-textarea"
+                  formControlName="description"
+                  rows="4"
+                  maxlength="5000"
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= ROW 3 - TYPE ================= -->
+          <div class="user-form-row">
+            <div class="user-form-col full-width">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Type
+                  <span class="required">*</span>
+                </label>
+
+                <div class="radio-group">
+                  <!-- DAILY -->
+                  <label class="radio-option">
+                    <input
+                      type="radio"
+                      formControlName="type"
+                      [value]="1"
+                      (change)="onTypeChange()"
+                    />
+                    <span>Daily</span>
+                  </label>
+
+                  <!-- WEEKLY -->
+                  <label class="radio-option">
+                    <input
+                      type="radio"
+                      formControlName="type"
+                      [value]="2"
+                      (change)="onTypeChange()"
+                    />
+                    <span>Weekly</span>
+                  </label>
+
+                  <!-- MONTHLY -->
+                  <label class="radio-option">
+                    <input
+                      type="radio"
+                      formControlName="type"
+                      [value]="3"
+                      (change)="onTypeChange()"
+                    />
+                    <span>Monthly</span>
+                  </label>
+
+                  <!-- YEARLY -->
+                  <label class="radio-option">
+                    <input
+                      type="radio"
+                      formControlName="type"
+                      [value]="4"
+                      (change)="onTypeChange()"
+                    />
+                    <span>Yearly</span>
+                  </label>
+                </div>
+
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('type')?.touched && recurringForm.get('type')?.invalid"
+                >
+                  Type is required
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= WEEKLY ================= -->
+          <div class="user-form-row" *ngIf="recurringForm.get('type')?.value === 2">
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Day
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="day">
+                  <option [ngValue]="null">Select Day</option>
+
+                  <option [ngValue]="1">Monday</option>
+
+                  <option [ngValue]="2">Tuesday</option>
+
+                  <option [ngValue]="3">Wednesday</option>
+
+                  <option [ngValue]="4">Thursday</option>
+
+                  <option [ngValue]="5">Friday</option>
+
+                  <option [ngValue]="6">Saturday</option>
+
+                  <option [ngValue]="7">Sunday</option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('day')?.touched && recurringForm.get('day')?.invalid"
+                >
+                  Day is required
+                </div>
+              </div>
+            </div>
+
+            <div class="user-form-col empty-column"></div>
+            <div class="user-form-col empty-column"></div>
+            <div class="user-form-col empty-column"></div>
+          </div>
+
+          <!-- ================= MONTHLY ================= -->
+          <div class="user-form-row" *ngIf="recurringForm.get('type')?.value === 3">
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Date
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="date">
+                  <option [ngValue]="null">Select Date</option>
+
+                  <option *ngFor="let date of dates" [ngValue]="date">
+                    {{ date }}
+                  </option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('date')?.touched && recurringForm.get('date')?.invalid"
+                >
+                  Date is required
+                </div>
+              </div>
+            </div>
+
+            <div class="user-form-col empty-column"></div>
+            <div class="user-form-col empty-column"></div>
+            <div class="user-form-col empty-column"></div>
+          </div>
+
+          <!-- ================= YEARLY ================= -->
+          <div class="user-form-row" *ngIf="recurringForm.get('type')?.value === 4">
+            <!-- DATE -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Date
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="date">
+                  <option [ngValue]="null">Select Date</option>
+
+                  <option *ngFor="let date of dates" [ngValue]="date">
+                    {{ date }}
+                  </option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('date')?.touched && recurringForm.get('date')?.invalid"
+                >
+                  Date is required
+                </div>
+              </div>
+            </div>
+
+            <!-- MONTH -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Month
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="month">
+                  <option [ngValue]="null">Select Month</option>
+
+                  <option [ngValue]="1">January</option>
+
+                  <option [ngValue]="2">February</option>
+
+                  <option [ngValue]="3">March</option>
+
+                  <option [ngValue]="4">April</option>
+
+                  <option [ngValue]="5">May</option>
+
+                  <option [ngValue]="6">June</option>
+
+                  <option [ngValue]="7">July</option>
+
+                  <option [ngValue]="8">August</option>
+
+                  <option [ngValue]="9">September</option>
+
+                  <option [ngValue]="10">October</option>
+
+                  <option [ngValue]="11">November</option>
+
+                  <option [ngValue]="12">December</option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('month')?.touched && recurringForm.get('month')?.invalid"
+                >
+                  Month is required
+                </div>
+              </div>
+            </div>
+
+            <div class="user-form-col empty-column"></div>
+            <div class="user-form-col empty-column"></div>
+          </div>
+
+          <!-- ================= TASK CATEGORY ================= -->
+          <div class="user-form-row">
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Task Category
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="taskCatId">
+                  <option [ngValue]="null">Select Task Category</option>
+
+                  <option
+                    *ngFor="let category of taskCategories"
+                    [ngValue]="category.taskcategoryId"
+                  >
+                    {{ category.name }}
+                  </option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="
+                    recurringForm.get('taskCatId')?.touched &&
+                    recurringForm.get('taskCatId')?.invalid
+                  "
+                >
+                  Task Category is required
+                </div>
+              </div>
+            </div>
+
+            <div class="user-form-col empty-column"></div>
+            <div class="user-form-col empty-column"></div>
+            <div class="user-form-col empty-column"></div>
+          </div>
+
+          <!-- ================= BUTTONS ================= -->
+          <div class="user-buttons">
+            <button type="button" class="user-reset-btn" (click)="onReset()">Reset</button>
+
+            <button type="submit" class="user-submit-btn" [disabled]="isSubmitting">
+              {{ isSubmitting ? 'Submitting...' : isEditMode ? 'Update' : 'Submit' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
