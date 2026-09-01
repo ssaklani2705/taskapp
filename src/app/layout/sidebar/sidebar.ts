@@ -584,7 +584,7 @@ export class Sidebar implements OnInit {
       {
         moduleId: 4,
 
-        label: 'State',
+        label: 'State Master',
 
         icon: 'bar_chart',
 
