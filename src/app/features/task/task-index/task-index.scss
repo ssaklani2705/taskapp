@@ -978,6 +978,41 @@
 
 
 /* =========================================================
+   TASK STATUS COLUMN
+========================================================= */
+
+.user-table tbody td:nth-child(8) {
+  min-width: 130px;
+  width: 130px;
+  padding: 8px 10px;
+  text-align: center;
+  white-space: normal;
+}
+
+
+/* =========================================================
+   TASK STATUS BADGE
+========================================================= */
+
+.user-table tbody td:nth-child(8) .status-badge {
+  min-width: 90px;
+  max-width: 120px;
+  min-height: 30px;
+  height: auto;
+
+  padding: 6px 10px;
+
+  box-sizing: border-box;
+
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+
+  text-align: center;
+  line-height: 16px;
+}
+
+/* =========================================================
    STATUS BADGE
 ========================================================= */
 
