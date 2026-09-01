@@ -139,6 +139,8 @@ export class ManagerLogin {
   // }
 
   loadCaptcha() {
+    this.loginForm.get('captcha')?.reset('');
+
     this.authService.getCaptcha().subscribe({
       next: (res: { success: boolean; message: string; data: string }) => {
         if (res.success) {

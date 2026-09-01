@@ -1,53 +1,103 @@
 <div class="sidebar">
 
-  <!-- ================= BRAND ================= -->
+  <!-- =====================================================
+       BRAND
+  ====================================================== -->
 
   <div class="sidebar-brand">
 
     <div class="brand-logo">
-      <mat-icon>domain</mat-icon>
+
+      <mat-icon>
+        domain
+      </mat-icon>
+
     </div>
 
+
     <div class="brand-info">
-      <strong>Society 123</strong>
-      <span>Business Portal</span>
+
+      <strong>
+        Society 123
+      </strong>
+
+      <span>
+        Business Portal
+      </span>
+
     </div>
 
   </div>
 
-  <!-- ================= MENU ================= -->
+
+  <!-- =====================================================
+       MENU
+  ====================================================== -->
 
   <nav class="sidebar-menu">
 
-    <button type="button" class="menu-item" *ngFor="let item of menuItems" [class.active]="activeMenu === item.label"
-      (click)="selectMenu(item)">
+    <button
+      type="button"
 
-      <mat-icon>{{ item.icon }}</mat-icon>
+      class="menu-item"
 
-      <span>{{ item.label }}</span>
+      *ngFor="let item of menuItems"
+
+      [class.active]="
+        activeMenu === item.label
+      "
+
+      (click)="selectMenu(item)"
+    >
+
+      <mat-icon>
+        {{ item.icon }}
+      </mat-icon>
+
+      <span>
+        {{ item.label }}
+      </span>
 
     </button>
 
   </nav>
 
-  <!-- ================= USER ================= -->
+
+  <!-- =====================================================
+       USER
+  ====================================================== -->
 
   <div class="sidebar-user">
 
     <div class="user-avatar">
-    {{ getInitials(username) }}
-  </div>
 
-    <div class="user-info">
-      <small>
-      {{ getShortName(username) }}
-    </small>
-      <!-- <span>Manager</span> -->
+      {{ getInitials(username) }}
+
     </div>
 
-    <button type="button" class="more-button" [matMenuTriggerFor]="userMenu">
 
-      <mat-icon>more_vert</mat-icon> 
+    <div class="user-info">
+
+      <small>
+        {{ getShortName(username) }}
+      </small>
+
+    </div>
+
+
+    <button
+      type="button"
+
+      class="more-button"
+
+      [matMenuTriggerFor]="userMenu"
+
+      (click)="$event.stopPropagation()"
+    >
+
+      <mat-icon>
+        more_vert
+      </mat-icon>
 
     </button>
 
@@ -55,15 +105,35 @@
 
 </div>
 
-<!-- ================= USER MENU ================= -->
 
-<mat-menu #userMenu="matMenu" class="user-menu" xPosition="before" yPosition="above">
+<!-- =======================================================
+     USER MENU
+======================================================== -->
 
-  <!-- User Header -->
-  <!-- Settings -->
-  <!-- Logout -->
-  <button mat-menu-item (click)="onLogout()">
-    <mat-icon>logout</mat-icon>
-    <span>Logout</span>
+<mat-menu
+  #userMenu="matMenu"
+
+  class="user-menu"
+
+  xPosition="before"
+
+  yPosition="above"
+>
+
+  <button
+    mat-menu-item
+
+    (click)="onLogout()"
+  >
+
+    <mat-icon>
+      logout
+    </mat-icon>
+
+    <span>
+      Logout
+    </span>
+
   </button>
+
 </mat-menu>

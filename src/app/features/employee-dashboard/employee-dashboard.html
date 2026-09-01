@@ -8,13 +8,13 @@
       <div class="profile-section">
 
         <div class="avatar">
-          AK
+          {{getInitials(username)}}
         </div>
 
         <div class="profile-info">
           <h1>My workspace</h1>
           <p>
-            {{ employeeName() }}
+            {{ username }}
             <span class="separator">·</span>
             {{ employeeRole() }}
           </p>
@@ -41,7 +41,8 @@
           class="task-count"
           matTooltip="Tasks today">
 
-          6
+         {{ todayTasks() }}
+
 
         </div>
 

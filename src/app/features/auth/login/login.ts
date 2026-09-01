@@ -143,10 +143,13 @@ export class Login {
   // }
 
   loadCaptcha() {
+    this.loginForm.get('captcha')?.reset('');
+
     this.authService.getCaptcha().subscribe({
       next: (res: { success: boolean; message: string; data: string }) => {
         if (res.success) {
           this.captchaText = res.data;
+      
         }
       },
       error: (err: any) => {
@@ -209,152 +212,7 @@ export class Login {
      LOGIN
   ===================================================== */
 
-  // onLogin(): void {
-
-  //   this.errorMessage = '';
-
-  //   this.captchaError = false;
-
-
-  //   /* Validate form */
-
-  //   if (this.loginForm.invalid) {
-
-  //     this.loginForm.markAllAsTouched();
-
-  //     return;
-
-  //   }
-
-
-  //   /* Validate CAPTCHA */
-
-  //   if (!this.validateCaptcha()) {
-
-  //     this.loginForm.controls.captcha.setValue('');
-
-  //     return;
-
-  //   }
-
-
-  //   this.loading = true;
-
-
-  //   /*
-  //    * Do not send CAPTCHA to your API
-  //    *
-  //    * Create payload with only username/password
-  //    */
-
-  //   const loginPayload = {
-
-  //     username:
-  //       this.loginForm.controls.username.value,
-
-  //     password:
-  //       this.loginForm.controls.password.value,
-
-  //     captcha:
-  //       this.loginForm.controls.captcha.value,
-
-  //     captchaAns:
-  //       this.captchaText,
-
-
-  //   };
-
-
-  //   this.authService
-  //     .login(loginPayload)
-  //     .subscribe({
-
-  //       next: (response) => {
-
-  //         console.log(
-  //           'LOGIN RESPONSE:',
-  //           response
-  //         );
-
-
-  //         this.loading = false;
-
-
-  //         /*
-  //          * Generate a new CAPTCHA
-  //          */
-
-  //         this.generateCaptcha();
-
-
-  //         console.log(
-  //           'CURRENT URL:',
-  //           this.router.url
-  //         );
-
-
-  //         console.log(
-  //           'TRYING TO NAVIGATE TO /dashboard'
-  //         );
-
-
-  //         this.router
-  //           .navigate(['/dashboard'])
-
-  //           .then(result => {
-
-  //             console.log(
-  //               'Navigation result:',
-  //               result
-  //             );
-
-
-  //             console.log(
-  //               'URL AFTER NAVIGATION:',
-  //               this.router.url
-  //             );
-
-  //           })
-
-  //           .catch(error => {
-
-  //             console.error(
-  //               'Navigation error:',
-  //               error
-  //             );
-
-  //           });
-
-  //       },
-
-
-  //       error: (error) => {
-
-  //         this.loading = false;
-
-
-  //         console.error(
-  //           'LOGIN ERROR:',
-  //           error
-  //         );
-
-
-  //         this.errorMessage =
-  //           error?.error?.message ||
-  //           'Invalid username or password. Please try again.';
-
-
-  //         /*
-  //          * Refresh CAPTCHA after failed login
-  //          */
-
-  //         this.generateCaptcha();
-
-  //       }
-
-  //     });
-
-  // }
+  
 onLogin(): void {
   this.errorMessage = '';
   this.captchaError = false;

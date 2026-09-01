@@ -38,8 +38,8 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () =>
-          import('./features/dashboard/dashboard')
-            .then(m => m.Dashboard)
+          import('./features/manager-dashboard/manager-dashboard')
+            .then(m => m.ManagerDashboard)
       },
 
        {
