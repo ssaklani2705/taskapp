@@ -146,6 +146,7 @@ readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
   userId: any;
 
+  isAdmin: any;
 
   // ============================================================
   // MODE
@@ -240,6 +241,12 @@ readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
       this.userId =
         sessionStorage.getItem(
           'userId'
+        );
+
+      
+      this.isAdmin =
+        sessionStorage.getItem(
+          'isAdmin'
         );
 
     }
@@ -1043,7 +1050,8 @@ onZipSelected(event: Event): void {
   }
   loadDropdownData(): void {
 
-    this.dataprovider.getTaskFilterData().subscribe({
+    this.dataprovider.getTaskFilterData( this.isAdmin,
+        this.userId).subscribe({
 
       next: (res: any) => {
 

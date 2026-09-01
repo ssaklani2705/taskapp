@@ -732,7 +732,8 @@ export class TaskIndex {
   private loadFilterData(): void {
 
     this.dataprovider
-      .getTaskFilterData()
+      .getTaskFilterData( this.isAdmin,
+        this.userId)
       .subscribe({
 
         next: (response: any) => {
@@ -2276,6 +2277,7 @@ export class TaskIndex {
     formData.append('selectedTaskStatusId', String(this.selectedTaskStatusId));
     formData.append('taskId', String(this.task.taskId));
     formData.append('description', this.taskDescription.trim());
+    formData.append('userId', this.userId);
 
     if (this.fileTwo) {
       formData.append('fileName1', this.fileTwo, this.fileTwo.name);   // normal file → fileName1 (pdf)

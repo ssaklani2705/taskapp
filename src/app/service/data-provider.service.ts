@@ -1436,11 +1436,17 @@ export class DataProviderService {
   deletePlan(plan: any): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}admin/plan/delete`, plan);
   }
-
-  getTaskFilterData(): Observable<any> {
+//sunil
+  getTaskFilterData(isAdmin: string, userId: number): Observable<any> {
 
     return this.http.get<any>(
-      `${environment.apiBaseUrl}admin/task/getTaskFilterData`
+      `${environment.apiBaseUrl}admin/task/getTaskFilterData`,
+      {
+        params: {
+          isAdmin: isAdmin.toString(),
+          userId: userId.toString()
+        }
+      }
     );
 
   }
