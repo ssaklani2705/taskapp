@@ -8,9 +8,12 @@ import * as XLSX from 'xlsx';
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
 import { SessionStorageService } from '../../../service/session-storage.service';
 import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
+import { MatCardModule } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/divider';
 
 interface Client {
   clientId: number;
@@ -51,7 +54,16 @@ interface Client {
 
 @Component({
   selector: 'app-client-index',
-  imports: [CommonModule, FormsModule, MatInputModule, MatDatepickerModule, MatNativeDateModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatCardModule,
+    MatIcon,
+    MatDivider,
+  ],
   templateUrl: './client-index.html',
   styleUrl: './client-index.scss',
   providers: [
@@ -93,8 +105,8 @@ export class ClientIndex {
 
   searchQuery = '';
   search = '';
-  selectedStatus = '';
-  statusIndex = 0;
+  selectedStatus = '1';
+  statusIndex = 1;
 
   stateId = 0;
   managerId = 0;
@@ -355,6 +367,11 @@ export class ClientIndex {
       size: this.size,
       stateId: this.stateId,
       managerId: this.managerId,
+      planId: this.planId,
+      gstFlag: this.gstFlag,
+      taxFlag: this.taxFlag,
+      fromDate: this.formatDate(this.fromDate),
+      toDate: this.formatDate(this.toDate),
     };
 
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
@@ -372,6 +389,11 @@ export class ClientIndex {
       size: this.size,
       stateId: this.stateId,
       managerId: this.managerId,
+      planId: this.planId,
+      gstFlag: this.gstFlag,
+      taxFlag: this.taxFlag,
+      fromDate: this.formatDate(this.fromDate),
+      toDate: this.formatDate(this.toDate),
     };
 
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
@@ -389,6 +411,11 @@ export class ClientIndex {
       size: this.size,
       stateId: this.stateId,
       managerId: this.managerId,
+      planId: this.planId,
+      gstFlag: this.gstFlag,
+      taxFlag: this.taxFlag,
+      fromDate: this.formatDate(this.fromDate),
+      toDate: this.formatDate(this.toDate),
     };
 
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));

@@ -366,178 +366,80 @@ mat-divider {
   font-size: 24px;
 }
 
-/* =========================================================
-   TABLE CONTAINER
-========================================================= */
-
 .table-container {
   padding: 0 !important;
-
   width: 100%;
-
   box-sizing: border-box;
 }
 
-
-/* =========================================================
-   HISTORY TABLE WRAPPER
-========================================================= */
-
 .history-table-wrapper {
   width: 100%;
-
   overflow-x: auto;
 }
 
-
-/* =========================================================
-   HISTORY TABLE
-========================================================= */
-
 .history-table {
   width: 100%;
-
-  min-width: 600px;
-
+  min-width: 650px;
   border-collapse: collapse;
-
   background: var(--white);
-
   color: var(--text);
-
   font-family: Arial, sans-serif;
-
-  font-size: 13px;
+  font-size: 15px;
 }
 
-
-/* =========================================================
-   TABLE HEADER
-========================================================= */
-
 .history-table thead th {
-  height: 38px;
-
-  padding: 5px 10px;
-
+  height: 47px;
+  padding: 8px 15px;
   background: var(--table-header);
-
   border: 1px solid var(--border);
-
   color: #172f4c;
-
   text-align: left;
-
-  vertical-align: middle;
-
-  font-size: 13px;
-
   font-weight: 700;
 }
 
-
-/* =========================================================
-   TABLE BODY
-========================================================= */
-
 .history-table tbody td {
-  height: 38px;
-
-  padding: 5px 10px;
-
+  height: 52px;
+  padding: 10px 15px;
   background: var(--white);
-
   border: 1px solid var(--border);
-
   color: var(--text);
-
   vertical-align: middle;
-
-  font-size: 13px;
 }
-
-
-/* =========================================================
-   ROW HOVER
-========================================================= */
 
 .history-table tbody tr:hover td {
   background: #f8fbfd;
 }
 
-
-/* =========================================================
-   ACTION BADGE
-========================================================= */
-
 .action-badge {
   display: inline-flex;
-
   align-items: center;
-
-  justify-content: center;
-
-  padding: 3px 7px;
-
+  padding: 5px 10px;
   border-radius: 3px;
-
   background: var(--primary-blue-light);
-
   border: 1px solid #d1e3ef;
-
   color: var(--primary-blue-dark);
-
-  font-size: 11px;
-
-  line-height: 16px;
-
+  font-size: 13px;
   font-weight: 600;
-
-  white-space: nowrap;
 }
-
-
-/* =========================================================
-   NO RECORDS
-========================================================= */
 
 .no-records-box {
-  min-height: 60px;
-
+  min-height: 95px;
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  gap: 6px;
-
-  padding: 8px !important;
-
+  gap: 8px;
   color: var(--text-muted);
-
   background: var(--white);
-
   font-family: Arial, sans-serif;
-
-  font-size: 13px;
+  font-size: 14px;
 }
-
-
-/* =========================================================
-   NO RECORDS ICON
-========================================================= */
 
 .no-records-box mat-icon {
-  width: 18px;
-
-  height: 18px;
-
-  font-size: 18px;
-
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
   color: var(--primary-blue);
 }
-
 
 ::ng-deep .mat-mdc-card {
   border-radius: 0 !important;
@@ -1198,67 +1100,3 @@ mat-divider {
     flex: 1;
   }
 }
-
-
-
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 82px;
-  height: 32px;
-  padding: 0 13px;
-  border-radius: 2px;
-  font-size: 13px;
-  font-weight: 600;
-  box-sizing: border-box;
-}
-
-.status-badge.active,
-.status-badge.status-active,
-.status-active {
-  background: #e6f4ee;
-  color: #287d5e;
-  border: 1px solid #c8e7da;
-}
-
-.status-badge.inactive,
-.status-badge.status-inactive,
-.status-inactive {
-  background: #fff5df;
-  color: #a87308;
-  border: 1px solid #f0d99e;
-}
-
-.status-badge.deleted,
-.status-badge.status-deleted {
-  background: #fbeaea;
-  color: #b8403d;
-  border: 1px solid #efcaca;
-}
-
-.action-buttons {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.action-btn {
-  width: 38px;
-  height: 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border-radius: 1px;
-  background: var(--white);
-  font-size: 14px;
-  cursor: pointer;
-
-  transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
-}
-

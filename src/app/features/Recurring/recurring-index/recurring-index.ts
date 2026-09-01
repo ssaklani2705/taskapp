@@ -6,6 +6,10 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
 import { SessionStorageService } from '../../../service/session-storage.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatDivider } from '@angular/material/divider';
 
 interface Recurring {
   recurringId: number;
@@ -29,7 +33,7 @@ interface TaskCategory {
 
 @Component({
   selector: 'app-recurring-index',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MatInputModule, MatCardModule, MatIcon, MatDivider],
   templateUrl: './recurring-index.html',
   styleUrl: './recurring-index.scss',
 })
@@ -155,40 +159,6 @@ export class RecurringIndex {
     });
   }
 
-  // getRecurringDetails(): void {
-  //   this.dataprovider
-  //     .getRecurringDetails(
-  //       this.page,
-  //       this.size,
-  //       this.statusIndex,
-  //       this.search,
-  //       this.sortColumn || 'title',
-  //       this.sortDirection,
-  //       this.userId,
-  //     )
-  //     .subscribe({
-  //       next: (response: any) => {
-  //         console.log('Recurring Details Response:', response);
-
-  //         this.recurring = response.data || [];
-
-  //         this.totalRecords = response.totalElements || 0;
-  //         this.totalPages = response.totalPages || 1;
-  //         this.currentPage = (response.currentPage ?? this.page) + 1;
-  //         this.page = response.currentPage ?? this.page;
-  //         this.size = response.pageSize ?? this.size;
-  //       },
-
-  //       error: (error) => {
-  //         console.error('Error fetching recurring details:', error);
-
-  //         this.recurring = [];
-  //         this.totalRecords = 0;
-  //         this.totalPages = 1;
-  //       },
-  //     });
-  // }
-
   getRecurringDetails(): void {
     this.isLoading = true;
 
@@ -286,16 +256,6 @@ export class RecurringIndex {
 
     this.getRecurringDetails();
   }
-
-  // onStatusChange(): void {
-  //   this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
-  //   this.search = this.searchQuery.trim();
-  //   this.currentPage = 1;
-  //   this.page = 0;
-  //   this.saveFilterState();
-
-  //   this.getRecurringDetails();
-  // }
 
   onFilterChange(): void {
     this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);

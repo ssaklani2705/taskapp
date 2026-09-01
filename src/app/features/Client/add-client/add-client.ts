@@ -42,7 +42,6 @@ import Swal from 'sweetalert2';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
   ],
   templateUrl: './add-client.html',
   styleUrl: './add-client.scss',
@@ -75,6 +74,16 @@ export class AddClient implements OnInit {
   states: any[] = [];
   managers: any[] = [];
   plans: any[] = [];
+
+  stateId = 0;
+  managerId = 0;
+  planId = 0;
+
+  gstFlag: number | null = null;
+  taxFlag: number | null = null;
+
+  fromDate: Date | null = null;
+  toDate: Date | null = null;
 
   minDate: Date = new Date();
 
@@ -222,98 +231,6 @@ export class AddClient implements OnInit {
     });
   }
 
-  // onSubmit(): void {
-  //   if (this.isSubmitting) {
-  //     return;
-  //   }
-
-  //   this.clientForm.markAllAsTouched();
-
-  //   if (this.clientForm.invalid) {
-  //     return;
-  //   }
-
-  //   this.isSubmitting = true;
-
-  //   const formValues = this.clientForm.getRawValue();
-
-  //   const payload: any = {
-  //     clientId: this.isEditMode ? this.clientId : 0,
-
-  //     name: formValues.name?.trim() || '',
-  //     code: formValues.code?.trim() || '',
-  //     pan: formValues.pan?.trim().toUpperCase() || '',
-
-  //     status: Number(formValues.status),
-
-  //     gstFlag: Number(formValues.gstFlag || 0),
-  //     gstNo: formValues.gstNo?.trim() || '',
-
-  //     stateId: Number(formValues.stateId || 0),
-
-  //     addressLine1: formValues.addressLine1?.trim() || '',
-  //     addressLine2: formValues.addressLine2?.trim() || '',
-  //     city: formValues.city?.trim() || '',
-  //     pincode: formValues.pincode?.trim() || '',
-
-  //     contactName: formValues.contactName?.trim() || '',
-  //     contactEmail: formValues.contactEmail?.trim().toLowerCase() || '',
-  //     emails: formValues.emails?.trim() || '',
-
-  //     startDate: this.formatDateForBackend(formValues.startDate),
-  //     monthlyCharge: Number(formValues.monthlyCharge || 0),
-  //     outstanding: Number(formValues.outstanding || 0),
-
-  //     name1: formValues.name1?.trim() || '',
-  //     emailId1: formValues.emailId1?.trim().toLowerCase() || '',
-
-  //     name2: formValues.name2?.trim() || '',
-  //     emailId2: formValues.emailId2?.trim().toLowerCase() || '',
-
-  //     name3: formValues.name3?.trim() || '',
-  //     emailId3: formValues.emailId3?.trim().toLowerCase() || '',
-
-  //     managerId: Number(formValues.managerId || 0),
-
-  //     // userId: Number(formValues.userId || 0),
-  //     userId: this.userId,
-
-  //     taxFlag: Number(formValues.taxFlag || 0),
-  //     location: formValues.location?.trim() || '',
-
-  //     planId: Number(formValues.planId || 0),
-  //   };
-
-  //   console.log('Client payload:', payload);
-
-  //   this.dataProvider.saveClient(payload).subscribe({
-  //     next: (response: any) => {
-  //       this.isSubmitting = false;
-
-  //       console.log('Save client response:', response);
-
-  //       if (response?.success === false) {
-  //         alert(response.message || 'Operation failed.');
-  //         return;
-  //       }
-
-  //       alert(this.isEditMode ? 'Client updated successfully!' : 'Client saved successfully!');
-
-  //       this.backToIndexPage();
-  //     },
-  //     error: (err) => {
-  //       this.isSubmitting = false;
-
-  //       console.error('Save client error:', err);
-
-  //       alert(
-  //         err?.error?.message ||
-  //           (this.isEditMode ? 'Failed to update client.' : 'Failed to save client.'),
-  //       );
-  //     },
-  //   });
-  // }
-
   onSubmit(): void {
     if (this.isSubmitting) {
       return;
@@ -383,7 +300,6 @@ export class AddClient implements OnInit {
 
         console.log('Save client response:', response);
 
-        // Backend returned failure
         if (response?.success === false) {
           Swal.fire({
             icon: 'error',
@@ -396,7 +312,6 @@ export class AddClient implements OnInit {
           return;
         }
 
-        // Success
         Swal.fire({
           icon: 'success',
           title: this.isEditMode ? 'Client Updated!' : 'Client Saved!',
@@ -470,7 +385,7 @@ export class AddClient implements OnInit {
         this.plans = response?.data || response || [];
       },
       error: (error) => {
-        console.error('Error loading managers:', error);
+        console.error('Error loading plans:', error);
         this.plans = [];
       },
     });
@@ -598,7 +513,26 @@ export class AddClient implements OnInit {
         statusIndex: this.statusIndex,
         searchText: this.searchText,
         size: this.size,
+        stateId: this.stateId,
+        managerId: this.managerId,
+        planId: this.planId,
+        gstFlag: this.gstFlag,
+        taxFlag: this.taxFlag,
+        fromDate: this.formatDate(this.fromDate),
+        toDate: this.formatDate(this.toDate),
       },
     });
+  }
+
+  private formatDate(date: Date | null): string {
+    if (!date) {
+      return '';
+    }
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
   }
 }

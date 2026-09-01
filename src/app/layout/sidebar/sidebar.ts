@@ -524,7 +524,7 @@ export class Sidebar implements OnInit {
       {
         moduleId: 2,
 
-        label: 'Department',
+        label: 'Department Master',
 
         icon: 'groups',
 
@@ -534,7 +534,7 @@ export class Sidebar implements OnInit {
       {
         moduleId: 3,
 
-        label: 'Designation',
+        label: 'Designation Master',
 
         icon: 'badge',
 
@@ -554,31 +554,11 @@ export class Sidebar implements OnInit {
       {
         moduleId: 5,
 
-        label: 'Task Category',
+        label: 'Task Category Master',
 
         icon: 'task_alt',
 
         route: '/task-category-index'
-      },
-
-      {
-        moduleId: 10,
-
-        label: 'Tasks',
-
-        icon: 'task_alt',
-
-        route: '/task-index'
-      },
-
-      {
-        moduleId: 8,
-
-        label: 'Client',
-
-        icon: 'business',
-
-        route: '/client-index'
       },
 
       {
@@ -591,7 +571,7 @@ export class Sidebar implements OnInit {
         route: '/state-index'
       },
 
-      {
+        {
         moduleId: 9,
 
         label: 'Plan Master',
@@ -600,6 +580,32 @@ export class Sidebar implements OnInit {
 
         route: '/plan-index'
       },
+
+       {
+        moduleId: 8,
+
+        label: 'Client Master',
+
+        icon: 'business',
+
+        route: '/client-index'
+      },
+
+      {
+        moduleId: 10,
+
+        label: 'Tasks',
+
+        icon: 'task_alt',
+
+        route: '/task-index'
+      },
+
+     
+
+      
+
+    
 
       {
         label: 'Reports',
