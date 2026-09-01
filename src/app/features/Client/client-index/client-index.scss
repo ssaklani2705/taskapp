@@ -18,8 +18,6 @@
   --warning: #d49a16;
 }
 
-
-
 .page-content-wrapper {
   width: 100%;
   min-height: calc(100vh - 120px);
@@ -542,8 +540,6 @@
 .clear-wrapper {
   flex: 0 0 auto;
 }
-
-
 
 .btn-clear {
   height: 38px;
@@ -1235,4 +1231,178 @@
 .btn-upload-cancel:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+// /* Date filter */
+// .date-wrapper {
+//   flex: 0 0 250px;
+//   width: 250px;
+//   display: flex;
+//   align-items: center;
+// }
+
+// .date-field {
+//   width: 100%;
+//   margin: 0;
+// }
+
+// /* Remove Material bottom spacing */
+// .date-field .mat-mdc-form-field-subscript-wrapper {
+//   display: none;
+// }
+
+// /* Match existing 42px filter height */
+// .date-field .mat-mdc-text-field-wrapper {
+//   height: 42px;
+//   padding: 0;
+//   background: var(--white);
+// }
+
+// /* Align input and calendar icon */
+// .date-field .mat-mdc-form-field-flex {
+//   height: 42px;
+//   align-items: center;
+// }
+
+// /* Input text */
+// .date-field input.mat-mdc-input-element {
+//   height: 40px;
+//   padding: 0 12px;
+//   color: var(--text);
+//   font-family: Arial, Helvetica, sans-serif;
+//   font-size: 14px;
+//   box-sizing: border-box;
+// }
+
+// /* Placeholder */
+// .date-field input::placeholder {
+//   color: #8b99a9;
+//   opacity: 1;
+// }
+
+// /* Calendar button */
+// .date-field .mat-mdc-icon-button {
+//   width: 40px;
+//   height: 40px;
+//   padding: 8px;
+//   color: var(--dashboard-blue);
+// }
+
+// /* Calendar button hover */
+// .date-field .mat-mdc-icon-button:hover {
+//   background: transparent;
+// }
+
+// /* Focus border */
+// .date-field.mat-focused .mat-mdc-text-field-wrapper {
+//   border-color: var(--dashboard-blue);
+// }
+
+// /* Keep date filters same width as select filters */
+// .filter-row .date-wrapper {
+//   flex: 0 0 250px;
+// }
+
+// /* Mobile */
+// @media (max-width: 768px) {
+//   .date-wrapper {
+//     width: 100%;
+//     flex: none !important;
+//   }
+
+//   .date-field {
+//     width: 100%;
+//   }
+// }
+
+/* =========================================================
+   DATE FILTER
+========================================================= */
+.date-filter-wrapper {
+  flex: 0 0 165px;
+  width: 165px;
+  min-width: 165px;
+  max-width: 165px;
+  margin: 0;
+}
+
+.date-filter-input {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #cbd8e6;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.date-filter-input:hover {
+  border-color: #9ca3af;
+}
+
+.date-filter-input:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.08);
+}
+
+.date-input {
+  width: 100%;
+  height: 38px;
+  padding: 0 38px 0 12px !important;
+  border: none !important;
+  outline: none;
+  background: transparent !important;
+  color: #374151;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.date-input::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+.date-filter-input .mat-datepicker-toggle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.date-filter-input .mat-datepicker-toggle button {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-filter-input .mat-datepicker-toggle .mat-mdc-button-touch-target {
+  width: 38px;
+  height: 38px;
+}
+
+.date-filter-input .mat-datepicker-toggle .mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  color: #000;
+}
+
+.date-filter-input .mat-datepicker-toggle:hover .mat-icon {
+  color: #2563eb;
 }
