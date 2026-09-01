@@ -7,7 +7,9 @@ export const routes: Routes = [
   // ================================
   // AUTH
   // ================================
-
+ { path: 'forgot-password', loadComponent: () =>
+      import('./features/forget-password/forget-password.component')
+        .then(m => m.ForgetPasswordComponent)  },
   {
     path: 'login',
     loadComponent: () =>

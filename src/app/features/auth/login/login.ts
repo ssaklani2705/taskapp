@@ -23,6 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AuthService } from '../../../core/services/auth';
+import { LoginService } from '../../../service/login.service';
 
 
 @Component({
@@ -104,7 +105,7 @@ export class Login {
   });
 
 
-  constructor() {
+  constructor( private loginService: LoginService) {
 
     this.loadCaptcha();
 
@@ -383,15 +384,28 @@ onLogin(): void {
   /* =====================================================
      FORGOT PASSWORD
   ===================================================== */
+isProcessingForgotPassword: boolean = false;
+  onForgotPassword() {
 
-  forgotPassword(): void {
+    const email = this.loginForm.value.username?.trim();
 
-    console.log(
-      'Forgot password clicked'
-    );
+    if (!email) {
+      this.errorMessage = 'Please enter Email Id.';
+      return;
+    }
 
-    // this.router.navigate(['/forgot-password']);
+    this.isProcessingForgotPassword = true;
 
+    this.loginService.forgotPasswordMail(email).subscribe({
+      next: (res: any) => {
+        alert(res.message || 'Password reset email sent.');
+        this.isProcessingForgotPassword = false;
+      },
+      error: (err) => {
+        alert(err.error?.message || 'Error occurred.');
+        this.isProcessingForgotPassword = false;
+      }
+    });
   }
 
 
