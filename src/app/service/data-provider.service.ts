@@ -1318,6 +1318,11 @@ export class DataProviderService {
     status: any,
     managerId: any,
     stateId: any,
+    gstFlag: any,
+    taxFlag: any,
+    planId: any,
+    fromDate: any,
+    toDate: any,
     clientName: any,
     clientCode: any,
     contactName: any,
@@ -1332,6 +1337,7 @@ export class DataProviderService {
       .set('status', status.toString())
       .set('managerId', managerId.toString())
       .set('stateId', stateId.toString())
+      .set('planId', planId?.toString())
       .set('sortColumn', sortColumn)
       .set('sortDirection', sortDirection);
     if (clientName && clientName.trim() !== '') {
@@ -1348,6 +1354,22 @@ export class DataProviderService {
     }
     if (search && search.trim() !== '') {
       params = params.set('search', search.trim());
+    }
+
+    if (gstFlag !== null && gstFlag !== undefined) {
+      params = params.set('gstFlag', gstFlag.toString());
+    }
+
+    if (taxFlag !== null && taxFlag !== undefined) {
+      params = params.set('taxFlag', taxFlag.toString());
+    }
+
+    if (fromDate && fromDate.trim() !== '') {
+      params = params.set('fromDate', fromDate.trim());
+    }
+
+    if (toDate && toDate.trim() !== '') {
+      params = params.set('toDate', toDate.trim());
     }
     return this.http.get<any>(`${environment.apiBaseUrl}admin/getClientDetails`, { params });
   }

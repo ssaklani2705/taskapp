@@ -7,7 +7,10 @@ import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
 import { SessionStorageService } from '../../../service/session-storage.service';
-import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerInputEvent, MatDatepickerModule } from '@angular/material/datepicker';
+import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
 interface Client {
   clientId: number;
@@ -48,9 +51,19 @@ interface Client {
 
 @Component({
   selector: 'app-client-index',
-  imports: [CommonModule, FormsModule,MatIconModule],
+  imports: [CommonModule, FormsModule, MatInputModule, MatDatepickerModule, MatNativeDateModule],
   templateUrl: './client-index.html',
   styleUrl: './client-index.scss',
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MyDateAdapter,
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB',
+    },
+  ],
 })
 export class ClientIndex {
   clients: Client[] = [];
@@ -87,8 +100,18 @@ export class ClientIndex {
   managerId = 0;
   planId = 0;
 
+  selectedGstFlag: string = '';
+  selectedTaxFlag: string = '';
+
+  gstFlag: number | null = null;
+  taxFlag: number | null = null;
+
+  fromDate: Date | null = null;
+  toDate: Date | null = null;
+
   states: any[] = [];
   managers: any[] = [];
+  plans: any[] = [];
 
   filterKey = SESSION_KEYS.CLIENT_MASTER_FILTER;
 
@@ -140,6 +163,7 @@ export class ClientIndex {
     this.restoreFilterState();
     this.loadStates();
     this.loadManagers();
+    this.loadPlan();
     this.getClientDetails();
   }
 
@@ -156,6 +180,11 @@ export class ClientIndex {
         this.statusIndex,
         this.managerId,
         this.stateId,
+        this.gstFlag,
+        this.taxFlag,
+        this.planId,
+        this.formatDate(this.fromDate),
+        this.formatDate(this.toDate),
         clientName,
         clientCode,
         contactName,
@@ -215,6 +244,52 @@ export class ClientIndex {
     });
   }
 
+  loadPlan(): void {
+    this.dataprovider.getPlan().subscribe({
+      next: (response: any) => {
+        this.plans = response?.data || response || [];
+      },
+      error: (error) => {
+        console.error('Error loading plans:', error);
+        this.plans = [];
+      },
+    });
+  }
+
+  private formatDate(date: Date | null): string {
+    if (!date) {
+      return '';
+    }
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
+
+  private parseDate(dateString: string): Date | null {
+    if (!dateString) {
+      return null;
+    }
+
+    const parts = dateString.split('-');
+
+    if (parts.length !== 3) {
+      return null;
+    }
+
+    const day = Number(parts[0]);
+    const month = Number(parts[1]);
+    const year = Number(parts[2]);
+
+    if (!day || !month || !year) {
+      return null;
+    }
+
+    return new Date(year, month - 1, day);
+  }
+
   onStateChange(): void {
     this.currentPage = 1;
     this.page = 0;
@@ -233,6 +308,15 @@ export class ClientIndex {
     this.getClientDetails();
   }
 
+  onPlanChange(): void {
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+
+    this.getClientDetails();
+  }
+
   clearFilter(): void {
     this.searchQuery = '';
     this.search = '';
@@ -240,8 +324,18 @@ export class ClientIndex {
     this.selectedStatus = '';
     this.statusIndex = 0;
 
+    this.selectedGstFlag = '';
+    this.selectedTaxFlag = '';
+
+    this.gstFlag = null;
+    this.taxFlag = null;
+
+    this.fromDate = null;
+    this.toDate = null;
+
     this.stateId = 0;
     this.managerId = 0;
+    this.planId = 0;
 
     this.currentPage = 1;
     this.page = 0;
@@ -360,6 +454,28 @@ export class ClientIndex {
     this.getClientDetails();
   }
 
+  onGstChange(): void {
+    this.gstFlag = this.selectedGstFlag === '' ? null : Number(this.selectedGstFlag);
+
+    this.search = this.searchQuery.trim();
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+    this.getClientDetails();
+  }
+
+  onTaxChange(): void {
+    this.taxFlag = this.selectedTaxFlag === '' ? null : Number(this.selectedTaxFlag);
+
+    this.search = this.searchQuery.trim();
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+    this.getClientDetails();
+  }
+
   onSearch(): void {
     this.search = this.searchQuery.trim();
     this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
@@ -382,6 +498,11 @@ export class ClientIndex {
       size: this.size,
       stateId: this.stateId,
       managerId: this.managerId,
+      planId: this.planId,
+      gstFlag: this.gstFlag,
+      taxFlag: this.taxFlag,
+      fromDate: this.formatDate(this.fromDate),
+      toDate: this.formatDate(this.toDate),
     };
 
     sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
@@ -576,9 +697,6 @@ export class ClientIndex {
         this.showUploadModal = false;
         this.selectedFile = null;
 
-        /*
-         * PARTIAL UPLOAD
-         */
         if (res.downloadFilePath) {
           const url = res.downloadFilePath;
 
@@ -604,12 +722,7 @@ export class ClientIndex {
           }).then(() => {
             this.getClientDetails();
           });
-        }
-
-        /*
-         * COMPLETE SUCCESS
-         */
-        else {
+        } else {
           Swal.fire({
             icon: 'success',
             title: 'Upload Successful',
@@ -653,6 +766,11 @@ export class ClientIndex {
         this.statusIndex,
         this.managerId,
         this.stateId,
+        this.gstFlag,
+        this.taxFlag,
+        this.planId,
+        this.formatDate(this.fromDate),
+        this.formatDate(this.toDate),
         '', // clientName
         '', // clientCode
         '', // contactName
@@ -822,6 +940,30 @@ export class ClientIndex {
       if (this.statusIndex > 0) {
         this.selectedStatus = String(this.statusIndex);
       }
+
+      if (filterState.planId !== undefined) {
+        this.planId = Number(filterState.planId);
+      }
+
+      if (filterState.gstFlag !== undefined) {
+        this.gstFlag = filterState.gstFlag === null ? null : Number(filterState.gstFlag);
+
+        this.selectedGstFlag = this.gstFlag === null ? '' : String(this.gstFlag);
+      }
+
+      if (filterState.taxFlag !== undefined) {
+        this.taxFlag = filterState.taxFlag === null ? null : Number(filterState.taxFlag);
+
+        this.selectedTaxFlag = this.taxFlag === null ? '' : String(this.taxFlag);
+      }
+
+      if (filterState.fromDate) {
+        this.fromDate = this.parseDate(filterState.fromDate);
+      }
+
+      if (filterState.toDate) {
+        this.toDate = this.parseDate(filterState.toDate);
+      }
     } catch (error) {
       console.error('Error restoring filter state:', error);
     }
@@ -870,13 +1012,18 @@ export class ClientIndex {
       sortable: true,
     },
     {
+      key: 'city',
+      label: 'City',
+      sortable: true,
+    },
+    {
       key: 'stateName',
       label: 'State',
       sortable: true,
     },
     {
-      key: 'planName',
-      label: 'Plan',
+      key: 'location',
+      label: 'Location',
       sortable: true,
     },
     {
@@ -889,14 +1036,32 @@ export class ClientIndex {
       label: 'Contact Email',
       sortable: true,
     },
-    {
-      key: 'city',
-      label: 'City',
-      sortable: true,
-    },
+
     {
       key: 'startDate',
       label: 'Start Date',
+      sortable: true,
+    },
+
+    {
+      key: 'planName',
+      label: 'Plan',
+      sortable: true,
+    },
+
+    {
+      key: 'outstanding',
+      label: 'Outstanding',
+      sortable: true,
+    },
+    {
+      key: 'gstFlag',
+      label: 'GST Applicable',
+      sortable: true,
+    },
+    {
+      key: 'taxFlag',
+      label: 'Tax Payable',
       sortable: true,
     },
     {
