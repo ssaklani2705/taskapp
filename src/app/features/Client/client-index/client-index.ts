@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import * as XLSX from 'xlsx';
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
 import { SessionStorageService } from '../../../service/session-storage.service';
+import { MatIconModule } from '@angular/material/icon';
 
 interface Client {
   clientId: number;
@@ -47,7 +48,7 @@ interface Client {
 
 @Component({
   selector: 'app-client-index',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule,MatIconModule],
   templateUrl: './client-index.html',
   styleUrl: './client-index.scss',
 })

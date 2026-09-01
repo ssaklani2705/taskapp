@@ -1696,4 +1696,31 @@ export class DataProviderService {
     );
   }
 
+  // Manager dashboard
+  getTasksByStatus(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/getTasksByStatus`);
+  }
+
+  countOfActiveTask(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfActiveTask`);
+  }
+
+  countOfCompletedTask(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfCompletedTask`);
+  }
+
+  countOfPendingTask(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfPendingTask`);
+  }
+
+    // Employee Dashboard
+  getDashboard(userId: number): Observable<any> {
+
+    return this.http.get<any>(
+      `${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}`
+    );
+
+  }
+
+
 }

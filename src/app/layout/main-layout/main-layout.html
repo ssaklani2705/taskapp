@@ -1,6 +1,9 @@
 <div class="layout">
 
-  <!-- FIXED HEADER -->
+  <!-- =====================================================
+       FIXED HEADER
+  ====================================================== -->
+
   <header class="layout-header">
 
     <app-header
@@ -10,22 +13,43 @@
   </header>
 
 
-  <!-- BODY -->
+  <!-- =====================================================
+       BODY
+  ====================================================== -->
+
   <div class="layout-body">
 
-    <!-- SIDEBAR -->
+    <!-- ===================================================
+         MOBILE OVERLAY
+    ==================================================== -->
+
+    <div
+      class="sidebar-overlay"
+      *ngIf="sidebarOpened"
+      (click)="closeSidebar()">
+    </div>
+
+
+    <!-- ===================================================
+         SIDEBAR
+    ==================================================== -->
+
     <aside
       class="layout-sidebar"
       [class.sidebar-closed]="!sidebarOpened">
 
       <app-sidebar
-        [opened]="sidebarOpened">
+        [opened]="sidebarOpened"
+        (openedChange)="onSidebarOpenedChange($event)">
       </app-sidebar>
 
     </aside>
 
 
-    <!-- SCROLLABLE CONTENT -->
+    <!-- ===================================================
+         CONTENT
+    ==================================================== -->
+
     <main class="layout-content">
 
       <div class="content-wrapper">
@@ -39,7 +63,10 @@
   </div>
 
 
-  <!-- FIXED FOOTER -->
+  <!-- =====================================================
+       FIXED FOOTER
+  ====================================================== -->
+
   <footer class="layout-footer">
 
     <app-footer></app-footer>

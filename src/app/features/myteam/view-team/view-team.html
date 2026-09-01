@@ -530,6 +530,8 @@
 
             <tr>
 
+              <th>Sr. No.</th>
+
               <th>
                 Date & Time
               </th>
@@ -550,8 +552,9 @@
           <tbody>
 
             <tr
-              *ngFor="let record of transactionhistory">
+              *ngFor="let record of transactionhistory; let i = index">
 
+              <td>{{i+1}}</td>
               <td>
                 {{ record.entryDate }}
               </td>
