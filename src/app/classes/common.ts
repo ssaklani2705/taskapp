@@ -22,9 +22,9 @@ export class Common {
       case 3:
         return 'Re-Open';
       case 4:
-        return 'Re-Closure';
+        return 'Assignee Re-Closure';
       case 5:
-        return 'Closure';
+        return 'Assignor Closure';
       default:
         return 'Unknown';
     }

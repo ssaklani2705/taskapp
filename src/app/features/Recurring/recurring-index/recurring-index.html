@@ -1,35 +1,26 @@
-<div class="page-content-wrapper">
-  <div class="page-content">
-    <div class="user-management-container">
-      <!-- ================= HEADER ================= -->
-      <div class="page-header">
-        <div class="header-title-section">
-          <h2>Recurring Master</h2>
+<div class="page-container">
+  <div class="main-card">
+    <div class="page-header">
+      <div class="page-title">
+        <mat-icon>task_alt</mat-icon>
+        <span>Recurring Master</span>
+      </div>
 
-          <button
-            type="button"
-            class="collapse-btn"
-            (click)="togglePanel()"
-            [attr.aria-expanded]="isPanelVisible"
-          >
-            <span>
-              {{ isPanelVisible ? '▲' : '▼' }}
-            </span>
-          </button>
-        </div>
-
+      <div class="header-action">
         @if (addPer === 'Y') {
-          <button type="button" class="btn-add-user" (click)="addRecurring()">
+          <button type="button" class="add-button" (click)="addRecurring()">
             Add New
             <span class="plus-icon">+</span>
           </button>
         }
       </div>
+    </div>
 
-      <!-- ================= SEARCH PANEL ================= -->
-      <div class="search-panel" *ngIf="isPanelVisible">
+    <mat-divider></mat-divider>
+
+    <div class="search-section">
+      <div class="search-grid">
         <div class="search-row">
-          <!-- SEARCH -->
           <div class="search-wrapper">
             <div class="search-box">
               <input
@@ -46,7 +37,6 @@
             </div>
           </div>
 
-          <!-- CLIENT NAME -->
           <div class="status-wrapper">
             <select
               class="status-select"
@@ -61,7 +51,6 @@
             </select>
           </div>
 
-          <!-- TYPE -->
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedType" (change)="onFilterChange()">
               <option [ngValue]="0">--All Type--</option>
@@ -72,7 +61,6 @@
             </select>
           </div>
 
-          <!-- TASK CATEGORY -->
           <div class="status-wrapper">
             <select
               class="status-select"
@@ -88,7 +76,6 @@
           </div>
         </div>
 
-        <!-- ================= SECOND ROW ================= -->
         <div class="filter-row">
           <!-- STATUS -->
           <div class="status-wrapper">
@@ -111,40 +98,22 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- ================= TABLE HEADER / PAGINATION ================= -->
-      <div class="table-top-section">
-        <!-- RECORD SUMMARY -->
+    <mat-divider></mat-divider>
+
+    <div class="table-section">
+      <div class="table-toolbar">
         <div class="record-summary">
           {{ recordSummary }}
         </div>
 
-        <!-- PAGINATION -->
         <div class="pagination">
-          <!-- FIRST -->
-          <button
-            type="button"
-            class="pagination-btn first-btn"
-            (click)="goToFirstPage()"
-            [disabled]="currentPage === 1"
-          >
-            « First
-          </button>
+          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <!-- PREVIOUS -->
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPreviousPage()"
-            [disabled]="currentPage === 1"
-          >
-            ‹ Prev
-          </button>
+          <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <!-- PAGE NUMBERS -->
           <button
-            type="button"
-            class="pagination-btn page-number"
             *ngFor="let pageNumber of pages()"
             (click)="goToPage(pageNumber)"
             [class.active-pagination]="pageNumber === currentPage"
@@ -152,194 +121,133 @@
             {{ pageNumber }}
           </button>
 
-          <!-- NEXT -->
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToNextPage()"
-            [disabled]="currentPage === totalPages"
-          >
-            Next ›
-          </button>
+          <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next ›</button>
 
-          <!-- LAST -->
-          <button
-            type="button"
-            class="pagination-btn last-btn"
-            (click)="goToLastPage()"
-            [disabled]="currentPage === totalPages"
-          >
-            Last »
-          </button>
+          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
 
-      <!-- ================= TABLE ================= -->
-      <div class="table-container">
-        <div class="table-responsive">
-          <table class="user-table">
-            <thead>
-              <tr>
-                <!-- NUMBER -->
-                <th class="serial-column">Sr. No.</th>
+      <div class="table-wrapper">
+        <table class="designation-table">
+          <thead>
+            <tr>
+              <th class="serial-column">#</th>
 
-                <!-- DYNAMIC COLUMNS -->
-                <th
-                  *ngFor="let col of columns"
-                  [class.sortable-column]="col.sortable"
-                  (click)="col.sortable && sortData(col.key)"
-                >
-                  <div class="column-header">
-                    <span>{{ col.label }}</span>
+              <th
+                *ngFor="let col of columns"
+                [class.sortable-column]="col.sortable"
+                (click)="col.sortable && sortData(col.key)"
+              >
+                <div class="column-header">
+                  <span>{{ col.label }}</span>
 
-                    <span *ngIf="col.sortable" class="sort-icons">
-                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'">
-                        ▲
-                      </span>
-
-                      <span
-                        [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"
-                      >
-                        ▼
-                      </span>
+                  <span *ngIf="col.sortable" class="sort-icons">
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'">
+                      ▲
                     </span>
-                  </div>
-                </th>
 
-                <!-- ACTION -->
-                <th class="action-column">Action</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <!-- LOADING -->
-              <tr *ngIf="isLoading">
-                <td [attr.colspan]="columns.length + 2" class="loading-cell">
-                  <div class="loading-spinner"></div>
-                  Loading recurrings...
-                </td>
-              </tr>
-
-              <!-- NO RECORDS -->
-              <tr *ngIf="!isLoading && recurring.length === 0">
-                <td [attr.colspan]="columns.length + 2" class="no-records">No recurrings found.</td>
-              </tr>
-
-              <!-- CLIENT RECORDS -->
-              <tr *ngFor="let item of recurring; let i = index" class="user-row">
-                <!-- SERIAL NUMBER -->
-                <td class="serial-number">
-                  {{ (currentPage - 1) * size + i + 1 }}
-                </td>
-
-                <!-- CLIENT NAME -->
-                <td>
-                  <span class="user-name">
-                    {{ item.clientName || '-' }}
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'">
+                      ▼
+                    </span>
                   </span>
-                </td>
+                </div>
+              </th>
 
-                <!-- Title -->
-                <td>
-                  {{ item.title || '-' }}
-                </td>
+              <th class="action-column">Action</th>
+            </tr>
+          </thead>
 
-                <!-- Type -->
-                <td>
-                  {{ getTypeLabel(item.type) }}
-                </td>
+          <tbody>
+            <tr *ngFor="let item of recurring; let i = index">
+              <td class="serial-cell">
+                {{ (currentPage - 1) * size + i + 1 }}
+              </td>
 
-                <!-- Task Category -->
-                <td>
-                  {{ item.taskCatName || '-' }}
-                </td>
+              <td class="plan-name-cell">
+                <span class="user-name">
+                  {{ item.clientName || '-' }}
+                </span>
+              </td>
 
-                <!-- STATUS -->
-                <td>
-                  <span class="status-badge" [ngClass]="getStatusClass(item.status)">
-                    {{ getStatusLabel(item.status) }}
-                  </span>
-                </td>
+              <td class="plan-name-cell">
+                {{ item.title || '-' }}
+              </td>
 
-                <!-- ACTION -->
-                <td>
-                  <div class="action-buttons">
-                    <!-- VIEW -->
+              <td class="plan-name-cell">
+                {{ getTypeLabel(item.type) }}
+              </td>
+
+              <td class="plan-name-cell">
+                {{ item.taskCatName || '-' }}
+              </td>
+
+              <td class="status-cell">
+                <span class="status-badge" [ngClass]="getStatusClass(item.status)">
+                  {{ getStatusLabel(item.status) }}
+                </span>
+              </td>
+
+              <td class="action-cell">
+                @if (viewPer === 'Y') {
+                  <button
+                    type="button"
+                    class="action-button view-button"
+                    title="View"
+                    (click)="viewRecurring(item.recurringId)"
+                  >
+                    <mat-icon> visibility </mat-icon>
+                  </button>
+                }
+
+                <ng-container *ngIf="item.status === 1 || item.status === 2">
+                  @if (editPer === 'Y') {
                     <button
                       type="button"
-                      class="action-btn view-btn"
-                      title="View"
-                      (click)="viewRecurring(item.recurringId)"
+                      class="action-button edit-button"
+                      title="Edit"
+                      (click)="editRecurring(item.recurringId)"
                     >
-                      <i class="fa fa-eye"></i>
+                      <mat-icon> edit </mat-icon>
                     </button>
+                  }
 
-                    <!-- EDIT -->
-                    <ng-container *ngIf="item.status === 1 || item.status === 2">
-                      @if (editPer === 'Y') {
-                        <button
-                          type="button"
-                          class="action-btn edit-btn"
-                          title="Edit"
-                          (click)="editRecurring(item.recurringId)"
-                        >
-                          <i class="fa fa-pencil"></i>
-                        </button>
-                      }
+                  <!-- DELETE -->
+                  @if (deletePer === 'Y') {
+                    <button
+                      type="button"
+                      class="action-button delete-button"
+                      title="Delete"
+                      (click)="onDeleteUser(item.recurringId)"
+                    >
+                      <mat-icon> delete </mat-icon>
+                    </button>
+                  }
+                </ng-container>
+              </td>
+            </tr>
 
-                      <!-- DELETE -->
-                      @if (deletePer === 'Y') {
-                        <button
-                          type="button"
-                          class="action-btn delete-btn"
-                          title="Delete"
-                          (click)="onDeleteUser(item.recurringId)"
-                        >
-                          <i class="fa fa-trash"></i>
-                        </button>
-                      }
-                    </ng-container>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+            <tr *ngIf="!recurring || recurring.length === 0">
+              <td colspan="7" class="no-records">
+                <mat-icon> info_outline </mat-icon>
+
+                <span> No records found </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- ================= BOTTOM SECTION ================= -->
-     <div class="table-top-section">
-        <!-- RECORD SUMMARY -->
+      <div class="table-toolbar bottom-toolbar">
         <div class="record-summary">
           {{ recordSummary }}
         </div>
 
-        <!-- PAGINATION -->
         <div class="pagination">
-          <!-- FIRST -->
-          <button
-            type="button"
-            class="pagination-btn first-btn"
-            (click)="goToFirstPage()"
-            [disabled]="currentPage === 1"
-          >
-            « First
-          </button>
+          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <!-- PREVIOUS -->
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPreviousPage()"
-            [disabled]="currentPage === 1"
-          >
-            ‹ Prev
-          </button>
+          <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <!-- PAGE NUMBERS -->
           <button
-            type="button"
-            class="pagination-btn page-number"
             *ngFor="let pageNumber of pages()"
             (click)="goToPage(pageNumber)"
             [class.active-pagination]="pageNumber === currentPage"
@@ -347,25 +255,9 @@
             {{ pageNumber }}
           </button>
 
-          <!-- NEXT -->
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToNextPage()"
-            [disabled]="currentPage === totalPages"
-          >
-            Next ›
-          </button>
+          <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next ›</button>
 
-          <!-- LAST -->
-          <button
-            type="button"
-            class="pagination-btn last-btn"
-            (click)="goToLastPage()"
-            [disabled]="currentPage === totalPages"
-          >
-            Last »
-          </button>
+          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
     </div>

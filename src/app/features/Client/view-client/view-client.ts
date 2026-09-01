@@ -53,6 +53,16 @@ export class ViewClient {
   page = 0;
   size = 5;
 
+  stateId = 0;
+  managerId = 0;
+  planId = 0;
+
+  gstFlag: number | null = null;
+  taxFlag: number | null = null;
+
+  fromDate: Date | null = null;
+  toDate: Date | null = null;
+
   showChangeOutstandingModal = false;
   newOutstanding: number | null = null;
   isChangingOutstanding = false;
@@ -237,7 +247,7 @@ export class ViewClient {
     this.outstandingValidationError = false;
     this.newOutstanding = null;
   }
-  
+
   updateOutstanding(): void {
     this.outstandingValidationError = false;
 
@@ -271,13 +281,11 @@ export class ViewClient {
     const managerId = Number(this.client.managerId);
     const userId = Number(this.userId);
 
-
     console.log('Updating outstanding:', {
       clientId: this.client.clientId,
       outstanding: outstanding,
       managerId: managerId,
-      // userId: this.userId
-
+      userId: userId
     });
 
     this.dataprovider
@@ -345,7 +353,26 @@ export class ViewClient {
         searchText: this.searchText,
         page: this.page,
         size: this.size || 5,
+        stateId: this.stateId,
+        managerId: this.managerId,
+        planId: this.planId,
+        gstFlag: this.gstFlag,
+        taxFlag: this.taxFlag,
+        fromDate: this.formatDate(this.fromDate),
+        toDate: this.formatDate(this.toDate),
       },
     });
+  }
+
+  private formatDate(date: Date | null): string {
+    if (!date) {
+      return '';
+    }
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
   }
 }

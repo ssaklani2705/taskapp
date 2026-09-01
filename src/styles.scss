@@ -253,3 +253,12 @@
   margin-right: 5px !important;
 }
 
+.header {
+  position: fixed;
+  z-index: 10000;
+}
+
+.footer {
+  position: fixed;
+  z-index: 10000;
+}

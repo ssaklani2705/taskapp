@@ -605,7 +605,7 @@ export class StateIndex {
           'stateName',
 
         label:
-          'StateName',
+          'State Name',
 
         sortable:
           true,
