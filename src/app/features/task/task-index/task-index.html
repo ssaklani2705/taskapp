@@ -226,7 +226,7 @@
 
           </div>
 
-          
+
 
           <!-- GO -->
           <div class="go-wrapper">
@@ -785,7 +785,7 @@
       <!-- TASK ID (hidden) -->
       <input type="hidden" name="taskId" [(ngModel)]="task.taskId" />
 
-      <div class="manager-form-group" *ngIf="task?.taskStatus == 2">
+      <div class="manager-form-group" *ngIf="task?.taskStatus == 2 || task?.taskStatus == 4">
         <label class="modal-field-label">
           Status
           <span class="required">*</span>
