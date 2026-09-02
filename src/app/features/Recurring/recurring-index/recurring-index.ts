@@ -340,6 +340,9 @@ export class RecurringIndex {
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it',
+      customClass: {
+    popup: 'small-confirm-popup'
+  }
     }).then((result) => {
       if (result.isConfirmed) {
         this.dataprovider.deleteRecurring(recurringId, this.userId).subscribe({

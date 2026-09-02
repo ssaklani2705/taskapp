@@ -425,12 +425,12 @@
 
                 <!-- TASK STATUS -->
                 <td>
-                  <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
+                  <!-- <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
                     [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Manager" [disabled]="
                    
     task.taskStatus == 5 ||
 
-    (task.addedBy == userId &&
+    ( task.addedBy == userId &&
       (task.taskStatus == 1 || task.taskStatus == 3)) ||
 
     (task.assignedTo == userId &&
@@ -440,7 +440,32 @@
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
                     }}
-                  </button>
+                  </button> -->
+                  <!-- {{task.addedBy}} {{userId}} {{task.assignedTo}} -->
+                  <button
+  type="button"
+  class="change-manager-button"
+  (click)="openChangeManagerModal(task)"
+  [ngClass]="common.getTaskStatusClass(task.taskStatus)"
+  matTooltip="Change Manager"
+  [disabled]="
+    task.taskStatus == 5 ||
+
+    (
+      (task.taskStatus == 1 || task.taskStatus == 3) &&
+      (task.addedBy != userId || task.assignedTo != userId)
+    ) ||
+
+    (
+      (task.taskStatus == 2 || task.taskStatus == 4) &&
+      task.assignedTo == userId
+    )
+  "
+>
+  {{ common.getTaskStatusLabel(task.taskStatus) }}
+</button>
+
+
                 </td>
 
 

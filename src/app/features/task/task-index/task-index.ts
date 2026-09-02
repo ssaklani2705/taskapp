@@ -121,6 +121,8 @@ export class TaskIndex {
 
   apiResponseTaskDetails: any = {};
 
+  loginType = '';
+
 
   // =========================================================
   // FILTER MASTER DATA
@@ -352,6 +354,9 @@ export class TaskIndex {
         sessionStorage.getItem(
           'isAdmin'
         );
+
+        this.loginType =
+        sessionStorage.getItem('loginType') || 'other';
 
     }
 
@@ -733,7 +738,7 @@ export class TaskIndex {
 
     this.dataprovider
       .getTaskFilterData( this.isAdmin,
-        this.userId)
+        this.userId,this.loginType)
       .subscribe({
 
         next: (response: any) => {
@@ -851,7 +856,8 @@ export class TaskIndex {
         toDate,
         this.isAdmin,
         this.userId,
-        taskStatusId
+        taskStatusId,
+        this.loginType
 
       )
       .subscribe({
@@ -2323,7 +2329,7 @@ export class TaskIndex {
     const exportData = this.tasks.map((task: any, index: number) => {
 
       return {
-        '#': index + 1,
+        'Sr. No.': index + 1,
 
         'Title': task.title || '-',
 

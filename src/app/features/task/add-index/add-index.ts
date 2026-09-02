@@ -148,6 +148,8 @@ readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
   isAdmin: any;
 
+  loginType: any ='';
+
   // ============================================================
   // MODE
   // ============================================================
@@ -248,6 +250,9 @@ readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
         sessionStorage.getItem(
           'isAdmin'
         );
+
+        this.loginType =
+        sessionStorage.getItem('loginType') || 'other';
 
     }
 
@@ -1049,25 +1054,17 @@ onZipSelected(event: Event): void {
 
   }
   loadDropdownData(): void {
-
     this.dataprovider.getTaskFilterData( this.isAdmin,
-        this.userId).subscribe({
-
+        this.userId,this.loginType).subscribe({
       next: (res: any) => {
-
         console.log('TASK DROPDOWN RESPONSE:', res);
-
         const data = res?.data || res;
-
         this.clients = data?.clients || [];
-
         this.taskCategories = data?.taskCategories || [];
-
         this.users = data?.assignedUsers || [];
-
-        console.log('CLIENTS:', this.clients);
-        console.log('TASK CATEGORIES:', this.taskCategories);
-        console.log('ASSIGNED USERS:', this.users);
+        // console.log('CLIENTS:', this.clients);
+        // console.log('TASK CATEGORIES:', this.taskCategories);
+        // console.log('ASSIGNED USERS:', this.users);
       },
 
       error: (error: any) => {

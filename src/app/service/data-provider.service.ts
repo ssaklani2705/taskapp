@@ -1459,14 +1459,15 @@ export class DataProviderService {
     return this.http.post(`${environment.apiBaseUrl}admin/plan/delete`, plan);
   }
 //sunil
-  getTaskFilterData(isAdmin: string, userId: number): Observable<any> {
+  getTaskFilterData(isAdmin: string, userId: number,loginType: string): Observable<any> {
 
     return this.http.get<any>(
       `${environment.apiBaseUrl}admin/task/getTaskFilterData`,
       {
         params: {
           isAdmin: isAdmin.toString(),
-          userId: userId.toString()
+          userId: userId.toString(),
+          loginType: loginType.toString()
         }
       }
     );
@@ -1486,7 +1487,8 @@ export class DataProviderService {
     toDate: string,
     isAdmin: string,
     userId: any,
-    taskStatusId:any
+    taskStatusId:any,
+    loginType:string
   ): Observable<any> {
 
     const params = new HttpParams()
@@ -1548,6 +1550,7 @@ export class DataProviderService {
         'taskStatusId',
         taskStatusId.toString()
       )
+      .set('loginType',loginType.toString())
 
     console.log(
       'Task API Params:',

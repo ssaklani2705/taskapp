@@ -111,33 +111,6 @@ export class ManagerLogin {
      CAPTCHA GENERATION
   ===================================================== */
 
-  // generateCaptcha(): void {
-
-  //   const characters =
-  //     'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-
-  //   let captcha = '';
-
-  //   for (let i = 0; i < 6; i++) {
-
-  //     const randomIndex =
-  //       Math.floor(
-  //         Math.random() * characters.length
-  //       );
-
-  //     captcha +=
-  //       characters[randomIndex];
-
-  //   }
-
-  //   this.captchaText = captcha;
-
-  //   this.loginForm.controls.captcha.reset();
-
-  //   this.captchaError = false;
-
-  // }
-
   loadCaptcha() {
     this.loginForm.get('captcha')?.reset('');
 

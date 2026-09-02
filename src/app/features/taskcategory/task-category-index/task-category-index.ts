@@ -643,6 +643,8 @@ this.recordsPerPage =
 
       size:
         this.size,
+
+      page: this.page
     };
 
     this.sessionService.setItem(
@@ -685,6 +687,8 @@ this.recordsPerPage =
 
       size:
         this.size,
+
+      page: this.page
     };
 
     this.sessionService.setItem(
@@ -725,6 +729,7 @@ this.recordsPerPage =
 
       size:
         this.size,
+      page: this.page
     };
 
     this.sessionService.setItem(

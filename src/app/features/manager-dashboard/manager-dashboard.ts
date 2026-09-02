@@ -63,6 +63,7 @@ export class ManagerDashboard {
 
   search: string = '';
   userId: any;
+  loginType: any= '';
   isAdmin: any;
 
   page: number = 0;
@@ -96,6 +97,9 @@ export class ManagerDashboard {
 
   ngOnInit(): void {
     this.username = sessionStorage.getItem('username') || 'Society 123';
+
+    this.loginType =
+        sessionStorage.getItem('loginType') || 'other';
 
     this.getTasks();
     this.getTaskCounts();
@@ -348,6 +352,7 @@ export class ManagerDashboard {
         this.isAdmin,
         this.userId,
         taskStatusId,
+        this.loginType
       )
       .subscribe({
         next: (response: any) => {

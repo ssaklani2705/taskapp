@@ -135,130 +135,35 @@
 }
 
 
-
-
-// toast CSS
 /* =========================================================
-   SweetAlert2 Small Toast
+   Small Delete Confirmation Popup
    ========================================================= */
 
-.swal2-container {
-  padding: 10px !important;
+.swal2-container .small-confirm-popup {
+  width: 400px !important;
+  height: 320px !important;
+  padding: 20px !important;
+  border-radius: 6px !important;
 }
 
-/* Main toast */
-.swal2-container .small-toast.swal2-popup {
-  width: 220px !important;
-  min-width: 220px !important;
-  max-width: 220px !important;
-
-  min-height: 0 !important;
-  height: auto !important;
-
-  padding: 6px 10px !important;
-  margin: 0 !important;
-
-  border-radius: 5px !important;
-
-  box-sizing: border-box !important;
-
-  display: flex !important;
-  align-items: center !important;
+.swal2-container .small-confirm-popup .swal2-icon {
+  width: 70px !important;
+  height: 70px !important;
+  margin: 0 auto 15px !important;
 }
 
-/* Toast title / message */
-.swal2-container .small-toast .swal2-title {
-  margin: 0 !important;
-  padding: 0 !important;
-
-  font-size: 12px !important;
-  line-height: 16px !important;
-  font-weight: 500 !important;
-
-  text-align: left !important;
-
-  flex: 1 !important;
+.swal2-container .small-confirm-popup .swal2-title {
+  font-size: 28px !important;
+  margin: 0 0 10px !important;
 }
 
-/* Toast icon */
-.swal2-container .small-toast .swal2-icon {
-  width: 20px !important;
-  height: 20px !important;
-
-  min-width: 20px !important;
-
-  margin: 0 7px 0 0 !important;
-
-  font-size: 11px !important;
+.swal2-container .small-confirm-popup .swal2-html-container {
+  font-size: 16px !important;
+  margin: 5px 0 15px !important;
 }
 
-/* Success icon */
-.swal2-container .small-toast .swal2-icon.swal2-success {
-  width: 20px !important;
-  height: 20px !important;
-}
-
-/* Error icon */
-.swal2-container .small-toast .swal2-icon.swal2-error {
-  width: 20px !important;
-  height: 20px !important;
-}
-
-/* Warning icon */
-.swal2-container .small-toast .swal2-icon.swal2-warning {
-  width: 20px !important;
-  height: 20px !important;
-}
-
-/* Info icon */
-.swal2-container .small-toast .swal2-icon.swal2-info {
-  width: 20px !important;
-  height: 20px !important;
-}
-
-/* Timer progress bar */
-.swal2-container .small-toast .swal2-timer-progress-bar {
-  height: 2px !important;
-}
-
-/* Remove unnecessary SweetAlert spacing */
-.swal2-container .small-toast .swal2-html-container {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* =========================================================
-   Optional: Even smaller toast
-   ========================================================= */
-
-
-.swal2-container .small-toast.swal2-popup {
-  width: 180px !important;
-  min-width: 180px !important;
-  max-width: 180px !important;
-
-  padding: 5px 8px !important;
-}
-
-.swal2-container .small-toast .swal2-title {
-  font-size: 11px !important;
-  line-height: 14px !important;
-}
-
-.swal2-container .small-toast .swal2-icon {
-  width: 18px !important;
-  height: 18px !important;
-  min-width: 18px !important;
-
-  margin-right: 5px !important;
-}
-
-.header {
-  position: fixed;
-  z-index: 10000;
-}
-
-.footer {
-  position: fixed;
-  z-index: 10000;
+.swal2-container .small-confirm-popup .swal2-confirm,
+.swal2-container .small-confirm-popup .swal2-cancel {
+  font-size: 14px !important;
+  padding: 8px 16px !important;
 }
