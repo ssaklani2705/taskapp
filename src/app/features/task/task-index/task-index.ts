@@ -1890,7 +1890,10 @@ export class TaskIndex {
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it',
       confirmButtonColor: '#d33',
-      cancelButtonColor: '#6c757d'
+      cancelButtonColor: '#6c757d',
+      customClass: {
+    popup: 'small-confirm-popup'
+  }
     }).then((result) => {
 
       if (result.isConfirmed) {

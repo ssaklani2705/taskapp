@@ -207,7 +207,7 @@
 
 .user-error {
   color: #d9534f !important;
-  font-size: 12px !important;
+  font-size: 16px !important;
   margin-top: 5px;
   line-height: 16px;
 }
@@ -512,5 +512,522 @@
 
   .form-section {
     margin-top: 25px;
+  }
+}
+
+
+/* =========================================================
+   DATEPICKER OVERLAY
+   ========================================================= */
+
+::ng-deep .cdk-overlay-container {
+  z-index: 1000 !important;
+}
+
+
+/* =========================================================
+   DATEPICKER POPUP
+   ========================================================= */
+
+::ng-deep .user-date-datepicker {
+  width: 280px !important;
+  min-width: 280px !important;
+  max-width: 280px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: #ffffff !important;
+
+  border-radius: 7px !important;
+
+  overflow: hidden !important;
+
+  box-shadow:
+    0 6px 18px rgba(33, 75, 120, 0.18) !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   DATEPICKER CONTENT
+   ========================================================= */
+
+::ng-deep .user-date-datepicker.mat-datepicker-content {
+  width: 280px !important;
+  min-width: 280px !important;
+  max-width: 280px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: #ffffff !important;
+
+  border-radius: 7px !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   CONTENT CONTAINER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-datepicker-content-container {
+
+  width: 280px !important;
+  min-width: 280px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   CALENDAR
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar {
+  height: 310px !important;
+  width: 280px !important;
+  min-width: 280px !important;
+  max-width: 280px !important;
+
+  // height: auto !important;
+  min-height: 0 !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: #ffffff !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   CALENDAR HEADER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-header {
+
+  width: 100% !important;
+
+  height: 44px !important;
+  min-height: 44px !important;
+
+  padding: 4px 6px !important;
+
+  background: #214b78 !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   MONTH / YEAR BUTTON
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-period-button {
+
+  min-width: 0 !important;
+
+  height: 36px !important;
+
+  padding: 0 6px !important;
+
+  font-size: 13px !important;
+
+  font-weight: 600 !important;
+
+  color: #ffffff !important;
+}
+
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-period-button
+.mat-button-wrapper {
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CALENDAR ARROW
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-arrow {
+
+  margin-left: 3px !important;
+
+  fill: #ffffff !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   PREVIOUS / NEXT BUTTON
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-previous-button,
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-next-button {
+
+  width: 36px !important;
+  height: 36px !important;
+
+  min-width: 36px !important;
+  min-height: 36px !important;
+
+  padding: 7px !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   NAVIGATION SVG
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-previous-button svg,
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-next-button svg {
+
+  fill: #ffffff !important;
+}
+
+
+/* =========================================================
+   CALENDAR CONTROLS
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-controls {
+
+  height: 36px !important;
+
+  margin: 0 !important;
+}
+
+
+/* =========================================================
+   CALENDAR CONTENT
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-content {
+
+  width: 100% !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+
+  padding: 4px 6px 6px !important;
+
+  margin: 0 !important;
+
+  background: #ffffff !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   CALENDAR TABLE
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-table {
+
+  width: 100% !important;
+
+  table-layout: fixed !important;
+
+  margin: 0 !important;
+}
+
+
+/* =========================================================
+   WEEKDAY HEADER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-table-header {
+
+  height: 26px !important;
+}
+
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-table-header th {
+
+  height: 26px !important;
+
+  padding: 0 !important;
+
+  font-size: 11px !important;
+
+  font-weight: 600 !important;
+
+  color: #214b78 !important;
+
+  text-align: center !important;
+}
+
+
+/* =========================================================
+   DATE CELLS
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-cell {
+
+  width: 14.28% !important;
+
+  height: 34px !important;
+
+  padding: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+::ng-deep
+.mat-datepicker-content .mat-calendar {
+    height: 310px  !important;
+}
+
+
+/* =========================================================
+   DATE NUMBER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-cell-content {
+
+  width: 28px !important;
+  height: 28px !important;
+
+  line-height: 28px !important;
+
+  font-size: 12px !important;
+
+  font-weight: 400 !important;
+
+  color: #333333 !important;
+
+  border-radius: 50% !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   SELECTED DATE
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-selected {
+
+  width: 28px !important;
+  height: 28px !important;
+
+  line-height: 28px !important;
+
+  background-color: #214b78 !important;
+
+  color: #ffffff !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   TODAY
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-today {
+
+  border: 1px solid #214b78 !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   TODAY + SELECTED
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-today.mat-calendar-body-selected {
+
+  border: none !important;
+
+  background-color: #214b78 !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+.mat-calendar-body-cell-content {
+
+  background-color: #e7f0f8 !important;
+
+  color: #214b78 !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   ACTIVE DATE
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-active
+.mat-calendar-body-cell-content {
+
+  background-color: #e7f0f8 !important;
+
+  color: #214b78 !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   DISABLED DATES
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-disabled {
+
+  color: #b8b8b8 !important;
+
+  opacity: 0.6 !important;
+}
+
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-disabled
+.mat-calendar-body-cell-content {
+
+  color: #b8b8b8 !important;
+
+  background: transparent !important;
+}
+
+
+/* =========================================================
+   MONTH / YEAR LABEL
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-label {
+
+  font-size: 11px !important;
+
+  font-weight: 500 !important;
+
+  color: #555555 !important;
+}
+
+
+/* =========================================================
+   REMOVE EXTRA SPACING
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-table-header-divider {
+
+  display: none !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  ::ng-deep
+  .user-date-datepicker,
+  ::ng-deep
+  .user-date-datepicker.mat-datepicker-content,
+  ::ng-deep
+  .user-date-datepicker
+  .mat-datepicker-content-container,
+  ::ng-deep
+  .user-date-datepicker
+  .mat-calendar {
+
+    width: 270px !important;
+
+    min-width: 270px !important;
+    max-width: 270px !important;
+  }
+
+
+  ::ng-deep
+  .user-date-datepicker
+  .mat-calendar-body-cell {
+
+    height: 32px !important;
+  }
+
+
+  ::ng-deep
+  .user-date-datepicker
+  .mat-calendar-body-cell-content {
+
+    width: 27px !important;
+    height: 27px !important;
+
+    line-height: 27px !important;
   }
 }

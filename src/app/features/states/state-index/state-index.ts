@@ -365,7 +365,10 @@ export class StateIndex {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
-      cancelButtonText: 'No, keep it'
+      cancelButtonText: 'No, keep it',
+      customClass: {
+    popup: 'small-confirm-popup'
+  }
     }).then((result) => {
 
       if (result.isConfirmed) {

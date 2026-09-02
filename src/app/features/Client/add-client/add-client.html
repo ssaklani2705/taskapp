@@ -563,7 +563,7 @@
             <!-- ROW 9 -->
             <div class="user-form-row">
               <!-- Start Date -->
-              <div class="user-form-col">
+              <!-- <div class="user-form-col">
                 <div class="user-form-group">
                   <label class="user-label">
                     Start Date
@@ -598,7 +598,55 @@
                     Start Date is required
                   </div>
                 </div>
-              </div>
+              </div> -->
+
+              <div class="user-form-col">
+  <div class="user-form-group">
+
+    <label class="user-label">
+      Start Date
+      <span class="required">*</span>
+    </label>
+
+    <div class="user-date-group">
+
+      <span
+        class="user-date-icon"
+        (click)="startDatePicker.open()"
+      >
+        <i class="fa fa-calendar"></i>
+      </span>
+
+      <input
+        matInput
+        #startDatePickerInput
+        [matDatepicker]="startDatePicker"
+        class="user-input user-date-input"
+        placeholder="DD-MM-YYYY"
+        formControlName="startDate"
+        autocomplete="off"
+      />
+
+      <mat-datepicker
+        #startDatePicker
+        [startAt]="minDate"
+        panelClass="user-date-datepicker">
+      </mat-datepicker>
+
+    </div>
+
+    <div
+      class="user-error"
+      *ngIf="
+        clientForm.get('startDate')?.touched &&
+        clientForm.get('startDate')?.errors?.['required']
+      "
+    >
+      Start Date is required
+    </div>
+
+  </div>
+</div>
 
               <!-- Plan -->
               <div class="user-form-col">

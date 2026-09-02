@@ -481,6 +481,9 @@ export class DesignationIndexComponent {
 
       cancelButtonText:
         'No, keep it',
+        customClass: {
+    popup: 'small-confirm-popup'
+  }
 
     }).then((result) => {
 

@@ -1545,6 +1545,9 @@ private restoreFilterState(): void {
     showCancelButton: true,
     confirmButtonText: 'Yes, delete it!',
     cancelButtonText: 'Cancel',
+    customClass: {
+    popup: 'small-confirm-popup'
+  },
     reverseButtons: true
   }).then((result) => {
 
