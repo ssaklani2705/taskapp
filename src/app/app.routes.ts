@@ -132,18 +132,18 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/Recurring/view-recurring/view-recurring').then((m) => m.ViewRecurring),
       },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
+      // {
+      //   path: '',
+      //   redirectTo: 'dashboard',
+      //   pathMatch: 'full'
+      // },
 
 
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
-      },
+      // {
+      //   path: '',
+      //   redirectTo: 'dashboard',
+      //   pathMatch: 'full'
+      // },
 
 
       { path: 'plan-index', loadComponent: () => import('./features/plan/plan-index/plan-index').then(m => m.PlanIndex) },
