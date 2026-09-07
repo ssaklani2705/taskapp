@@ -1,3 +1,5 @@
+import * as CryptoJS from 'crypto-js';
+
 export class Common {
 
   getStatusLabel(status: number | string): string {
@@ -191,6 +193,35 @@ export class Common {
 
     if (decimalPart && decimalPart.length > 1) {
       event.preventDefault();
+    }
+  }
+
+   decryptDES(data: string): string {
+    console.log('decryptDES called with:', data);
+    try {
+      const key = CryptoJS.enc.Utf8.parse('PP@S@800');
+
+      const decrypted = CryptoJS.DES.decrypt(
+        {
+          ciphertext: CryptoJS.enc.Hex.parse(data)
+        } as any,
+        key,
+        {
+          mode: CryptoJS.mode.ECB,
+          padding: CryptoJS.pad.Pkcs7
+        }
+      );
+
+      console.log('Raw:', decrypted.toString());
+
+      const result = decrypted.toString(CryptoJS.enc.Utf8);
+
+      console.log('UTF8:', result);
+
+      return result;
+    } catch (e) {
+      console.error(e);
+      return '';
     }
   }
 

@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { LoginService } from '../../service/login.service';
 import { environment } from '../../../environments/environment';
+import * as CryptoJS from 'crypto-js';
+import { Common } from '../../classes/common';
 
 
 
@@ -20,8 +22,11 @@ export class ForgetPasswordComponent {
   emailId: string = '';
   userId: string = '';
   isManagerLogin:string='';
+  encryptedManagerLogin: string ='';
 
   imgUrl: any = "";
+
+  common =new Common();
 
 
   constructor(private fb: FormBuilder, private router: Router, private loginServic: LoginService, private route: ActivatedRoute) {
@@ -37,9 +42,18 @@ export class ForgetPasswordComponent {
       this.emailId = params['emailId'] || '';
       this.userId = params['userId'] || '';
       this.isManagerLogin= params['isManagerLogin'] || '';
-      // alert(this.isManagerLogin);
+
+      const encryptedManagerLogin =this.common.decryptDES(this.isManagerLogin);
+      console.log("encrypt "+encryptedManagerLogin);
+       console.log("encrypt "+this.isManagerLogin);
+
+      alert(encryptedManagerLogin);
+      this.encryptedManagerLogin=encryptedManagerLogin;
+;
     });
   }
+
+
 
   passwordMatchValidator(form: FormGroup) {
     return form.get('password')?.value === form.get('confirmPassword')?.value

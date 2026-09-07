@@ -17,6 +17,13 @@ export const routes: Routes = [
         .then(m => m.Login)
   },
 
+   {
+    path: '',
+    loadComponent: () =>
+      import('./features/auth/login/login')
+        .then(m => m.Login)
+  },
+
   {
     path: 'manager-login',
     loadComponent: () =>
