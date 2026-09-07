@@ -397,6 +397,14 @@
                   }}
                 </td>
 
+                <td>
+                  {{
+                  task.dueDateTime
+                  ? (task.dueDateTime | date:'dd-MM-yyyy HH:mm a')
+                  : '-'
+                  }}
+                </td>
+
 
                 <!-- TASK CATEGORY -->
                 <td>
