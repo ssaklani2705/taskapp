@@ -133,7 +133,7 @@
             </span>
 
             <span class="info-value">
-              {{ formatDate(task.date) }}
+                {{ task.date | date:'dd-MM-yyyy HH:mm a' }}
             </span>
 
           </div>

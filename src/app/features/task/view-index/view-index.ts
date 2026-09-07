@@ -520,80 +520,80 @@ export class ViewIndex implements OnInit {
   // FORMAT TASK DATE
   // =========================================================
 
-  formatDate(
-    value: any
-  ): string {
+  // formatDate(
+  //   value: any
+  // ): string {
 
-    if (!value) {
+  //   if (!value) {
 
-      return '-';
+  //     return '-';
 
-    }
-
-
-    // -------------------------------------------------------
-    // LOCAL DATE YYYY-MM-DD
-    // -------------------------------------------------------
-
-    if (
-      typeof value === 'string' &&
-      /^\d{4}-\d{2}-\d{2}$/.test(value)
-    ) {
-
-      const parts =
-        value.split('-');
-
-      return (
-        parts[2] +
-        '-' +
-        parts[1] +
-        '-' +
-        parts[0]
-      );
-
-    }
+  //   }
 
 
-    const date =
-      new Date(value);
+  //   // -------------------------------------------------------
+  //   // LOCAL DATE YYYY-MM-DD
+  //   // -------------------------------------------------------
+
+  //   if (
+  //     typeof value === 'string' &&
+  //     /^\d{4}-\d{2}-\d{2}$/.test(value)
+  //   ) {
+
+  //     const parts =
+  //       value.split('-');
+
+  //     return (
+  //       parts[2] +
+  //       '-' +
+  //       parts[1] +
+  //       '-' +
+  //       parts[0]
+  //     );
+
+  //   }
 
 
-    if (
-      isNaN(
-        date.getTime()
-      )
-    ) {
-
-      return String(value);
-
-    }
+  //   const date =
+  //     new Date(value);
 
 
-    const day =
-      String(
-        date.getDate()
-      ).padStart(2, '0');
+  //   if (
+  //     isNaN(
+  //       date.getTime()
+  //     )
+  //   ) {
+
+  //     return String(value);
+
+  //   }
 
 
-    const month =
-      String(
-        date.getMonth() + 1
-      ).padStart(2, '0');
+  //   const day =
+  //     String(
+  //       date.getDate()
+  //     ).padStart(2, '0');
 
 
-    const year =
-      date.getFullYear();
+  //   const month =
+  //     String(
+  //       date.getMonth() + 1
+  //     ).padStart(2, '0');
 
 
-    return (
-      day +
-      '-' +
-      month +
-      '-' +
-      year
-    );
+  //   const year =
+  //     date.getFullYear();
 
-  }
+
+  //   return (
+  //     day +
+  //     '-' +
+  //     month +
+  //     '-' +
+  //     year
+  //   );
+
+  // }
 
 
   // =========================================================
