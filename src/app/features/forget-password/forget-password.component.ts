@@ -36,7 +36,8 @@ export class ForgetPasswordComponent {
     this.route.queryParams.subscribe(params => {
       this.emailId = params['emailId'] || '';
       this.userId = params['userId'] || '';
-      this.isManagerLogin= params['userId'] || '';
+      this.isManagerLogin= params['isManagerLogin'] || '';
+      // alert(this.isManagerLogin);
     });
   }
 
@@ -97,7 +98,7 @@ export class ForgetPasswordComponent {
         if (res.success) {
 
            const loginType = res.data;
-          alert('Password changed successfully!');
+          alert('Password changed successfully!'+loginType);
           // this.router.navigate(['/login']);
            if (loginType === 'manager') {
         this.router.navigate(['/manager-login']);
