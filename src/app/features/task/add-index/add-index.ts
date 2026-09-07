@@ -64,6 +64,7 @@ import {
 import {
   OwlMomentDateTimeModule
 } from '@danielmoncada/angular-datetime-picker-moment-adapter';
+import moment from 'moment';
 
 export const MY_DATE_TIME_FORMATS = {
   parseInput: 'DD-MM-YYYY HH:mm',
@@ -780,25 +781,25 @@ onZipSelected(event: Event): void {
     // ----------------------------------------------------------
     // DATE
     // ----------------------------------------------------------
+// alert(this.task.date);
+    // let dateValue = '';
 
-    let dateValue = '';
+    // if (this.task.date) {
 
-    if (this.task.date) {
+    //   const date = new Date(this.task.date);
 
-      const date = new Date(this.task.date);
+    //   const year = date.getFullYear();
 
-      const year = date.getFullYear();
+    //   const month = String(
+    //     date.getMonth() + 1
+    //   ).padStart(2, '0');
 
-      const month = String(
-        date.getMonth() + 1
-      ).padStart(2, '0');
+    //   const day = String(
+    //     date.getDate()
+    //   ).padStart(2, '0');
 
-      const day = String(
-        date.getDate()
-      ).padStart(2, '0');
-
-      dateValue = `${year}-${month}-${day}`;
-    }
+    //   dateValue = `${year}-${month}-${day}`;
+    // }
 
 
     // ----------------------------------------------------------
@@ -821,7 +822,9 @@ onZipSelected(event: Event): void {
 
     formData.append(
       'date',
-      dateValue
+      // dateValue
+      
+        this.formatDateTimeForApi(this.task.date) ?? ''
     );
 
     formData.append(
@@ -975,6 +978,53 @@ onZipSelected(event: Event): void {
       });
   }
 
+    private formatDateTimeForApi(date: any): string | null {
+  
+    if (!date) {
+      return null;
+    }
+  
+    let dateObj: Date;
+  
+    // Moment object
+    if (moment.isMoment(date)) {
+      dateObj = date.toDate();
+    }
+  
+    // JavaScript Date
+    else if (date instanceof Date) {
+      dateObj = date;
+    }
+  
+    else {
+      console.error('Unsupported dueDateTime value:', date);
+      return null;
+    }
+  
+    if (isNaN(dateObj.getTime())) {
+      return null;
+    }
+  
+    const year = dateObj.getFullYear();
+  
+    const month = String(
+      dateObj.getMonth() + 1
+    ).padStart(2, '0');
+  
+    const day = String(
+      dateObj.getDate()
+    ).padStart(2, '0');
+  
+    const hours = String(
+      dateObj.getHours()
+    ).padStart(2, '0');
+  
+    const minutes = String(
+      dateObj.getMinutes()
+    ).padStart(2, '0');
+  
+    return `${year}-${month}-${day} ${hours}:${minutes}:00`;
+  }
 
   // ============================================================
   // RESET
