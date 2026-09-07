@@ -7,9 +7,16 @@ export const routes: Routes = [
   // ================================
   // AUTH
   // ================================
- { path: 'forgot-password', loadComponent: () =>
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'forgot-password', loadComponent: () =>
       import('./features/forget-password/forget-password.component')
-        .then(m => m.ForgetPasswordComponent)  },
+        .then(m => m.ForgetPasswordComponent)
+  },
   {
     path: 'login',
     loadComponent: () =>
@@ -17,7 +24,7 @@ export const routes: Routes = [
         .then(m => m.Login)
   },
 
-   {
+  {
     path: '',
     loadComponent: () =>
       import('./features/auth/login/login')
@@ -51,7 +58,7 @@ export const routes: Routes = [
             .then(m => m.ManagerDashboard)
       },
 
-       {
+      {
         path: 'employee-dashboard',
         loadComponent: () =>
           import('./features/employee-dashboard/employee-dashboard')
