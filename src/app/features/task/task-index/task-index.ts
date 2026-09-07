@@ -2289,11 +2289,11 @@ export class TaskIndex {
     formData.append('userId', this.userId);
 
     if (this.fileTwo) {
-      formData.append('fileName1', this.fileTwo, this.fileTwo.name);   // normal file → fileName1 (pdf)
+      formData.append('fileName3', this.fileTwo, this.fileTwo.name);   // normal file → fileName1 (pdf)
     }
 
     if (this.fileOne) {
-      formData.append('fileName2', this.fileOne, this.fileOne.name);
+      formData.append('fileName4', this.fileOne, this.fileOne.name);
     }
 
 

@@ -425,25 +425,25 @@
 
                 <!-- TASK STATUS -->
                 <td>
-                  <!-- <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
+                  <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
                     [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Manager" [disabled]="
                    
-    task.taskStatus == 5 ||
+                        task.taskStatus == 5 ||
 
-    ( task.addedBy == userId &&
-      (task.taskStatus == 1 || task.taskStatus == 3)) ||
+                        ( task.addedBy == userId &&
+                          (task.taskStatus == 1 || task.taskStatus == 3)) ||
 
-    (task.assignedTo == userId &&
-      (task.taskStatus == 2 || task.taskStatus == 4))
-                    
+                        (task.assignedTo == userId &&
+                          (task.taskStatus == 2 || task.taskStatus == 4))
+                                        
                       ">
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
                     }}
-                  </button> -->
+                  </button>
                   <!-- {{task.addedBy}} {{userId}} {{task.assignedTo}} -->
                   <!-- //Working case -->
-                  <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
+                  <!-- <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
                     [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Manager" [disabled]="
     task.taskStatus == 5 ||
 
@@ -458,7 +458,7 @@
     )
   ">
                     {{ common.getTaskStatusLabel(task.taskStatus) }}
-                  </button>
+                  </button> -->
 
 
                   <!-- <button
@@ -872,7 +872,7 @@
       </div>
 
       <!-- ZIP FILE UPLOAD -->
-      <div class="manager-form-group">
+      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3">
         <label class="modal-field-label">
           Zip File
         </label>
@@ -886,7 +886,7 @@
       </div>
 
       <!-- NORMAL FILE UPLOAD -->
-      <div class="manager-form-group">
+      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3">
         <label class="modal-field-label">
           File
         </label>
