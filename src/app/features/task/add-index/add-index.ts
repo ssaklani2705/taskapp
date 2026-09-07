@@ -97,7 +97,7 @@ export const MY_DATE_TIME_FORMATS = {
     MatSelectModule,
     MatIconModule,
     OwlDateTimeModule,
-  OwlMomentDateTimeModule
+    OwlMomentDateTimeModule
   ],
 
   templateUrl: './add-index.html',
@@ -105,15 +105,15 @@ export const MY_DATE_TIME_FORMATS = {
   styleUrl: './add-index.scss',
   encapsulation: ViewEncapsulation.Emulated,
   providers: [
-  {
-    provide: OWL_DATE_TIME_LOCALE,
-    useValue: 'en-GB'
-  },
-  {
-    provide: OWL_DATE_TIME_FORMATS,
-    useValue: MY_DATE_TIME_FORMATS
-  }
-]
+    {
+      provide: OWL_DATE_TIME_LOCALE,
+      useValue: 'en-GB'
+    },
+    {
+      provide: OWL_DATE_TIME_FORMATS,
+      useValue: MY_DATE_TIME_FORMATS
+    }
+  ]
   // providers: [
   //   {
   //     provide: DateAdapter,
@@ -129,15 +129,15 @@ export const MY_DATE_TIME_FORMATS = {
 
 export class AddIndexComponent implements OnInit {
 
-@ViewChild('pdfInput')
-pdfInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('pdfInput')
+  pdfInput!: ElementRef<HTMLInputElement>;
 
-@ViewChild('zipInput')
-zipInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('zipInput')
+  zipInput!: ElementRef<HTMLInputElement>;
 
-today: Date = new Date();
+  today: Date = new Date();
 
-readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+  readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
   // ============================================================
   // TASK
@@ -184,7 +184,7 @@ readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
   isAdmin: any;
 
-  loginType: any ='';
+  loginType: any = '';
 
   // ============================================================
   // MODE
@@ -281,13 +281,13 @@ readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
           'userId'
         );
 
-      
+
       this.isAdmin =
         sessionStorage.getItem(
           'isAdmin'
         );
 
-        this.loginType =
+      this.loginType =
         sessionStorage.getItem('loginType') || 'other';
 
     }
@@ -354,7 +354,7 @@ readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
         fileName1: null,
 
         fileName2: null,
-        taskStatusId:null
+        taskStatusId: null
 
       };
 
@@ -574,62 +574,62 @@ readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
   //     file.name;
 
   // }
-onPdfSelected(event: Event): void {
+  onPdfSelected(event: Event): void {
 
-  const input =
-    event.target as HTMLInputElement;
+    const input =
+      event.target as HTMLInputElement;
 
-  const file =
-    input.files?.[0];
+    const file =
+      input.files?.[0];
 
-  // Reset previous values
-  this.pdfError = '';
-  this.pdfFile = null;
-  this.pdfFileName = '';
+    // Reset previous values
+    this.pdfError = '';
+    this.pdfFile = null;
+    this.pdfFileName = '';
 
-  if (!file) {
-    return;
+    if (!file) {
+      return;
+    }
+
+    // Validate file type
+    const isPdf =
+      file.type === 'application/pdf' ||
+      file.name.toLowerCase().endsWith('.pdf');
+
+    if (!isPdf) {
+
+      this.pdfError =
+        'Please select a valid PDF file.';
+
+      input.value = '';
+
+      return;
+    }
+
+    // Validate file size
+    if (
+      file.size >
+      this.MAX_FILE_SIZE
+    ) {
+
+      this.pdfError =
+        'PDF file size must not exceed 5 MB.';
+
+      input.value = '';
+
+      return;
+    }
+
+    // Valid file
+    this.pdfFile =
+      file;
+
+    this.pdfFileName =
+      file.name;
+
+    this.pdfError = '';
+
   }
-
-  // Validate file type
-  const isPdf =
-    file.type === 'application/pdf' ||
-    file.name.toLowerCase().endsWith('.pdf');
-
-  if (!isPdf) {
-
-    this.pdfError =
-      'Please select a valid PDF file.';
-
-    input.value = '';
-
-    return;
-  }
-
-  // Validate file size
-  if (
-    file.size >
-    this.MAX_FILE_SIZE
-  ) {
-
-    this.pdfError =
-      'PDF file size must not exceed 5 MB.';
-
-    input.value = '';
-
-    return;
-  }
-
-  // Valid file
-  this.pdfFile =
-    file;
-
-  this.pdfFileName =
-    file.name;
-
-  this.pdfError = '';
-
-}
 
   // ============================================================
   // ZIP
@@ -691,63 +691,63 @@ onPdfSelected(event: Event): void {
   //     file.name;
 
   // }
-onZipSelected(event: Event): void {
+  onZipSelected(event: Event): void {
 
-  const input =
-    event.target as HTMLInputElement;
+    const input =
+      event.target as HTMLInputElement;
 
-  const file =
-    input.files?.[0];
+    const file =
+      input.files?.[0];
 
-  // Reset previous values
-  this.zipError = '';
-  this.zipFile = null;
-  this.zipFileName = '';
+    // Reset previous values
+    this.zipError = '';
+    this.zipFile = null;
+    this.zipFileName = '';
 
-  if (!file) {
-    return;
+    if (!file) {
+      return;
+    }
+
+    // Validate file type
+    const isZip =
+      file.type === 'application/zip' ||
+      file.type === 'application/x-zip-compressed' ||
+      file.name.toLowerCase().endsWith('.zip');
+
+    if (!isZip) {
+
+      this.zipError =
+        'Please select a valid ZIP file.';
+
+      input.value = '';
+
+      return;
+    }
+
+    // Validate file size
+    if (
+      file.size >
+      this.MAX_FILE_SIZE
+    ) {
+
+      this.zipError =
+        'ZIP file size must not exceed 5 MB.';
+
+      input.value = '';
+
+      return;
+    }
+
+    // Valid file
+    this.zipFile =
+      file;
+
+    this.zipFileName =
+      file.name;
+
+    this.zipError = '';
+
   }
-
-  // Validate file type
-  const isZip =
-    file.type === 'application/zip' ||
-    file.type === 'application/x-zip-compressed' ||
-    file.name.toLowerCase().endsWith('.zip');
-
-  if (!isZip) {
-
-    this.zipError =
-      'Please select a valid ZIP file.';
-
-    input.value = '';
-
-    return;
-  }
-
-  // Validate file size
-  if (
-    file.size >
-    this.MAX_FILE_SIZE
-  ) {
-
-    this.zipError =
-      'ZIP file size must not exceed 5 MB.';
-
-    input.value = '';
-
-    return;
-  }
-
-  // Valid file
-  this.zipFile =
-    file;
-
-  this.zipFileName =
-    file.name;
-
-  this.zipError = '';
-
-}
 
   // ============================================================
   // SUBMIT
@@ -797,7 +797,12 @@ onZipSelected(event: Event): void {
         date.getDate()
       ).padStart(2, '0');
 
-      dateValue = `${year}-${month}-${day}`;
+      if (this.task.date) {
+        dateValue = new Date(this.task.date).toISOString();
+
+        console.log('Selected DateTime:', dateValue);
+      }
+
     }
 
 
@@ -982,82 +987,82 @@ onZipSelected(event: Event): void {
 
   onReset(): void {
 
-  if (this.isEditMode) {
+    if (this.isEditMode) {
 
-    this.task = {
-      ...this.originalTask
-    };
+      this.task = {
+        ...this.originalTask
+      };
 
-    if (this.task.date) {
+      if (this.task.date) {
 
-      this.task.date =
-        new Date(
-          this.task.date
-        );
+        this.task.date =
+          new Date(
+            this.task.date
+          );
+
+      }
+
+    } else {
+
+      this.task = {
+
+        taskId: null,
+
+        title: '',
+
+        clientId: null,
+
+        date: null,
+
+        taskCategoryId: null,
+
+        description: '',
+
+        assignedTo: null,
+
+        priority: null,
+
+        status: 1,
+
+        addedBy: null,
+
+        fileName1: null,
+
+        fileName2: null
+
+      };
 
     }
 
-  } else {
 
-    this.task = {
+    // Clear Angular variables
+    this.pdfFile = null;
 
-      taskId: null,
+    this.zipFile = null;
 
-      title: '',
+    this.pdfFileName = '';
 
-      clientId: null,
+    this.zipFileName = '';
 
-      date: null,
+    this.pdfError = '';
 
-      taskCategoryId: null,
+    this.zipError = '';
 
-      description: '',
 
-      assignedTo: null,
+    // Clear actual file input
+    if (this.pdfInput) {
 
-      priority: null,
+      this.pdfInput.nativeElement.value = '';
 
-      status: 1,
+    }
 
-      addedBy: null,
+    if (this.zipInput) {
 
-      fileName1: null,
+      this.zipInput.nativeElement.value = '';
 
-      fileName2: null
-
-    };
+    }
 
   }
-
-
-  // Clear Angular variables
-  this.pdfFile = null;
-
-  this.zipFile = null;
-
-  this.pdfFileName = '';
-
-  this.zipFileName = '';
-
-  this.pdfError = '';
-
-  this.zipError = '';
-
-
-  // Clear actual file input
-  if (this.pdfInput) {
-
-    this.pdfInput.nativeElement.value = '';
-
-  }
-
-  if (this.zipInput) {
-
-    this.zipInput.nativeElement.value = '';
-
-  }
-
-}
 
 
   // ============================================================
@@ -1090,41 +1095,41 @@ onZipSelected(event: Event): void {
 
   }
   loadDropdownData(): void {
-    this.dataprovider.getTaskFilterData( this.isAdmin,
-        this.userId,this.loginType).subscribe({
-      next: (res: any) => {
-        console.log('TASK DROPDOWN RESPONSE:', res);
-        const data = res?.data || res;
-        this.clients = data?.clients || [];
-        this.taskCategories = data?.taskCategories || [];
-        this.users = data?.assignedUsers || [];
-        // console.log('CLIENTS:', this.clients);
-        // console.log('TASK CATEGORIES:', this.taskCategories);
-        // console.log('ASSIGNED USERS:', this.users);
-      },
+    this.dataprovider.getTaskFilterData(this.isAdmin,
+      this.userId, this.loginType).subscribe({
+        next: (res: any) => {
+          console.log('TASK DROPDOWN RESPONSE:', res);
+          const data = res?.data || res;
+          this.clients = data?.clients || [];
+          this.taskCategories = data?.taskCategories || [];
+          this.users = data?.assignedUsers || [];
+          // console.log('CLIENTS:', this.clients);
+          // console.log('TASK CATEGORIES:', this.taskCategories);
+          // console.log('ASSIGNED USERS:', this.users);
+        },
 
-      error: (error: any) => {
+        error: (error: any) => {
 
-        console.error(
-          'Error loading task dropdown data:',
-          error
-        );
+          console.error(
+            'Error loading task dropdown data:',
+            error
+          );
 
-        this.clients = [];
-        this.taskCategories = [];
-        this.users = [];
+          this.clients = [];
+          this.taskCategories = [];
+          this.users = [];
 
-        Swal.fire(
-          'Error',
-          'Unable to load task dropdown data.',
-          'error'
-        );
-      }
-
-
+          Swal.fire(
+            'Error',
+            'Unable to load task dropdown data.',
+            'error'
+          );
+        }
 
 
 
-    });
+
+
+      });
   }
 }
