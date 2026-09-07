@@ -92,16 +92,16 @@ export class LoginService {
     return this.http.get(`${environment.apiBaseUrl}api/getUserDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   }
 
-  forgotPassword(emailId: string, userId: string, password: string) {
+  forgotPassword(emailId: string, userId: string, password: string,isManagerLogin:string) {
     return this.http.post<any>(
-      `${environment.apiBaseUrl}auth/forgotpassword?emailId=${emailId}&userId=${userId}&password=${password}`,
+      `${environment.apiBaseUrl}auth/forgotpassword?emailId=${emailId}&userId=${userId}&password=${password}&isManagerLogin=${isManagerLogin}`,
       {} // sending empty body because your backend takes only @RequestParam
     );
   }
 
-  forgotPasswordMail(emailId: string) {
+  forgotPasswordMail(emailId: string,loginType: string) {
     return this.http.post<any>(
-      `${environment.apiBaseUrl}auth/forgotpasswordMail?emailId=${encodeURIComponent(emailId)}`,
+      `${environment.apiBaseUrl}auth/forgotpasswordMail?emailId=${encodeURIComponent(emailId)}&loginType=${encodeURIComponent(loginType)}`,
       {} // empty body because backend uses @RequestParam only
     );
   }

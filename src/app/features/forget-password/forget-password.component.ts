@@ -19,6 +19,7 @@ export class ForgetPasswordComponent {
 
   emailId: string = '';
   userId: string = '';
+  isManagerLogin:string='';
 
   imgUrl: any = "";
 
@@ -35,6 +36,7 @@ export class ForgetPasswordComponent {
     this.route.queryParams.subscribe(params => {
       this.emailId = params['emailId'] || '';
       this.userId = params['userId'] || '';
+      this.isManagerLogin= params['userId'] || '';
     });
   }
 
@@ -90,11 +92,18 @@ export class ForgetPasswordComponent {
     }
 
     // Call API
-    this.loginServic.forgotPassword(this.emailId, this.userId, password).subscribe({
+    this.loginServic.forgotPassword(this.emailId, this.userId, password,this.isManagerLogin).subscribe({
       next: (res) => {
         if (res.success) {
+
+           const loginType = res.data;
           alert('Password changed successfully!');
-          this.router.navigate(['/login']);
+          // this.router.navigate(['/login']);
+           if (loginType === 'manager') {
+        this.router.navigate(['/manager-login']);
+      } else {
+        this.router.navigate(['/login']);
+      }
         } else {
           alert(res.message || 'Password reset failed.');
         }

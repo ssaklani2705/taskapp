@@ -42,6 +42,7 @@ import Swal from 'sweetalert2';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatIconModule
   ],
   templateUrl: './add-client.html',
   styleUrl: './add-client.scss',
@@ -237,6 +238,20 @@ export class AddClient implements OnInit {
     }
 
     this.clientForm.markAllAsTouched();
+
+    const outstanding = Number(this.clientForm.get('outstanding')?.value);
+
+    if (outstanding < 0) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid Outstanding Amount',
+        text: 'Outstanding amount cannot be negative.',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#d33',
+      });
+
+      return;
+    }
 
     if (this.clientForm.invalid) {
       return;

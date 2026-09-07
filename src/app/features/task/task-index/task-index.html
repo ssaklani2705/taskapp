@@ -235,7 +235,7 @@
             <button type="button" class="btn-go" (click)="onSearch()">
               Go
             </button>
-            &nbsp;
+            <!-- &nbsp; -->
             <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
               Clear
             </button>
@@ -442,6 +442,7 @@
                     }}
                   </button> -->
                   <!-- {{task.addedBy}} {{userId}} {{task.assignedTo}} -->
+                 <!-- //Working case -->
                   <button
   type="button"
   class="change-manager-button"
@@ -466,6 +467,34 @@
 </button>
 
 
+<!-- <button
+  type="button"
+  class="change-manager-button"
+  (click)="openChangeManagerModal(task)"
+  [ngClass]="common.getTaskStatusClass(task.taskStatus)"
+  matTooltip="Change Manager"
+  [disabled]="
+    !(
+      task.addedBy == userId &&
+      task.assignedTo == userId
+    ) &&
+    (
+      task.taskStatus == 5 ||
+
+      (
+        (task.taskStatus == 1 || task.taskStatus == 3) &&
+        (task.addedBy != userId || task.assignedTo != userId)
+      ) ||
+
+      (
+        (task.taskStatus == 2 || task.taskStatus == 4) &&
+        task.assignedTo == userId
+      )
+    )
+  "
+>
+  {{ common.getTaskStatusLabel(task.taskStatus) }}
+</button> -->
                 </td>
 
 

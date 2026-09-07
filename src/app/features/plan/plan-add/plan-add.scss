@@ -984,6 +984,7 @@
 
     .user-form-body {
         padding: 15px 10px;
+        width: 209px;
     }
 
 
@@ -1050,3 +1051,19 @@
 }
 
 
+@media (max-width: 1024px) {
+  .user-form-body {
+        padding: 15px 10px;
+        width: 461px;
+    }
+
+   .user-buttons {
+        margin-left: 24%;
+    }
+}
+
+@media (max-width: 1024px) {
+.user-page-wrapper{
+    margin-top: 20px;
+  }
+}

@@ -2,7 +2,9 @@
 
   <div class="user-portlet">
 
-    <!-- HEADER -->
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
     <div class="user-portlet-title">
 
       <div class="user-title">
@@ -13,10 +15,13 @@
 
       <div class="user-actions">
 
-        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
-          <mat-icon>
-            arrow_back
-          </mat-icon>
+        <button
+          type="button"
+          class="back-index-btn"
+          (click)="backToIndexPage()">
+
+          <mat-icon>arrow_back</mat-icon>
+
           Back to Index
 
         </button>
@@ -26,14 +31,21 @@
     </div>
 
 
-    <!-- BODY -->
+    <!-- =====================================================
+         BODY
+    ====================================================== -->
     <div class="user-portlet-body">
 
-      <form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)" novalidate>
+      <form
+        #taskForm="ngForm"
+        (ngSubmit)="onSubmit(taskForm)"
+        novalidate>
 
         <div class="user-form-body">
 
-          <!-- Mandatory Message -->
+          <!-- =================================================
+               MANDATORY MESSAGE
+          ================================================== -->
           <div class="mandatory-message">
 
             Fields with
@@ -43,13 +55,15 @@
           </div>
 
 
-          <!-- =====================================================
-               ROW 1
-          ====================================================== -->
+          <!-- =================================================
+               FORM GRID
+          ================================================== -->
+          <div class="user-form-grid">
 
-          <div class="user-form-row">
 
-            <!-- TITLE -->
+            <!-- =================================================
+                 TITLE
+            ================================================== -->
             <div class="user-form-col">
 
               <div class="user-form-group">
@@ -59,10 +73,20 @@
                   <span class="required">*</span>
                 </label>
 
-                <input type="text" class="user-input" placeholder="Enter Task Title" [(ngModel)]="task.title"
-                  name="title" required minlength="2" maxlength="100" #titleCtrl="ngModel">
+                <input
+                  type="text"
+                  class="user-input"
+                  placeholder="Enter Task Title"
+                  [(ngModel)]="task.title"
+                  name="title"
+                  required
+                  minlength="2"
+                  maxlength="100"
+                  #titleCtrl="ngModel">
 
-                <div class="user-error" *ngIf="titleCtrl.invalid && titleCtrl.touched">
+                <div
+                  class="user-error"
+                  *ngIf="titleCtrl.invalid && titleCtrl.touched">
 
                   <span *ngIf="titleCtrl.errors?.['required']">
                     Title is required
@@ -79,7 +103,9 @@
             </div>
 
 
-            <!-- CLIENT -->
+            <!-- =================================================
+                 CLIENT
+            ================================================== -->
             <div class="user-form-col">
 
               <div class="user-form-group">
@@ -89,14 +115,20 @@
                   <span class="required">*</span>
                 </label>
 
-                <select class="user-input user-select" [(ngModel)]="task.clientId" name="clientId" required
+                <select
+                  class="user-input user-select"
+                  [(ngModel)]="task.clientId"
+                  name="clientId"
+                  required
                   #clientCtrl="ngModel">
 
                   <option [ngValue]="null">
                     Select Client
                   </option>
 
-                  <option *ngFor="let client of clients" [ngValue]="client.clientId">
+                  <option
+                    *ngFor="let client of clients"
+                    [ngValue]="client.clientId">
 
                     {{ client.name }}
 
@@ -104,7 +136,9 @@
 
                 </select>
 
-                <div class="user-error" *ngIf="clientCtrl.invalid && clientCtrl.touched">
+                <div
+                  class="user-error"
+                  *ngIf="clientCtrl.invalid && clientCtrl.touched">
 
                   Client is required
 
@@ -115,89 +149,61 @@
             </div>
 
 
-            <!-- DATE -->
-            <!-- <div class="user-form-col">
+            <!-- =================================================
+                 DATE & TIME
+            ================================================== -->
+            <div class="user-form-col">
 
               <div class="user-form-group">
 
                 <label class="user-label">
-                  Date <span class="required">*</span>
+                  Date &amp; Time
+                  <span class="required">*</span>
                 </label>
 
                 <div class="user-date-group">
 
-                  <span class="user-date-icon" (click)="picker.open()">
+                  <span
+                    class="user-date-icon"
+                    [owlDateTimeTrigger]="picker">
+
                     <i class="fa fa-calendar"></i>
+
                   </span>
 
+                  <input
+                    class="user-input user-date-input"
+                    [owlDateTime]="picker"
+                    [(ngModel)]="task.date"
+                    name="date"
+                    required
+                    placeholder="DD-MM-YYYY HH:mm"
+                    autocomplete="off"
+                    [min]="today">
 
+                  <owl-date-time
+                    #picker
+                    pickerType="both">
+                  </owl-date-time>
 
-                  <input matInput [matDatepicker]="picker" class="user-input user-date-input" [(ngModel)]="task.date"
-                    name="date" required placeholder="DD-MM-YYYY" autocomplete="off" [min]="today" />
+                </div>
 
-                  <mat-datepicker #picker></mat-datepicker>
+                <div
+                  class="user-error"
+                  *ngIf="taskForm?.submitted && !task.date">
 
-                  <div class="user-error" *ngIf="taskForm?.submitted && !task.date">
-                    Date is required
-                  </div>
+                  Date &amp; Time is required
 
                 </div>
 
               </div>
 
-            </div> -->
-
-            <div class="user-form-col">
-  <div class="user-form-group">
-
-    <label class="user-label">
-      Date <span class="required">*</span>
-    </label>
-
-    <div class="user-date-group">
-
-      <span class="user-date-icon" (click)="picker.open()">
-        <i class="fa fa-calendar"></i>
-      </span>
-
-      <input
-        matInput
-        [matDatepicker]="picker"
-        class="user-input user-date-input"
-        [(ngModel)]="task.date"
-        name="date"
-        required
-        placeholder="DD-MM-YYYY"
-        autocomplete="off"
-        [min]="today"
-      />
-
-      <mat-datepicker
-        #picker
-        panelClass="user-date-datepicker">
-      </mat-datepicker>
-
-      <div
-        class="user-error"
-        *ngIf="taskForm?.submitted && !task.date">
-        Date is required
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-          </div>
+            </div>
 
 
-          <!-- =====================================================
-               ROW 2
-          ====================================================== -->
-
-          <div class="user-form-row">
-
-            <!-- TASK CATEGORY -->
+            <!-- =================================================
+                 TASK CATEGORY
+            ================================================== -->
             <div class="user-form-col">
 
               <div class="user-form-group">
@@ -207,14 +213,20 @@
                   <span class="required">*</span>
                 </label>
 
-                <select class="user-input user-select" [(ngModel)]="task.taskCategoryId" name="taskCategoryId" required
+                <select
+                  class="user-input user-select"
+                  [(ngModel)]="task.taskCategoryId"
+                  name="taskCategoryId"
+                  required
                   #categoryCtrl="ngModel">
 
                   <option [ngValue]="null">
                     Select Task Category
                   </option>
 
-                  <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
+                  <option
+                    *ngFor="let category of taskCategories"
+                    [ngValue]="category.taskcategoryId">
 
                     {{ category.name }}
 
@@ -222,10 +234,9 @@
 
                 </select>
 
-                <div class="user-error" *ngIf="
-                    categoryCtrl.invalid &&
-                    categoryCtrl.touched
-                  ">
+                <div
+                  class="user-error"
+                  *ngIf="categoryCtrl.invalid && categoryCtrl.touched">
 
                   Task Category is required
 
@@ -236,7 +247,9 @@
             </div>
 
 
-            <!-- DESCRIPTION -->
+            <!-- =================================================
+                 DESCRIPTION
+            ================================================== -->
             <div class="user-form-col">
 
               <div class="user-form-group">
@@ -246,12 +259,19 @@
                   <span class="required">*</span>
                 </label>
 
-                <textarea class="user-input user-textarea" placeholder="Enter Task Description"
-                  [(ngModel)]="task.description" name="description" required maxlength="5000"
+                <textarea
+                  class="user-input user-textarea"
+                  placeholder="Enter Task Description"
+                  [(ngModel)]="task.description"
+                  name="description"
+                  required
+                  maxlength="5000"
                   #descriptionCtrl="ngModel">
                 </textarea>
 
-                <div class="user-error" *ngIf="
+                <div
+                  class="user-error"
+                  *ngIf="
                     descriptionCtrl.invalid &&
                     descriptionCtrl.touched
                   ">
@@ -265,35 +285,57 @@
             </div>
 
 
-            <!-- PDF -->
+            <!-- =================================================
+                 PDF FILE
+            ================================================== -->
             <div class="user-form-col">
 
               <div class="user-form-group">
 
                 <label class="user-label">
-                  PDF File <span class="file-limit">
+
+                  PDF File
+
+                  <span class="file-limit">
                     [.pdf allowed up to 5 MB]
                   </span>
+
                 </label>
 
-                <input #pdfInput type="file" class="user-input file-input" accept=".pdf,application/pdf"
+                <input
+                  #pdfInput
+                  type="file"
+                  class="user-input file-input"
+                  accept=".pdf,application/pdf"
                   (change)="onPdfSelected($event)">
 
-                <div class="selected-file" *ngIf="pdfFileName">
+                <div
+                  class="selected-file"
+                  *ngIf="pdfFileName">
+
                   {{ pdfFileName }}
+
                 </div>
 
-                <div class="existing-file" *ngIf="
-        isEditMode &&
-        task.fileName1 &&
-        !pdfFile
-      ">
+                <div
+                  class="existing-file"
+                  *ngIf="
+                    isEditMode &&
+                    task.fileName1 &&
+                    !pdfFile
+                  ">
+
                   Existing:
                   {{ task.fileName1 }}
+
                 </div>
 
-                <div class="user-error" *ngIf="pdfError">
+                <div
+                  class="user-error"
+                  *ngIf="pdfError">
+
                   {{ pdfError }}
+
                 </div>
 
               </div>
@@ -301,36 +343,57 @@
             </div>
 
 
-          </div>
-
-
-          <!-- =====================================================
-               ROW 3
-          ====================================================== -->
-
-          <div class="user-form-row">
-
-            <!-- ZIP -->
+            <!-- =================================================
+                 ZIP FILE
+            ================================================== -->
             <div class="user-form-col">
 
               <div class="user-form-group">
+
                 <label class="user-label">
-                  ZIP File <span class="file-limit">
+
+                  ZIP File
+
+                  <span class="file-limit">
                     [.zip file allowed up to 5 MB]
                   </span>
+
                 </label>
 
-                <input #zipInput type="file" class="user-input file-input" accept=".zip,application/zip"
+                <input
+                  #zipInput
+                  type="file"
+                  class="user-input file-input"
+                  accept=".zip,application/zip"
                   (change)="onZipSelected($event)">
-                <div class="selected-file" *ngIf="zipFileName">
+
+                <div
+                  class="selected-file"
+                  *ngIf="zipFileName">
+
                   {{ zipFileName }}
+
                 </div>
-                <div class="existing-file" *ngIf="isEditMode && task.fileName2 && !zipFile">
+
+                <div
+                  class="existing-file"
+                  *ngIf="
+                    isEditMode &&
+                    task.fileName2 &&
+                    !zipFile
+                  ">
+
                   Existing:
                   {{ task.fileName2 }}
+
                 </div>
-                <div class="user-error" *ngIf="zipError">
+
+                <div
+                  class="user-error"
+                  *ngIf="zipError">
+
                   {{ zipError }}
+
                 </div>
 
               </div>
@@ -338,7 +401,9 @@
             </div>
 
 
-            <!-- ASSIGNED TO -->
+            <!-- =================================================
+                 ASSIGNED TO
+            ================================================== -->
             <div class="user-form-col">
 
               <div class="user-form-group">
@@ -348,14 +413,20 @@
                   <span class="required">*</span>
                 </label>
 
-                <select class="user-input user-select" [(ngModel)]="task.assignedTo" name="assignedTo" required
+                <select
+                  class="user-input user-select"
+                  [(ngModel)]="task.assignedTo"
+                  name="assignedTo"
+                  required
                   #assignedCtrl="ngModel">
 
                   <option [ngValue]="null">
                     Select User
                   </option>
 
-                  <option *ngFor="let user of users" [ngValue]="user.userId">
+                  <option
+                    *ngFor="let user of users"
+                    [ngValue]="user.userId">
 
                     {{ user.firstName }}
 
@@ -363,7 +434,9 @@
 
                 </select>
 
-                <div class="user-error" *ngIf="
+                <div
+                  class="user-error"
+                  *ngIf="
                     assignedCtrl.invalid &&
                     assignedCtrl.touched
                   ">
@@ -377,7 +450,9 @@
             </div>
 
 
-            <!-- PRIORITY -->
+            <!-- =================================================
+                 PRIORITY
+            ================================================== -->
             <div class="user-form-col">
 
               <div class="user-form-group">
@@ -387,7 +462,11 @@
                   <span class="required">*</span>
                 </label>
 
-                <select class="user-input user-select" [(ngModel)]="task.priority" name="priority" required
+                <select
+                  class="user-input user-select"
+                  [(ngModel)]="task.priority"
+                  name="priority"
+                  required
                   #priorityCtrl="ngModel">
 
                   <option [ngValue]="null">
@@ -408,7 +487,9 @@
 
                 </select>
 
-                <div class="user-error" *ngIf="
+                <div
+                  class="user-error"
+                  *ngIf="
                     priorityCtrl.invalid &&
                     priorityCtrl.touched
                   ">
@@ -421,16 +502,13 @@
 
             </div>
 
-          </div>
 
-
-          <!-- =====================================================
-               ROW 4 - STATUS ONLY UPDATE
-          ====================================================== -->
-
-          <div class="user-form-row status-row" *ngIf="isEditMode">
-
-            <div class="user-form-col">
+            <!-- =================================================
+                 STATUS - EDIT ONLY
+            ================================================== -->
+            <div
+              class="user-form-col"
+              *ngIf="isEditMode">
 
               <div class="user-form-group">
 
@@ -439,7 +517,11 @@
                   <span class="required">*</span>
                 </label>
 
-                <select class="user-input user-select" [(ngModel)]="task.status" name="status" required
+                <select
+                  class="user-input user-select"
+                  [(ngModel)]="task.status"
+                  name="status"
+                  required
                   #statusCtrl="ngModel">
 
                   <option [ngValue]="null">
@@ -460,7 +542,9 @@
 
                 </select>
 
-                <div class="user-error" *ngIf="
+                <div
+                  class="user-error"
+                  *ngIf="
                     statusCtrl.invalid &&
                     statusCtrl.touched
                   ">
@@ -473,22 +557,28 @@
 
             </div>
 
+
           </div>
 
 
-          <!-- =====================================================
+          <!-- =================================================
                BUTTONS
-          ====================================================== -->
-
+          ================================================== -->
           <div class="user-buttons">
 
-            <button type="button" class="user-reset-btn" (click)="onReset()">
+            <button
+              type="button"
+              class="user-reset-btn"
+              (click)="onReset()">
 
               Reset
 
             </button>
 
-            <button type="submit" class="user-submit-btn" [disabled]="
+            <button
+              type="submit"
+              class="user-submit-btn"
+              [disabled]="
                 taskForm.invalid ||
                 pdfError ||
                 zipError
@@ -499,6 +589,7 @@
             </button>
 
           </div>
+
 
         </div>
 

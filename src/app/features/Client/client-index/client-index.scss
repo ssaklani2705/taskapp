@@ -1086,18 +1086,238 @@ mat-divider {
   cursor: not-allowed;
 }
 
+// @media (max-width: 1200px) {
+//   .search-row,
+//   .filter-row {
+//     flex-wrap: wrap;
+//   }
+
+//   .search-wrapper {
+//     flex: 1 1 400px;
+//     max-width: none;
+//   }
+
+//   .status-wrapper {
+//     flex: 1 1 220px;
+//   }
+
+//   .date-filter-wrapper {
+//     flex: 1 1 165px;
+//     width: auto;
+//     min-width: 165px;
+//     max-width: none;
+//   }
+// }
+
+// @media (max-width: 1100px) {
+//   .page-container {
+//     padding: 20px;
+//   }
+
+//   .table-toolbar {
+//     align-items: flex-start;
+//     flex-direction: column;
+//     justify-content: center;
+//     padding: 12px 0;
+//   }
+
+//   .pagination {
+//     justify-content: flex-start;
+//   }
+// }
+
+// @media (max-width: 992px) {
+//   .pagination {
+//     width: 100%;
+//     justify-content: flex-start;
+//     overflow-x: auto;
+//     padding-bottom: 3px;
+//   }
+// }
+
+// @media (max-width: 768px) {
+//   .page-container {
+//     padding: 12px;
+//   }
+
+//   .page-header {
+//     min-height: auto;
+//     padding: 15px;
+//     flex-direction: column;
+//     align-items: flex-start;
+//     gap: 14px;
+//   }
+
+//   .page-title {
+//     font-size: 22px;
+//   }
+
+//   .header-action {
+//     width: 100%;
+//   }
+
+//   .add-button {
+//     width: 100%;
+//   }
+
+//   .search-section {
+//     padding: 15px;
+//   }
+
+//   .search-grid {
+//     grid-template-columns: 1fr;
+//   }
+
+//   .search-row,
+//   .filter-row {
+//     flex-direction: column;
+//     align-items: stretch;
+//     gap: 10px;
+//   }
+
+//   .filter-row {
+//     margin-top: 0;
+//   }
+
+//   .search-wrapper,
+//   .status-wrapper,
+//   .go-wrapper,
+//   .clear-wrapper,
+//   .date-filter-wrapper {
+//     width: 100%;
+//     min-width: 0;
+//     max-width: none;
+//     flex: none;
+//   }
+
+//   .search-box,
+//   .status-select,
+//   .date-filter-input {
+//     width: 100%;
+//   }
+
+//   .btn-go,
+//   .btn-clear {
+//     width: 100%;
+//   }
+
+//   .btn-upload-excel,
+//   .btn-export-excel,
+//   .btn-download-template {
+//     width: 100%;
+//     margin-left: 0;
+//   }
+
+//   .table-section {
+//     padding: 0 15px 15px;
+//   }
+
+//   .table-toolbar {
+//     min-height: auto;
+//     padding: 13px 0;
+//     align-items: flex-start;
+//     flex-direction: column;
+//     gap: 12px;
+//   }
+
+//   .record-summary {
+//     white-space: normal;
+//     line-height: 20px;
+//   }
+
+//   .pagination {
+//     width: 100%;
+//     justify-content: flex-start;
+//     overflow-x: auto;
+//   }
+
+//   .pagination button {
+//     flex-shrink: 0;
+//     min-width: 36px;
+//     height: 36px;
+//     padding: 0 8px;
+//   }
+
+//   .designation-table {
+//     min-width: 1500px;
+//   }
+// }
+
+// @media (max-width: 480px) {
+//   .page-container {
+//     padding: 8px;
+//   }
+
+//   .page-title {
+//     font-size: 19px;
+//   }
+
+//   .page-title mat-icon {
+//     width: 22px;
+//     height: 22px;
+//     font-size: 22px;
+//   }
+
+//   .search-section {
+//     padding: 12px;
+//   }
+
+//   .table-section {
+//     padding: 0 12px 12px;
+//   }
+
+//   .record-summary {
+//     font-size: 13px;
+//   }
+
+//   .pagination {
+//     gap: 3px;
+//   }
+
+//   .pagination button {
+//     min-width: 36px;
+//     height: 36px;
+//     padding: 0 7px;
+//     font-size: 12px;
+//   }
+
+//   .designation-table {
+//     min-width: 1500px;
+//   }
+
+//   .action-button {
+//     width: 31px;
+//     height: 31px;
+//   }
+// }
+
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+
+/* =========================
+   LARGE TABLET / SMALL LAPTOP
+   ========================= */
 @media (max-width: 1200px) {
+
+  .page-container {
+    padding: 20px;
+  }
+
   .search-row,
   .filter-row {
     flex-wrap: wrap;
   }
 
   .search-wrapper {
-    flex: 1 1 400px;
+    flex: 1 1 380px;
+    min-width: 300px;
     max-width: none;
   }
 
-  .status-wrapper {
+  .status-wrapper,
+  .filter-row .status-wrapper {
     flex: 1 1 220px;
   }
 
@@ -1107,49 +1327,1159 @@ mat-divider {
     min-width: 165px;
     max-width: none;
   }
+
+  .table-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .designation-table {
+    min-width: 1500px;
+  }
 }
 
+
+/* =========================
+   TABLET
+   769px - 1100px
+   ========================= */
 @media (max-width: 1100px) {
+
   .page-container {
-    padding: 20px;
+    padding: 18px;
+  }
+
+  .page-header {
+    min-height: 70px;
+    padding: 0 18px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .search-section {
+    padding: 18px;
+  }
+
+  .search-row,
+  .filter-row {
+    gap: 12px;
+  }
+
+  .search-wrapper {
+    flex: 1 1 350px;
+    min-width: 280px;
+  }
+
+  .status-wrapper,
+  .filter-row .status-wrapper {
+    flex: 1 1 200px;
+  }
+
+  .date-filter-wrapper {
+    flex: 1 1 160px;
+    min-width: 160px;
   }
 
   .table-toolbar {
     align-items: flex-start;
     flex-direction: column;
     justify-content: center;
+    gap: 12px;
     padding: 12px 0;
   }
 
-  .pagination {
-    justify-content: flex-start;
+  .record-summary {
+    white-space: normal;
   }
-}
 
-@media (max-width: 992px) {
   .pagination {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .pagination button {
+    min-width: 38px;
+    height: 38px;
+  }
+
+  .table-wrapper {
+    width: 100%;
     overflow-x: auto;
-    padding-bottom: 3px;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .designation-table {
+    min-width: 1500px;
+  }
+
+  .designation-table thead th {
+    height: 45px;
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+
+  .designation-table tbody td {
+    height: 52px;
+    padding: 7px 10px;
+    font-size: 14px;
+  }
+
+  .action-button {
+    width: 33px;
+    height: 33px;
   }
 }
 
-@media (max-width: 768px) {
+
+/* =========================
+   iPAD / TABLET
+   769px - 1024px
+   ========================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+
   .page-container {
-    padding: 12px;
+    padding: 16px;
+  }
+
+  .main-card {
+    width: 100%;
   }
 
   .page-header {
-    min-height: auto;
-    padding: 15px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
+    min-height: 68px;
+    padding: 0 16px;
   }
 
   .page-title {
-    font-size: 22px;
+    font-size: 23px;
+    gap: 8px;
+  }
+
+  .page-title mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+  }
+
+  .add-button {
+    height: 38px;
+    min-width: 110px;
+    padding: 0 15px;
+  }
+
+  .search-section {
+    padding: 16px;
+  }
+
+  .search-row,
+  .filter-row {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .search-wrapper {
+    flex: 1 1 320px;
+    min-width: 260px;
+  }
+
+  .status-wrapper,
+  .filter-row .status-wrapper {
+    flex: 1 1 190px;
+  }
+
+  .date-filter-wrapper {
+    flex: 1 1 150px;
+    min-width: 150px;
+  }
+
+  .search-box,
+  .status-select {
+    height: 40px;
+  }
+
+  .date-filter-input {
+    height: 40px;
+  }
+
+  .btn-go {
+    height: 40px;
+    min-width: 55px;
+  }
+
+  .btn-clear {
+    height: 38px;
+  }
+
+  .table-section {
+    padding: 0 16px 16px;
+  }
+
+  .table-toolbar {
+    min-height: 54px;
+  }
+
+  .designation-table {
+    min-width: 1500px;
+  }
+
+  .designation-table thead th {
+    height: 44px;
+    padding: 7px 8px;
+    font-size: 13px;
+  }
+
+  .designation-table tbody td {
+    height: 50px;
+    padding: 7px 8px;
+    font-size: 13px;
+  }
+
+  .action-button {
+    width: 32px;
+    height: 32px;
+    margin: 0 1px;
+  }
+
+  .action-button mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  .status-badge {
+    min-width: 78px;
+    height: 30px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+
+  .pagination {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 3px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pagination button {
+    flex-shrink: 0;
+    min-width: 36px;
+    height: 36px;
+  }
+}
+
+
+/* =========================
+   SMALL TABLET / MOBILE
+   <= 768px
+   ========================= */
+@media (max-width: 768px) {
+
+  .page-container {
+    padding: 10px;
+  }
+
+  .main-card {
+    width: 100%;
+  }
+
+  /* Header */
+  .page-header {
+    min-height: auto;
+    padding: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .page-title {
+    width: 100%;
+    font-size: 21px;
+    line-height: 28px;
+  }
+
+  .page-title mat-icon {
+    width: 23px;
+    height: 23px;
+    font-size: 23px;
+    flex-shrink: 0;
+  }
+
+  .header-action {
+    width: 100%;
+  }
+
+  .add-button {
+    width: 100%;
+    height: 40px;
+  }
+
+
+  /* Search */
+  .search-section {
+    padding: 14px;
+  }
+
+  .search-grid {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .search-row,
+  .filter-row {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+
+  .filter-row {
+    margin-top: 0;
+  }
+
+  .search-wrapper,
+  .status-wrapper,
+  .filter-row .status-wrapper,
+  .go-wrapper,
+  .clear-wrapper,
+  .date-filter-wrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    flex: none;
+  }
+
+  .search-box {
+    width: 100%;
+    height: 42px;
+  }
+
+  .search-input {
+    font-size: 14px;
+    padding: 0 12px;
+  }
+
+  .search-btn {
+    width: 48px;
+    flex: 0 0 48px;
+  }
+
+  .status-select {
+    width: 100%;
+    height: 42px;
+  }
+
+  .date-filter-wrapper {
+    width: 100%;
+  }
+
+  .date-filter-input {
+    width: 100%;
+    height: 42px;
+  }
+
+  .date-input {
+    height: 40px;
+  }
+
+  .btn-go,
+  .btn-clear {
+    width: 100%;
+  }
+
+  .btn-go {
+    height: 42px;
+  }
+
+  .btn-clear {
+    height: 40px;
+  }
+
+
+  /* Excel Buttons */
+  .btn-upload-excel,
+  .btn-export-excel,
+  .btn-download-template {
+    width: 100%;
+    height: 40px;
+    margin-left: 0;
+    box-sizing: border-box;
+  }
+
+
+  /* Table */
+  .table-section {
+    padding: 0 14px 14px;
+  }
+
+  .table-toolbar {
+    min-height: auto;
+    padding: 12px 0;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .record-summary {
+    width: 100%;
+    white-space: normal;
+    line-height: 20px;
+    font-size: 13px;
+  }
+
+  .pagination {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    gap: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .pagination button {
+    flex: 0 0 auto;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+
+
+  /* Horizontal Table Scroll */
+  .table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+  }
+
+  .designation-table {
+    width: 1500px;
+    min-width: 1500px;
+    table-layout: fixed;
+  }
+
+  .designation-table thead th {
+    height: 44px;
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+
+  .designation-table tbody td {
+    height: 50px;
+    padding: 7px 8px;
+    font-size: 13px;
+  }
+
+  .user-name {
+    font-size: 13px;
+  }
+
+  .email-text {
+    font-size: 12px;
+  }
+
+  .description-cell,
+  .description-text {
+    line-height: 18px;
+  }
+
+  .status-badge {
+    min-width: 76px;
+    height: 29px;
+    padding: 0 9px;
+    font-size: 12px;
+  }
+
+  .action-button {
+    width: 32px;
+    height: 32px;
+    margin: 0 1px;
+  }
+
+  .action-button mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+}
+
+
+/* =========================
+   iPHONE / SMALL MOBILE
+   <= 480px
+   ========================= */
+@media (max-width: 480px) {
+
+  .page-container {
+    padding: 7px;
+  }
+
+  .page-header {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .page-title {
+    font-size: 18px;
+    line-height: 24px;
+    gap: 7px;
+  }
+
+  .page-title mat-icon {
+    width: 21px;
+    height: 21px;
+    font-size: 21px;
+  }
+
+  .add-button {
+    height: 39px;
+    font-size: 13px;
+  }
+
+  .search-section {
+    padding: 11px;
+  }
+
+  .search-grid {
+    gap: 10px;
+  }
+
+  .search-row,
+  .filter-row {
+    gap: 9px;
+  }
+
+  .search-box {
+    height: 40px;
+  }
+
+  .search-input {
+    font-size: 13px;
+    padding: 0 10px;
+  }
+
+  .search-btn {
+    width: 45px;
+    flex: 0 0 45px;
+    font-size: 15px;
+  }
+
+  .status-select {
+    height: 40px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .date-filter-input {
+    height: 40px;
+  }
+
+  .date-input {
+    height: 38px;
+    padding: 0 36px 0 10px !important;
+    font-size: 12px;
+  }
+
+  .date-filter-input .mat-datepicker-toggle,
+  .date-filter-input .mat-datepicker-toggle button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .date-filter-input .mat-datepicker-toggle .mat-mdc-button-touch-target {
+    width: 36px;
+    height: 36px;
+  }
+
+  .date-filter-input .mat-datepicker-toggle .mat-icon {
+    width: 19px;
+    height: 19px;
+    font-size: 19px;
+  }
+
+  .btn-go,
+  .btn-clear {
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .btn-upload-excel,
+  .btn-export-excel,
+  .btn-download-template {
+    height: 39px;
+    font-size: 13px;
+    padding: 0 12px;
+  }
+
+  .table-section {
+    padding: 0 11px 11px;
+  }
+
+  .table-toolbar {
+    padding: 11px 0;
+    gap: 9px;
+  }
+
+  .record-summary {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .pagination {
+    gap: 3px;
+  }
+
+  .pagination button {
+    min-width: 34px;
+    height: 34px;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+
+  .designation-table {
+    width: 1500px;
+    min-width: 1500px;
+  }
+
+  .designation-table thead th {
+    height: 42px;
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+
+  .designation-table tbody td {
+    height: 48px;
+    padding: 6px 7px;
+    font-size: 12px;
+  }
+
+  .user-name {
+    font-size: 12px;
+  }
+
+  .email-text {
+    font-size: 11px;
+  }
+
+  .serial-cell {
+    font-size: 12px;
+  }
+
+  .status-badge {
+    min-width: 70px;
+    height: 28px;
+    padding: 0 7px;
+    font-size: 11px;
+  }
+
+  .action-button {
+    width: 30px;
+    height: 30px;
+    margin: 0 1px;
+  }
+
+  .action-button mat-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+  }
+
+  .upload-modal-overlay {
+    padding: 10px;
+  }
+
+  .upload-modal {
+    max-width: 100%;
+    border-radius: 6px;
+  }
+
+  .upload-modal-header {
+    padding: 13px 14px;
+  }
+
+  .upload-modal-header h3 {
+    font-size: 16px;
+  }
+
+  .upload-modal-body {
+    padding: 17px 14px;
+  }
+
+  .upload-modal-footer {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .btn-upload-cancel,
+  .btn-upload-submit {
+    min-width: 80px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+}
+
+
+/* =========================
+   VERY SMALL iPHONE
+   <= 375px
+   ========================= */
+@media (max-width: 375px) {
+
+  .page-container {
+    padding: 5px;
+  }
+
+  .page-header {
+    padding: 10px;
+  }
+
+  .page-title {
+    font-size: 17px;
+    line-height: 22px;
+  }
+
+  .page-title mat-icon {
+    width: 19px;
+    height: 19px;
+    font-size: 19px;
+  }
+
+  .search-section {
+    padding: 9px;
+  }
+
+  .table-section {
+    padding: 0 9px 9px;
+  }
+
+  .pagination button {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 5px;
+    font-size: 10px;
+  }
+
+  .designation-table {
+    width: 1500px;
+    min-width: 1500px;
+  }
+
+  .designation-table thead th {
+    font-size: 10px;
+    padding: 5px 6px;
+  }
+
+  .designation-table tbody td {
+    font-size: 11px;
+    padding: 5px 6px;
+  }
+
+  .status-badge {
+    min-width: 66px;
+    height: 27px;
+    font-size: 10px;
+  }
+
+  .action-button {
+    width: 29px;
+    height: 29px;
+  }
+}
+
+
+/* =========================
+   TOUCH DEVICE IMPROVEMENTS
+   ========================= */
+@media (hover: none) and (pointer: coarse) {
+
+  button,
+  input,
+  select {
+    touch-action: manipulation;
+  }
+
+  .table-wrapper {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .pagination {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .action-button {
+    min-width: 30px;
+    min-height: 30px;
+  }
+}
+
+@media (max-width: 1024px) {
+ .page-container{
+    margin-top: 20px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE FIX - 1024px AND BELOW
+   NO HTML CHANGES REQUIRED
+   ========================================================= */
+
+@media (max-width: 1024px) {
+
+  .page-container {
+    width: 100%;
+    padding: 16px;
+    margin-top: 20px;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+
+  .main-card {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* =========================
+     HEADER
+     ========================= */
+
+  .page-header {
+    min-height: 65px;
+    padding: 12px 16px;
+  }
+
+  .page-title {
+    font-size: 23px;
+  }
+
+  .add-button {
+    height: 38px;
+  }
+
+
+  /* =========================
+     SEARCH / FILTER AREA
+     ========================= */
+
+  .search-section {
+    width: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+  }
+
+  .search-grid {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /*
+   * Allow filters to wrap naturally.
+   */
+  .search-row,
+  .filter-row {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+  }
+
+  /*
+   * Search field gets the remaining space.
+   */
+  .search-wrapper {
+    flex: 1 1 350px;
+    min-width: 280px;
+    max-width: none;
+  }
+
+  /*
+   * Normal select fields.
+   */
+  .status-wrapper,
+  .filter-row .status-wrapper {
+    flex: 1 1 190px;
+    min-width: 180px;
+    max-width: none;
+  }
+
+  /*
+   * Date fields.
+   */
+  .date-filter-wrapper {
+    flex: 1 1 160px !important;
+    width: auto;
+    min-width: 150px;
+    max-width: none;
+  }
+
+  .search-box {
+    width: 100%;
+    height: 40px;
+  }
+
+  .search-input {
+    min-width: 0;
+    font-size: 13px;
+  }
+
+  .status-select {
+    width: 100%;
+    height: 40px;
+    font-size: 13px;
+  }
+
+  .date-filter-input {
+    width: 100%;
+    height: 40px;
+  }
+
+
+  /* =========================
+     GO / CLEAR
+     ========================= */
+
+  .go-wrapper,
+  .clear-wrapper {
+    flex: 0 0 auto;
+  }
+
+  .btn-go {
+    height: 40px;
+    min-width: 58px;
+  }
+
+  .btn-clear {
+    height: 38px;
+  }
+
+
+  /* =========================
+     EXCEL BUTTONS
+     ========================= */
+
+  .btn-upload-excel,
+  .btn-export-excel,
+  .btn-download-template {
+    height: 38px;
+    margin-left: 0;
+    flex: 0 0 auto;
+  }
+
+
+  /* =========================
+     TABLE
+     ========================= */
+
+  .table-section {
+    width: 100%;
+    padding: 0 16px 16px;
+    box-sizing: border-box;
+  }
+
+  /*
+   * Important:
+   * Do NOT allow the table to shrink below its
+   * required width.
+   */
+  .table-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box;
+  }
+
+  .designation-table {
+    width: 1500px;
+    min-width: 1500px;
+    table-layout: fixed;
+  }
+
+  .designation-table thead th {
+    height: 44px;
+    padding: 7px 8px;
+    font-size: 12px;
+    line-height: 17px;
+  }
+
+  .designation-table tbody td {
+    height: 50px;
+    padding: 7px 8px;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .user-name {
+    font-size: 13px;
+  }
+
+  .email-text {
+    font-size: 12px;
+  }
+
+  .status-badge {
+    min-width: 76px;
+    height: 29px;
+    padding: 0 9px;
+    font-size: 11px;
+  }
+
+  .action-button {
+    width: 32px;
+    height: 32px;
+    margin: 0 1px;
+  }
+
+  .action-button mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+
+  /* =========================
+     TABLE TOOLBAR
+     ========================= */
+
+  .table-toolbar {
+    min-height: 54px;
+    padding: 10px 0;
+    gap: 12px;
+  }
+
+  .record-summary {
+    font-size: 13px;
+  }
+
+  .pagination {
+    max-width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: 3px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pagination button {
+    flex: 0 0 auto;
+    min-width: 36px;
+    height: 36px;
+  }
+}
+
+
+/* =========================================================
+   1024px - 769px
+   TABLET
+   ========================================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  .page-container {
+    padding: 14px;
+  }
+
+  .page-header {
+    padding: 12px 14px;
+  }
+
+  .search-section {
+    padding: 14px;
+  }
+
+  /*
+   * First row:
+   * Search + State + Manager
+   */
+  .search-row .search-wrapper {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .search-row .status-wrapper {
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
+  }
+
+  /*
+   * Second filter row:
+   * GST + Tax + Plan + Status
+   */
+  .filter-row .status-wrapper {
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
+  }
+
+  /*
+   * Date/filter/action row.
+   */
+  .filter-row .date-filter-wrapper {
+    flex: 1 1 calc(50% - 5px) !important;
+    min-width: 0;
+  }
+
+  .filter-row .go-wrapper,
+  .filter-row .clear-wrapper {
+    flex: 1 1 calc(50% - 5px);
+  }
+
+  .filter-row .btn-go,
+  .filter-row .btn-clear {
+    width: 100%;
+  }
+
+  .btn-upload-excel,
+  .btn-export-excel,
+  .btn-download-template {
+    flex: 1 1 calc(33.333% - 7px);
+    margin-left: 0;
+  }
+
+  .table-section {
+    padding: 0 14px 14px;
+  }
+}
+
+
+/* =========================================================
+   <= 768px
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .page-container {
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  .page-header {
+    padding: 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .page-title {
+    width: 100%;
+    font-size: 21px;
   }
 
   .header-action {
@@ -1160,34 +2490,31 @@ mat-divider {
     width: 100%;
   }
 
-  .search-section {
-    padding: 15px;
-  }
 
-  .search-grid {
-    grid-template-columns: 1fr;
+  /* Search */
+  .search-section {
+    padding: 14px;
   }
 
   .search-row,
   .filter-row {
+    width: 100%;
     flex-direction: column;
     align-items: stretch;
+    flex-wrap: nowrap;
     gap: 10px;
-  }
-
-  .filter-row {
-    margin-top: 0;
   }
 
   .search-wrapper,
   .status-wrapper,
+  .filter-row .status-wrapper,
+  .date-filter-wrapper,
   .go-wrapper,
-  .clear-wrapper,
-  .date-filter-wrapper {
+  .clear-wrapper {
     width: 100%;
-    min-width: 0;
+    min-width: 0 !important;
     max-width: none;
-    flex: none;
+    flex: none !important;
   }
 
   .search-box,
@@ -1205,88 +2532,100 @@ mat-divider {
   .btn-export-excel,
   .btn-download-template {
     width: 100%;
+    flex: none;
     margin-left: 0;
   }
 
+
+  /* Table */
   .table-section {
-    padding: 0 15px 15px;
+    padding: 0 14px 14px;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    touch-action: pan-x;
+  }
+
+  .designation-table {
+    width: 1500px;
+    min-width: 1500px;
+  }
+
+  .designation-table thead th {
+    height: 43px;
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+
+  .designation-table tbody td {
+    height: 49px;
+    padding: 6px 7px;
+    font-size: 12px;
   }
 
   .table-toolbar {
-    min-height: auto;
-    padding: 13px 0;
-    align-items: flex-start;
     flex-direction: column;
-    gap: 12px;
-  }
-
-  .record-summary {
-    white-space: normal;
-    line-height: 20px;
+    align-items: flex-start;
   }
 
   .pagination {
     width: 100%;
-    justify-content: flex-start;
-    overflow-x: auto;
-  }
-
-  .pagination button {
-    flex-shrink: 0;
-    min-width: 36px;
-    height: 36px;
-    padding: 0 8px;
-  }
-
-  .designation-table {
-    min-width: 1500px;
   }
 }
 
+
+/* =========================================================
+   <= 480px
+   ========================================================= */
+
 @media (max-width: 480px) {
+
   .page-container {
-    padding: 8px;
+    padding: 7px;
   }
 
-  .page-title {
-    font-size: 19px;
-  }
-
-  .page-title mat-icon {
-    width: 22px;
-    height: 22px;
-    font-size: 22px;
-  }
-
-  .search-section {
+  .page-header {
     padding: 12px;
   }
 
+  .page-title {
+    font-size: 18px;
+  }
+
+  .search-section {
+    padding: 11px;
+  }
+
   .table-section {
-    padding: 0 12px 12px;
-  }
-
-  .record-summary {
-    font-size: 13px;
-  }
-
-  .pagination {
-    gap: 3px;
-  }
-
-  .pagination button {
-    min-width: 36px;
-    height: 36px;
-    padding: 0 7px;
-    font-size: 12px;
+    padding: 0 11px 11px;
   }
 
   .designation-table {
+    width: 1500px;
     min-width: 1500px;
   }
 
+  .designation-table thead th {
+    font-size: 10px;
+    padding: 5px 6px;
+  }
+
+  .designation-table tbody td {
+    font-size: 11px;
+    padding: 5px 6px;
+  }
+
+  .status-badge {
+    min-width: 66px;
+    height: 27px;
+    font-size: 10px;
+  }
+
   .action-button {
-    width: 31px;
-    height: 31px;
+    width: 29px;
+    height: 29px;
   }
 }

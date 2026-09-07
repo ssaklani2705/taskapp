@@ -964,130 +964,130 @@
    TABLET
 ========================================================= */
 
-@media (max-width: 1100px) {
+// @media (max-width: 1100px) {
 
-  .page-content {
-    padding: 16px 20px;
-  }
+//   .page-content {
+//     padding: 16px 20px;
+//   }
 
-  .search-row {
-    grid-template-columns:
-      100px
-      minmax(250px, 1fr)
-      190px
-      60px;
+//   .search-row {
+//     grid-template-columns:
+//       100px
+//       minmax(250px, 1fr)
+//       190px
+//       60px;
 
-    gap: 10px;
-  }
+//     gap: 10px;
+//   }
 
-  .page-header {
-    padding: 0 20px;
-  }
+//   .page-header {
+//     padding: 0 20px;
+//   }
 
-  .search-panel {
-    padding: 18px 20px;
-  }
+//   .search-panel {
+//     padding: 18px 20px;
+//   }
 
-  .table-container {
-    padding: 0 20px;
-  }
+//   .table-container {
+//     padding: 0 20px;
+//   }
 
-  .table-top-section {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+//   .table-top-section {
+//     padding-left: 20px;
+//     padding-right: 20px;
+//   }
 
-  .table-bottom-section {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-}
+//   .table-bottom-section {
+//     margin-left: 20px;
+//     margin-right: 20px;
+//   }
+// }
 
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media (max-width: 768px) {
+// @media (max-width: 768px) {
 
-  .page-content {
-    padding: 10px;
-  }
+//   .page-content {
+//     padding: 10px;
+//   }
 
-  .page-header {
-    min-height: 65px;
+//   .page-header {
+//     min-height: 65px;
 
-    padding: 0 15px;
-  }
+//     padding: 0 15px;
+//   }
 
-  .header-title-section h2 {
-    font-size: 21px;
-  }
+//   .header-title-section h2 {
+//     font-size: 21px;
+//   }
 
-  .header-title-section h2 i {
-    font-size: 18px;
-  }
+//   .header-title-section h2 i {
+//     font-size: 18px;
+//   }
 
-  .search-panel {
-    padding: 15px;
-  }
+//   .search-panel {
+//     padding: 15px;
+//   }
 
-  .search-row {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
+//   .search-row {
+//     grid-template-columns: 1fr;
+//     gap: 10px;
+//   }
 
-  .add-user-wrapper {
-    width: 100%;
-  }
+//   .add-user-wrapper {
+//     width: 100%;
+//   }
 
-  .btn-add-user {
-    width: auto;
-  }
+//   .btn-add-user {
+//     width: auto;
+//   }
 
-  .go-wrapper,
-  .btn-go {
-    width: 100%;
-  }
+//   .go-wrapper,
+//   .btn-go {
+//     width: 100%;
+//   }
 
-  .table-top-section {
-    padding: 12px 15px;
+//   .table-top-section {
+//     padding: 12px 15px;
 
-    flex-direction: column;
+//     flex-direction: column;
 
-    align-items: flex-start;
+//     align-items: flex-start;
 
-    gap: 10px;
-  }
+//     gap: 10px;
+//   }
 
-  .pagination {
-    width: 100%;
+//   .pagination {
+//     width: 100%;
 
-    overflow-x: auto;
+//     overflow-x: auto;
 
-    padding-bottom: 2px;
-  }
+//     padding-bottom: 2px;
+//   }
 
-  .table-container {
-    padding: 0 15px;
-  }
+//   .table-container {
+//     padding: 0 15px;
+//   }
 
-  .table-bottom-section {
-    margin-left: 15px;
-    margin-right: 15px;
+//   .table-bottom-section {
+//     margin-left: 15px;
+//     margin-right: 15px;
 
-    flex-direction: column;
+//     flex-direction: column;
 
-    align-items: flex-start;
+//     align-items: flex-start;
 
-    gap: 10px;
-  }
+//     gap: 10px;
+//   }
 
-  .records-per-page {
-    width: 100%;
-    justify-content: flex-end;
-  }
-}
+//   .records-per-page {
+//     width: 100%;
+//     justify-content: flex-end;
+//   }
+// }
 
 
 /* =========================================================
@@ -1096,6 +1096,10 @@
 
 @media (max-width: 480px) {
 
+  .btn-clear{
+    width: 330px;
+  }
+  
   .page-content {
     padding: 7px;
   }
@@ -1106,7 +1110,7 @@
   }
 
   .header-title-section h2 {
-    font-size: 19px;
+    font-size: 17px;
   }
 
   .search-panel {
@@ -1275,3 +1279,768 @@
     border-color 0.15s ease;
 }
 
+// @media (max-width: 1024px) {
+// .search-box{
+//   // width: 712px;
+// }
+// }
+
+
+
+/* =========================================================
+   TABLET DESIGN
+   601px - 1100px
+   2 FIELDS PER ROW
+========================================================= */
+
+@media (min-width: 601px) and (max-width: 1100px) {
+
+  /* ---------------------------------------------------------
+     PAGE
+  --------------------------------------------------------- */
+
+  .page-content-wrapper {
+    width: 100%;
+  }
+
+  .page-content {
+    width: 100%;
+    padding: 15px 18px;
+    box-sizing: border-box;
+  }
+
+
+  /* ---------------------------------------------------------
+     MAIN CONTAINER
+  --------------------------------------------------------- */
+
+  .user-management-container {
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  /* ---------------------------------------------------------
+     HEADER
+  --------------------------------------------------------- */
+
+  .page-header {
+    min-height: 70px;
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+  }
+
+  .header-title-section {
+    min-width: 0;
+  }
+
+  .header-title-section h2 {
+    font-size: 23px;
+    white-space: nowrap;
+  }
+
+  .btn-add-user {
+    flex-shrink: 0;
+  }
+
+
+  /* ---------------------------------------------------------
+     SEARCH PANEL
+     EXACTLY 2 ITEMS PER ROW
+  --------------------------------------------------------- */
+
+  .search-panel {
+    width: 100%;
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+
+  .search-row {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+
+    column-gap: 18px;
+    row-gap: 12px;
+
+    align-items: center;
+
+    box-sizing: border-box;
+  }
+
+
+  /* ---------------------------------------------------------
+     SEARCH
+  --------------------------------------------------------- */
+
+  .search-wrapper {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .search-box {
+    width: 100%;
+    height: 40px;
+  }
+
+  .search-input {
+    width: 100%;
+    min-width: 0;
+  }
+
+
+  /* ---------------------------------------------------------
+     DEPARTMENT
+  --------------------------------------------------------- */
+
+  .department-wrapper {
+    width: 100%;
+    min-width: 0;
+  }
+
+
+  /* ---------------------------------------------------------
+     DESIGNATION
+  --------------------------------------------------------- */
+
+  .designation-wrapper {
+    width: 100%;
+    min-width: 0;
+  }
+
+
+  /* ---------------------------------------------------------
+     STATUS
+  --------------------------------------------------------- */
+
+  .status-wrapper {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .status-select {
+    width: 100%;
+    height: 40px;
+  }
+
+
+  /* ---------------------------------------------------------
+     GO
+  --------------------------------------------------------- */
+
+  .go-wrapper {
+    width: 100%;
+  }
+
+  .btn-go {
+    width: 100%;
+    height: 40px;
+  }
+
+
+  /* ---------------------------------------------------------
+     CLEAR
+  --------------------------------------------------------- */
+
+  .btn-clear {
+    width: 100%;
+    height: 40px;
+  }
+
+
+  /* ---------------------------------------------------------
+     TABLE TOP
+  --------------------------------------------------------- */
+
+  .table-top-section {
+    width: 100%;
+
+    padding: 12px 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    box-sizing: border-box;
+  }
+
+
+  .record-summary {
+    white-space: nowrap;
+  }
+
+
+  /* ---------------------------------------------------------
+     PAGINATION
+  --------------------------------------------------------- */
+
+  .pagination {
+    display: flex;
+    align-items: center;
+
+    gap: 3px;
+
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    white-space: nowrap;
+  }
+
+
+  .pagination-btn {
+    flex-shrink: 0;
+  }
+
+
+  /* ---------------------------------------------------------
+     TABLE
+  --------------------------------------------------------- */
+
+  .table-container {
+    width: 100%;
+    padding: 0 18px;
+
+    box-sizing: border-box;
+  }
+
+
+  .table-responsive {
+    width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+
+  .user-table {
+
+    /*
+     * Keep table readable on tablet.
+     * Horizontal scrolling is intentional.
+     */
+    min-width: 850px;
+
+    width: 100%;
+
+    table-layout: fixed;
+  }
+
+
+  .user-table thead th {
+    padding: 7px 6px;
+
+    font-size: 12px;
+  }
+
+
+  .user-table tbody td {
+    padding: 7px 6px;
+
+    font-size: 12px;
+  }
+
+
+  /* ---------------------------------------------------------
+     TABLE BOTTOM
+  --------------------------------------------------------- */
+
+  .table-bottom-section {
+
+    margin-left: 18px;
+    margin-right: 18px;
+
+    padding: 12px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+  }
+
+
+  /* ---------------------------------------------------------
+     STATUS
+  --------------------------------------------------------- */
+
+  .status-badge {
+    min-width: 75px;
+    height: 30px;
+
+    padding: 0 10px;
+
+    font-size: 12px;
+  }
+
+
+  /* ---------------------------------------------------------
+     ACTION BUTTONS
+  --------------------------------------------------------- */
+
+  .action-buttons {
+    gap: 4px;
+  }
+
+  .action-btn {
+    width: 34px;
+    height: 32px;
+  }
+
+}
+
+
+/* =========================================================
+   LARGE TABLET
+   901px - 1100px
+========================================================= */
+
+@media (min-width: 901px) and (max-width: 1100px) {
+
+  .page-content {
+    padding: 18px 20px;
+  }
+
+  .page-header {
+    padding: 0 20px;
+  }
+
+  .search-panel {
+    padding: 20px;
+  }
+
+  .search-row {
+    column-gap: 20px;
+    row-gap: 14px;
+  }
+
+  .table-container {
+    padding: 0 20px;
+  }
+
+  .table-top-section {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .table-bottom-section {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL TABLET
+   601px - 900px
+========================================================= */
+
+@media (min-width: 601px) and (max-width: 900px) {
+
+  .page-content {
+    padding: 12px;
+  }
+
+
+  .page-header {
+    min-height: 65px;
+    padding: 0 15px;
+  }
+
+
+  .header-title-section h2 {
+    font-size: 21px;
+  }
+
+
+  .search-panel {
+    padding: 15px;
+  }
+
+
+  .search-row {
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+
+    column-gap: 12px;
+    row-gap: 10px;
+  }
+
+
+  .table-container {
+    padding: 0 15px;
+  }
+
+
+  .table-top-section {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+
+  .table-bottom-section {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   0 - 600px
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .page-content {
+    width: 100%;
+    padding: 10px;
+  }
+
+
+  /* ---------------------------------------------------------
+     HEADER
+  --------------------------------------------------------- */
+
+  .page-header {
+
+    min-height: 65px;
+
+    padding: 10px 12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: stretch;
+
+    justify-content: center;
+
+    gap: 10px;
+  }
+
+
+  .header-title-section {
+
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+  }
+
+
+  .header-title-section h2 {
+
+    font-size: 20px;
+
+    white-space: nowrap;
+  }
+
+
+  .collapse-btn {
+    flex-shrink: 0;
+  }
+
+
+  .btn-add-user {
+
+    width: 100%;
+
+    height: 38px;
+  }
+
+
+  /* ---------------------------------------------------------
+     SEARCH
+  --------------------------------------------------------- */
+
+  .search-panel {
+
+    padding: 14px 12px;
+  }
+
+
+  .search-row {
+
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+
+  .search-wrapper,
+  .department-wrapper,
+  .designation-wrapper,
+  .status-wrapper,
+  .go-wrapper {
+
+    width: 100%;
+
+    min-width: 0;
+  }
+
+
+  .search-box {
+
+    width: 100%;
+
+    height: 40px;
+  }
+
+
+  .search-input {
+
+    width: 100%;
+
+    min-width: 0;
+
+    font-size: 13px;
+  }
+
+
+  .status-select {
+
+    width: 100%;
+
+    height: 40px;
+  }
+
+
+  .btn-go {
+
+    width: 100%;
+
+    height: 40px;
+  }
+
+
+  .btn-clear {
+
+    width: 100% !important;
+
+    height: 40px;
+  }
+
+
+  /* ---------------------------------------------------------
+     TABLE TOP
+  --------------------------------------------------------- */
+
+  .table-top-section {
+
+    padding: 12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: flex-start;
+
+    gap: 10px;
+  }
+
+
+  .record-summary {
+
+    width: 100%;
+
+    white-space: normal;
+
+    font-size: 12px;
+  }
+
+
+  /* ---------------------------------------------------------
+     PAGINATION
+  --------------------------------------------------------- */
+
+  .pagination {
+
+    width: 100%;
+
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    padding-bottom: 3px;
+
+    justify-content: flex-start;
+
+    white-space: nowrap;
+  }
+
+
+  .pagination-btn {
+
+    flex-shrink: 0;
+  }
+
+
+  /* ---------------------------------------------------------
+     TABLE
+  --------------------------------------------------------- */
+
+  .table-container {
+
+    width: 100%;
+
+    padding: 0 12px;
+  }
+
+
+  .table-responsive {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+
+  .user-table {
+
+    min-width: 850px;
+  }
+
+
+  /* ---------------------------------------------------------
+     BOTTOM
+  --------------------------------------------------------- */
+
+  .table-bottom-section {
+
+    margin-left: 12px;
+
+    margin-right: 12px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 10px;
+  }
+
+
+  .records-per-page {
+
+    width: 100%;
+
+    justify-content: flex-end;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   0 - 480px
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .page-content {
+    padding: 7px;
+  }
+
+
+  .page-header {
+    padding: 9px 10px;
+  }
+
+
+  .header-title-section h2 {
+    font-size: 17px;
+  }
+
+
+  .search-panel {
+    padding: 12px 10px;
+  }
+
+
+  .table-top-section {
+    padding: 10px;
+  }
+
+
+  .table-container {
+    padding: 0 10px;
+  }
+
+
+  .table-bottom-section {
+
+    margin-left: 10px;
+
+    margin-right: 10px;
+  }
+
+
+  .pagination-btn {
+
+    min-width: 34px;
+
+    height: 30px;
+
+    padding: 0 6px;
+
+    font-size: 11px;
+  }
+
+
+  .pagination-btn.first-btn,
+  .pagination-btn.last-btn {
+
+    min-width: 52px;
+  }
+
+
+  .btn-add-user {
+    height: 36px;
+  }
+
+
+  .search-input,
+  .search-btn,
+  .status-select,
+  .btn-go,
+  .btn-clear {
+
+    height: 38px;
+  }
+
+}
+@media (max-width: 1024px) {
+ .page-content-wrapper{
+    margin-top: 20px;
+  }
+}

@@ -15,6 +15,7 @@ interface Task {
   assignedTo: string;
   assignedUserName: string;
   taskStatus: number;
+  addedBy: number;
 }
 
 @Component({

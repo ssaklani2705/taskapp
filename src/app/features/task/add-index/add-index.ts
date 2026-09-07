@@ -55,7 +55,31 @@ import {
 import Swal from 'sweetalert2';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 import { MatIconModule } from '@angular/material/icon';
+import {
+  OwlDateTimeModule,
+  OWL_DATE_TIME_FORMATS,
+  OWL_DATE_TIME_LOCALE
+} from '@danielmoncada/angular-datetime-picker';
 
+import {
+  OwlMomentDateTimeModule
+} from '@danielmoncada/angular-datetime-picker-moment-adapter';
+
+export const MY_DATE_TIME_FORMATS = {
+  parseInput: 'DD-MM-YYYY HH:mm',
+
+  fullPickerInput: 'DD-MM-YYYY HH:mm',
+
+  datePickerInput: 'DD-MM-YYYY',
+
+  timePickerInput: 'HH:mm',
+
+  monthYearLabel: 'MMM YYYY',
+
+  dateA11yLabel: 'LL',
+
+  monthYearA11yLabel: 'MMMM YYYY'
+};
 
 @Component({
   selector: 'app-add-task',
@@ -71,7 +95,9 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatNativeDateModule,
     MatSelectModule,
-    MatIconModule
+    MatIconModule,
+    OwlDateTimeModule,
+  OwlMomentDateTimeModule
   ],
 
   templateUrl: './add-index.html',
@@ -79,15 +105,25 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './add-index.scss',
   encapsulation: ViewEncapsulation.Emulated,
   providers: [
-    {
-      provide: DateAdapter,
-      useClass: MyDateAdapter,
-    },
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-GB',
-    },
-  ],
+  {
+    provide: OWL_DATE_TIME_LOCALE,
+    useValue: 'en-GB'
+  },
+  {
+    provide: OWL_DATE_TIME_FORMATS,
+    useValue: MY_DATE_TIME_FORMATS
+  }
+]
+  // providers: [
+  //   {
+  //     provide: DateAdapter,
+  //     useClass: MyDateAdapter,
+  //   },
+  //   {
+  //     provide: MAT_DATE_LOCALE,
+  //     useValue: 'en-GB',
+  //   },
+  // ],
 })
 
 

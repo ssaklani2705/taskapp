@@ -1100,3 +1100,11 @@ mat-divider {
     flex: 1;
   }
 }
+
+
+
+@media (max-width: 1024px) {
+ .page-container{
+    margin-top: 20px;
+  }
+}

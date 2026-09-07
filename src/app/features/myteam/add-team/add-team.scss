@@ -1854,3 +1854,9 @@
   box-shadow: none;
   outline: none;
 }
+
+@media (max-width: 1024px) {
+.user-page-wrapper{
+    margin-top: 20px;
+  }
+}

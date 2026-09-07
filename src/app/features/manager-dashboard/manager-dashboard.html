@@ -90,7 +90,7 @@
                 </div>
               </td>
 
-              <td>
+              <!-- <td>
                 <span
                   class="status-badge"
                   [ngClass]="getTaskStatusClass(task.taskStatus)"
@@ -100,7 +100,45 @@
                   <span class="status-dot"></span>
                   {{ getTaskStatusLabel(task.taskStatus) }}
                 </span>
-              </td>
+              </td> -->
+              <td>
+  <span
+    class="status-badge"
+    [ngClass]="getTaskStatusClass(task.taskStatus)"
+    [class.status-disabled]="
+      task.taskStatus == 5 ||
+
+      (
+        (task.taskStatus == 1 || task.taskStatus == 3) &&
+        (task.addedBy != userId || task.assignedTo != userId)
+      ) ||
+
+      (
+        (task.taskStatus == 2 || task.taskStatus == 4) &&
+        task.assignedTo == userId
+      )
+    "
+    (click)="
+      !(
+        task.taskStatus == 5 ||
+
+        (
+          (task.taskStatus == 1 || task.taskStatus == 3) &&
+          (task.addedBy != userId || task.assignedTo != userId)
+        ) ||
+
+        (
+          (task.taskStatus == 2 || task.taskStatus == 4) &&
+          task.assignedTo == userId
+        )
+      ) && openChangeManagerModal(task.taskId)
+    "
+  >
+    <span class="status-dot"></span>
+    {{ getTaskStatusLabel(task.taskStatus) }}
+  </span>
+</td>
+
 
               <td>
                 <button mat-icon-button class="task-action">

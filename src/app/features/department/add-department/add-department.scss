@@ -950,6 +950,12 @@
 
 }
 
+@media (max-width: 1024px) {
+  .user-form-body {
+        padding: 15px 10px;
+        width: 461px;
+    }
+}
 
 /* =========================================================
    MOBILE
@@ -984,6 +990,7 @@
 
     .user-form-body {
         padding: 15px 10px;
+        width: 250px;
     }
 
 
@@ -1046,5 +1053,14 @@
 @media (max-width: 600px) {
     .user-form-row {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1024px) {
+   .user-buttons {
+        margin-left: 24%;
+    }
+    .user-page-wrapper{
+        margin-top: 20px;
     }
 }

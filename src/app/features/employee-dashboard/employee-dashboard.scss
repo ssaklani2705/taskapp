@@ -748,13 +748,13 @@
 
 @media (min-width: 1200px) {
 
- .page-shell {
-    padding: 26px 8px 18px;
+  .page-shell {
+    padding: 26px 50px 18px;
   }
 
   .workspace-card {
-    width: 1100px;
-    max-width: calc(100% - 16px);
+    width: 100%;
+    max-width: 1400px;
   }
 }
 

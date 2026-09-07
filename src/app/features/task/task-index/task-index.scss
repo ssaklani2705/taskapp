@@ -521,31 +521,31 @@
    The previous six controls consume the first row.
 */
 
-@media (min-width: 1201px) {
+// @media (min-width: 1201px) {
 
-  .search-row {
-    column-gap: 40px;
-    row-gap: 14px;
-  }
+//   .search-row {
+//     column-gap: 40px;
+//     row-gap: 14px;
+//   }
 
-  .search-wrapper {
-    flex: 0 0 220px;
-    width: 220px;
-  }
+//   .search-wrapper {
+//     flex: 0 0 220px;
+//     width: 220px;
+//   }
 
-  .status-wrapper {
-    flex: 0 0 150px;
-    width: 150px;
-  }
+//   .status-wrapper {
+//     flex: 0 0 150px;
+//     width: 150px;
+//   }
 
-  /*
-     Force From Date to next line.
-  */
-  .date-filter-wrapper:nth-last-of-type(2) {
-    margin-left: 0;
-  }
+//   /*
+//      Force From Date to next line.
+//   */
+//   .date-filter-wrapper:nth-last-of-type(2) {
+//     margin-left: 0;
+//   }
 
-}
+// }
 
 
 /* =========================================================
@@ -1193,308 +1193,308 @@
    LARGE TABLET / SMALL DESKTOP
 ========================================================= */
 
-@media (max-width: 1200px) {
+// @media (max-width: 1200px) {
 
-  .page-content {
-    padding: 20px;
-  }
+//   .page-content {
+//     padding: 20px;
+//   }
 
-  /*
-     Let the six first filters wrap naturally.
-     Dates remain on their own row.
-  */
+//   /*
+//      Let the six first filters wrap naturally.
+//      Dates remain on their own row.
+//   */
 
-  .search-row {
-    gap: 12px;
-  }
+//   .search-row {
+//     gap: 12px;
+//   }
 
-  .search-wrapper {
-    flex: 1 1 220px;
+//   .search-wrapper {
+//     flex: 1 1 220px;
 
-    max-width: none;
-  }
+//     max-width: none;
+//   }
 
-  .status-wrapper {
-    flex: 1 1 150px;
+//   .status-wrapper {
+//     flex: 1 1 150px;
 
-    max-width: none;
-  }
+//     max-width: none;
+//   }
 
-  .date-filter-wrapper {
-    flex: 0 0 150px;
+//   .date-filter-wrapper {
+//     flex: 0 0 150px;
 
-    width: 150px;
+//     width: 150px;
 
-    min-width: 150px;
-  }
+//     min-width: 150px;
+//   }
 
-  .table-responsive {
-    overflow-x: auto;
-  }
+//   .table-responsive {
+//     overflow-x: auto;
+//   }
 
-  .user-table {
-    min-width: 1100px;
-  }
-}
+//   .user-table {
+//     min-width: 1100px;
+//   }
+// }
 
 
 /* =========================================================
    TABLET
 ========================================================= */
 
-@media (max-width: 992px) {
+// @media (max-width: 992px) {
 
-  .search-row {
-    display: grid;
+//   .search-row {
+//     display: grid;
 
-    grid-template-columns:
-      minmax(180px, 1.5fr) repeat(3, minmax(140px, 1fr));
+//     grid-template-columns:
+//       minmax(180px, 1.5fr) repeat(3, minmax(140px, 1fr));
 
-    gap: 12px;
-  }
+//     gap: 12px;
+//   }
 
-  .search-wrapper,
-  .status-wrapper {
-    width: 100%;
+//   .search-wrapper,
+//   .status-wrapper {
+//     width: 100%;
 
-    min-width: 0;
+//     min-width: 0;
 
-    max-width: none;
-  }
+//     max-width: none;
+//   }
 
-  /*
-     Row 2
-  */
+//   /*
+//      Row 2
+//   */
 
-  .date-filter-wrapper {
-    width: 100%;
+//   .date-filter-wrapper {
+//     width: 100%;
 
-    min-width: 0;
+//     min-width: 0;
 
-    max-width: none;
+//     max-width: none;
 
-    flex: none;
-  }
+//     flex: none;
+//   }
 
-  .go-wrapper {
-    width: auto;
+//   .go-wrapper {
+//     width: auto;
 
-    justify-content: flex-start;
-  }
-}
+//     justify-content: flex-start;
+//   }
+// }
 
 
 /* =========================================================
    MOBILE / TABLET
 ========================================================= */
 
-@media (max-width: 768px) {
+// @media (max-width: 768px) {
 
-  .page-content {
-    padding: 12px;
-  }
+//   .page-content {
+//     padding: 12px;
+//   }
 
-  .page-header {
-    min-height: 70px;
+//   .page-header {
+//     min-height: 70px;
 
-    padding: 0 15px;
-  }
+//     padding: 0 15px;
+//   }
 
-  .header-title-section h2 {
-    font-size: 22px;
-  }
+//   .header-title-section h2 {
+//     font-size: 22px;
+//   }
 
-  .search-panel {
-    padding: 18px 15px;
-  }
+//   .search-panel {
+//     padding: 18px 15px;
+//   }
 
-  /*
-     One filter per row on smaller screens.
-  */
+//   /*
+//      One filter per row on smaller screens.
+//   */
 
-  .search-row {
-    display: grid;
+//   .search-row {
+//     display: grid;
 
-    grid-template-columns: 1fr;
+//     grid-template-columns: 1fr;
 
-    gap: 12px;
-  }
+//     gap: 12px;
+//   }
 
-  .search-wrapper,
-  .status-wrapper,
-  .date-filter-wrapper {
-    width: 100%;
+//   .search-wrapper,
+//   .status-wrapper,
+//   .date-filter-wrapper {
+//     width: 100%;
 
-    min-width: 0;
+//     min-width: 0;
 
-    max-width: none;
+//     max-width: none;
 
-    flex: none;
-  }
+//     flex: none;
+//   }
 
-  .search-input,
-  .search-btn,
-  .status-select {
-    height: 44px;
-  }
+//   .search-input,
+//   .search-btn,
+//   .status-select {
+//     height: 44px;
+//   }
 
-  .date-filter-input {
-    height: 44px;
-  }
+//   .date-filter-input {
+//     height: 44px;
+//   }
 
-  .date-input {
-    height: 42px;
-  }
+//   .date-input {
+//     height: 42px;
+//   }
 
-  .date-filter-input .mat-datepicker-toggle {
-    width: 42px;
-    height: 42px;
-  }
+//   .date-filter-input .mat-datepicker-toggle {
+//     width: 42px;
+//     height: 42px;
+//   }
 
-  .date-filter-input .mat-datepicker-toggle button {
-    width: 42px;
-    height: 42px;
-  }
+//   .date-filter-input .mat-datepicker-toggle button {
+//     width: 42px;
+//     height: 42px;
+//   }
 
-  /*
-     Go and Clear side by side.
-  */
+//   /*
+//      Go and Clear side by side.
+//   */
 
-  .go-wrapper {
-    width: 100%;
+//   .go-wrapper {
+//     width: 100%;
 
-    display: grid;
+//     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+//     grid-template-columns: 1fr 1fr;
 
-    gap: 10px;
-  }
+//     gap: 10px;
+//   }
 
-  .btn-go,
-  .btn-clear {
-    width: 100%;
-  }
+//   .btn-go,
+//   .btn-clear {
+//     width: 100%;
+//   }
 
-  /*
-     Remove the old &nbsp; spacing from HTML visually.
-  */
+//   /*
+//      Remove the old &nbsp; spacing from HTML visually.
+//   */
 
-  .go-wrapper {
-    font-size: 0;
-  }
+//   .go-wrapper {
+//     font-size: 0;
+//   }
 
-  .go-wrapper .btn-go,
-  .go-wrapper .btn-clear {
-    font-size: 14px;
-  }
+//   .go-wrapper .btn-go,
+//   .go-wrapper .btn-clear {
+//     font-size: 14px;
+//   }
 
 
-  /* TABLE TOP */
+//   /* TABLE TOP */
 
-  .table-top-section,
-  .table-bottom-section {
-    padding: 15px;
+//   .table-top-section,
+//   .table-bottom-section {
+//     padding: 15px;
 
-    flex-direction: column;
+//     flex-direction: column;
 
-    align-items: flex-start;
+//     align-items: flex-start;
 
-    gap: 12px;
-  }
+//     gap: 12px;
+//   }
 
-  .pagination {
-    width: 100%;
+//   .pagination {
+//     width: 100%;
 
-    overflow-x: auto;
-  }
+//     overflow-x: auto;
+//   }
 
-  .table-container {
-    padding: 0 15px;
-  }
+//   .table-container {
+//     padding: 0 15px;
+//   }
 
-  .table-responsive {
-    width: 100%;
+//   .table-responsive {
+//     width: 100%;
 
-    overflow-x: auto;
+//     overflow-x: auto;
 
-    overflow-y: hidden;
-  }
+//     overflow-y: hidden;
+//   }
 
-  .user-table {
-    min-width: 1100px;
+//   .user-table {
+//     min-width: 1100px;
 
-    width: 1100px;
-  }
-}
+//     width: 1100px;
+//   }
+// }
 
 
 /* =========================================================
    SMALL MOBILE
 ========================================================= */
 
-@media (max-width: 480px) {
+// @media (max-width: 480px) {
 
-  .page-content {
-    padding: 8px;
-  }
+//   .page-content {
+//     padding: 8px;
+//   }
 
-  .header-title-section h2 {
-    font-size: 19px;
-  }
+//   .header-title-section h2 {
+//     font-size: 19px;
+//   }
 
-  .search-panel {
-    padding: 15px 12px;
-  }
+//   .search-panel {
+//     padding: 15px 12px;
+//   }
 
-  .search-row {
-    gap: 10px;
-  }
+//   .search-row {
+//     gap: 10px;
+//   }
 
-  .search-input,
-  .search-btn,
-  .status-select {
-    height: 42px;
-  }
+//   .search-input,
+//   .search-btn,
+//   .status-select {
+//     height: 42px;
+//   }
 
-  .date-filter-input {
-    height: 42px;
-  }
+//   .date-filter-input {
+//     height: 42px;
+//   }
 
-  .date-input {
-    height: 40px;
+//   .date-input {
+//     height: 40px;
 
-    font-size: 14px;
-  }
+//     font-size: 14px;
+//   }
 
-  .go-wrapper {
-    grid-template-columns: 1fr 1fr;
-  }
+//   .go-wrapper {
+//     grid-template-columns: 1fr 1fr;
+//   }
 
-  .pagination-btn {
-    min-width: 38px;
+//   .pagination-btn {
+//     min-width: 38px;
 
-    padding: 0 7px;
+//     padding: 0 7px;
 
-    font-size: 12px;
-  }
+//     font-size: 12px;
+//   }
 
-  .first-btn,
-  .last-btn {
-    min-width: 55px;
-  }
+//   .first-btn,
+//   .last-btn {
+//     min-width: 55px;
+//   }
 
-  .table-responsive {
-    width: 100%;
+//   .table-responsive {
+//     width: 100%;
 
-    overflow-x: auto;
-  }
+//     overflow-x: auto;
+//   }
 
-  .user-table {
-    min-width: 1100px;
+//   .user-table {
+//     min-width: 1100px;
 
-    width: 1100px;
-  }
-}
+//     width: 1100px;
+//   }
+// }
 
 
 
@@ -2271,63 +2271,63 @@ button.btn-add-user .plus-icon {
    MOBILE
 ========================================================= */
 
-@media (max-width: 600px) {
+// @media (max-width: 600px) {
 
-  .modal-overlay {
-    padding: 10px;
-  }
+//   .modal-overlay {
+//     padding: 10px;
+//   }
 
-  .task-notes-modal {
-    width: 100%;
+//   .task-notes-modal {
+//     width: 100%;
 
-    max-width: 100%;
+//     max-width: 100%;
 
-    height: calc(100vh - 20px);
+//     height: calc(100vh - 20px);
 
-    max-height: calc(100vh - 20px);
+//     max-height: calc(100vh - 20px);
 
-    min-height: 350px;
-  }
+//     min-height: 350px;
+//   }
 
-  .task-notes-modal .modal-header {
-    flex-basis: 72px;
+//   .task-notes-modal .modal-header {
+//     flex-basis: 72px;
 
-    height: 72px;
+//     height: 72px;
 
-    min-height: 72px;
+//     min-height: 72px;
 
-    padding: 12px 16px;
-  }
+//     padding: 12px 16px;
+//   }
 
-  .task-notes-modal .modal-body {
-    padding: 18px 16px;
-  }
+//   .task-notes-modal .modal-body {
+//     padding: 18px 16px;
+//   }
 
-  .task-notes-modal .modal-footer {
-    flex-basis: 64px;
+//   .task-notes-modal .modal-footer {
+//     flex-basis: 64px;
 
-    height: 64px;
+//     height: 64px;
 
-    min-height: 64px;
+//     min-height: 64px;
 
-    padding: 12px 16px;
-  }
+//     padding: 12px 16px;
+//   }
 
-  .modal-title-text {
-    font-size: 18px;
-  }
+//   .modal-title-text {
+//     font-size: 18px;
+//   }
 
-  .modal-subtitle {
-    font-size: 11px;
+//   .modal-subtitle {
+//     font-size: 11px;
 
-    max-width: 220px;
-  }
+//     max-width: 220px;
+//   }
 
-  .task-note-content {
-    padding-left: 0;
-  }
+//   .task-note-content {
+//     padding-left: 0;
+//   }
 
-}
+// }
 
 
 /* =========================================================
@@ -2992,122 +2992,122 @@ button.btn-add-user .plus-icon {
    RESPONSIVE
    ========================================================= */
 
-@media (max-width: 1200px) {
+// @media (max-width: 1200px) {
 
-  .user-form-row {
-    gap: 20px;
-  }
+//   .user-form-row {
+//     gap: 20px;
+//   }
 
-}
+// }
 
 
 /* =========================================================
    TABLET
    ========================================================= */
 
-@media (max-width: 992px) {
+// @media (max-width: 992px) {
 
-  .user-form-row {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+//   .user-form-row {
+//     grid-template-columns:
+//       repeat(2, minmax(0, 1fr));
 
-    row-gap: 18px;
+//     row-gap: 18px;
 
-    column-gap: 20px;
-  }
+//     column-gap: 20px;
+//   }
 
-}
+// }
 
 
 /* =========================================================
    MOBILE
    ========================================================= */
 
-@media (max-width: 600px) {
+// @media (max-width: 600px) {
 
-  .user-page-wrapper {
-    padding: 12px;
-  }
-
-
-  .user-portlet-title {
-    min-height: 55px;
-
-    padding: 8px 10px;
-
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 10px;
-  }
+//   .user-page-wrapper {
+//     padding: 12px;
+//   }
 
 
-  .user-actions {
-    width: 100%;
-  }
+//   .user-portlet-title {
+//     min-height: 55px;
+
+//     padding: 8px 10px;
+
+//     flex-direction: column;
+
+//     align-items: flex-start;
+
+//     gap: 10px;
+//   }
 
 
-  .back-index-btn {
-    width: auto;
-
-    min-width: 150px;
-  }
+//   .user-actions {
+//     width: 100%;
+//   }
 
 
-  .user-form-body {
-    padding: 15px 10px;
-  }
+//   .back-index-btn {
+//     width: auto;
+
+//     min-width: 150px;
+//   }
 
 
-  .user-form-row {
-    grid-template-columns: 1fr;
-
-    row-gap: 15px;
-
-    gap: 15px;
-  }
+//   .user-form-body {
+//     padding: 15px 10px;
+//   }
 
 
-  .user-page-title {
-    font-size: 20px !important;
-  }
+//   .user-form-row {
+//     grid-template-columns: 1fr;
+
+//     row-gap: 15px;
+
+//     gap: 15px;
+//   }
 
 
-  .user-buttons {
-    margin-top: 22px;
-  }
+//   .user-page-title {
+//     font-size: 20px !important;
+//   }
 
-}
+
+//   .user-buttons {
+//     margin-top: 22px;
+//   }
+
+// }
 
 
 /* =========================================================
    VERY SMALL MOBILE
    ========================================================= */
 
-@media (max-width: 400px) {
+// @media (max-width: 400px) {
 
-  .user-page-wrapper {
-    padding: 8px;
-  }
-
-
-  .back-index-btn {
-    width: 100%;
-  }
+//   .user-page-wrapper {
+//     padding: 8px;
+//   }
 
 
-  .user-buttons {
-    flex-direction: column;
-  }
+//   .back-index-btn {
+//     width: 100%;
+//   }
 
 
-  .user-reset-btn,
-  .user-submit-btn {
-    width: 100%;
-  }
+//   .user-buttons {
+//     flex-direction: column;
+//   }
 
-}
+
+//   .user-reset-btn,
+//   .user-submit-btn {
+//     width: 100%;
+//   }
+
+// }
 
 
 
@@ -3520,69 +3520,69 @@ button.btn-add-user .plus-icon {
   }
 }
 
-@media (max-width: 600px) {
-  .modal-overlay {
-    padding: 12px;
-    align-items: center;
-  }
+// @media (max-width: 600px) {
+//   .modal-overlay {
+//     padding: 12px;
+//     align-items: center;
+//   }
 
-  .change-manager-modal {
-    max-width: 100%;
-  }
+//   .change-manager-modal {
+//     max-width: 100%;
+//   }
 
-  .modal-header {
-    min-height: 70px;
-    padding: 12px 15px;
-  }
+//   .modal-header {
+//     min-height: 70px;
+//     padding: 12px 15px;
+//   }
 
-  .modal-title {
-    gap: 9px;
-  }
+//   .modal-title {
+//     gap: 9px;
+//   }
 
-  .modal-title-icon {
-    width: 36px;
-    height: 36px;
-  }
+//   .modal-title-icon {
+//     width: 36px;
+//     height: 36px;
+//   }
 
-  .modal-title-icon mat-icon {
-    width: 20px;
-    height: 20px;
-    font-size: 20px;
-  }
+//   .modal-title-icon mat-icon {
+//     width: 20px;
+//     height: 20px;
+//     font-size: 20px;
+//   }
 
-  .modal-title-text {
-    font-size: 18px;
-  }
+//   .modal-title-text {
+//     font-size: 18px;
+//   }
 
-  .modal-subtitle {
-    font-size: 11px;
-  }
+//   .modal-subtitle {
+//     font-size: 11px;
+//   }
 
-  .modal-body {
-    padding: 18px 15px 20px;
-  }
+//   .modal-body {
+//     padding: 18px 15px 20px;
+//   }
 
-  .modal-footer {
-    padding: 12px 15px;
-  }
+//   .modal-footer {
+//     padding: 12px 15px;
+//   }
 
-  .modal-cancel-button,
-  .modal-save-button {
-    flex: 1;
-  }
+//   .modal-cancel-button,
+//   .modal-save-button {
+//     flex: 1;
+//   }
 
-  .change-manager-button {
-    padding: 0 7px;
-  }
+//   .change-manager-button {
+//     padding: 0 7px;
+//   }
 
-  .change-manager-button span {
-    display: none;
-  }
+//   .change-manager-button span {
+//     display: none;
+//   }
 
-  .change-manager-button mat-icon {
-    margin: 0;
-  }
-}
+//   .change-manager-button mat-icon {
+//     margin: 0;
+//   }
+// }
 
 
 textarea.manager-select {
@@ -3730,5 +3730,1034 @@ textarea.manager-select::placeholder {
 
   i {
     font-size: 16px;
+  }
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET / iPAD
+========================================================= */
+
+@media (max-width: 1024px) {
+
+  /* PAGE */
+  .page-content {
+    padding: 16px;
+  }
+
+  .user-page-wrapper {
+    padding: 16px;
+  }
+
+  /* =======================================================
+     SEARCH / FILTER
+  ======================================================= */
+
+  .search-panel {
+    padding: 20px 18px;
+  }
+
+  .search-row {
+    display: grid;
+
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+  }
+
+  .search-wrapper,
+  .status-wrapper,
+  .date-filter-wrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    flex: none;
+  }
+
+  .search-wrapper {
+    max-width: none;
+  }
+
+  .status-wrapper {
+    max-width: none;
+  }
+
+  .date-filter-wrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+  }
+
+  /* =======================================================
+     GO + CLEAR
+  ======================================================= */
+
+  .go-wrapper {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-start;
+
+    gap: 10px;
+
+    margin: 0;
+  }
+
+  .btn-go {
+    height: 40px;
+
+    min-width: 85px;
+
+    padding: 0 18px;
+
+    flex: 0 0 auto;
+  }
+
+  .filter-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: nowrap;
+  }
+
+  .btn-clear {
+    height: 40px;
+
+    min-width: 85px;
+
+    padding: 0 16px;
+
+    flex: 0 0 auto;
+  }
+
+  /* =======================================================
+     EXPORT EXCEL
+  ======================================================= */
+
+  .btn-export-excel {
+    height: 40px;
+
+    min-width: 145px;
+
+    padding: 0 16px;
+
+    margin-left: 0;
+
+    flex: 0 0 auto;
+
+    white-space: nowrap;
+  }
+
+
+  /* =======================================================
+     TABLE TOP
+  ======================================================= */
+
+  .table-top-section,
+  .table-bottom-section {
+    padding: 14px 18px;
+
+    gap: 12px;
+  }
+
+  .record-summary {
+    font-size: 13px;
+  }
+
+  .pagination {
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+
+    max-width: 100%;
+  }
+
+  /* =======================================================
+     TABLE
+  ======================================================= */
+
+  .table-container {
+    padding: 0 18px;
+  }
+
+  .table-responsive {
+    width: 100%;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .user-table {
+    width: 1100px;
+
+    min-width: 1100px;
+  }
+
+  /* =======================================================
+     FORM
+  ======================================================= */
+
+  .user-form-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+  }
+}
+
+
+/* =========================================================
+   iPAD PORTRAIT
+   768px - 820px
+========================================================= */
+
+@media (min-width: 768px) and (max-width: 820px) {
+
+  .page-content {
+    padding: 14px;
+  }
+
+  .user-page-wrapper {
+    padding: 14px;
+  }
+
+  /* HEADER */
+
+  .page-header {
+    min-height: 78px;
+
+    padding: 0 18px;
+  }
+
+  .user-portlet-title {
+    min-height: 60px;
+
+    padding: 0 14px;
+  }
+
+  .header-title-section h2 {
+    font-size: 24px;
+  }
+
+  .user-page-title {
+    font-size: 22px !important;
+  }
+
+  /* =======================================================
+     FILTER
+  ======================================================= */
+
+  .search-panel {
+    padding: 18px 16px;
+  }
+
+  .search-row {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
+  }
+
+  .search-wrapper,
+  .status-wrapper,
+  .date-filter-wrapper {
+    width: 100%;
+  }
+
+  /* =======================================================
+     GO / CLEAR / EXPORT
+  ======================================================= */
+
+  .go-wrapper {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    flex-wrap: nowrap;
+  }
+
+  .btn-go,
+  .btn-clear {
+    height: 40px;
+
+    min-width: 90px;
+  }
+
+  .filter-actions {
+    display: flex;
+
+    gap: 10px;
+  }
+
+  .btn-export-excel {
+    height: 40px;
+
+    min-width: 145px;
+
+    padding: 0 14px;
+
+    margin-left: 0;
+  }
+
+  /* =======================================================
+     TABLE TOP
+  ======================================================= */
+
+  .table-top-section,
+  .table-bottom-section {
+    min-height: 65px;
+
+    padding: 12px 16px;
+  }
+
+  .table-container {
+    padding: 0 16px;
+  }
+
+  .user-table {
+    width: 1100px;
+
+    min-width: 1100px;
+  }
+
+  /* PAGINATION */
+
+  .pagination {
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    padding-bottom: 2px;
+  }
+
+  .pagination-btn {
+    min-width: 40px;
+
+    height: 36px;
+
+    flex-shrink: 0;
+  }
+
+  .first-btn,
+  .last-btn {
+    min-width: 62px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   <= 767px
+========================================================= */
+
+@media (max-width: 767px) {
+
+  /* =======================================================
+     PAGE
+  ======================================================= */
+
+  .page-content {
+    padding: 10px;
+  }
+
+  .user-page-wrapper {
+    padding: 10px;
+  }
+
+
+  /* =======================================================
+     HEADER
+  ======================================================= */
+
+  .page-header {
+    min-height: auto;
+
+    padding: 14px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: flex-start;
+
+    gap: 12px;
+  }
+
+  .user-portlet-title {
+    min-height: auto;
+
+    padding: 12px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: flex-start;
+
+    gap: 12px;
+  }
+
+  .header-title-section {
+    width: 100%;
+  }
+
+  .header-title-section h2 {
+    font-size: 21px;
+  }
+
+  .user-title {
+    width: 100%;
+  }
+
+  .user-page-title {
+    font-size: 20px !important;
+  }
+
+
+  /* =======================================================
+     BACK BUTTON
+  ======================================================= */
+
+  .user-actions {
+    width: 100%;
+  }
+
+  .back-index-btn {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 42px;
+  }
+
+
+  /* =======================================================
+     SEARCH PANEL
+  ======================================================= */
+
+  .search-panel {
+    padding: 16px 12px;
+  }
+
+  .search-row {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+  }
+
+  .search-wrapper,
+  .status-wrapper,
+  .date-filter-wrapper {
+    width: 100%;
+
+    min-width: 0;
+
+    max-width: none;
+
+    flex: none;
+  }
+
+
+  /* =======================================================
+     SEARCH INPUT
+  ======================================================= */
+
+  .search-input {
+    height: 42px;
+  }
+
+  .search-btn {
+    width: 48px;
+
+    height: 42px;
+
+    flex: 0 0 48px;
+  }
+
+  .status-select {
+    height: 42px;
+  }
+
+
+  /* =======================================================
+     DATE
+  ======================================================= */
+
+  .date-filter-input {
+    width: 100%;
+
+    height: 42px;
+  }
+
+  .date-input {
+    height: 40px;
+
+    font-size: 14px;
+  }
+
+  .date-filter-input .mat-datepicker-toggle {
+    width: 40px;
+
+    height: 40px;
+  }
+
+  .date-filter-input .mat-datepicker-toggle button {
+    width: 40px;
+
+    height: 40px;
+  }
+
+
+  /* =======================================================
+     GO + CLEAR + EXPORT
+  ======================================================= */
+
+  .go-wrapper {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+
+    align-items: stretch;
+  }
+
+  .btn-go {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 42px;
+
+    padding: 0 12px;
+  }
+
+  .filter-actions {
+    width: 100%;
+
+    display: flex;
+
+    gap: 10px;
+  }
+
+  .btn-clear {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 42px;
+
+    padding: 0 12px;
+  }
+
+  /*
+     If Export Excel is inside .filter-actions,
+     make it full width on mobile.
+  */
+
+  .btn-export-excel {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 42px;
+
+    margin-left: 0;
+
+    padding: 0 12px;
+
+    white-space: nowrap;
+  }
+
+
+  /* =======================================================
+     TABLE TOP
+  ======================================================= */
+
+  .table-top-section,
+  .table-bottom-section {
+    min-height: auto;
+
+    padding: 13px 12px;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: flex-start;
+
+    gap: 12px;
+  }
+
+  .record-summary {
+    width: 100%;
+
+    font-size: 13px;
+  }
+
+
+  /* =======================================================
+     PAGINATION
+  ======================================================= */
+
+  .pagination {
+    width: 100%;
+
+    max-width: 100%;
+
+    display: flex;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    gap: 5px;
+
+    padding-bottom: 3px;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+  }
+
+  .pagination::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pagination-btn {
+    min-width: 38px;
+
+    height: 36px;
+
+    padding: 0 8px;
+
+    flex: 0 0 auto;
+
+    font-size: 12px;
+  }
+
+  .first-btn,
+  .last-btn {
+    min-width: 58px;
+  }
+
+
+  /* =======================================================
+     TABLE
+  ======================================================= */
+
+  .table-container {
+    padding: 0 12px;
+  }
+
+  .table-responsive {
+    width: 100%;
+
+    max-width: 100%;
+
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: thin;
+  }
+
+  .user-table {
+    width: 1100px;
+
+    min-width: 1100px;
+  }
+
+
+  /* =======================================================
+     TABLE CELLS
+  ======================================================= */
+
+  .user-table thead th {
+    height: 52px;
+
+    padding: 7px 10px;
+
+    font-size: 13px;
+  }
+
+  .user-table tbody td {
+    height: 54px;
+
+    padding: 7px 10px;
+
+    font-size: 13px;
+  }
+
+
+  /* =======================================================
+     ACTION BUTTONS
+  ======================================================= */
+
+  .action-buttons {
+    gap: 5px;
+
+    justify-content: center;
+  }
+
+  .action-btn {
+    width: 36px;
+
+    height: 36px;
+
+    min-width: 36px;
+
+    max-width: 36px;
+
+    flex: 0 0 36px;
+  }
+
+  .action-btn i {
+    font-size: 14px;
+  }
+}
+
+
+/* =========================================================
+   iPHONE
+   <= 480px
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .page-content {
+    padding: 7px;
+  }
+
+  .user-page-wrapper {
+    padding: 7px;
+  }
+
+
+  /* =======================================================
+     HEADER
+  ======================================================= */
+
+  .page-header {
+    padding: 12px;
+
+    gap: 10px;
+  }
+
+  .user-portlet-title {
+    padding: 11px;
+
+    gap: 10px;
+  }
+
+  .header-title-section h2 {
+    font-size: 19px;
+  }
+
+  .user-page-title {
+    font-size: 18px !important;
+
+    line-height: 1.25;
+  }
+
+
+  /* =======================================================
+     SEARCH
+  ======================================================= */
+
+  .search-panel {
+    padding: 13px 10px;
+  }
+
+  .search-row {
+    gap: 10px;
+  }
+
+  .search-input {
+    height: 42px;
+
+    font-size: 14px;
+  }
+
+  .search-btn {
+    height: 42px;
+
+    width: 44px;
+
+    flex: 0 0 44px;
+  }
+
+  .status-select {
+    height: 42px;
+
+    font-size: 13px;
+  }
+
+
+  /* =======================================================
+     DATE
+  ======================================================= */
+
+  .date-filter-input {
+    height: 42px;
+  }
+
+  .date-input {
+    height: 40px;
+
+    padding-left: 10px !important;
+
+    font-size: 13px;
+  }
+
+
+  /* =======================================================
+     GO + CLEAR
+  ======================================================= */
+
+  .go-wrapper {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 8px;
+  }
+
+  .btn-go,
+  .btn-clear {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 42px;
+
+    padding: 0 8px;
+
+    font-size: 13px;
+  }
+
+
+  /* =======================================================
+     EXPORT EXCEL
+  ======================================================= */
+
+  .btn-export-excel {
+    width: 100%;
+
+    min-width: 0;
+
+    height: 42px;
+
+    margin-left: 0;
+
+    padding: 0 10px;
+
+    font-size: 13px;
+
+    gap: 6px;
+  }
+
+  .btn-export-excel i {
+    font-size: 15px;
+  }
+
+
+  /* =======================================================
+     TABLE TOP
+  ======================================================= */
+
+  .table-top-section,
+  .table-bottom-section {
+    padding: 12px 10px;
+
+    gap: 10px;
+  }
+
+  .record-summary {
+    font-size: 12px;
+  }
+
+
+  /* =======================================================
+     PAGINATION
+  ======================================================= */
+
+  .pagination-btn {
+    min-width: 34px;
+
+    height: 34px;
+
+    padding: 0 6px;
+
+    font-size: 11px;
+  }
+
+  .first-btn,
+  .last-btn {
+    min-width: 52px;
+  }
+
+
+  /* =======================================================
+     TABLE
+  ======================================================= */
+
+  .table-container {
+    padding: 0 10px;
+  }
+
+  .user-table {
+    width: 1050px;
+
+    min-width: 1050px;
+  }
+
+  .user-table thead th {
+    height: 50px;
+
+    padding: 6px 8px;
+
+    font-size: 12px;
+  }
+
+  .user-table tbody td {
+    height: 52px;
+
+    padding: 6px 8px;
+
+    font-size: 12px;
+  }
+
+
+  /* =======================================================
+     STATUS
+  ======================================================= */
+
+  .status-badge {
+    min-width: 72px;
+
+    height: 30px;
+
+    padding: 0 8px;
+
+    font-size: 11px;
+  }
+
+
+  /* =======================================================
+     ACTION BUTTON
+  ======================================================= */
+
+  .action-btn {
+    width: 34px;
+
+    height: 34px;
+
+    min-width: 34px;
+
+    max-width: 34px;
+
+    flex: 0 0 34px;
+  }
+
+  .action-btn i {
+    font-size: 13px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL iPHONE
+   <= 375px
+========================================================= */
+
+@media (max-width: 375px) {
+
+  .page-content {
+    padding: 5px;
+  }
+
+  .user-page-wrapper {
+    padding: 5px;
+  }
+
+  .search-panel {
+    padding: 12px 8px;
+  }
+
+  .user-page-title {
+    font-size: 17px !important;
+  }
+
+
+  /* GO + CLEAR */
+
+  .go-wrapper {
+    grid-template-columns: 1fr 1fr;
+
+    gap: 7px;
+  }
+
+  .btn-go,
+  .btn-clear {
+    height: 40px;
+
+    font-size: 12px;
+
+    padding: 0 6px;
+  }
+
+
+  /* EXPORT */
+
+  .btn-export-excel {
+    height: 40px;
+
+    font-size: 12px;
+
+    padding: 0 8px;
+  }
+
+
+  /* TABLE */
+
+  .table-container {
+    padding: 0 8px;
+  }
+
+  .user-table {
+    width: 1000px;
+
+    min-width: 1000px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .status-badge{
+     min-width: 74px !important;
+  }
+  .page-content-wrapper{
+    margin-top: 20px;
   }
 }

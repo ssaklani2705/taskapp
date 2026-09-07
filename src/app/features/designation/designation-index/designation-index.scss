@@ -1118,239 +1118,239 @@ mat-divider {
    TABLET
 ========================================================= */
 
-@media (max-width: 1100px) {
+// @media (max-width: 1100px) {
 
-  .page-container {
+//   .page-container {
 
-    padding: 20px;
-  }
-
-
-  .search-grid {
-
-    grid-template-columns:
-      minmax(240px, 1fr)
-      minmax(180px, 1fr)
-      auto;
-  }
+//     padding: 20px;
+//   }
 
 
-  .table-toolbar {
+//   .search-grid {
 
-    align-items: flex-start;
-
-    flex-direction: column;
-
-    justify-content: center;
-
-    padding: 12px 0;
-  }
+//     grid-template-columns:
+//       minmax(240px, 1fr)
+//       minmax(180px, 1fr)
+//       auto;
+//   }
 
 
-  .pagination {
+//   .table-toolbar {
 
-    justify-content: flex-start;
-  }
+//     align-items: flex-start;
 
-}
+//     flex-direction: column;
+
+//     justify-content: center;
+
+//     padding: 12px 0;
+//   }
+
+
+//   .pagination {
+
+//     justify-content: flex-start;
+//   }
+
+// }
 
 
 /* =========================================================
    MOBILE
 ========================================================= */
 
-@media (max-width: 768px) {
+// @media (max-width: 768px) {
 
-  .page-container {
+//   .page-container {
 
-    padding: 12px;
-  }
-
-
-  .page-header {
-
-    min-height: auto;
-
-    padding: 15px;
-
-    flex-direction: column;
-
-    align-items: flex-start;
-
-    gap: 14px;
-  }
+//     padding: 12px;
+//   }
 
 
-  .page-title {
+//   .page-header {
 
-    font-size: 22px;
-  }
+//     min-height: auto;
 
+//     padding: 15px;
 
-  .header-action {
+//     flex-direction: column;
 
-    width: 100%;
-  }
+//     align-items: flex-start;
 
-
-  .add-button {
-
-    width: 100%;
-  }
+//     gap: 14px;
+//   }
 
 
-  .search-section {
+//   .page-title {
 
-    padding: 15px;
-  }
-
-
-  .search-grid {
-
-    grid-template-columns: 1fr;
-
-    row-gap: 15px;
-  }
+//     font-size: 22px;
+//   }
 
 
-  .filter-action {
+//   .header-action {
 
-    width: 100%;
-  }
-
-
-  .go-button {
-
-    width: 100%;
-  }
+//     width: 100%;
+//   }
 
 
-  .table-section {
+//   .add-button {
 
-    padding: 0 15px 15px;
-  }
-
-
-  .table-toolbar {
-
-    min-height: auto;
-
-    padding: 13px 0;
-
-    align-items: flex-start;
-
-    flex-direction: column;
-
-    gap: 12px;
-  }
+//     width: 100%;
+//   }
 
 
-  .pagination {
+//   .search-section {
 
-    width: 100%;
-
-    justify-content: flex-start;
-  }
+//     padding: 15px;
+//   }
 
 
-  .pagination button {
+//   .search-grid {
 
-    min-width: 34px;
+//     grid-template-columns: 1fr;
 
-    height: 31px;
-
-    padding: 0 7px;
-
-    font-size: 12px;
-  }
+//     row-gap: 15px;
+//   }
 
 
-  .designation-table {
+//   .filter-action {
 
-    min-width: 760px;
-  }
+//     width: 100%;
+//   }
 
-}
+
+//   .go-button {
+
+//     width: 100%;
+//   }
+
+
+//   .table-section {
+
+//     padding: 0 15px 15px;
+//   }
+
+
+//   .table-toolbar {
+
+//     min-height: auto;
+
+//     padding: 13px 0;
+
+//     align-items: flex-start;
+
+//     flex-direction: column;
+
+//     gap: 12px;
+//   }
+
+
+//   .pagination {
+
+//     width: 100%;
+
+//     justify-content: flex-start;
+//   }
+
+
+//   .pagination button {
+
+//     min-width: 34px;
+
+//     height: 31px;
+
+//     padding: 0 7px;
+
+//     font-size: 12px;
+//   }
+
+
+//   .designation-table {
+
+//     min-width: 760px;
+//   }
+
+// }
 
 
 /* =========================================================
    SMALL MOBILE
 ========================================================= */
 
-@media (max-width: 480px) {
+// @media (max-width: 480px) {
 
-  .page-container {
+//   .page-container {
 
-    padding: 8px;
-  }
-
-
-  .page-title {
-
-    font-size: 19px;
-  }
+//     padding: 8px;
+//   }
 
 
-  .page-title mat-icon {
+//   .page-title {
 
-    width: 22px;
-
-    height: 22px;
-
-    font-size: 22px;
-  }
+//     font-size: 19px;
+//   }
 
 
-  .search-section {
+//   .page-title mat-icon {
 
-    padding: 12px;
-  }
+//     width: 22px;
 
+//     height: 22px;
 
-  .table-section {
-
-    padding: 0 12px 12px;
-  }
+//     font-size: 22px;
+//   }
 
 
-  .record-summary {
+//   .search-section {
 
-    font-size: 13px;
-  }
-
-
-  .pagination {
-
-    gap: 3px;
-  }
+//     padding: 12px;
+//   }
 
 
-  .pagination button {
+//   .table-section {
 
-    min-width: 30px;
-
-    height: 30px;
-
-    padding: 0 5px;
-
-    font-size: 11px;
-  }
+//     padding: 0 12px 12px;
+//   }
 
 
-  .designation-table {
+//   .record-summary {
 
-    min-width: 760px;
-  }
+//     font-size: 13px;
+//   }
 
 
-  .action-button {
+//   .pagination {
 
-    width: 31px;
+//     gap: 3px;
+//   }
 
-    height: 31px;
-  }
 
-}
+//   .pagination button {
+
+//     min-width: 30px;
+
+//     height: 30px;
+
+//     padding: 0 5px;
+
+//     font-size: 11px;
+//   }
+
+
+//   .designation-table {
+
+//     min-width: 760px;
+//   }
+
+
+//   .action-button {
+
+//     width: 31px;
+
+//     height: 31px;
+//   }
+
+// }
 
 
 
@@ -1440,3 +1440,718 @@ mat-divider {
     border-color 0.15s ease;
 }
 
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+
+  .page-container {
+    padding: 20px;
+  }
+
+  .search-grid {
+    grid-template-columns:
+      minmax(220px, 1fr)
+      minmax(170px, 1fr)
+      auto;
+    column-gap: 14px;
+    row-gap: 14px;
+  }
+
+  .table-toolbar {
+    min-height: auto;
+    padding: 12px 0;
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .pagination {
+    justify-content: flex-start;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+
+/* =========================================================
+   IPAD / TABLET
+   769px - 1024px
+========================================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  .page-container {
+    padding: 16px;
+  }
+
+  .main-card {
+    width: 100%;
+  }
+
+  /* HEADER */
+
+  .page-header {
+    min-height: 70px;
+    padding: 0 18px;
+  }
+
+  .page-title {
+    font-size: 24px;
+  }
+
+  .page-title mat-icon {
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
+  }
+
+  .add-button {
+    min-width: 115px;
+    height: 38px;
+  }
+
+
+  /* SEARCH */
+
+  .search-section {
+    padding: 18px;
+  }
+
+  .search-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    column-gap: 12px;
+    row-gap: 12px;
+    align-items: end;
+  }
+
+  .search-field label {
+    font-size: 13px;
+  }
+
+  .search-input-wrapper,
+  .search-field select,
+  .go-button {
+    height: 40px;
+  }
+
+  .go-button {
+    min-width: 72px;
+  }
+
+
+  /* TABLE */
+
+  .table-section {
+    padding: 0 18px 18px;
+  }
+
+  .table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .designation-table {
+    min-width: 760px;
+  }
+
+  .designation-table thead th {
+    height: 45px;
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+
+  .designation-table tbody td {
+    height: 52px;
+    padding: 7px 10px;
+    font-size: 13px;
+  }
+
+
+  /* ACTION BUTTONS */
+
+  .action-button {
+    width: 34px;
+    height: 34px;
+    margin: 0 1px;
+  }
+
+  .action-button mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   max-width: 768px
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .page-container {
+    padding: 10px;
+  }
+
+  .main-card {
+    width: 100%;
+    overflow: hidden;
+  }
+
+
+  /* =======================================================
+     HEADER
+  ======================================================= */
+
+  .page-header {
+    min-height: auto;
+    padding: 14px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .page-title {
+    font-size: 21px;
+    line-height: 1.25;
+    gap: 7px;
+  }
+
+  .page-title mat-icon {
+    width: 23px;
+    height: 23px;
+    font-size: 23px;
+    flex-shrink: 0;
+  }
+
+  .header-action {
+    width: 100%;
+  }
+
+  .add-button {
+    width: 100%;
+    height: 40px;
+  }
+
+
+  /* =======================================================
+     SEARCH
+  ======================================================= */
+
+  .search-section {
+    padding: 14px;
+  }
+
+  .search-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+    column-gap: 0;
+  }
+
+  .search-field {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .search-field label {
+    font-size: 13px;
+  }
+
+  .search-input-wrapper {
+    width: 100%;
+    height: 40px;
+  }
+
+  .search-input-wrapper input {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+
+  .search-button {
+    width: 42px;
+    min-width: 42px;
+  }
+
+  .search-field select {
+    width: 100%;
+    height: 40px;
+    font-size: 14px;
+  }
+
+  .filter-action {
+    width: 100%;
+  }
+
+  .go-button {
+    width: 100%;
+    height: 40px;
+  }
+
+
+  /* =======================================================
+     TABLE SECTION
+  ======================================================= */
+
+  .table-section {
+    width: 100%;
+    padding: 0 14px 14px;
+    box-sizing: border-box;
+  }
+
+
+  /* =======================================================
+     TOOLBAR
+  ======================================================= */
+
+  .table-toolbar {
+    min-height: auto;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 11px;
+  }
+
+  .record-summary {
+    width: 100%;
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .pagination {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    gap: 4px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    padding-bottom: 2px;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .pagination::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pagination button {
+    flex: 0 0 auto;
+    min-width: 34px;
+    height: 32px;
+    padding: 0 7px;
+    font-size: 12px;
+  }
+
+
+  /* =======================================================
+     TABLE
+  ======================================================= */
+
+  .table-wrapper {
+    width: 100%;
+    max-width: 100%;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .designation-table {
+    width: 100%;
+    min-width: 700px;
+    table-layout: fixed;
+  }
+
+  .designation-table thead th {
+    height: 46px;
+    padding: 7px 8px;
+    font-size: 12px;
+    white-space: normal;
+  }
+
+  .designation-table tbody td {
+    height: 52px;
+    padding: 7px 8px;
+    font-size: 12px;
+  }
+
+
+  /* =======================================================
+     DESIGNATION
+  ======================================================= */
+
+  .designation-name {
+    font-size: 12px;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  .serial-cell {
+    font-size: 12px;
+  }
+
+  .sequence-cell {
+    font-size: 12px;
+  }
+
+
+  /* =======================================================
+     STATUS
+  ======================================================= */
+
+  .status-badge {
+    min-width: 68px;
+    min-height: 28px;
+    height: 28px;
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+
+  /* =======================================================
+     ACTION BUTTONS
+  ======================================================= */
+
+  .action-cell {
+    white-space: nowrap;
+  }
+
+  .action-button {
+    width: 33px;
+    height: 33px;
+    margin: 0 1px;
+  }
+
+  .action-button mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+}
+
+
+/* =========================================================
+   IPHONE / SMALL MOBILE
+   max-width: 480px
+========================================================= */
+
+@media (max-width: 480px) {
+
+  .page-container {
+    padding: 7px;
+  }
+
+
+  /* HEADER */
+
+  .page-header {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .page-title {
+    font-size: 18px;
+    gap: 6px;
+  }
+
+  .page-title mat-icon {
+    width: 21px;
+    height: 21px;
+    font-size: 21px;
+  }
+
+  .add-button {
+    height: 39px;
+    font-size: 13px;
+  }
+
+
+  /* SEARCH */
+
+  .search-section {
+    padding: 11px;
+  }
+
+  .search-grid {
+    row-gap: 10px;
+  }
+
+  .search-field label {
+    font-size: 12px;
+  }
+
+  .search-input-wrapper,
+  .search-field select,
+  .go-button {
+    height: 39px;
+  }
+
+  .search-input-wrapper input,
+  .search-field select {
+    font-size: 13px;
+  }
+
+  .search-button {
+    width: 40px;
+    min-width: 40px;
+  }
+
+
+  /* TABLE */
+
+  .table-section {
+    padding: 0 11px 11px;
+  }
+
+  .table-toolbar {
+    padding: 11px 0;
+    gap: 9px;
+  }
+
+  .record-summary {
+    font-size: 12px;
+  }
+
+  .pagination {
+    gap: 3px;
+  }
+
+  .pagination button {
+    min-width: 31px;
+    height: 30px;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+
+
+  /* TABLE WIDTH */
+
+  .designation-table {
+    min-width: 680px;
+  }
+
+  .designation-table thead th {
+    height: 44px;
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+
+  .designation-table tbody td {
+    height: 50px;
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+
+
+  /* STATUS */
+
+  .status-badge {
+    min-width: 62px;
+    min-height: 27px;
+    height: 27px;
+    padding: 2px 7px;
+    font-size: 10px;
+  }
+
+
+  /* ACTION */
+
+  .action-button {
+    width: 31px;
+    height: 31px;
+    margin: 0;
+  }
+
+  .action-button mat-icon {
+    width: 15px;
+    height: 15px;
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL IPHONE
+   max-width: 375px
+========================================================= */
+
+@media (max-width: 375px) {
+
+  .page-container {
+    padding: 5px;
+  }
+
+  .page-header {
+    padding: 10px;
+  }
+
+  .page-title {
+    font-size: 17px;
+  }
+
+  .page-title mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+  }
+
+  .search-section {
+    padding: 9px;
+  }
+
+  .table-section {
+    padding: 0 9px 9px;
+  }
+
+  .record-summary {
+    font-size: 11px;
+  }
+
+  .pagination button {
+    min-width: 29px;
+    height: 29px;
+    padding: 0 5px;
+    font-size: 10px;
+  }
+
+  .designation-table {
+    min-width: 650px;
+  }
+
+  .designation-table thead th {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+
+  .designation-table tbody td {
+    padding: 5px 6px;
+    font-size: 10px;
+  }
+
+  .status-badge {
+    min-width: 58px;
+    height: 26px;
+    font-size: 10px;
+  }
+
+  .action-button {
+    width: 29px;
+    height: 29px;
+  }
+
+  .action-button mat-icon {
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+  }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+  .add-button,
+  .go-button,
+  .btn-clear,
+  .pagination button,
+  .action-button,
+  .search-button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .add-button,
+  .go-button,
+  .btn-clear,
+  .pagination button,
+  .action-button,
+  .search-button {
+    touch-action: manipulation;
+  }
+
+  .action-button {
+    min-height: 32px;
+  }
+}
+
+
+/* =========================================================
+   CLEAR BUTTON
+========================================================= */
+
+.btn-clear {
+  height: 38px;
+  min-width: 65px;
+  padding: 0 16px;
+
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+
+  background: #fff;
+  color: #dc3545;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-clear:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+.btn-clear:active {
+  transform: scale(0.98);
+}
+
+
+/* =========================================================
+   CLEAR BUTTON - MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+  .btn-clear {
+    width: 100%;
+    min-width: 0;
+    height: 40px;
+  }
+}
+
+@media (max-width: 1024px) {
+    .page-container{
+        margin-top: 20px;
+    }
+}

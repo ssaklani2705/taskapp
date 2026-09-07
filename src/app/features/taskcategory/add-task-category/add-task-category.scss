@@ -369,16 +369,77 @@
    DATE
    ========================================================= */
 
+// .user-date-group {
+//     display: flex;
+
+//     width: 100%;
+
+//     height: 43px;
+
+//     box-sizing: border-box;
+// }
+
+
+// .user-date-icon {
+//     width: 52px;
+
+//     min-width: 52px;
+
+//     height: 43px;
+
+//     display: flex;
+
+//     align-items: center;
+
+//     justify-content: center;
+
+//     background: #e7ebef;
+
+//     color: #52616e;
+
+//     border: 1px solid #d2dbe3;
+
+//     border-right: 0;
+
+//     box-sizing: border-box;
+// }
+
+
+// .user-date-icon i {
+//     font-size: 16px;
+// }
+
+
+// .user-date-group .user-date-input {
+//     flex: 1;
+
+//     width: auto !important;
+
+//     border-left: 1px solid var(--border-dark) !important;
+// }
+
+/* =========================================================
+   DATE & TIME PICKER
+========================================================= */
+
 .user-date-group {
-    display: flex;
+    position: relative;
 
     width: 100%;
 
     height: 43px;
 
+    display: flex;
+
+    align-items: stretch;
+
     box-sizing: border-box;
 }
 
+
+/* =========================================================
+   CALENDAR ICON
+========================================================= */
 
 .user-date-icon {
     width: 52px;
@@ -397,26 +458,169 @@
 
     color: #52616e;
 
-    border: 1px solid #d2dbe3;
+    border: 1px solid var(--border-dark);
 
     border-right: 0;
+
+    border-radius: 2px 0 0 2px;
+
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s ease;
+}
+
+
+.user-date-icon:hover {
+    background: #dce5ed;
+
+    color: var(--primary-blue);
+}
+
+
+.user-date-icon mat-icon {
+    width: 19px !important;
+
+    height: 19px !important;
+
+    font-size: 19px !important;
+
+    line-height: 19px !important;
+}
+
+
+/* =========================================================
+   DATE INPUT
+========================================================= */
+
+.user-date-group .user-date-input {
+    flex: 1;
+
+    width: 100% !important;
+
+    height: 43px !important;
+
+    min-height: 43px !important;
+
+    padding: 8px 14px !important;
+
+    border: 1px solid var(--border-dark) !important;
+
+    border-radius: 0 2px 2px 0 !important;
+
+    cursor: pointer;
+
+    background: #ffffff !important;
 
     box-sizing: border-box;
 }
 
 
-.user-date-icon i {
-    font-size: 16px;
+/* Focus */
+
+.user-date-group:focus-within
+.user-date-icon {
+    border-color: var(--primary-blue);
+
+    color: var(--primary-blue);
 }
 
 
-.user-date-group .user-date-input {
-    flex: 1;
-
-    width: auto !important;
-
-    border-left: 1px solid var(--border-dark) !important;
+.user-date-group:focus-within
+.user-date-input {
+    border-color: var(--primary-blue) !important;
 }
+
+
+/* =========================================================
+   DATE VALIDATION
+========================================================= */
+
+.user-date-input.ng-invalid.ng-touched {
+    border-color: var(--danger) !important;
+}
+
+
+.user-date-group:has(
+    .user-date-input.ng-invalid.ng-touched
+)
+.user-date-icon {
+    border-color: var(--danger);
+
+    color: var(--danger);
+}
+
+
+/* =========================================================
+   FORM GRID
+========================================================= */
+
+/* IMPORTANT:
+   Remove width: 150%
+*/
+
+.user-form-row {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 30px;
+
+    width: 100% !important;
+
+    margin-bottom: 20px;
+
+    box-sizing: border-box;
+}
+
+
+.user-form-col {
+    width: 100%;
+
+    min-width: 0;
+}
+
+
+/* Status should stay in first column */
+
+.status-row {
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 992px) {
+
+    .user-form-row {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 20px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .user-form-row {
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+    }
+
+    .user-date-group {
+        height: 43px;
+    }
+
+}
+
 
 
 /* =========================================================
@@ -1047,4 +1251,414 @@
     .user-form-row {
         grid-template-columns: 1fr;
     }
+}
+
+//Date & Time Picker CSS
+
+
+/* =========================================================
+   ATTRACTIVE OWL DATE & TIME PICKER
+   ========================================================= */
+
+.owl-dt-container {
+  width: 400px !important;
+  max-width: 95vw !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #d8e2ec !important;
+  border-radius: 10px !important;
+
+  overflow: hidden !important;
+
+  box-shadow:
+    0 10px 30px rgba(27, 59, 99, 0.18),
+    0 3px 8px rgba(0, 0, 0, 0.08) !important;
+
+  font-family: Arial, Helvetica, sans-serif !important;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.owl-dt-calendar-control {
+  height: 62px !important;
+
+  background: linear-gradient(
+    135deg,
+    #1b3b63 0%,
+    #285b87 100%
+  ) !important;
+
+  color: #ffffff !important;
+
+  padding: 0 14px !important;
+
+  border-bottom: 0 !important;
+
+  box-sizing: border-box;
+}
+
+
+/* Header text */
+
+.owl-dt-calendar-control-content {
+  color: #ffffff !important;
+
+  font-size: 17px !important;
+
+  font-weight: 600 !important;
+
+  letter-spacing: 0.2px;
+}
+
+
+/* Header arrows */
+
+.owl-dt-calendar-control-arrow {
+  color: #ffffff !important;
+
+  width: 38px !important;
+  height: 38px !important;
+
+  border-radius: 50% !important;
+
+  transition: all 0.2s ease !important;
+}
+
+.owl-dt-calendar-control-arrow:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CALENDAR
+   ========================================================= */
+
+.owl-dt-calendar {
+  padding: 8px 12px 4px !important;
+
+  background: #ffffff !important;
+}
+
+
+/* Weekday header */
+
+.owl-dt-calendar-table th {
+  color: #1b3b63 !important;
+
+  font-size: 13px !important;
+
+  font-weight: 700 !important;
+
+  padding-bottom: 8px !important;
+
+  text-transform: none !important;
+}
+
+
+/* Calendar cells */
+
+.owl-dt-calendar-cell {
+  color: #34495e !important;
+
+  font-size: 14px !important;
+
+  font-weight: 400 !important;
+
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease !important;
+}
+
+
+/* =========================================================
+   DATE HOVER
+   ========================================================= */
+
+.owl-dt-calendar-cell:hover {
+  background: #eaf2f8 !important;
+
+  color: #1b3b63 !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   SELECTED DATE
+   ========================================================= */
+
+.owl-dt-calendar-cell-selected {
+  background: #3378a9 !important;
+
+  color: #ffffff !important;
+
+  border-radius: 50% !important;
+
+  font-weight: 700 !important;
+
+  box-shadow: 0 3px 8px rgba(51, 120, 169, 0.30) !important;
+}
+
+
+/* Selected date hover */
+
+.owl-dt-calendar-cell-selected:hover {
+  background: #28658f !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   TODAY
+   ========================================================= */
+
+.owl-dt-calendar-cell-today {
+  border: 1px solid #3378a9 !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   DISABLED DATES
+   ========================================================= */
+
+.owl-dt-calendar-cell-disabled {
+  color: #cbd3da !important;
+
+  opacity: 0.65 !important;
+}
+
+
+/* =========================================================
+   TIMER SECTION
+   ========================================================= */
+
+.owl-dt-timer {
+  background: #f7fafc !important;
+
+  border-top: 1px solid #e1e8ef !important;
+
+  padding: 16px 12px !important;
+}
+
+
+/* Time numbers */
+
+.owl-dt-timer-content {
+  color: #1b3b63 !important;
+
+  font-size: 24px !important;
+
+  font-weight: 600 !important;
+}
+
+
+/* Time input boxes */
+
+.owl-dt-timer-content input {
+  width: 52px !important;
+
+  height: 42px !important;
+
+  border: 1px solid #b9c9d8 !important;
+
+  border-radius: 6px !important;
+
+  background: #ffffff !important;
+
+  color: #1b3b63 !important;
+
+  font-size: 20px !important;
+
+  text-align: center !important;
+
+  outline: none !important;
+
+  transition: all 0.2s ease !important;
+}
+
+.owl-dt-timer-content input:focus {
+  border-color: #3378a9 !important;
+
+  box-shadow:
+    0 0 0 3px rgba(51, 120, 169, 0.12) !important;
+}
+
+
+/* =========================================================
+   TIMER ARROWS
+   ========================================================= */
+
+.owl-dt-control-button {
+//   color: #28658f !important;
+    color: #ffffff !important;
+
+  border-radius: 50% !important;
+
+  transition: all 0.2s ease !important;
+}
+
+.owl-dt-control-button:hover {
+  background: #e7f0f7 !important;
+
+  color: #1b3b63 !important;
+}
+
+
+/* =========================================================
+   AM / PM BUTTON
+   ========================================================= */
+
+.owl-dt-timer-period {
+  color: #1b3b63 !important;
+
+  border: 1px solid #3378a9 !important;
+
+  border-radius: 6px !important;
+
+  background: #ffffff !important;
+
+  font-weight: 600 !important;
+}
+
+.owl-dt-timer-period:hover {
+  background: #eaf2f8 !important;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.owl-dt-container-buttons {
+  height: 58px !important;
+
+  padding: 8px 16px !important;
+
+  border-top: 1px solid #e1e8ef !important;
+
+  background: #ffffff !important;
+
+  display: flex !important;
+
+  align-items: center !important;
+
+  justify-content: flex-end !important;
+
+  gap: 10px !important;
+}
+
+
+/* =========================================================
+   CANCEL / SET BUTTONS
+   ========================================================= */
+
+.owl-dt-container-buttons button {
+  min-width: 90px !important;
+
+  height: 38px !important;
+
+  padding: 0 18px !important;
+
+  border-radius: 5px !important;
+
+  font-size: 14px !important;
+
+  font-weight: 600 !important;
+
+  text-transform: none !important;
+
+  transition: all 0.2s ease !important;
+}
+
+
+/* Cancel */
+
+.owl-dt-container-buttons button:first-child {
+  color: #1b3b63 !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #b9c9d8 !important;
+}
+
+.owl-dt-container-buttons button:first-child:hover {
+  background: #f1f5f8 !important;
+
+  border-color: #1b3b63 !important;
+}
+
+
+/* Set */
+
+.owl-dt-container-buttons button:last-child {
+  color: #ffffff !important;
+
+  background: #1b3b63 !important;
+
+  border: 1px solid #1b3b63 !important;
+}
+
+.owl-dt-container-buttons button:last-child:hover {
+  background: #28527a !important;
+
+  border-color: #28527a !important;
+
+  box-shadow: 0 3px 8px rgba(27, 59, 99, 0.20) !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .owl-dt-container {
+    width: 94vw !important;
+  }
+
+  .owl-dt-calendar {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+
+}
+
+/* =========================================================
+   MONTH / YEAR DROPDOWN
+   ========================================================= */
+
+.owl-dt-calendar-control-content {
+  cursor: pointer !important;
+
+  border-radius: 5px !important;
+
+  padding: 6px 12px !important;
+
+  transition: background-color 0.2s ease !important;
+}
+
+.owl-dt-calendar-control-content:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+
+.owl-dt-control-arrow-button svg {
+    fill: rgb(141 126 83) !important;
+}
+
+@media (max-width: 1024px) {
+.user-page-wrapper{
+    margin-top: 20px;
+  }
 }

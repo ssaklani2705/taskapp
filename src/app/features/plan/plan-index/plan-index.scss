@@ -1474,3 +1474,95 @@ mat-divider {
     border-color 0.15s ease;
 }
 
+
+
+/* =========================================================
+   TABLE / STATUS / ACTION - 1024px
+========================================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  /* Keep table comfortably visible */
+  .designation-table {
+    min-width: 820px;
+    table-layout: fixed;
+  }
+
+  /* Status column */
+  .designation-table th:nth-child(5),
+  .designation-table td:nth-child(5) {
+    width: 13%;
+  }
+
+  /* Action column */
+  .designation-table th:nth-child(6),
+  .designation-table td:nth-child(6) {
+    width: 15%;
+  }
+
+  /* Status badge */
+  .status-badge {
+    min-width: 76px;
+    height: 30px;
+    padding: 0 9px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* Action container */
+  .action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+  }
+
+  /* Action buttons */
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .action-btn mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  /* If using the older action-button class */
+  .action-button {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    margin: 0 1px;
+  }
+
+  .action-button mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+  }
+
+  /* Prevent action cell from wrapping */
+  .action-cell {
+    white-space: nowrap;
+    text-align: center !important;
+  }
+
+  /* Keep status centered */
+  .designation-table td:nth-child(5) {
+    text-align: center !important;
+    white-space: nowrap;
+  }
+
+}
+
+@media (max-width: 1024px) {
+.page-container{
+    margin-top: 20px;
+  }
+}

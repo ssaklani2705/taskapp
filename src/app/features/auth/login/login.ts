@@ -396,7 +396,7 @@ isProcessingForgotPassword: boolean = false;
 
     this.isProcessingForgotPassword = true;
 
-    this.loginService.forgotPasswordMail(email).subscribe({
+    this.loginService.forgotPasswordMail(email,"otherlogin").subscribe({
       next: (res: any) => {
         alert(res.message || 'Password reset email sent.');
         this.isProcessingForgotPassword = false;
