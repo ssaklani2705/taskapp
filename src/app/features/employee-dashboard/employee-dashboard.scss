@@ -32,11 +32,12 @@
   --yellow: #d79b17;
   --success: #359263;
 
-  font-family:
-    Roboto,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
+  // font-family:
+  //   Roboto,
+  //   "Helvetica Neue",
+  //   Arial,
+  //   sans-serif;
+  font-family: Georgia, "Times New Roman", serif;
 
   box-sizing: border-box;
 }
@@ -319,7 +320,7 @@
 
   color: #788393;
 
-  font-size: 10px;
+  font-size: 16px;
 
   line-height: 14px;
 
@@ -399,7 +400,7 @@
 
   color: #69768a;
 
-  font-size: 11px;
+  font-size: 19px;
 
   line-height: 18px;
 
@@ -511,7 +512,7 @@
 
   color: #9aa6b6;
 
-  font-size: 9px;
+  font-size: 11px;
 
   line-height: 13px;
 
@@ -900,7 +901,7 @@
   }
 
   .profile-info h1 {
-    font-size: 14px;
+    font-size: 19px;
   }
 
   .profile-info p {

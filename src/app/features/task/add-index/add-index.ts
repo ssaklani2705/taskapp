@@ -1139,15 +1139,56 @@ export class AddIndexComponent implements OnInit {
     );
 
   }
+
+   onchangeloadDropdownData(): void {
+    // alert(this.task.clientId);
+    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin,
+      this.userId, this.loginType,this.task.clientId).subscribe({
+        next: (res: any) => {
+          const data = res?.data || res;
+          // this.clients = data?.clients || [];
+          // this.taskCategories = data?.taskCategories || [];
+          this.users = data?.assignedUsers || [];
+          // console.log('CLIENTS:', this.clients);
+          // console.log('TASK CATEGORIES:', this.taskCategories);
+          // console.log('ASSIGNED USERS:', this.users);
+        },
+
+        error: (error: any) => {
+
+          console.error(
+            'Error loading task dropdown data:',
+            error
+          );
+
+          // this.clients = [];
+          // this.taskCategories = [];
+          this.users = [];
+
+          // Swal.fire(
+          //   'Error',
+          //   'Unable to load task dropdown data.',
+          //   'error'
+          // );
+        }
+
+
+
+
+
+      });
+  }
+
+
   loadDropdownData(): void {
+    // alert(this.task.clientId);
     this.dataprovider.getTaskFilterData(this.isAdmin,
       this.userId, this.loginType).subscribe({
         next: (res: any) => {
-          console.log('TASK DROPDOWN RESPONSE:', res);
           const data = res?.data || res;
           this.clients = data?.clients || [];
           this.taskCategories = data?.taskCategories || [];
-          this.users = data?.assignedUsers || [];
+          // this.users = data?.assignedUsers || [];
           // console.log('CLIENTS:', this.clients);
           // console.log('TASK CATEGORIES:', this.taskCategories);
           // console.log('ASSIGNED USERS:', this.users);
@@ -1177,4 +1218,11 @@ export class AddIndexComponent implements OnInit {
 
       });
   }
+
+  onClientChange(clientId: number | null): void {
+  if (!clientId) {
+    this.task.assignedTo = null;
+  }
+}
+
 }

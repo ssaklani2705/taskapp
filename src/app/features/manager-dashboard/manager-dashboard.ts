@@ -8,6 +8,7 @@ import { DataProviderService } from '../../service/data-provider.service';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 interface Task {
   taskId: number;
@@ -15,7 +16,9 @@ interface Task {
   assignedTo: string;
   assignedUserName: string;
   taskStatus: number;
-  addedBy: number;
+  addedByName: string;
+  date: string;
+  priority: number;
 }
 
 @Component({
@@ -27,6 +30,7 @@ interface Task {
     MatIconModule,
     MatButtonModule,
     MatDividerModule,
+    MatPaginatorModule,
   ],
   templateUrl: './manager-dashboard.html',
   styleUrl: './manager-dashboard.scss',
@@ -63,12 +67,16 @@ export class ManagerDashboard {
   toDate: Date | null = null;
 
   search: string = '';
-  userId: any;
   loginType: any= '';
+  userId: any;
   isAdmin: any;
 
+  totalTasks = 0;
   page: number = 0;
-  size: number = environment.size;
+  size: number = 20;
+
+  pageSize = 20;
+  pageIndex = 0;
 
   kpis = [
     {
@@ -86,32 +94,62 @@ export class ManagerDashboard {
       change: '1 escalated',
     },
     {
-      title: 'Pending Tasks',
+      title: 'All Pending Tasks',
       value: 0,
       icon: 'pending_actions',
       className: 'orange',
       change: '3 due today',
+    },
+    {
+      title: 'Assigned Tasks',
+      value: 0,
+      icon: 'assignment',
+      className: 'blue',
+      change: 'Currently assigned',
+    },
+    {
+      title: 'Assignee Closure Tasks',
+      value: 0,
+      icon: 'task_alt',
+      className: 'orange',
+      change: 'Awaiting closure',
+    },
+    {
+      title: 'Re-Open Tasks',
+      value: 0,
+      icon: 'restart_alt',
+      className: 'red',
+      change: 'Requires attention',
+    },
+    {
+      title: 'Assignee Re-Closure Tasks',
+      value: 0,
+      icon: 'published_with_changes',
+      className: 'purple',
+      change: 'Awaiting re-closure',
     },
   ];
 
   constructor(private dataProvider: DataProviderService) {}
 
   ngOnInit(): void {
-    this.username = sessionStorage.getItem('username') || 'Society 123';
 
     this.loginType =
         sessionStorage.getItem('loginType') || 'other';
+    this.username = sessionStorage.getItem('username') || 'Society 123';
 
     this.getTasks();
     this.getTaskCounts();
   }
 
   getTasks(): void {
-    this.dataProvider.getTasksByStatus().subscribe({
+    this.dataProvider.getTasksByStatus(this.pageIndex, this.pageSize).subscribe({
       next: (response: any) => {
         console.log('Task API Response:', response);
 
         const taskList = response?.taskList || [];
+
+        this.totalTasks = response?.totalTasks || 0;
 
         this.tasks = taskList.map((task: any) => ({
           taskId: task.taskId,
@@ -119,13 +157,24 @@ export class ManagerDashboard {
           assignedTo: task.assignedTo || '',
           assignedUserName: task.assignedUserName || '',
           taskStatus: task.taskStatus,
+          addedByName: task.addedByName,
+          date: task.date,
+          priority: task.priority,
         }));
       },
       error: (error) => {
         console.error('Error fetching tasks:', error);
         this.tasks = [];
+        this.totalTasks = 0;
       },
     });
+  }
+
+  onPageChange(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = 20;
+
+    this.getTasks();
   }
 
   getTaskCounts(): void {
@@ -171,6 +220,66 @@ export class ManagerDashboard {
         console.error('Error fetching pending task count:', error);
 
         this.kpis[2].value = 0;
+      },
+    });
+
+    // Assigned Tasks
+    this.dataProvider.countOfAssignedTask().subscribe({
+      next: (response: any) => {
+        console.log('Assigned Task Count:', response);
+
+        this.kpis[3].value = response?.count || 0;
+      },
+
+      error: (error) => {
+        console.error('Error fetching assigned task count:', error);
+
+        this.kpis[3].value = 0;
+      },
+    });
+
+    // Assignee Closure Tasks
+    this.dataProvider.countOfAssigneeClosureTask().subscribe({
+      next: (response: any) => {
+        console.log('Assignee Closure Task Count:', response);
+
+        this.kpis[4].value = response?.count || 0;
+      },
+
+      error: (error) => {
+        console.error('Error fetching assignee closure task count:', error);
+
+        this.kpis[4].value = 0;
+      },
+    });
+
+    // Re Open Tasks
+    this.dataProvider.countOfReOpenTask().subscribe({
+      next: (response: any) => {
+        console.log('Re Open Task Count:', response);
+
+        this.kpis[5].value = response?.count || 0;
+      },
+
+      error: (error) => {
+        console.error('Error fetching re-open task count:', error);
+
+        this.kpis[5].value = 0;
+      },
+    });
+
+    // Assignee Re-Closure Tasks
+    this.dataProvider.countOfAssigneeReClosureTask().subscribe({
+      next: (response: any) => {
+        console.log('Assignee Re-Closure Task Count:', response);
+
+        this.kpis[6].value = response?.count || 0;
+      },
+
+      error: (error) => {
+        console.error('Error fetching assignee re-closure task count:', error);
+
+        this.kpis[6].value = 0;
       },
     });
   }
@@ -252,7 +361,6 @@ export class ManagerDashboard {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
 
-      // PDF validation
       if (!file.name.toLowerCase().endsWith('.pdf')) {
         Swal.fire('Error', 'Only PDF files are allowed.', 'error');
 
@@ -297,11 +405,11 @@ export class ManagerDashboard {
     formData.append('description', this.taskDescription.trim());
 
     if (this.fileTwo) {
-      formData.append('fileName1', this.fileTwo, this.fileTwo.name); // normal file → fileName1 (pdf)
+      formData.append('fileName1', this.fileTwo, this.fileTwo.name);
     }
 
     if (this.fileOne) {
-      formData.append('fileName2', this.fileOne, this.fileOne.name); // zip file → fileName2
+      formData.append('fileName2', this.fileOne, this.fileOne.name);
     }
 
     this.dataProvider.updateTaskDetails(formData).subscribe({
@@ -354,6 +462,7 @@ export class ManagerDashboard {
         this.userId,
         taskStatusId,
         this.loginType
+
       )
       .subscribe({
         next: (response: any) => {
@@ -430,5 +539,51 @@ export class ManagerDashboard {
       default:
         return 'status-default';
     }
+  }
+
+  getPriorityLabel(priority: number): string {
+    switch (priority) {
+      case 1:
+        return 'High';
+
+      case 2:
+        return 'Medium';
+
+      case 3:
+        return 'Low';
+
+      default:
+        return 'Unknown';
+    }
+  }
+
+  getPriorityClass(priority: number): string {
+    switch (priority) {
+      case 1:
+        return 'priority-high';
+
+      case 2:
+        return 'priority-medium';
+
+      case 3:
+        return 'priority-low';
+
+      default:
+        return 'priority-default';
+    }
+  }
+
+  formatTaskDate(date: string): string {
+    if (!date) {
+      return '';
+    }
+
+    const parts = date.split('-');
+
+    if (parts.length !== 3) {
+      return date;
+    }
+
+    return `${parts[2]}-${parts[1]}-${parts[0]}`;
   }
 }

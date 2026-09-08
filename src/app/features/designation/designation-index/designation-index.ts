@@ -150,7 +150,7 @@ export class DesignationIndexComponent {
 
       {
         key: 'name',
-        label: 'Name',
+        label: 'Designation Name',
         sortable: true,
       },
 

@@ -32,10 +32,6 @@
         {{ kpi.value }}
         <span *ngIf="kpi.title === 'On-time %'" class="percentage"> % </span>
       </div>
-
-      <!-- <div class="kpi-change">
-        {{ kpi.change }}
-      </div> -->
     </mat-card>
   </section>
 
@@ -58,7 +54,10 @@
           <thead>
             <tr>
               <th>TASK</th>
-              <th>OWNER</th>
+              <th>ASSIGNED BY</th>
+              <th>ASSIGNED TO</th>
+              <th>DUE DATE</th>
+              <th>PRIORITY</th>
               <th>STATUS</th>
               <th>ACTION</th>
             </tr>
@@ -81,6 +80,16 @@
               <td>
                 <div class="owner">
                   <span class="owner-avatar">
+                    {{ task.addedByName ? task.addedByName.charAt(0).toUpperCase() : '?' }}
+                  </span>
+
+                  {{ task.addedByName }}
+                </div>
+              </td>
+
+              <td>
+                <div class="owner">
+                  <span class="owner-avatar">
                     {{
                       task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?'
                     }}
@@ -90,7 +99,22 @@
                 </div>
               </td>
 
-              <!-- <td>
+              <td>
+                <div class="owner">
+                  <!-- {{ task.date }} -->
+                  {{ task.date | date:'dd-MM-yyyy HH:mm a' }}
+                </div>
+              </td>
+
+              <td>
+                <div class="owner">
+                  <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
+                    {{ getPriorityLabel(task.priority) }}
+                  </span>
+                </div>
+              </td>
+
+              <td>
                 <span
                   class="status-badge"
                   [ngClass]="getTaskStatusClass(task.taskStatus)"
@@ -100,45 +124,7 @@
                   <span class="status-dot"></span>
                   {{ getTaskStatusLabel(task.taskStatus) }}
                 </span>
-              </td> -->
-              <td>
-  <span
-    class="status-badge"
-    [ngClass]="getTaskStatusClass(task.taskStatus)"
-    [class.status-disabled]="
-      task.taskStatus == 5 ||
-
-      (
-        (task.taskStatus == 1 || task.taskStatus == 3) &&
-        (task.addedBy != userId || task.assignedTo != userId)
-      ) ||
-
-      (
-        (task.taskStatus == 2 || task.taskStatus == 4) &&
-        task.assignedTo == userId
-      )
-    "
-    (click)="
-      !(
-        task.taskStatus == 5 ||
-
-        (
-          (task.taskStatus == 1 || task.taskStatus == 3) &&
-          (task.addedBy != userId || task.assignedTo != userId)
-        ) ||
-
-        (
-          (task.taskStatus == 2 || task.taskStatus == 4) &&
-          task.assignedTo == userId
-        )
-      ) && openChangeManagerModal(task.taskId)
-    "
-  >
-    <span class="status-dot"></span>
-    {{ getTaskStatusLabel(task.taskStatus) }}
-  </span>
-</td>
-
+              </td>
 
               <td>
                 <button mat-icon-button class="task-action">
@@ -148,11 +134,20 @@
             </tr>
 
             <tr *ngIf="tasks.length === 0">
-              <td colspan="4" class="no-records">No active tasks found.</td>
+              <td colspan="7" class="no-records">No active tasks found.</td>
             </tr>
           </tbody>
         </table>
       </div>
+
+      <mat-paginator
+        [length]="totalTasks"
+        [pageSize]="20"
+        [pageSizeOptions]="[20]"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)"
+      >
+      </mat-paginator>
     </mat-card>
   </section>
 </div>

@@ -118,6 +118,7 @@
                 <select
                   class="user-input user-select"
                   [(ngModel)]="task.clientId"
+                  (ngModelChange)="onClientChange($event);onchangeloadDropdownData()"
                   name="clientId"
                   required
                   #clientCtrl="ngModel">
@@ -418,6 +419,7 @@
                   [(ngModel)]="task.assignedTo"
                   name="assignedTo"
                   required
+                  [disabled]="!task.clientId"
                   #assignedCtrl="ngModel">
 
                   <option [ngValue]="null">

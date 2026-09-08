@@ -1467,7 +1467,24 @@ export class DataProviderService {
         params: {
           isAdmin: isAdmin.toString(),
           userId: userId.toString(),
-          loginType: loginType.toString()
+          loginType: loginType.toString(),
+          // clientId: clientId ?? ''
+        }
+      }
+    );
+
+  }
+
+  changesClientIdgetTaskFilterData(isAdmin: string, userId: number,loginType: string,clientId: number): Observable<any> {
+
+    return this.http.get<any>(
+      `${environment.apiBaseUrl}admin/task/getTaskFilterDataOnChange`,
+      {
+        params: {
+          isAdmin: isAdmin.toString(),
+          userId: userId.toString(),
+          loginType: loginType.toString(),
+          clientId: clientId ?? ''
         }
       }
     );
@@ -1720,10 +1737,20 @@ export class DataProviderService {
       },
     );
   }
+  //Employee Dashboard
+  getDashboard(userId: number): Observable<any> {
 
-  // Manager dashboard
-  getTasksByStatus(): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/getTasksByStatus`);
+    return this.http.get<any>(
+      `${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}`
+    );
+
+  }
+
+
+
+  //New
+  getTasksByStatus(page: number, size: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/getTasksByStatus?page=${page}&size=${size}`);
   }
 
   countOfActiveTask(): Observable<any> {
@@ -1738,14 +1765,19 @@ export class DataProviderService {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfPendingTask`);
   }
 
-    // Employee Dashboard
-  getDashboard(userId: number): Observable<any> {
-
-    return this.http.get<any>(
-      `${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}`
-    );
-
+  countOfAssignedTask(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssignedTask`);
   }
 
+    countOfAssigneeClosureTask(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeClosureTask`);
+  }
 
+    countOfReOpenTask(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfReOpenTask`);
+  }
+
+    countOfAssigneeReClosureTask(): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeReClosureTask`);
+  }
 }
