@@ -181,7 +181,7 @@ export class MyTeam implements OnInit {
 
     {
       key: 'firstName',
-      label: 'Name',
+      label: 'User Name',
       sortable: true
     },
 

@@ -764,8 +764,8 @@ export class TaskIndex {
             response.taskCategories || [];
 
 
-          this.assignedUsers =
-            response.assignedUsers || [];
+          // this.assignedUsers =
+          //   response.assignedUsers || [];
 
         },
 
@@ -781,7 +781,7 @@ export class TaskIndex {
 
           this.taskCategories = [];
 
-          this.assignedUsers = [];
+          // this.assignedUsers = [];
 
         }
 

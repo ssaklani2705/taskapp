@@ -771,7 +771,7 @@
 
 .user-table th:nth-child(4),
 .user-table td:nth-child(4) {
-  width: 14%;
+  width: 8%;
 }
 
 .user-table th:nth-child(5),
@@ -4753,11 +4753,281 @@ textarea.manager-select::placeholder {
   }
 }
 
-@media (max-width: 1024px) {
-  .status-badge{
-     min-width: 74px !important;
+/* ================================================================
+   FINAL TASK INDEX TABLE OVERRIDE
+   Paste this block at the VERY END of the component SCSS.
+
+   Actual HTML column order:
+   1  Sr. No.
+   2  Title
+   3  Client
+   4  Start Date
+   5  Due Date
+   6  Task Category
+   7  Assigned To
+   8  Priority
+   9  Task Status
+   10 Status
+   11 Action
+   ================================================================ */
+
+.table-container {
+  width: 100% !important;
+  padding: 0 25px !important;
+  box-sizing: border-box !important;
+}
+
+.table-responsive {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.user-table {
+  width: 1650px !important;
+  min-width: 1650px !important;
+  max-width: none !important;
+  table-layout: fixed !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+}
+
+.user-table thead th,
+.user-table tbody td {
+  box-sizing: border-box !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.user-table thead th {
+  height: 58px !important;
+  padding: 8px 7px !important;
+  white-space: normal !important;
+  overflow: hidden !important;
+}
+
+.user-table tbody td {
+  height: 58px !important;
+  padding: 8px 7px !important;
+}
+
+/* Exact widths - total 1650px */
+.user-table th:nth-child(1),
+.user-table td:nth-child(1) {
+  width: 65px !important;
+}
+
+.user-table th:nth-child(2),
+.user-table td:nth-child(2) {
+  width: 190px !important;
+}
+
+.user-table th:nth-child(3),
+.user-table td:nth-child(3) {
+  width: 150px !important;
+}
+
+.user-table th:nth-child(4),
+.user-table td:nth-child(4) {
+  width: 190px !important;
+}
+
+.user-table th:nth-child(5),
+.user-table td:nth-child(5) {
+  width: 220px !important;
+}
+
+.user-table th:nth-child(6),
+.user-table td:nth-child(6) {
+  width: 170px !important;
+}
+
+.user-table th:nth-child(7),
+.user-table td:nth-child(7) {
+  width: 190px !important;
+}
+
+.user-table th:nth-child(8),
+.user-table td:nth-child(8) {
+  width: 100px !important;
+}
+
+.user-table th:nth-child(9),
+.user-table td:nth-child(9) {
+  width: 170px !important;
+}
+
+.user-table th:nth-child(10),
+.user-table td:nth-child(10) {
+  width: 105px !important;
+}
+
+.user-table th:nth-child(11),
+.user-table td:nth-child(11) {
+  width: 100px !important;
+}
+
+/* Text columns */
+.user-table tbody td:nth-child(2),
+.user-table tbody td:nth-child(3),
+.user-table tbody td:nth-child(6),
+.user-table tbody td:nth-child(7) {
+  white-space: normal !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+/* Date columns: clip only the inner text, not the table cell */
+.user-table tbody td:nth-child(4),
+.user-table tbody td:nth-child(5) {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-align: center !important;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+.user-table tbody td:nth-child(4)>*,
+.user-table tbody td:nth-child(5)>* {
+  display: inline-block !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  vertical-align: middle !important;
+}
+
+/* If Angular outputs plain text directly in the td, wrapping is the safest fallback. */
+.user-table tbody td:nth-child(4),
+.user-table tbody td:nth-child(5) {
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
+}
+
+/* Priority */
+.user-table tbody td:nth-child(8) {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+/* Task Status */
+.user-table tbody td:nth-child(9) {
+  padding: 8px 5px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+.user-table tbody td:nth-child(9) .status-badge,
+.user-table tbody td:nth-child(9) .change-manager-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: calc(100% - 4px) !important;
+  min-width: 0 !important;
+  max-width: 160px !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  padding: 0 7px !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  line-height: 1 !important;
+  font-size: 12px !important;
+}
+
+/* Status */
+.user-table tbody td:nth-child(10) {
+  padding: 8px 4px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+}
+
+.user-table tbody td:nth-child(10) .status-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 82px !important;
+  min-width: 82px !important;
+  max-width: 82px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  margin: 0 auto !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* Action */
+.user-table tbody td:nth-child(11) {
+  padding: 8px 4px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
+.user-table tbody td:nth-child(11) .action-buttons {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.user-table tbody td:nth-child(11) .action-btn {
+  width: 38px !important;
+  height: 36px !important;
+  min-width: 38px !important;
+  max-width: 38px !important;
+  flex: 0 0 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Remove old width/min-width rules from common named classes */
+.user-table th.action-column,
+.user-table td.action-column {
+  width: 100px !important;
+  min-width: 100px !important;
+  max-width: 100px !important;
+}
+
+.user-table th.task-status-column,
+.user-table td.task-status-column {
+  width: 170px !important;
+  min-width: 170px !important;
+  max-width: 170px !important;
+}
+
+/* Keep the table visually clean */
+.user-table tbody tr {
+  height: 58px !important;
+}
+
+.user-table tbody tr:hover td {
+  background: #f8fbfd !important;
+}
+
+/* Mobile/tablet: retain the horizontal table rather than squeezing dates */
+@media (max-width: 900px) {
+  .table-container {
+    padding: 0 12px !important;
   }
-  .page-content-wrapper{
-    margin-top: 20px;
+
+  .user-table {
+    width: 1650px !important;
+    min-width: 1650px !important;
   }
 }

@@ -118,7 +118,7 @@ export class DepartmentIndexComponent {
   }[] = [
       {
         key: 'name',
-        label: 'Name',
+        label: 'Department Name',
         sortable: true,
       },
       {

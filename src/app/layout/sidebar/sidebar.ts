@@ -16,7 +16,7 @@ import {
 } from '@angular/common';
 
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 import {
   MatMenuModule,
@@ -26,6 +26,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 
 import { LoginService } from '../../service/login.service';
+import { filter } from 'rxjs';
 
 
 interface MenuItem {
@@ -107,6 +108,13 @@ export class Sidebar implements OnInit {
   // =========================================================
 
   ngOnInit(): void {
+
+    this.setActiveMenuFromRoute(this.router.url);
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.setActiveMenuFromRoute(event.urlAfterRedirects);
+      });
 
     if (isPlatformBrowser(this.platformId)) {
 
@@ -928,5 +936,142 @@ export class Sidebar implements OnInit {
 
     return `${initials}. ${lastName}`;
   }
+
+  // private setActiveMenuFromRoute(url: string): void {
+  //   const currentUrl = url.split('?')[0].split('#')[0];
+
+  //   const activeItem = this.menuItems.find((item) => {
+  //     return item.route === currentUrl;
+  //   });
+
+  //   if (activeItem) {
+  //     this.activeMenu = activeItem.label;
+  //     this.selectedModuleId = activeItem.moduleId ?? null;
+  //   }
+  // }
+
+  private setActiveMenuFromRoute(url: string): void {
+  const currentUrl = url.split('?')[0].split('#')[0];
+
+  const moduleRoutes: {
+    label: string;
+    moduleId: number;
+    routes: string[];
+  }[] = [
+    {
+      label: 'User Management',
+      moduleId: 1,
+      routes: [
+        '/my-team',
+        '/add-team',
+        '/edit-team',
+        '/view-team',
+      ],
+    },
+    {
+      label: 'Department',
+      moduleId: 2,
+      routes: [
+        '/department-master',
+        '/add-department',
+        '/edit-department',
+        '/view-department',
+      ],
+    },
+    {
+      label: 'Designation',
+      moduleId: 3,
+      routes: [
+        '/designation-master',
+        '/add-designation',
+        '/edit-designation',
+        '/view-designation',
+      ],
+    },
+    {
+      label: 'Tasks',
+      moduleId: 10,
+      routes: [
+        '/task-index',
+        '/add-task',
+        '/edit-task',
+        '/view-task',
+      ],
+    },
+    {
+      label: 'Task Category',
+      moduleId: 5,
+      routes: [
+        '/task-category-index',
+        '/add-task-category',
+        '/edit-task-category',
+        '/view-task-category',
+      ],
+    },
+    {
+      label: 'State',
+      moduleId: 4,
+      routes: [
+        '/state-index',
+        '/add-state',
+        '/edit-state',
+        '/view-state',
+      ],
+    },
+    {
+      label: 'Client',
+      moduleId: 8,
+      routes: [
+        '/client-index',
+        '/add-client',
+        '/edit-client',
+        '/view-client',
+      ],
+    },
+    {
+      label: 'Recurring Master',
+      moduleId: 11,
+      routes: [
+        '/recurring-index',
+        '/add-recurring',
+        '/edit-recurring',
+        '/view-recurring',
+      ],
+    },
+    {
+      label: 'Plan Master',
+      moduleId: 9,
+      routes: [
+        '/plan-index',
+        '/add-plan',
+        '/edit-plan',
+        '/view-plan',
+      ],
+    },
+  ];
+
+  const activeModule = moduleRoutes.find((module) =>
+    module.routes.some(
+      (route) =>
+        currentUrl === route ||
+        currentUrl.startsWith(route + '/')
+    )
+  );
+
+  if (activeModule) {
+    this.activeMenu = activeModule.label;
+    this.selectedModuleId = activeModule.moduleId;
+    return;
+  }
+
+  const activeItem = this.menuItems.find(
+    (item) => item.route === currentUrl
+  );
+
+  if (activeItem) {
+    this.activeMenu = activeItem.label;
+    this.selectedModuleId = activeItem.moduleId ?? null;
+  }
+}
 
 }
