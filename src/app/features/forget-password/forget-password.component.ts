@@ -47,7 +47,7 @@ export class ForgetPasswordComponent {
       console.log("encrypt "+encryptedManagerLogin);
        console.log("encrypt "+this.isManagerLogin);
 
-      alert(encryptedManagerLogin);
+      // alert(encryptedManagerLogin);
       this.encryptedManagerLogin=encryptedManagerLogin;
 ;
     });
@@ -112,7 +112,7 @@ export class ForgetPasswordComponent {
         if (res.success) {
 
            const loginType = res.data;
-          alert('Password changed successfully!'+loginType);
+          alert('Password changed successfully!');
           // this.router.navigate(['/login']);
            if (loginType === 'manager') {
         this.router.navigate(['/manager-login']);
