@@ -47,6 +47,7 @@ interface Task {
   taskId: number;
   clientName: string;
   date: string;
+  dueDateTime: string;
   taskCategoryName: string;
   assignedToName: string;
   priority: number;
@@ -265,7 +266,13 @@ export class TaskIndex {
 
       {
         key: 'date',
-        label: 'Date',
+        label: 'Start Date',
+        sortable: true
+      },
+
+      {
+        key: 'due_date',
+        label: 'Due Date',
         sortable: true
       },
 
@@ -355,7 +362,7 @@ export class TaskIndex {
           'isAdmin'
         );
 
-        this.loginType =
+      this.loginType =
         sessionStorage.getItem('loginType') || 'other';
 
     }
@@ -737,8 +744,8 @@ export class TaskIndex {
   private loadFilterData(): void {
 
     this.dataprovider
-      .getTaskFilterData( this.isAdmin,
-        this.userId,this.loginType)
+      .getTaskFilterData(this.isAdmin,
+        this.userId, this.loginType)
       .subscribe({
 
         next: (response: any) => {
@@ -1892,8 +1899,8 @@ export class TaskIndex {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#6c757d',
       customClass: {
-    popup: 'small-confirm-popup'
-  }
+        popup: 'small-confirm-popup'
+      }
     }).then((result) => {
 
       if (result.isConfirmed) {
@@ -2149,11 +2156,11 @@ export class TaskIndex {
   openChangeManagerModal(taskObject: any): void {
     console.log("sssssssss" + taskObject);
     this.descriptionValidationError = false;
-    
+
 
     this.task = {
       taskId: taskObject.taskId,
-      taskStatus:taskObject.taskStatus
+      taskStatus: taskObject.taskStatus
     };
 
 
