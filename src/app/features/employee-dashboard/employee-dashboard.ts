@@ -48,6 +48,13 @@ interface ApiTask {
 
   closeRemarks: string | null;
 
+
+  clientName: string;
+  assignedUser: string;
+
+  dueDateTime: string;
+
+
 }
 
 
@@ -78,20 +85,19 @@ interface DashboardResponse {
 
 
 interface Task {
-
   title: string;
-
   subtitle: string;
-
+  clientName: string;
+  assignedToName: string;
+  startDay: string;
+  dueDate: string;
   type:
-    | 'high'
-    | 'medium'
-    | 'low'
-    | 'progress'
-    | 'done';
-
+  | 'high'
+  | 'medium'
+  | 'low'
+  | 'progress'
+  | 'done';
   progress?: number;
-
 }
 
 
@@ -153,15 +159,15 @@ export class EmployeeDashboard implements OnInit {
 
   constructor(
     private dataProviderService: DataProviderService
-  ) {}
+  ) { }
 
 
   // ======================================================
   // INIT
   // ======================================================
-username: string = '';
+  username: string = '';
   ngOnInit(): void {
-     this.username = sessionStorage.getItem('username') || 'Society 123';
+    this.username = sessionStorage.getItem('username') || 'Society 123';
 
     this.loadDashboard();
 
@@ -182,27 +188,19 @@ username: string = '';
       .subscribe({
 
         next: (res: DashboardResponse) => {
-
           console.log(
             'Dashboard response:',
             res
           );
-
-
           if (!res) {
             return;
           }
-
-          
           // Today's task count
           this.todayTasks.set(res.myTasksToday);
-
           // ----------------------------------------------
           // STATISTICS
           // ----------------------------------------------
-
           this.stats.set([
-
             {
               label: 'My tasks today',
               value: res.myTasksToday,
@@ -258,7 +256,7 @@ username: string = '';
             },
 
             {
-              title: 'Done',
+              title: 'Completed Tasks',
 
               count:
                 res.done?.count || 0,
@@ -313,6 +311,14 @@ username: string = '';
 
           subtitle: 'Completed',
 
+          clientName: task.clientName || '',
+
+          assignedToName: task.assignedUser  || '',
+
+          startDay: this.formatDate(task.date),
+
+          dueDate: this.formatDate(task.dueDateTime),
+
           type: 'done'
 
         };
@@ -332,6 +338,14 @@ username: string = '';
 
           subtitle:
             `${task.progress || 0}% complete`,
+
+          clientName: task.clientName || '',
+
+          assignedToName: task.assignedUser  || '',
+
+          startDay: this.formatDate(task.date),
+
+          dueDate: this.formatDate(task.dueDateTime),
 
           type: 'progress',
 
@@ -354,6 +368,14 @@ username: string = '';
         subtitle:
           `Due ${this.formatDate(task.date)} · ${this.formatPriority(task.priority)}`,
 
+        clientName: task.clientName || '',
+
+        assignedToName: task.assignedUser  || '',
+
+        startDay: this.formatDate(task.date),
+
+        dueDate: this.formatDate(task.dueDateTime),
+
         type:
           this.getPriorityType(task.priority)
 
@@ -373,7 +395,7 @@ username: string = '';
   ): 'high' | 'medium' | 'low' {
 
     switch (
-      priority?.toUpperCase()
+    priority?.toUpperCase()
     ) {
 
       case 'HIGH':
@@ -417,26 +439,25 @@ username: string = '';
   // DATE FORMAT
   // ======================================================
 
-  private formatDate(
-    date: string
-  ): string {
-
+  private formatDate(date: string): string {
     if (!date) {
       return '';
     }
 
-    const taskDate =
-      new Date(date);
+    const taskDate = new Date(date);
 
+    if (isNaN(taskDate.getTime())) {
+      return '';
+    }
 
-    return taskDate.toLocaleDateString(
-      'en-US',
-      {
-        month: 'short',
-        day: 'numeric'
-      }
-    );
-
+    return taskDate.toLocaleString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
   }
 
 
@@ -479,7 +500,7 @@ username: string = '';
   }
 
 
-    // =========================================================
+  // =========================================================
   // GET INITIALS
   // =========================================================
 

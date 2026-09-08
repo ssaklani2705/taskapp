@@ -22,7 +22,7 @@
 
       </div>
 
-      <div class="header-actions">
+      <!--div class="header-actions">
 
         <button
           mat-flat-button
@@ -46,7 +46,7 @@
 
         </div>
 
-      </div>
+      </div-->
 
     </header>
 
@@ -56,19 +56,17 @@
 
       @for (stat of stats(); track stat.label) {
 
-        <mat-card
-          class="stat-card"
-          [class.stat-danger]="stat.color === 'danger'">
+      <mat-card class="stat-card" [class.stat-danger]="stat.color === 'danger'">
 
-          <div class="stat-label">
-            {{ stat.label }}
-          </div>
+        <div class="stat-label">
+          {{ stat.label }}
+        </div>
 
-          <div class="stat-value">
-            {{ stat.value }}
-          </div>
+        <div class="stat-value">
+          {{ stat.value }}
+        </div>
 
-        </mat-card>
+      </mat-card>
 
       }
 
@@ -80,72 +78,82 @@
 
       @for (column of columns(); track column.title) {
 
-        <section class="task-column">
+      <section class="task-column">
 
-          <!-- Column Header -->
-          <div class="column-header">
+        <!-- Column Header -->
+        <div class="column-header">
 
-            <h2>
-              {{ column.title }}
-              <span class="column-count">
-                {{ column.count }}
-              </span>
-            </h2>
+          <h2>
+            {{ column.title }}
+            <span class="column-count">
+              {{ column.count }}
+            </span>
+          </h2>
 
-          </div>
+        </div>
 
 
-          <!-- Tasks -->
-          <div class="tasks-list">
+        <!-- Tasks -->
+        <div class="tasks-list">
 
-            @for (task of column.tasks; track task.title) {
+          @for (task of column.tasks; track task.title) {
 
-              <article
-                class="task-card"
-                [class.task-high]="task.type === 'high'"
-                [class.task-medium]="task.type === 'medium'"
-                [class.task-low]="task.type === 'low'"
-                [class.task-progress]="task.type === 'progress'"
-                [class.task-done]="task.type === 'done'">
+          <article class="task-card" [class.task-high]="task.type === 'high'"
+            [class.task-medium]="task.type === 'medium'" [class.task-low]="task.type === 'low'"
+            [class.task-progress]="task.type === 'progress'" [class.task-done]="task.type === 'done'">
 
-                <div class="task-content">
+            <div class="task-content">
 
-                  <div class="task-title">
-                    {{ task.title }}
+              <div class="task-title">
+                {{ task.title }}
+              </div>
+
+              <div class="task-details">
+                <strong>Client:</strong> {{ task.clientName }}
+              </div>
+
+              <div class="task-details">
+                <strong>Assigned To:</strong> {{ task.assignedToName  || 'Not Assigned' }}
+              </div>
+
+              <div class="task-details">
+                <strong>Start Date:</strong>
+                {{ task.startDay  }}
+              </div>
+
+              <div class="task-details">
+                <strong>Due Date:</strong>
+                {{ task.dueDate }}
+              </div>
+
+              <div class="task-subtitle" [class.approved]="task.type === 'done'">
+
+                {{ task.subtitle }}
+
+              </div>
+
+              @if (task.type === 'progress') {
+
+              <div class="progress-wrapper">
+
+                <div class="progress-track">
+                  <div class="progress-bar" [style.width.%]="task.progress">
                   </div>
-
-                  <div
-                    class="task-subtitle"
-                    [class.approved]="task.type === 'done'">
-
-                    {{ task.subtitle }}
-
-                  </div>
-
-                  @if (task.type === 'progress') {
-
-                    <div class="progress-wrapper">
-
-                      <div class="progress-track">
-                        <div
-                          class="progress-bar"
-                          [style.width.%]="task.progress">
-                        </div>
-                      </div>
-
-                    </div>
-
-                  }
-
                 </div>
 
-              </article>
+              </div>
 
-            }
+              }
 
-          </div>
+            </div>
 
-        </section>
+          </article>
+
+          }
+
+        </div>
+
+      </section>
 
       }
 
