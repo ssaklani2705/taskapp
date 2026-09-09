@@ -388,21 +388,16 @@
                 </td>
 
 
-                <!-- DATE -->
                 <td>
-                  {{
-                  task.date
-                  ? (task.date | date:'dd-MM-yyyy HH:mm a')
-                  : '-'
-                  }}
+                  {{ task.date ? (task.date | date:'dd-MM-yyyy') : '-' }}
+                  <br>
+                  {{ task.date ? (task.date | date:'hh:mm a') : '' }}
                 </td>
 
                 <td>
-                  {{
-                  task.dueDateTime
-                  ? (task.dueDateTime | date:'dd-MM-yyyy HH:mm a')
-                  : '-'
-                  }}
+                  {{ task.dueDateTime ? (task.dueDateTime | date:'dd-MM-yyyy') : '-' }}
+                  <br>
+                  {{ task.dueDateTime ? (task.dueDateTime | date:'hh:mm a') : '' }}
                 </td>
 
 

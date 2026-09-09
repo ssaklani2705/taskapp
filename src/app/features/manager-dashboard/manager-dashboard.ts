@@ -12,12 +12,14 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 interface Task {
   taskId: number;
+  clientName:string;
   title: string;
   assignedTo: string;
   assignedUserName: string;
   taskStatus: number;
   addedByName: string;
   date: string;
+  duedatetime:string;
   priority: number;
 }
 
@@ -153,12 +155,14 @@ export class ManagerDashboard {
 
         this.tasks = taskList.map((task: any) => ({
           taskId: task.taskId,
+          clientName:task.clientName,
           title: task.title || '',
           assignedTo: task.assignedTo || '',
           assignedUserName: task.assignedUserName || '',
           taskStatus: task.taskStatus,
           addedByName: task.addedByName,
           date: task.date,
+          duedatetime:task.dueDateTime,
           priority: task.priority,
         }));
       },

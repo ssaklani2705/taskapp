@@ -54,12 +54,15 @@
           <thead>
             <tr>
               <th>TASK</th>
+           
+              <th>CLIENT NAME</th>
               <th>ASSIGNED BY</th>
               <th>ASSIGNED TO</th>
+              <th>START DATE</th>
               <th>DUE DATE</th>
               <th>PRIORITY</th>
               <th>STATUS</th>
-              <th>ACTION</th>
+              <!-- <th>ACTION</th> -->
             </tr>
           </thead>
 
@@ -74,6 +77,15 @@
                   <span>
                     {{ task.title }}
                   </span>
+                </div>
+              </td>
+             <td>
+                <div class="owner">
+                  <span class="owner-avatar">
+                    {{ task.clientName ? task.clientName.charAt(0).toUpperCase() : '?' }}
+                  </span>
+
+                  {{ task.clientName }}
                 </div>
               </td>
 
@@ -91,18 +103,28 @@
                 <div class="owner">
                   <span class="owner-avatar">
                     {{
-                      task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?'
+                    task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?'
                     }}
                   </span>
 
                   {{ task.assignedUserName }}
                 </div>
               </td>
+              <td>
+                <div class="owner">
+                  <!-- {{ task.date }} -->
+                  {{ task.date | date:'dd-MM-yyyy' }}
+                  <br>
+                  {{ task.date | date:'hh:mm a' }}
+                </div>
+              </td>
 
               <td>
                 <div class="owner">
                   <!-- {{ task.date }} -->
-                  {{ task.date | date:'dd-MM-yyyy HH:mm a' }}
+                  {{ task.duedatetime | date:'dd-MM-yyyy' }}
+                  <br>
+                  {{ task.duedatetime | date:'hh:mm a' }}
                 </div>
               </td>
 
@@ -115,22 +137,19 @@
               </td>
 
               <td>
-                <span
-                  class="status-badge"
-                  [ngClass]="getTaskStatusClass(task.taskStatus)"
+                <span class="status-badge" [ngClass]="getTaskStatusClass(task.taskStatus)"
                   [class.status-disabled]="task.taskStatus === 5"
-                  (click)="task.taskStatus !== 5 && openChangeManagerModal(task.taskId)"
-                >
+                  (click)="task.taskStatus !== 5 && openChangeManagerModal(task.taskId)">
                   <span class="status-dot"></span>
                   {{ getTaskStatusLabel(task.taskStatus) }}
                 </span>
               </td>
 
-              <td>
+              <!-- <td>
                 <button mat-icon-button class="task-action">
                   <mat-icon> more_horiz </mat-icon>
                 </button>
-              </td>
+              </td> -->
             </tr>
 
             <tr *ngIf="tasks.length === 0">
@@ -140,13 +159,8 @@
         </table>
       </div>
 
-      <mat-paginator
-        [length]="totalTasks"
-        [pageSize]="20"
-        [pageSizeOptions]="[20]"
-        [showFirstLastButtons]="true"
-        (page)="onPageChange($event)"
-      >
+      <mat-paginator [length]="totalTasks" [pageSize]="20" [pageSizeOptions]="[20]" [showFirstLastButtons]="true"
+        (page)="onPageChange($event)">
       </mat-paginator>
     </mat-card>
   </section>
@@ -166,12 +180,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeChangeManagerModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -189,13 +198,8 @@
           <span class="required">*</span>
         </label>
 
-        <textarea
-          class="manager-select"
-          rows="4"
-          [(ngModel)]="taskDescription"
-          [disabled]="isChangingManager"
-          placeholder="Enter description"
-        ></textarea>
+        <textarea class="manager-select" rows="4" [(ngModel)]="taskDescription" [disabled]="isChangingManager"
+          placeholder="Enter description"></textarea>
 
         <div class="manager-validation-error" *ngIf="descriptionValidationError">
           <mat-icon>error_outline</mat-icon>
@@ -207,13 +211,8 @@
       <div class="manager-form-group">
         <label class="modal-field-label"> Zip File </label>
 
-        <input
-          type="file"
-          class="manager-select"
-          accept=".zip"
-          [disabled]="isChangingManager"
-          (change)="onFileOneSelected($event)"
-        />
+        <input type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"
+          (change)="onFileOneSelected($event)" />
 
         <span class="current-manager-name" *ngIf="fileOneName">
           {{ fileOneName }}
@@ -224,12 +223,7 @@
       <div class="manager-form-group">
         <label class="modal-field-label"> File </label>
 
-        <input
-          type="file"
-          class="manager-select"
-          [disabled]="isChangingManager"
-          (change)="onFileTwoSelected($event)"
-        />
+        <input type="file" class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
 
         <span class="current-manager-name" *ngIf="fileTwoName">
           {{ fileTwoName }}
@@ -238,21 +232,12 @@
     </div>
 
     <div class="modal-footer">
-      <button
-        type="button"
-        class="modal-cancel-button"
-        (click)="closeChangeManagerModal()"
-        [disabled]="isChangingManager"
-      >
+      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()"
+        [disabled]="isChangingManager">
         Cancel
       </button>
 
-      <button
-        type="button"
-        class="modal-save-button"
-        (click)="changeManager()"
-        [disabled]="isChangingManager"
-      >
+      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
         <mat-icon>
           {{ isChangingManager ? 'hourglass_top' : 'save' }}
         </mat-icon>
