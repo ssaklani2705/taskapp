@@ -394,17 +394,35 @@ export class EmployeeDashboard implements OnInit {
     priority: string
   ): 'high' | 'medium' | 'low' {
 
-    switch (
-    priority?.toUpperCase()
-    ) {
+    const normalized =
+      (priority || '')
+        .toString()
+        .trim()
+        .toUpperCase();
+
+    switch (normalized) {
 
       case 'HIGH':
+      case 'H':
+      case '1':
         return 'high';
 
       case 'MEDIUM':
+      case 'MED':
+      case 'M':
+      case '2':
         return 'medium';
 
+      case 'LOW':
+      case 'L':
+      case '3':
+        return 'low';
+
       default:
+        console.warn(
+          'Unmapped task priority value, defaulting to low:',
+          priority
+        );
         return 'low';
 
     }

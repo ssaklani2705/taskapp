@@ -1,284 +1,217 @@
 /* ============================================================
-   EMPLOYEE WORKSPACE DASHBOARD
-   Angular 21 + Angular Material
-   ============================================================ */
+   WORKSPACE DASHBOARD
+============================================================ */
 
 :host {
+
   display: block;
+
   width: 100%;
   height: 100%;
 
-  /* Colors */
-  --workspace-border: #d9dfe7;
-  --workspace-header: #f1f2f4;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  --border: #dce2e9;
+
+  --header-bg: #f1f2f4;
+
   --stat-bg: #f0f1f3;
-  --column-bg: #f0f1f3;
 
-  --text-dark: #26354b;
-  --text-heading: #293548;
-  --text-muted: #7b8798;
-  --text-light: #9aa5b4;
+  --text-dark: #193454;
 
-  --navy: #20365e;
-  --navy-hover: #1a2d50;
+  --text-heading: #1d3657;
 
-  --green: #2f8659;
-  --green-hover: #26754c;
+  --text-muted: #71839d;
 
-  --red: #bd394b;
-  --red-border: #cf4052;
+  --icon-color: #7387a2;
 
-  --blue: #397eb3;
-  --yellow: #d79b17;
-  --success: #359263;
+  --red: #c62f48;
 
-  // font-family:
-  //   Roboto,
-  //   "Helvetica Neue",
-  //   Arial,
-  //   sans-serif;
-  font-family: Georgia, "Times New Roman", serif;
+  --red-bg: #fde6eb;
+
+  --blue: #397fb5;
+
+  --blue-bg: #e5f2fb;
+
+  --yellow: #d89c1b;
+
+  --green: #3c9569;
 
   box-sizing: border-box;
 }
+
 
 :host *,
 :host *::before,
 :host *::after {
+
   box-sizing: border-box;
+
 }
 
 
 /* ============================================================
-   PAGE / CONTENT AREA
-   ============================================================ */
+   PAGE
+============================================================ */
 
 .page-shell {
+
   width: 100%;
 
   min-height: 100%;
 
-  padding: 26px 5px 18px;
-
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  padding: 0 5px 30px;
 
   background: #ffffff;
+
 }
 
 
 /* ============================================================
-   MAIN WORKSPACE CARD
-   ============================================================ */
+   MAIN CARD
+============================================================ */
 
 .workspace-card {
-  width: min(1300px, 100%);
+
+  width: 100%;
 
   background: #ffffff;
 
-  border: 1px solid var(--workspace-border);
+  border: 1px solid var(--border);
 
-  border-radius: 15px;
+  border-radius: 14px;
 
   overflow: hidden;
 
   box-shadow: none;
 
-  flex-shrink: 0;
 }
 
 
 /* ============================================================
-   WORKSPACE HEADER
-   ============================================================ */
+   HEADER
+============================================================ */
 
 .workspace-header {
+
   width: 100%;
 
-  height: 65px;
+  height: 82px;
 
-  padding: 0 20px;
+  min-height: 82px;
 
-  background: var(--workspace-header);
+  padding: 0 25px;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
+
+  background: linear-gradient(120deg, #eaf3fb 0%, #f1eefc 55%, #fdeef3 100%);
+
 }
 
 
-/* ------------------------------------------------------------
+/* ============================================================
    PROFILE
-   ------------------------------------------------------------ */
+============================================================ */
 
 .profile-section {
+
   display: flex;
+
   align-items: center;
 
   min-width: 0;
+
 }
 
 
 .avatar {
-  width: 32px;
-  height: 32px;
 
-  flex: 0 0 32px;
+  width: 40px;
+
+  height: 40px;
+
+  flex: 0 0 40px;
 
   border-radius: 50%;
 
-  background: #3c9291;
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: linear-gradient(135deg, #37b6a8 0%, #2f8fc0 100%);
 
   color: #ffffff;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 13px;
 
-  font-size: 11px;
-  font-weight: 500;
+  font-weight: 700;
 
-  line-height: 1;
+  box-shadow: 0 3px 8px rgba(47, 143, 192, 0.35);
+
 }
 
 
 .profile-info {
-  margin-left: 11px;
+
+  margin-left: 13px;
 
   min-width: 0;
+
 }
 
 
 .profile-info h1 {
+
   margin: 0;
 
   color: var(--text-heading);
 
-  font-size: 16px;
-  line-height: 19px;
+  font-size: 22px;
 
-  font-weight: 600;
+  line-height: 25px;
 
-  white-space: nowrap;
+  font-weight: 700;
+
 }
 
 
 .profile-info p {
+
   margin: 2px 0 0;
 
-  color: #7d8796;
+  color: #73849c;
 
-  font-size: 10px;
-  line-height: 13px;
+  font-size: 12px;
 
-  font-weight: 400;
+  line-height: 15px;
+
 }
 
 
 .separator {
-  margin: 0 3px;
 
-  color: #9aa3af;
-}
+  margin: 0 5px;
 
+  color: #9ca8b8;
 
-/* ============================================================
-   HEADER ACTIONS
-   ============================================================ */
-
-.header-actions {
-  display: flex;
-  align-items: center;
-
-  gap: 16px;
-
-  flex-shrink: 0;
-}
-
-
-/* ------------------------------------------------------------
-   CHECK IN
-   ------------------------------------------------------------ */
-
-.check-in-button {
-  height: 29px !important;
-
-  min-width: 125px !important;
-
-  padding: 0 15px !important;
-
-  border: 0 !important;
-
-  border-radius: 16px !important;
-
-  background: var(--green) !important;
-
-  color: #ffffff !important;
-
-  box-shadow: none !important;
-
-  font-family: inherit !important;
-
-  font-size: 11px !important;
-  line-height: 29px !important;
-
-  font-weight: 500 !important;
-
-  letter-spacing: 0 !important;
-}
-
-
-.check-in-button:hover {
-  background: var(--green-hover) !important;
-}
-
-
-.check-in-button:active {
-  transform: translateY(1px);
-}
-
-
-.check-in-button .dot {
-  margin: 0 4px;
-
-  opacity: 0.8;
-}
-
-
-/* ------------------------------------------------------------
-   TASK COUNT CIRCLE
-   ------------------------------------------------------------ */
-
-.task-count {
-  width: 28px;
-  height: 28px;
-
-  flex: 0 0 28px;
-
-  border: 1px solid #d9dfe6;
-
-  border-radius: 50%;
-
-  background: #f8f9fa;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #788496;
-
-  font-size: 11px;
-
-  font-weight: 400;
 }
 
 
 /* ============================================================
    STATISTICS
-   ============================================================ */
+============================================================ */
 
 .stats-grid {
+
   width: 100%;
 
   display: grid;
@@ -286,71 +219,161 @@
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 17px;
 
-  padding: 16px 19px 14px;
+  padding: 20px 24px 20px;
+
 }
 
 
-/* ------------------------------------------------------------
+/* ============================================================
    STAT CARD
-   ------------------------------------------------------------ */
+============================================================ */
 
 .stat-card {
-  height: 66px;
 
-  min-height: 66px;
+  position: relative;
 
-  padding: 11px 15px;
+  height: 83px;
+
+  min-height: 83px;
+
+  padding: 13px 18px 13px 24px;
 
   border: 0 !important;
 
-  border-radius: 9px !important;
+  border-radius: 10px !important;
 
   background: var(--stat-bg) !important;
 
   box-shadow: none !important;
 
-  display: block;
+  overflow: hidden;
+
+}
+
+
+.stat-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  top: 0;
+
+  bottom: 0;
+
+  width: 6px;
+
+  background: #9aa8bd;
+
+}
+
+
+.stats-grid > mat-card:nth-child(1) {
+
+  background: #e7f2fd !important;
+
+}
+
+.stats-grid > mat-card:nth-child(1)::before {
+
+  background: #3d8fd6;
+
+}
+
+.stats-grid > mat-card:nth-child(1) .stat-value {
+
+  color: #1f5c96;
+
+}
+
+
+.stats-grid > mat-card:nth-child(2) {
+
+  background: #eeeafc !important;
+
+}
+
+.stats-grid > mat-card:nth-child(2)::before {
+
+  background: #8465d6;
+
+}
+
+.stats-grid > mat-card:nth-child(2) .stat-value {
+
+  color: #5b3fa8;
+
+}
+
+
+.stats-grid > mat-card:nth-child(3) {
+
+  background: #fde9ee !important;
+
+}
+
+.stats-grid > mat-card:nth-child(3)::before {
+
+  background: var(--red);
+
 }
 
 
 .stat-label {
-  margin: 0;
 
-  color: #788393;
+  color: #6f829d;
 
-  font-size: 16px;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-  line-height: 14px;
+  font-size: 17px;
+
+  line-height: 22px;
 
   font-weight: 400;
+
 }
 
 
 .stat-value {
+
   margin-top: 1px;
 
-  color: #26354b;
+  color: #1d3657;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
   font-size: 25px;
 
-  line-height: 27px;
+  line-height: 30px;
 
   font-weight: 700;
+
 }
 
 
 .stat-danger .stat-value {
+
   color: var(--red);
+
 }
 
 
 /* ============================================================
-   TASK BOARD
-   ============================================================ */
+   TASK BOARD (KANBAN — 3 COLUMNS IN ONE ROW)
+============================================================ */
 
 .task-board {
+
   width: 100%;
 
   display: grid;
@@ -358,243 +381,694 @@
   grid-template-columns:
     repeat(3, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 20px;
 
-  padding: 0 19px 13px;
-}
+  padding: 0 24px 25px;
 
+  align-items: start;
 
-/* ------------------------------------------------------------
-   COLUMN
-   ------------------------------------------------------------ */
-
-.task-column {
-  width: 100%;
-
-  min-height: 293px;
-
-  padding: 12px;
-
-  border-radius: 9px;
-
-  background: var(--column-bg);
-}
-
-
-/* ------------------------------------------------------------
-   COLUMN HEADER
-   ------------------------------------------------------------ */
-
-.column-header {
-  height: 18px;
-
-  margin: 0 0 8px;
-
-  display: flex;
-  align-items: center;
-}
-
-
-.column-header h2 {
-  margin: 0;
-
-  color: #69768a;
-
-  font-size: 19px;
-
-  line-height: 18px;
-
-  font-weight: 600;
-}
-
-
-.column-count {
-  margin-left: 4px;
-
-  color: #69768a;
-
-  font-weight: 500;
 }
 
 
 /* ============================================================
-   TASK LIST
-   ============================================================ */
+   TASK SECTION (ONE KANBAN COLUMN)
+============================================================ */
 
-.tasks-list {
+.task-section {
+
   width: 100%;
+
+  min-width: 0;
+
+  margin-bottom: 0;
+
+}
+
+
+/* ============================================================
+   COLUMN HEADER
+============================================================ */
+
+.column-header {
+
+  width: 100%;
+
+  height: 43px;
+
+  display: flex;
+
+  align-items: center;
+
+  border-bottom: 3px solid #dce7f5;
+
+}
+
+
+.column-header h2 {
+
+  margin: 0;
+
+  color: #3a5578;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 24px;
+
+  line-height: 28px;
+
+  font-weight: 700;
+
+}
+
+
+.column-count {
+
+  margin-left: 5px;
+
+  color: #71839d;
+
+  font-size: 17px;
+
+  font-weight: 400;
+
+}
+
+
+/* ============================================================
+   CARDS STACKED VERTICALLY WITHIN EACH COLUMN
+============================================================ */
+
+.tasks-grid {
+
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns: 1fr;
+
+  gap: 18px;
+
+  align-items: stretch;
+
+}
+
+
+/* ============================================================
+   EMPTY COLUMN STATE
+============================================================ */
+
+.column-empty {
+
+  width: 100%;
+
+  padding: 22px 18px;
+
+  border: 1px dashed #d8e0e8;
+
+  border-radius: 13px;
+
+  color: #93a2b8;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 15px;
+
+  text-align: center;
+
+  background: #fbfcfd;
+
+}
+
+
+/* ============================================================
+   TASK CARD (STACKED LEFT/RIGHT — SINGLE COLUMN LAYOUT)
+============================================================ */
+
+.task-card {
+
+  position: relative;
+
+  width: 100%;
+
+  min-width: 0;
+
+  min-height: auto;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(150px, 0.85fr);
+
+  background: #ffffff;
+
+  border: 1px solid #d8e0e8;
+
+  border-radius: 13px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 12px rgba(32, 53, 78, 0.08);
+
+}
+
+
+/* ============================================================
+   LEFT COLOR STRIPE
+============================================================ */
+
+.task-card::before {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  top: 0;
+
+  bottom: 0;
+
+  width: 9px;
+
+  z-index: 3;
+
+  background: #aebccc;
+
+}
+
+
+.task-high::before {
+
+  background: #c9384e;
+
+}
+
+
+.task-medium::before {
+
+  background: #d69b20;
+
+}
+
+
+.task-low::before {
+
+  background: #3b82b8;
+
+}
+
+
+.task-progress::before {
+
+  background: #397eb3;
+
+}
+
+
+.task-done::before {
+
+  background: #3b9568;
+
+}
+
+
+/* ============================================================
+   LEFT CONTENT
+============================================================ */
+
+.task-left {
+
+  min-width: 0;
+
+  padding: 16px 16px 14px 24px;
 
   display: flex;
 
   flex-direction: column;
 
-  gap: 8px;
 }
 
 
 /* ============================================================
-   TASK CARD
-   ============================================================ */
+   TASK TITLE
+============================================================ */
 
-.task-card {
-  position: relative;
+.task-title {
 
-  width: 100%;
+  margin-bottom: 10px;
 
-  min-height: 49px;
+  color: #173553;
 
-  border: 1px solid #dce2e9;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
 
-  border-radius: 6px;
+  font-size: 20px;
 
-  background: #ffffff;
+  line-height: 24px;
 
-  overflow: hidden;
+  font-weight: 700;
+
+  white-space: normal;
+
+  overflow: visible;
+
+  word-break: break-word;
+
+}
+
+
+/* ============================================================
+   TASK INFORMATION
+============================================================ */
+
+.task-info-row {
 
   display: flex;
-  align-items: stretch;
 
-  box-shadow: none;
+  align-items: flex-start;
+
+  gap: 12px;
+
+  margin-bottom: 10px;
+
 }
 
 
-/* Left status stripe */
+.task-info-row mat-icon {
 
-.task-card::before {
-  content: "";
+  width: 20px;
 
-  position: absolute;
+  height: 20px;
 
-  top: 0;
-  bottom: 0;
-  left: 0;
+  flex: 0 0 20px;
 
-  width: 3px;
+  padding: 4px;
 
-  z-index: 2;
+  border-radius: 50%;
 
-  background: #aeb8c5;
+  box-sizing: content-box;
+
+  background: #e5f2fb;
+
+  color: #397fb5;
+
+  font-size: 20px;
+
+  line-height: 20px;
+
 }
 
 
-/* ------------------------------------------------------------
-   TASK CONTENT
-   ------------------------------------------------------------ */
-
-.task-content {
-  width: 100%;
+.task-info-content {
 
   min-width: 0;
 
-  padding: 8px 10px 7px 12px;
+  display: flex;
+
+  flex-direction: column;
+
 }
 
 
-.task-title {
-  color: #304058;
+.task-label {
 
-  font-size: 11px;
+  margin-bottom: 3px;
+
+  color: #7185a1;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 12px;
 
   line-height: 15px;
 
-  font-weight: 500;
+  font-weight: 700;
+
+  letter-spacing: 0.6px;
+
+}
+
+
+.task-value {
+
+  color: #1c3758;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 16px;
+
+  line-height: 20px;
+
+  font-weight: 400;
+
+  white-space: normal;
+
+  overflow: visible;
+
+  word-break: break-word;
+
+}
+
+
+/* ============================================================
+   RIGHT SIDE
+============================================================ */
+
+.task-right {
+
+  min-width: 0;
+
+  padding: 16px 18px 14px 18px;
+
+  border-left: 2px solid #e0e5eb;
+
+  border-top: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+
+/* ============================================================
+   PRIORITY
+============================================================ */
+
+.priority-wrapper {
+
+  display: flex;
+
+  justify-content: flex-start;
+
+  margin-bottom: 10px;
+
+}
+
+
+.priority-badge {
+
+  min-width: 78px;
+
+  height: 32px;
+
+  padding: 0 14px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 30px;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 14px;
+
+  font-weight: 700;
 
   white-space: nowrap;
 
-  overflow: hidden;
-
-  text-overflow: ellipsis;
 }
 
 
-.task-subtitle {
-  margin-top: 1px;
+/* HIGH */
 
-  color: #9aa6b6;
+.priority-high {
 
-  font-size: 11px;
+  color: #c42f45;
 
-  line-height: 13px;
+  background: #fde5ea;
 
-  font-weight: 400;
+}
+
+
+/* MEDIUM */
+
+.priority-medium {
+
+  color: #b77c05;
+
+  background: #fff1d1;
+
+}
+
+
+/* LOW */
+
+.priority-low {
+
+  color: #2775ae;
+
+  background: #e5f3fb;
+
+}
+
+
+/* PROGRESS */
+
+.priority-progress {
+
+  color: #327caf;
+
+  background: #e5f3fb;
+
+}
+
+
+/* DONE */
+
+.priority-done {
+
+  color: #31845d;
+
+  background: #e5f5ec;
+
 }
 
 
 /* ============================================================
-   TASK STATUS COLORS
-   ============================================================ */
+   DATE ROW
+============================================================ */
 
-.task-high::before {
-  background: var(--red-border);
+.date-row {
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 12px;
+
+  margin-bottom: 10px;
+
 }
 
 
-.task-medium::before {
-  background: var(--yellow);
+.date-row mat-icon {
+
+  width: 18px;
+
+  height: 18px;
+
+  flex: 0 0 18px;
+
+  padding: 4px;
+
+  border-radius: 50%;
+
+  box-sizing: content-box;
+
+  background: #fdf1de;
+
+  color: #c98a1e;
+
+  font-size: 18px;
+
+  line-height: 18px;
+
 }
 
 
-.task-low::before {
-  background: var(--blue);
+.date-content {
+
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
 }
 
 
-.task-progress::before {
-  background: #3678ad;
+.date-label {
+
+  margin-bottom: 4px;
+
+  color: #7185a1;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  font-size: 12px;
+
+  line-height: 15px;
+
+  font-weight: 700;
+
+  letter-spacing: 0.6px;
+
 }
 
 
-.task-done::before {
-  background: var(--success);
-}
+.date-value {
 
+  color: #173553;
 
-.task-done .task-subtitle {
-  color: #3a8e64;
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 14px;
+
+  line-height: 19px;
+
+  white-space: normal;
+
+  word-break: break-word;
+
 }
 
 
 /* ============================================================
-   PROGRESS BAR
-   ============================================================ */
+   BOTTOM STATUS
+============================================================ */
+
+.task-bottom-status {
+
+  margin-top: auto;
+
+  padding-top: 15px;
+
+  border-top: 2px solid #e2e6eb;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: #7789a1;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 14px;
+
+  line-height: 18px;
+
+}
+
+
+.task-bottom-status mat-icon {
+
+  width: 20px;
+
+  height: 20px;
+
+  font-size: 20px;
+
+  line-height: 20px;
+
+}
+
+
+.task-bottom-status.approved {
+
+  color: #3b9065;
+
+}
+
+
+.status-count {
+
+  color: #7689a1;
+
+}
+
+
+/* ============================================================
+   PROGRESS
+============================================================ */
 
 .progress-wrapper {
+
   width: 100%;
 
-  margin-top: 5px;
+  margin-top: auto;
+
+  padding-top: 8px;
+
 }
 
 
 .progress-track {
+
   width: 100%;
 
-  height: 3px;
-
-  border-radius: 4px;
-
-  background: #e3e7eb;
+  height: 5px;
 
   overflow: hidden;
+
+  border-radius: 5px;
+
+  background: #e2e7ec;
+
 }
 
 
 .progress-bar {
+
   height: 100%;
 
-  border-radius: 4px;
+  border-radius: inherit;
 
-  background: #3f7fac;
+  background: linear-gradient(90deg, #4fa8dd, #7c6be0);
 
   transition:
-    width 250ms ease-in-out;
+    width 250ms ease;
+
 }
 
 
 /* ============================================================
-   FOOTER ACTIONS
-   ============================================================ */
+   FOOTER
+============================================================ */
 
 .workspace-footer {
+
   width: 100%;
 
   display: grid;
@@ -602,120 +1076,21 @@
   grid-template-columns:
     repeat(2, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: 18px;
 
-  padding: 0 19px 9px;
-}
+  padding: 0 24px 25px;
 
-
-/* ------------------------------------------------------------
-   HELPDESK
-   ------------------------------------------------------------ */
-
-.helpdesk-button {
-  width: 100%;
-
-  height: 35px !important;
-
-  min-height: 35px !important;
-
-  padding: 0 13px !important;
-
-  border: 0 !important;
-
-  border-radius: 7px !important;
-
-  background: var(--navy) !important;
-
-  color: #ffffff !important;
-
-  box-shadow: none !important;
-
-  display: flex !important;
-
-  justify-content: flex-start !important;
-  align-items: center !important;
-
-  font-family: inherit !important;
-
-  font-size: 11px !important;
-
-  font-weight: 500 !important;
-
-  letter-spacing: 0 !important;
-}
-
-
-.helpdesk-button:hover {
-  background: var(--navy-hover) !important;
-}
-
-
-.helpdesk-button mat-icon {
-  width: 15px;
-  height: 15px;
-
-  margin: 0 5px 0 0;
-
-  font-size: 15px;
-
-  line-height: 15px;
-}
-
-
-/* ------------------------------------------------------------
-   APPLY LEAVE
-   ------------------------------------------------------------ */
-
-.leave-button {
-  width: 100%;
-
-  height: 35px !important;
-
-  min-height: 35px !important;
-
-  padding: 0 15px !important;
-
-  border: 1px solid #ccd4de !important;
-
-  border-radius: 7px !important;
-
-  background: #ffffff !important;
-
-  color: #7b8797 !important;
-
-  box-shadow: none !important;
-
-  display: flex !important;
-
-  justify-content: flex-start !important;
-  align-items: center !important;
-
-  font-family: inherit !important;
-
-  font-size: 11px !important;
-
-  font-weight: 400 !important;
-
-  letter-spacing: 0 !important;
-}
-
-
-.leave-button:hover {
-  background: #fafbfc !important;
-
-  border-color: #c2cbd6 !important;
 }
 
 
 /* ============================================================
-   ANGULAR MATERIAL RESET
-   ============================================================ */
+   MATERIAL RESET
+============================================================ */
 
 .mat-mdc-card {
-  --mdc-elevated-card-container-color: transparent;
 
   box-shadow: none !important;
+
 }
 
 
@@ -723,149 +1098,97 @@
 .mat-mdc-unelevated-button,
 .mat-mdc-outlined-button,
 .mat-mdc-raised-button {
-  font-family: inherit !important;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif !important;
 
   letter-spacing: 0 !important;
-}
 
-
-.mat-mdc-button-touch-target {
-  height: 100% !important;
-}
-
-
-/* Remove Material ripple visual if desired */
-
-.check-in-button .mat-ripple,
-.helpdesk-button .mat-ripple,
-.leave-button .mat-ripple {
-  border-radius: inherit;
-}
-
-
-/* ============================================================
-   DESKTOP — MATCH SCREENSHOT
-   ============================================================ */
-
-@media (min-width: 1200px) {
-
-  .page-shell {
-    padding: 26px 50px 18px;
-  }
-
-  .workspace-card {
-    width: 100%;
-    max-width: 1400px;
-  }
 }
 
 
 /* ============================================================
    LAPTOP
-   ============================================================ */
+============================================================ */
 
-@media (min-width: 901px) and (max-width: 1199px) {
+@media (max-width: 1500px) {
 
-  .page-shell {
-    padding: 24px 25px;
+  .task-title {
+
+    font-size: 23px;
+
   }
 
-  .workspace-card {
-    width: min(970px, 100%);
+
+  .task-value {
+
+    font-size: 17px;
+
+  }
+
+
+  .date-value {
+
+    font-size: 16px;
+
   }
 
 }
 
 
 /* ============================================================
-   TABLET
-   ============================================================ */
+   TABLET — DROP TO 2 KANBAN COLUMNS
+============================================================ */
 
-@media (max-width: 900px) {
-
-  .page-shell {
-    padding: 20px;
-  }
-
-  .workspace-card {
-    width: 100%;
-  }
+@media (max-width: 1100px) {
 
   .task-board {
+
     grid-template-columns:
-      repeat(3, minmax(0, 1fr));
+      repeat(2, minmax(0, 1fr));
 
-    gap: 10px;
-
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .stats-grid {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .workspace-footer {
-    padding-left: 15px;
-    padding-right: 15px;
-  }
-
-  .task-column {
-    padding: 10px;
   }
 
 }
 
 
 /* ============================================================
-   SMALL TABLET
-   ============================================================ */
+   SMALL TABLET — DROP TO 1 KANBAN COLUMN, STACK CARD SIDES
+============================================================ */
 
-@media (max-width: 700px) {
-
-  .workspace-header {
-    height: auto;
-
-    min-height: 64px;
-
-    padding: 12px 15px;
-
-    gap: 12px;
-  }
-
-  .header-actions {
-    gap: 8px;
-  }
-
-  .check-in-button {
-    min-width: 110px !important;
-  }
+@media (max-width: 800px) {
 
   .stats-grid {
-    grid-template-columns: 1fr;
 
-    gap: 8px;
+    grid-template-columns:
+      1fr;
+
   }
 
-  .stat-card {
-    height: 56px;
-
-    min-height: 56px;
-  }
 
   .task-board {
-    grid-template-columns: 1fr;
 
-    gap: 10px;
+    grid-template-columns:
+      1fr;
+
   }
 
-  .task-column {
-    min-height: auto;
+
+  .task-card {
+
+    grid-template-columns: 1fr;
+
   }
 
-  .workspace-footer {
-    grid-template-columns: 1fr;
+
+  .task-right {
+
+    border-left: 0;
+
+    border-top: 2px solid #e0e5eb;
+
   }
 
 }
@@ -873,67 +1196,144 @@
 
 /* ============================================================
    MOBILE
-   ============================================================ */
+============================================================ */
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
 
   .page-shell {
-    padding: 10px;
+
+    padding: 0 5px 20px;
+
   }
 
-  .workspace-card {
-    border-radius: 10px;
-  }
 
   .workspace-header {
-    padding: 12px;
+
+    height: 76px;
+
+    min-height: 76px;
+
+    padding: 0 16px;
+
   }
+
 
   .avatar {
-    width: 30px;
-    height: 30px;
 
-    flex-basis: 30px;
+    width: 38px;
+
+    height: 38px;
+
+    flex-basis: 38px;
+
   }
 
-  .profile-info {
-    margin-left: 8px;
-  }
 
   .profile-info h1 {
-    font-size: 19px;
+
+    font-size: 20px;
+
   }
+
 
   .profile-info p {
-    font-size: 9px;
+
+    font-size: 10px;
+
   }
 
-  .task-count {
-    display: none;
-  }
-
-  .check-in-button {
-    min-width: 100px !important;
-
-    padding: 0 10px !important;
-
-    font-size: 10px !important;
-  }
 
   .stats-grid {
-    padding: 12px;
+
+    gap: 10px;
+
+    padding: 14px;
+
   }
+
 
   .stat-card {
-    padding: 9px 12px;
+
+    height: 72px;
+
+    min-height: 72px;
+
   }
+
 
   .task-board {
-    padding: 0 12px 12px;
+
+    padding: 0 14px 20px;
+
+    gap: 14px;
+
   }
 
-  .workspace-footer {
-    padding: 0 12px 12px;
+
+  .column-header {
+
+    height: 40px;
+
+  }
+
+
+  .column-header h2 {
+
+    font-size: 21px;
+
+  }
+
+
+  .tasks-grid {
+
+    gap: 14px;
+
+  }
+
+
+  .task-left {
+
+    padding: 22px 18px 15px 24px;
+
+  }
+
+
+  .task-right {
+
+    padding: 18px 18px 18px 24px;
+
+  }
+
+
+  .task-title {
+
+    margin-bottom: 18px;
+
+    font-size: 24px;
+
+  }
+
+
+  .task-info-row {
+
+    margin-bottom: 16px;
+
+  }
+
+
+  .task-value {
+
+    font-size: 17px;
+
+  }
+
+
+  .date-value {
+
+    font-size: 16px;
+
+    white-space: normal;
+
   }
 
 }
@@ -941,54 +1341,56 @@
 
 /* ============================================================
    VERY SMALL MOBILE
-   ============================================================ */
+============================================================ */
 
-@media (max-width: 360px) {
+@media (max-width: 400px) {
 
-  .workspace-header {
-    align-items: flex-start;
+  .priority-badge {
+
+    min-width: 100px;
+
+    height: 40px;
+
+    font-size: 17px;
+
   }
 
-  .header-actions {
-    margin-top: 1px;
+
+  .task-title {
+
+    font-size: 22px;
+
   }
 
-  .check-in-button {
-    min-width: 90px !important;
+
+  .task-info-row mat-icon,
+  .date-row mat-icon {
+
+    width: 26px;
+
+    height: 26px;
+
+    flex-basis: 26px;
+
+    font-size: 26px;
+
+    line-height: 26px;
+
   }
 
-  .check-in-button .dot {
-    margin: 0 2px;
-  }
-
-}
-
-
-/* ============================================================
-   ACCESSIBILITY / FOCUS
-   ============================================================ */
-
-.check-in-button:focus-visible,
-.helpdesk-button:focus-visible,
-.leave-button:focus-visible {
-  outline: 2px solid #4b88bd;
-
-  outline-offset: 2px;
 }
 
 
 /* ============================================================
    REDUCE MOTION
-   ============================================================ */
+============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
 
   .progress-bar {
-    transition: none;
-  }
 
-  .check-in-button:active {
-    transform: none;
+    transition: none;
+
   }
 
 }
