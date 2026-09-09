@@ -219,6 +219,7 @@
                   [(ngModel)]="task.taskCategoryId"
                   name="taskCategoryId"
                   required
+                  [disabled]="!task.clientId"
                   #categoryCtrl="ngModel">
 
                   <option [ngValue]="null">
@@ -411,18 +412,17 @@
 
                 <label class="user-label">
                   Assigned To
-                  <span class="required">*</span>
+                  <!-- <span class="required">*</span> -->
                 </label>
 
                 <select
                   class="user-input user-select"
                   [(ngModel)]="task.assignedTo"
                   name="assignedTo"
-                  required
                   [disabled]="!task.clientId"
                   #assignedCtrl="ngModel">
 
-                  <option [ngValue]="null">
+                  <option [ngValue]="0">
                     Select User
                   </option>
 
@@ -436,7 +436,7 @@
 
                 </select>
 
-                <div
+                <!-- <div
                   class="user-error"
                   *ngIf="
                     assignedCtrl.invalid &&
@@ -445,7 +445,7 @@
 
                   Assigned To is required
 
-                </div>
+                </div> -->
 
               </div>
 
