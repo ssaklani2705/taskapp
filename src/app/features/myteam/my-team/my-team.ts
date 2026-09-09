@@ -28,6 +28,7 @@ import {
   MatIconModule
 } from '@angular/material/icon';
 import Swal from 'sweetalert2';
+import { environment } from '../../../../environments/environment';
 
 
 interface User {
@@ -117,7 +118,12 @@ export class MyTeam implements OnInit {
 
   page: number = 0;
 
-  size: number = 5;
+  // size: number = 5;
+    recordsPerPage: number =
+      environment.recordsPerPage;
+  
+    size: number =
+      environment.size;
 
   totalRecords: number = 0;
 

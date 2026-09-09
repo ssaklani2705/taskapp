@@ -14,6 +14,7 @@ import { MyDateAdapter } from '../../../classes/my-date-adapter';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
+import { environment } from '../../../../environments/environment';
 
 interface Client {
   clientId: number;
@@ -84,7 +85,8 @@ export class ClientIndex {
 
   currentPage = 1;
   page = 0;
-  size = 5;
+  // size = 5;
+  
   totalRecords = 0;
   totalPages = 1;
 
@@ -92,6 +94,11 @@ export class ClientIndex {
   sortDirection: 'asc' | 'desc' = 'asc';
 
   isPanelVisible = true;
+
+    recordsPerPage: number =
+      environment.recordsPerPage;
+    size: number =
+      environment.size;
 
   addPer: string = 'N';
   editPer: string = 'N';
