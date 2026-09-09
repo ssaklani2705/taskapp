@@ -398,6 +398,10 @@ export class AddIndexComponent implements OnInit {
 
             }
 
+            if(this.task.clientId){
+              this.onchangeloadDropdownData();
+            }
+
           }
 
         },
@@ -1147,7 +1151,7 @@ export class AddIndexComponent implements OnInit {
         next: (res: any) => {
           const data = res?.data || res;
           // this.clients = data?.clients || [];
-          // this.taskCategories = data?.taskCategories || [];
+          this.taskCategories = data?.taskCategories || [];
           this.users = data?.assignedUsers || [];
           // console.log('CLIENTS:', this.clients);
           // console.log('TASK CATEGORIES:', this.taskCategories);
@@ -1162,7 +1166,7 @@ export class AddIndexComponent implements OnInit {
           );
 
           // this.clients = [];
-          // this.taskCategories = [];
+          this.taskCategories = [];
           this.users = [];
 
           // Swal.fire(
@@ -1187,7 +1191,7 @@ export class AddIndexComponent implements OnInit {
         next: (res: any) => {
           const data = res?.data || res;
           this.clients = data?.clients || [];
-          this.taskCategories = data?.taskCategories || [];
+          // this.taskCategories = data?.taskCategories || [];
           // this.users = data?.assignedUsers || [];
           // console.log('CLIENTS:', this.clients);
           // console.log('TASK CATEGORIES:', this.taskCategories);
@@ -1202,8 +1206,8 @@ export class AddIndexComponent implements OnInit {
           );
 
           this.clients = [];
-          this.taskCategories = [];
-          this.users = [];
+          // this.taskCategories = [];
+          // this.users = [];
 
           Swal.fire(
             'Error',
