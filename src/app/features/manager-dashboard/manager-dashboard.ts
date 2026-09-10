@@ -12,15 +12,20 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
 interface Task {
   taskId: number;
-  clientName:string;
   title: string;
   assignedTo: string;
   assignedUserName: string;
   taskStatus: number;
   addedByName: string;
   date: string;
-  duedatetime:string;
   priority: number;
+  clientName: string;
+  duedatetime:string;
+}
+
+interface Client {
+  clientId: number;
+  name: string;
 }
 
 @Component({
@@ -44,6 +49,7 @@ export class ManagerDashboard {
   apiResponseTaskDetails: any = {};
   tasks: Task[] = [];
   task: any = {};
+  clients: Client[] = [];
 
   private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
@@ -140,39 +146,64 @@ export class ManagerDashboard {
         sessionStorage.getItem('loginType') || 'other';
     this.username = sessionStorage.getItem('username') || 'Society 123';
 
+    this.userId = sessionStorage.getItem('userId');
+
+    this.loadFilterData();
     this.getTasks();
     this.getTaskCounts();
   }
 
-  getTasks(): void {
-    this.dataProvider.getTasksByStatus(this.pageIndex, this.pageSize).subscribe({
+ 
+   getTasks(): void {
+    const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
+
+    this.dataProvider
+      .getTasksByStatus(this.pageIndex, this.pageSize, clientId, this.userId)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Task API Response:', response);
+
+          const taskList = response?.taskList || [];
+
+          this.totalTasks = response?.totalTasks || 0;
+
+          this.tasks = taskList.map((task: any) => ({
+            taskId: task.taskId,
+            title: task.title || '',
+            assignedTo: task.assignedTo || '',
+            assignedUserName: task.assignedUserName || '',
+            taskStatus: task.taskStatus,
+            addedByName: task.addedByName,
+            date: task.date,
+            priority: task.priority,
+            clientName: task.clientName,
+            duedatetime: task.dueDateTime
+          }));
+        },
+        error: (error) => {
+          console.error('Error fetching tasks:', error);
+          this.tasks = [];
+          this.totalTasks = 0;
+        },
+      });
+  }
+
+  private loadFilterData(): void {
+    this.dataProvider.getTaskClient(this.userId).subscribe({
       next: (response: any) => {
-        console.log('Task API Response:', response);
+        console.log('TASK FILTER DATA:', response);
 
-        const taskList = response?.taskList || [];
-
-        this.totalTasks = response?.totalTasks || 0;
-
-        this.tasks = taskList.map((task: any) => ({
-          taskId: task.taskId,
-          clientName:task.clientName,
-          title: task.title || '',
-          assignedTo: task.assignedTo || '',
-          assignedUserName: task.assignedUserName || '',
-          taskStatus: task.taskStatus,
-          addedByName: task.addedByName,
-          date: task.date,
-          duedatetime:task.dueDateTime,
-          priority: task.priority,
-        }));
+        this.clients = response.clients || [];
       },
+
       error: (error) => {
-        console.error('Error fetching tasks:', error);
-        this.tasks = [];
-        this.totalTasks = 0;
+        console.error('Error loading task filter data:', error);
+
+        this.clients = [];
       },
     });
   }
+
 
   onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
@@ -590,4 +621,28 @@ export class ManagerDashboard {
 
     return `${parts[2]}-${parts[1]}-${parts[0]}`;
   }
+
+   clearFilters(): void {
+    this.search = '';
+
+    this.selectedClient = '';
+    this.selectedTaskCategory = '';
+    this.selectedAssignedTo = '';
+    this.selectedPriority = '';
+
+    this.selectedTaskStatus = '';
+
+    this.fromDate = null;
+    this.toDate = null;
+
+    this.statusIndex = 0;
+    this.page = 0;
+
+    this.getTasks();
+  }
+
+   onSearch(): void {
+    this.getTasks();
+  }
+
 }

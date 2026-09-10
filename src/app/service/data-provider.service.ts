@@ -1508,6 +1508,8 @@ export class DataProviderService {
 
   }
 
+
+
   getTaskDetails(
     page: number,
     size: number,
@@ -1766,8 +1768,15 @@ export class DataProviderService {
 
 
   //New
-  getTasksByStatus(page: number, size: number): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/getTasksByStatus?page=${page}&size=${size}`);
+  getTasksByStatus(page: number, size: number, clientId: number, userId: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/getTasksByStatus`, {
+      params: {
+        page,
+        size,
+        clientId,
+        userId,
+      },
+    });
   }
 
   countOfActiveTask(): Observable<any> {
@@ -1797,4 +1806,14 @@ export class DataProviderService {
     countOfAssigneeReClosureTask(): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeReClosureTask`);
   }
+
+  getTaskClient(userId: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/getTaskClient`, {
+      params: {
+        userId,
+      },
+    });
+  }
+
+
 }

@@ -45,7 +45,24 @@
 
           <p>Current workload and status</p>
         </div>
+
+        <div class="task-filters">
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
+              <option value="">--All Clients--</option>
+
+              <option *ngFor="let client of clients" [value]="client.clientId">
+                {{ client.name }}
+              </option>
+            </select>
+          </div>
+
+          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
+            Clear
+          </button>
+        </div>
       </div>
+
 
       <mat-divider></mat-divider>
 
