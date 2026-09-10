@@ -757,8 +757,7 @@ export class TaskIndex {
             response.clients || [];
           this.taskCategories =
             response.taskCategories || [];
-          this.assignedUsers =
-            response.assignedUsers || [];
+        
 
 
           this.assignedUsers =
