@@ -207,7 +207,14 @@ export class AddIndexComponent implements OnInit {
   page: number = 0;
 
   size: number = 5;
-
+  taskStatusIds: string = '';
+  clientId: string = '';
+  taskCategoryId: string = '';
+  assignedTo: string = '';
+  priority: string = '';
+  fromDate: string = '';
+  toDate: string = '';
+  // ----------------------------
 
   // ============================================================
   // CONSTRUCTOR
@@ -238,35 +245,42 @@ export class AddIndexComponent implements OnInit {
     const queryParams =
       this.route.snapshot.queryParamMap;
 
-
     this.currentPage =
-      Number(
-        queryParams.get('currentPage')
-      ) || 1;
-
+      Number(queryParams.get('currentPage')) || 1;
 
     this.searchText =
       queryParams.get('searchText') || '';
 
-
     this.statusIndex =
-      Number(
-        queryParams.get('statusIndex')
-      ) || 0;
-
+      Number(queryParams.get('statusIndex')) || 0;
 
     this.page =
-      Number(
-        queryParams.get('page')
-      ) || this.currentPage - 1;
-
+      Number(queryParams.get('page')) || this.currentPage - 1;
 
     this.size =
-      Number(
-        queryParams.get('size')
-      ) || 5;
+      Number(queryParams.get('size')) || 5;
 
+    this.taskStatusIds =
+      queryParams.get('taskStatusIds') || '';
 
+    // -------- ADD THESE --------
+    this.clientId =
+      queryParams.get('clientId') || '';
+
+    this.taskCategoryId =
+      queryParams.get('taskCategoryId') || '';
+
+    this.assignedTo =
+      queryParams.get('assignedTo') || '';
+
+    this.priority =
+      queryParams.get('priority') || '';
+
+    this.fromDate =
+      queryParams.get('fromDate') || '';
+
+    this.toDate =
+      queryParams.get('toDate') || '';
     // ----------------------------------------------------------
     // USER ID
     // ----------------------------------------------------------
@@ -398,7 +412,7 @@ export class AddIndexComponent implements OnInit {
 
             }
 
-            if(this.task.clientId){
+            if (this.task.clientId) {
               this.onchangeloadDropdownData();
             }
 
@@ -785,7 +799,7 @@ export class AddIndexComponent implements OnInit {
     // ----------------------------------------------------------
     // DATE
     // ----------------------------------------------------------
-// alert(this.task.date);
+    // alert(this.task.date);
     // let dateValue = '';
 
     // if (this.task.date) {
@@ -827,8 +841,8 @@ export class AddIndexComponent implements OnInit {
     formData.append(
       'date',
       // dateValue
-      
-        this.formatDateTimeForApi(this.task.date) ?? ''
+
+      this.formatDateTimeForApi(this.task.date) ?? ''
     );
 
     formData.append(
@@ -982,51 +996,51 @@ export class AddIndexComponent implements OnInit {
       });
   }
 
-    private formatDateTimeForApi(date: any): string | null {
-  
+  private formatDateTimeForApi(date: any): string | null {
+
     if (!date) {
       return null;
     }
-  
+
     let dateObj: Date;
-  
+
     // Moment object
     if (moment.isMoment(date)) {
       dateObj = date.toDate();
     }
-  
+
     // JavaScript Date
     else if (date instanceof Date) {
       dateObj = date;
     }
-  
+
     else {
       console.error('Unsupported dueDateTime value:', date);
       return null;
     }
-  
+
     if (isNaN(dateObj.getTime())) {
       return null;
     }
-  
+
     const year = dateObj.getFullYear();
-  
+
     const month = String(
       dateObj.getMonth() + 1
     ).padStart(2, '0');
-  
+
     const day = String(
       dateObj.getDate()
     ).padStart(2, '0');
-  
+
     const hours = String(
       dateObj.getHours()
     ).padStart(2, '0');
-  
+
     const minutes = String(
       dateObj.getMinutes()
     ).padStart(2, '0');
-  
+
     return `${year}-${month}-${day} ${hours}:${minutes}:00`;
   }
 
@@ -1135,25 +1149,45 @@ export class AddIndexComponent implements OnInit {
             this.searchText,
 
           size:
-            this.size || 5
+            this.size || 5,
+
+          taskStatusIds:
+            this.taskStatusIds || null,
+
+          clientId:
+            this.clientId || null,
+
+          taskCategoryId:
+            this.taskCategoryId || null,
+
+          assignedTo:
+            this.assignedTo || null,
+
+          priority:
+            this.priority || null,
+
+          fromDate:
+            this.fromDate || null,
+
+          toDate:
+            this.toDate || null,
 
         }
-
       }
     );
 
   }
 
-   onchangeloadDropdownData(): void {
+  onchangeloadDropdownData(): void {
     // alert(this.task.clientId);
     this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin,
-      this.userId, this.loginType,this.task.clientId).subscribe({
+      this.userId, this.loginType, this.task.clientId).subscribe({
         next: (res: any) => {
           const data = res?.data || res;
           // this.clients = data?.clients || [];
           this.taskCategories = data?.taskCategories || [];
           // this.users = data?.assignedUsers || [];
-    
+
         },
 
         error: (error: any) => {
@@ -1181,26 +1215,16 @@ export class AddIndexComponent implements OnInit {
       });
   }
 
-   onchangeloadUserDropdownData(): void {
-
-     // Category cleared
-  if (!this.task.taskCategoryId) {
-
-    this.task.assignedTo = null;
-    this.users = [];
-
-    return;
-  }
-
+  onchangeloadUserDropdownData(): void {
     // alert(this.task.clientId);
     this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin,
-      this.userId, this.loginType,this.task.clientId,this.task.taskCategoryId).subscribe({
+      this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId).subscribe({
         next: (res: any) => {
           const data = res?.data || res;
           // this.clients = data?.clients || [];
           // this.taskCategories = data?.taskCategories || [];
           this.users = data?.assignedUsers || [];
-    
+
         },
 
         error: (error: any) => {
@@ -1269,30 +1293,10 @@ export class AddIndexComponent implements OnInit {
       });
   }
 
-//   onClientChange(clientId: number | null): void {
-//   if (!clientId) {
-//     this.task.assignedTo = null;
-//   }
-// }
-
-onClientChange(clientId: number | null): void {
-
-  if (!clientId) {
-
-    this.task.taskCategoryId = null;
-    this.task.assignedTo = null;
-
-    this.taskCategories = [];
-    this.users = [];
-
-    return;
+  onClientChange(clientId: number | null): void {
+    if (!clientId) {
+      this.task.assignedTo = null;
+    }
   }
-
-  // Client changed, so old category/user should not remain selected
-  this.task.taskCategoryId = null;
-  this.task.assignedTo = null;
-  this.users = [];
-}
-
 
 }

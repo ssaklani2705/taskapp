@@ -102,6 +102,15 @@ export class ViewIndex implements OnInit {
 
   size = 5;
 
+  taskStatusIds: string = '';
+
+  clientId: string = '';
+  taskCategoryId: string = '';
+  assignedTo: string = '';
+  priority: string = '';
+  fromDate: string = '';
+  toDate: string = '';
+
 
   // =========================================================
   // CONSTRUCTOR
@@ -111,7 +120,7 @@ export class ViewIndex implements OnInit {
     private route: ActivatedRoute,
     private dataprovider: DataProviderService,
     private router: Router
-  ) {}
+  ) { }
 
 
   // =========================================================
@@ -143,34 +152,42 @@ export class ViewIndex implements OnInit {
     const queryParams =
       this.route.snapshot.queryParamMap;
 
-
     this.currentPage =
-      Number(
-        queryParams.get('currentPage')
-      ) || 1;
-
+      Number(queryParams.get('currentPage')) || 1;
 
     this.searchText =
       queryParams.get('searchText') || '';
 
-
     this.statusIndex =
-      Number(
-        queryParams.get('statusIndex')
-      ) || 0;
-
+      Number(queryParams.get('statusIndex')) || 0;
 
     this.page =
-      Number(
-        queryParams.get('page')
-      ) || this.currentPage - 1;
-
+      Number(queryParams.get('page')) || this.currentPage - 1;
 
     this.size =
-      Number(
-        queryParams.get('size')
-      ) || 5;
+      Number(queryParams.get('size')) || 5;
 
+    this.taskStatusIds =
+      queryParams.get('taskStatusIds') || '';
+
+    // -------- ADD THESE --------
+    this.clientId =
+      queryParams.get('clientId') || '';
+
+    this.taskCategoryId =
+      queryParams.get('taskCategoryId') || '';
+
+    this.assignedTo =
+      queryParams.get('assignedTo') || '';
+
+    this.priority =
+      queryParams.get('priority') || '';
+
+    this.fromDate =
+      queryParams.get('fromDate') || '';
+
+    this.toDate =
+      queryParams.get('toDate') || '';
 
     // -------------------------------------------------------
     // LOAD TASK
@@ -715,7 +732,7 @@ export class ViewIndex implements OnInit {
 
 
     switch (
-      Number(priority)
+    Number(priority)
     ) {
 
       case 1:
@@ -757,7 +774,7 @@ export class ViewIndex implements OnInit {
 
 
     switch (
-      Number(priority)
+    Number(priority)
     ) {
 
       case 1:
@@ -799,7 +816,7 @@ export class ViewIndex implements OnInit {
 
 
     switch (
-      Number(status)
+    Number(status)
     ) {
 
       case 0:
@@ -847,7 +864,7 @@ export class ViewIndex implements OnInit {
 
 
     switch (
-      Number(status)
+    Number(status)
     ) {
 
       case 0:
@@ -936,66 +953,66 @@ export class ViewIndex implements OnInit {
   // DOWNLOAD FILE
   // =========================================================
 
-//   downloadFile(
-//     fileName: string | null | undefined
-//   ): void {
+  //   downloadFile(
+  //     fileName: string | null | undefined
+  //   ): void {
 
-//     if (!fileName) {
+  //     if (!fileName) {
 
-//       return;
+  //       return;
 
-//     }
-
-
-//     console.log(
-//       'Download file:',
-//       fileName
-//     );
+  //     }
 
 
-//     // -------------------------------------------------------
-//     // IMPORTANT:
-//     // Change this URL according to your backend.
-//     // -------------------------------------------------------
-
-//     // const fileUrl =
-//     //   `/api/task/download/${encodeURIComponent(fileName)}`;
-
-//      const fileUrl =
-//     `${environment.baseurluploaded}task/pdf/${encodeURIComponent(fileName)}`;
-// alert(fileUrl);
+  //     console.log(
+  //       'Download file:',
+  //       fileName
+  //     );
 
 
-//     window.open(
-//       fileUrl,
-//       '_blank'
-//     );
+  //     // -------------------------------------------------------
+  //     // IMPORTANT:
+  //     // Change this URL according to your backend.
+  //     // -------------------------------------------------------
 
-//   }
-downloadFile(
-  fileName: string | null | undefined,
-  fileType: 'pdf' | 'zip'
-): void {
+  //     // const fileUrl =
+  //     //   `/api/task/download/${encodeURIComponent(fileName)}`;
 
-  if (!fileName) {
-    return;
+  //      const fileUrl =
+  //     `${environment.baseurluploaded}task/pdf/${encodeURIComponent(fileName)}`;
+  // alert(fileUrl);
+
+
+  //     window.open(
+  //       fileUrl,
+  //       '_blank'
+  //     );
+
+  //   }
+  downloadFile(
+    fileName: string | null | undefined,
+    fileType: 'pdf' | 'zip'
+  ): void {
+
+    if (!fileName) {
+      return;
+    }
+
+    let folder = '';
+
+    if (fileType === 'pdf') {
+      folder = 'tasks/pdf/';
+    } else if (fileType === 'zip') {
+      folder = 'tasks/zip/';
+    }
+
+    const fileUrl =
+      `${environment.baseurluploaded}${folder}${encodeURIComponent(fileName)}`;
+
+    console.log('Download/View URL:', fileUrl);
+
+    window.open(fileUrl, '_blank');
   }
-
-  let folder = '';
-
-  if (fileType === 'pdf') {
-    folder = 'tasks/pdf/';
-  } else if (fileType === 'zip') {
-    folder = 'tasks/zip/';
-  }
-
-  const fileUrl =
-    `${environment.baseurluploaded}${folder}${encodeURIComponent(fileName)}`;
-
-  console.log('Download/View URL:', fileUrl);
-
-  window.open(fileUrl, '_blank');
-}
 
   // =========================================================
   // CHECK FILE EXISTS
@@ -1033,16 +1050,33 @@ downloadFile(
           searchText:
             this.searchText,
 
-          page:
-            this.page,
-
           size:
-            this.size || 5
+            this.size || 5,
+
+          taskStatusIds:
+            this.taskStatusIds || null,
+
+          clientId:
+            this.clientId || null,
+
+          taskCategoryId:
+            this.taskCategoryId || null,
+
+          assignedTo:
+            this.assignedTo || null,
+
+          priority:
+            this.priority || null,
+
+          fromDate:
+            this.fromDate || null,
+
+          toDate:
+            this.toDate || null,
 
         }
       }
     );
-
   }
 
 
@@ -1066,8 +1100,10 @@ downloadFile(
 
           currentPage:
             this.currentPage,
+
           statusIndex:
             this.statusIndex,
+
           searchText:
             this.searchText,
 
@@ -1100,15 +1136,15 @@ downloadFile(
   }
 
   get hasAttachments(): boolean {
-  return !!(
-    this.task?.fileName1 ||
-    this.task?.fileName2 ||
-    this.task?.fileName3 ||
-    this.task?.fileName4
-  );
-}
+    return !!(
+      this.task?.fileName1 ||
+      this.task?.fileName2 ||
+      this.task?.fileName3 ||
+      this.task?.fileName4
+    );
+  }
 
-getTaskStatusClass(status: number | string): string {
+  getTaskStatusClass(status: number | string): string {
     switch (+status) {
       case 1:
         return 'status-badge active';

@@ -20,7 +20,7 @@ interface Task {
   date: string;
   priority: number;
   clientName: string;
-  duedatetime:string;
+  duedatetime: string;
 }
 
 interface Client {
@@ -66,7 +66,7 @@ export class ManagerDashboard {
   fileTwoName: string = '';
 
   selectedClient: string = '';
-  selectedTaskStatus: string = '';
+  selectedTaskStatus: string[] = [];
   selectedTaskCategory: string = '';
   selectedAssignedTo: string = '';
   selectedPriority: string = '';
@@ -75,7 +75,7 @@ export class ManagerDashboard {
   toDate: Date | null = null;
 
   search: string = '';
-  loginType: any= '';
+  loginType: any = '';
   userId: any;
   isAdmin: any;
 
@@ -138,12 +138,12 @@ export class ManagerDashboard {
     },
   ];
 
-  constructor(private dataProvider: DataProviderService) {}
+  constructor(private dataProvider: DataProviderService) { }
 
   ngOnInit(): void {
 
     this.loginType =
-        sessionStorage.getItem('loginType') || 'other';
+      sessionStorage.getItem('loginType') || 'other';
     this.username = sessionStorage.getItem('username') || 'Society 123';
 
     this.userId = sessionStorage.getItem('userId');
@@ -153,8 +153,8 @@ export class ManagerDashboard {
     this.getTaskCounts();
   }
 
- 
-   getTasks(): void {
+
+  getTasks(): void {
     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
 
     this.dataProvider
@@ -479,7 +479,7 @@ export class ManagerDashboard {
     const priority = this.selectedPriority ? Number(this.selectedPriority) : 0;
     const fromDate = this.formatDateForApi(this.fromDate);
     const toDate = this.formatDateForApi(this.toDate);
-    const taskStatusId = this.selectedTaskStatus ? Number(this.selectedTaskStatus) : 0;
+    const taskStatusIds: string[] = this.selectedTaskStatus;
 
     this.dataProvider
       .getTaskDetails(
@@ -495,7 +495,7 @@ export class ManagerDashboard {
         toDate,
         this.isAdmin,
         this.userId,
-        taskStatusId,
+        taskStatusIds,
         this.loginType
 
       )
@@ -622,7 +622,7 @@ export class ManagerDashboard {
     return `${parts[2]}-${parts[1]}-${parts[0]}`;
   }
 
-   clearFilters(): void {
+  clearFilters(): void {
     this.search = '';
 
     this.selectedClient = '';
@@ -630,7 +630,7 @@ export class ManagerDashboard {
     this.selectedAssignedTo = '';
     this.selectedPriority = '';
 
-    this.selectedTaskStatus = '';
+    this.selectedTaskStatus = [];
 
     this.fromDate = null;
     this.toDate = null;
@@ -641,7 +641,7 @@ export class ManagerDashboard {
     this.getTasks();
   }
 
-   onSearch(): void {
+  onSearch(): void {
     this.getTasks();
   }
 

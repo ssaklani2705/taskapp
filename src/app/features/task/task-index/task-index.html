@@ -70,14 +70,9 @@
                 --All Clients--
               </option>
 
-              <!-- <option *ngFor="let client of clients" [value]="client.clientId">
+              <option *ngFor="let client of clients" [value]="client.clientId">
                 {{ client.name }}
-              </option> -->
-              <option
-  *ngFor="let client of filteredClients"
-  [value]="client.clientId">
-  {{ client.name }}
-</option>
+              </option>
 
             </select>
 
@@ -170,29 +165,18 @@
             </select>
 
           </div>
+          <div class="status-dropdown">
+            <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">
+              --All Task Status--
+            </button>
 
-          <div class="status-wrapper">
-
-            <select class="status-select" [(ngModel)]="selectedTaskStatus" (change)="onSearch()">
-              <option value="">
-                --All Task Status--
-              </option>
-              <option value="1">
-                Assigned
-              </option>
-              <option value="2">
-                Assignee Closure
-              </option>
-              <option value="3">
-                Re-Open
-              </option>
-              <option value="4">
-                Assignee Re-Closure
-              </option>
-              <option value="5">
-                Assignor Closure
-              </option>
-            </select>
+            <div class="dropdown-menu" *ngIf="showStatusDropdown" (click)="$event.stopPropagation()">
+              <label *ngFor="let status of taskStatusOptions">
+                <input type="checkbox" [value]="status.id" [checked]="isTaskStatusChecked(status.id)"
+                  (click)="$event.preventDefault(); toggleTaskStatus(status.id)">
+                {{ status.label }}
+              </label>
+            </div>
           </div>
 
           <!-- FROM DATE -->
