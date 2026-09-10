@@ -1066,10 +1066,8 @@ downloadFile(
 
           currentPage:
             this.currentPage,
-
           statusIndex:
             this.statusIndex,
-
           searchText:
             this.searchText,
 
