@@ -1182,6 +1182,16 @@ export class AddIndexComponent implements OnInit {
   }
 
    onchangeloadUserDropdownData(): void {
+
+     // Category cleared
+  if (!this.task.taskCategoryId) {
+
+    this.task.assignedTo = null;
+    this.users = [];
+
+    return;
+  }
+
     // alert(this.task.clientId);
     this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin,
       this.userId, this.loginType,this.task.clientId,this.task.taskCategoryId).subscribe({
@@ -1259,10 +1269,30 @@ export class AddIndexComponent implements OnInit {
       });
   }
 
-  onClientChange(clientId: number | null): void {
+//   onClientChange(clientId: number | null): void {
+//   if (!clientId) {
+//     this.task.assignedTo = null;
+//   }
+// }
+
+onClientChange(clientId: number | null): void {
+
   if (!clientId) {
+
+    this.task.taskCategoryId = null;
     this.task.assignedTo = null;
+
+    this.taskCategories = [];
+    this.users = [];
+
+    return;
   }
+
+  // Client changed, so old category/user should not remain selected
+  this.task.taskCategoryId = null;
+  this.task.assignedTo = null;
+  this.users = [];
 }
+
 
 }

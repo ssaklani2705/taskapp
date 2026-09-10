@@ -12,6 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { DataProviderService } from '../../service/data-provider.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 
 interface ApiTask {
@@ -124,7 +126,9 @@ interface TaskColumn {
     MatButtonModule,
     MatCardModule,
     MatIconModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
 
   templateUrl: './employee-dashboard.html',
@@ -166,9 +170,25 @@ export class EmployeeDashboard implements OnInit {
   // INIT
   // ======================================================
   username: string = '';
+  loginType: string = '';
+    isAdmin: any;
+    userId: any;
   ngOnInit(): void {
     this.username = sessionStorage.getItem('username') || 'Society 123';
+    this.isAdmin =
+        sessionStorage.getItem(
+          'isAdmin'
+        );
 
+         this.userId =
+        sessionStorage.getItem(
+          'userId'
+        );
+
+        this.loginType =
+        sessionStorage.getItem('loginType') || 'other';
+
+    this.getDashboardClients();
     this.loadDashboard();
 
   }
@@ -184,7 +204,7 @@ export class EmployeeDashboard implements OnInit {
       Number(sessionStorage.getItem('userId')) || 1;
 
     this.dataProviderService
-      .getDashboard(userId)
+      .getDashboard(userId,this.isAdmin,this.selectedClientId)
       .subscribe({
 
         next: (res: DashboardResponse) => {
@@ -613,5 +633,44 @@ export class EmployeeDashboard implements OnInit {
 
     return `${initials}. ${lastName}`;
   }
+
+  //Dropdown
+  clients: any[] = [];
+selectedClientId: number | null = null;
+getDashboardClients(): void {
+
+  this.dataProviderService
+    .getDashboardClients(
+      this.userId,
+      this.isAdmin,
+      this.loginType,
+       this.selectedClientId
+    )
+    .subscribe({
+      next: (res: any[]) => {
+        this.clients = res;
+      },
+      error: (error) => {
+        console.error('Error loading dashboard clients:', error);
+        this.clients = [];
+      }
+    });
+}
+
+
+onClientChange(clientId: number | null): void {
+
+  this.selectedClientId = clientId;
+
+  console.log(
+    'Selected Client ID:',
+    clientId
+  );
+
+  // Reload dashboard with selected client
+  this.loadDashboard();
+}
+
+
 
 }

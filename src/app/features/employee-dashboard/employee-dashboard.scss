@@ -3,9 +3,7 @@
 ============================================================ */
 
 :host {
-
   display: block;
-
   width: 100%;
   height: 100%;
 
@@ -15,41 +13,31 @@
     serif;
 
   --border: #dce2e9;
-
   --header-bg: #f1f2f4;
 
   --stat-bg: #f0f1f3;
 
   --text-dark: #193454;
-
   --text-heading: #1d3657;
-
   --text-muted: #71839d;
-
   --icon-color: #7387a2;
 
   --red: #c62f48;
-
   --red-bg: #fde6eb;
 
   --blue: #397fb5;
-
   --blue-bg: #e5f2fb;
 
   --yellow: #d89c1b;
-
   --green: #3c9569;
 
   box-sizing: border-box;
 }
 
-
 :host *,
 :host *::before,
 :host *::after {
-
   box-sizing: border-box;
-
 }
 
 
@@ -58,15 +46,12 @@
 ============================================================ */
 
 .page-shell {
-
   width: 100%;
-
   min-height: 100%;
 
   padding: 0 5px 30px;
 
   background: #ffffff;
-
 }
 
 
@@ -75,19 +60,16 @@
 ============================================================ */
 
 .workspace-card {
-
   width: 100%;
 
   background: #ffffff;
 
   border: 1px solid var(--border);
-
   border-radius: 14px;
 
   overflow: hidden;
 
   box-shadow: none;
-
 }
 
 
@@ -96,24 +78,25 @@
 ============================================================ */
 
 .workspace-header {
-
   width: 100%;
-
-  height: 82px;
-
   min-height: 82px;
+  height: 82px;
 
   padding: 0 25px;
 
   display: flex;
-
   align-items: center;
 
-  justify-content: space-between;
+  background: linear-gradient(
+    120deg,
+    #eaf3fb 0%,
+    #f1eefc 55%,
+    #fdeef3 100%
+  );
 
-  background: linear-gradient(120deg, #eaf3fb 0%, #f1eefc 55%, #fdeef3 100%);
-
+  box-sizing: border-box;
 }
+
 
 
 /* ============================================================
@@ -121,20 +104,16 @@
 ============================================================ */
 
 .profile-section {
-
   display: flex;
-
   align-items: center;
 
   min-width: 0;
-
+  flex: 1;
 }
 
 
 .avatar {
-
   width: 40px;
-
   height: 40px;
 
   flex: 0 0 40px;
@@ -142,67 +121,257 @@
   border-radius: 50%;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
-  background: linear-gradient(135deg, #37b6a8 0%, #2f8fc0 100%);
+  background: linear-gradient(
+    135deg,
+    #37b6a8 0%,
+    #2f8fc0 100%
+  );
 
   color: #ffffff;
 
   font-size: 13px;
-
   font-weight: 700;
 
-  box-shadow: 0 3px 8px rgba(47, 143, 192, 0.35);
-
+  box-shadow:
+    0 3px 8px rgba(47, 143, 192, 0.35);
 }
 
 
 .profile-info {
-
   margin-left: 13px;
 
   min-width: 0;
-
 }
 
 
 .profile-info h1 {
-
   margin: 0;
 
   color: var(--text-heading);
 
   font-size: 22px;
-
   line-height: 25px;
 
   font-weight: 700;
-
 }
 
 
 .profile-info p {
-
   margin: 2px 0 0;
 
   color: #73849c;
 
   font-size: 12px;
-
   line-height: 15px;
-
 }
 
 
 .separator {
-
   margin: 0 5px;
 
   color: #9ca8b8;
+}
 
+/* ============================================================
+   CLIENT FILTER
+============================================================ */
+
+.client-filter {
+  display: flex;
+  align-items: center;
+
+  margin-left: auto;
+
+  flex: 0 0 auto;
+}
+
+
+/* ============================================================
+   CLIENT SELECT
+============================================================ */
+
+.client-select {
+  width: 225px;
+  margin: 0;
+}
+
+
+/* Remove bottom space */
+
+.client-select
+.mat-mdc-form-field-subscript-wrapper {
+  display: none !important;
+}
+
+
+/* Field */
+
+.client-select
+.mat-mdc-text-field-wrapper {
+  background: rgba(255, 255, 255, 0.95) !important;
+
+  border-radius: 8px !important;
+
+  padding: 0 !important;
+}
+
+
+/* Height */
+
+.client-select
+.mat-mdc-form-field-flex {
+  height: 48px !important;
+
+  align-items: center !important;
+}
+
+
+.client-select
+.mat-mdc-form-field-infix {
+  min-height: 48px !important;
+
+  padding-top: 9px !important;
+  padding-bottom: 8px !important;
+}
+
+
+/* Selected value */
+
+.client-select
+.mat-mdc-select-value {
+  color: #294568 !important;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 15px !important;
+
+  font-weight: 600;
+}
+
+
+/* Label */
+
+.client-select
+.mdc-floating-label {
+  color: #667c96 !important;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  font-size: 13px !important;
+}
+
+
+/* Arrow */
+
+.client-select
+.mat-mdc-select-arrow {
+  color: #496783 !important;
+}
+
+
+/* Border */
+
+.client-select
+.mdc-notched-outline__leading,
+
+.client-select
+.mdc-notched-outline__notch,
+
+.client-select
+.mdc-notched-outline__trailing {
+  border-color: #c5d2e0 !important;
+
+  border-width: 1px !important;
+}
+
+
+/* Focus */
+
+.client-select.mat-focused
+.mdc-notched-outline__leading,
+
+.client-select.mat-focused
+.mdc-notched-outline__notch,
+
+.client-select.mat-focused
+.mdc-notched-outline__trailing {
+  border-color: #5b91bd !important;
+
+  border-width: 1.5px !important;
+}
+
+
+/* ============================================================
+   CLIENT DROPDOWN PANEL
+============================================================ */
+
+.client-select-panel {
+  min-width: 225px !important;
+
+  max-height: 180px !important;
+
+  margin-top: -185px !important;
+
+  border-radius: 9px !important;
+
+  overflow: hidden !important;
+
+  background: #ffffff !important;
+
+  border: 1px solid #d6e0ea !important;
+
+  box-shadow:
+    0 5px 18px rgba(36, 67, 102, 0.16) !important;
+}
+
+
+/* ============================================================
+   OPTIONS
+============================================================ */
+
+.client-select-panel
+.mat-mdc-option {
+  min-height: 42px !important;
+
+  padding: 0 16px !important;
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif !important;
+
+  font-size: 14px !important;
+
+  color: #354f6b !important;
+}
+
+
+/* Hover */
+
+.client-select-panel
+.mat-mdc-option:hover {
+  background: #eef5fb !important;
+}
+
+
+/* Selected */
+
+.client-select-panel
+.mat-mdc-option.mdc-list-item--selected {
+  background: #e7f2fa !important;
+
+  color: #245b86 !important;
+
+  font-weight: 600 !important;
 }
 
 
@@ -211,7 +380,6 @@
 ============================================================ */
 
 .stats-grid {
-
   width: 100%;
 
   display: grid;
@@ -222,7 +390,6 @@
   gap: 17px;
 
   padding: 20px 24px 20px;
-
 }
 
 
@@ -231,11 +398,9 @@
 ============================================================ */
 
 .stat-card {
-
   position: relative;
 
   height: 83px;
-
   min-height: 83px;
 
   padding: 13px 18px 13px 24px;
@@ -249,82 +414,73 @@
   box-shadow: none !important;
 
   overflow: hidden;
-
 }
 
 
 .stat-card::before {
-
   content: "";
 
   position: absolute;
 
   left: 0;
-
   top: 0;
-
   bottom: 0;
 
   width: 6px;
 
   background: #9aa8bd;
-
 }
 
+
+/* ============================================================
+   STAT CARD COLORS
+============================================================ */
 
 .stats-grid > mat-card:nth-child(1) {
-
   background: #e7f2fd !important;
-
 }
+
 
 .stats-grid > mat-card:nth-child(1)::before {
-
   background: #3d8fd6;
-
 }
 
+
 .stats-grid > mat-card:nth-child(1) .stat-value {
-
   color: #1f5c96;
-
 }
 
 
 .stats-grid > mat-card:nth-child(2) {
-
   background: #eeeafc !important;
-
 }
+
 
 .stats-grid > mat-card:nth-child(2)::before {
-
   background: #8465d6;
-
 }
 
+
 .stats-grid > mat-card:nth-child(2) .stat-value {
-
   color: #5b3fa8;
-
 }
 
 
 .stats-grid > mat-card:nth-child(3) {
-
   background: #fde9ee !important;
-
 }
+
 
 .stats-grid > mat-card:nth-child(3)::before {
-
   background: var(--red);
-
 }
 
 
-.stat-label {
+/* ============================================================
+   STAT TEXT
+============================================================ */
 
+.stat-label {
   color: #6f829d;
 
   font-family:
@@ -333,16 +489,13 @@
     serif;
 
   font-size: 17px;
-
   line-height: 22px;
 
   font-weight: 400;
-
 }
 
 
 .stat-value {
-
   margin-top: 1px;
 
   color: #1d3657;
@@ -353,27 +506,22 @@
     serif;
 
   font-size: 25px;
-
   line-height: 30px;
 
   font-weight: 700;
-
 }
 
 
 .stat-danger .stat-value {
-
   color: var(--red);
-
 }
 
 
 /* ============================================================
-   TASK BOARD (KANBAN — 3 COLUMNS IN ONE ROW)
+   TASK BOARD
 ============================================================ */
 
 .task-board {
-
   width: 100%;
 
   display: grid;
@@ -386,22 +534,19 @@
   padding: 0 24px 25px;
 
   align-items: start;
-
 }
 
 
 /* ============================================================
-   TASK SECTION (ONE KANBAN COLUMN)
+   TASK SECTION
 ============================================================ */
 
 .task-section {
-
   width: 100%;
 
   min-width: 0;
 
   margin-bottom: 0;
-
 }
 
 
@@ -410,22 +555,18 @@
 ============================================================ */
 
 .column-header {
-
   width: 100%;
 
   height: 43px;
 
   display: flex;
-
   align-items: center;
 
   border-bottom: 3px solid #dce7f5;
-
 }
 
 
 .column-header h2 {
-
   margin: 0;
 
   color: #3a5578;
@@ -436,16 +577,13 @@
     serif;
 
   font-size: 24px;
-
   line-height: 28px;
 
   font-weight: 700;
-
 }
 
 
 .column-count {
-
   margin-left: 5px;
 
   color: #71839d;
@@ -453,16 +591,14 @@
   font-size: 17px;
 
   font-weight: 400;
-
 }
 
 
 /* ============================================================
-   CARDS STACKED VERTICALLY WITHIN EACH COLUMN
+   TASK GRID
 ============================================================ */
 
 .tasks-grid {
-
   width: 100%;
 
   display: grid;
@@ -472,16 +608,14 @@
   gap: 18px;
 
   align-items: stretch;
-
 }
 
 
 /* ============================================================
-   EMPTY COLUMN STATE
+   EMPTY COLUMN
 ============================================================ */
 
 .column-empty {
-
   width: 100%;
 
   padding: 22px 18px;
@@ -502,20 +636,17 @@
   text-align: center;
 
   background: #fbfcfd;
-
 }
 
 
 /* ============================================================
-   TASK CARD (STACKED LEFT/RIGHT — SINGLE COLUMN LAYOUT)
+   TASK CARD
 ============================================================ */
 
 .task-card {
-
   position: relative;
 
   width: 100%;
-
   min-width: 0;
 
   min-height: auto;
@@ -536,7 +667,6 @@
 
   box-shadow:
     0 4px 12px rgba(32, 53, 78, 0.08);
-
 }
 
 
@@ -545,15 +675,12 @@
 ============================================================ */
 
 .task-card::before {
-
   content: "";
 
   position: absolute;
 
   left: 0;
-
   top: 0;
-
   bottom: 0;
 
   width: 9px;
@@ -561,59 +688,45 @@
   z-index: 3;
 
   background: #aebccc;
-
 }
 
 
 .task-high::before {
-
   background: #c9384e;
-
 }
 
 
 .task-medium::before {
-
   background: #d69b20;
-
 }
 
 
 .task-low::before {
-
   background: #3b82b8;
-
 }
 
 
 .task-progress::before {
-
   background: #397eb3;
-
 }
 
 
 .task-done::before {
-
   background: #3b9568;
-
 }
 
 
 /* ============================================================
-   LEFT CONTENT
+   TASK LEFT
 ============================================================ */
 
 .task-left {
-
   min-width: 0;
 
   padding: 16px 16px 14px 24px;
 
   display: flex;
-
   flex-direction: column;
-
 }
 
 
@@ -622,7 +735,6 @@
 ============================================================ */
 
 .task-title {
-
   margin-bottom: 10px;
 
   color: #173553;
@@ -633,7 +745,6 @@
     serif;
 
   font-size: 20px;
-
   line-height: 24px;
 
   font-weight: 700;
@@ -643,16 +754,14 @@
   overflow: visible;
 
   word-break: break-word;
-
 }
 
 
 /* ============================================================
-   TASK INFORMATION
+   TASK INFO
 ============================================================ */
 
 .task-info-row {
-
   display: flex;
 
   align-items: flex-start;
@@ -660,14 +769,11 @@
   gap: 12px;
 
   margin-bottom: 10px;
-
 }
 
 
 .task-info-row mat-icon {
-
   width: 20px;
-
   height: 20px;
 
   flex: 0 0 20px;
@@ -683,25 +789,19 @@
   color: #397fb5;
 
   font-size: 20px;
-
   line-height: 20px;
-
 }
 
 
 .task-info-content {
-
   min-width: 0;
 
   display: flex;
-
   flex-direction: column;
-
 }
 
 
 .task-label {
-
   margin-bottom: 3px;
 
   color: #7185a1;
@@ -711,18 +811,15 @@
     sans-serif;
 
   font-size: 12px;
-
   line-height: 15px;
 
   font-weight: 700;
 
   letter-spacing: 0.6px;
-
 }
 
 
 .task-value {
-
   color: #1c3758;
 
   font-family:
@@ -731,7 +828,6 @@
     serif;
 
   font-size: 16px;
-
   line-height: 20px;
 
   font-weight: 400;
@@ -741,16 +837,14 @@
   overflow: visible;
 
   word-break: break-word;
-
 }
 
 
 /* ============================================================
-   RIGHT SIDE
+   TASK RIGHT
 ============================================================ */
 
 .task-right {
-
   min-width: 0;
 
   padding: 16px 18px 14px 18px;
@@ -762,7 +856,6 @@
   display: flex;
 
   flex-direction: column;
-
 }
 
 
@@ -771,18 +864,15 @@
 ============================================================ */
 
 .priority-wrapper {
-
   display: flex;
 
   justify-content: flex-start;
 
   margin-bottom: 10px;
-
 }
 
 
 .priority-badge {
-
   min-width: 78px;
 
   height: 32px;
@@ -792,7 +882,6 @@
   display: inline-flex;
 
   align-items: center;
-
   justify-content: center;
 
   border-radius: 30px;
@@ -807,71 +896,44 @@
   font-weight: 700;
 
   white-space: nowrap;
-
 }
 
-
-/* HIGH */
 
 .priority-high {
-
   color: #c42f45;
-
   background: #fde5ea;
-
 }
 
-
-/* MEDIUM */
 
 .priority-medium {
-
   color: #b77c05;
-
   background: #fff1d1;
-
 }
 
-
-/* LOW */
 
 .priority-low {
-
   color: #2775ae;
-
   background: #e5f3fb;
-
 }
 
-
-/* PROGRESS */
 
 .priority-progress {
-
   color: #327caf;
-
   background: #e5f3fb;
-
 }
 
 
-/* DONE */
-
 .priority-done {
-
   color: #31845d;
-
   background: #e5f5ec;
-
 }
 
 
 /* ============================================================
-   DATE ROW
+   DATE
 ============================================================ */
 
 .date-row {
-
   display: flex;
 
   align-items: flex-start;
@@ -879,14 +941,11 @@
   gap: 12px;
 
   margin-bottom: 10px;
-
 }
 
 
 .date-row mat-icon {
-
   width: 18px;
-
   height: 18px;
 
   flex: 0 0 18px;
@@ -902,25 +961,19 @@
   color: #c98a1e;
 
   font-size: 18px;
-
   line-height: 18px;
-
 }
 
 
 .date-content {
-
   min-width: 0;
 
   display: flex;
-
   flex-direction: column;
-
 }
 
 
 .date-label {
-
   margin-bottom: 4px;
 
   color: #7185a1;
@@ -930,18 +983,15 @@
     sans-serif;
 
   font-size: 12px;
-
   line-height: 15px;
 
   font-weight: 700;
 
   letter-spacing: 0.6px;
-
 }
 
 
 .date-value {
-
   color: #173553;
 
   font-family:
@@ -950,13 +1000,11 @@
     serif;
 
   font-size: 14px;
-
   line-height: 19px;
 
   white-space: normal;
 
   word-break: break-word;
-
 }
 
 
@@ -965,7 +1013,6 @@
 ============================================================ */
 
 .task-bottom-status {
-
   margin-top: auto;
 
   padding-top: 15px;
@@ -986,36 +1033,26 @@
     serif;
 
   font-size: 14px;
-
   line-height: 18px;
-
 }
 
 
 .task-bottom-status mat-icon {
-
   width: 20px;
-
   height: 20px;
 
   font-size: 20px;
-
   line-height: 20px;
-
 }
 
 
 .task-bottom-status.approved {
-
   color: #3b9065;
-
 }
 
 
 .status-count {
-
   color: #7689a1;
-
 }
 
 
@@ -1024,18 +1061,15 @@
 ============================================================ */
 
 .progress-wrapper {
-
   width: 100%;
 
   margin-top: auto;
 
   padding-top: 8px;
-
 }
 
 
 .progress-track {
-
   width: 100%;
 
   height: 5px;
@@ -1045,21 +1079,23 @@
   border-radius: 5px;
 
   background: #e2e7ec;
-
 }
 
 
 .progress-bar {
-
   height: 100%;
 
   border-radius: inherit;
 
-  background: linear-gradient(90deg, #4fa8dd, #7c6be0);
+  background:
+    linear-gradient(
+      90deg,
+      #4fa8dd,
+      #7c6be0
+    );
 
   transition:
     width 250ms ease;
-
 }
 
 
@@ -1068,7 +1104,6 @@
 ============================================================ */
 
 .workspace-footer {
-
   width: 100%;
 
   display: grid;
@@ -1079,7 +1114,6 @@
   gap: 18px;
 
   padding: 0 24px 25px;
-
 }
 
 
@@ -1088,9 +1122,7 @@
 ============================================================ */
 
 .mat-mdc-card {
-
   box-shadow: none !important;
-
 }
 
 
@@ -1098,14 +1130,12 @@
 .mat-mdc-unelevated-button,
 .mat-mdc-outlined-button,
 .mat-mdc-raised-button {
-
   font-family:
     Georgia,
     "Times New Roman",
     serif !important;
 
   letter-spacing: 0 !important;
-
 }
 
 
@@ -1116,79 +1146,77 @@
 @media (max-width: 1500px) {
 
   .task-title {
-
     font-size: 23px;
-
   }
-
 
   .task-value {
-
     font-size: 17px;
-
   }
-
 
   .date-value {
-
     font-size: 16px;
-
   }
-
 }
 
 
 /* ============================================================
-   TABLET — DROP TO 2 KANBAN COLUMNS
+   TABLET
 ============================================================ */
 
 @media (max-width: 1100px) {
 
   .task-board {
-
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
-
   }
 
 }
 
 
 /* ============================================================
-   SMALL TABLET — DROP TO 1 KANBAN COLUMN, STACK CARD SIDES
+   SMALL TABLET
 ============================================================ */
 
 @media (max-width: 800px) {
 
+  .workspace-header {
+    min-height: 90px;
+
+    padding: 12px 20px;
+
+    gap: 15px;
+  }
+
+
+  .client-filter {
+    margin-left: 10px;
+  }
+
+
+  .client-select {
+    width: 200px;
+  }
+
+
   .stats-grid {
-
-    grid-template-columns:
-      1fr;
-
+    grid-template-columns: 1fr;
   }
 
 
   .task-board {
-
-    grid-template-columns:
-      1fr;
-
+    grid-template-columns: 1fr;
   }
 
 
   .task-card {
-
     grid-template-columns: 1fr;
-
   }
 
 
   .task-right {
-
     border-left: 0;
 
     border-top: 2px solid #e0e5eb;
-
   }
 
 }
@@ -1201,139 +1229,129 @@
 @media (max-width: 600px) {
 
   .page-shell {
-
     padding: 0 5px 20px;
-
   }
 
 
   .workspace-header {
+    min-height: auto;
 
-    height: 76px;
+    padding: 14px 16px;
 
-    min-height: 76px;
+    flex-direction: column;
 
-    padding: 0 16px;
+    align-items: stretch;
 
+    gap: 12px;
+  }
+
+
+  .profile-section {
+    width: 100%;
   }
 
 
   .avatar {
-
     width: 38px;
-
     height: 38px;
 
     flex-basis: 38px;
-
   }
 
 
   .profile-info h1 {
-
     font-size: 20px;
-
   }
 
 
   .profile-info p {
-
     font-size: 10px;
+  }
 
+
+  /* Client dropdown full width on mobile */
+
+  .client-filter {
+    width: 100%;
+
+    margin-left: 0;
+
+    justify-content: stretch;
+  }
+
+
+  .client-select {
+    width: 100%;
   }
 
 
   .stats-grid {
-
     gap: 10px;
 
     padding: 14px;
-
   }
 
 
   .stat-card {
-
     height: 72px;
 
     min-height: 72px;
-
   }
 
 
   .task-board {
-
     padding: 0 14px 20px;
 
     gap: 14px;
-
   }
 
 
   .column-header {
-
     height: 40px;
-
   }
 
 
   .column-header h2 {
-
     font-size: 21px;
-
   }
 
 
   .tasks-grid {
-
     gap: 14px;
-
   }
 
 
   .task-left {
-
     padding: 22px 18px 15px 24px;
-
   }
 
 
   .task-right {
-
     padding: 18px 18px 18px 24px;
-
   }
 
 
   .task-title {
-
     margin-bottom: 18px;
 
     font-size: 24px;
-
   }
 
 
   .task-info-row {
-
     margin-bottom: 16px;
-
   }
 
 
   .task-value {
-
     font-size: 17px;
-
   }
 
 
   .date-value {
-
     font-size: 16px;
 
     white-space: normal;
-
   }
 
 }
@@ -1346,26 +1364,21 @@
 @media (max-width: 400px) {
 
   .priority-badge {
-
     min-width: 100px;
 
     height: 40px;
 
     font-size: 17px;
-
   }
 
 
   .task-title {
-
     font-size: 22px;
-
   }
 
 
   .task-info-row mat-icon,
   .date-row mat-icon {
-
     width: 26px;
 
     height: 26px;
@@ -1375,7 +1388,6 @@
     font-size: 26px;
 
     line-height: 26px;
-
   }
 
 }
@@ -1388,9 +1400,7 @@
 @media (prefers-reduced-motion: reduce) {
 
   .progress-bar {
-
     transition: none;
-
   }
 
 }

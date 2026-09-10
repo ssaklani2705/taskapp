@@ -70,9 +70,14 @@
                 --All Clients--
               </option>
 
-              <option *ngFor="let client of clients" [value]="client.clientId">
+              <!-- <option *ngFor="let client of clients" [value]="client.clientId">
                 {{ client.name }}
-              </option>
+              </option> -->
+              <option
+  *ngFor="let client of filteredClients"
+  [value]="client.clientId">
+  {{ client.name }}
+</option>
 
             </select>
 

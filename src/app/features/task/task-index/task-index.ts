@@ -130,6 +130,7 @@ export class TaskIndex {
   // =========================================================
 
   clients: Client[] = [];
+  filteredClients: any[] = [];
 
   taskCategories: TaskCategory[] = [];
 
@@ -758,7 +759,7 @@ export class TaskIndex {
           this.taskCategories =
             response.taskCategories || [];
         
-
+           this.filterAvailableClients();
 
           this.assignedUsers =
             response.assignedUsers || [];
@@ -772,6 +773,7 @@ export class TaskIndex {
           );
 
           this.clients = [];
+          this.filteredClients = [];
 
           this.taskCategories = [];
 
@@ -876,6 +878,8 @@ export class TaskIndex {
           this.tasks =
             response.data || [];
 
+            this.filterAvailableClients();
+
         },
 
         error: (error) => {
@@ -896,6 +900,28 @@ export class TaskIndex {
       });
 
   }
+
+
+  private filterAvailableClients(): void {
+
+  // Get unique client names from task data
+  const availableClientNames = new Set(
+    this.tasks
+      .map((task: any) => task.clientName)
+      .filter((name: string) => name)
+  );
+
+  // Keep only clients which are present in task data
+  this.filteredClients = this.clients.filter(
+    (client: any) =>
+      availableClientNames.has(client.name)
+  );
+
+  console.log(
+    'AVAILABLE CLIENTS:',
+    this.filteredClients
+  );
+}
 
 
   // =========================================================

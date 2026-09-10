@@ -19,6 +19,41 @@
 
         </div>
       </div>
+
+      <!-- RIGHT: CLIENT DROPDOWN -->
+ <div class="client-filter">
+
+  <mat-form-field
+    appearance="outline"
+    class="client-select">
+
+    <mat-label>Select Client</mat-label>
+
+    <mat-select
+      [(value)]="selectedClientId"
+      panelClass="client-select-panel"
+      (selectionChange)="onClientChange($event.value)">
+
+      <mat-option [value]="null">
+        All Clients
+      </mat-option>
+
+      @for (client of clients; track client.clientId) {
+        <mat-option [value]="client.clientId">
+          {{ client.clientName }}
+        </mat-option>
+      }
+
+    </mat-select>
+
+  </mat-form-field>
+
+</div>
+
+
+
+
+
       <!--div class="header-actions">
 
         <button

@@ -420,10 +420,10 @@
                   class="user-input user-select"
                   [(ngModel)]="task.assignedTo"
                   name="assignedTo"
-                  [disabled]="!task.clientId"
+                  [disabled]="!task.clientId || !task.taskCategoryId"
                   #assignedCtrl="ngModel">
 
-                  <option [ngValue]="0">
+                  <option [ngValue]="null">
                     Select User
                   </option>
 
