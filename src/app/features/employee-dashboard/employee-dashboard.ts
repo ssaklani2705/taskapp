@@ -636,7 +636,7 @@ export class EmployeeDashboard implements OnInit {
 
   //Dropdown
   clients: any[] = [];
-selectedClientId: number | null = null;
+selectedClientId: any = 0;
 getDashboardClients(): void {
 
   this.dataProviderService
