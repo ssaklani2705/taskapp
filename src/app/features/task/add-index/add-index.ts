@@ -1152,10 +1152,8 @@ export class AddIndexComponent implements OnInit {
           const data = res?.data || res;
           // this.clients = data?.clients || [];
           this.taskCategories = data?.taskCategories || [];
-          this.users = data?.assignedUsers || [];
-          // console.log('CLIENTS:', this.clients);
-          // console.log('TASK CATEGORIES:', this.taskCategories);
-          // console.log('ASSIGNED USERS:', this.users);
+          // this.users = data?.assignedUsers || [];
+    
         },
 
         error: (error: any) => {
@@ -1167,6 +1165,43 @@ export class AddIndexComponent implements OnInit {
 
           // this.clients = [];
           this.taskCategories = [];
+          // this.users = [];
+
+          // Swal.fire(
+          //   'Error',
+          //   'Unable to load task dropdown data.',
+          //   'error'
+          // );
+        }
+
+
+
+
+
+      });
+  }
+
+   onchangeloadUserDropdownData(): void {
+    // alert(this.task.clientId);
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin,
+      this.userId, this.loginType,this.task.clientId,this.task.taskCategoryId).subscribe({
+        next: (res: any) => {
+          const data = res?.data || res;
+          // this.clients = data?.clients || [];
+          // this.taskCategories = data?.taskCategories || [];
+          this.users = data?.assignedUsers || [];
+    
+        },
+
+        error: (error: any) => {
+
+          console.error(
+            'Error loading task dropdown data:',
+            error
+          );
+
+          // this.clients = [];
+          // this.taskCategories = [];
           this.users = [];
 
           // Swal.fire(
@@ -1182,6 +1217,7 @@ export class AddIndexComponent implements OnInit {
 
       });
   }
+
 
 
   loadDropdownData(): void {

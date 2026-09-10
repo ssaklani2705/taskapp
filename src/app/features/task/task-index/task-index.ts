@@ -761,6 +761,8 @@ export class TaskIndex {
             response.assignedUsers || [];
 
 
+          this.assignedUsers =
+            response.assignedUsers || [];
 
         },
         error: (error) => {

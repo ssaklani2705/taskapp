@@ -1491,6 +1491,23 @@ export class DataProviderService {
 
   }
 
+  changesCategoryIdgetUserFilterData(isAdmin: string, userId: number,loginType: string,clientId: number,categoryId: number): Observable<any> {
+
+    return this.http.get<any>(
+      `${environment.apiBaseUrl}admin/task/changesCategoryIdgetUserFilterData`,
+      {
+        params: {
+          isAdmin: isAdmin.toString(),
+          userId: userId.toString(),
+          loginType: loginType.toString(),
+          clientId: clientId ?? '',
+          categoryId: categoryId ?? '',
+        }
+      }
+    );
+
+  }
+
   getTaskDetails(
     page: number,
     size: number,

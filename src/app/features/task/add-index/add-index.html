@@ -219,6 +219,7 @@
                   [(ngModel)]="task.taskCategoryId"
                   name="taskCategoryId"
                   required
+                  (ngModelChange)="onchangeloadUserDropdownData()"
                   [disabled]="!task.clientId"
                   #categoryCtrl="ngModel">
 
