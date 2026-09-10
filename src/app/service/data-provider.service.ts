@@ -1458,8 +1458,8 @@ export class DataProviderService {
   deletePlan(plan: any): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}admin/plan/delete`, plan);
   }
-//sunil
-  getTaskFilterData(isAdmin: string, userId: number,loginType: string): Observable<any> {
+  //sunil
+  getTaskFilterData(isAdmin: string, userId: number, loginType: string): Observable<any> {
 
     return this.http.get<any>(
       `${environment.apiBaseUrl}admin/task/getTaskFilterData`,
@@ -1475,7 +1475,7 @@ export class DataProviderService {
 
   }
 
-  changesClientIdgetTaskFilterData(isAdmin: string, userId: number,loginType: string,clientId: number): Observable<any> {
+  changesClientIdgetTaskFilterData(isAdmin: string, userId: number, loginType: string, clientId: number): Observable<any> {
 
     return this.http.get<any>(
       `${environment.apiBaseUrl}admin/task/getTaskFilterDataOnChange`,
@@ -1491,7 +1491,7 @@ export class DataProviderService {
 
   }
 
-  changesCategoryIdgetUserFilterData(isAdmin: string, userId: number,loginType: string,clientId: number,categoryId: number): Observable<any> {
+  changesCategoryIdgetUserFilterData(isAdmin: string, userId: number, loginType: string, clientId: number, categoryId: number): Observable<any> {
 
     return this.http.get<any>(
       `${environment.apiBaseUrl}admin/task/changesCategoryIdgetUserFilterData`,
@@ -1523,84 +1523,38 @@ export class DataProviderService {
     toDate: string,
     isAdmin: string,
     userId: any,
-    taskStatusId:any,
-    loginType:string
+    taskStatusIds: string[],
+    loginType: string
   ): Observable<any> {
 
-    const params = new HttpParams()
-
-      .set(
-        'page',
-        page.toString()
-      )
-
-      .set(
-        'size',
-        size.toString()
-      )
-
-      .set(
-        'statusIndex',
-        statusIndex.toString()
-      )
-
-      .set(
-        'search',
-        search || ''
-      )
-
-      .set(
-        'clientId',
-        clientId.toString()
-      )
-
-      .set(
-        'taskCategoryId',
-        taskCategoryId.toString()
-      )
-
-      .set(
-        'assignedTo',
-        assignedTo.toString()
-      )
-
-      .set(
-        'priority',
-        priority.toString()
-      )
-
-      .set(
-        'fromDate',
-        fromDate || ''
-      )
-
-      .set(
-        'toDate',
-        toDate || ''
-      )
-
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('statusIndex', statusIndex.toString())
+      .set('search', search || '')
+      .set('clientId', (clientId || 0).toString())
+      .set('taskCategoryId', (taskCategoryId || 0).toString())
+      .set('assignedTo', (assignedTo || 0).toString())
+      .set('priority', (priority || 0).toString())
+      .set('fromDate', fromDate || '')
+      .set('toDate', toDate || '')
       .set('isAdmin', isAdmin || '')
+      .set('userId', userId ? userId.toString() : '0')
+      .set('loginType', loginType || '');
 
-      .set('userId', userId || '')
-      .set(
-        'taskStatusId',
-        taskStatusId.toString()
-      )
-      .set('loginType',loginType.toString())
+    if (taskStatusIds && taskStatusIds.length > 0) {
+      params = params.set(
+        'taskStatusIds',
+        taskStatusIds.join(',')
+      );
+    }
 
-    console.log(
-      'Task API Params:',
-      params.toString()
-    );
-
+    console.log('Task API Params:', params.toString());
 
     return this.http.get<any>(
       `${environment.apiBaseUrl}admin/task/getTaskDetails`,
-      {
-        params
-      }
+      { params }
     );
-
   }
 
   saveTask(formData: FormData) {
@@ -1616,7 +1570,7 @@ export class DataProviderService {
     );
   }
 
-  changeClientManager(clientId: number, managerId: number,userId: number) {
+  changeClientManager(clientId: number, managerId: number, userId: number) {
     return this.http.put<any>(`${environment.apiBaseUrl}admin/client/${clientId}/manager`, {
       managerId: managerId,
       userId: userId
@@ -1740,7 +1694,7 @@ export class DataProviderService {
     });
   }
 
-  updateClientOutstanding(clientId: number, outstanding: number, managerId: number,userId: number) {
+  updateClientOutstanding(clientId: number, outstanding: number, managerId: number, userId: number) {
     return this.http.post<any>(
       `${environment.apiBaseUrl}admin/updateClientOutstanding`,
       {
@@ -1751,7 +1705,7 @@ export class DataProviderService {
       {
         params: {
           managerId: managerId,
-          
+
         },
       },
     );
@@ -1795,15 +1749,15 @@ export class DataProviderService {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssignedTask`);
   }
 
-    countOfAssigneeClosureTask(): Observable<any> {
+  countOfAssigneeClosureTask(): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeClosureTask`);
   }
 
-    countOfReOpenTask(): Observable<any> {
+  countOfReOpenTask(): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfReOpenTask`);
   }
 
-    countOfAssigneeReClosureTask(): Observable<any> {
+  countOfAssigneeReClosureTask(): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeReClosureTask`);
   }
 

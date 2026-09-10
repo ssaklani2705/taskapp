@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -38,11 +38,13 @@ import {
   SESSION_KEYS
 } from '../../../service/session-storage.keys';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
-import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule, MatOption, MatOptionModule } from '@angular/material/core';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 //import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import * as XLSX from 'xlsx';
+
+
 interface Task {
   taskId: number;
   clientName: string;
@@ -58,33 +60,23 @@ interface Task {
   assignedTo: string;
 }
 
-
 interface Client {
   clientId: number;
   name: string;
 }
 
-
 interface TaskCategory {
-
   taskcategoryId: number;
-
   name: string;
 }
 
-
 interface AssignedUser {
-
   userId: number;
-
   firstName: string;
 }
 
-
 @Component({
-
   selector: 'app-task-index',
-
   imports: [
     CommonModule,
     FormsModule,
@@ -93,7 +85,11 @@ interface AssignedUser {
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
-    MatDividerModule
+    MatDividerModule,
+    MatFormField,
+    MatLabel,
+    MatOptionModule
+
   ],
 
   templateUrl: './task-index.html',
@@ -150,7 +146,7 @@ export class TaskIndex {
   // =========================================================
 
   selectedClient: string = '';
-  selectedTaskStatus: string = '';
+  selectedTaskStatuses: string[] = [];
 
   selectedTaskCategory: string = '';
 
@@ -474,7 +470,39 @@ export class TaskIndex {
 
 
     // -------------------------------------------------------
-    // SECOND: SESSION STORAGE
+    // SECOND: QUERY PARAMS (from a URL-based navigation)
+    // -------------------------------------------------------
+
+    if (!stateData) {
+
+      const qp = this.route.snapshot.queryParamMap;
+
+      if (qp.keys.length > 0) {
+
+        stateData = {
+          currentPage: qp.get('currentPage'),
+          page: qp.get('page'),
+          size: qp.get('size'),
+          statusIndex: qp.get('statusIndex'),
+          searchText: qp.get('searchText'),
+          clientId: qp.get('clientId'),
+          taskCategoryId: qp.get('taskCategoryId'),
+          assignedTo: qp.get('assignedTo'),
+          priority: qp.get('priority'),
+          fromDate: qp.get('fromDate'),
+          toDate: qp.get('toDate'),
+          taskStatusId: qp.get('taskStatusIds')
+            ? qp.get('taskStatusIds')!.split(',')
+            : []
+        };
+
+      }
+
+    }
+
+
+    // -------------------------------------------------------
+    // THIRD: SESSION STORAGE
     // -------------------------------------------------------
 
     if (!stateData) {
@@ -512,34 +540,19 @@ export class TaskIndex {
     if (!stateData) {
 
       this.currentPage = 1;
-
       this.page = 0;
-
-      this.size =
-        environment.size;
-
-      this.recordsPerPage =
-        this.size;
-
+      this.size = environment.size;
+      this.recordsPerPage = this.size;
       this.search = '';
-
       this.searchQuery = '';
-
       this.statusIndex = 0;
-
       this.selectedStatus = '';
-
       this.selectedClient = '';
-
       this.selectedTaskCategory = '';
-
       this.selectedAssignedTo = '';
-
       this.selectedPriority = '';
-      this.selectedTaskStatus = ''
-
+      this.selectedTaskStatuses = [];
       this.fromDate = null;
-
       this.toDate = null;
 
       return;
@@ -634,38 +647,25 @@ export class TaskIndex {
 
 
     // -------------------------------------------------------
-    // FROM DATE
+    // TASK STATUSES   ⬅ ADD THIS BLOCK
     // -------------------------------------------------------
+
+    this.selectedTaskStatuses =
+      Array.isArray(stateData.taskStatusId)
+        ? stateData.taskStatusId.map((v: any) => String(v))
+        : [];
+
+
 
     this.fromDate =
       stateData.fromDate
-        ? new Date(
-          stateData.fromDate + 'T00:00:00'
-        )
+        ? new Date(stateData.fromDate + 'T00:00:00')
         : null;
-
-
-    // -------------------------------------------------------
-    // TO DATE
-    // -------------------------------------------------------
 
     this.toDate =
       stateData.toDate
-        ? new Date(
-          stateData.toDate + 'T00:00:00'
-        )
+        ? new Date(stateData.toDate + 'T00:00:00')
         : null;
-
-
-    console.log(
-      'Restored From Date:',
-      this.fromDate
-    );
-
-    console.log(
-      'Restored To Date:',
-      this.toDate
-    );
 
   }
 
@@ -719,7 +719,7 @@ export class TaskIndex {
       toDate:
         this.formatDateForApi(this.toDate),
       taskStatusId:
-        this.selectedTaskStatus || null,
+        this.selectedTaskStatuses,
 
     };
 
@@ -757,7 +757,7 @@ export class TaskIndex {
             response.clients || [];
           this.taskCategories =
             response.taskCategories || [];
-        
+
 
 
           this.assignedUsers =
@@ -829,9 +829,7 @@ export class TaskIndex {
       this.formatDateForApi(this.toDate);
 
     const taskStatusId =
-      this.selectedTaskStatus
-        ? Number(this.selectedTaskStatus)
-        : 0;
+      this.selectedTaskStatuses;
 
     this.dataprovider
       .getTaskDetails(
@@ -979,8 +977,10 @@ export class TaskIndex {
 
             toDate:
               this.formatDateForApi(this.toDate) || null,
-            taskStatusId:
-              this.selectedTaskStatus || null,
+            taskStatusIds:
+              this.selectedTaskStatuses.length
+                ? this.selectedTaskStatuses.join(',')
+                : null,
 
           },
 
@@ -1159,8 +1159,10 @@ export class TaskIndex {
             toDate:
               toDate || null,
 
-            taskStatusId:
-              this.selectedTaskStatus || null,
+            taskStatusIds:
+              this.selectedTaskStatuses.length
+                ? this.selectedTaskStatuses.join(',')
+                : null,
 
 
           },
@@ -1358,41 +1360,48 @@ export class TaskIndex {
         taskId
       ],
       {
+        queryParams: {
+
+          currentPage: this.currentPage,
+
+          statusIndex: this.statusIndex,
+
+          searchText: this.search,
+
+          size: this.size,
+
+          clientId: this.selectedClient || null,
+
+          taskCategoryId: this.selectedTaskCategory || null,
+
+          assignedTo: this.selectedAssignedTo || null,
+
+          priority: this.selectedPriority || null,
+
+          fromDate: this.formatDateForApi(this.fromDate) || null,
+
+          toDate: this.formatDateForApi(this.toDate) || null,
+
+          taskStatusIds: this.selectedTaskStatuses.length
+            ? this.selectedTaskStatuses.join(',')
+            : null,
+        },
+
         state: {
-
-          currentPage:
-            this.currentPage,
-
-          statusIndex:
-            this.statusIndex,
-
-          searchText:
-            this.search,
-
-          size:
-            this.size,
-
-          clientId:
-            this.selectedClient,
-
-          taskCategoryId:
-            this.selectedTaskCategory,
-
-          assignedTo:
-            this.selectedAssignedTo,
-
-          priority:
-            this.selectedPriority,
-
-          fromDate:
-            this.formatDateForApi(this.fromDate),
-
-          toDate:
-            this.formatDateForApi(this.toDate),
-          taskStatusId: this.selectedTaskStatus
-
+          currentPage: this.currentPage,
+          statusIndex: this.statusIndex,
+          searchText: this.search,
+          size: this.size,
+          clientId: this.selectedClient,
+          taskCategoryId: this.selectedTaskCategory,
+          assignedTo: this.selectedAssignedTo,
+          priority: this.selectedPriority,
+          fromDate: this.formatDateForApi(this.fromDate),
+          toDate: this.formatDateForApi(this.toDate),
+          taskStatusIds: this.selectedTaskStatuses
         }
       }
+
     );
 
   }
@@ -1417,97 +1426,103 @@ export class TaskIndex {
       ],
 
       {
+        queryParams: {
+
+          currentPage: this.currentPage,
+
+          statusIndex: this.statusIndex,
+
+          searchText: this.search,
+
+          size: this.size,
+
+          clientId: this.selectedClient || null,
+
+          taskCategoryId: this.selectedTaskCategory || null,
+
+          assignedTo: this.selectedAssignedTo || null,
+
+          priority: this.selectedPriority || null,
+
+          fromDate: this.formatDateForApi(this.fromDate) || null,
+
+          toDate: this.formatDateForApi(this.toDate) || null,
+
+          taskStatusIds: this.selectedTaskStatuses.length
+            ? this.selectedTaskStatuses.join(',')
+            : null,
+        },
 
         state: {
-
-          currentPage:
-            this.currentPage,
-
-          statusIndex:
-            this.statusIndex,
-
-          searchText:
-            this.search,
-
-          size:
-            this.size,
-
-          clientId:
-            this.selectedClient,
-
-          taskCategoryId:
-            this.selectedTaskCategory,
-
-          assignedTo:
-            this.selectedAssignedTo,
-
-          priority:
-            this.selectedPriority,
-          fromDate:
-            this.formatDateForApi(this.fromDate),
-
-          toDate:
-            this.formatDateForApi(this.toDate),
-          taskStatusId: this.selectedTaskStatus
-
+          currentPage: this.currentPage,
+          statusIndex: this.statusIndex,
+          searchText: this.search,
+          size: this.size,
+          clientId: this.selectedClient,
+          taskCategoryId: this.selectedTaskCategory,
+          assignedTo: this.selectedAssignedTo,
+          priority: this.selectedPriority,
+          fromDate: this.formatDateForApi(this.fromDate),
+          toDate: this.formatDateForApi(this.toDate),
+          taskStatusIds: this.selectedTaskStatuses
         }
-
       }
-
     );
-
   }
 
 
   // =========================================================
   // ADD TASK
   // =========================================================
-
   addTask(): void {
 
     this.saveFilterState();
-
 
     this.router.navigate(
 
       ['/add-task'],
 
       {
+        queryParams: {
+
+          currentPage: this.currentPage,
+
+          statusIndex: this.statusIndex,
+
+          searchText: this.search,
+
+          size: this.size,
+
+          clientId: this.selectedClient || null,
+
+          taskCategoryId: this.selectedTaskCategory || null,
+
+          assignedTo: this.selectedAssignedTo || null,
+
+          priority: this.selectedPriority || null,
+
+          fromDate: this.formatDateForApi(this.fromDate) || null,
+
+          toDate: this.formatDateForApi(this.toDate) || null,
+
+          taskStatusIds: this.selectedTaskStatuses.length
+            ? this.selectedTaskStatuses.join(',')
+            : null,
+        },
 
         state: {
-
-          currentPage:
-            this.currentPage,
-
-          statusIndex:
-            this.statusIndex,
-
-          searchText:
-            this.search,
-
-          size:
-            this.size,
-
-          clientId:
-            this.selectedClient,
-
-          taskCategoryId:
-            this.selectedTaskCategory,
-
-          assignedTo:
-            this.selectedAssignedTo,
-
-          priority:
-            this.selectedPriority,
-          fromDate:
-            this.formatDateForApi(this.fromDate),
-
-          toDate:
-            this.formatDateForApi(this.toDate),
-          taskStatusId: this.selectedTaskStatus
-
+          currentPage: this.currentPage,
+          statusIndex: this.statusIndex,
+          searchText: this.search,
+          size: this.size,
+          clientId: this.selectedClient,
+          taskCategoryId: this.selectedTaskCategory,
+          assignedTo: this.selectedAssignedTo,
+          priority: this.selectedPriority,
+          fromDate: this.formatDateForApi(this.fromDate),
+          toDate: this.formatDateForApi(this.toDate),
+          taskStatusIds: this.selectedTaskStatuses
         }
-
       }
 
     );
@@ -1801,7 +1816,7 @@ export class TaskIndex {
   // =========================================================
 
   clearFilters(): void {
-
+    this.showStatusDropdown = false
     // Clear search
     this.searchQuery = '';
     this.search = '';
@@ -1812,7 +1827,7 @@ export class TaskIndex {
     this.selectedAssignedTo = '';
     this.selectedPriority = '';
     this.selectedStatus = '';
-    this.selectedTaskStatus = '';
+    this.selectedTaskStatuses = [];
 
     // Clear dates
     this.fromDate = null;
@@ -1859,7 +1874,7 @@ export class TaskIndex {
           fromDate: null,
 
           toDate: null,
-          taskStatusId: 0
+          taskStatusId: null
 
         },
 
@@ -2431,4 +2446,51 @@ export class TaskIndex {
     return `${day}-${month}-${year}`;
   }
 
+
+  showStatusDropdown = false;
+
+
+
+  onStatusChange(event: any): void {
+    const value = event.target.value;
+
+    if (event.target.checked) {
+      this.selectedTaskStatuses.push(value);
+    } else {
+      this.selectedTaskStatuses =
+        this.selectedTaskStatuses.filter(x => x !== value);
+    }
+
+    this.onSearch();
+  }
+
+
+  taskStatusOptions: { id: string; label: string }[] = [
+    { id: '1', label: 'Assigned' },
+    { id: '2', label: 'Assignee Closure' },
+    { id: '3', label: 'Re-Open' },
+    { id: '4', label: 'Assignee Re-Closure' },
+    { id: '5', label: 'Assignor Closure' },
+  ];
+
+
+  toggleTaskStatus(id: string): void {
+    const index = this.selectedTaskStatuses.indexOf(id);
+
+    if (index > -1) {
+      this.selectedTaskStatuses = this.selectedTaskStatuses.filter(x => x !== id);
+    } else {
+      this.selectedTaskStatuses = [...this.selectedTaskStatuses, id];
+    }
+
+    console.log('selectedTaskStatuses:', this.selectedTaskStatuses);
+
+    this.onSearch();
+  }
+
+
+
+  isTaskStatusChecked(id: string): boolean {
+    return this.selectedTaskStatuses.includes(id);
+  }
 }
