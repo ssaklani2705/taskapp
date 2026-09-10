@@ -749,27 +749,20 @@ export class TaskIndex {
       .subscribe({
 
         next: (response: any) => {
-
           console.log(
             'TASK FILTER DATA:',
             response
           );
-
-
           this.clients =
             response.clients || [];
-
-
           this.taskCategories =
             response.taskCategories || [];
+          this.assignedUsers =
+            response.assignedUsers || [];
 
 
-          // this.assignedUsers =
-          //   response.assignedUsers || [];
 
         },
-
-
         error: (error) => {
 
           console.error(
@@ -781,7 +774,7 @@ export class TaskIndex {
 
           this.taskCategories = [];
 
-          // this.assignedUsers = [];
+          this.assignedUsers = [];
 
         }
 
@@ -821,7 +814,7 @@ export class TaskIndex {
     const assignedTo =
       this.selectedAssignedTo
         ? Number(this.selectedAssignedTo)
-        : 0;
+        : -1;
 
     const priority =
       this.selectedPriority

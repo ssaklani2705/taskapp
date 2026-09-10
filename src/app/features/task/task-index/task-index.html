@@ -412,7 +412,9 @@
                 <!-- ASSIGNED TO -->
                 <td>
                   <span class="wrap-text">
-                    {{ task.assignedToName || '-' }}
+                    {{ !task.assignedToName || task.assignedToName === '0'
+                    ? 'Unassigned User'
+                    : task.assignedToName }}
                   </span>
                 </td>
 
