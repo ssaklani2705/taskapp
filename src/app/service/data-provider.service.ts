@@ -1711,10 +1711,10 @@ export class DataProviderService {
     );
   }
   //Employee Dashboard
-  getDashboard(userId: number): Observable<any> {
+  getDashboard(userId: number,isAdmin:any,selectedClientId:any): Observable<any> {
 
     return this.http.get<any>(
-      `${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}`
+      `${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}&isAdmin=${isAdmin}&selectedClientId=${selectedClientId}`
     );
 
   }
@@ -1769,5 +1769,16 @@ export class DataProviderService {
     });
   }
 
+   // Dashboard Clients
+  getDashboardClients(
+    userId: any,
+    isAdmin: string,
+    loginType: string,
+    selectedClientId: any
+  ): Observable<any> {
+    return this.http.get(
+      `${environment.apiBaseUrl}api/task/dashboard-clients?userId=${userId}&isAdmin=${isAdmin}&loginType=${loginType}&selectedClientId=${selectedClientId}`
+    );
+  }
 
 }

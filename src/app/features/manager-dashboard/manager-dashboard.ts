@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface Task {
   taskId: number;
@@ -93,6 +94,7 @@ export class ManagerDashboard {
       icon: 'task_alt',
       className: 'blue',
       change: '+8 this week',
+      taskStatusId: null,
     },
     {
       title: 'Completed Tasks',
@@ -100,6 +102,7 @@ export class ManagerDashboard {
       icon: 'check_circle',
       className: 'green',
       change: '1 escalated',
+      taskStatusId: 5,
     },
     {
       title: 'All Pending Tasks',
@@ -107,6 +110,7 @@ export class ManagerDashboard {
       icon: 'pending_actions',
       className: 'orange',
       change: '3 due today',
+      taskStatusId: null,
     },
     {
       title: 'Assigned Tasks',
@@ -114,6 +118,7 @@ export class ManagerDashboard {
       icon: 'assignment',
       className: 'blue',
       change: 'Currently assigned',
+      taskStatusId: 1,
     },
     {
       title: 'Assignee Closure Tasks',
@@ -121,6 +126,7 @@ export class ManagerDashboard {
       icon: 'task_alt',
       className: 'orange',
       change: 'Awaiting closure',
+      taskStatusId: 2,
     },
     {
       title: 'Re-Open Tasks',
@@ -128,6 +134,7 @@ export class ManagerDashboard {
       icon: 'restart_alt',
       className: 'red',
       change: 'Requires attention',
+      taskStatusId: 3,
     },
     {
       title: 'Assignee Re-Closure Tasks',
@@ -135,10 +142,12 @@ export class ManagerDashboard {
       icon: 'published_with_changes',
       className: 'purple',
       change: 'Awaiting re-closure',
+      taskStatusId: 4,
     },
   ];
 
-  constructor(private dataProvider: DataProviderService) { }
+
+  constructor(private dataProvider: DataProviderService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit(): void {
 
@@ -644,5 +653,28 @@ export class ManagerDashboard {
   onSearch(): void {
     this.getTasks();
   }
+
+ onKpiClick(kpi: any): void {
+    console.log('KPI CLICKED:', kpi);
+
+    if (kpi.taskStatusId === null) {
+      this.router.navigate(['/task-index']);
+      return;
+    }
+
+    this.router
+      .navigate(['/task-index'], {
+        queryParams: {
+          taskStatusId: kpi.taskStatusId,
+        },
+      })
+      .then((success) => {
+        console.log('KPI navigation:', success);
+      })
+      .catch((error) => {
+        console.error('KPI navigation error:', error);
+      });
+  }
+
 
 }

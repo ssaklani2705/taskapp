@@ -314,8 +314,8 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     // this.isEditMode = true;
 
-  // this.userForm.get('departmentId')?.disable();
-  // this.userForm.get('desigmationId')?.disable();
+  this.userForm.get('departmentId')?.disable();
+  this.userForm.get('desigmationId')?.disable();
 
     // First load dropdowns
     this.loadDepartments();

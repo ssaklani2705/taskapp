@@ -126,6 +126,7 @@ export class TaskIndex {
   // =========================================================
 
   clients: Client[] = [];
+  filteredClients: any[] = [];
 
   taskCategories: TaskCategory[] = [];
 
@@ -164,6 +165,7 @@ export class TaskIndex {
   // =========================================================
 
   currentPage: number = 1;
+  selectedTaskStatus: any;
 
   page: number = 0;
 
@@ -445,6 +447,15 @@ export class TaskIndex {
     // -------------------------------------------------------
 
     this.getTaskDetails();
+     this.route.queryParams.subscribe((params) => {
+      if (params['taskStatusId'] !== undefined) {
+        this.selectedTaskStatus = params['taskStatusId'] || '';
+        this.currentPage = 1;
+        this.page = 0;
+      }
+
+      this.getTaskDetails();
+    });
 
   }
 
@@ -554,6 +565,7 @@ export class TaskIndex {
       this.selectedTaskStatuses = [];
       this.fromDate = null;
       this.toDate = null;
+      
 
       return;
     }
@@ -655,7 +667,8 @@ export class TaskIndex {
         ? stateData.taskStatusId.map((v: any) => String(v))
         : [];
 
-
+  this.selectedTaskStatus =
+        stateData.taskStatusId != null ? String(stateData.taskStatusId) : '';
 
     this.fromDate =
       stateData.fromDate
@@ -758,6 +771,8 @@ export class TaskIndex {
           this.taskCategories =
             response.taskCategories || [];
 
+            this.filterAvailableClients();
+
 
 
           this.assignedUsers =
@@ -771,7 +786,9 @@ export class TaskIndex {
             error
           );
 
+          
           this.clients = [];
+           this.filteredClients = [];
 
           this.taskCategories = [];
 
@@ -783,6 +800,26 @@ export class TaskIndex {
 
   }
 
+ private filterAvailableClients(): void {
+
+  // Get unique client names from task data
+  const availableClientNames = new Set(
+    this.tasks
+      .map((task: any) => task.clientName)
+      .filter((name: string) => name)
+  );
+
+  // Keep only clients which are present in task data
+  this.filteredClients = this.clients.filter(
+    (client: any) =>
+      availableClientNames.has(client.name)
+  );
+
+  console.log(
+    'AVAILABLE CLIENTS:',
+    this.filteredClients
+  );
+}
 
   // =========================================================
   // TOGGLE PANEL
@@ -873,6 +910,8 @@ export class TaskIndex {
 
           this.tasks =
             response.data || [];
+
+             this.filterAvailableClients();
 
         },
 

@@ -17,7 +17,7 @@
 
   <!-- KPI Cards -->
   <section class="kpi-grid">
-    <mat-card class="kpi-card" *ngFor="let kpi of kpis" [class]="kpi.className">
+    <mat-card class="kpi-card" *ngFor="let kpi of kpis" [class]="kpi.className" (click)="onKpiClick(kpi)">
       <div class="kpi-top">
         <span class="kpi-title">
           {{ kpi.title }}
