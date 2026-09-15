@@ -300,7 +300,13 @@ export class ViewTeam implements OnInit {
               : [];
 
 
-          this.taskCategoryList = Array.isArray(response?.taskCategories) ? [...response.taskCategories] : []
+
+
+          this.taskCategoryList =
+            response?.taskCategories || [];
+
+            console.log("{}" + this.taskCategoryList)
+
 
 
           this.transactionhistory.sort(
