@@ -189,8 +189,12 @@
         <div class="detail-row">
           <span class="detail-label">Task Category</span>
           <div class="category-chips">
-            <span class="chip">{{taskCategoryList}}</span>
-        
+            <span class="chip" *ngFor="let category of taskCategoryList">
+
+              {{ category }}
+
+            </span>
+
           </div>
         </div>
       </div>
