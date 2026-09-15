@@ -8,8 +8,11 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import {
   Component,
+  ElementRef,
+  HostListener,
   Inject,
-  PLATFORM_ID
+  PLATFORM_ID,
+  ViewChild
 } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
@@ -447,7 +450,7 @@ export class TaskIndex {
     // -------------------------------------------------------
 
     this.getTaskDetails();
-     this.route.queryParams.subscribe((params) => {
+    this.route.queryParams.subscribe((params) => {
       if (params['taskStatusId'] !== undefined) {
         this.selectedTaskStatus = params['taskStatusId'] || '';
         this.currentPage = 1;
@@ -565,7 +568,7 @@ export class TaskIndex {
       this.selectedTaskStatuses = [];
       this.fromDate = null;
       this.toDate = null;
-      
+
 
       return;
     }
@@ -667,8 +670,8 @@ export class TaskIndex {
         ? stateData.taskStatusId.map((v: any) => String(v))
         : [];
 
-  this.selectedTaskStatus =
-        stateData.taskStatusId != null ? String(stateData.taskStatusId) : '';
+    this.selectedTaskStatus =
+      stateData.taskStatusId != null ? String(stateData.taskStatusId) : '';
 
     this.fromDate =
       stateData.fromDate
@@ -771,7 +774,7 @@ export class TaskIndex {
           this.taskCategories =
             response.taskCategories || [];
 
-            this.filterAvailableClients();
+          this.filterAvailableClients();
 
 
 
@@ -786,9 +789,9 @@ export class TaskIndex {
             error
           );
 
-          
+
           this.clients = [];
-           this.filteredClients = [];
+          this.filteredClients = [];
 
           this.taskCategories = [];
 
@@ -800,26 +803,26 @@ export class TaskIndex {
 
   }
 
- private filterAvailableClients(): void {
+  private filterAvailableClients(): void {
 
-  // Get unique client names from task data
-  const availableClientNames = new Set(
-    this.tasks
-      .map((task: any) => task.clientName)
-      .filter((name: string) => name)
-  );
+    // Get unique client names from task data
+    const availableClientNames = new Set(
+      this.tasks
+        .map((task: any) => task.clientName)
+        .filter((name: string) => name)
+    );
 
-  // Keep only clients which are present in task data
-  this.filteredClients = this.clients.filter(
-    (client: any) =>
-      availableClientNames.has(client.name)
-  );
+    // Keep only clients which are present in task data
+    this.filteredClients = this.clients.filter(
+      (client: any) =>
+        availableClientNames.has(client.name)
+    );
 
-  console.log(
-    'AVAILABLE CLIENTS:',
-    this.filteredClients
-  );
-}
+    console.log(
+      'AVAILABLE CLIENTS:',
+      this.filteredClients
+    );
+  }
 
   // =========================================================
   // TOGGLE PANEL
@@ -911,7 +914,7 @@ export class TaskIndex {
           this.tasks =
             response.data || [];
 
-             this.filterAvailableClients();
+          this.filterAvailableClients();
 
         },
 
@@ -2532,4 +2535,20 @@ export class TaskIndex {
   isTaskStatusChecked(id: string): boolean {
     return this.selectedTaskStatuses.includes(id);
   }
+
+  @ViewChild('statusDropdown')
+  statusDropdown!: ElementRef;
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+
+    if (
+      this.showStatusDropdown &&
+      this.statusDropdown &&
+      !this.statusDropdown.nativeElement.contains(event.target)
+    ) {
+      this.showStatusDropdown = false;
+    }
+  }
+
 }

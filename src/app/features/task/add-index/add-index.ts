@@ -416,6 +416,7 @@ export class AddIndexComponent implements OnInit {
               this.onchangeloadDropdownData();
             }
 
+           if (this.task.clientId && this.task.taskCategoryId) { this.onchangeloadUserDropdownData(); }
           }
 
         },
@@ -796,33 +797,6 @@ export class AddIndexComponent implements OnInit {
       : null;
 
 
-    // ----------------------------------------------------------
-    // DATE
-    // ----------------------------------------------------------
-    // alert(this.task.date);
-    // let dateValue = '';
-
-    // if (this.task.date) {
-
-    //   const date = new Date(this.task.date);
-
-    //   const year = date.getFullYear();
-
-    //   const month = String(
-    //     date.getMonth() + 1
-    //   ).padStart(2, '0');
-
-    //   const day = String(
-    //     date.getDate()
-    //   ).padStart(2, '0');
-
-    //   dateValue = `${year}-${month}-${day}`;
-    // }
-
-
-    // ----------------------------------------------------------
-    // FORM DATA
-    // ----------------------------------------------------------
 
     const formData = new FormData();
 
@@ -949,50 +923,19 @@ export class AddIndexComponent implements OnInit {
     this.dataprovider
       .saveTask(formData)
       .subscribe({
-
         next: (response: any) => {
-
-          if (
-            response &&
-            response.success
-          ) {
-
-            Swal.fire(
-              'Success',
-              response.message,
-              'success'
-            );
-
+          if (response && response.success) {
+            Swal.fire('Success', response.message, 'success');
             this.backToIndexPage();
-
           }
           else {
-
-            Swal.fire(
-              'Error',
-              response?.message ||
-              'Unable to save task.',
-              'error'
-            );
+            Swal.fire('Error', response?.message || 'Unable to save task.', 'error');
           }
         },
-
-
         error: (error: any) => {
-
-          console.error(
-            'Error saving task:',
-            error
-          );
-
-          Swal.fire(
-            'Error',
-            error?.error?.message ||
-            'Something went wrong.',
-            'error'
-          );
+          console.error('Error saving task:', error);
+          Swal.fire('Error', error?.error?.message || 'Something went wrong.', 'error');
         }
-
       });
   }
 
