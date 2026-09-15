@@ -17,7 +17,12 @@
 
   <!-- KPI Cards -->
   <section class="kpi-grid">
-    <mat-card class="kpi-card" *ngFor="let kpi of kpis" [class]="kpi.className" (click)="onKpiClick(kpi)">
+    <mat-card
+      class="kpi-card"
+      *ngFor="let kpi of kpis"
+      [class]="kpi.className"
+      (click)="onKpiClick(kpi)"
+    >
       <div class="kpi-top">
         <span class="kpi-title">
           {{ kpi.title }}
@@ -57,12 +62,16 @@
             </select>
           </div>
 
-          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
+          <button
+            type="button"
+            class="btn-clear"
+            (click)="clearFilters()"
+            title="Clear Filters"
+          >
             Clear
           </button>
         </div>
       </div>
-
 
       <mat-divider></mat-divider>
 
@@ -71,7 +80,6 @@
           <thead>
             <tr>
               <th>TASK</th>
-           
               <th>CLIENT NAME</th>
               <th>ASSIGNED BY</th>
               <th>ASSIGNED TO</th>
@@ -79,7 +87,6 @@
               <th>DUE DATE</th>
               <th>PRIORITY</th>
               <th>STATUS</th>
-              <!-- <th>ACTION</th> -->
             </tr>
           </thead>
 
@@ -96,7 +103,7 @@
                   </span>
                 </div>
               </td>
-             <td>
+              <td>
                 <div class="owner">
                   <span class="owner-avatar">
                     {{ task.clientName ? task.clientName.charAt(0).toUpperCase() : '?' }}
@@ -120,31 +127,39 @@
                 <div class="owner">
                   <span class="owner-avatar">
                     {{
-                    task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?'
+                      task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?'
                     }}
                   </span>
 
                   {{ task.assignedUserName }}
                 </div>
               </td>
-              <td>
+              <!-- <td>
                 <div class="owner">
-                  <!-- {{ task.date }} -->
-                  {{ task.date | date:'dd-MM-yyyy' }}
-                  <br>
-                  {{ task.date | date:'hh:mm a' }}
+                  {{ task.date | date: 'dd-MM-yyyy' }}
+                  <br />
+                  {{ task.date | date: 'hh:mm a' }}
+                </div>
+              </td> -->
+              <td>
+                <div class="task-date">
+                  <span>{{ task.date | date: 'dd-MM-yyyy' }}</span>
+                  <small>{{ task.date | date: 'hh:mm a' }}</small>
                 </div>
               </td>
-
-              <td>
+              <!-- <td>
                 <div class="owner">
-                  <!-- {{ task.date }} -->
-                  {{ task.duedatetime | date:'dd-MM-yyyy' }}
-                  <br>
-                  {{ task.duedatetime | date:'hh:mm a' }}
+                  {{ task.duedatetime | date: 'dd-MM-yyyy' }}
+                  <br />
+                  {{ task.duedatetime | date: 'hh:mm a' }}
+                </div>
+              </td> -->
+              <td>
+                <div class="task-date">
+                  <span>{{ task.duedatetime | date: 'dd-MM-yyyy' }}</span>
+                  <small>{{ task.duedatetime | date: 'hh:mm a' }}</small>
                 </div>
               </td>
-
               <td>
                 <div class="owner">
                   <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
@@ -154,30 +169,32 @@
               </td>
 
               <td>
-                <span class="status-badge" [ngClass]="getTaskStatusClass(task.taskStatus)"
+                <span
+                  class="status-badge"
+                  [ngClass]="getTaskStatusClass(task.taskStatus)"
                   [class.status-disabled]="task.taskStatus === 5"
-                  (click)="task.taskStatus !== 5 && openChangeManagerModal(task.taskId)">
+                  (click)="task.taskStatus !== 5 && openChangeManagerModal(task.taskId)"
+                >
                   <span class="status-dot"></span>
                   {{ getTaskStatusLabel(task.taskStatus) }}
                 </span>
               </td>
-
-              <!-- <td>
-                <button mat-icon-button class="task-action">
-                  <mat-icon> more_horiz </mat-icon>
-                </button>
-              </td> -->
             </tr>
 
             <tr *ngIf="tasks.length === 0">
-              <td colspan="7" class="no-records">No active tasks found.</td>
+              <td colspan="8" class="no-records">No active tasks found.</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <mat-paginator [length]="totalTasks" [pageSize]="20" [pageSizeOptions]="[20]" [showFirstLastButtons]="true"
-        (page)="onPageChange($event)">
+      <mat-paginator
+        [length]="totalTasks"
+        [pageSize]="20"
+        [pageSizeOptions]="[20]"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)"
+      >
       </mat-paginator>
     </mat-card>
   </section>
@@ -197,7 +214,12 @@
         </div>
       </div>
 
-      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" aria-label="Close">
+      <button
+        type="button"
+        class="modal-close-button"
+        (click)="closeChangeManagerModal()"
+        aria-label="Close"
+      >
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -215,8 +237,13 @@
           <span class="required">*</span>
         </label>
 
-        <textarea class="manager-select" rows="4" [(ngModel)]="taskDescription" [disabled]="isChangingManager"
-          placeholder="Enter description"></textarea>
+        <textarea
+          class="manager-select"
+          rows="4"
+          [(ngModel)]="taskDescription"
+          [disabled]="isChangingManager"
+          placeholder="Enter description"
+        ></textarea>
 
         <div class="manager-validation-error" *ngIf="descriptionValidationError">
           <mat-icon>error_outline</mat-icon>
@@ -228,8 +255,13 @@
       <div class="manager-form-group">
         <label class="modal-field-label"> Zip File </label>
 
-        <input type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"
-          (change)="onFileOneSelected($event)" />
+        <input
+          type="file"
+          class="manager-select"
+          accept=".zip"
+          [disabled]="isChangingManager"
+          (change)="onFileOneSelected($event)"
+        />
 
         <span class="current-manager-name" *ngIf="fileOneName">
           {{ fileOneName }}
@@ -240,7 +272,12 @@
       <div class="manager-form-group">
         <label class="modal-field-label"> File </label>
 
-        <input type="file" class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+        <input
+          type="file"
+          class="manager-select"
+          [disabled]="isChangingManager"
+          (change)="onFileTwoSelected($event)"
+        />
 
         <span class="current-manager-name" *ngIf="fileTwoName">
           {{ fileTwoName }}
@@ -249,12 +286,21 @@
     </div>
 
     <div class="modal-footer">
-      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()"
-        [disabled]="isChangingManager">
+      <button
+        type="button"
+        class="modal-cancel-button"
+        (click)="closeChangeManagerModal()"
+        [disabled]="isChangingManager"
+      >
         Cancel
       </button>
 
-      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
+      <button
+        type="button"
+        class="modal-save-button"
+        (click)="changeManager()"
+        [disabled]="isChangingManager"
+      >
         <mat-icon>
           {{ isChangingManager ? 'hourglass_top' : 'save' }}
         </mat-icon>

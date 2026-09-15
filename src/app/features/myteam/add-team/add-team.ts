@@ -66,7 +66,8 @@ import {
 import {
   DataProviderService,
   DepartmentDTO,
-  DesignationDTO
+  DesignationDTO,
+  TaskCategoryDTO
 } from '../../../service/data-provider.service';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
@@ -314,8 +315,8 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     // this.isEditMode = true;
 
-  this.userForm.get('departmentId')?.disable();
-  this.userForm.get('desigmationId')?.disable();
+  // this.userForm.get('departmentId')?.disable();
+  // this.userForm.get('desigmationId')?.disable();
 
     // First load dropdowns
     this.loadDepartments();
@@ -420,93 +421,386 @@ export class AddTeam implements OnInit, AfterViewInit {
   // EDIT MODE
   // ============================================================
 
-  private loadUserDetails(): void {
+//   private loadUserDetails(): void {
 
-    this.dataProvider
-      .getUserManagementDetailsById(this.userId)
-      .subscribe({
+//     this.dataProvider
+//       .getUserManagementDetailsById(this.userId)
+//       .subscribe({
 
-        next: (response: any) => {
-// alert( response.designationId);
-          if (!response) {
-            alert('User details not found.');
-            this.backToIndexPage();
-            return;
-          }
+//         next: (response: any) => {
+// // alert( response.designationId);
+//           if (!response) {
+//             alert('User details not found.');
+//             this.backToIndexPage();
+//             return;
+//           }
 
-          /**
-           * Password is optional while editing
-           */
-          this.userForm
-            .get('password')
-            ?.clearValidators();
+//           /**
+//            * Password is optional while editing
+//            */
+//           this.userForm
+//             .get('password')
+//             ?.clearValidators();
 
-          this.userForm
-            .get('password')
-            ?.updateValueAndValidity();
+//           this.userForm
+//             .get('password')
+//             ?.updateValueAndValidity();
 
-         this.userForm.patchValue({
+//          this.userForm.patchValue({
 
-  name:
-    response.firstName || '',
+//   name:
+//     response.firstName || '',
 
-  email:
-    response.email || '',
+//   email:
+//     response.email || '',
 
-  mobile:
-    response.mobileNo || '',
+//   mobile:
+//     response.mobileNo || '',
 
-  telephone:
-    response.telephone &&
-    response.telephone !== 'NA'
-      ? response.telephone
-      : '',
+//   telephone:
+//     response.telephone &&
+//     response.telephone !== 'NA'
+//       ? response.telephone
+//       : '',
 
-  expiryDate:
-    this.parseExpiryDate(
-      response.expiryDate
-    ),
+//   expiryDate:
+//     this.parseExpiryDate(
+//       response.expiryDate
+//     ),
 
-  status:
-    Number(response.status) || 1,
+//   status:
+//     Number(response.status) || 1,
 
-  isAdmin:
-    response.permission === 'Y',
+//   isAdmin:
+//     response.permission === 'Y',
 
-  departmentId:
-    response.departmentId || null,
+//   departmentId:
+//     response.departmentId || null,
 
-  desigmationId:
-    response.designationId || null
+//   desigmationId:
+//     response.designationId || null
 
-});
+// });
 
-          /**
-           * Load permissions returned by API
-           */
-          if (response.module) {
-            this.buildPermissionGroups(
-              response.module
-            );
-          }
+//           /**
+//            * Load permissions returned by API
+//            */
+//           if (response.module) {
+//             this.buildPermissionGroups(
+//               response.module
+//             );
+//           }
 
-        },
+//         },
 
-        error: (err) => {
+//         error: (err) => {
 
-          console.error(
-            'Failed to fetch user details',
-            err
-          );
+//           console.error(
+//             'Failed to fetch user details',
+//             err
+//           );
 
-          alert(
-            'Failed to load user details.'
-          );
+//           alert(
+//             'Failed to load user details.'
+//           );
+
+//           this.backToIndexPage();
+//         }
+//       });
+//   }
+
+private loadUserDetails(): void {
+
+  this.dataProvider
+    .getUserManagementDetailsById(this.userId)
+    .subscribe({
+
+      next: (response: any) => {
+
+        console.log(
+          '========== EDIT USER RESPONSE =========='
+        );
+
+        console.log(
+          'Full Response:',
+          response
+        );
+
+
+        // =====================================================
+        // CHECK RESPONSE
+        // =====================================================
+
+        if (!response) {
+
+          alert('User details not found.');
 
           this.backToIndexPage();
+
+          return;
+
         }
-      });
-  }
+
+
+        // =====================================================
+        // PASSWORD
+        // Password is optional during edit
+        // =====================================================
+
+        this.userForm
+          .get('password')
+          ?.clearValidators();
+
+        this.userForm
+          .get('password')
+          ?.updateValueAndValidity();
+
+
+        // =====================================================
+        // CATEGORY IDS
+        // Restore categories already assigned to user
+        //
+        // Supports:
+        // [1, 2]
+        // "1,2"
+        // "3"
+        // 3
+        // =====================================================
+
+        const categoryIds =
+          response.taskcategoryIds;
+
+        console.log(
+          'Raw taskcategoryIds:',
+          categoryIds
+        );
+
+        console.log(
+          'taskcategoryIds type:',
+          typeof categoryIds
+        );
+
+        console.log(
+          'taskcategoryIds is array:',
+          Array.isArray(categoryIds)
+        );
+
+
+        if (Array.isArray(categoryIds)) {
+
+          this.selectedCategoryIds =
+            categoryIds
+              .map(
+                (id: any) => Number(id)
+              )
+              .filter(
+                (id: number) => !isNaN(id)
+              );
+
+        }
+
+        else if (
+          typeof categoryIds === 'string' &&
+          categoryIds.trim() !== ''
+        ) {
+
+          this.selectedCategoryIds =
+            categoryIds
+              .split(',')
+              .map(
+                (id: string) =>
+                  Number(id.trim())
+              )
+              .filter(
+                (id: number) =>
+                  !isNaN(id)
+              );
+
+        }
+
+        else if (
+          typeof categoryIds === 'number'
+        ) {
+
+          this.selectedCategoryIds = [
+            Number(categoryIds)
+          ];
+
+        }
+
+        else {
+
+          this.selectedCategoryIds = [];
+
+        }
+
+
+        console.log(
+          'EDIT Selected Category IDs:',
+          this.selectedCategoryIds
+        );
+
+
+        // =====================================================
+        // PATCH USER FORM
+        // =====================================================
+
+        this.userForm.patchValue({
+
+          name:
+            response.firstName || '',
+
+
+          email:
+            response.email || '',
+
+
+          mobile:
+            response.mobileNo || '',
+
+
+          telephone:
+            response.telephone &&
+            response.telephone !== 'NA'
+              ? response.telephone
+              : '',
+
+
+          expiryDate:
+            this.parseExpiryDate(
+              response.expiryDate
+            ),
+
+
+          status:
+            Number(response.status) || 1,
+
+
+          isAdmin:
+            response.permission === 'Y',
+
+
+          departmentId:
+            response.departmentId || null,
+
+
+          desigmationId:
+            response.designationId || null
+
+        });
+
+
+        // =====================================================
+        // DEBUG FORM VALUES
+        // =====================================================
+
+        console.log(
+          'Patched Department ID:',
+          this.userForm.get(
+            'departmentId'
+          )?.value
+        );
+
+        console.log(
+          'Patched Designation ID:',
+          this.userForm.get(
+            'desigmationId'
+          )?.value
+        );
+
+
+        // =====================================================
+        // LOAD CATEGORIES
+        //
+        // IMPORTANT:
+        // false prevents loadCategories() from clearing
+        // selectedCategoryIds.
+        // =====================================================
+
+        if (response.departmentId) {
+
+          console.log(
+            'Loading categories for department:',
+            response.departmentId
+          );
+
+          this.loadCategories(false);
+
+        }
+
+        else {
+
+          this.categoryList = [];
+
+        }
+
+
+        // =====================================================
+        // LOAD PERMISSIONS
+        // =====================================================
+
+        if (response.module) {
+
+          console.log(
+            'Loading module permissions:',
+            response.module
+          );
+
+          this.buildPermissionGroups(
+            response.module
+          );
+
+        }
+
+
+        // =====================================================
+        // FINAL DEBUG
+        // =====================================================
+
+        console.log(
+          '========== EDIT DATA LOADED =========='
+        );
+
+        console.log(
+          'Selected Category IDs:',
+          this.selectedCategoryIds
+        );
+
+        console.log(
+          'Category List:',
+          this.categoryList
+        );
+
+        console.log(
+          'Form Values:',
+          this.userForm.getRawValue()
+        );
+
+      },
+
+
+      // =======================================================
+      // ERROR
+      // =======================================================
+
+      error: (err) => {
+
+        console.error(
+          'Failed to fetch user details',
+          err
+        );
+
+        alert(
+          'Failed to load user details.'
+        );
+
+        this.backToIndexPage();
+
+      }
+
+    });
+}
+
 
   // ============================================================
   // LOAD PERMISSION MODULES
@@ -1351,8 +1645,10 @@ onSubmit(): void {
   // are disabled during EDIT mode.
   // ============================================================
 
-  const formValues =
-    this.userForm.getRawValue();
+  // const formValues =
+  //   this.userForm.getRawValue();
+  
+  const formValues = this.userForm.value;
 
 
   console.log(
@@ -1439,6 +1735,9 @@ onSubmit(): void {
         ? 'Y'
         : 'N',
 
+        // Multiple selected category IDs
+      categoryIds:
+      this.selectedCategoryIds,
 
     status:
       Number(
@@ -2218,6 +2517,8 @@ validateExpiryDate(): boolean {
 
   designationList: DesignationDTO[] = [];
 
+  categoryList: TaskCategoryDTO[] = [];
+
   loadDepartments(): void {
     this.dataProvider.getActiveDepartments().subscribe({
       next: (response: DepartmentDTO[]) => {
@@ -2239,6 +2540,8 @@ validateExpiryDate(): boolean {
       }
     });
   }
+
+
 
 private formatDateForApi(
   date: Date | null
@@ -2282,6 +2585,105 @@ private formatDateForApi(
     ).padStart(2, '0');
 
   return `${year}-${month}-${day}`;
+}
+
+//Task category
+
+
+selectedCategoryIds: number[] = [];
+showCategoryDropdown = false;
+
+loadCategories(clearSelection: boolean = true): void {
+
+  const departmentId =
+    this.userForm.get('departmentId')?.value;
+
+  console.log(
+    'Selected Department ID:',
+    departmentId
+  );
+
+  if (!departmentId) {
+    this.categoryList = [];
+    this.selectedCategoryIds = [];
+    return;
+  }
+
+  // Only clear when department is manually changed
+  if (clearSelection) {
+    this.selectedCategoryIds = [];
+  }
+
+  this.dataProvider
+    .getCategoriesByDepartmentId(departmentId)
+    .subscribe({
+
+      next: (response: TaskCategoryDTO[]) => {
+
+        console.log(
+          'Category API Response:',
+          response
+        );
+
+        this.categoryList = response;
+
+        response.forEach(category => {
+
+          console.log(
+            'Category:',
+            category.name,
+            'ID:',
+            category.taskcategoryId,
+            'Checked:',
+            this.isCategoryChecked(
+              category.taskcategoryId
+            )
+          );
+
+        });
+
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Error loading categories:',
+          error
+        );
+
+        this.categoryList = [];
+
+      }
+
+    });
+}
+
+toggleCategory(taskcategoryId: number, event: Event): void {
+
+  const checkbox = event.target as HTMLInputElement;
+
+  console.log('Clicked ID:', taskcategoryId);
+  console.log('Checked:', checkbox.checked);
+
+  if (checkbox.checked) {
+
+    if (!this.selectedCategoryIds.includes(taskcategoryId)) {
+      this.selectedCategoryIds.push(taskcategoryId);
+    }
+
+  } else {
+
+    this.selectedCategoryIds =
+      this.selectedCategoryIds.filter(
+        id => id !== taskcategoryId
+      );
+  }
+
+  console.log('Selected Category IDs:', this.selectedCategoryIds);
+}
+
+isCategoryChecked(taskcategoryId: number): boolean {
+  return this.selectedCategoryIds.includes(taskcategoryId);
 }
 
 }

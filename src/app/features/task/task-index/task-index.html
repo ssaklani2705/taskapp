@@ -70,11 +70,9 @@
                 --All Clients--
               </option>
 
-                <option
-  *ngFor="let client of filteredClients"
-  [value]="client.clientId">
-  {{ client.name }}
-</option>
+              <option *ngFor="let client of filteredClients" [value]="client.clientId">
+                {{ client.name }}
+              </option>
 
 
             </select>
@@ -83,7 +81,7 @@
 
 
           <!-- TASK CATEGORY -->
-          <div class="status-wrapper">
+          <div class="status-wrapper" >
 
             <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()">
 
@@ -337,7 +335,7 @@
 
                 </th>
 
-                <th class="action-column">
+                <th class="action-column" style="width: 200px;">
                   Action
                 </th>
 
@@ -369,6 +367,13 @@
                   <span class="wrap-text">
                     {{ task.title || '-' }}
                   </span>
+
+                  <button type="button" class="description-icon-button" *ngIf="task.description"
+                    (click)="openDescriptionModal(task)" matTooltip="View Description" aria-label="View Description">
+
+                     <i class="fa fa-file-text"></i>
+
+                  </button>
                 </td>
 
 
@@ -397,6 +402,13 @@
                 <td>
                   <span class="wrap-text">
                     {{ task.taskCategoryName || '-' }}
+                  </span>
+                </td>
+
+                <!-- ASSIGNED BY -->
+                <td>
+                  <span class="wrap-text">
+                    {{ task.assignedbyName }}
                   </span>
                 </td>
 
@@ -519,10 +531,10 @@
 
                     <!-- EDIT -->
                     @if (
-                    editPer === "Y"
+                    editPer === "Y" && task.taskStatus == 1
                     && task.status !== 3
                     && (
-                    isAdmin === "Y"
+                    isAdmin === "Y" && task.taskStatus == 1
                     || isTaskOwner(task)
                     )
                     ) {
@@ -917,4 +929,79 @@
       </button>
     </div>
   </div>
+</div>
+
+
+<!-- DESCRIPTION MODAL -->
+<div class="modal-overlay" *ngIf="showDescriptionModal" (click)="closeDescriptionModal()">
+
+  <div class="change-manager-modal description-modal" (click)="$event.stopPropagation()">
+
+    <!-- HEADER -->
+    <div class="modal-header">
+
+      <div class="modal-title">
+
+        <div class="modal-title-icon">
+          <mat-icon>description</mat-icon>
+        </div>
+
+        <div>
+          <div class="modal-title-text">
+            Task Description
+          </div>
+
+          <div class="modal-subtitle">
+            {{ selectedDescriptionTask?.title || 'Task' }}
+          </div>
+        </div>
+
+      </div>
+
+      <button type="button" class="modal-close-button" (click)="closeDescriptionModal()" aria-label="Close">
+
+        <mat-icon>close</mat-icon>
+
+      </button>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- BODY -->
+    <div class="modal-body">
+
+      <div class="manager-form-group">
+
+        <label class="modal-field-label">
+          Description
+        </label>
+
+        <div class="description-content">
+
+          {{ selectedDescriptionTask?.description || 'No description available.' }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="modal-footer">
+
+      <button type="button" class="modal-cancel-button" (click)="closeDescriptionModal()">
+
+        <mat-icon>close</mat-icon>
+
+        <span>
+          Close
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
 </div>

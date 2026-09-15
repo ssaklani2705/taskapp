@@ -51,6 +51,12 @@ export interface DesignationDTO {
   name?: string;
 }
 
+export interface TaskCategoryDTO {
+taskcategoryId: number;
+name: string;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -427,6 +433,13 @@ export class DataProviderService {
       `${environment.apiBaseUrl}admin/designation/active`,
     );
   }
+
+  getCategoriesByDepartmentId(departmentId: number): Observable<TaskCategoryDTO[]> {
+return this.http.get<TaskCategoryDTO[]>(
+`${environment.apiBaseUrl}admin/taskcategory/department/${departmentId}`
+);
+}
+
 
   //Task Category
   getTaskCategoryDetails(
