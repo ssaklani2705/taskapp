@@ -13,11 +13,7 @@
       </div>
 
       <div class="header-action">
-        <button
-          mat-flat-button
-          class="back-button"
-          type="button"
-          (click)="backToIndexPage()">
+        <button mat-flat-button class="back-button" type="button" (click)="backToIndexPage()">
 
           <mat-icon>arrow_back</mat-icon>
           Back to Index
@@ -81,7 +77,7 @@
 
           </div>
 
-           <div class="info-row">
+          <div class="info-row">
 
             <span class="info-label">
               Designation Name:
@@ -94,20 +90,22 @@
           </div>
 
 
+
+
+
           <!-- ADMIN PERMISSION -->
 
           <div class="admin-permission">
 
-            <mat-icon
-              [ngClass]="
+            <mat-icon [ngClass]="
                 user.permission === 'Y'
                   ? 'permission-yes'
                   : 'permission-no'
               ">
 
               {{ user.permission === 'Y'
-                ? 'verified_user'
-                : 'close'
+              ? 'verified_user'
+              : 'close'
               }}
 
             </mat-icon>
@@ -119,6 +117,9 @@
           </div>
 
         </div>
+
+
+
 
 
         <!-- RIGHT COLUMN -->
@@ -150,8 +151,8 @@
 
           </div>
 
-         
-<div class="info-row">
+
+          <div class="info-row">
 
             <span class="info-label">
               Department Name:
@@ -162,7 +163,9 @@
             </span>
 
           </div>
-          
+
+
+
 
 
           <div class="info-row status-row">
@@ -171,9 +174,7 @@
               Status:
             </span>
 
-            <span
-              class="status-badge"
-              [ngClass]="getStatusClass(user.status)">
+            <span class="status-badge" [ngClass]="getStatusClass(user.status)">
 
               {{ getStatusText(user.status) }}
 
@@ -181,8 +182,20 @@
 
           </div>
 
+
+
         </div>
 
+        <div class="detail-row">
+          <span class="detail-label">Task Category</span>
+          <div class="category-chips">
+            <span class="chip">Bills</span>
+            <span class="chip">Cash &amp; Liquidity Management</span>
+            <span class="chip">Financial Reporting</span>
+            <span class="chip">Legal Aid</span>
+            <span class="chip">Shorthand Dictation</span>
+          </div>
+        </div>
       </div>
 
     </mat-card-content>
@@ -194,9 +207,7 @@
        RIGHTS AND PERMISSIONS
   ====================================================== -->
 
-  <mat-card
-    class="section-card"
-    *ngIf="user.permission !== 'Y'">
+  <mat-card class="section-card" *ngIf="user.permission !== 'Y'">
 
     <mat-card-header class="section-header">
 
@@ -271,8 +282,7 @@
 
           <tbody>
 
-            <ng-container
-              *ngFor="let group of permissionGroups">
+            <ng-container *ngFor="let group of permissionGroups">
 
               <!-- GROUP -->
 
@@ -295,9 +305,7 @@
 
               <!-- MODULES -->
 
-              <tr
-                class="module-row"
-                *ngFor="let mod of group.modules">
+              <tr class="module-row" *ngFor="let mod of group.modules">
 
                 <td class="module-name">
                   {{ mod }}
@@ -308,17 +316,16 @@
 
                 <td>
 
-                  <mat-icon
-                    [ngClass]="
+                  <mat-icon [ngClass]="
                       permissions[mod]?.addPer
                         ? 'permission-yes'
                         : 'permission-no'
                     ">
 
                     {{
-                      permissions[mod]?.addPer
-                        ? 'check'
-                        : 'close'
+                    permissions[mod]?.addPer
+                    ? 'check'
+                    : 'close'
                     }}
 
                   </mat-icon>
@@ -330,17 +337,16 @@
 
                 <td>
 
-                  <mat-icon
-                    [ngClass]="
+                  <mat-icon [ngClass]="
                       permissions[mod]?.editPer
                         ? 'permission-yes'
                         : 'permission-no'
                     ">
 
                     {{
-                      permissions[mod]?.editPer
-                        ? 'check'
-                        : 'close'
+                    permissions[mod]?.editPer
+                    ? 'check'
+                    : 'close'
                     }}
 
                   </mat-icon>
@@ -352,17 +358,16 @@
 
                 <td>
 
-                  <mat-icon
-                    [ngClass]="
+                  <mat-icon [ngClass]="
                       permissions[mod]?.deletePer
                         ? 'permission-yes'
                         : 'permission-no'
                     ">
 
                     {{
-                      permissions[mod]?.deletePer
-                        ? 'check'
-                        : 'close'
+                    permissions[mod]?.deletePer
+                    ? 'check'
+                    : 'close'
                     }}
 
                   </mat-icon>
@@ -374,17 +379,16 @@
 
                 <td>
 
-                  <mat-icon
-                    [ngClass]="
+                  <mat-icon [ngClass]="
                       permissions[mod]?.approvePer
                         ? 'permission-yes'
                         : 'permission-no'
                     ">
 
                     {{
-                      permissions[mod]?.approvePer
-                        ? 'check'
-                        : 'close'
+                    permissions[mod]?.approvePer
+                    ? 'check'
+                    : 'close'
                     }}
 
                   </mat-icon>
@@ -396,17 +400,16 @@
 
                 <td>
 
-                  <mat-icon
-                    [ngClass]="
+                  <mat-icon [ngClass]="
                       permissions[mod]?.adminApprovePer
                         ? 'permission-yes'
                         : 'permission-no'
                     ">
 
                     {{
-                      permissions[mod]?.adminApprovePer
-                        ? 'check'
-                        : 'close'
+                    permissions[mod]?.adminApprovePer
+                    ? 'check'
+                    : 'close'
                     }}
 
                   </mat-icon>
@@ -418,17 +421,16 @@
 
                 <td>
 
-                  <mat-icon
-                    [ngClass]="
+                  <mat-icon [ngClass]="
                       permissions[mod]?.viewPer
                         ? 'permission-yes'
                         : 'permission-no'
                     ">
 
                     {{
-                      permissions[mod]?.viewPer
-                        ? 'check'
-                        : 'close'
+                    permissions[mod]?.viewPer
+                    ? 'check'
+                    : 'close'
                     }}
 
                   </mat-icon>
@@ -440,17 +442,16 @@
 
                 <td>
 
-                  <mat-icon
-                    [ngClass]="
+                  <mat-icon [ngClass]="
                       permissions[mod]?.exportExcel
                         ? 'permission-yes'
                         : 'permission-no'
                     ">
 
                     {{
-                      permissions[mod]?.exportExcel
-                        ? 'check'
-                        : 'close'
+                    permissions[mod]?.exportExcel
+                    ? 'check'
+                    : 'close'
                     }}
 
                   </mat-icon>
@@ -503,9 +504,7 @@
 
       <!-- NO RECORDS -->
 
-      <div
-        *ngIf="!hasTransactionHistory"
-        class="no-records-box">
+      <div *ngIf="!hasTransactionHistory" class="no-records-box">
 
         <mat-icon>
           info
@@ -520,9 +519,7 @@
 
       <!-- HISTORY TABLE -->
 
-      <div
-        *ngIf="hasTransactionHistory"
-        class="history-table-wrapper">
+      <div *ngIf="hasTransactionHistory" class="history-table-wrapper">
 
         <table class="history-table">
 
@@ -551,8 +548,7 @@
 
           <tbody>
 
-            <tr
-              *ngFor="let record of transactionhistory; let i = index">
+            <tr *ngFor="let record of transactionhistory; let i = index">
 
               <td>{{i+1}}</td>
               <td>

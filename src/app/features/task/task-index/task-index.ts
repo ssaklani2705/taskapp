@@ -61,8 +61,8 @@ interface Task {
   taskStatus: number;
   addedBy: String;
   assignedTo: string;
-  assignedbyName:string;
-  description:string;
+  assignedbyName: string;
+  description: string;
 }
 
 interface Client {
@@ -335,7 +335,7 @@ export class TaskIndex {
   ) { }
 
 
- ngOnInit(): void {
+  ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
 
     if (isPlatformBrowser(this.platformId)) {
@@ -375,8 +375,8 @@ export class TaskIndex {
       if (params['taskStatusIds'] !== undefined) {
         this.selectedTaskStatuses = params['taskStatusIds']
           ? String(params['taskStatusIds'])
-              .split(',')
-              .filter((status: string) => status !== '')
+            .split(',')
+            .filter((status: string) => status !== '')
           : [];
 
         this.currentPage = 1;
@@ -483,7 +483,7 @@ export class TaskIndex {
   }
 
 
- 
+
   // =========================================================
   // SAVE FILTER STATE
   // =========================================================
@@ -2177,117 +2177,117 @@ export class TaskIndex {
   }
 
 
-  
-exportToExcel(): void {
 
-  // Make sure there is data
-  if (!this.tasks || this.tasks.length === 0) {
-    alert('No tasks available for export.');
-    return;
+  exportToExcel(): void {
+
+    // Make sure there is data
+    if (!this.tasks || this.tasks.length === 0) {
+      alert('No tasks available for export.');
+      return;
+    }
+
+    const exportData = this.tasks.map((task: any, index: number) => {
+
+      return {
+
+        // 1. Sr. No.
+        'Sr. No.': index + 1,
+
+        // 2. Title
+        'Title': task.title || '-',
+
+        // 3. Client
+        'Client': task.clientName || '-',
+
+        // 4. Date
+        'Date': task.date
+          ? this.formatExcelDate(task.date)
+          : '-',
+
+        // 5. Due Date
+        'Due Date': task.dueDateTime
+          ? this.formatExcelDate(task.dueDateTime)
+          : '-',
+
+        // 6. Task Category
+        'Task Category': task.taskCategoryName || '-',
+
+        // 7. Assigned By
+        'Assigned By': task.assignedbyName || '-',
+
+        // 8. Assigned To
+        'Assigned To':
+          !task.assignedToName ||
+            task.assignedToName === '0'
+            ? 'Unassigned User'
+            : task.assignedToName,
+
+        // 9. Priority
+        'Priority': this.getPriorityLabel(task.priority),
+
+        // 10. Task Status
+        'Task Status': this.common.getTaskStatusLabel(
+          task.taskStatus
+        ),
+
+        // 11. Status
+        'Status': this.common.getStatusLabel(
+          task.status
+        )
+      };
+    });
+
+
+    // Create worksheet
+    const worksheet: XLSX.WorkSheet =
+      XLSX.utils.json_to_sheet(exportData);
+
+
+    // Set column widths
+    worksheet['!cols'] = [
+
+      { wch: 8 },    // Sr. No.
+      { wch: 35 },   // Title
+      { wch: 25 },   // Client
+      { wch: 20 },   // Date
+      { wch: 20 },   // Due Date
+      { wch: 25 },   // Task Category
+      { wch: 25 },   // Assigned By
+      { wch: 25 },   // Assigned To
+      { wch: 15 },   // Priority
+      { wch: 20 },   // Task Status
+      { wch: 15 }    // Status
+    ];
+
+
+    // Create workbook
+    const workbook: XLSX.WorkBook =
+      XLSX.utils.book_new();
+
+
+    // Add worksheet
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      'Tasks'
+    );
+
+
+    // Generate file name
+    const today = new Date();
+
+    const dateString =
+      `${today.getFullYear()}-` +
+      `${String(today.getMonth() + 1).padStart(2, '0')}-` +
+      `${String(today.getDate()).padStart(2, '0')}`;
+
+
+    // Download Excel
+    XLSX.writeFile(
+      workbook,
+      `Tasks_${dateString}.xlsx`
+    );
   }
-
-  const exportData = this.tasks.map((task: any, index: number) => {
-
-    return {
-
-      // 1. Sr. No.
-      'Sr. No.': index + 1,
-
-      // 2. Title
-      'Title': task.title || '-',
-
-      // 3. Client
-      'Client': task.clientName || '-',
-
-      // 4. Date
-      'Date': task.date
-        ? this.formatExcelDate(task.date)
-        : '-',
-
-      // 5. Due Date
-      'Due Date': task.dueDateTime
-        ? this.formatExcelDate(task.dueDateTime)
-        : '-',
-
-      // 6. Task Category
-      'Task Category': task.taskCategoryName || '-',
-
-      // 7. Assigned By
-      'Assigned By': task.assignedbyName || '-',
-
-      // 8. Assigned To
-      'Assigned To':
-        !task.assignedToName ||
-        task.assignedToName === '0'
-          ? 'Unassigned User'
-          : task.assignedToName,
-
-      // 9. Priority
-      'Priority': this.getPriorityLabel(task.priority),
-
-      // 10. Task Status
-      'Task Status': this.common.getTaskStatusLabel(
-        task.taskStatus
-      ),
-
-      // 11. Status
-      'Status': this.common.getStatusLabel(
-        task.status
-      )
-    };
-  });
-
-
-  // Create worksheet
-  const worksheet: XLSX.WorkSheet =
-    XLSX.utils.json_to_sheet(exportData);
-
-
-  // Set column widths
-  worksheet['!cols'] = [
-
-    { wch: 8 },    // Sr. No.
-    { wch: 35 },   // Title
-    { wch: 25 },   // Client
-    { wch: 20 },   // Date
-    { wch: 20 },   // Due Date
-    { wch: 25 },   // Task Category
-    { wch: 25 },   // Assigned By
-    { wch: 25 },   // Assigned To
-    { wch: 15 },   // Priority
-    { wch: 20 },   // Task Status
-    { wch: 15 }    // Status
-  ];
-
-
-  // Create workbook
-  const workbook: XLSX.WorkBook =
-    XLSX.utils.book_new();
-
-
-  // Add worksheet
-  XLSX.utils.book_append_sheet(
-    workbook,
-    worksheet,
-    'Tasks'
-  );
-
-
-  // Generate file name
-  const today = new Date();
-
-  const dateString =
-    `${today.getFullYear()}-` +
-    `${String(today.getMonth() + 1).padStart(2, '0')}-` +
-    `${String(today.getDate()).padStart(2, '0')}`;
-
-
-  // Download Excel
-  XLSX.writeFile(
-    workbook,
-    `Tasks_${dateString}.xlsx`
-  );
-}
 
 
 
@@ -2450,22 +2450,22 @@ exportToExcel(): void {
     return this.selectedTaskStatuses.includes(id);
   }
 
-showDescriptionModal = false;
-selectedDescriptionTask: any = null;
+  showDescriptionModal = false;
+  selectedDescriptionTask: any = null;
 
-openDescriptionModal(task: Task): void {
+  openDescriptionModal(task: Task): void {
 
-  this.selectedDescriptionTask = task;
+    this.selectedDescriptionTask = task;
 
-  this.showDescriptionModal = true;
-}
+    this.showDescriptionModal = true;
+  }
 
-closeDescriptionModal(): void {
+  closeDescriptionModal(): void {
 
-  this.showDescriptionModal = false;
+    this.showDescriptionModal = false;
 
-  this.selectedDescriptionTask = null;
-}
+    this.selectedDescriptionTask = null;
+  }
 
 
 

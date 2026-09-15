@@ -38,7 +38,7 @@ import { Common } from '../../../classes/common';
 
 @Component({
   selector: 'app-view-team',
-    standalone: true,
+  standalone: true,
 
   imports: [
     CommonModule,
@@ -50,7 +50,7 @@ import { Common } from '../../../classes/common';
   templateUrl: './view-team.html',
   styleUrl: './view-team.scss',
 })
-export class ViewTeam  implements OnInit {
+export class ViewTeam implements OnInit {
 
 
   // =====================================================
@@ -108,6 +108,7 @@ export class ViewTeam  implements OnInit {
   // =====================================================
 
   transactionhistory: any[] = [];
+  taskCategoryList: any[] = [];
 
 
   // =====================================================
@@ -127,7 +128,7 @@ export class ViewTeam  implements OnInit {
     private dataprovider: DataProviderService,
 
     private router: Router
-  ) {}
+  ) { }
 
 
   // =====================================================
@@ -299,6 +300,9 @@ export class ViewTeam  implements OnInit {
               : [];
 
 
+          this.taskCategoryList = Array.isArray(response?.taskCategories) ? [...response.taskCategories] : []
+
+
           this.transactionhistory.sort(
             (a: any, b: any) => {
 
@@ -424,7 +428,7 @@ export class ViewTeam  implements OnInit {
               .map(
                 key =>
                   groupMap[
-                    Number(key)
+                  Number(key)
                   ]
               )
 
