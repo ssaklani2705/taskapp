@@ -21,64 +21,23 @@
       </div>
 
       <!-- RIGHT: CLIENT DROPDOWN -->
- <div class="client-filter">
+<div class="client-filter">
+        <div class="status-wrapper">
+          <select
+            class="status-select"
+            [(ngModel)]="selectedClientId"
+            (change)="onClientChange(selectedClientId)"
+          >
+            <option [value]="0">--All Clients--</option>
 
-  <mat-form-field
-    appearance="outline"
-    class="client-select">
-
-    <mat-label>Select Client</mat-label>
-
-    <mat-select
-      [(value)]="selectedClientId"
-      panelClass="client-select-panel"
-      (selectionChange)="onClientChange($event.value)">
-
-      <mat-option [value]="0">
-        All Clients
-      </mat-option>
-
-      @for (client of clients; track client.clientId) {
-        <mat-option [value]="client.clientId">
-          {{ client.clientName }}
-        </mat-option>
-      }
-
-    </mat-select>
-
-  </mat-form-field>
-
-</div>
-
-
-
-
-
-      <!--div class="header-actions">
-
-        <button
-          mat-flat-button
-          class="check-in-button"
-          (click)="checkIn()">
-
-          <span>Check in</span>
-
-          <span class="dot">·</span>
-
-          <span>{{ checkedInTime() }}</span>
-
-        </button>
-
-        <div
-          class="task-count"
-          matTooltip="Tasks today">
-
-         {{ todayTasks() }}
-
-
+            @for (client of clients; track client.clientId) {
+              <option [value]="client.clientId">
+                {{ client.clientName }}
+              </option>
+            }
+          </select>
         </div>
-
-      </div-->
+      </div>
 
     </header>
 
@@ -208,6 +167,28 @@
 
                         <span class="task-value">
                           {{ task.assignedToName || 'Not Assigned' }}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                    <!-- ASSIGNED By -->
+
+                    <div class="task-info-row">
+
+                      <mat-icon>
+                        person
+                      </mat-icon>
+
+                      <div class="task-info-content">
+
+                        <span class="task-label">
+                          ASSIGNED BY
+                        </span>
+
+                        <span class="task-value">
+                          {{ task.assignedByUser}}
                         </span>
 
                       </div>

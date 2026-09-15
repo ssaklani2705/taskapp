@@ -1,36 +1,23 @@
-/* ============================================================
-   WORKSPACE DASHBOARD
-============================================================ */
-
 :host {
   display: block;
   width: 100%;
   height: 100%;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  --border: #dce2e9;
-  --header-bg: #f1f2f4;
-
+  font-family: Arial, Helvetica, sans-serif;
+  --border: #dce3eb;
+  --header-bg: #f4f7fa;
   --stat-bg: #f0f1f3;
-
   --text-dark: #193454;
   --text-heading: #1d3657;
+  --text-primary: #294563;
   --text-muted: #71839d;
+  --text-light: #94a1b1;
   --icon-color: #7387a2;
-
   --red: #c62f48;
   --red-bg: #fde6eb;
-
   --blue: #397fb5;
   --blue-bg: #e5f2fb;
-
   --yellow: #d89c1b;
   --green: #3c9569;
-
   box-sizing: border-box;
 }
 
@@ -40,1367 +27,820 @@
   box-sizing: border-box;
 }
 
-
-/* ============================================================
-   PAGE
-============================================================ */
-
 .page-shell {
   width: 100%;
   min-height: 100%;
-
   padding: 0 5px 30px;
-
   background: #ffffff;
 }
-
-
-/* ============================================================
-   MAIN CARD
-============================================================ */
 
 .workspace-card {
   width: 100%;
-
   background: #ffffff;
-
   border: 1px solid var(--border);
   border-radius: 14px;
-
   overflow: hidden;
-
-  box-shadow: none;
+  box-shadow: 0 2px 10px rgba(32, 53, 78, 0.035);
 }
-
-
-/* ============================================================
-   HEADER
-============================================================ */
 
 .workspace-header {
   width: 100%;
   min-height: 82px;
   height: 82px;
-
   padding: 0 25px;
-
   display: flex;
   align-items: center;
-
-  background: linear-gradient(
-    120deg,
-    #eaf3fb 0%,
-    #f1eefc 55%,
-    #fdeef3 100%
-  );
-
-  box-sizing: border-box;
+  justify-content: space-between;
+  background: linear-gradient(120deg, #eaf3fb 0%, #f1eefc 55%, #fdeef3 100%);
 }
-
-
-
-/* ============================================================
-   PROFILE
-============================================================ */
 
 .profile-section {
   display: flex;
   align-items: center;
-
   min-width: 0;
   flex: 1;
 }
 
-
 .avatar {
-  width: 40px;
-  height: 40px;
-
-  flex: 0 0 40px;
-
-  border-radius: 50%;
-
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  background: linear-gradient(
-    135deg,
-    #37b6a8 0%,
-    #2f8fc0 100%
-  );
-
+  border-radius: 50%;
+  background: linear-gradient(135deg, #37b6a8 0%, #2f8fc0 100%);
   color: #ffffff;
-
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
   font-weight: 700;
-
-  box-shadow:
-    0 3px 8px rgba(47, 143, 192, 0.35);
+  box-shadow: 0 3px 9px rgba(47, 143, 192, 0.28);
 }
-
 
 .profile-info {
-  margin-left: 13px;
-
   min-width: 0;
+  margin-left: 13px;
 }
-
 
 .profile-info h1 {
   margin: 0;
-
   color: var(--text-heading);
-
-  font-size: 22px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 21px;
   line-height: 25px;
-
   font-weight: 700;
+  letter-spacing: -0.2px;
 }
-
 
 .profile-info p {
-  margin: 2px 0 0;
-
+  margin: 3px 0 0;
   color: #73849c;
-
-  font-size: 12px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
   line-height: 15px;
+  font-weight: 500;
 }
 
-
 .separator {
-  margin: 0 5px;
-
+  margin: 0 6px;
   color: #9ca8b8;
 }
 
-/* ============================================================
+/* =========================
    CLIENT FILTER
-============================================================ */
+========================= */
 
 .client-filter {
   display: flex;
   align-items: center;
-
   margin-left: auto;
-
   flex: 0 0 auto;
 }
 
-
-/* ============================================================
-   CLIENT SELECT
-============================================================ */
-
-.client-select {
-  width: 225px;
-  margin: 0;
+.status-wrapper {
+  display: flex;
+  align-items: center;
 }
 
+.status-select {
+  width: 240px;
+  height: 46px;
 
-/* Remove bottom space */
+  padding: 0 42px 0 15px;
 
-.client-select
-.mat-mdc-form-field-subscript-wrapper {
-  display: none !important;
+  border: 1px solid #cbd7e3;
+  border-radius: 9px;
+
+  background-color: #ffffff;
+
+  color: #294563;
+
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+
+  outline: none;
+
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  background-image:
+    linear-gradient(45deg, transparent 50%, #496783 50%),
+    linear-gradient(135deg, #496783 50%, transparent 50%);
+
+  background-position:
+    calc(100% - 19px) 20px,
+    calc(100% - 14px) 20px;
+
+  background-size:
+    5px 5px,
+    5px 5px;
+
+  background-repeat: no-repeat;
+
+  box-shadow:
+    0 2px 7px rgba(35, 58, 84, 0.07),
+    0 1px 2px rgba(35, 58, 84, 0.04);
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
 }
 
-
-/* Field */
-
-.client-select
-.mat-mdc-text-field-wrapper {
-  background: rgba(255, 255, 255, 0.95) !important;
-
-  border-radius: 8px !important;
-
-  padding: 0 !important;
+.status-select:hover {
+  border-color: #b8c8d8;
+  background-color: #ffffff;
 }
 
+.status-select:focus {
+  border-color: #5b91bd;
 
-/* Height */
-
-.client-select
-.mat-mdc-form-field-flex {
-  height: 48px !important;
-
-  align-items: center !important;
+  box-shadow:
+    0 3px 10px rgba(57, 127, 181, 0.12),
+    0 0 0 2px rgba(91, 145, 189, 0.07);
 }
 
+.status-select option {
+  min-height: 38px;
+  padding: 10px 14px;
+  background: #ffffff;
+  color: #344f6c;
 
-.client-select
-.mat-mdc-form-field-infix {
-  min-height: 48px !important;
-
-  padding-top: 9px !important;
-  padding-bottom: 8px !important;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
 }
 
-
-/* Selected value */
-
-.client-select
-.mat-mdc-select-value {
-  color: #294568 !important;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 15px !important;
-
+.status-select option:checked {
+  background-color: #e9f3fa;
+  color: #285f89;
   font-weight: 600;
 }
 
-
-/* Label */
-
-.client-select
-.mdc-floating-label {
-  color: #667c96 !important;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 13px !important;
+.status-select option:hover {
+  background-color: #f1f6fa;
+  color: #285f89;
 }
-
-
-/* Arrow */
-
-.client-select
-.mat-mdc-select-arrow {
-  color: #496783 !important;
-}
-
-
-/* Border */
-
-.client-select
-.mdc-notched-outline__leading,
-
-.client-select
-.mdc-notched-outline__notch,
-
-.client-select
-.mdc-notched-outline__trailing {
-  border-color: #c5d2e0 !important;
-
-  border-width: 1px !important;
-}
-
-
-/* Focus */
-
-.client-select.mat-focused
-.mdc-notched-outline__leading,
-
-.client-select.mat-focused
-.mdc-notched-outline__notch,
-
-.client-select.mat-focused
-.mdc-notched-outline__trailing {
-  border-color: #5b91bd !important;
-
-  border-width: 1.5px !important;
-}
-
-
-/* ============================================================
-   CLIENT DROPDOWN PANEL
-============================================================ */
-
-.client-select-panel {
-  min-width: 225px !important;
-
-  max-height: 180px !important;
-
-  margin-top: -185px !important;
-
-  border-radius: 9px !important;
-
-  overflow: hidden !important;
-
-  background: #ffffff !important;
-
-  border: 1px solid #d6e0ea !important;
-
-  box-shadow:
-    0 5px 18px rgba(36, 67, 102, 0.16) !important;
-}
-
-
-/* ============================================================
-   OPTIONS
-============================================================ */
-
-.client-select-panel
-.mat-mdc-option {
-  min-height: 42px !important;
-
-  padding: 0 16px !important;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif !important;
-
-  font-size: 14px !important;
-
-  color: #354f6b !important;
-}
-
-
-/* Hover */
-
-.client-select-panel
-.mat-mdc-option:hover {
-  background: #eef5fb !important;
-}
-
-
-/* Selected */
-
-.client-select-panel
-.mat-mdc-option.mdc-list-item--selected {
-  background: #e7f2fa !important;
-
-  color: #245b86 !important;
-
-  font-weight: 600 !important;
-}
-
-
-/* ============================================================
-   STATISTICS
-============================================================ */
 
 .stats-grid {
   width: 100%;
-
   display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 17px;
-
-  padding: 20px 24px 20px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 15px;
+  padding: 19px 24px 20px;
 }
-
-
-/* ============================================================
-   STAT CARD
-============================================================ */
 
 .stat-card {
   position: relative;
-
-  height: 83px;
-  min-height: 83px;
-
-  padding: 13px 18px 13px 24px;
-
+  height: 78px;
+  min-height: 78px;
+  padding: 12px 18px 11px 23px;
   border: 0 !important;
-
   border-radius: 10px !important;
-
   background: var(--stat-bg) !important;
-
   box-shadow: none !important;
-
   overflow: hidden;
+
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease;
 }
 
+.stat-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(32, 53, 78, 0.07) !important;
+}
 
 .stat-card::before {
-  content: "";
-
+  content: '';
   position: absolute;
-
   left: 0;
   top: 0;
   bottom: 0;
-
-  width: 6px;
-
+  width: 5px;
   background: #9aa8bd;
 }
-
-
-/* ============================================================
-   STAT CARD COLORS
-============================================================ */
 
 .stats-grid > mat-card:nth-child(1) {
   background: #e7f2fd !important;
 }
 
-
 .stats-grid > mat-card:nth-child(1)::before {
   background: #3d8fd6;
 }
-
 
 .stats-grid > mat-card:nth-child(1) .stat-value {
   color: #1f5c96;
 }
 
-
 .stats-grid > mat-card:nth-child(2) {
   background: #eeeafc !important;
 }
-
 
 .stats-grid > mat-card:nth-child(2)::before {
   background: #8465d6;
 }
 
-
 .stats-grid > mat-card:nth-child(2) .stat-value {
   color: #5b3fa8;
 }
-
 
 .stats-grid > mat-card:nth-child(3) {
   background: #fde9ee !important;
 }
 
-
 .stats-grid > mat-card:nth-child(3)::before {
   background: var(--red);
 }
 
-
-/* ============================================================
-   STAT TEXT
-============================================================ */
-
 .stat-label {
-  color: #6f829d;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 17px;
-  line-height: 22px;
-
-  font-weight: 400;
+  color: #71829a;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 17px;
+  font-weight: 600;
+  letter-spacing: 0.15px;
 }
-
 
 .stat-value {
-  margin-top: 1px;
-
+  margin-top: 3px;
   color: #1d3657;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 25px;
-  line-height: 30px;
-
+  line-height: 28px;
   font-weight: 700;
+  letter-spacing: -0.4px;
 }
-
 
 .stat-danger .stat-value {
   color: var(--red);
 }
 
-
-/* ============================================================
-   TASK BOARD
-============================================================ */
-
 .task-board {
   width: 100%;
-
   display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 20px;
-
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 19px;
   padding: 0 24px 25px;
-
   align-items: start;
 }
 
-
-/* ============================================================
-   TASK SECTION
-============================================================ */
-
 .task-section {
   width: 100%;
-
   min-width: 0;
-
-  margin-bottom: 0;
 }
-
-
-/* ============================================================
-   COLUMN HEADER
-============================================================ */
 
 .column-header {
   width: 100%;
-
   height: 43px;
-
   display: flex;
   align-items: center;
-
-  border-bottom: 3px solid #dce7f5;
+  border-bottom: 2px solid #dce7f5;
 }
-
 
 .column-header h2 {
   margin: 0;
-
   color: #3a5578;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 700;
+  letter-spacing: -0.15px;
+}
 
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 24px;
-  line-height: 28px;
-
+.column-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  margin-left: 7px;
+  padding: 0 6px;
+  border-radius: 11px;
+  background: #eef3f8;
+  color: #71839d;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
   font-weight: 700;
 }
 
-
-.column-count {
-  margin-left: 5px;
-
-  color: #71839d;
-
-  font-size: 17px;
-
-  font-weight: 400;
-}
-
-
-/* ============================================================
-   TASK GRID
-============================================================ */
-
 .tasks-grid {
   width: 100%;
-
   display: grid;
-
   grid-template-columns: 1fr;
-
-  gap: 18px;
-
+  gap: 14px;
+  padding-top: 14px;
   align-items: stretch;
 }
 
-
-/* ============================================================
-   EMPTY COLUMN
-============================================================ */
-
 .column-empty {
   width: 100%;
-
+  margin-top: 14px;
   padding: 22px 18px;
-
   border: 1px dashed #d8e0e8;
-
-  border-radius: 13px;
-
+  border-radius: 11px;
   color: #93a2b8;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 15px;
-
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
   text-align: center;
-
   background: #fbfcfd;
 }
 
-
-/* ============================================================
-   TASK CARD
-============================================================ */
-
 .task-card {
   position: relative;
-
   width: 100%;
   min-width: 0;
-
-  min-height: auto;
-
   display: grid;
 
   grid-template-columns:
     minmax(0, 1fr)
-    minmax(150px, 0.85fr);
+    minmax(145px, 0.78fr);
 
   background: #ffffff;
-
   border: 1px solid #d8e0e8;
-
-  border-radius: 13px;
-
+  border-radius: 11px;
   overflow: hidden;
+  box-shadow: 0 3px 10px rgba(32, 53, 78, 0.055);
 
-  box-shadow:
-    0 4px 12px rgba(32, 53, 78, 0.08);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
 }
 
+.task-card:hover {
+  transform: translateY(-2px);
+  border-color: #cdd8e3;
 
-/* ============================================================
-   LEFT COLOR STRIPE
-============================================================ */
+  box-shadow:
+    0 7px 18px rgba(32, 53, 78, 0.1),
+    0 2px 5px rgba(32, 53, 78, 0.04);
+}
 
 .task-card::before {
-  content: "";
-
+  content: '';
   position: absolute;
-
   left: 0;
   top: 0;
   bottom: 0;
-
-  width: 9px;
-
+  width: 6px;
   z-index: 3;
-
   background: #aebccc;
 }
-
 
 .task-high::before {
   background: #c9384e;
 }
 
-
 .task-medium::before {
   background: #d69b20;
 }
-
 
 .task-low::before {
   background: #3b82b8;
 }
 
-
 .task-progress::before {
   background: #397eb3;
 }
-
 
 .task-done::before {
   background: #3b9568;
 }
 
-
-/* ============================================================
-   TASK LEFT
-============================================================ */
-
 .task-left {
   min-width: 0;
-
-  padding: 16px 16px 14px 24px;
-
+  padding: 15px 16px 14px 21px;
   display: flex;
   flex-direction: column;
 }
 
-
-/* ============================================================
-   TASK TITLE
-============================================================ */
-
 .task-title {
-  margin-bottom: 10px;
-
+  margin-bottom: 13px;
   color: #173553;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 20px;
-  line-height: 24px;
-
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 21px;
   font-weight: 700;
-
+  letter-spacing: -0.15px;
   white-space: normal;
-
   overflow: visible;
-
   word-break: break-word;
 }
-
-
-/* ============================================================
-   TASK INFO
-============================================================ */
 
 .task-info-row {
   display: flex;
-
-  align-items: flex-start;
-
-  gap: 12px;
-
+  align-items: center;
+  gap: 9px;
   margin-bottom: 10px;
 }
 
-
-.task-info-row mat-icon {
-  width: 20px;
-  height: 20px;
-
-  flex: 0 0 20px;
-
-  padding: 4px;
-
-  border-radius: 50%;
-
-  box-sizing: content-box;
-
-  background: #e5f2fb;
-
-  color: #397fb5;
-
-  font-size: 20px;
-  line-height: 20px;
+.task-info-row:last-child {
+  margin-bottom: 0;
 }
 
+.task-info-row mat-icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  padding: 4px;
+  border-radius: 50%;
+  box-sizing: content-box;
+  background: #eaf3fa;
+  color: #397fb5;
+  font-size: 16px;
+  line-height: 16px;
+}
 
 .task-info-content {
   min-width: 0;
-
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
-
 
 .task-label {
-  margin-bottom: 3px;
-
-  color: #7185a1;
-
-  font-family:
-    Arial,
-    sans-serif;
-
-  font-size: 12px;
-  line-height: 15px;
-
+  color: #8a99aa;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  line-height: 12px;
   font-weight: 700;
-
-  letter-spacing: 0.6px;
+  letter-spacing: 0.7px;
 }
 
-
 .task-value {
-  color: #1c3758;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 16px;
-  line-height: 20px;
-
-  font-weight: 400;
-
+  min-width: 0;
+  color: #344f6c;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 17px;
+  font-weight: 500;
   white-space: normal;
-
   overflow: visible;
-
   word-break: break-word;
 }
 
-
-/* ============================================================
-   TASK RIGHT
-============================================================ */
-
 .task-right {
   min-width: 0;
-
-  padding: 16px 18px 14px 18px;
-
-  border-left: 2px solid #e0e5eb;
-
-  border-top: 0;
-
+  padding: 15px 16px 14px;
+  border-left: 1px solid #e0e5eb;
   display: flex;
-
   flex-direction: column;
 }
 
-
-/* ============================================================
-   PRIORITY
-============================================================ */
-
 .priority-wrapper {
   display: flex;
-
+  align-items: center;
   justify-content: flex-start;
-
-  margin-bottom: 10px;
+  margin-bottom: 13px;
 }
-
 
 .priority-badge {
-  min-width: 78px;
-
-  height: 32px;
-
-  padding: 0 14px;
-
+  min-width: 70px;
+  height: 27px;
+  padding: 0 11px;
   display: inline-flex;
-
   align-items: center;
   justify-content: center;
-
-  border-radius: 30px;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 14px;
-
+  border-radius: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
   font-weight: 700;
-
   white-space: nowrap;
 }
-
 
 .priority-high {
   color: #c42f45;
   background: #fde5ea;
 }
 
-
 .priority-medium {
   color: #b77c05;
   background: #fff1d1;
 }
-
 
 .priority-low {
   color: #2775ae;
   background: #e5f3fb;
 }
 
-
 .priority-progress {
   color: #327caf;
   background: #e5f3fb;
 }
-
 
 .priority-done {
   color: #31845d;
   background: #e5f5ec;
 }
 
-
-/* ============================================================
-   DATE
-============================================================ */
-
 .date-row {
   display: flex;
-
-  align-items: flex-start;
-
-  gap: 12px;
-
-  margin-bottom: 10px;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 11px;
 }
 
+.date-row:last-child {
+  margin-bottom: 0;
+}
 
 .date-row mat-icon {
-  width: 18px;
-  height: 18px;
-
-  flex: 0 0 18px;
-
+  width: 15px;
+  height: 15px;
+  flex: 0 0 15px;
   padding: 4px;
-
   border-radius: 50%;
-
   box-sizing: content-box;
-
   background: #fdf1de;
-
   color: #c98a1e;
-
-  font-size: 18px;
-  line-height: 18px;
+  font-size: 15px;
+  line-height: 15px;
 }
-
 
 .date-content {
   min-width: 0;
-
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
-
 
 .date-label {
-  margin-bottom: 4px;
-
-  color: #7185a1;
-
-  font-family:
-    Arial,
-    sans-serif;
-
-  font-size: 12px;
-  line-height: 15px;
-
+  color: #8a99aa;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9px;
+  line-height: 12px;
   font-weight: 700;
-
-  letter-spacing: 0.6px;
+  letter-spacing: 0.7px;
 }
 
-
 .date-value {
-  color: #173553;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 14px;
-  line-height: 19px;
-
+  color: #344f6c;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 15px;
+  font-weight: 600;
   white-space: normal;
-
   word-break: break-word;
 }
 
+.progress-wrapper {
+  width: 100%;
+  margin-top: auto;
+  padding-top: 10px;
+}
 
-/* ============================================================
-   BOTTOM STATUS
-============================================================ */
+.progress-track {
+  width: 100%;
+  height: 5px;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #e2e7ec;
+}
+
+.progress-bar {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #4fa8dd, #7c6be0);
+  transition: width 250ms ease;
+}
 
 .task-bottom-status {
   margin-top: auto;
-
-  padding-top: 15px;
-
-  border-top: 2px solid #e2e6eb;
-
+  padding-top: 12px;
+  border-top: 1px solid #e2e6eb;
   display: flex;
-
   align-items: center;
-
-  gap: 9px;
-
+  gap: 8px;
   color: #7789a1;
-
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif;
-
-  font-size: 14px;
-  line-height: 18px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 16px;
 }
-
 
 .task-bottom-status mat-icon {
-  width: 20px;
-  height: 20px;
-
-  font-size: 20px;
-  line-height: 20px;
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+  line-height: 17px;
 }
-
 
 .task-bottom-status.approved {
   color: #3b9065;
 }
 
-
 .status-count {
   color: #7689a1;
 }
-
-
-/* ============================================================
-   PROGRESS
-============================================================ */
-
-.progress-wrapper {
-  width: 100%;
-
-  margin-top: auto;
-
-  padding-top: 8px;
-}
-
-
-.progress-track {
-  width: 100%;
-
-  height: 5px;
-
-  overflow: hidden;
-
-  border-radius: 5px;
-
-  background: #e2e7ec;
-}
-
-
-.progress-bar {
-  height: 100%;
-
-  border-radius: inherit;
-
-  background:
-    linear-gradient(
-      90deg,
-      #4fa8dd,
-      #7c6be0
-    );
-
-  transition:
-    width 250ms ease;
-}
-
-
-/* ============================================================
-   FOOTER
-============================================================ */
-
-.workspace-footer {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
-
-  gap: 18px;
-
-  padding: 0 24px 25px;
-}
-
-
-/* ============================================================
-   MATERIAL RESET
-============================================================ */
 
 .mat-mdc-card {
   box-shadow: none !important;
 }
 
-
 .mat-mdc-button,
 .mat-mdc-unelevated-button,
 .mat-mdc-outlined-button,
 .mat-mdc-raised-button {
-  font-family:
-    Georgia,
-    "Times New Roman",
-    serif !important;
-
+  font-family: Arial, Helvetica, sans-serif !important;
   letter-spacing: 0 !important;
 }
 
-
-/* ============================================================
-   LAPTOP
-============================================================ */
-
 @media (max-width: 1500px) {
-
   .task-title {
-    font-size: 23px;
+    font-size: 15px;
+    line-height: 20px;
   }
 
   .task-value {
-    font-size: 17px;
+    font-size: 11px;
   }
 
   .date-value {
-    font-size: 16px;
+    font-size: 10px;
   }
 }
-
-
-/* ============================================================
-   TABLET
-============================================================ */
 
 @media (max-width: 1100px) {
-
   .task-board {
-    grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
-
-/* ============================================================
-   SMALL TABLET
-============================================================ */
-
 @media (max-width: 800px) {
-
   .workspace-header {
     min-height: 90px;
-
+    height: auto;
     padding: 12px 20px;
-
     gap: 15px;
   }
-
 
   .client-filter {
     margin-left: 10px;
   }
 
-
-  .client-select {
+  .status-select {
     width: 200px;
   }
-
 
   .stats-grid {
     grid-template-columns: 1fr;
   }
 
-
   .task-board {
     grid-template-columns: 1fr;
   }
-
 
   .task-card {
     grid-template-columns: 1fr;
   }
 
-
   .task-right {
     border-left: 0;
-
-    border-top: 2px solid #e0e5eb;
+    border-top: 1px solid #e0e5eb;
   }
-
 }
 
-
-/* ============================================================
-   MOBILE
-============================================================ */
-
 @media (max-width: 600px) {
-
   .page-shell {
     padding: 0 5px 20px;
   }
 
-
   .workspace-header {
     min-height: auto;
-
     padding: 14px 16px;
-
     flex-direction: column;
-
     align-items: stretch;
-
     gap: 12px;
   }
-
 
   .profile-section {
     width: 100%;
   }
 
-
   .avatar {
     width: 38px;
     height: 38px;
-
     flex-basis: 38px;
   }
 
-
   .profile-info h1 {
-    font-size: 20px;
+    font-size: 19px;
   }
-
 
   .profile-info p {
     font-size: 10px;
   }
 
-
-  /* Client dropdown full width on mobile */
-
   .client-filter {
     width: 100%;
-
     margin-left: 0;
-
     justify-content: stretch;
   }
 
-
-  .client-select {
+  .status-select {
     width: 100%;
   }
 
-
   .stats-grid {
     gap: 10px;
-
     padding: 14px;
   }
 
-
   .stat-card {
     height: 72px;
-
     min-height: 72px;
   }
 
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .stat-value {
+    font-size: 22px;
+    line-height: 26px;
+  }
 
   .task-board {
     padding: 0 14px 20px;
-
     gap: 14px;
   }
-
 
   .column-header {
     height: 40px;
   }
 
-
   .column-header h2 {
-    font-size: 21px;
+    font-size: 16px;
   }
-
 
   .tasks-grid {
-    gap: 14px;
+    gap: 12px;
+    padding-top: 12px;
   }
-
 
   .task-left {
-    padding: 22px 18px 15px 24px;
+    padding: 15px 16px 14px 20px;
   }
-
 
   .task-right {
-    padding: 18px 18px 18px 24px;
+    padding: 15px 16px 16px 20px;
   }
-
 
   .task-title {
-    margin-bottom: 18px;
-
-    font-size: 24px;
+    margin-bottom: 13px;
+    font-size: 16px;
+    line-height: 21px;
   }
-
-
-  .task-info-row {
-    margin-bottom: 16px;
-  }
-
 
   .task-value {
-    font-size: 17px;
+    font-size: 12px;
   }
-
 
   .date-value {
-    font-size: 16px;
-
-    white-space: normal;
+    font-size: 11px;
   }
-
 }
-
-
-/* ============================================================
-   VERY SMALL MOBILE
-============================================================ */
 
 @media (max-width: 400px) {
-
   .priority-badge {
-    min-width: 100px;
-
-    height: 40px;
-
-    font-size: 17px;
+    min-width: 75px;
+    height: 28px;
+    font-size: 10px;
   }
-
 
   .task-title {
-    font-size: 22px;
+    font-size: 15px;
   }
-
-
-  .task-info-row mat-icon,
-  .date-row mat-icon {
-    width: 26px;
-
-    height: 26px;
-
-    flex-basis: 26px;
-
-    font-size: 26px;
-
-    line-height: 26px;
-  }
-
 }
 
-
-/* ============================================================
-   REDUCE MOTION
-============================================================ */
-
 @media (prefers-reduced-motion: reduce) {
-
+  .task-card,
+  .stat-card,
   .progress-bar {
     transition: none;
   }
-
 }

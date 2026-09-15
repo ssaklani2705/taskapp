@@ -61,6 +61,8 @@ interface Task {
   taskStatus: number;
   addedBy: String;
   assignedTo: string;
+  assignedbyName:string;
+  description:string;
 }
 
 interface Client {
@@ -282,6 +284,11 @@ export class TaskIndex {
         label: 'Task Category',
         sortable: true
       },
+      {
+        key: 'assignedbyName',
+        label: 'Assigned By',
+        sortable: true
+      },
 
       {
         key: 'assignedToName',
@@ -328,171 +335,69 @@ export class TaskIndex {
   ) { }
 
 
-  // =========================================================
-  // INIT
-  // =========================================================
+ ngOnInit(): void {
+    this.sessionService.clearOtherSessions(this.filterKey);
 
-  ngOnInit(): void {
-
-    /*
-     * Clear only unrelated filter sessions.
-     *
-     * Do NOT clear TASK_MASTER_FILTER here,
-     * otherwise your pagination/filter state is lost.
-     */
-    this.sessionService.clearOtherSessions(
-      this.filterKey
-    );
-
-
-    // -------------------------------------------------------
-    // USER ID
-    // -------------------------------------------------------
-
-    if (
-      isPlatformBrowser(this.platformId)
-    ) {
-
-      this.userId =
-        sessionStorage.getItem(
-          'userId'
-        );
-
-      this.isAdmin =
-        sessionStorage.getItem(
-          'isAdmin'
-        );
-
-      this.loginType =
-        sessionStorage.getItem('loginType') || 'other';
-
+    if (isPlatformBrowser(this.platformId)) {
+      this.userId = sessionStorage.getItem('userId');
+      this.isAdmin = sessionStorage.getItem('isAdmin');
+      this.loginType = sessionStorage.getItem('loginType') || 'other';
     }
 
-
-    // -------------------------------------------------------
-    // PERMISSIONS
-    // -------------------------------------------------------
-
-    if (
-      isPlatformBrowser(this.platformId)
-    ) {
-
-      const storedModules =
-        sessionStorage.getItem(
-          'selectedModuleDetail'
-        );
-
+    if (isPlatformBrowser(this.platformId)) {
+      const storedModules = sessionStorage.getItem('selectedModuleDetail');
 
       if (storedModules) {
-
         try {
+          const parsed = JSON.parse(storedModules);
 
-          const parsed =
-            JSON.parse(storedModules);
-
-          this.moduleName =
-            parsed.name ?? '';
-
-          this.addPer =
-            parsed.addPer ?? 'N';
-
-          this.editPer =
-            parsed.editPer ?? 'N';
-
-          this.deletePer =
-            parsed.deletePer ?? 'N';
-
-          this.viewPer =
-            parsed.viewPer ?? 'N';
-
-          this.approvePer =
-            parsed.approvePer ?? 'N';
-
-          this.adminApprovePer =
-            parsed.adminApprovePer ?? 'N';
-
-          this.adminApprovePer =
-            parsed.adminApprovePer ?? 'N';
-
-          this.exportExcelPer =
-            parsed.exportExcel ?? 'N';
-
+          if (parsed) {
+            this.moduleName = parsed.name ?? '';
+            this.addPer = parsed.addPer ?? 'N';
+            this.editPer = parsed.editPer ?? 'N';
+            this.deletePer = parsed.deletePer ?? 'N';
+            this.viewPer = parsed.viewPer ?? 'N';
+            this.approvePer = parsed.approvePer ?? 'N';
+            this.adminApprovePer = parsed.adminApprovePer ?? 'N';
+            this.adminApprovePer = parsed.adminApprovePer ?? 'N';
+            this.exportExcelPer = parsed.exportExcel ?? 'N';
+          }
         } catch (error) {
-
-          console.error(
-            'Invalid selectedModuleDetail:',
-            error
-          );
-
+          console.error('Invalid selectedModuleDetail:', error);
         }
-
       }
-
     }
 
-
-    // -------------------------------------------------------
-    // RESTORE FILTER STATE
-    // -------------------------------------------------------
-
     this.restoreFilterState();
-
-
-    // -------------------------------------------------------
-    // LOAD FILTER MASTER DATA
-    // -------------------------------------------------------
-
     this.loadFilterData();
 
-
-    // -------------------------------------------------------
-    // LOAD TASKS
-    // -------------------------------------------------------
-
-    this.getTaskDetails();
     this.route.queryParams.subscribe((params) => {
-      if (params['taskStatusId'] !== undefined) {
-        this.selectedTaskStatus = params['taskStatusId'] || '';
+      if (params['taskStatusIds'] !== undefined) {
+        this.selectedTaskStatuses = params['taskStatusIds']
+          ? String(params['taskStatusIds'])
+              .split(',')
+              .filter((status: string) => status !== '')
+          : [];
+
         this.currentPage = 1;
         this.page = 0;
       }
 
       this.getTaskDetails();
     });
-
   }
 
-
-  // =========================================================
-  // RESTORE FILTER STATE
-  // =========================================================
-
   private restoreFilterState(): void {
-
     let stateData: any = null;
 
+    const nav = this.router.getCurrentNavigation();
 
-    // -------------------------------------------------------
-    // FIRST: ROUTER NAVIGATION STATE
-    // -------------------------------------------------------
-
-    const nav =
-      this.router.getCurrentNavigation();
-
-    stateData =
-      nav?.extras?.state;
-
-
-    // -------------------------------------------------------
-    // SECOND: QUERY PARAMS (from a URL-based navigation)
-    // -------------------------------------------------------
+    stateData = nav?.extras?.state;
 
     if (!stateData) {
-
       const qp = this.route.snapshot.queryParamMap;
 
       if (qp.keys.length > 0) {
-
         stateData = {
           currentPage: qp.get('currentPage'),
           page: qp.get('page'),
@@ -505,54 +410,24 @@ export class TaskIndex {
           priority: qp.get('priority'),
           fromDate: qp.get('fromDate'),
           toDate: qp.get('toDate'),
-          taskStatusId: qp.get('taskStatusIds')
-            ? qp.get('taskStatusIds')!.split(',')
-            : []
+          taskStatusId: qp.get('taskStatusIds') ? qp.get('taskStatusIds')!.split(',') : [],
         };
-
       }
-
     }
 
-
-    // -------------------------------------------------------
-    // THIRD: SESSION STORAGE
-    // -------------------------------------------------------
-
     if (!stateData) {
-
-      const saved =
-        sessionStorage.getItem(
-          this.filterKey
-        );
+      const saved = sessionStorage.getItem(this.filterKey);
 
       if (saved) {
-
         try {
-
-          stateData =
-            JSON.parse(saved);
-
+          stateData = JSON.parse(saved);
         } catch (error) {
-
-          console.error(
-            'Invalid task filter session:',
-            error
-          );
-
+          console.error('Invalid task filter session:', error);
         }
-
       }
-
     }
 
-
-    // -------------------------------------------------------
-    // NOTHING SAVED
-    // -------------------------------------------------------
-
     if (!stateData) {
-
       this.currentPage = 1;
       this.page = 0;
       this.size = environment.size;
@@ -569,123 +444,46 @@ export class TaskIndex {
       this.fromDate = null;
       this.toDate = null;
 
-
       return;
     }
 
-
-    // -------------------------------------------------------
-    // PAGE
-    // -------------------------------------------------------
-
-    this.currentPage =
-      Number(stateData.currentPage) || 1;
-
-    this.page =
-      this.currentPage - 1;
-
-
-    // -------------------------------------------------------
-    // SIZE
-    // -------------------------------------------------------
-
-    this.size =
-      Number(stateData.size) ||
-      environment.size;
-
-    this.recordsPerPage =
-      this.size;
-
-
-    // -------------------------------------------------------
-    // SEARCH
-    // -------------------------------------------------------
-
-    this.search =
-      stateData.searchText || '';
-
-    this.searchQuery =
-      this.search;
-
-
-    // -------------------------------------------------------
-    // STATUS
-    // -------------------------------------------------------
-
-    this.statusIndex =
-      Number(stateData.statusIndex) || 0;
-
-    this.selectedStatus =
-      this.statusIndex
-        ? String(this.statusIndex)
-        : '';
-
-
-    // -------------------------------------------------------
-    // CLIENT
-    // -------------------------------------------------------
-
-    this.selectedClient =
-      stateData.clientId != null
-        ? String(stateData.clientId)
-        : '';
-
-
-    // -------------------------------------------------------
-    // TASK CATEGORY
-    // -------------------------------------------------------
+    this.currentPage = Number(stateData.currentPage) || 1;
+    this.page = this.currentPage - 1;
+    this.size = Number(stateData.size) || environment.size;
+    this.recordsPerPage = this.size;
+    this.search = stateData.searchText || '';
+    this.searchQuery = this.search;
+    this.statusIndex = Number(stateData.statusIndex) || 0;
+    this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
+    this.selectedClient = stateData.clientId != null ? String(stateData.clientId) : '';
 
     this.selectedTaskCategory =
-      stateData.taskCategoryId != null
-        ? String(stateData.taskCategoryId)
-        : '';
+      stateData.taskCategoryId != null ? String(stateData.taskCategoryId) : '';
 
+    this.selectedAssignedTo = stateData.assignedTo != null ? String(stateData.assignedTo) : '';
+    this.selectedPriority = stateData.priority != null ? String(stateData.priority) : '';
 
-    // -------------------------------------------------------
-    // ASSIGNED TO
-    // -------------------------------------------------------
+    this.selectedTaskStatuses = Array.isArray(stateData.taskStatusId)
+      ? stateData.taskStatusId.map((v: any) => String(v))
+      : [];
 
-    this.selectedAssignedTo =
-      stateData.assignedTo != null
-        ? String(stateData.assignedTo)
-        : '';
+    //
+    if (Array.isArray(stateData.taskStatusId)) {
+      this.selectedTaskStatuses = stateData.taskStatusId.map((v: any) => String(v));
+    } else if (stateData.taskStatusId != null && stateData.taskStatusId !== '') {
+      this.selectedTaskStatuses = String(stateData.taskStatusId)
+        .split(',')
+        .filter((v: string) => v !== '');
+    } else {
+      this.selectedTaskStatuses = [];
+    }
 
-
-    // -------------------------------------------------------
-    // PRIORITY
-    // -------------------------------------------------------
-
-    this.selectedPriority =
-      stateData.priority != null
-        ? String(stateData.priority)
-        : '';
-
-
-    // -------------------------------------------------------
-    // TASK STATUSES   ⬅ ADD THIS BLOCK
-    // -------------------------------------------------------
-
-    this.selectedTaskStatuses =
-      Array.isArray(stateData.taskStatusId)
-        ? stateData.taskStatusId.map((v: any) => String(v))
-        : [];
-
-    this.selectedTaskStatus =
-      stateData.taskStatusId != null ? String(stateData.taskStatusId) : '';
-
-    this.fromDate =
-      stateData.fromDate
-        ? new Date(stateData.fromDate + 'T00:00:00')
-        : null;
-
-    this.toDate =
-      stateData.toDate
-        ? new Date(stateData.toDate + 'T00:00:00')
-        : null;
-
+    this.fromDate = stateData.fromDate ? new Date(stateData.fromDate + 'T00:00:00') : null;
+    this.toDate = stateData.toDate ? new Date(stateData.toDate + 'T00:00:00') : null;
   }
 
 
+ 
   // =========================================================
   // SAVE FILTER STATE
   // =========================================================
@@ -2379,89 +2177,205 @@ export class TaskIndex {
   }
 
 
-  exportToExcel(): void {
+  
+exportToExcel(): void {
 
-    // Make sure there is data
-    if (!this.tasks || this.tasks.length === 0) {
-      console.warn('No tasks available for export.');
-      return;
-    }
-
-    const exportData = this.tasks.map((task: any, index: number) => {
-
-      return {
-        'Sr. No.': index + 1,
-
-        'Title': task.title || '-',
-
-        'Client': task.clientName || '-',
-
-        'Date': task.date
-          ? this.formatExcelDate(task.date)
-          : '-',
-
-        'Task Category': task.taskCategoryName || '-',
-
-        'Assigned To': task.assignedToName || '-',
-
-        'Priority': this.getPriorityLabel(task.priority),
-
-        'Task Status': this.common.getTaskStatusLabel(
-          task.taskStatus
-        ),
-
-        'Status': this.common.getStatusLabel(
-          task.status
-        )
-      };
-
-    });
-
-
-    // Create worksheet
-    const worksheet: XLSX.WorkSheet =
-      XLSX.utils.json_to_sheet(exportData);
-
-
-    // Set column widths
-    worksheet['!cols'] = [
-      { wch: 6 },    // #
-      { wch: 35 },   // Title
-      { wch: 25 },   // Client
-      { wch: 15 },   // Date
-      { wch: 25 },   // Task Category
-      { wch: 25 },   // Assigned To
-      { wch: 15 },   // Priority
-      { wch: 20 },   // Task Status
-      { wch: 15 }    // Status
-    ];
-
-
-    // Create workbook
-    const workbook: XLSX.WorkBook =
-      XLSX.utils.book_new();
-
-
-    XLSX.utils.book_append_sheet(
-      workbook,
-      worksheet,
-      'Tasks'
-    );
-
-
-    // Generate file name
-    const today = new Date();
-
-    const dateString =
-      `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-
-    // Download Excel
-    XLSX.writeFile(
-      workbook,
-      `Tasks_${dateString}.xlsx`
-    );
+  // Make sure there is data
+  if (!this.tasks || this.tasks.length === 0) {
+    alert('No tasks available for export.');
+    return;
   }
+
+  const exportData = this.tasks.map((task: any, index: number) => {
+
+    return {
+
+      // 1. Sr. No.
+      'Sr. No.': index + 1,
+
+      // 2. Title
+      'Title': task.title || '-',
+
+      // 3. Client
+      'Client': task.clientName || '-',
+
+      // 4. Date
+      'Date': task.date
+        ? this.formatExcelDate(task.date)
+        : '-',
+
+      // 5. Due Date
+      'Due Date': task.dueDateTime
+        ? this.formatExcelDate(task.dueDateTime)
+        : '-',
+
+      // 6. Task Category
+      'Task Category': task.taskCategoryName || '-',
+
+      // 7. Assigned By
+      'Assigned By': task.assignedbyName || '-',
+
+      // 8. Assigned To
+      'Assigned To':
+        !task.assignedToName ||
+        task.assignedToName === '0'
+          ? 'Unassigned User'
+          : task.assignedToName,
+
+      // 9. Priority
+      'Priority': this.getPriorityLabel(task.priority),
+
+      // 10. Task Status
+      'Task Status': this.common.getTaskStatusLabel(
+        task.taskStatus
+      ),
+
+      // 11. Status
+      'Status': this.common.getStatusLabel(
+        task.status
+      )
+    };
+  });
+
+
+  // Create worksheet
+  const worksheet: XLSX.WorkSheet =
+    XLSX.utils.json_to_sheet(exportData);
+
+
+  // Set column widths
+  worksheet['!cols'] = [
+
+    { wch: 8 },    // Sr. No.
+    { wch: 35 },   // Title
+    { wch: 25 },   // Client
+    { wch: 20 },   // Date
+    { wch: 20 },   // Due Date
+    { wch: 25 },   // Task Category
+    { wch: 25 },   // Assigned By
+    { wch: 25 },   // Assigned To
+    { wch: 15 },   // Priority
+    { wch: 20 },   // Task Status
+    { wch: 15 }    // Status
+  ];
+
+
+  // Create workbook
+  const workbook: XLSX.WorkBook =
+    XLSX.utils.book_new();
+
+
+  // Add worksheet
+  XLSX.utils.book_append_sheet(
+    workbook,
+    worksheet,
+    'Tasks'
+  );
+
+
+  // Generate file name
+  const today = new Date();
+
+  const dateString =
+    `${today.getFullYear()}-` +
+    `${String(today.getMonth() + 1).padStart(2, '0')}-` +
+    `${String(today.getDate()).padStart(2, '0')}`;
+
+
+  // Download Excel
+  XLSX.writeFile(
+    workbook,
+    `Tasks_${dateString}.xlsx`
+  );
+}
+
+
+
+
+
+  // exportToExcel(): void {
+
+  //   // Make sure there is data
+  //   if (!this.tasks || this.tasks.length === 0) {
+  //     console.warn('No tasks available for export.');
+  //     return;
+  //   }
+
+  //   const exportData = this.tasks.map((task: any, index: number) => {
+
+  //     return {
+  //       'Sr. No.': index + 1,
+
+  //       'Title': task.title || '-',
+
+  //       'Client': task.clientName || '-',
+
+  //       'Date': task.date
+  //         ? this.formatExcelDate(task.date)
+  //         : '-',
+
+  //       'Task Category': task.taskCategoryName || '-',
+
+  //       'Assigned To': task.assignedToName || '-',
+
+  //       'Priority': this.getPriorityLabel(task.priority),
+
+  //       'Task Status': this.common.getTaskStatusLabel(
+  //         task.taskStatus
+  //       ),
+
+  //       'Status': this.common.getStatusLabel(
+  //         task.status
+  //       )
+  //     };
+
+  //   });
+
+
+  //   // Create worksheet
+  //   const worksheet: XLSX.WorkSheet =
+  //     XLSX.utils.json_to_sheet(exportData);
+
+
+  //   // Set column widths
+  //   worksheet['!cols'] = [
+  //     { wch: 6 },    // #
+  //     { wch: 35 },   // Title
+  //     { wch: 25 },   // Client
+  //     { wch: 15 },   // Date
+  //     { wch: 25 },   // Task Category
+  //     { wch: 25 },   // Assigned To
+  //     { wch: 15 },   // Priority
+  //     { wch: 20 },   // Task Status
+  //     { wch: 15 }    // Status
+  //   ];
+
+
+  //   // Create workbook
+  //   const workbook: XLSX.WorkBook =
+  //     XLSX.utils.book_new();
+
+
+  //   XLSX.utils.book_append_sheet(
+  //     workbook,
+  //     worksheet,
+  //     'Tasks'
+  //   );
+
+
+  //   // Generate file name
+  //   const today = new Date();
+
+  //   const dateString =
+  //     `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+
+  //   // Download Excel
+  //   XLSX.writeFile(
+  //     workbook,
+  //     `Tasks_${dateString}.xlsx`
+  //   );
+  // }
 
   private formatExcelDate(date: any): string {
 
@@ -2536,19 +2450,25 @@ export class TaskIndex {
     return this.selectedTaskStatuses.includes(id);
   }
 
-  @ViewChild('statusDropdown')
-  statusDropdown!: ElementRef;
+showDescriptionModal = false;
+selectedDescriptionTask: any = null;
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
+openDescriptionModal(task: Task): void {
 
-    if (
-      this.showStatusDropdown &&
-      this.statusDropdown &&
-      !this.statusDropdown.nativeElement.contains(event.target)
-    ) {
-      this.showStatusDropdown = false;
-    }
-  }
+  this.selectedDescriptionTask = task;
+
+  this.showDescriptionModal = true;
+}
+
+closeDescriptionModal(): void {
+
+  this.showDescriptionModal = false;
+
+  this.selectedDescriptionTask = null;
+}
+
+
+
+
 
 }

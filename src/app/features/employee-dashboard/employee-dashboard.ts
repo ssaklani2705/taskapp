@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DataProviderService } from '../../service/data-provider.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
 
 
 interface ApiTask {
@@ -56,6 +57,7 @@ interface ApiTask {
 
   dueDateTime: string;
 
+  assignedByUser : string;
 
 }
 
@@ -93,6 +95,7 @@ interface Task {
   assignedToName: string;
   startDay: string;
   dueDate: string;
+  assignedByUser: string;
   type:
   | 'high'
   | 'medium'
@@ -100,6 +103,7 @@ interface Task {
   | 'progress'
   | 'done';
   progress?: number;
+
 }
 
 
@@ -128,7 +132,8 @@ interface TaskColumn {
     MatIconModule,
     MatTooltipModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    FormsModule
   ],
 
   templateUrl: './employee-dashboard.html',
@@ -334,12 +339,13 @@ export class EmployeeDashboard implements OnInit {
           clientName: task.clientName || '',
 
           assignedToName: task.assignedUser  || '',
+          assignedByUser: task.assignedByUser || '',
 
           startDay: this.formatDate(task.date),
 
           dueDate: this.formatDate(task.dueDateTime),
-
-          type: 'done'
+          type: 'done',
+           
 
         };
 
@@ -362,6 +368,7 @@ export class EmployeeDashboard implements OnInit {
           clientName: task.clientName || '',
 
           assignedToName: task.assignedUser  || '',
+          assignedByUser: task.assignedByUser || '',
 
           startDay: this.formatDate(task.date),
 
@@ -391,6 +398,7 @@ export class EmployeeDashboard implements OnInit {
         clientName: task.clientName || '',
 
         assignedToName: task.assignedUser  || '',
+        assignedByUser: task.assignedByUser || '',
 
         startDay: this.formatDate(task.date),
 

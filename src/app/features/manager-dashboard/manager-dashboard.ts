@@ -6,7 +6,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { DataProviderService } from '../../service/data-provider.service';
 import Swal from 'sweetalert2';
-import { environment } from '../../../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -94,7 +93,7 @@ export class ManagerDashboard {
       icon: 'task_alt',
       className: 'blue',
       change: '+8 this week',
-      taskStatusId: null,
+      taskStatusIds: [],
     },
     {
       title: 'Completed Tasks',
@@ -102,7 +101,7 @@ export class ManagerDashboard {
       icon: 'check_circle',
       className: 'green',
       change: '1 escalated',
-      taskStatusId: 5,
+      taskStatusIds: ['5'],
     },
     {
       title: 'All Pending Tasks',
@@ -110,7 +109,7 @@ export class ManagerDashboard {
       icon: 'pending_actions',
       className: 'orange',
       change: '3 due today',
-      taskStatusId: null,
+      taskStatusIds: ['1', '2', '3', '4'],
     },
     {
       title: 'Assigned Tasks',
@@ -118,7 +117,7 @@ export class ManagerDashboard {
       icon: 'assignment',
       className: 'blue',
       change: 'Currently assigned',
-      taskStatusId: 1,
+      taskStatusIds: ['1'],
     },
     {
       title: 'Assignee Closure Tasks',
@@ -126,7 +125,7 @@ export class ManagerDashboard {
       icon: 'task_alt',
       className: 'orange',
       change: 'Awaiting closure',
-      taskStatusId: 2,
+      taskStatusIds: ['2'],
     },
     {
       title: 'Re-Open Tasks',
@@ -134,7 +133,7 @@ export class ManagerDashboard {
       icon: 'restart_alt',
       className: 'red',
       change: 'Requires attention',
-      taskStatusId: 3,
+      taskStatusIds: ['3'],
     },
     {
       title: 'Assignee Re-Closure Tasks',
@@ -142,17 +141,18 @@ export class ManagerDashboard {
       icon: 'published_with_changes',
       className: 'purple',
       change: 'Awaiting re-closure',
-      taskStatusId: 4,
+      taskStatusIds: ['4'],
     },
   ];
 
-
-  constructor(private dataProvider: DataProviderService, private route: ActivatedRoute, private router: Router) { }
+  constructor(
+    private dataProvider: DataProviderService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
-
-    this.loginType =
-      sessionStorage.getItem('loginType') || 'other';
+    this.loginType = sessionStorage.getItem('loginType') || 'other';
     this.username = sessionStorage.getItem('username') || 'Society 123';
 
     this.userId = sessionStorage.getItem('userId');
@@ -161,7 +161,6 @@ export class ManagerDashboard {
     this.getTasks();
     this.getTaskCounts();
   }
-
 
   getTasks(): void {
     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
@@ -186,7 +185,7 @@ export class ManagerDashboard {
             date: task.date,
             priority: task.priority,
             clientName: task.clientName,
-            duedatetime: task.dueDateTime
+            duedatetime: task.dueDateTime,
           }));
         },
         error: (error) => {
@@ -212,7 +211,6 @@ export class ManagerDashboard {
       },
     });
   }
-
 
   onPageChange(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
@@ -505,8 +503,7 @@ export class ManagerDashboard {
         this.isAdmin,
         this.userId,
         taskStatusIds,
-        this.loginType
-
+        this.loginType,
       )
       .subscribe({
         next: (response: any) => {
@@ -654,27 +651,17 @@ export class ManagerDashboard {
     this.getTasks();
   }
 
- onKpiClick(kpi: any): void {
+  onKpiClick(kpi: any): void {
     console.log('KPI CLICKED:', kpi);
-
-    if (kpi.taskStatusId === null) {
+    if (!kpi.taskStatusIds) {
       this.router.navigate(['/task-index']);
       return;
     }
 
-    this.router
-      .navigate(['/task-index'], {
-        queryParams: {
-          taskStatusId: kpi.taskStatusId,
-        },
-      })
-      .then((success) => {
-        console.log('KPI navigation:', success);
-      })
-      .catch((error) => {
-        console.error('KPI navigation error:', error);
-      });
+    this.router.navigate(['/task-index'], {
+      queryParams: {
+        taskStatusIds: kpi.taskStatusIds.join(','),
+      },
+    });
   }
-
-
 }

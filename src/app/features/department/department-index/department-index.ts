@@ -9,6 +9,7 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 import { SessionStorageService } from '../../../service/session-storage.service';
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
+import { MatIconModule } from '@angular/material/icon';
 
 interface Department {
   departmentId: number;
@@ -22,7 +23,8 @@ interface Department {
     CommonModule,
     FormsModule,
     RouterModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule
   ],
   templateUrl: './department-index.html',
   styleUrl: './department-index.scss'
