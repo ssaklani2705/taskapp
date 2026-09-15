@@ -1101,3 +1101,33 @@ mat-divider {
     margin-top: 20px;
   }
 }
+
+
+.detail-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #1e2a3a;
+  min-width: 130px;
+  flex-shrink: 0;
+}
+
+.category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  background-color: #eef2f7;
+  color: #2c3e50;
+  padding: 4px 12px;
+  border-radius: 14px;
+  font-size: 13px;
+  white-space: nowrap;
+}
