@@ -288,56 +288,67 @@
             </div>
 
 
-            <!-- Category -->
-<div class="user-form-col">
+       
 
+<div class="user-form-col">
   <div class="user-form-group">
 
+    <label class="user-label">
+      Task Category
+      <span class="required">*</span>
+    </label>
 
-<label class="user-label">
-  Category
-  <span class="required">*</span>
-</label>
 
-<div class="status-dropdown">
+    <div class="status-dropdown" #categoryDropdown>
 
   <button
     type="button"
     class="dropdown-btn"
     [disabled]="!categoryList || categoryList.length === 0"
-    (click)="showCategoryDropdown = !showCategoryDropdown">
-
-    --Select Category--
-
+    (click)="categoryList?.length && (showCategoryDropdown = !showCategoryDropdown)"
+  >
+    <span class="selected-category-text">
+      {{ getSelectedCategoryNames() || '--Select Task Category--' }}
+    </span>
   </button>
 
   <div
     class="dropdown-menu"
     *ngIf="showCategoryDropdown && categoryList?.length"
-    (click)="$event.stopPropagation()">
-
+    (click)="$event.stopPropagation()"
+  >
     <label *ngFor="let category of categoryList">
-
       <input
         type="checkbox"
         [id]="'category-' + category.taskcategoryId"
         [checked]="isCategoryChecked(category.taskcategoryId)"
         (change)="toggleCategory(category.taskcategoryId, $event)"
       />
-
       {{ category.name }}
-
     </label>
-
   </div>
 
 </div>
 
-
-  </div>
-
+<!-- No categories available -->
+<div class="user-error" *ngIf=" userForm.get('departmentId')?.value && categoryList && categoryList.length === 0">
+  No task categories are available for this department..
 </div>
 
+<!-- Category required -->
+<div
+  class="user-error"
+  *ngIf="
+    showCategoryValidation &&
+    categoryList?.length &&
+    (!selectedCategoryIds || selectedCategoryIds.length === 0)
+  "
+>
+  Task Category is required.
+</div>
+
+  </div>
+</div>
 
 
 

@@ -130,7 +130,7 @@
 
 
   <!-- Due Date & Time -->
-<div class="user-form-col">
+<!-- <div class="user-form-col">
   <div class="user-form-group">
     <label class="user-label">
       Max Hours
@@ -149,6 +149,7 @@
       step="1"
       #dueDateTimeCtrl="ngModel"
       autocomplete="off"
+      (keydown)="preventDecimal($event)"
     />
 
     <div
@@ -168,8 +169,53 @@
       </span>
     </div>
   </div>
-</div>
+</div> -->
 
+
+<div class="user-form-col">
+  <div class="user-form-group">
+    <label class="user-label">
+      Max Hours
+      <span class="required">*</span>
+    </label>
+
+    <input
+      type="number"
+      class="user-input"
+      placeholder="Enter max hours"
+      [(ngModel)]="taskCategory.dueDateTime"
+      name="dueDateTime"
+      required
+      min="1"
+      max="500"
+      step="1"
+      #dueDateTimeCtrl="ngModel"
+      autocomplete="off"
+      (keydown)="preventDecimal($event)"
+    />
+
+    <div
+      class="user-error"
+      *ngIf="dueDateTimeCtrl.invalid && dueDateTimeCtrl.touched"
+    >
+      <span *ngIf="dueDateTimeCtrl.errors?.['required']">
+        Max Hours is required
+      </span>
+
+      <span *ngIf="dueDateTimeCtrl.errors?.['min']">
+        Minimum value is 1 hour
+      </span>
+
+      <span *ngIf="dueDateTimeCtrl.errors?.['max']">
+        Maximum value is 500 hours
+      </span>
+
+      <span *ngIf="dueDateTimeCtrl.errors?.['step']">
+        Only whole numbers are allowed
+      </span>
+    </div>
+  </div>
+</div>
 </div>
 
 

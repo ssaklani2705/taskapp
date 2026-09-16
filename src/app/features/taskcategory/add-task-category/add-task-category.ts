@@ -1303,4 +1303,10 @@ this.taskCategory.dueDateTime
   return date;
 }
 
+preventDecimal(event: KeyboardEvent): void {
+  if (event.key === '.' || event.key === ',' || event.key === 'e' || event.key === 'E') {
+    event.preventDefault();
+  }
+}
+
 }

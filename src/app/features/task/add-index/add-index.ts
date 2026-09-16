@@ -1159,39 +1159,21 @@ export class AddIndexComponent implements OnInit {
   }
 
   onchangeloadUserDropdownData(): void {
-    // alert(this.task.clientId);
     this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin,
       this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId).subscribe({
         next: (res: any) => {
           const data = res?.data || res;
-          // this.clients = data?.clients || [];
-          // this.taskCategories = data?.taskCategories || [];
           this.users = data?.assignedUsers || [];
 
         },
-
         error: (error: any) => {
 
           console.error(
             'Error loading task dropdown data:',
             error
           );
-
-          // this.clients = [];
-          // this.taskCategories = [];
           this.users = [];
-
-          // Swal.fire(
-          //   'Error',
-          //   'Unable to load task dropdown data.',
-          //   'error'
-          // );
         }
-
-
-
-
-
       });
   }
 

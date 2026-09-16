@@ -414,13 +414,36 @@
 
 
                 <!-- ASSIGNED TO -->
-                <td>
+                <!-- <td>
                   <span class="wrap-text">
                     {{ !task.assignedToName || task.assignedToName === '0'
                     ? 'Unassigned User'
                     : task.assignedToName }}
                   </span>
-                </td>
+                </td> -->
+                <!-- ASSIGNED TO -->
+<td>
+  <span
+    class="wrap-text"
+    [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+    (click)="
+      (!task.assignedToName || task.assignedToName === '0')
+        ? openAssignUserModal(task)
+        : null
+    "
+    [matTooltip]="
+      (!task.assignedToName || task.assignedToName === '0')
+        ? 'Assign User'
+        : ''
+    "
+  >
+    {{
+      !task.assignedToName || task.assignedToName === '0'
+        ? 'Unassigned User'
+        : task.assignedToName
+    }}
+  </span>
+</td>
 
 
                 <!-- PRIORITY -->
@@ -874,4 +897,114 @@
 
   </div>
 
+</div>
+
+
+
+
+<!-- ASSIGN USER MODAL -->
+<div
+  class="modal-overlay"
+  *ngIf="showAssignUserModal"
+  (click)="closeAssignUserModal()"
+>
+  <div
+    class="change-manager-modal description-modal"
+    (click)="$event.stopPropagation()"
+  >
+
+    <!-- HEADER -->
+    <div class="modal-header">
+
+      <div class="modal-title">
+
+        <div class="modal-title-icon">
+          <mat-icon>person_add</mat-icon>
+        </div>
+
+        <div>
+
+          <div class="modal-title-text">
+            Assign User
+          </div>
+
+          <div class="modal-subtitle">
+            {{ selectedAssignTask?.title || 'Task' }}
+          </div>
+
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="modal-close-button"
+        (click)="closeAssignUserModal()"
+        aria-label="Close"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- BODY -->
+    <div class="modal-body">
+
+      <div class="manager-form-group">
+
+        <label class="modal-field-label">
+          Assigned To
+        </label>
+
+        <select
+          class="user-input user-select"
+          [(ngModel)]="selectedAssignTask.assignedTo"
+          name="assignedToModal"
+        >
+
+           <option [ngValue]="0">
+            Select User
+           </option>
+
+
+          <option
+            *ngFor="let user of users"
+            [ngValue]="user.userId"
+          >
+            {{ user.firstName }}
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="modal-footer">
+
+      <button
+        type="button"
+        class="modal-cancel-button"
+        (click)="closeAssignUserModal()"
+      >
+        <mat-icon>close</mat-icon>
+        <span>Close</span>
+      </button>
+
+      <button
+        type="button"
+        class="modal-save-button"
+        [disabled]="!selectedAssignTask?.assignedTo"
+        (click)="assignUser()"
+      >
+        <mat-icon>save</mat-icon>
+        <span>Assign</span>
+      </button>
+
+    </div>
+
+  </div>
 </div>

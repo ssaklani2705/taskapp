@@ -1959,3 +1959,18 @@
   background: #c7d0db;
   border-radius: 3px;
 }
+
+
+.selected-category-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.validation-message {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 5px;
+}

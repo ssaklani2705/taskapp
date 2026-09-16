@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
+
 import {
   Component,
   ElementRef,
@@ -46,6 +47,7 @@ import { MyDateAdapter } from '../../../classes/my-date-adapter';
 //import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import * as XLSX from 'xlsx';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 interface Task {
@@ -93,7 +95,8 @@ interface AssignedUser {
     MatDividerModule,
     MatFormField,
     MatLabel,
-    MatOptionModule
+    MatOptionModule,
+    MatTooltipModule
 
   ],
 
@@ -2468,7 +2471,175 @@ export class TaskIndex {
   }
 
 
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+
+  if (!target.closest('.status-dropdown')) {
+    this.showStatusDropdown = false;
+  }
+}
 
 
+//Assign To Model
+showAssignUserModal = false;
+selectedAssignTask: any = null;
+// userId: any;
+// isAdmin: any;
+// loginType: any = '';
+users: any[] = [];
+
+openAssignUserModal(task: any): void {
+
+  // Create a copy so table data is not changed
+  // until user clicks Assign
+  this.selectedAssignTask = {
+    ...task
+  };
+
+  // Show "Select User" when task is unassigned
+  if (
+    this.selectedAssignTask.assignedTo === null ||
+    this.selectedAssignTask.assignedTo === undefined
+  ) {
+    this.selectedAssignTask.assignedTo = 0;
+  }
+
+  this.showAssignUserModal = true;
+
+  this.users = [];
+
+  this.dataprovider.changesCategoryIdgetUserFilterData(
+    this.isAdmin,
+    this.userId,
+    this.loginType,
+    task.clientId,
+    task.taskCategoryId
+  ).subscribe({
+    next: (res: any) => {
+
+      const data = res?.data || res;
+
+      this.users = data?.assignedUsers || [];
+
+    },
+    error: (error: any) => {
+
+      console.error(
+        'Error loading assigned users:',
+        error
+      );
+
+      this.users = [];
+    }
+  });
+}
+
+closeAssignUserModal(): void {
+  this.showAssignUserModal = false;
+  this.selectedAssignTask = null;
+  this.users = [];
+}
+
+assignUser(): void {
+
+  if (
+    !this.selectedAssignTask ||
+    !this.selectedAssignTask.assignedTo ||
+    this.selectedAssignTask.assignedTo == 0
+  ) {
+    return;
+  }
+
+  const taskId = this.selectedAssignTask.taskId;
+  const assignedTo = this.selectedAssignTask.assignedTo;
+
+  this.dataprovider.updateTaskAssignedUser(
+    taskId,
+    assignedTo
+  ).subscribe({
+    next: (res: any) => {
+
+      if (res?.success) {
+
+        // Find selected user
+        const selectedUser = this.users.find(
+          (user: any) =>
+            user.userId == assignedTo
+        );
+
+        // Update original table task only after API success
+        const taskIndex = this.paginatedTasks.findIndex(
+          (task: any) =>
+            task.taskId == taskId
+        );
+
+        if (taskIndex !== -1) {
+
+          this.paginatedTasks[taskIndex].assignedTo =
+            assignedTo;
+
+          this.paginatedTasks[taskIndex].assignedToName =
+            selectedUser?.firstName || 'Unassigned User';
+        }
+
+        this.closeAssignUserModal();
+
+        // Optional: refresh table from backend
+        this.onSearch();
+
+      } else {
+
+        console.error(
+          'Failed to assign user:',
+          res?.message
+        );
+      }
+    },
+
+    error: (error: any) => {
+
+      console.error(
+        'Error assigning user:',
+        error
+      );
+    }
+  });
+}
+
+onchangeloadUserDropdownData(task: any): void {
+
+  this.dataprovider.changesCategoryIdgetUserFilterData(
+    this.isAdmin,
+    this.userId,
+    this.loginType,
+    task.clientId,
+    task.taskCategoryId
+  ).subscribe({
+    next: (res: any) => {
+
+      const data = res?.data || res;
+
+      this.users = data?.assignedUsers || [];
+
+    },
+    error: (error: any) => {
+
+      console.error(
+        'Error loading task dropdown data:',
+        error
+      );
+
+      this.users = [];
+    }
+  });
+}
+
+// openAssignUserModal(task: any): void {
+//   this.selectedAssignTask = task;
+//   this.showAssignUserModal = true;
+
+//   this.onchangeloadUserDropdownData(task);
+// }
 
 }

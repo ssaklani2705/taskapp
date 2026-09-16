@@ -548,7 +548,15 @@ export class Sidebar implements OnInit {
 
         route: '/designation-master'
       },
+      {
+        moduleId: 5,
 
+        label: 'Task Category Master',
+
+        icon: 'task_alt',
+
+        route: '/task-category-index'
+      },
       {
         moduleId: 1,
 
@@ -559,16 +567,7 @@ export class Sidebar implements OnInit {
         route: '/my-team'
       },
 
-      {
-        moduleId: 5,
-
-        label: 'Task Category Master',
-
-        icon: 'task_alt',
-
-        route: '/task-category-index'
-      },
-
+      
       {
         moduleId: 4,
 

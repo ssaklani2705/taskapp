@@ -1521,6 +1521,28 @@ return this.http.get<TaskCategoryDTO[]>(
 
   }
 
+// changesCategoryIdgetUserFilterData(
+// isAdmin: string,
+// userId: number,
+// loginType: string,
+// clientId: number,
+// categoryIds: string
+// ): Observable<any> {
+
+// return this.http.get<any>(
+// `${environment.apiBaseUrl}admin/task/changesCategoryIdgetUserFilterData`,
+// {
+// params: {
+// isAdmin: isAdmin.toString(),
+// userId: userId.toString(),
+// loginType: loginType.toString(),
+// clientId: clientId?.toString() ?? '',
+// categoryIds: categoryIds ?? ''
+// }
+// }
+// );
+
+// }
 
 
   getTaskDetails(
@@ -1793,5 +1815,16 @@ return this.http.get<TaskCategoryDTO[]>(
       `${environment.apiBaseUrl}api/task/dashboard-clients?userId=${userId}&isAdmin=${isAdmin}&loginType=${loginType}&selectedClientId=${selectedClientId}`
     );
   }
+
+  updateTaskAssignedUser(taskId: any, assignedTo: any): Observable<any> {
+
+  return this.http.put(
+    `${environment.apiBaseUrl}admin/task/updateAssignedUser`,
+    {
+      taskId: taskId,
+      assignedTo: assignedTo
+    }
+  );
+}
 
 }
