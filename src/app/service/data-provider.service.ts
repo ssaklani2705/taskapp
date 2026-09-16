@@ -1768,7 +1768,7 @@ return this.http.get<TaskCategoryDTO[]>(
     });
   }
 
-  countOfActiveTask(): Observable<any> {
+  countOfActiveTask(clientId:any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfActiveTask`);
   }
 

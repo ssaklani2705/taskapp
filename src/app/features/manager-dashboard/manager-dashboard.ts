@@ -220,8 +220,9 @@ export class ManagerDashboard {
   }
 
   getTaskCounts(): void {
+     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
     // Active Tasks
-    this.dataProvider.countOfActiveTask().subscribe({
+    this.dataProvider.countOfActiveTask(clientId).subscribe({
       next: (response: any) => {
         console.log('Active Task Count:', response);
 

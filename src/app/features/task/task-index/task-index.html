@@ -413,15 +413,7 @@
                 </td>
 
 
-                <!-- ASSIGNED TO -->
-                <!-- <td>
-                  <span class="wrap-text">
-                    {{ !task.assignedToName || task.assignedToName === '0'
-                    ? 'Unassigned User'
-                    : task.assignedToName }}
-                  </span>
-                </td> -->
-                <!-- ASSIGNED TO -->
+             
 <td>
   <span
     class="wrap-text"
@@ -457,18 +449,9 @@
 
                 <!-- TASK STATUS -->
                 <td>
-                  <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
-                    [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Manager" [disabled]="
-                   
-                        task.taskStatus == 5 ||
-
-                        ( task.addedBy == userId &&
-                          (task.taskStatus == 1 || task.taskStatus == 3)) ||
-
-                        (task.assignedTo == userId &&
-                          (task.taskStatus == 2 || task.taskStatus == 4))
-                                        
-                      ">
+                   <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
+                    [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Manager"
+                    [disabled]="canDisableChangeManager(task)">
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
                     }}

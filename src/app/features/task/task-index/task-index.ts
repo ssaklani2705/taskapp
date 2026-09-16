@@ -2005,18 +2005,26 @@ export class TaskIndex {
   fileTwoName: string = '';
 
 
+ 
+
   openChangeManagerModal(taskObject: any): void {
-    console.log("sssssssss" + taskObject);
+    //  console.log("sssssssss" + taskObject);
     this.descriptionValidationError = false;
+
+
+
 
 
     this.task = {
       taskId: taskObject.taskId,
+      managerId: taskObject.managerId,
+      addedBy: taskObject.addedBy,
+      assignedTo: taskObject.assignedTo,
       taskStatus: taskObject.taskStatus
     };
 
 
-    console.log("{ == }" + JSON.stringify(this.task));
+    //  console.log("{ == }" + JSON.stringify(this.task));
 
     this.taskDescription = '';
 
@@ -2641,5 +2649,68 @@ onchangeloadUserDropdownData(task: any): void {
 
 //   this.onchangeloadUserDropdownData(task);
 // }
+
+
+
+  canDisableChangeManager(task: any): boolean {
+    const isManager = Number(task.managerId) === Number(this.userId);
+
+    // Status 5 => closed, locked for everyone, no exceptions
+    if (task.taskStatus == 5) {
+      return true;
+    }
+    // const isAssignor = this.task.addedBy == this.userId;
+    const selfAssigned =
+      task.addedBy == task.assignedTo
+
+
+    if (selfAssigned) {
+
+      // For self-assigned tasks: only the manager can act when status is 4
+      // if (isManager  && task.taskStatus != 4 ) {
+      //   return true; // enabled — manager can open the modal
+      // }
+
+      // if (task.taskStatus == 4 && !isManager) {
+      //   return true; // disabled — no one else can open it at status 4
+      // }
+      return false; // any other status => self-assigned user can always change manager
+    }
+
+    return (
+      (task.addedBy == this.userId &&
+        (task.taskStatus == 1 || task.taskStatus == 3)) ||
+
+      (task.assignedTo == this.userId &&
+        (task.taskStatus == 2 || task.taskStatus == 4))
+    );
+  }
+
+
+
+  isStatusRadioDisabled(task: any): boolean {
+    const selfAssigned =
+      task.addedBy == this.userId &&
+      task.assignedTo == this.userId;
+    const isManager =
+      task.managerId == this.userId;
+    // console.log("{} is manager only " + isManager)
+    return (isManager);
+  }
+
+
+
+  canShowAssignorClosure(): boolean {
+    // console.error("Inside method checking !!!!")
+    // console.error("{this.userId }" + this.userId)
+
+    console.error("{this.managerId }" + this.task.addedBy, this.task.managerId, this.task.assignedTo)
+    const isManager = this.task.managerId == this.userId;
+
+    const isAssignor = this.task.addedBy == this.userId;
+    const isSelfAssigned = this.task.addedBy == this.task.assignedTo;
+
+    return isManager || (isAssignor && !isSelfAssigned);
+  }
 
 }
