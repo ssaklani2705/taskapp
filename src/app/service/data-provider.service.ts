@@ -1769,31 +1769,73 @@ return this.http.get<TaskCategoryDTO[]>(
   }
 
   countOfActiveTask(clientId:any): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfActiveTask`);
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfActiveTask`,
+      {
+      params: {
+        clientId: clientId
+      }
+    }
+    );
   }
 
-  countOfCompletedTask(): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfCompletedTask`);
+  countOfCompletedTask(clientId:any): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfCompletedTask`,
+      {
+      params: {
+        clientId: clientId
+      }
+    }
+    );
   }
 
-  countOfPendingTask(): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfPendingTask`);
+  countOfPendingTask(clientId:any): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfPendingTask`,
+      {
+      params: {
+        clientId: clientId
+      }
+    }
+    );
   }
 
-  countOfAssignedTask(): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssignedTask`);
+  countOfAssignedTask(clientId:any): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssignedTask`,
+      {
+      params: {
+        clientId: clientId
+      }
+    }
+    );
   }
 
-  countOfAssigneeClosureTask(): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeClosureTask`);
+  countOfAssigneeClosureTask(clientId:any): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeClosureTask`,
+      {
+      params: {
+        clientId: clientId
+      }
+    }
+    );
   }
 
-  countOfReOpenTask(): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfReOpenTask`);
+  countOfReOpenTask(clientId:any): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfReOpenTask`,
+      {
+      params: {
+        clientId: clientId
+      }
+    }
+    );
   }
 
-  countOfAssigneeReClosureTask(): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeReClosureTask`);
+  countOfAssigneeReClosureTask(clientId:any): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeReClosureTask`,
+      {
+      params: {
+        clientId: clientId
+      }
+    }
+    );
   }
 
   getTaskClient(userId: number): Observable<any> {

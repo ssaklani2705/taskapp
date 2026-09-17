@@ -331,7 +331,10 @@
 </div>
 
 <!-- No categories available -->
-<div class="user-error" *ngIf=" userForm.get('departmentId')?.value && categoryList && categoryList.length === 0">
+<div class="user-error" *ngIf="
+    !categoriesLoading &&
+    userForm.get('departmentId')?.value &&
+    categoryList && categoryList.length === 0">
   No task categories are available for this department..
 </div>
 

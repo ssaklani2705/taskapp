@@ -344,7 +344,9 @@ export class EmployeeDashboard implements OnInit {
           startDay: this.formatDate(task.date),
 
           dueDate: this.formatDate(task.dueDateTime),
-          type: 'done',
+          // type: 'done',
+          type:
+          this.getPriorityType(task.priority)
            
 
         };

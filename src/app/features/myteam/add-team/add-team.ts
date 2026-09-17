@@ -2232,26 +2232,25 @@ private formatDateForApi(
 selectedCategoryIds: number[] = [];
 showCategoryDropdown = false;
 
+categoriesLoading = false;
+
 loadCategories(clearSelection: boolean = true): void {
 
   const departmentId =
     this.userForm.get('departmentId')?.value;
 
-  console.log(
-    'Selected Department ID:',
-    departmentId
-  );
-
   if (!departmentId) {
     this.categoryList = [];
     this.selectedCategoryIds = [];
+    this.categoriesLoading = false;
     return;
   }
 
-  // Only clear when department is manually changed
   if (clearSelection) {
     this.selectedCategoryIds = [];
   }
+
+  this.categoriesLoading = true;
 
   this.dataProvider
     .getCategoriesByDepartmentId(departmentId)
@@ -2259,43 +2258,61 @@ loadCategories(clearSelection: boolean = true): void {
 
       next: (response: TaskCategoryDTO[]) => {
 
-        console.log(
-          'Category API Response:',
-          response
-        );
-
         this.categoryList = response;
+        this.categoriesLoading = false;
 
-        response.forEach(category => {
+        // Auto-select all categories when Department ID = 1
+        if (Number(departmentId) === 1 && clearSelection) {
 
-          console.log(
-            'Category:',
-            category.name,
-            'ID:',
-            category.taskcategoryId,
-            'Checked:',
-            this.isCategoryChecked(
-              category.taskcategoryId
-            )
-          );
+          this.selectedCategoryIds =
+            response.map(category => category.taskcategoryId);
 
-        });
-
+          this.showCategoryValidation = false;
+        }
       },
 
       error: (error) => {
-
-        console.error(
-          'Error loading categories:',
-          error
-        );
-
+        console.error('Error loading categories:', error);
         this.categoryList = [];
-
+        this.categoriesLoading = false;
       }
-
     });
 }
+
+// loadCategories(clearSelection: boolean = true): void {
+
+//   const departmentId =
+//     this.userForm.get('departmentId')?.value;
+
+//   if (!departmentId) {
+//     this.categoryList = [];
+//     this.selectedCategoryIds = [];
+//     this.categoriesLoading = false;
+//     return;
+//   }
+
+//   if (clearSelection) {
+//     this.selectedCategoryIds = [];
+//   }
+
+//   this.categoriesLoading = true;
+
+//   this.dataProvider
+//     .getCategoriesByDepartmentId(departmentId)
+//     .subscribe({
+
+//       next: (response: TaskCategoryDTO[]) => {
+//         this.categoryList = response;
+//         this.categoriesLoading = false;
+//       },
+
+//       error: (error) => {
+//         console.error('Error loading categories:', error);
+//         this.categoryList = [];
+//         this.categoriesLoading = false;
+//       }
+//     });
+// }
 
 toggleCategory(categoryId: number, event: Event): void {
 
