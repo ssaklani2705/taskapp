@@ -1041,6 +1041,67 @@
 }
 
 
+//For  Task Status
+/* =========================================================
+  STATUS BADGE
+  ========================================================= */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 82px;
+  min-width: 82px;
+  max-width: 82px;
+  height: 32px;
+  padding: 0 8px;
+  margin: 0 auto;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* Status 1 - Active (Green) */
+.status-badge.status-1 {
+  background: var(--success-bg);
+  color: var(--success) !important;
+  border: 1px solid var(--success-border);
+}
+
+/* Status 2 - Inactive (Amber/Orange) */
+.status-badge.status-2 {
+  background: var(--warning-bg);
+  color: var(--warning) !important;
+  border: 1px solid var(--warning-border);
+}
+
+/* Status 3 - Deleted (Red) */
+.status-badge.status-3 {
+  background: var(--danger-bg);
+  color: #b8403d !important;
+  border: 1px solid var(--danger-border);
+}
+
+/* Status 4 - Blue */
+.status-badge.status-4 {
+  background: #e3f2fd;
+  color: #1565c0 !important;
+  border: 1px solid #90caf9;
+}
+
+/* Status 5 - Purple */
+.status-badge.status-5 {
+  background: #f3e5f5;
+  color: #7b1fa2 !important;
+  border: 1px solid #ce93d8;
+}
+
+
 /* =========================================================
   ACTION COLUMN — sticky to the right of the scroll area so
   actions stay reachable without scrolling all the way over,
@@ -2916,4 +2977,71 @@ textarea.manager-select::placeholder {
 
 .description-icon-button:hover {
   color: #2f6fa3;
+}
+
+
+.unassigned-user {
+  color: #1976d2;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  text-decoration: underline dotted;
+
+  &:hover {
+    color: #0d47a1;
+    text-decoration: underline solid;
+  }
+
+  .assign-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+
+.title-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0; // allows text-overflow to work inside flex
+}
+
+.title-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description-icon-button {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #6b7280; // neutral gray icon
+  transition: background 0.15s ease, color 0.15s ease;
+
+  i {
+    font-size: 14px;
+  }
+
+  &:hover {
+    background: rgba(25, 118, 210, 0.1);
+    color: #1976d2; // highlight on hover
+  }
+
+  &:active {
+    background: rgba(25, 118, 210, 0.18);
+  }
 }

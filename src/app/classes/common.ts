@@ -64,6 +64,23 @@ export class Common {
   }
 
 
+  getTaskStatusClassNew(status: number | string): string {
+  switch (+status) {
+    case 1:
+      return 'status-badge status-1';
+    case 2:
+      return 'status-badge status-2';
+    case 3:
+      return 'status-badge status-3';
+    case 4:
+      return 'status-badge status-4';
+    case 5:
+      return 'status-badge status-5';
+    default:
+      return 'status-badge';
+  }
+}
+
 
 
   getFollowUpStatusLabel(status: number): string {

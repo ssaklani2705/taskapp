@@ -305,7 +305,7 @@
     type="button"
     class="dropdown-btn"
     [disabled]="!categoryList || categoryList.length === 0"
-    (click)="categoryList?.length && (showCategoryDropdown = !showCategoryDropdown)"
+    (click)="categoryList.length && (showCategoryDropdown = !showCategoryDropdown)"
   >
     <span class="selected-category-text">
       {{ getSelectedCategoryNames() || '--Select Task Category--' }}
@@ -314,7 +314,7 @@
 
   <div
     class="dropdown-menu"
-    *ngIf="showCategoryDropdown && categoryList?.length"
+    *ngIf="showCategoryDropdown && categoryList.length"
     (click)="$event.stopPropagation()"
   >
     <label *ngFor="let category of categoryList">
@@ -343,7 +343,7 @@
   class="user-error"
   *ngIf="
     showCategoryValidation &&
-    categoryList?.length &&
+    categoryList.length &&
     (!selectedCategoryIds || selectedCategoryIds.length === 0)
   "
 >

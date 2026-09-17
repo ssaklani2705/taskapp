@@ -93,8 +93,6 @@ interface AssignedUser {
     MatNativeDateModule,
     MatIconModule,
     MatDividerModule,
-    MatFormField,
-    MatLabel,
     MatOptionModule,
     MatTooltipModule
 
@@ -2564,7 +2562,8 @@ assignUser(): void {
 
   this.dataprovider.updateTaskAssignedUser(
     taskId,
-    assignedTo
+    assignedTo,
+    this.userId
   ).subscribe({
     next: (res: any) => {
 
