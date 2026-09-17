@@ -450,7 +450,7 @@
                 <!-- TASK STATUS -->
                 <td>
                    <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
-                    [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Manager"
+                    [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Task status"
                     [disabled]="canDisableChangeManager(task)">
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
