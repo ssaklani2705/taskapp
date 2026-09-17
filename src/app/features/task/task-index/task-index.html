@@ -81,7 +81,7 @@
 
 
           <!-- TASK CATEGORY -->
-          <div class="status-wrapper" >
+          <div class="status-wrapper">
 
             <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()">
 
@@ -371,7 +371,7 @@
                   <button type="button" class="description-icon-button" *ngIf="task.description"
                     (click)="openDescriptionModal(task)" matTooltip="View Description" aria-label="View Description">
 
-                     <i class="fa fa-file-text"></i>
+                    <i class="fa fa-file-text"></i>
 
                   </button>
                 </td>
@@ -413,29 +413,25 @@
                 </td>
 
 
-             
-<td>
-  <span
-    class="wrap-text"
-    [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-    (click)="
+
+                <td>
+                  <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+                    (click)="
       (!task.assignedToName || task.assignedToName === '0')
         ? openAssignUserModal(task)
         : null
-    "
-    [matTooltip]="
+    " [matTooltip]="
       (!task.assignedToName || task.assignedToName === '0')
         ? 'Assign User'
         : ''
-    "
-  >
-    {{
-      !task.assignedToName || task.assignedToName === '0'
-        ? 'Unassigned User'
-        : task.assignedToName
-    }}
-  </span>
-</td>
+    ">
+                    {{
+                    !task.assignedToName || task.assignedToName === '0'
+                    ? 'Unassigned User'
+                    : task.assignedToName
+                    }}
+                  </span>
+                </td>
 
 
                 <!-- PRIORITY -->
@@ -449,7 +445,7 @@
 
                 <!-- TASK STATUS -->
                 <td>
-                   <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
+                  <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
                     [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Task status"
                     [disabled]="canDisableChangeManager(task)">
                     {{
@@ -757,7 +753,7 @@
       </div>
 
       <!-- ZIP FILE UPLOAD -->
-      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3">
+      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5">
         <label class="modal-field-label">
           Zip File
         </label>
@@ -771,7 +767,7 @@
       </div>
 
       <!-- NORMAL FILE UPLOAD -->
-      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3">
+      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5">
         <label class="modal-field-label">
           File
         </label>
@@ -886,15 +882,8 @@
 
 
 <!-- ASSIGN USER MODAL -->
-<div
-  class="modal-overlay"
-  *ngIf="showAssignUserModal"
-  (click)="closeAssignUserModal()"
->
-  <div
-    class="change-manager-modal description-modal"
-    (click)="$event.stopPropagation()"
-  >
+<div class="modal-overlay" *ngIf="showAssignUserModal" (click)="closeAssignUserModal()">
+  <div class="change-manager-modal description-modal" (click)="$event.stopPropagation()">
 
     <!-- HEADER -->
     <div class="modal-header">
@@ -919,12 +908,7 @@
 
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeAssignUserModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeAssignUserModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
 
@@ -941,21 +925,14 @@
           Assigned To
         </label>
 
-        <select
-          class="user-input user-select"
-          [(ngModel)]="selectedAssignTask.assignedTo"
-          name="assignedToModal"
-        >
+        <select class="user-input user-select" [(ngModel)]="selectedAssignTask.assignedTo" name="assignedToModal">
 
-           <option [ngValue]="0">
+          <option [ngValue]="0">
             Select User
-           </option>
+          </option>
 
 
-          <option
-            *ngFor="let user of users"
-            [ngValue]="user.userId"
-          >
+          <option *ngFor="let user of users" [ngValue]="user.userId">
             {{ user.firstName }}
           </option>
 
@@ -968,21 +945,13 @@
     <!-- FOOTER -->
     <div class="modal-footer">
 
-      <button
-        type="button"
-        class="modal-cancel-button"
-        (click)="closeAssignUserModal()"
-      >
+      <button type="button" class="modal-cancel-button" (click)="closeAssignUserModal()">
         <mat-icon>close</mat-icon>
         <span>Close</span>
       </button>
 
-      <button
-        type="button"
-        class="modal-save-button"
-        [disabled]="!selectedAssignTask?.assignedTo"
-        (click)="assignUser()"
-      >
+      <button type="button" class="modal-save-button" [disabled]="!selectedAssignTask?.assignedTo"
+        (click)="assignUser()">
         <mat-icon>save</mat-icon>
         <span>Assign</span>
       </button>
