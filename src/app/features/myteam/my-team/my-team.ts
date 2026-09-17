@@ -119,11 +119,11 @@ export class MyTeam implements OnInit {
   page: number = 0;
 
   // size: number = 5;
-    recordsPerPage: number =
-      environment.recordsPerPage;
-  
-    size: number =
-      environment.size;
+  recordsPerPage: number =
+    environment.recordsPerPage;
+
+  size: number =
+    environment.size;
 
   totalRecords: number = 0;
 
@@ -237,7 +237,7 @@ export class MyTeam implements OnInit {
     @Inject(PLATFORM_ID)
     private platformId: Object
 
-  ) {}
+  ) { }
 
 
   // =========================================================
@@ -249,9 +249,9 @@ export class MyTeam implements OnInit {
     /*
      * First restore all filters
      */
-    this.restoreFilterState();
+    // this.restoreFilterState();
 
-
+    this.clearFilters();
     /*
      * Load dropdowns
      */
@@ -1100,41 +1100,47 @@ export class MyTeam implements OnInit {
   // RESTORE FILTER STATE
   // =========================================================
 
-private restoreFilterState(): void {
+  private restoreFilterState(): void {
 
-  if (!isPlatformBrowser(this.platformId)) {
-    return;
-  }
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
-  const stored = sessionStorage.getItem(this.filterKey);
+    const stored = sessionStorage.getItem(this.filterKey);
 
-  if (!stored) {
-    return;
-  }
+    if (!stored) {
+      return;
+    }
 
-  try {
+    try {
 
-    const filterState = JSON.parse(stored);
+      const filterState = JSON.parse(stored);
 
-    // =====================================================
-    // PAGE
-    // =====================================================
-
-    if (
-      filterState.currentPage !== undefined &&
-      filterState.currentPage !== null
-    ) {
-
-      const restoredPage = Number(
-        filterState.currentPage
-      );
+      // =====================================================
+      // PAGE
+      // =====================================================
 
       if (
-        Number.isFinite(restoredPage) &&
-        restoredPage >= 1
+        filterState.currentPage !== undefined &&
+        filterState.currentPage !== null
       ) {
 
-        this.currentPage = restoredPage;
+        const restoredPage = Number(
+          filterState.currentPage
+        );
+
+        if (
+          Number.isFinite(restoredPage) &&
+          restoredPage >= 1
+        ) {
+
+          this.currentPage = restoredPage;
+
+        } else {
+
+          this.currentPage = 1;
+
+        }
 
       } else {
 
@@ -1142,34 +1148,34 @@ private restoreFilterState(): void {
 
       }
 
-    } else {
-
-      this.currentPage = 1;
-
-    }
-
-    /*
-     * Backend page is 0-based
-     */
-    this.page = this.currentPage - 1;
+      /*
+       * Backend page is 0-based
+       */
+      this.page = this.currentPage - 1;
 
 
-    // =====================================================
-    // STATUS
-    // =====================================================
+      // =====================================================
+      // STATUS
+      // =====================================================
 
-    if (
-      filterState.statusIndex !== undefined &&
-      filterState.statusIndex !== null
-    ) {
+      if (
+        filterState.statusIndex !== undefined &&
+        filterState.statusIndex !== null
+      ) {
 
-      const restoredStatus = Number(
-        filterState.statusIndex
-      );
+        const restoredStatus = Number(
+          filterState.statusIndex
+        );
 
-      if (Number.isFinite(restoredStatus)) {
+        if (Number.isFinite(restoredStatus)) {
 
-        this.statusIndex = restoredStatus;
+          this.statusIndex = restoredStatus;
+
+        } else {
+
+          this.statusIndex = 0;
+
+        }
 
       } else {
 
@@ -1177,96 +1183,96 @@ private restoreFilterState(): void {
 
       }
 
-    } else {
 
-      this.statusIndex = 0;
+      // =====================================================
+      // SELECTED STATUS
+      // =====================================================
 
-    }
+      if (this.statusIndex > 0) {
 
+        this.selectedStatus =
+          String(this.statusIndex);
 
-    // =====================================================
-    // SELECTED STATUS
-    // =====================================================
+      } else {
 
-    if (this.statusIndex > 0) {
-
-      this.selectedStatus =
-        String(this.statusIndex);
-
-    } else {
-
-      this.selectedStatus = '';
-
-    }
-
-
-    // =====================================================
-    // SEARCH
-    // =====================================================
-
-    if (
-      filterState.searchText !== undefined &&
-      filterState.searchText !== null
-    ) {
-
-      this.search =
-        String(filterState.searchText);
-
-      this.searchQuery =
-        String(filterState.searchText);
-
-    } else {
-
-      this.search = '';
-      this.searchQuery = '';
-
-    }
-
-
-    // =====================================================
-    // PAGE SIZE
-    // =====================================================
-
-    if (
-      filterState.size !== undefined &&
-      filterState.size !== null
-    ) {
-
-      const restoredSize =
-        Number(filterState.size);
-
-      if (
-        Number.isFinite(restoredSize) &&
-        restoredSize > 0
-      ) {
-
-        this.size = restoredSize;
+        this.selectedStatus = '';
 
       }
 
-    }
 
-
-    // =====================================================
-    // DEPARTMENT
-    // =====================================================
-
-    if (
-      filterState.departmentId !== undefined &&
-      filterState.departmentId !== null &&
-      filterState.departmentId !== ''
-    ) {
-
-      const departmentId =
-        Number(filterState.departmentId);
+      // =====================================================
+      // SEARCH
+      // =====================================================
 
       if (
-        Number.isFinite(departmentId) &&
-        departmentId > 0
+        filterState.searchText !== undefined &&
+        filterState.searchText !== null
       ) {
 
-        this.selectedDepartmentId =
-          departmentId;
+        this.search =
+          String(filterState.searchText);
+
+        this.searchQuery =
+          String(filterState.searchText);
+
+      } else {
+
+        this.search = '';
+        this.searchQuery = '';
+
+      }
+
+
+      // =====================================================
+      // PAGE SIZE
+      // =====================================================
+
+      if (
+        filterState.size !== undefined &&
+        filterState.size !== null
+      ) {
+
+        const restoredSize =
+          Number(filterState.size);
+
+        if (
+          Number.isFinite(restoredSize) &&
+          restoredSize > 0
+        ) {
+
+          this.size = restoredSize;
+
+        }
+
+      }
+
+
+      // =====================================================
+      // DEPARTMENT
+      // =====================================================
+
+      if (
+        filterState.departmentId !== undefined &&
+        filterState.departmentId !== null &&
+        filterState.departmentId !== ''
+      ) {
+
+        const departmentId =
+          Number(filterState.departmentId);
+
+        if (
+          Number.isFinite(departmentId) &&
+          departmentId > 0
+        ) {
+
+          this.selectedDepartmentId =
+            departmentId;
+
+        } else {
+
+          this.selectedDepartmentId = null;
+
+        }
 
       } else {
 
@@ -1274,33 +1280,33 @@ private restoreFilterState(): void {
 
       }
 
-    } else {
 
-      this.selectedDepartmentId = null;
-
-    }
-
-
-    // =====================================================
-    // DESIGNATION
-    // =====================================================
-
-    if (
-      filterState.designationId !== undefined &&
-      filterState.designationId !== null &&
-      filterState.designationId !== ''
-    ) {
-
-      const designationId =
-        Number(filterState.designationId);
+      // =====================================================
+      // DESIGNATION
+      // =====================================================
 
       if (
-        Number.isFinite(designationId) &&
-        designationId > 0
+        filterState.designationId !== undefined &&
+        filterState.designationId !== null &&
+        filterState.designationId !== ''
       ) {
 
-        this.selectedDesignationId =
-          designationId;
+        const designationId =
+          Number(filterState.designationId);
+
+        if (
+          Number.isFinite(designationId) &&
+          designationId > 0
+        ) {
+
+          this.selectedDesignationId =
+            designationId;
+
+        } else {
+
+          this.selectedDesignationId = null;
+
+        }
 
       } else {
 
@@ -1308,49 +1314,43 @@ private restoreFilterState(): void {
 
       }
 
-    } else {
 
-      this.selectedDesignationId = null;
+      // =====================================================
+      // DEBUG
+      // =====================================================
+
+      console.log(
+        'RESTORED FILTER STATE:',
+        {
+          currentPage: this.currentPage,
+          page: this.page,
+          size: this.size,
+          search: this.search,
+          statusIndex: this.statusIndex,
+          selectedStatus: this.selectedStatus,
+          departmentId: this.selectedDepartmentId,
+          designationId: this.selectedDesignationId
+        }
+      );
+
+    }
+    catch (error) {
+
+      console.error(
+        'Error restoring filter state:',
+        error
+      );
+
+      /*
+       * If corrupted JSON is present,
+       * remove it so it doesn't keep causing
+       * the same problem.
+       */
+      sessionStorage.removeItem(this.filterKey);
 
     }
 
-
-    // =====================================================
-    // DEBUG
-    // =====================================================
-
-    console.log(
-      'RESTORED FILTER STATE:',
-      {
-        currentPage: this.currentPage,
-        page: this.page,
-        size: this.size,
-        search: this.search,
-        statusIndex: this.statusIndex,
-        selectedStatus: this.selectedStatus,
-        departmentId: this.selectedDepartmentId,
-        designationId: this.selectedDesignationId
-      }
-    );
-
   }
-  catch (error) {
-
-    console.error(
-      'Error restoring filter state:',
-      error
-    );
-
-    /*
-     * If corrupted JSON is present,
-     * remove it so it doesn't keep causing
-     * the same problem.
-     */
-    sessionStorage.removeItem(this.filterKey);
-
-  }
-
-}
 
 
   // =========================================================
@@ -1520,99 +1520,99 @@ private restoreFilterState(): void {
 
   onDeleteUser(userId: number): void {
 
-  const createdBy = Number(
-    sessionStorage.getItem('userId') || 0
-  );
+    const createdBy = Number(
+      sessionStorage.getItem('userId') || 0
+    );
 
-  if (!userId) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Invalid User',
-      text: 'User ID is missing.'
-    });
+    if (!userId) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid User',
+        text: 'User ID is missing.'
+      });
 
-    return;
-  }
-
-  if (!createdBy) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Session Expired',
-      text: 'Unable to identify the logged-in user.'
-    });
-
-    return;
-  }
-
-  Swal.fire({
-    title: 'Are you sure?',
-    text: 'You want to delete this user?',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'Yes, delete it!',
-    cancelButtonText: 'Cancel',
-    customClass: {
-    popup: 'small-confirm-popup'
-  },
-    reverseButtons: true
-  }).then((result) => {
-
-    if (!result.isConfirmed) {
       return;
     }
 
-    this.dataprovider
-      .deleteUserManagement(userId, String(createdBy))
-      .subscribe({
+    if (!createdBy) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Session Expired',
+        text: 'Unable to identify the logged-in user.'
+      });
 
-        next: (response: any) => {
+      return;
+    }
 
-          if (response?.success) {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You want to delete this user?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        popup: 'small-confirm-popup'
+      },
+      reverseButtons: true
+    }).then((result) => {
 
-            Swal.fire({
-              icon: 'success',
-              title: 'Deleted!',
-              text: response.message || 'User deleted successfully.',
-              timer: 1500,
-              showConfirmButton: false
-            });
+      if (!result.isConfirmed) {
+        return;
+      }
 
-            // Reload user list
-            this.getUserDetails();
+      this.dataprovider
+        .deleteUserManagement(userId, String(createdBy))
+        .subscribe({
 
-          } else {
+          next: (response: any) => {
+
+            if (response?.success) {
+
+              Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: response.message || 'User deleted successfully.',
+                timer: 1500,
+                showConfirmButton: false
+              });
+
+              // Reload user list
+              this.getUserDetails();
+
+            } else {
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Delete Failed',
+                text: response?.message || 'Unable to delete user.'
+              });
+
+            }
+
+          },
+
+          error: (error) => {
+
+            console.error(
+              'Delete user error:',
+              error
+            );
 
             Swal.fire({
               icon: 'error',
-              title: 'Delete Failed',
-              text: response?.message || 'Unable to delete user.'
+              title: 'Error',
+              text:
+                error?.error?.message ||
+                'Something went wrong while deleting the user.'
             });
 
           }
 
-        },
+        });
 
-        error: (error) => {
-
-          console.error(
-            'Delete user error:',
-            error
-          );
-
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text:
-              error?.error?.message ||
-              'Something went wrong while deleting the user.'
-          });
-
-        }
-
-      });
-
-  });
-}
+    });
+  }
 
 
   // =========================================================
@@ -1753,35 +1753,35 @@ private restoreFilterState(): void {
   }
 
   // =========================================================
-// CLEAR FILTERS
-// =========================================================
+  // CLEAR FILTERS
+  // =========================================================
 
-clearFilters(): void {
+  clearFilters(): void {
 
-  // Clear search
-  this.searchQuery = '';
-  this.search = '';
+    // Clear search
+    this.searchQuery = '';
+    this.search = '';
 
-  // Clear department
-  this.selectedDepartmentId = null;
+    // Clear department
+    this.selectedDepartmentId = null;
 
-  // Clear designation
-  this.selectedDesignationId = null;
+    // Clear designation
+    this.selectedDesignationId = null;
 
-  // Clear status
-  this.selectedStatus = '';
+    // Clear status
+    this.selectedStatus = '';
 
-  // Reset status index if you are using it
-  this.statusIndex = 0;
+    // Reset status index if you are using it
+    this.statusIndex = 0;
 
-  // Reset pagination
-  this.currentPage = 1;
-  this.page = 0;
+    // Reset pagination
+    this.currentPage = 1;
+    this.page = 0;
 
-  // Reload the first page with cleared filters
-  this.onSearch();
+    // Reload the first page with cleared filters
+    this.onSearch();
 
-}
+  }
 
 
 }

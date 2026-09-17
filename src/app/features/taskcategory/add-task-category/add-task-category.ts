@@ -51,11 +51,9 @@ import {
   DataProviderService
 } from '../../../service/data-provider.service';
 
-import {
-  OwlMomentDateTimeModule
-} from '@danielmoncada/angular-datetime-picker-moment-adapter';
 
 import moment from 'moment';
+import { OwlMomentDateTimeModule } from '@danielmoncada/angular-datetime-picker-moment-adapter';
 
 
 /* ============================================
@@ -107,9 +105,9 @@ export const MY_DATE_TIME_FORMATS = {
 
     MatIconModule,
 
-    OwlDateTimeModule,
+    // OwlDateTimeModule,
 
-    OwlMomentDateTimeModule
+    // OwlMomentDateTimeModule
 
   ],
 

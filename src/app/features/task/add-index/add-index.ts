@@ -416,7 +416,7 @@ export class AddIndexComponent implements OnInit {
               this.onchangeloadDropdownData();
             }
 
-           if (this.task.clientId && this.task.taskCategoryId) { this.onchangeloadUserDropdownData(); }
+            if (this.task.clientId && this.task.taskCategoryId) { this.onchangeloadUserDropdownData(); }
           }
 
         },
@@ -1223,5 +1223,27 @@ export class AddIndexComponent implements OnInit {
       this.task.assignedTo = null;
     }
   }
+  removePdfFile(): void {
 
+    this.pdfFile = null;
+    this.pdfFileName = '';
+    this.pdfError = '';
+
+    if (this.pdfInput) {
+      this.pdfInput.nativeElement.value = '';
+    }
+
+  }
+
+  removeZipFile(): void {
+
+    this.zipFile = null;
+    this.zipFileName = '';
+    this.zipError = '';
+
+    if (this.zipInput) {
+      this.zipInput.nativeElement.value = '';
+    }
+
+  }
 }
