@@ -29,6 +29,8 @@ import {
 } from '@angular/material/icon';
 import Swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
+import { SESSION_KEYS } from '../../../service/session-storage.keys';
+import { SessionStorageService } from '../../../service/session-storage.service';
 
 
 interface User {
@@ -176,7 +178,8 @@ export class MyTeam implements OnInit {
   // SESSION STORAGE KEY
   // =========================================================
 
-  filterKey: string = 'userManagementFilter';
+  filterKey =
+    SESSION_KEYS.USER_MODULE_FILTER;
 
 
   // =========================================================
@@ -229,15 +232,9 @@ export class MyTeam implements OnInit {
   // =========================================================
 
   constructor(
-
-    private dataprovider: DataProviderService,
-
-    private router: Router,
-
+    private dataprovider: DataProviderService, private router: Router,
     @Inject(PLATFORM_ID)
-    private platformId: Object
-
-  ) { }
+    private platformId: Object, private sessionService: SessionStorageService,) { }
 
 
   // =========================================================
@@ -246,41 +243,22 @@ export class MyTeam implements OnInit {
 
   ngOnInit(): void {
 
-    /*
-     * First restore all filters
-     */
-    // this.restoreFilterState();
+    this.sessionService.clearOtherSessions(this.filterKey);
 
-    this.clearFilters();
-    /*
-     * Load dropdowns
-     */
+    this.restoreFilterState();
+
     this.loadDepartments();
-
     this.loadDesignations();
-
-
     /*
      * Load users
      */
     this.getUserDetails();
-
-
     /*
      * Load permissions
      */
-    if (
-      isPlatformBrowser(this.platformId)
-    ) {
-
-      const storedModules =
-        sessionStorage.getItem(
-          'selectedModuleDetail'
-        );
-
-
+    if (isPlatformBrowser(this.platformId)) {
+      const storedModules = sessionStorage.getItem('selectedModuleDetail');
       if (storedModules) {
-
         try {
 
           const parsed =
@@ -582,32 +560,22 @@ export class MyTeam implements OnInit {
       this.selectedStatus === ''
         ? 0
         : Number(this.selectedStatus);
-
     this.saveFilterState();
-
     this.getUserDetails();
-
   }
 
 
   onDesignationChange(): void {
-
     this.currentPage = 1;
-
     this.page = 0;
-
     this.search =
       this.searchQuery.trim();
-
     this.statusIndex =
       this.selectedStatus === ''
         ? 0
         : Number(this.selectedStatus);
-
     this.saveFilterState();
-
     this.getUserDetails();
-
   }
 
 
@@ -1073,15 +1041,11 @@ export class MyTeam implements OnInit {
         this.platformId
       )
     ) {
-
       return;
-
     }
-
 
     const filterState =
       this.getCurrentFilterState();
-
 
     sessionStorage.setItem(
 
@@ -1383,7 +1347,10 @@ export class MyTeam implements OnInit {
       );
 
     }
-
+    sessionStorage.setItem(
+      'userManagementReturnFromDetail',
+      'Y'
+    );
 
     /*
      * Navigate
@@ -1405,6 +1372,8 @@ export class MyTeam implements OnInit {
   viewUser(
     userId: any
   ): void {
+
+
 
     const filterState =
       this.getCurrentFilterState();
@@ -1431,7 +1400,10 @@ export class MyTeam implements OnInit {
 
     }
 
-
+    sessionStorage.setItem(
+      'userManagementReturnFromDetail',
+      'Y'
+    );
     /*
      * Navigate
      */
@@ -1459,6 +1431,7 @@ export class MyTeam implements OnInit {
     userId: any
   ): void {
 
+
     const filterState =
       this.getCurrentFilterState();
 
@@ -1484,7 +1457,10 @@ export class MyTeam implements OnInit {
 
     }
 
-
+    sessionStorage.setItem(
+      'userManagementReturnFromDetail',
+      'Y'
+    );
     /*
      * Navigate
      */

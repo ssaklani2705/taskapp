@@ -113,15 +113,12 @@ interface AssignedUser {
       useValue: 'en-GB',
     },
   ],
-
 })
+
 export class TaskIndex {
-
-
   // =========================================================
   // DATA
   // =========================================================
-
   tasks: Task[] = [];
 
   apiResponseTaskDetails: any = {};
@@ -376,30 +373,20 @@ export class TaskIndex {
 
     this.route.queryParams.subscribe((params) => {
       if (params['taskStatusIds'] !== undefined) {
-        this.selectedTaskStatuses = params['taskStatusIds']
-          ? String(params['taskStatusIds'])
-            .split(',')
-            .filter((status: string) => status !== '')
-          : [];
-
+        this.selectedTaskStatuses = params['taskStatusIds'] ? String(params['taskStatusIds']).split(',').filter((status: string) => status !== '') : [];
         this.currentPage = 1;
         this.page = 0;
       }
-
       this.getTaskDetails();
     });
   }
 
   private restoreFilterState(): void {
     let stateData: any = null;
-
     const nav = this.router.getCurrentNavigation();
-
     stateData = nav?.extras?.state;
-
     if (!stateData) {
       const qp = this.route.snapshot.queryParamMap;
-
       if (qp.keys.length > 0) {
         stateData = {
           currentPage: qp.get('currentPage'),
