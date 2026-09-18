@@ -89,6 +89,8 @@ export class ManagerDashboard {
   pageSize = 20;
   pageIndex = 0;
 
+  searchText: any="";
+
   kpis = [
     {
       title: 'Tasks',
