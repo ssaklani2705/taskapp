@@ -1041,6 +1041,67 @@
 }
 
 
+//For  Task Status
+/* =========================================================
+  STATUS BADGE
+  ========================================================= */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 82px;
+  min-width: 82px;
+  max-width: 82px;
+  height: 32px;
+  padding: 0 8px;
+  margin: 0 auto;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* Status 1 - Active (Green) */
+.status-badge.status-1 {
+  background: var(--success-bg);
+  color: var(--success) !important;
+  border: 1px solid var(--success-border);
+}
+
+/* Status 2 - Inactive (Amber/Orange) */
+.status-badge.status-2 {
+  background: var(--warning-bg);
+  color: var(--warning) !important;
+  border: 1px solid var(--warning-border);
+}
+
+/* Status 3 - Deleted (Red) */
+.status-badge.status-3 {
+  background: var(--danger-bg);
+  color: #b8403d !important;
+  border: 1px solid var(--danger-border);
+}
+
+/* Status 4 - Blue */
+.status-badge.status-4 {
+  background: #e3f2fd;
+  color: #1565c0 !important;
+  border: 1px solid #90caf9;
+}
+
+/* Status 5 - Purple */
+.status-badge.status-5 {
+  background: #f3e5f5;
+  color: #7b1fa2 !important;
+  border: 1px solid #ce93d8;
+}
+
+
 /* =========================================================
   ACTION COLUMN — sticky to the right of the scroll area so
   actions stay reachable without scrolling all the way over,
@@ -2916,4 +2977,227 @@ textarea.manager-select::placeholder {
 
 .description-icon-button:hover {
   color: #2f6fa3;
+}
+
+
+.unassigned-user {
+  color: #1976d2;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  text-decoration: underline dotted;
+
+  &:hover {
+    color: #0d47a1;
+    text-decoration: underline solid;
+  }
+
+  .assign-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+
+.title-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0; // allows text-overflow to work inside flex
+}
+
+.title-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description-icon-button {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #6b7280; // neutral gray icon
+  transition: background 0.15s ease, color 0.15s ease;
+
+  i {
+    font-size: 14px;
+  }
+
+  &:hover {
+    background: rgba(25, 118, 210, 0.1);
+    color: #1976d2; // highlight on hover
+  }
+
+  &:active {
+    background: rgba(25, 118, 210, 0.18);
+  }
+}
+
+// Date design 
+.due-date-cell {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  min-width: 100px;
+}
+
+.due-date-row,
+.due-time-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.due-date-row {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.due-time-row {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.due-icon {
+  font-size: 12px;
+  width: 13px;
+  text-align: center;
+}
+
+/* OVERDUE — red */
+.due-overdue {
+  background: #fde8e8;
+  border: 1px solid #f5b5b5;
+
+  .due-date-row, .due-time-row { color: #c0392b; }
+  .due-icon { color: #e74c3c; }
+}
+
+/* DUE TODAY — orange/amber */
+.due-today {
+  background: #fff4e0;
+  border: 1px solid #ffd699;
+
+  .due-date-row, .due-time-row { color: #b8620a; }
+  .due-icon { color: #f39c12; }
+}
+
+/* UPCOMING — blue */
+.due-upcoming {
+  background: #e8f4fd;
+  border: 1px solid #a9d6f5;
+
+  .due-date-row, .due-time-row { color: #1565c0; }
+  .due-icon { color: #2196f3; }
+}
+
+//FOr start date
+.date-cell {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  min-width: 100px;
+  background: #f3f4f6;
+  border: 1px solid #e0e2e6;
+}
+
+.date-row,
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.date-row {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.time-row {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.date-icon {
+  font-size: 12px;
+  width: 13px;
+  text-align: center;
+  color: #9ca3af;
+}
+
+//Title
+.title-cell {
+  display: flex;
+  align-items: flex-start; // aligns icon to top if title wraps to multiple lines
+  gap: 8px;
+  min-width: 0;
+  padding-left: 8px;
+  border-left: 3px solid #6366f1;
+}
+
+.title-text {
+  flex: 1;
+  min-width: 0;
+  white-space: normal;      // allow wrapping instead of truncating
+  word-break: break-word;   // wrap long words if needed
+  overflow: visible;        // show full text, no clipping
+  font-size: 13px;
+  font-weight: 600;
+  color: #1f2937;
+  letter-spacing: 0.1px;
+  line-height: 1.4;
+}
+
+.description-icon-button {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  margin-top: 2px; // slight nudge so it aligns nicely with first line of wrapped text
+
+  i {
+    font-size: 12px;
+  }
+
+  &:hover {
+    transform: scale(1.12) rotate(-6deg);
+    box-shadow: 0 4px 8px rgba(99, 102, 241, 0.45);
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }

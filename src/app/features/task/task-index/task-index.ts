@@ -93,8 +93,6 @@ interface AssignedUser {
     MatNativeDateModule,
     MatIconModule,
     MatDividerModule,
-    MatFormField,
-    MatLabel,
     MatOptionModule,
     MatTooltipModule
 
@@ -2551,7 +2549,8 @@ assignUser(): void {
 
   this.dataprovider.updateTaskAssignedUser(
     taskId,
-    assignedTo
+    assignedTo,
+    this.userId
   ).subscribe({
     next: (res: any) => {
 
@@ -2699,5 +2698,23 @@ onchangeloadUserDropdownData(task: any): void {
 
     return isManager || (isAssignor && !isSelfAssigned);
   }
+
+
+
+  getDueDateClass(dueDateTime: string): string {
+  const due = new Date(dueDateTime);
+  const now = new Date();
+
+  const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate());
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  if (due < now) {
+    return 'due-overdue';
+  } else if (dueDay.getTime() === today.getTime()) {
+    return 'due-today';
+  } else {
+    return 'due-upcoming';
+  }
+}
 
 }

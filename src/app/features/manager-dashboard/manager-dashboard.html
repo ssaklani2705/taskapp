@@ -3,93 +3,49 @@
   <div class="welcome-row">
     <div>
       <h2>Good morning, {{ username }} (MANAGER)</h2>
-
       <p>Here's what's happening with your team today.</p>
     </div>
 
     <div class="task-filters">
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
-              <option value="">--All Clients--</option>
+      <div class="status-wrapper">
+        <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
+          <option value="">--All Clients--</option>
+          <option *ngFor="let client of clients" [value]="client.clientId">
+            {{ client.name }}
+          </option>
+        </select>
+      </div>
 
-              <option *ngFor="let client of clients" [value]="client.clientId">
-                {{ client.name }}
-              </option>
-            </select>
-          </div>
-
-          <button
-            type="button"
-            class="btn-clear"
-            (click)="clearFilters()"
-            title="Clear Filters"
-          >
-            Clear
-          </button>
-        </div>
-
-    <!-- <div class="date-info">
-      <mat-icon> calendar_today </mat-icon>
-      <span>{{ today | date: 'EEEE, dd MMM yyyy' }}</span>
-    </div> -->
+      <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
+        <mat-icon>clear</mat-icon>
+        Clear
+      </button>
+    </div>
   </div>
 
   <!-- KPI Cards -->
   <section class="kpi-grid">
-    <mat-card
-      class="kpi-card"
-      *ngFor="let kpi of kpis"
-      [class]="kpi.className"
-      (click)="onKpiClick(kpi)"
-    >
+    <mat-card class="kpi-card" *ngFor="let kpi of kpis" [class]="kpi.className" (click)="onKpiClick(kpi)">
       <div class="kpi-top">
-        <span class="kpi-title">
-          {{ kpi.title }}
-        </span>
-
-        <mat-icon>
-          {{ kpi.icon }}
-        </mat-icon>
+        <span class="kpi-title">{{ kpi.title }}</span>
+        <mat-icon>{{ kpi.icon }}</mat-icon>
       </div>
 
       <div class="kpi-value">
         {{ kpi.value }}
-        <span *ngIf="kpi.title === 'On-time %'" class="percentage"> % </span>
+        <span *ngIf="kpi.title === 'On-time %'" class="percentage">%</span>
       </div>
     </mat-card>
   </section>
 
   <!-- Main dashboard grid -->
   <section class="dashboard-grid">
-    <!-- Team Tasks -->
     <mat-card class="panel task-panel">
       <div class="panel-header">
         <div>
           <h3>Tasks</h3>
-
           <p>Current workload and status</p>
         </div>
-
-        <!-- <div class="task-filters">
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
-              <option value="">--All Clients--</option>
-
-              <option *ngFor="let client of clients" [value]="client.clientId">
-                {{ client.name }}
-              </option>
-            </select>
-          </div>
-
-          <button
-            type="button"
-            class="btn-clear"
-            (click)="clearFilters()"
-            title="Clear Filters"
-          >
-            Clear
-          </button>
-        </div> -->
       </div>
 
       <mat-divider></mat-divider>
@@ -111,97 +67,124 @@
 
           <tbody>
             <tr *ngFor="let task of tasks">
+              <!-- TASK -->
               <td>
                 <div class="task-name">
                   <span class="task-icon">
                     <mat-icon>description</mat-icon>
                   </span>
-
-                  <span>
-                    {{ task.title }}
-                  </span>
+                  <span>{{ task.title }}</span>
                 </div>
               </td>
+
+              <!-- CLIENT -->
               <td>
                 <div class="owner">
                   <span class="owner-avatar">
                     {{ task.clientName ? task.clientName.charAt(0).toUpperCase() : '?' }}
                   </span>
-
                   {{ task.clientName }}
                 </div>
               </td>
 
+              <!-- ASSIGNED BY -->
               <td>
                 <div class="owner">
                   <span class="owner-avatar">
                     {{ task.addedByName ? task.addedByName.charAt(0).toUpperCase() : '?' }}
                   </span>
-
                   {{ task.addedByName }}
                 </div>
               </td>
 
+              <!-- ASSIGNED TO -->
               <td>
                 <div class="owner">
                   <span class="owner-avatar">
-                    {{
-                      task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?'
-                    }}
+                    {{ task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?' }}
                   </span>
-
                   {{ task.assignedUserName }}
                 </div>
               </td>
-              <!-- <td>
-                <div class="owner">
-                  {{ task.date | date: 'dd-MM-yyyy' }}
-                  <br />
-                  {{ task.date | date: 'hh:mm a' }}
-                </div>
-              </td> -->
+
+              <!-- START DATE -->
               <td>
                 <div class="task-date">
-                  <span>{{ task.date | date: 'dd-MM-yyyy' }}</span>
-                  <small>{{ task.date | date: 'hh:mm a' }}</small>
-                </div>
-              </td>
-              <!-- <td>
-                <div class="owner">
-                  {{ task.duedatetime | date: 'dd-MM-yyyy' }}
-                  <br />
-                  {{ task.duedatetime | date: 'hh:mm a' }}
-                </div>
-              </td> -->
-              <td>
-                <div class="task-date">
-                  <span>{{ task.duedatetime | date: 'dd-MM-yyyy' }}</span>
-                  <small>{{ task.duedatetime | date: 'hh:mm a' }}</small>
-                </div>
-              </td>
-              <td>
-                <div class="owner">
-                  <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
-                    {{ getPriorityLabel(task.priority) }}
-                  </span>
+                  <div class="date-line">
+                    <mat-icon class="date-icon">event</mat-icon>
+                    <span>{{ task.date | date: 'dd-MM-yyyy' }}</span>
+                  </div>
+                  <small>
+                    <mat-icon class="time-icon">schedule</mat-icon>
+                    {{ task.date | date: 'hh:mm a' }}
+                  </small>
                 </div>
               </td>
 
+              <!-- DUE DATE -->
+              <td>
+                <div class="task-date">
+                  <div class="date-line">
+                    <mat-icon class="date-icon">event</mat-icon>
+                    <span>{{ task.duedatetime | date: 'dd-MM-yyyy' }}</span>
+                  </div>
+                  <small>
+                    <mat-icon class="time-icon">schedule</mat-icon>
+                    {{ task.duedatetime | date: 'hh:mm a' }}
+                  </small>
+                </div>
+              </td>
+
+              <!-- PRIORITY -->
+              <td>
+                <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
+                  <mat-icon class="priority-icon">
+                    {{
+                      task.priority === 1 ? 'keyboard_double_arrow_up' :
+                      task.priority === 2 ? 'drag_handle' :
+                      task.priority === 3 ? 'keyboard_double_arrow_down' :
+                      'remove'
+                    }}
+                  </mat-icon>
+                  {{ getPriorityLabel(task.priority) }}
+                </span>
+              </td>
+
+              <!-- STATUS [matTooltip]="common.getTaskStatusLabel(task.taskStatus)"-->
               <td>
                 <span
                   class="status-badge"
-                  [ngClass]="getTaskStatusClass(task.taskStatus)"
+                  [ngClass]="{
+                    'todo': task.taskStatus === 1,
+                    'progress': task.taskStatus === 2,
+                    'overdue': task.taskStatus === 3,
+                    'submitted': task.taskStatus === 4,
+                    'approved': task.taskStatus === 5
+                  }"
                   [class.status-disabled]="task.taskStatus === 5"
+                  
                   (click)="task.taskStatus !== 5 && openChangeManagerModal(task.taskId)"
                 >
-                  <span class="status-dot"></span>
-                  {{ getTaskStatusLabel(task.taskStatus) }}
+                  <mat-icon class="status-icon">
+                    {{
+                      task.taskStatus === 1 ? 'radio_button_unchecked' :
+                      task.taskStatus === 2 ? 'schedule' :
+                      task.taskStatus === 3 ? 'error_outline' :
+                      task.taskStatus === 4 ? 'check_circle_outline' :
+                      task.taskStatus === 5 ? 'lock_outline' :
+                      'help_outline'
+                    }}
+                  </mat-icon>
+                  <span class="status-label">{{ common.getTaskStatusLabel(task.taskStatus) }}</span>
                 </span>
               </td>
             </tr>
 
             <tr *ngIf="tasks.length === 0">
-              <td colspan="8" class="no-records">No active tasks found.</td>
+              <td colspan="8" class="no-records">
+                <mat-icon class="no-records-icon">inbox</mat-icon>
+                No active tasks found.
+              </td>
             </tr>
           </tbody>
         </table>
@@ -226,19 +209,13 @@
         <div class="modal-title-icon">
           <mat-icon>upload_file</mat-icon>
         </div>
-
         <div>
           <div class="modal-title-text">Upload Task</div>
           <div class="modal-subtitle">Add a description and attach files</div>
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeChangeManagerModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -246,10 +223,8 @@
     <mat-divider></mat-divider>
 
     <div class="modal-body">
-      <!-- TASK ID (hidden) -->
       <input type="hidden" name="taskId" [(ngModel)]="task.taskId" />
 
-      <!-- DESCRIPTION -->
       <div class="manager-form-group">
         <label class="modal-field-label">
           Description
@@ -270,10 +245,8 @@
         </div>
       </div>
 
-      <!-- ZIP FILE UPLOAD -->
       <div class="manager-form-group">
-        <label class="modal-field-label"> Zip File </label>
-
+        <label class="modal-field-label">Zip File</label>
         <input
           type="file"
           class="manager-select"
@@ -281,51 +254,29 @@
           [disabled]="isChangingManager"
           (change)="onFileOneSelected($event)"
         />
-
-        <span class="current-manager-name" *ngIf="fileOneName">
-          {{ fileOneName }}
-        </span>
+        <span class="current-manager-name" *ngIf="fileOneName">{{ fileOneName }}</span>
       </div>
 
-      <!-- NORMAL FILE UPLOAD -->
       <div class="manager-form-group">
-        <label class="modal-field-label"> File </label>
-
+        <label class="modal-field-label">File</label>
         <input
           type="file"
           class="manager-select"
           [disabled]="isChangingManager"
           (change)="onFileTwoSelected($event)"
         />
-
-        <span class="current-manager-name" *ngIf="fileTwoName">
-          {{ fileTwoName }}
-        </span>
+        <span class="current-manager-name" *ngIf="fileTwoName">{{ fileTwoName }}</span>
       </div>
     </div>
 
     <div class="modal-footer">
-      <button
-        type="button"
-        class="modal-cancel-button"
-        (click)="closeChangeManagerModal()"
-        [disabled]="isChangingManager"
-      >
+      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()" [disabled]="isChangingManager">
         Cancel
       </button>
 
-      <button
-        type="button"
-        class="modal-save-button"
-        (click)="changeManager()"
-        [disabled]="isChangingManager"
-      >
-        <mat-icon>
-          {{ isChangingManager ? 'hourglass_top' : 'save' }}
-        </mat-icon>
-        <span>
-          {{ isChangingManager ? 'Updating...' : 'Submit' }}
-        </span>
+      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
+        <mat-icon>{{ isChangingManager ? 'hourglass_top' : 'save' }}</mat-icon>
+        <span>{{ isChangingManager ? 'Updating...' : 'Submit' }}</span>
       </button>
     </div>
   </div>

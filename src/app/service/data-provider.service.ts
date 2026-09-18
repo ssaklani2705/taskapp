@@ -1858,13 +1858,14 @@ return this.http.get<TaskCategoryDTO[]>(
     );
   }
 
-  updateTaskAssignedUser(taskId: any, assignedTo: any): Observable<any> {
+  updateTaskAssignedUser(taskId: any, assignedTo: any, userId: any): Observable<any> {
 
   return this.http.put(
     `${environment.apiBaseUrl}admin/task/updateAssignedUser`,
     {
       taskId: taskId,
-      assignedTo: assignedTo
+      assignedTo: assignedTo,
+      userId: userId
     }
   );
 }

@@ -91,8 +91,6 @@ interface AssignedUser {
     MatNativeDateModule,
     MatIconModule,
     MatDividerModule,
-    MatFormField,
-    MatLabel,
     MatOptionModule
 
   ],

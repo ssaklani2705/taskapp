@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Common } from '../../classes/common';
 
 interface Task {
   taskId: number;
@@ -64,6 +65,8 @@ export class ManagerDashboard {
 
   fileTwo: File | null = null;
   fileTwoName: string = '';
+
+  common = new Common();
 
   selectedClient: string = '';
   selectedTaskStatus: string[] = [];

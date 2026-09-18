@@ -1,176 +1,106 @@
 <div class="page-content-wrapper">
-
   <div class="page-content">
-
     <div class="user-management-container">
-
-      <!-- =====================================================
-           HEADER
-      ====================================================== -->
-
       <div class="page-header">
-
         <div class="header-title-section">
           <mat-icon>task_alt</mat-icon>
-
           <h2>Tasks</h2>
-
           <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible"
             title="Toggle Search Panel">
             {{ isPanelVisible ? "▲" : "▼" }}
           </button>
-
         </div>
-
         @if (addPer === "Y") {
-
         <button type="button" class="btn-add-user" (click)="addTask()">
           <span class="plus-icon">+</span>
           Add New
         </button>
-
-
-
         }
-
       </div>
 
-
-      <!-- =====================================================
-           SEARCH / FILTER PANEL
-      ====================================================== -->
-
       <div class="search-panel" *ngIf="isPanelVisible">
-
         <div class="search-row">
-
           <!-- SEARCH -->
           <div class="search-wrapper">
-
             <div class="search-box">
-
               <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Title" class="search-input"
                 (keyup.enter)="onSearch()" />
-
               <button type="button" class="search-btn" (click)="onSearch()" title="Search">
                 <i class="fa fa-search"></i>
               </button>
-
             </div>
-
           </div>
-
-
           <!-- CLIENT -->
           <div class="status-wrapper">
-
             <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
-
               <option value="">
                 --All Clients--
               </option>
-
               <option *ngFor="let client of filteredClients" [value]="client.clientId">
                 {{ client.name }}
               </option>
-
-
             </select>
-
           </div>
-
-
           <!-- TASK CATEGORY -->
           <div class="status-wrapper">
-
             <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()">
-
               <option value="">
                 --All Task Categories--
               </option>
-
               <option *ngFor="let category of taskCategories" [value]="category.taskcategoryId">
                 {{ category.name }}
               </option>
-
             </select>
-
           </div>
-
-
           <!-- ASSIGNED TO -->
           <div class="status-wrapper">
-
             <select class="status-select" [(ngModel)]="selectedAssignedTo" (change)="onSearch()">
-
               <option value="">
                 --All Assigned To--
               </option>
-
               <option *ngFor="let user of assignedUsers" [value]="user.userId">
                 {{ user.firstName }}
               </option>
-
             </select>
-
           </div>
-
-
           <!-- PRIORITY -->
           <div class="status-wrapper">
-
             <select class="status-select" [(ngModel)]="selectedPriority" (change)="onSearch()">
-
               <option value="">
                 --All Priority--
               </option>
-
               <option value="1">
                 High
               </option>
-
               <option value="2">
                 Medium
               </option>
-
               <option value="3">
                 Low
               </option>
-
             </select>
-
           </div>
-
-
           <!-- STATUS -->
           <div class="status-wrapper">
-
             <select class="status-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
-
               <option value="">
                 --All Status--
               </option>
-
               <option value="1">
                 Active
               </option>
-
               <option value="2">
                 Inactive
               </option>
-
               <option value="3">
                 Deleted
               </option>
-
             </select>
-
           </div>
           <div class="status-dropdown" #statusDropdown>
             <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">
               --All Task Status--
             </button>
-
             <div class="dropdown-menu" *ngIf="showStatusDropdown" (click)="$event.stopPropagation()">
               <label *ngFor="let status of taskStatusOptions">
                 <input type="checkbox" [value]="status.id" [checked]="isTaskStatusChecked(status.id)"
@@ -182,46 +112,28 @@
 
           <!-- FROM DATE -->
           <div class="status-wrapper date-filter-wrapper">
-
             <div class="date-filter-input">
-
               <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" name="fromDate"
                 placeholder="From Date" class="date-input" autocomplete="off" readonly />
-
               <mat-datepicker-toggle matSuffix [for]="fromPicker">
               </mat-datepicker-toggle>
-
               <mat-datepicker #fromPicker>
               </mat-datepicker>
-
             </div>
-
           </div>
-
-
           <!-- TO DATE -->
           <div class="status-wrapper date-filter-wrapper">
-
             <div class="date-filter-input">
-
               <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" name="toDate" placeholder="To Date"
                 class="date-input" autocomplete="off" readonly [min]="fromDate" />
-
               <mat-datepicker-toggle matSuffix [for]="toPicker">
               </mat-datepicker-toggle>
-
               <mat-datepicker #toPicker>
               </mat-datepicker>
-
             </div>
-
           </div>
-
-
-
           <!-- GO -->
           <div class="go-wrapper">
-
             <button type="button" class="btn-go" (click)="onSearch()">
               Go
             </button>
@@ -229,81 +141,50 @@
             <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
               Clear
             </button>
-
             @if (exportExcelPer === 'Y') {
             <button type="button" class="btn-export-excel" (click)="exportToExcel()">
               Export to Excel
               <i class="fas fa-file-excel" aria-hidden="true"></i>
             </button>
             }
-
           </div>
-
         </div>
-
       </div>
-
-
-      <!-- =====================================================
-           TOP PAGINATION
-      ====================================================== -->
-
       <div class="table-top-section">
-
         <div class="record-summary" role="status" aria-live="polite">
           {{ recordSummary }}
         </div>
-
         <div class="pagination">
-
           <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()"
             [disabled]="currentPage === 1">
             « First
           </button>
-
           <button type="button" class="pagination-btn" (click)="goToPage(currentPage - 1)"
             [disabled]="currentPage === 1">
             ‹ Prev
           </button>
-
           <button type="button" class="pagination-btn" *ngFor="let page of pages()" (click)="goToPage(page)"
             [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
-
           <button type="button" class="pagination-btn" (click)="goToPage(currentPage + 1)"
             [disabled]="currentPage === totalPages">
             Next ›
           </button>
-
           <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()"
             [disabled]="currentPage === totalPages">
             Last »
           </button>
-
         </div>
-
       </div>
-
-
-      <!-- =====================================================
-           TABLE
-      ====================================================== -->
-
       <div class="table-container">
-
         <div class="table-responsive">
-
           <table class="user-table">
-
             <thead>
-
               <tr>
-
                 <th class="serial-column">
                   Sr. No.
                 </th>
-
                 <th *ngFor="let col of columns" [class.sortable-column]="col.sortable"
                   (click)="col.sortable && sortData(col.key)">
 
@@ -363,18 +244,24 @@
 
 
                 <!-- TITLE -->
-                <td>
-                  <span class="wrap-text">
-                    {{ task.title || '-' }}
-                  </span>
+               <td>
+  <div class="title-cell">
+    <span class="wrap-text title-text">
+      {{ task.title || '-' }}
+    </span>
 
-                  <button type="button" class="description-icon-button" *ngIf="task.description"
-                    (click)="openDescriptionModal(task)" matTooltip="View Description" aria-label="View Description">
-
-                    <i class="fa fa-file-text"></i>
-
-                  </button>
-                </td>
+    <button
+      type="button"
+      class="description-icon-button"
+      *ngIf="task.description"
+      (click)="openDescriptionModal(task)"
+      matTooltip="View Description"
+      aria-label="View Description"
+    >
+      <i class="fa fa-file-text"></i>
+    </button>
+  </div>
+</td>
 
 
                 <!-- CLIENT -->
@@ -386,16 +273,50 @@
 
 
                 <td>
+  <div class="date-cell" *ngIf="task.date; else noDate">
+    <div class="date-row">
+      <i class="fa fa-calendar date-icon"></i>
+      <span>{{ task.date | date:'dd-MM-yyyy' }}</span>
+    </div>
+    <div class="time-row">
+      <i class="fa fa-clock-o date-icon"></i>
+      <span>{{ task.date | date:'hh:mm a' }}</span>
+    </div>
+  </div>
+
+  <ng-template #noDate>
+    <span class="wrap-text">-</span>
+  </ng-template>
+</td>
+
+                <!-- <td>
                   {{ task.date ? (task.date | date:'dd-MM-yyyy') : '-' }}
                   <br>
                   {{ task.date ? (task.date | date:'hh:mm a') : '' }}
-                </td>
+                </td> -->
 
                 <td>
+  <div class="due-date-cell" *ngIf="task.dueDateTime; else noDueDate" [ngClass]="getDueDateClass(task.dueDateTime)">
+    <div class="due-date-row">
+      <i class="fa fa-calendar due-icon"></i>
+      <span>{{ task.dueDateTime | date:'dd-MM-yyyy' }}</span>
+    </div>
+    <div class="due-time-row">
+      <i class="fa fa-clock-o due-icon"></i>
+      <span>{{ task.dueDateTime | date:'hh:mm a' }}</span>
+    </div>
+  </div>
+
+  <ng-template #noDueDate>
+    <span class="wrap-text">-</span>
+  </ng-template>
+</td>
+
+                <!-- <td>
                   {{ task.dueDateTime ? (task.dueDateTime | date:'dd-MM-yyyy') : '-' }}
                   <br>
                   {{ task.dueDateTime ? (task.dueDateTime | date:'hh:mm a') : '' }}
-                </td>
+                </td> -->
 
 
                 <!-- TASK CATEGORY -->
@@ -408,31 +329,33 @@
                 <!-- ASSIGNED BY -->
                 <td>
                   <span class="wrap-text">
-                    {{ task.assignedbyName }}
+                    {{ task.assignedbyName || '-' }}
                   </span>
                 </td>
 
 
 
-                <td>
-                  <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-                    (click)="
+               <td>
+  <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+    (click)="
       (!task.assignedToName || task.assignedToName === '0')
         ? openAssignUserModal(task)
         : null
     " [matTooltip]="
       (!task.assignedToName || task.assignedToName === '0')
-        ? 'Assign User'
+        ? 'Click to assign a user'
         : ''
     ">
-                    {{
-                    !task.assignedToName || task.assignedToName === '0'
-                    ? 'Unassigned User'
-                    : task.assignedToName
-                    }}
-                  </span>
-                </td>
+    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+      <mat-icon class="assign-icon">person_add</mat-icon>
+      Assign User
+    </ng-container>
 
+    <ng-template #assignedBlock>
+      {{ task.assignedToName }}
+    </ng-template>
+  </span>
+</td>
 
                 <!-- PRIORITY -->
                 <td>
@@ -444,16 +367,33 @@
                 </td>
 
                 <!-- TASK STATUS -->
-                <td>
+                <!-- TASK STATUS -->
+<td>
+  <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
+    <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
+      [ngClass]="common.getTaskStatusClassNew(task.taskStatus)" matTooltip="Change Task status"
+      [disabled]="canDisableChangeManager(task)">
+      {{
+      common.getTaskStatusLabel(task.taskStatus)
+      }}
+    </button>
+  </ng-container>
+
+  <ng-template #noStatus>
+    <span class="wrap-text">-</span>
+  </ng-template>
+</td>
+                <!-- <td>
                   <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
-                    [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Task status"
+                    [ngClass]="common.getTaskStatusClassNew(task.taskStatus)" matTooltip="Change Task status"
+>>>>>>> 4998ce0 (your commit message describing these changes)
                     [disabled]="canDisableChangeManager(task)">
                     {{
                     common.getTaskStatusLabel(task.taskStatus)
                     }}
                   </button>
 
-                </td>
+                </td> -->
                 <!-- STATUS -->
                 <td>
                   <span class="status-badge" [ngClass]="common.getStatusClass(task.status)">
