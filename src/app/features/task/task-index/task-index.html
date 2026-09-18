@@ -43,10 +43,6 @@
           </div>
           <!-- TASK CATEGORY -->
           <div class="status-wrapper">
-<<<<<<< HEAD
-
-=======
->>>>>>> 4998ce0 (your commit message describing these changes)
             <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()">
               <option value="">
                 --All Task Categories--
@@ -248,27 +244,24 @@
 
 
                 <!-- TITLE -->
-                <td>
-                  <div class="title-cell">
-                    <span class="wrap-text title-text" [matTooltip]="task.title || ''" matTooltipShowDelay="500">
-                      {{ task.title || '-' }}
-                    </span>
+               <td>
+  <div class="title-cell">
+    <span class="wrap-text title-text">
+      {{ task.title || '-' }}
+    </span>
 
-<<<<<<< HEAD
-                  <button type="button" class="description-icon-button" *ngIf="task.description"
-                    (click)="openDescriptionModal(task)" matTooltip="View Description" aria-label="View Description">
-
-                    <i class="fa fa-file-text"></i>
-
-                  </button>
-=======
-                    <button type="button" class="description-icon-button" *ngIf="task.description"
-                      (click)="openDescriptionModal(task)" matTooltip="View Description" aria-label="View Description">
-                      <i class="fa fa-file-text"></i>
-                    </button>
-                  </div>
->>>>>>> 4998ce0 (your commit message describing these changes)
-                </td>
+    <button
+      type="button"
+      class="description-icon-button"
+      *ngIf="task.description"
+      (click)="openDescriptionModal(task)"
+      matTooltip="View Description"
+      aria-label="View Description"
+    >
+      <i class="fa fa-file-text"></i>
+    </button>
+  </div>
+</td>
 
 
                 <!-- CLIENT -->
@@ -280,16 +273,50 @@
 
 
                 <td>
+  <div class="date-cell" *ngIf="task.date; else noDate">
+    <div class="date-row">
+      <i class="fa fa-calendar date-icon"></i>
+      <span>{{ task.date | date:'dd-MM-yyyy' }}</span>
+    </div>
+    <div class="time-row">
+      <i class="fa fa-clock-o date-icon"></i>
+      <span>{{ task.date | date:'hh:mm a' }}</span>
+    </div>
+  </div>
+
+  <ng-template #noDate>
+    <span class="wrap-text">-</span>
+  </ng-template>
+</td>
+
+                <!-- <td>
                   {{ task.date ? (task.date | date:'dd-MM-yyyy') : '-' }}
                   <br>
                   {{ task.date ? (task.date | date:'hh:mm a') : '' }}
-                </td>
+                </td> -->
 
                 <td>
+  <div class="due-date-cell" *ngIf="task.dueDateTime; else noDueDate" [ngClass]="getDueDateClass(task.dueDateTime)">
+    <div class="due-date-row">
+      <i class="fa fa-calendar due-icon"></i>
+      <span>{{ task.dueDateTime | date:'dd-MM-yyyy' }}</span>
+    </div>
+    <div class="due-time-row">
+      <i class="fa fa-clock-o due-icon"></i>
+      <span>{{ task.dueDateTime | date:'hh:mm a' }}</span>
+    </div>
+  </div>
+
+  <ng-template #noDueDate>
+    <span class="wrap-text">-</span>
+  </ng-template>
+</td>
+
+                <!-- <td>
                   {{ task.dueDateTime ? (task.dueDateTime | date:'dd-MM-yyyy') : '-' }}
                   <br>
                   {{ task.dueDateTime ? (task.dueDateTime | date:'hh:mm a') : '' }}
-                </td>
+                </td> -->
 
 
                 <!-- TASK CATEGORY -->
@@ -306,14 +333,11 @@
                   </span>
                 </td>
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 4998ce0 (your commit message describing these changes)
-                <td>
-                  <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-                    (click)="
+               <td>
+  <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+    (click)="
       (!task.assignedToName || task.assignedToName === '0')
         ? openAssignUserModal(task)
         : null
@@ -322,25 +346,16 @@
         ? 'Click to assign a user'
         : ''
     ">
-<<<<<<< HEAD
-                    {{
-                    !task.assignedToName || task.assignedToName === '0'
-                    ? 'Unassigned User'
-                    : task.assignedToName
-                    }}
-=======
-                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
-                      <mat-icon class="assign-icon">person_add</mat-icon>
-                      Assign User
-                    </ng-container>
+    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+      <mat-icon class="assign-icon">person_add</mat-icon>
+      Assign User
+    </ng-container>
 
-                    <ng-template #assignedBlock>
-                      {{ task.assignedToName }}
-                    </ng-template>
->>>>>>> 4998ce0 (your commit message describing these changes)
-                  </span>
-                </td>
-
+    <ng-template #assignedBlock>
+      {{ task.assignedToName }}
+    </ng-template>
+  </span>
+</td>
 
                 <!-- PRIORITY -->
                 <td>
@@ -352,12 +367,8 @@
                 </td>
 
                 <!-- TASK STATUS -->
-<<<<<<< HEAD
-                <td>
-                  <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
-                    [ngClass]="common.getTaskStatusClass(task.taskStatus)" matTooltip="Change Task status"
-=======
-                 <td>
+                <!-- TASK STATUS -->
+<td>
   <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
     <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
       [ngClass]="common.getTaskStatusClassNew(task.taskStatus)" matTooltip="Change Task status"

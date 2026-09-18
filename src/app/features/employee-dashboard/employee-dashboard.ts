@@ -376,7 +376,9 @@ export class EmployeeDashboard implements OnInit {
 
           dueDate: this.formatDate(task.dueDateTime),
 
-          type: 'progress',
+          // type: 'progress',
+          type:
+          this.getPriorityType(task.priority),
 
           progress:
             task.progress || 0
