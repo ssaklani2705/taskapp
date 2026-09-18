@@ -1,157 +1,444 @@
 <div class="dashboard">
-  <!-- Welcome row -->
-  <div class="welcome-row">
-    <div>
-      <h2>Good morning, {{ username }} (MANAGER)</h2>
-      <p>Here's what's happening with your team today.</p>
-    </div>
 
-    <div class="task-filters">
-      <div class="status-wrapper">
-        <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
-          <option value="">--All Clients--</option>
-          <option *ngFor="let client of clients" [value]="client.clientId">
-            {{ client.name }}
-          </option>
-        </select>
+  <!-- =========================================================
+       WELCOME ROW
+  ========================================================== -->
+  <div class="welcome-row">
+
+    <div class="welcome-content">
+
+      <div class="welcome-icon">
+        <mat-icon>event_available</mat-icon>
       </div>
 
-      <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
+      <div class="welcome-text">
+        <h2>Good morning, {{ username }} (MANAGER)</h2>
+        <p>Here's what's happening with your team today.</p>
+      </div>
+
+    </div>
+
+
+    <!-- FILTERS -->
+    <div class="task-filters">
+
+      <div class="status-wrapper">
+
+        <div class="select-icon">
+          <mat-icon>groups</mat-icon>
+        </div>
+
+        <select
+          class="status-select"
+          [(ngModel)]="selectedClient"
+          (change)="onSearch()">
+
+          <option value="">All Clients</option>
+
+          <option
+            *ngFor="let client of clients"
+            [value]="client.clientId">
+
+            {{ client.name }}
+
+          </option>
+
+        </select>
+
+        <mat-icon class="select-arrow">
+          keyboard_arrow_down
+        </mat-icon>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="btn-clear"
+        (click)="clearFilters()"
+        title="Clear Filters">
+
         <mat-icon>clear</mat-icon>
         Clear
+
       </button>
+
     </div>
+
   </div>
 
-  <!-- KPI Cards -->
+
+  <!-- =========================================================
+       KPI CARDS
+  ========================================================== -->
   <section class="kpi-grid">
-    <mat-card class="kpi-card" *ngFor="let kpi of kpis" [class]="kpi.className" (click)="onKpiClick(kpi)">
-      <div class="kpi-top">
-        <span class="kpi-title">{{ kpi.title }}</span>
+
+    <mat-card
+      class="kpi-card"
+      *ngFor="let kpi of kpis"
+      [class]="kpi.className"
+      (click)="onKpiClick(kpi)">
+
+      <div class="kpi-icon-box">
         <mat-icon>{{ kpi.icon }}</mat-icon>
       </div>
 
-      <div class="kpi-value">
-        {{ kpi.value }}
-        <span *ngIf="kpi.title === 'On-time %'" class="percentage">%</span>
+      <div class="kpi-content">
+
+        <div class="kpi-title">
+          {{ kpi.title }}
+        </div>
+
+        <div class="kpi-value">
+          {{ kpi.value }}
+
+          <span
+            *ngIf="kpi.title === 'On-time %'"
+            class="percentage">
+            %
+          </span>
+        </div>
+
       </div>
+
+      <mat-icon class="kpi-arrow">
+        chevron_right
+      </mat-icon>
+
     </mat-card>
+
   </section>
 
-  <!-- Main dashboard grid -->
+
+  <!-- =========================================================
+       MAIN DASHBOARD
+  ========================================================== -->
   <section class="dashboard-grid">
+
     <mat-card class="panel task-panel">
+
+      <!-- PANEL HEADER -->
       <div class="panel-header">
-        <div>
-          <h3>Tasks</h3>
-          <p>Current workload and status</p>
+
+        <div class="panel-title-wrapper">
+
+          <div class="panel-title-icon">
+            <mat-icon>format_list_bulleted</mat-icon>
+          </div>
+
+          <div>
+            <h3>Tasks</h3>
+            <p>Current workload and status</p>
+          </div>
+
         </div>
+
+
+        <!-- TABLE FILTERS -->
+        <!-- <div class="table-filters">
+
+          <div class="table-search">
+
+            <mat-icon>search</mat-icon>
+
+            <input
+              type="text"
+              placeholder="Search tasks, clients, assignees..."
+              [(ngModel)]="searchText"
+              (input)="onSearch()">
+
+          </div>
+
+
+          <div class="priority-filter">
+
+            <mat-icon>filter_list</mat-icon>
+
+            <select
+              [(ngModel)]="selectedPriority"
+              (change)="onSearch()">
+
+              <option value="">All Priorities</option>
+              <option value="1">High</option>
+              <option value="2">Medium</option>
+              <option value="3">Low</option>
+
+            </select>
+
+            <mat-icon>keyboard_arrow_down</mat-icon>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="table-clear-button"
+            (click)="clearFilters()">
+
+            <mat-icon>clear</mat-icon>
+            Clear Filters
+
+          </button>
+
+        </div> -->
+
       </div>
 
-      <mat-divider></mat-divider>
 
+      <!-- =====================================================
+           TABLE
+      ====================================================== -->
       <div class="task-table-wrapper">
+
         <table class="task-table">
+
           <thead>
+
             <tr>
+
+              <th class="checkbox-column">
+
+                <!-- <input
+                  type="checkbox"
+                  class="table-checkbox"> -->
+
+              </th>
+
               <th>TASK</th>
+
               <th>CLIENT NAME</th>
+
               <th>ASSIGNED BY</th>
+
               <th>ASSIGNED TO</th>
+
               <th>START DATE</th>
+
               <th>DUE DATE</th>
+
               <th>PRIORITY</th>
+
               <th>STATUS</th>
+
+              <th class="action-column">
+                <!-- ACTIONS -->
+              </th>
+
             </tr>
+
           </thead>
 
+
           <tbody>
-            <tr *ngFor="let task of tasks">
+
+            <tr
+              *ngFor="let task of tasks"
+              class="task-row">
+
+
+              <!-- CHECKBOX -->
+              <td class="checkbox-column">
+
+                <!-- <input
+                  type="checkbox"
+                  class="table-checkbox"> -->
+
+              </td>
+
+
               <!-- TASK -->
               <td>
+
                 <div class="task-name">
+
                   <span class="task-icon">
                     <mat-icon>description</mat-icon>
                   </span>
-                  <span>{{ task.title }}</span>
+
+                  <div class="task-name-text">
+
+                    <span class="task-title">
+                      {{ task.title }}
+                    </span>
+
+                    <small>
+                      Task description goes here...
+                    </small>
+
+                  </div>
+
                 </div>
+
               </td>
+
 
               <!-- CLIENT -->
               <td>
+
                 <div class="owner">
+
                   <span class="owner-avatar">
-                    {{ task.clientName ? task.clientName.charAt(0).toUpperCase() : '?' }}
+
+                    {{
+                      task.clientName
+                        ? task.clientName.charAt(0).toUpperCase()
+                        : '?'
+                    }}
+
                   </span>
-                  {{ task.clientName }}
+
+                  <span class="owner-name">
+                    {{ task.clientName }}
+                  </span>
+
                 </div>
+
               </td>
+
 
               <!-- ASSIGNED BY -->
               <td>
+
                 <div class="owner">
+
                   <span class="owner-avatar">
-                    {{ task.addedByName ? task.addedByName.charAt(0).toUpperCase() : '?' }}
+
+                    {{
+                      task.addedByName
+                        ? task.addedByName.charAt(0).toUpperCase()
+                        : '?'
+                    }}
+
                   </span>
-                  {{ task.addedByName }}
+
+                  <span class="owner-name">
+                    {{ task.addedByName || '-' }}
+                  </span>
+
                 </div>
+
               </td>
+
 
               <!-- ASSIGNED TO -->
               <td>
+
                 <div class="owner">
+
                   <span class="owner-avatar">
-                    {{ task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?' }}
+
+                    {{
+                      task.assignedUserName
+                        ? task.assignedUserName.charAt(0).toUpperCase()
+                        : '?'
+                    }}
+
                   </span>
-                  {{ task.assignedUserName }}
+
+                  <span class="owner-name">
+                    {{ task.assignedUserName || '-' }}
+                  </span>
+
                 </div>
+
               </td>
+
 
               <!-- START DATE -->
               <td>
+
                 <div class="task-date">
+
                   <div class="date-line">
-                    <mat-icon class="date-icon">event</mat-icon>
-                    <span>{{ task.date | date: 'dd-MM-yyyy' }}</span>
+
+                    <mat-icon class="date-icon">
+                      event
+                    </mat-icon>
+
+                    <span>
+                      {{ task.date | date:'dd-MM-yyyy' }}
+                    </span>
+
                   </div>
+
                   <small>
-                    <mat-icon class="time-icon">schedule</mat-icon>
-                    {{ task.date | date: 'hh:mm a' }}
+
+                    <mat-icon class="time-icon">
+                      schedule
+                    </mat-icon>
+
+                    {{ task.date | date:'hh:mm a' }}
+
                   </small>
+
                 </div>
+
               </td>
+
 
               <!-- DUE DATE -->
               <td>
+
                 <div class="task-date">
+
                   <div class="date-line">
-                    <mat-icon class="date-icon">event</mat-icon>
-                    <span>{{ task.duedatetime | date: 'dd-MM-yyyy' }}</span>
+
+                    <mat-icon class="date-icon">
+                      event
+                    </mat-icon>
+
+                    <span>
+                      {{ task.duedatetime | date:'dd-MM-yyyy' }}
+                    </span>
+
                   </div>
+
                   <small>
-                    <mat-icon class="time-icon">schedule</mat-icon>
-                    {{ task.duedatetime | date: 'hh:mm a' }}
+
+                    <mat-icon class="time-icon">
+                      schedule
+                    </mat-icon>
+
+                    {{ task.duedatetime | date:'hh:mm a' }}
+
                   </small>
+
                 </div>
+
               </td>
+
 
               <!-- PRIORITY -->
               <td>
-                <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
+
+                <span
+                  class="priority-badge"
+                  [ngClass]="getPriorityClass(task.priority)">
+
                   <mat-icon class="priority-icon">
+
                     {{
-                      task.priority === 1 ? 'keyboard_double_arrow_up' :
-                      task.priority === 2 ? 'drag_handle' :
-                      task.priority === 3 ? 'keyboard_double_arrow_down' :
-                      'remove'
+                      task.priority === 1
+                        ? 'keyboard_double_arrow_up'
+                        : task.priority === 2
+                        ? 'drag_handle'
+                        : task.priority === 3
+                        ? 'keyboard_double_arrow_down'
+                        : 'remove'
                     }}
+
                   </mat-icon>
+
                   {{ getPriorityLabel(task.priority) }}
+
                 </span>
+
               </td>
 
-              <!-- STATUS [matTooltip]="common.getTaskStatusLabel(task.taskStatus)"-->
+
+              <!-- STATUS -->
               <td>
+
                 <span
                   class="status-badge"
                   [ngClass]="{
@@ -162,44 +449,95 @@
                     'approved': task.taskStatus === 5
                   }"
                   [class.status-disabled]="task.taskStatus === 5"
-                  
-                  (click)="task.taskStatus !== 5 && openChangeManagerModal(task.taskId)"
-                >
+                  (click)="
+                    task.taskStatus !== 5 &&
+                    openChangeManagerModal(task.taskId)
+                  ">
+
                   <mat-icon class="status-icon">
+
                     {{
-                      task.taskStatus === 1 ? 'radio_button_unchecked' :
-                      task.taskStatus === 2 ? 'schedule' :
-                      task.taskStatus === 3 ? 'error_outline' :
-                      task.taskStatus === 4 ? 'check_circle_outline' :
-                      task.taskStatus === 5 ? 'lock_outline' :
-                      'help_outline'
+                      task.taskStatus === 1
+                        ? 'radio_button_unchecked'
+                        : task.taskStatus === 2
+                        ? 'schedule'
+                        : task.taskStatus === 3
+                        ? 'error_outline'
+                        : task.taskStatus === 4
+                        ? 'check_circle_outline'
+                        : task.taskStatus === 5
+                        ? 'lock_outline'
+                        : 'help_outline'
                     }}
+
                   </mat-icon>
-                  <span class="status-label">{{ common.getTaskStatusLabel(task.taskStatus) }}</span>
+
+                  <span class="status-label">
+                    {{ common.getTaskStatusLabel(task.taskStatus) }}
+                  </span>
+
                 </span>
+
               </td>
+
+
+              <!-- ACTION -->
+              <td class="action-column">
+
+                <!-- <button
+                  type="button"
+                  class="task-action"
+                  title="View Task">
+
+                  <mat-icon>
+                    more_vert
+                  </mat-icon>
+
+                </button> -->
+
+              </td>
+
             </tr>
 
+
+            <!-- EMPTY -->
             <tr *ngIf="tasks.length === 0">
-              <td colspan="8" class="no-records">
-                <mat-icon class="no-records-icon">inbox</mat-icon>
+
+              <td
+                colspan="10"
+                class="no-records">
+
+                <mat-icon class="no-records-icon">
+                  inbox
+                </mat-icon>
+
                 No active tasks found.
+
               </td>
+
             </tr>
+
           </tbody>
+
         </table>
+
       </div>
 
+
+      <!-- PAGINATION -->
       <mat-paginator
         [length]="totalTasks"
         [pageSize]="20"
         [pageSizeOptions]="[20]"
         [showFirstLastButtons]="true"
-        (page)="onPageChange($event)"
-      >
+        (page)="onPageChange($event)">
+
       </mat-paginator>
+
     </mat-card>
+
   </section>
+
 </div>
 
 <div class="modal-overlay" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
