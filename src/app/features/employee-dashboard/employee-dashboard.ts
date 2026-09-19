@@ -180,8 +180,11 @@ export class EmployeeDashboard implements OnInit {
   loginType: string = '';
   isAdmin: any;
   userId: any;
+  designationName:any;
   ngOnInit(): void {
     this.username = sessionStorage.getItem('username') || 'Society 123';
+  this.designationName = sessionStorage.getItem('designationName')?.trim() || '-';
+
     this.isAdmin =
       sessionStorage.getItem(
         'isAdmin'
