@@ -91,6 +91,8 @@ export class ManagerDashboard {
 
   searchText: any="";
 
+  designationName: any;
+
   kpis = [
     {
       title: 'Tasks',
@@ -161,6 +163,9 @@ export class ManagerDashboard {
     this.username = sessionStorage.getItem('username') || 'Society 123';
 
     this.userId = sessionStorage.getItem('userId');
+
+     this.designationName =
+  sessionStorage.getItem('designationName')?.trim() || '-';
 
     this.loadFilterData();
     this.getTasks();

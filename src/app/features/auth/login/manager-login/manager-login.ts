@@ -259,6 +259,12 @@ onLogin(): void {
           JSON.stringify(res.data.modules)
         );
 
+         sessionStorage.setItem(
+          'designationName',
+          res.data.designationName
+        );
+
+
          // ==========================================
         // SAVE LOGIN TYPE
         // ==========================================

@@ -1296,3 +1296,74 @@ mat-divider {
     border-color 0.15s ease;
 }
 
+//seprate files
+.attachment-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.attachment-section {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.attachment-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #19345a;
+  margin-bottom: 10px;
+}
+
+.attachment-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.attachment-row + .attachment-row {
+  border-top: 1px solid #edf0f3;
+}
+
+.attachment-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.attachment-info mat-icon {
+  flex-shrink: 0;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.attachment-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.view-file-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #2f6fa3;
+  font-size: 13px;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.view-file-button mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

@@ -2020,8 +2020,7 @@ export class TaskIndex {
 
 
 
-
-
+this. selectedTaskStatusId= taskObject.taskStatus;
     this.task = {
       taskId: taskObject.taskId,
       managerId: taskObject.managerId,
@@ -2139,7 +2138,8 @@ export class TaskIndex {
       this.fileTwoName = '';
     }
   }
-  selectedTaskStatusId: number = 5;
+  // selectedTaskStatusId: number = 5;
+   selectedTaskStatusId: number = 0;
 
   changeManager(): void {
 

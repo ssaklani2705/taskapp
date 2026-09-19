@@ -690,9 +690,11 @@
       </div>
 
       <!-- ZIP FILE UPLOAD -->
-      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5">
+      <div class="manager-form-group" 
+      *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"
+      >
         <label class="modal-field-label">
-          Zip File
+          Zip File 
         </label>
 
         <input type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"

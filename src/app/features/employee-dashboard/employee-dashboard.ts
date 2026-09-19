@@ -151,8 +151,8 @@ export class EmployeeDashboard implements OnInit {
     signal('Anil Kumar');
 
 
-  readonly employeeRole =
-    signal('Employee');
+  // readonly employeeRole =
+  //   signal('Employee');
 
 
   readonly checkedInTime =
