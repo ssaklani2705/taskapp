@@ -534,7 +534,7 @@ export class Sidebar implements OnInit {
 
         label: 'Department Master',
 
-        icon: 'groups',
+        icon: 'apartment',
 
         route: '/department-master'
       },
@@ -573,7 +573,7 @@ export class Sidebar implements OnInit {
 
         label: 'State Master',
 
-        icon: 'bar_chart',
+        icon: 'location_on',
 
         route: '/state-index'
       },
@@ -583,7 +583,7 @@ export class Sidebar implements OnInit {
 
         label: 'Plan Master',
 
-        icon: 'bar_chart',
+        icon: 'event_note',
 
         route: '/plan-index'
       },
@@ -597,6 +597,15 @@ export class Sidebar implements OnInit {
 
         route: '/client-index'
       },
+       {
+          moduleId: 11,
+
+          label: 'Recurring Master',
+
+          icon: 'bar_chart',
+
+          route: '/recurring-index'
+        },
 
       {
         moduleId: 10,

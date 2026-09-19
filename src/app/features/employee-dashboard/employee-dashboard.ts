@@ -150,8 +150,8 @@ export class EmployeeDashboard implements OnInit {
     signal('Anil Kumar');
 
 
-  readonly employeeRole =
-    signal('Employee');
+  // readonly employeeRole =
+  //   signal('Employee');
 
 
   readonly checkedInTime =
@@ -177,6 +177,8 @@ export class EmployeeDashboard implements OnInit {
   username: string = '';
   loginType: string = '';
     isAdmin: any;
+
+  designationName:any;
     userId: any;
   ngOnInit(): void {
     this.username = sessionStorage.getItem('username') || 'Society 123';
@@ -184,6 +186,9 @@ export class EmployeeDashboard implements OnInit {
         sessionStorage.getItem(
           'isAdmin'
         );
+
+       this.designationName =
+  sessionStorage.getItem('designationName')?.trim() || '-';
 
          this.userId =
         sessionStorage.getItem(

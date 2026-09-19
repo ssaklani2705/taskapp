@@ -438,24 +438,28 @@ mat-divider {
 
 
 .section-title {
+      color: #163f70;
+    font-size: 26px;
+    font-weight: 700;
+    font-family: Georgia, Times New Roman, serif;
 
-  padding-left: 0;
+  // padding-left: 0;
 
-  display: flex;
+  // display: flex;
 
-  align-items: center;
+  // align-items: center;
 
-  gap: 9px;
+  // gap: 9px;
 
-  color: var(--primary-blue);
+  // color: var(--primary-blue);
 
-  font-family: Arial, sans-serif;
+  // font-family: Arial, sans-serif;
 
-  font-size: 25px;
+  // font-size: 25px;
 
-  font-weight: 700;
+  // font-weight: 700;
 
-  letter-spacing: 0;
+  // letter-spacing: 0;
 }
 
 

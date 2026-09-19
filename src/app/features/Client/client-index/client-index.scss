@@ -87,7 +87,8 @@
   gap: 6px;
   border: 0;
   border-radius: 4px;
-  background: var(--navy);
+  // background: var(--navy);
+  background: #1F3B64;
   color: var(--white);
   font-family: Arial, sans-serif;
   font-size: 14px;
@@ -239,9 +240,9 @@ mat-divider {
   height: 42px;
   min-width: 58px;
   padding: 0 17px;
-  border: 1px solid var(--primary-blue);
+  border: 1px solid #2878B5;
   border-radius: 2px;
-  background: var(--primary-blue);
+  background: #2878B5;
   color: var(--white);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 14px;
@@ -372,7 +373,7 @@ mat-divider {
   padding: 0 16px;
   border: none;
   border-radius: 5px;
-  background: #e67e22;
+  background: #168C8C;
   color: #fff;
   font-size: 14px;
   font-weight: 600;
@@ -387,12 +388,12 @@ mat-divider {
 }
 
 .btn-upload-excel:hover {
-  background: #ca6f1e;
+  background: #168C8C;
   color: #fff;
 }
 
 .btn-upload-excel:active {
-  background: #a95513;
+  background: #168C8C;
   transform: translateY(1px);
 }
 
@@ -405,7 +406,7 @@ mat-divider {
   padding: 0 16px;
   border: none;
   border-radius: 5px;
-  background: #2563eb;
+  background: #2563EB;
   color: #fff;
   font-size: 14px;
   font-weight: 600;
@@ -420,12 +421,12 @@ mat-divider {
 }
 
 .btn-export-excel:hover {
-  background: #1d4ed8;
+  background: #2563EB;
   color: #fff;
 }
 
 .btn-export-excel:active {
-  background: #1e40af;
+  background: #2563EB;
   transform: translateY(1px);
 }
 
@@ -438,7 +439,7 @@ mat-divider {
   padding: 0 16px;
   border: none;
   border-radius: 5px;
-  background: #217346;
+  background: #2E7D5B;
   color: #fff !important;
   font-size: 14px;
   font-weight: 600;
@@ -453,13 +454,13 @@ mat-divider {
 }
 
 .btn-download-template:hover {
-  background: #185c37;
+  background: #2E7D5B;
   color: #fff !important;
   text-decoration: none;
 }
 
 .btn-download-template:active {
-  background: #134a2c;
+  background: #2E7D5B;
   transform: translateY(1px);
 }
 

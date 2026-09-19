@@ -49,6 +49,8 @@ interface User {
 
   designationName: string;
 
+  taskCategoryNames: string;
+
 }
 
 
@@ -215,6 +217,12 @@ export class MyTeam implements OnInit {
     {
       key: 'designationName',
       label: 'Designation Name',
+      sortable: true
+    },
+
+    {
+      key: 'taskCategoryNames',
+      label: 'Category Name',
       sortable: true
     },
 

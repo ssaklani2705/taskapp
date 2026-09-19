@@ -1991,6 +1991,12 @@ export class TaskIndex {
 
 
  
+ 
+//  onTaskStatusChange(): void {
+//   this.selectedTaskStatusId = Number(this.selectedTaskStatusId);
+
+//   console.log('Selected Status:', this.selectedTaskStatusId);
+// }
 
   openChangeManagerModal(taskObject: any): void {
     //  console.log("sssssssss" + taskObject);
@@ -1998,8 +2004,7 @@ export class TaskIndex {
 
 
 
-
-
+this. selectedTaskStatusId= taskObject.taskStatus;
     this.task = {
       taskId: taskObject.taskId,
       managerId: taskObject.managerId,
@@ -2117,7 +2122,8 @@ export class TaskIndex {
       this.fileTwoName = '';
     }
   }
-  selectedTaskStatusId: number = 5;
+  // selectedTaskStatusId: number = 5;
+   selectedTaskStatusId: number = 0;
 
   changeManager(): void {
 
