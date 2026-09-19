@@ -46,3 +46,9 @@ Thumbs.db
 # Uploaded files
 src/assets/**
 src/environments/*.ts
+
+
+
+# Angular environments
+src/environments/environment.ts
+src/environments/environment.prod.ts
