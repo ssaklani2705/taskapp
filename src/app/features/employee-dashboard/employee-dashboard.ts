@@ -15,6 +15,7 @@ import { DataProviderService } from '../../service/data-provider.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 interface ApiTask {
@@ -57,7 +58,7 @@ interface ApiTask {
 
   dueDateTime: string;
 
-  assignedByUser : string;
+  assignedByUser: string;
 
 }
 
@@ -167,7 +168,8 @@ export class EmployeeDashboard implements OnInit {
 
 
   constructor(
-    private dataProviderService: DataProviderService
+    private dataProviderService: DataProviderService,
+    private router: Router,
   ) { }
 
 
@@ -176,22 +178,22 @@ export class EmployeeDashboard implements OnInit {
   // ======================================================
   username: string = '';
   loginType: string = '';
-    isAdmin: any;
-    userId: any;
+  isAdmin: any;
+  userId: any;
   ngOnInit(): void {
     this.username = sessionStorage.getItem('username') || 'Society 123';
     this.isAdmin =
-        sessionStorage.getItem(
-          'isAdmin'
-        );
+      sessionStorage.getItem(
+        'isAdmin'
+      );
 
-         this.userId =
-        sessionStorage.getItem(
-          'userId'
-        );
+    this.userId =
+      sessionStorage.getItem(
+        'userId'
+      );
 
-        this.loginType =
-        sessionStorage.getItem('loginType') || 'other';
+    this.loginType =
+      sessionStorage.getItem('loginType') || 'other';
 
     this.getDashboardClients();
     this.loadDashboard();
@@ -209,7 +211,7 @@ export class EmployeeDashboard implements OnInit {
       Number(sessionStorage.getItem('userId')) || 1;
 
     this.dataProviderService
-      .getDashboard(userId,this.isAdmin,this.selectedClientId)
+      .getDashboard(userId, this.isAdmin, this.selectedClientId)
       .subscribe({
 
         next: (res: DashboardResponse) => {
@@ -338,7 +340,7 @@ export class EmployeeDashboard implements OnInit {
 
           clientName: task.clientName || '',
 
-          assignedToName: task.assignedUser  || '',
+          assignedToName: task.assignedUser || '',
           assignedByUser: task.assignedByUser || '',
 
           startDay: this.formatDate(task.date),
@@ -346,8 +348,8 @@ export class EmployeeDashboard implements OnInit {
           dueDate: this.formatDate(task.dueDateTime),
           // type: 'done',
           type:
-          this.getPriorityType(task.priority)
-           
+            this.getPriorityType(task.priority)
+
 
         };
 
@@ -369,7 +371,7 @@ export class EmployeeDashboard implements OnInit {
 
           clientName: task.clientName || '',
 
-          assignedToName: task.assignedUser  || '',
+          assignedToName: task.assignedUser || '',
           assignedByUser: task.assignedByUser || '',
 
           startDay: this.formatDate(task.date),
@@ -378,7 +380,7 @@ export class EmployeeDashboard implements OnInit {
 
           // type: 'progress',
           type:
-          this.getPriorityType(task.priority),
+            this.getPriorityType(task.priority),
 
           progress:
             task.progress || 0
@@ -401,7 +403,7 @@ export class EmployeeDashboard implements OnInit {
 
         clientName: task.clientName || '',
 
-        assignedToName: task.assignedUser  || '',
+        assignedToName: task.assignedUser || '',
         assignedByUser: task.assignedByUser || '',
 
         startDay: this.formatDate(task.date),
@@ -648,41 +650,61 @@ export class EmployeeDashboard implements OnInit {
 
   //Dropdown
   clients: any[] = [];
-selectedClientId: any = 0;
-getDashboardClients(): void {
+  selectedClientId: any = 0;
+  getDashboardClients(): void {
 
-  this.dataProviderService
-    .getDashboardClients(
-      this.userId,
-      this.isAdmin,
-      this.loginType,
-       this.selectedClientId
-    )
-    .subscribe({
-      next: (res: any[]) => {
-        this.clients = res;
-      },
-      error: (error) => {
-        console.error('Error loading dashboard clients:', error);
-        this.clients = [];
+    this.dataProviderService
+      .getDashboardClients(
+        this.userId,
+        this.isAdmin,
+        this.loginType,
+        this.selectedClientId
+      )
+      .subscribe({
+        next: (res: any[]) => {
+          this.clients = res;
+        },
+        error: (error) => {
+          console.error('Error loading dashboard clients:', error);
+          this.clients = [];
+        }
+      });
+  }
+
+
+  onClientChange(clientId: number | null): void {
+
+    this.selectedClientId = clientId;
+
+    console.log(
+      'Selected Client ID:',
+      clientId
+    );
+
+    // Reload dashboard with selected client
+    this.loadDashboard();
+  }
+
+
+  openTaskIndex(stat: any): void {
+
+    let taskType = '';
+
+    if (stat.label === 'My tasks today') {
+      taskType = 'today';
+    } else if (stat.label === 'Due this week') {
+      taskType = 'week';
+    } else if (stat.label === 'Overdue') {
+      taskType = 'overdue';
+    }
+
+    this.router.navigate(
+      ['/task-index'],
+      {
+        queryParams: {
+          taskType: taskType
+        }
       }
-    });
-}
-
-
-onClientChange(clientId: number | null): void {
-
-  this.selectedClientId = clientId;
-
-  console.log(
-    'Selected Client ID:',
-    clientId
-  );
-
-  // Reload dashboard with selected client
-  this.loadDashboard();
-}
-
-
-
+    );
+  }
 }

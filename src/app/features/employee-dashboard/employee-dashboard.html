@@ -77,6 +77,7 @@
         <mat-card
           class="stat-card"
           [class.stat-danger]="stat.color === 'danger'"
+          (click)="openTaskIndex(stat)"
         >
 
           <!-- STAT ICON -->

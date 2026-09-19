@@ -31,7 +31,7 @@ import { environment } from '../../../../environments/environment';
   styleUrl: './view-index.scss'
 })
 export class ViewIndex implements OnInit {
-
+  dashboardFilter: string = '';
   // =========================================================
   // TASK ID
   // =========================================================
@@ -188,7 +188,7 @@ export class ViewIndex implements OnInit {
 
     this.toDate =
       queryParams.get('toDate') || '';
-
+    this.dashboardFilter = queryParams.get('taskType') || '';
     // -------------------------------------------------------
     // LOAD TASK
     // -------------------------------------------------------
@@ -1073,6 +1073,7 @@ export class ViewIndex implements OnInit {
 
           toDate:
             this.toDate || null,
+          taskType: this.dashboardFilter,
 
         }
       }

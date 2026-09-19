@@ -235,7 +235,7 @@ export class AddIndexComponent implements OnInit {
   // ============================================================
   // INIT
   // ============================================================
-
+  dashboardFilter: string = '';
   ngOnInit(): void {
 
     // ----------------------------------------------------------
@@ -281,6 +281,11 @@ export class AddIndexComponent implements OnInit {
 
     this.toDate =
       queryParams.get('toDate') || '';
+
+      this.dashboardFilter =  queryParams.get('taskType') || '';
+
+
+
     // ----------------------------------------------------------
     // USER ID
     // ----------------------------------------------------------
@@ -1114,6 +1119,7 @@ export class AddIndexComponent implements OnInit {
 
           toDate:
             this.toDate || null,
+               taskType: this.dashboardFilter,
 
         }
       }

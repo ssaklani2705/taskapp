@@ -1559,7 +1559,8 @@ return this.http.get<TaskCategoryDTO[]>(
     isAdmin: string,
     userId: any,
     taskStatusIds: string[],
-    loginType: string
+    loginType: string,
+     dashboardFilter:string
   ): Observable<any> {
 
     let params = new HttpParams()
@@ -1575,7 +1576,7 @@ return this.http.get<TaskCategoryDTO[]>(
       .set('toDate', toDate || '')
       .set('isAdmin', isAdmin || '')
       .set('userId', userId ? userId.toString() : '0')
-      .set('loginType', loginType || '');
+      .set('loginType', loginType || '').set('dashboardFilter', dashboardFilter || '');
 
     if (taskStatusIds && taskStatusIds.length > 0) {
       params = params.set(

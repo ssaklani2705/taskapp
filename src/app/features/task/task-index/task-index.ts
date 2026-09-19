@@ -114,6 +114,7 @@ interface AssignedUser {
 })
 
 export class TaskIndex {
+  dashboardFilter: string = '';
   // =========================================================
   // DATA
   // =========================================================
@@ -370,7 +371,10 @@ export class TaskIndex {
     this.loadFilterData();
 
     this.route.queryParams.subscribe((params) => {
+      this.dashboardFilter = params['taskType'];
+      // alert(this.dashboardFilter + " dd")
       if (params['taskStatusIds'] !== undefined) {
+
         this.selectedTaskStatuses = params['taskStatusIds'] ? String(params['taskStatusIds']).split(',').filter((status: string) => status !== '') : [];
         this.currentPage = 1;
         this.page = 0;
@@ -399,6 +403,7 @@ export class TaskIndex {
           fromDate: qp.get('fromDate'),
           toDate: qp.get('toDate'),
           taskStatusId: qp.get('taskStatusIds') ? qp.get('taskStatusIds')!.split(',') : [],
+             dashboardFilter: qp.get('taskType')
         };
       }
     }
@@ -454,7 +459,8 @@ export class TaskIndex {
     this.selectedTaskStatuses = Array.isArray(stateData.taskStatusId)
       ? stateData.taskStatusId.map((v: any) => String(v))
       : [];
-
+    this.dashboardFilter =
+    stateData.dashboardFilter || '';
     //
     if (Array.isArray(stateData.taskStatusId)) {
       this.selectedTaskStatuses = stateData.taskStatusId.map((v: any) => String(v));
@@ -657,6 +663,8 @@ export class TaskIndex {
     const taskStatusId =
       this.selectedTaskStatuses;
 
+
+
     this.dataprovider
       .getTaskDetails(
 
@@ -682,7 +690,8 @@ export class TaskIndex {
         this.isAdmin,
         this.userId,
         taskStatusId,
-        this.loginType
+        this.loginType,
+        this.dashboardFilter
 
       )
       .subscribe({
@@ -809,6 +818,8 @@ export class TaskIndex {
               this.selectedTaskStatuses.length
                 ? this.selectedTaskStatuses.join(',')
                 : null,
+                  taskType: this.dashboardFilter,
+
 
           },
 
@@ -991,6 +1002,9 @@ export class TaskIndex {
               this.selectedTaskStatuses.length
                 ? this.selectedTaskStatuses.join(',')
                 : null,
+                  taskType: this.dashboardFilter,
+                  
+
 
 
           },
@@ -1213,6 +1227,7 @@ export class TaskIndex {
           taskStatusIds: this.selectedTaskStatuses.length
             ? this.selectedTaskStatuses.join(',')
             : null,
+             taskType: this.dashboardFilter,
         },
 
         state: {
@@ -1226,7 +1241,8 @@ export class TaskIndex {
           priority: this.selectedPriority,
           fromDate: this.formatDateForApi(this.fromDate),
           toDate: this.formatDateForApi(this.toDate),
-          taskStatusIds: this.selectedTaskStatuses
+          taskStatusIds: this.selectedTaskStatuses,
+          taskType:this.dashboardFilter
         }
       }
 
@@ -1279,6 +1295,7 @@ export class TaskIndex {
           taskStatusIds: this.selectedTaskStatuses.length
             ? this.selectedTaskStatuses.join(',')
             : null,
+            taskType: this.dashboardFilter,
         },
 
         state: {
@@ -1292,7 +1309,8 @@ export class TaskIndex {
           priority: this.selectedPriority,
           fromDate: this.formatDateForApi(this.fromDate),
           toDate: this.formatDateForApi(this.toDate),
-          taskStatusIds: this.selectedTaskStatuses
+          taskStatusIds: this.selectedTaskStatuses,
+          taskType: this.dashboardFilter,
         }
       }
     );
@@ -1336,6 +1354,8 @@ export class TaskIndex {
           taskStatusIds: this.selectedTaskStatuses.length
             ? this.selectedTaskStatuses.join(',')
             : null,
+             taskType: this.dashboardFilter,
+
         },
 
         state: {
@@ -1349,7 +1369,9 @@ export class TaskIndex {
           priority: this.selectedPriority,
           fromDate: this.formatDateForApi(this.fromDate),
           toDate: this.formatDateForApi(this.toDate),
-          taskStatusIds: this.selectedTaskStatuses
+          taskStatusIds: this.selectedTaskStatuses,
+           taskType: this.dashboardFilter,
+
         }
       }
 
@@ -1990,7 +2012,7 @@ export class TaskIndex {
   fileTwoName: string = '';
 
 
- 
+
 
   openChangeManagerModal(taskObject: any): void {
     //  console.log("sssssssss" + taskObject);
@@ -2464,177 +2486,177 @@ export class TaskIndex {
   }
 
 
-@HostListener('document:click', ['$event'])
-onDocumentClick(event: MouseEvent): void {
-  const target = event.target as HTMLElement;
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
 
-  if (!target.closest('.status-dropdown')) {
-    this.showStatusDropdown = false;
-  }
-}
-
-
-//Assign To Model
-showAssignUserModal = false;
-selectedAssignTask: any = null;
-// userId: any;
-// isAdmin: any;
-// loginType: any = '';
-users: any[] = [];
-
-openAssignUserModal(task: any): void {
-
-  // Create a copy so table data is not changed
-  // until user clicks Assign
-  this.selectedAssignTask = {
-    ...task
-  };
-
-  // Show "Select User" when task is unassigned
-  if (
-    this.selectedAssignTask.assignedTo === null ||
-    this.selectedAssignTask.assignedTo === undefined
-  ) {
-    this.selectedAssignTask.assignedTo = 0;
-  }
-
-  this.showAssignUserModal = true;
-
-  this.users = [];
-
-  this.dataprovider.changesCategoryIdgetUserFilterData(
-    this.isAdmin,
-    this.userId,
-    this.loginType,
-    task.clientId,
-    task.taskCategoryId
-  ).subscribe({
-    next: (res: any) => {
-
-      const data = res?.data || res;
-
-      this.users = data?.assignedUsers || [];
-
-    },
-    error: (error: any) => {
-
-      console.error(
-        'Error loading assigned users:',
-        error
-      );
-
-      this.users = [];
+    if (!target.closest('.status-dropdown')) {
+      this.showStatusDropdown = false;
     }
-  });
-}
-
-closeAssignUserModal(): void {
-  this.showAssignUserModal = false;
-  this.selectedAssignTask = null;
-  this.users = [];
-}
-
-assignUser(): void {
-
-  if (
-    !this.selectedAssignTask ||
-    !this.selectedAssignTask.assignedTo ||
-    this.selectedAssignTask.assignedTo == 0
-  ) {
-    return;
   }
 
-  const taskId = this.selectedAssignTask.taskId;
-  const assignedTo = this.selectedAssignTask.assignedTo;
 
-  this.dataprovider.updateTaskAssignedUser(
-    taskId,
-    assignedTo,
-    this.userId
-  ).subscribe({
-    next: (res: any) => {
+  //Assign To Model
+  showAssignUserModal = false;
+  selectedAssignTask: any = null;
+  // userId: any;
+  // isAdmin: any;
+  // loginType: any = '';
+  users: any[] = [];
 
-      if (res?.success) {
+  openAssignUserModal(task: any): void {
 
-        // Find selected user
-        const selectedUser = this.users.find(
-          (user: any) =>
-            user.userId == assignedTo
-        );
+    // Create a copy so table data is not changed
+    // until user clicks Assign
+    this.selectedAssignTask = {
+      ...task
+    };
 
-        // Update original table task only after API success
-        const taskIndex = this.paginatedTasks.findIndex(
-          (task: any) =>
-            task.taskId == taskId
-        );
+    // Show "Select User" when task is unassigned
+    if (
+      this.selectedAssignTask.assignedTo === null ||
+      this.selectedAssignTask.assignedTo === undefined
+    ) {
+      this.selectedAssignTask.assignedTo = 0;
+    }
 
-        if (taskIndex !== -1) {
+    this.showAssignUserModal = true;
 
-          this.paginatedTasks[taskIndex].assignedTo =
-            assignedTo;
+    this.users = [];
 
-          this.paginatedTasks[taskIndex].assignedToName =
-            selectedUser?.firstName || 'Unassigned User';
-        }
+    this.dataprovider.changesCategoryIdgetUserFilterData(
+      this.isAdmin,
+      this.userId,
+      this.loginType,
+      task.clientId,
+      task.taskCategoryId
+    ).subscribe({
+      next: (res: any) => {
 
-        this.closeAssignUserModal();
+        const data = res?.data || res;
 
-        // Optional: refresh table from backend
-        this.onSearch();
+        this.users = data?.assignedUsers || [];
 
-      } else {
+      },
+      error: (error: any) => {
 
         console.error(
-          'Failed to assign user:',
-          res?.message
+          'Error loading assigned users:',
+          error
+        );
+
+        this.users = [];
+      }
+    });
+  }
+
+  closeAssignUserModal(): void {
+    this.showAssignUserModal = false;
+    this.selectedAssignTask = null;
+    this.users = [];
+  }
+
+  assignUser(): void {
+
+    if (
+      !this.selectedAssignTask ||
+      !this.selectedAssignTask.assignedTo ||
+      this.selectedAssignTask.assignedTo == 0
+    ) {
+      return;
+    }
+
+    const taskId = this.selectedAssignTask.taskId;
+    const assignedTo = this.selectedAssignTask.assignedTo;
+
+    this.dataprovider.updateTaskAssignedUser(
+      taskId,
+      assignedTo,
+      this.userId
+    ).subscribe({
+      next: (res: any) => {
+
+        if (res?.success) {
+
+          // Find selected user
+          const selectedUser = this.users.find(
+            (user: any) =>
+              user.userId == assignedTo
+          );
+
+          // Update original table task only after API success
+          const taskIndex = this.paginatedTasks.findIndex(
+            (task: any) =>
+              task.taskId == taskId
+          );
+
+          if (taskIndex !== -1) {
+
+            this.paginatedTasks[taskIndex].assignedTo =
+              assignedTo;
+
+            this.paginatedTasks[taskIndex].assignedToName =
+              selectedUser?.firstName || 'Unassigned User';
+          }
+
+          this.closeAssignUserModal();
+
+          // Optional: refresh table from backend
+          this.onSearch();
+
+        } else {
+
+          console.error(
+            'Failed to assign user:',
+            res?.message
+          );
+        }
+      },
+
+      error: (error: any) => {
+
+        console.error(
+          'Error assigning user:',
+          error
         );
       }
-    },
+    });
+  }
 
-    error: (error: any) => {
+  onchangeloadUserDropdownData(task: any): void {
 
-      console.error(
-        'Error assigning user:',
-        error
-      );
-    }
-  });
-}
+    this.dataprovider.changesCategoryIdgetUserFilterData(
+      this.isAdmin,
+      this.userId,
+      this.loginType,
+      task.clientId,
+      task.taskCategoryId
+    ).subscribe({
+      next: (res: any) => {
 
-onchangeloadUserDropdownData(task: any): void {
+        const data = res?.data || res;
 
-  this.dataprovider.changesCategoryIdgetUserFilterData(
-    this.isAdmin,
-    this.userId,
-    this.loginType,
-    task.clientId,
-    task.taskCategoryId
-  ).subscribe({
-    next: (res: any) => {
+        this.users = data?.assignedUsers || [];
 
-      const data = res?.data || res;
+      },
+      error: (error: any) => {
 
-      this.users = data?.assignedUsers || [];
+        console.error(
+          'Error loading task dropdown data:',
+          error
+        );
 
-    },
-    error: (error: any) => {
+        this.users = [];
+      }
+    });
+  }
 
-      console.error(
-        'Error loading task dropdown data:',
-        error
-      );
+  // openAssignUserModal(task: any): void {
+  //   this.selectedAssignTask = task;
+  //   this.showAssignUserModal = true;
 
-      this.users = [];
-    }
-  });
-}
-
-// openAssignUserModal(task: any): void {
-//   this.selectedAssignTask = task;
-//   this.showAssignUserModal = true;
-
-//   this.onchangeloadUserDropdownData(task);
-// }
+  //   this.onchangeloadUserDropdownData(task);
+  // }
 
 
 
@@ -2702,19 +2724,19 @@ onchangeloadUserDropdownData(task: any): void {
 
 
   getDueDateClass(dueDateTime: string): string {
-  const due = new Date(dueDateTime);
-  const now = new Date();
+    const due = new Date(dueDateTime);
+    const now = new Date();
 
-  const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate());
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dueDay = new Date(due.getFullYear(), due.getMonth(), due.getDate());
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-  if (due < now) {
-    return 'due-overdue';
-  } else if (dueDay.getTime() === today.getTime()) {
-    return 'due-today';
-  } else {
-    return 'due-upcoming';
+    if (due < now) {
+      return 'due-overdue';
+    } else if (dueDay.getTime() === today.getTime()) {
+      return 'due-today';
+    } else {
+      return 'due-upcoming';
+    }
   }
-}
 
 }
