@@ -1653,10 +1653,12 @@ return this.http.get<TaskCategoryDTO[]>(
 
   }
 
-  getRecurringClients(userId: number) {
+  getRecurringClients(userId: number,isAdmin: string,loginType: string) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/getRecurringClients`, {
       params: {
         userId: userId,
+        isAdmin: isAdmin,
+        loginType: loginType
       },
     });
   }
@@ -1720,6 +1722,17 @@ return this.http.get<TaskCategoryDTO[]>(
 
   getTaskCategories() {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/active`);
+  }
+
+
+   getActiveTaskCategoriesForRecurring(userId: any,isAdmin: any,loginType:any) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/recurring/active`,{
+      params: {
+        userId: userId,
+        isAdmin: isAdmin,
+        loginType: loginType
+      },
+    });
   }
 
   getRecurringDetailsById(recurringId: number, userId: number) {

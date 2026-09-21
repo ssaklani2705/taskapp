@@ -2018,9 +2018,10 @@ export class TaskIndex {
     //  console.log("sssssssss" + taskObject);
     this.descriptionValidationError = false;
 
+    this.selectedTaskStatusIdForCondition = taskObject.taskStatus;
 
 
-this. selectedTaskStatusId= taskObject.taskStatus;
+// this. selectedTaskStatusId= taskObject.taskStatus;
     this.task = {
       taskId: taskObject.taskId,
       managerId: taskObject.managerId,
@@ -2138,8 +2139,9 @@ this. selectedTaskStatusId= taskObject.taskStatus;
       this.fileTwoName = '';
     }
   }
-  // selectedTaskStatusId: number = 5;
-   selectedTaskStatusId: number = 0;
+  selectedTaskStatusId: number = 5;
+  selectedTaskStatusIdForCondition: number = 0;
+  //  selectedTaskStatusId: number = 0;
 
   changeManager(): void {
 
@@ -2739,4 +2741,18 @@ this. selectedTaskStatusId= taskObject.taskStatus;
     }
   }
 
+  removeZipFile(fileInput: HTMLInputElement): void {
+  this.fileOne = null;
+  this.fileOneName = '';
+  fileInput.value = '';
 }
+
+removeNormalFile(fileInput: HTMLInputElement): void {
+  this.fileTwo = null;
+  this.fileTwoName = '';
+  fileInput.value = '';
+}
+
+}
+
+

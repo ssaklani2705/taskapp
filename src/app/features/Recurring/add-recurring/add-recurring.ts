@@ -58,12 +58,21 @@ export class AddRecurring implements OnInit {
     private platformId: Object,
   ) {}
 
+  loginType = '';
+  isAdmin: any;
   ngOnInit(): void {
+     if (isPlatformBrowser(this.platformId)) {
+      this.isAdmin = sessionStorage.getItem('isAdmin');
+      this.loginType = sessionStorage.getItem('loginType') || 'other';
+     }
     this.initializeForm();
     this.getUserId();
     this.checkEditMode();
     this.loadClients();
     this.loadTaskCategories();
+
+    
+
   }
 
   private initializeForm(): void {
@@ -110,7 +119,7 @@ export class AddRecurring implements OnInit {
   }
 
   private loadClients(): void {
-    this.dataprovider.getRecurringClients(this.userId).subscribe({
+    this.dataprovider.getRecurringClients(this.userId,this.isAdmin,this.loginType).subscribe({
       next: (response: any) => {
         this.clients = response || [];
 
@@ -125,7 +134,7 @@ export class AddRecurring implements OnInit {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getTaskCategories().subscribe({
+    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId,this.isAdmin,this.loginType).subscribe({
       next: (response: any) => {
         this.taskCategories = response || [];
       },
