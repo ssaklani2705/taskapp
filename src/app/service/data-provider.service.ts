@@ -1691,6 +1691,9 @@ return this.http.get<TaskCategoryDTO[]>(
     sortColumn: string = 'title',
     sortDirection: string = 'asc',
     userId: number,
+    isAdmin: string, 
+    loginType: string
+
   ) {
     const params: any = {
       page: page,
@@ -1702,6 +1705,8 @@ return this.http.get<TaskCategoryDTO[]>(
       sortColumn: sortColumn,
       sortDirection: sortDirection,
       userId: userId,
+      isAdmin: isAdmin,
+      loginType: loginType
     };
 
     if (search && search.trim() !== '') {

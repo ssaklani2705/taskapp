@@ -178,6 +178,8 @@ export class RecurringIndex {
         this.sortColumn || 'title',
         this.sortDirection,
         this.userId,
+        this.isAdmin, 
+        this.loginType
       )
       .subscribe({
         next: (response: any) => {

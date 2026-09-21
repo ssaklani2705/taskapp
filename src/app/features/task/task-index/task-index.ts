@@ -2506,51 +2506,94 @@ export class TaskIndex {
   // loginType: any = '';
   users: any[] = [];
 
-  openAssignUserModal(task: any): void {
+  // openAssignUserModal(task: any): void {
 
-    // Create a copy so table data is not changed
-    // until user clicks Assign
-    this.selectedAssignTask = {
-      ...task
-    };
+  //   // Create a copy so table data is not changed
+  //   // until user clicks Assign
+  //   this.selectedAssignTask = {
+  //     ...task
+  //   };
 
-    // Show "Select User" when task is unassigned
-    if (
-      this.selectedAssignTask.assignedTo === null ||
-      this.selectedAssignTask.assignedTo === undefined
-    ) {
-      this.selectedAssignTask.assignedTo = 0;
+  //   // Show "Select User" when task is unassigned
+  //   if (
+  //     this.selectedAssignTask.assignedTo === null ||
+  //     this.selectedAssignTask.assignedTo === undefined
+  //   ) {
+  //     this.selectedAssignTask.assignedTo = 0;
+  //   }
+
+  //   this.showAssignUserModal = true;
+
+  //   this.users = [];
+
+  //   this.dataprovider.changesCategoryIdgetUserFilterData(
+  //     this.isAdmin,
+  //     this.userId,
+  //     this.loginType,
+  //     task.clientId,
+  //     task.taskCategoryId
+  //   ).subscribe({
+  //     next: (res: any) => {
+
+  //       const data = res?.data || res;
+
+  //       this.users = data?.assignedUsers || [];
+
+  //     },
+  //     error: (error: any) => {
+
+  //       console.error(
+  //         'Error loading assigned users:',
+  //         error
+  //       );
+
+  //       this.users = [];
+  //     }
+  //   });
+  // }
+
+openAssignUserModal(task: any): void {
+
+  const currentAssignedUserId = Number(task.assignedTo || 0);
+
+  this.selectedAssignTask = {
+    ...task,
+    assignedTo: 0
+  };
+
+  this.showAssignUserModal = true;
+  this.users = [];
+
+  this.dataprovider.changesCategoryIdgetUserFilterData(
+    this.isAdmin,
+    this.userId,
+    this.loginType,
+    task.clientId,
+    task.taskCategoryId
+  ).subscribe({
+    next: (res: any) => {
+
+      const data = res?.data || res;
+
+      const allUsers = data?.assignedUsers || [];
+
+      this.users = allUsers.filter(
+        (user: any) =>
+          Number(user.userId) !== currentAssignedUserId
+      );
+
+      console.log('Current assigned user:', currentAssignedUserId);
+      console.log('Filtered users:', this.users);
+    },
+
+    error: (error: any) => {
+      console.error('Error loading assigned users:', error);
+      this.users = [];
     }
+  });
+}
 
-    this.showAssignUserModal = true;
 
-    this.users = [];
-
-    this.dataprovider.changesCategoryIdgetUserFilterData(
-      this.isAdmin,
-      this.userId,
-      this.loginType,
-      task.clientId,
-      task.taskCategoryId
-    ).subscribe({
-      next: (res: any) => {
-
-        const data = res?.data || res;
-
-        this.users = data?.assignedUsers || [];
-
-      },
-      error: (error: any) => {
-
-        console.error(
-          'Error loading assigned users:',
-          error
-        );
-
-        this.users = [];
-      }
-    });
-  }
 
   closeAssignUserModal(): void {
     this.showAssignUserModal = false;

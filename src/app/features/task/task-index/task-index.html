@@ -328,9 +328,29 @@
                   </span>
                 </td>
 
+<td>
+  <span
+    class="wrap-text"
+    [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+    (click)="openAssignUserModal(task)"
+  >
+    <ng-container
+      *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock"
+    >
+      <mat-icon class="assign-icon">person_add</mat-icon>
+      Assign User
+    </ng-container>
+
+    <ng-template #assignedBlock>
+      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
+      {{ task.assignedToName }}
+      <span class="reassign-text">Re-assign</span>
+    </ng-template>
+  </span>
+</td>
 
 
-                <td>
+                <!-- <td>
                   <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
                     (click)="
       (!task.assignedToName || task.assignedToName === '0')
@@ -346,7 +366,7 @@
                       {{ task.assignedToName }}
                     </ng-template>
                   </span>
-                </td>
+                </td> -->
 
                 <!-- PRIORITY -->
                 <td>
@@ -685,7 +705,7 @@
 
       <!-- NORMAL FILE UPLOAD *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"-->
       <div class="manager-form-group"
-        *ngIf="selectedTaskStatusIdForCondition != 2">
+        *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
         <label class="modal-field-label">
           File
         </label>
@@ -704,9 +724,10 @@
         </div>
       </div>
 
-      <!-- ZIP FILE UPLOAD  *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"-->
+      <!-- ZIP FILE UPLOAD  *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"
+       selectedTaskStatusIdForCondition != 2-->
       <div class="manager-form-group"
-        *ngIf="selectedTaskStatusIdForCondition != 2">
+        *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
         <label class="modal-field-label">
           Zip File
         </label>
