@@ -109,12 +109,7 @@ export class Sidebar implements OnInit {
 
   ngOnInit(): void {
 
-    this.setActiveMenuFromRoute(this.router.url);
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.setActiveMenuFromRoute(event.urlAfterRedirects);
-      });
+   
 
     if (isPlatformBrowser(this.platformId)) {
 
@@ -189,6 +184,18 @@ export class Sidebar implements OnInit {
           this.selectedModuleId = null;
         }
       }
+
+
+       const allowedModuleIds = this.modules.map((m) => m.moduleId);
+    this.menuItems = this.filterMenuItems(this.getInitialMenu(), allowedModuleIds);
+    this.setActiveMenuFromRoute(this.router.url);
+    this.expandActiveParents(this.menuItems);
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.setActiveMenuFromRoute(event.urlAfterRedirects);
+      });
+
     }
 
 
@@ -945,141 +952,219 @@ export class Sidebar implements OnInit {
     return `${initials}. ${lastName}`;
   }
 
-  // private setActiveMenuFromRoute(url: string): void {
-  //   const currentUrl = url.split('?')[0].split('#')[0];
 
-  //   const activeItem = this.menuItems.find((item) => {
-  //     return item.route === currentUrl;
-  //   });
+//   private setActiveMenuFromRoute(url: string): void {
+//   const currentUrl = url.split('?')[0].split('#')[0];
 
-  //   if (activeItem) {
-  //     this.activeMenu = activeItem.label;
-  //     this.selectedModuleId = activeItem.moduleId ?? null;
-  //   }
-  // }
+//   const moduleRoutes: {
+//     label: string;
+//     moduleId: number;
+//     routes: string[];
+//   }[] = [
+//     {
+//       label: 'User Management',
+//       moduleId: 1,
+//       routes: [
+//         '/my-team',
+//         '/add-team',
+//         '/edit-team',
+//         '/view-team',
+//       ],
+//     },
+//     {
+//       label: 'Department',
+//       moduleId: 2,
+//       routes: [
+//         '/department-master',
+//         '/add-department',
+//         '/edit-department',
+//         '/view-department',
+//       ],
+//     },
+//     {
+//       label: 'Designation',
+//       moduleId: 3,
+//       routes: [
+//         '/designation-master',
+//         '/add-designation',
+//         '/edit-designation',
+//         '/view-designation',
+//       ],
+//     },
+//     {
+//       label: 'Tasks',
+//       moduleId: 10,
+//       routes: [
+//         '/task-index',
+//         '/add-task',
+//         '/edit-task',
+//         '/view-task',
+//       ],
+//     },
+//     {
+//       label: 'Task Category',
+//       moduleId: 5,
+//       routes: [
+//         '/task-category-index',
+//         '/add-task-category',
+//         '/edit-task-category',
+//         '/view-task-category',
+//       ],
+//     },
+//     {
+//       label: 'State',
+//       moduleId: 4,
+//       routes: [
+//         '/state-index',
+//         '/add-state',
+//         '/edit-state',
+//         '/view-state',
+//       ],
+//     },
+//     {
+//       label: 'Client',
+//       moduleId: 8,
+//       routes: [
+//         '/client-index',
+//         '/add-client',
+//         '/edit-client',
+//         '/view-client',
+//       ],
+//     },
+//     {
+//       label: 'Recurring Master',
+//       moduleId: 11,
+//       routes: [
+//         '/recurring-index',
+//         '/add-recurring',
+//         '/edit-recurring',
+//         '/view-recurring',
+//       ],
+//     },
+//     {
+//       label: 'Plan Master',
+//       moduleId: 9,
+//       routes: [
+//         '/plan-index',
+//         '/add-plan',
+//         '/edit-plan',
+//         '/view-plan',
+//       ],
+//     },
+//   ];
 
-  private setActiveMenuFromRoute(url: string): void {
-  const currentUrl = url.split('?')[0].split('#')[0];
+//   const activeModule = moduleRoutes.find((module) =>
+//     module.routes.some(
+//       (route) =>
+//         currentUrl === route ||
+//         currentUrl.startsWith(route + '/')
+//     )
+//   );
 
-  const moduleRoutes: {
-    label: string;
-    moduleId: number;
-    routes: string[];
-  }[] = [
-    {
-      label: 'User Management',
-      moduleId: 1,
-      routes: [
-        '/my-team',
-        '/add-team',
-        '/edit-team',
-        '/view-team',
-      ],
-    },
-    {
-      label: 'Department',
-      moduleId: 2,
-      routes: [
-        '/department-master',
-        '/add-department',
-        '/edit-department',
-        '/view-department',
-      ],
-    },
-    {
-      label: 'Designation',
-      moduleId: 3,
-      routes: [
-        '/designation-master',
-        '/add-designation',
-        '/edit-designation',
-        '/view-designation',
-      ],
-    },
-    {
-      label: 'Tasks',
-      moduleId: 10,
-      routes: [
-        '/task-index',
-        '/add-task',
-        '/edit-task',
-        '/view-task',
-      ],
-    },
-    {
-      label: 'Task Category',
-      moduleId: 5,
-      routes: [
-        '/task-category-index',
-        '/add-task-category',
-        '/edit-task-category',
-        '/view-task-category',
-      ],
-    },
-    {
-      label: 'State',
-      moduleId: 4,
-      routes: [
-        '/state-index',
-        '/add-state',
-        '/edit-state',
-        '/view-state',
-      ],
-    },
-    {
-      label: 'Client',
-      moduleId: 8,
-      routes: [
-        '/client-index',
-        '/add-client',
-        '/edit-client',
-        '/view-client',
-      ],
-    },
-    {
-      label: 'Recurring Master',
-      moduleId: 11,
-      routes: [
-        '/recurring-index',
-        '/add-recurring',
-        '/edit-recurring',
-        '/view-recurring',
-      ],
-    },
-    {
-      label: 'Plan Master',
-      moduleId: 9,
-      routes: [
-        '/plan-index',
-        '/add-plan',
-        '/edit-plan',
-        '/view-plan',
-      ],
-    },
-  ];
+//   if (activeModule) {
+//     this.activeMenu = activeModule.label;
+//     this.selectedModuleId = activeModule.moduleId;
+//     return;
+//   }
 
-  const activeModule = moduleRoutes.find((module) =>
-    module.routes.some(
-      (route) =>
-        currentUrl === route ||
-        currentUrl.startsWith(route + '/')
-    )
-  );
+//   const activeItem = this.menuItems.find(
+//     (item) => item.route === currentUrl
+//   );
 
-  if (activeModule) {
-    this.activeMenu = activeModule.label;
-    this.selectedModuleId = activeModule.moduleId;
-    return;
+//   if (activeItem) {
+//     this.activeMenu = activeItem.label;
+//     this.selectedModuleId = activeItem.moduleId ?? null;
+//   }
+// }
+
+ private setActiveMenuFromRoute(url: string): void {
+    const currentUrl = url.split('?')[0].split('#')[0];
+    const moduleRoutes: {
+      label: string;
+      moduleId: number;
+      routes: string[];
+    }[] = [
+      {
+        label: 'User Management',
+        moduleId: 1,
+        routes: ['/my-team', '/add-team', '/edit-team', '/view-team'],
+      },
+      {
+        label: 'Department Master',
+        moduleId: 2,
+        routes: ['/department-master', '/add-department', '/edit-department', '/view-department'],
+      },
+      {
+        label: 'Designation Master',
+        moduleId: 3,
+        routes: [
+          '/designation-master',
+          '/add-designation',
+          '/edit-designation',
+          '/view-designation',
+        ],
+      },
+      {
+        label: 'Tasks',
+        moduleId: 10,
+        routes: ['/task-index', '/add-task', '/edit-task', '/view-task'],
+      },
+      {
+        label: 'Task Category Master',
+        moduleId: 5,
+        routes: [
+          '/task-category-index',
+          '/add-task-category',
+          '/edit-task-category',
+          '/view-task-category',
+        ],
+      },
+      {
+        label: 'State Master',
+        moduleId: 4,
+        routes: ['/state-index', '/add-state', '/edit-state', '/view-state'],
+      },
+      {
+        label: 'Client Master',
+        moduleId: 8,
+        routes: ['/client-index', '/add-client', '/edit-client', '/view-client'],
+      },
+      {
+        label: 'Recurring Master',
+        moduleId: 11,
+        routes: ['/recurring-index', '/add-recurring', '/edit-recurring', '/view-recurring'],
+      },
+      {
+        label: 'Plan Master',
+        moduleId: 9,
+        routes: ['/plan-index', '/add-plan', '/edit-plan', '/view-plan'],
+      },
+    ];
+    const activeModule = moduleRoutes.find((module) =>
+      module.routes.some((route) => currentUrl === route || currentUrl.startsWith(route + '/')),
+    );
+    if (activeModule) {
+      this.activeMenu = activeModule.label;
+      this.selectedModuleId = activeModule.moduleId;
+      return;
+    }
+    // Dashboard routes
+    if (currentUrl === '/dashboard' || currentUrl === '/employee-dashboard') {
+      this.activeMenu = 'Dashboard';
+      this.selectedModuleId = null;
+      return;
+    }
+    // Other direct menu routes
+    const activeItem = this.menuItems.find((item) => {
+      if (!item.route) {
+        return false;
+      }
+      return currentUrl === item.route || currentUrl.startsWith(item.route + '/');
+    });
+    if (activeItem) {
+      this.activeMenu = activeItem.label;
+      this.selectedModuleId = activeItem.moduleId ?? null;
+    }
   }
-
-  const activeItem = this.menuItems.find(
-    (item) => item.route === currentUrl
-  );
-
-  if (activeItem) {
-    this.activeMenu = activeItem.label;
-    this.selectedModuleId = activeItem.moduleId ?? null;
-  }
-}
 
 }
