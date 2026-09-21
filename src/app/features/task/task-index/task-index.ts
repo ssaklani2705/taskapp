@@ -2739,4 +2739,18 @@ this. selectedTaskStatusId= taskObject.taskStatus;
     }
   }
 
+
+  removeZipFile(fileInput: HTMLInputElement): void {
+  this.fileOne = null;
+  this.fileOneName = '';
+  fileInput.value = '';
+}
+
+removeNormalFile(fileInput: HTMLInputElement): void {
+  this.fileTwo = null;
+  this.fileTwoName = '';
+  fileInput.value = '';
+}
+
+  
 }

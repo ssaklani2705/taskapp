@@ -244,24 +244,18 @@
 
 
                 <!-- TITLE -->
-               <td>
-  <div class="title-cell">
-    <span class="wrap-text title-text">
-      {{ task.title || '-' }}
-    </span>
+                <td>
+                  <div class="title-cell">
+                    <span class="wrap-text title-text">
+                      {{ task.title || '-' }}
+                    </span>
 
-    <button
-      type="button"
-      class="description-icon-button"
-      *ngIf="task.description"
-      (click)="openDescriptionModal(task)"
-      
-      aria-label="View Description"
-    >
-      <i class="fa fa-file-text"></i>
-    </button>
-  </div>
-</td>
+                    <button type="button" class="description-icon-button" *ngIf="task.description"
+                      (click)="openDescriptionModal(task)" aria-label="View Description">
+                      <i class="fa fa-file-text"></i>
+                    </button>
+                  </div>
+                </td>
 
 
                 <!-- CLIENT -->
@@ -273,21 +267,21 @@
 
 
                 <td>
-  <div class="date-cell" *ngIf="task.date; else noDate">
-    <div class="date-row">
-      <i class="fa fa-calendar date-icon"></i>
-      <span>{{ task.date | date:'dd-MM-yyyy' }}</span>
-    </div>
-    <div class="time-row">
-      <i class="fa fa-clock-o date-icon"></i>
-      <span>{{ task.date | date:'hh:mm a' }}</span>
-    </div>
-  </div>
+                  <div class="date-cell" *ngIf="task.date; else noDate">
+                    <div class="date-row">
+                      <i class="fa fa-calendar date-icon"></i>
+                      <span>{{ task.date | date:'dd-MM-yyyy' }}</span>
+                    </div>
+                    <div class="time-row">
+                      <i class="fa fa-clock-o date-icon"></i>
+                      <span>{{ task.date | date:'hh:mm a' }}</span>
+                    </div>
+                  </div>
 
-  <ng-template #noDate>
-    <span class="wrap-text">-</span>
-  </ng-template>
-</td>
+                  <ng-template #noDate>
+                    <span class="wrap-text">-</span>
+                  </ng-template>
+                </td>
 
                 <!-- <td>
                   {{ task.date ? (task.date | date:'dd-MM-yyyy') : '-' }}
@@ -296,21 +290,22 @@
                 </td> -->
 
                 <td>
-  <div class="due-date-cell" *ngIf="task.dueDateTime; else noDueDate" [ngClass]="getDueDateClass(task.dueDateTime)">
-    <div class="due-date-row">
-      <i class="fa fa-calendar due-icon"></i>
-      <span>{{ task.dueDateTime | date:'dd-MM-yyyy' }}</span>
-    </div>
-    <div class="due-time-row">
-      <i class="fa fa-clock-o due-icon"></i>
-      <span>{{ task.dueDateTime | date:'hh:mm a' }}</span>
-    </div>
-  </div>
+                  <div class="due-date-cell" *ngIf="task.dueDateTime; else noDueDate"
+                    [ngClass]="getDueDateClass(task.dueDateTime)">
+                    <div class="due-date-row">
+                      <i class="fa fa-calendar due-icon"></i>
+                      <span>{{ task.dueDateTime | date:'dd-MM-yyyy' }}</span>
+                    </div>
+                    <div class="due-time-row">
+                      <i class="fa fa-clock-o due-icon"></i>
+                      <span>{{ task.dueDateTime | date:'hh:mm a' }}</span>
+                    </div>
+                  </div>
 
-  <ng-template #noDueDate>
-    <span class="wrap-text">-</span>
-  </ng-template>
-</td>
+                  <ng-template #noDueDate>
+                    <span class="wrap-text">-</span>
+                  </ng-template>
+                </td>
 
                 <!-- <td>
                   {{ task.dueDateTime ? (task.dueDateTime | date:'dd-MM-yyyy') : '-' }}
@@ -335,24 +330,23 @@
 
 
 
-               <td>
-  <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-    (click)="
+                <td>
+                  <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+                    (click)="
       (!task.assignedToName || task.assignedToName === '0')
         ? openAssignUserModal(task)
         : null
-    "
-    >
-    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
-      <mat-icon class="assign-icon">person_add</mat-icon>
-      Assign User
-    </ng-container>
+    ">
+                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+                      <mat-icon class="assign-icon">person_add</mat-icon>
+                      Assign User
+                    </ng-container>
 
-    <ng-template #assignedBlock>
-      {{ task.assignedToName }}
-    </ng-template>
-  </span>
-</td>
+                    <ng-template #assignedBlock>
+                      {{ task.assignedToName }}
+                    </ng-template>
+                  </span>
+                </td>
 
                 <!-- PRIORITY -->
                 <td>
@@ -365,21 +359,21 @@
 
                 <!-- TASK STATUS -->
                 <!-- TASK STATUS matTooltip="Change Task status"-->
-<td>
-  <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
-    <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
-      [ngClass]="common.getTaskStatusClassNew(task.taskStatus)" 
-      [disabled]="canDisableChangeManager(task)">
-      {{
-      common.getTaskStatusLabel(task.taskStatus)
-      }}
-    </button>
-  </ng-container>
+                <td>
+                  <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
+                    <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
+                      [ngClass]="common.getTaskStatusClassNew(task.taskStatus)"
+                      [disabled]="canDisableChangeManager(task)">
+                      {{
+                      common.getTaskStatusLabel(task.taskStatus)
+                      }}
+                    </button>
+                  </ng-container>
 
-  <ng-template #noStatus>
-    <span class="wrap-text">-</span>
-  </ng-template>
-</td>
+                  <ng-template #noStatus>
+                    <span class="wrap-text">-</span>
+                  </ng-template>
+                </td>
                 <!-- <td>
                   <button type="button" class="change-manager-button" (click)="openChangeManagerModal(task)"
                     [ngClass]="common.getTaskStatusClassNew(task.taskStatus)" matTooltip="Change Task status"
@@ -690,32 +684,50 @@
       </div>
 
       <!-- ZIP FILE UPLOAD -->
-      <div class="manager-form-group" 
-      *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"
-      >
+      <!-- ZIP FILE -->
+      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5">
+
         <label class="modal-field-label">
-          Zip File 
+          Zip File
         </label>
 
-        <input type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"
+        <input #zipFileInput type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"
           (change)="onFileOneSelected($event)" />
 
-        <span class="current-manager-name" *ngIf="fileOneName">
-          {{ fileOneName }}
-        </span>
+        <div class="file-info" *ngIf="fileOneName">
+          <span class="current-manager-name">
+            {{ fileOneName }}
+          </span>
+
+          <button type="button" class="remove-file-btn" (click)="removeZipFile(zipFileInput)" title="Remove ZIP">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
       </div>
 
-      <!-- NORMAL FILE UPLOAD -->
+      <!-- NORMAL FILE -->
       <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5">
+
         <label class="modal-field-label">
           File
         </label>
 
-        <input type="file" class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+        <input #normalFileInput type="file" class="manager-select" [disabled]="isChangingManager"
+          (change)="onFileTwoSelected($event)" />
 
-        <span class="current-manager-name" *ngIf="fileTwoName">
-          {{ fileTwoName }}
-        </span>
+        <div class="file-info" *ngIf="fileTwoName">
+          <span class="current-manager-name">
+            {{ fileTwoName }}
+          </span>
+
+          <button type="button" class="remove-file-btn" (click)="removeNormalFile(normalFileInput)" title="Remove File">
+
+            <mat-icon>close</mat-icon>
+
+          </button>
+        </div>
+
       </div>
 
 
