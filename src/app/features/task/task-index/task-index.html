@@ -674,7 +674,7 @@
           <span class="required">*</span>
         </label>
 
-        <textarea class="manager-select" rows="4" [(ngModel)]="taskDescription" [disabled]="isChangingManager"
+        <textarea class="manager-select" rows="3" [(ngModel)]="taskDescription" [disabled]="isChangingManager"
           placeholder="Enter description"></textarea>
 
         <div class="manager-validation-error" *ngIf="descriptionValidationError">
@@ -683,52 +683,53 @@
         </div>
       </div>
 
-      <!-- ZIP FILE UPLOAD -->
-      <!-- ZIP FILE -->
-      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5">
-
-        <label class="modal-field-label">
-          Zip File
-        </label>
-
-        <input #zipFileInput type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"
-          (change)="onFileOneSelected($event)" />
-
-        <div class="file-info" *ngIf="fileOneName">
-          <span class="current-manager-name">
-            {{ fileOneName }}
-          </span>
-
-          <button type="button" class="remove-file-btn" (click)="removeZipFile(zipFileInput)" title="Remove ZIP">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-
-      </div>
-
-      <!-- NORMAL FILE -->
-      <div class="manager-form-group" *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5">
-
+      <!-- NORMAL FILE UPLOAD *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"-->
+      <div class="manager-form-group"
+        *ngIf="selectedTaskStatusIdForCondition != 2">
         <label class="modal-field-label">
           File
         </label>
 
-        <input #normalFileInput type="file" class="manager-select" [disabled]="isChangingManager"
-          (change)="onFileTwoSelected($event)" />
+        <input type="file" #normalFileInput class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
 
         <div class="file-info" *ngIf="fileTwoName">
-          <span class="current-manager-name">
-            {{ fileTwoName }}
-          </span>
+        <span class="current-manager-name" >
+          {{ fileTwoName }}
+        </span>
+        <button type="button" class="remove-file-btn" (click)="removeNormalFile(normalFileInput)" title="Remove File">
 
-          <button type="button" class="remove-file-btn" (click)="removeNormalFile(normalFileInput)" title="Remove File">
+          <mat-icon>close</mat-icon>
 
-            <mat-icon>close</mat-icon>
+        </button>
+        </div>
+      </div>
 
-          </button>
+      <!-- ZIP FILE UPLOAD  *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"-->
+      <div class="manager-form-group"
+        *ngIf="selectedTaskStatusIdForCondition != 2">
+        <label class="modal-field-label">
+          Zip File
+        </label>
+
+        <input type="file" class="manager-select" #zipFileInput accept=".zip" [disabled]="isChangingManager"
+          (change)="onFileOneSelected($event)" />
+
+          <div class="file-info" *ngIf="fileOneName">
+        <span class="current-manager-name" >
+          {{ fileOneName }}
+        </span>
+
+        <button type="button" class="remove-file-btn" (click)="removeZipFile(zipFileInput)" title="Remove ZIP">
+
+          <mat-icon>close</mat-icon>
+
+        </button>
         </div>
 
+
       </div>
+
+
 
 
 

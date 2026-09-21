@@ -84,8 +84,12 @@ export class RecurringIndex {
     private sessionService: SessionStorageService,
   ) {}
 
+  loginType = '';
+  isAdmin: any;
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
+    this.isAdmin = sessionStorage.getItem('isAdmin');
+      this.loginType = sessionStorage.getItem('loginType') || 'other';
 
     if (isPlatformBrowser(this.platformId)) {
       const storedUserId = sessionStorage.getItem('userId');
@@ -128,7 +132,7 @@ export class RecurringIndex {
       return;
     }
 
-    this.dataprovider.getRecurringClients(this.userId).subscribe({
+    this.dataprovider.getRecurringClients(this.userId,this.isAdmin,this.loginType).subscribe({
       next: (response: any) => {
         console.log('Recurring Clients:', response);
 
@@ -144,7 +148,7 @@ export class RecurringIndex {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getTaskCategories().subscribe({
+    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId,this.isAdmin,this.loginType).subscribe({
       next: (response: any) => {
         console.log('Task Categories:', response);
 

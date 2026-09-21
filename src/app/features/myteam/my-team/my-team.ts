@@ -222,7 +222,7 @@ export class MyTeam implements OnInit {
 
     {
       key: 'taskCategoryNames',
-      label: 'Category Name',
+      label: 'Task Category',
       sortable: true
     },
 
