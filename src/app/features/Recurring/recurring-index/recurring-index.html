@@ -8,10 +8,10 @@
 
       <div class="header-action">
         @if (addPer === 'Y') {
-          <button type="button" class="add-button" (click)="addRecurring()">
-            Add New
-            <span class="plus-icon">+</span>
-          </button>
+        <button type="button" class="add-button" (click)="addRecurring()">
+          Add New
+          <span class="plus-icon">+</span>
+        </button>
         }
       </div>
     </div>
@@ -23,13 +23,8 @@
         <div class="search-row">
           <div class="search-wrapper">
             <div class="search-box">
-              <input
-                type="text"
-                [(ngModel)]="searchQuery"
-                placeholder="Search Title and Description"
-                (keyup.enter)="onSearch()"
-                class="search-input"
-              />
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search Title and Description"
+                (keyup.enter)="onSearch()" class="search-input" />
 
               <button type="button" class="search-btn" (click)="onSearch()" title="Search">
                 <i class="fa fa-search"></i>
@@ -38,11 +33,7 @@
           </div>
 
           <div class="status-wrapper">
-            <select
-              class="status-select"
-              [(ngModel)]="selectedClientId"
-              (change)="onFilterChange()"
-            >
+            <select class="status-select" [(ngModel)]="selectedClientId" (change)="onFilterChange()">
               <option [ngValue]="0">--All Clients--</option>
 
               <option *ngFor="let client of clients" [ngValue]="client.clientId">
@@ -62,11 +53,7 @@
           </div>
 
           <div class="status-wrapper">
-            <select
-              class="status-select"
-              [(ngModel)]="selectedTaskCatId"
-              (change)="onFilterChange()"
-            >
+            <select class="status-select" [(ngModel)]="selectedTaskCatId" (change)="onFilterChange()">
               <option [ngValue]="0">--All Task Categories--</option>
 
               <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
@@ -113,11 +100,8 @@
 
           <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            *ngFor="let pageNumber of pages()"
-            (click)="goToPage(pageNumber)"
-            [class.active-pagination]="pageNumber === currentPage"
-          >
+          <button *ngFor="let pageNumber of pages()" (click)="goToPage(pageNumber)"
+            [class.active-pagination]="pageNumber === currentPage">
             {{ pageNumber }}
           </button>
 
@@ -133,11 +117,8 @@
             <tr>
               <th class="serial-column">#</th>
 
-              <th
-                *ngFor="let col of columns"
-                [class.sortable-column]="col.sortable"
-                (click)="col.sortable && sortData(col.key)"
-              >
+              <th *ngFor="let col of columns" [class.sortable-column]="col.sortable"
+                (click)="col.sortable && sortData(col.key)">
                 <div class="column-header">
                   <span>{{ col.label }}</span>
 
@@ -166,7 +147,12 @@
               <td class="plan-name-cell">
                 <span class="user-name">
                   {{ item.clientName || '-' }}
+                  
                 </span>
+                <button type="button" class="description-icon-button" *ngIf="item.description"
+                  (click)="openDescriptionModal(item)" aria-label="View Description">
+                  <i class="fa fa-file-text"></i>
+                </button>
               </td>
 
               <td class="plan-name-cell">
@@ -189,38 +175,26 @@
 
               <td class="action-cell">
                 @if (viewPer === 'Y') {
-                  <button
-                    type="button"
-                    class="action-button view-button"
-                    title="View"
-                    (click)="viewRecurring(item.recurringId)"
-                  >
-                    <mat-icon> visibility </mat-icon>
-                  </button>
+                <button type="button" class="action-button view-button" title="View"
+                  (click)="viewRecurring(item.recurringId)">
+                  <mat-icon> visibility </mat-icon>
+                </button>
                 }
 
                 <ng-container *ngIf="item.status === 1 || item.status === 2">
                   @if (editPer === 'Y') {
-                    <button
-                      type="button"
-                      class="action-button edit-button"
-                      title="Edit"
-                      (click)="editRecurring(item.recurringId)"
-                    >
-                      <mat-icon> edit </mat-icon>
-                    </button>
+                  <button type="button" class="action-button edit-button" title="Edit"
+                    (click)="editRecurring(item.recurringId)">
+                    <mat-icon> edit </mat-icon>
+                  </button>
                   }
 
                   <!-- DELETE -->
                   @if (deletePer === 'Y') {
-                    <button
-                      type="button"
-                      class="action-button delete-button"
-                      title="Delete"
-                      (click)="onDeleteUser(item.recurringId)"
-                    >
-                      <mat-icon> delete </mat-icon>
-                    </button>
+                  <button type="button" class="action-button delete-button" title="Delete"
+                    (click)="onDeleteUser(item.recurringId)">
+                    <mat-icon> delete </mat-icon>
+                  </button>
                   }
                 </ng-container>
               </td>
@@ -247,11 +221,8 @@
 
           <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            *ngFor="let pageNumber of pages()"
-            (click)="goToPage(pageNumber)"
-            [class.active-pagination]="pageNumber === currentPage"
-          >
+          <button *ngFor="let pageNumber of pages()" (click)="goToPage(pageNumber)"
+            [class.active-pagination]="pageNumber === currentPage">
             {{ pageNumber }}
           </button>
 
@@ -262,4 +233,76 @@
       </div>
     </div>
   </div>
+</div>
+<div class="modal-overlay" *ngIf="showDescriptionModal" (click)="closeDescriptionModal()">
+
+  <div class="change-manager-modal description-modal" (click)="$event.stopPropagation()">
+
+    <!-- HEADER -->
+    <div class="modal-header">
+
+      <div class="modal-title">
+
+        <div class="modal-title-icon">
+          <mat-icon>description</mat-icon>
+        </div>
+
+        <div>
+          <div class="modal-title-text">
+            Recurring Description
+          </div>
+
+          <div class="modal-subtitle">
+            {{ selectedDescriptionRecurring?.title || 'Task' }}
+          </div>
+        </div>
+
+      </div>
+
+      <button type="button" class="modal-close-button" (click)="closeDescriptionModal()" aria-label="Close">
+
+        <mat-icon>close</mat-icon>
+
+      </button>
+
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- BODY -->
+    <div class="modal-body">
+
+      <div class="manager-form-group">
+
+        <label class="modal-field-label">
+          Description
+        </label>
+
+        <div class="description-content">
+
+          {{ selectedDescriptionRecurring?.description || 'No description available.' }}
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="modal-footer">
+
+      <button type="button" class="modal-cancel-button" (click)="closeDescriptionModal()">
+
+        <mat-icon>close</mat-icon>
+
+        <span>
+          Close
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
 </div>

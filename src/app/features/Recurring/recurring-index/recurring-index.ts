@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataProviderService } from '../../../service/data-provider.service';
 import { Router } from '@angular/router';
@@ -82,14 +82,14 @@ export class RecurringIndex {
     @Inject(PLATFORM_ID)
     private platformId: Object,
     private sessionService: SessionStorageService,
-  ) {}
+  ) { }
 
   loginType = '';
   isAdmin: any;
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
     this.isAdmin = sessionStorage.getItem('isAdmin');
-      this.loginType = sessionStorage.getItem('loginType') || 'other';
+    this.loginType = sessionStorage.getItem('loginType') || 'other';
 
     if (isPlatformBrowser(this.platformId)) {
       const storedUserId = sessionStorage.getItem('userId');
@@ -132,7 +132,7 @@ export class RecurringIndex {
       return;
     }
 
-    this.dataprovider.getRecurringClients(this.userId,this.isAdmin,this.loginType).subscribe({
+    this.dataprovider.getRecurringClients(this.userId, this.isAdmin, this.loginType).subscribe({
       next: (response: any) => {
         console.log('Recurring Clients:', response);
 
@@ -148,7 +148,7 @@ export class RecurringIndex {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId,this.isAdmin,this.loginType).subscribe({
+    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType).subscribe({
       next: (response: any) => {
         console.log('Task Categories:', response);
 
@@ -345,8 +345,8 @@ export class RecurringIndex {
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it',
       customClass: {
-    popup: 'small-confirm-popup'
-  }
+        popup: 'small-confirm-popup'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         this.dataprovider.deleteRecurring(recurringId, this.userId).subscribe({
@@ -677,4 +677,36 @@ export class RecurringIndex {
       return 0;
     });
   }
+
+
+
+  showDescriptionModal = false;
+  selectedDescriptionRecurring: any = null;
+
+  openDescriptionModal(recurring: Recurring): void {
+  //  alert(1)
+    this.selectedDescriptionRecurring = recurring;
+    this.showDescriptionModal = true;
+    console.log(this.showDescriptionModal)
+  }
+
+  closeDescriptionModal(): void {
+
+    this.showDescriptionModal = false;
+
+    this.selectedDescriptionRecurring = null;
+  }
+
+
+ @HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+
+  if (
+    !target.closest('.description-modal') &&
+    !target.closest('.description-icon-button')
+  ) {
+    this.closeDescriptionModal();
+  }
+}
 }
