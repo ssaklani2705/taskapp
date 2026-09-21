@@ -261,36 +261,45 @@ mat-divider {
   align-self: flex-start;
 }
 
+
+
+
 .status-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 70px;
+  min-width: 82px;
   height: 32px;
-  padding: 0 14px;
-  box-sizing: border-box;
+  padding: 0 13px;
   border-radius: 2px;
   font-family: Arial, sans-serif;
   font-size: 13px;
   font-weight: 600;
+  box-sizing: border-box;
 }
 
+.status-badge.active,
+.status-badge.status-active,
 .status-active {
-  color: var(--success) !important;
-  background: var(--success-bg);
-  border: 1px solid #c7e5d9;
+  background: #e6f4ee;
+  color: #287d5e;
+  border: 1px solid #c8e7da;
 }
 
+.status-badge.inactive,
+.status-badge.status-inactive,
 .status-inactive {
-  color: #986b14 !important;
-  background: #fff5dc;
-  border: 1px solid #ecd9a7;
+  background: #fff5df;
+  color: #a87308;
+  border: 1px solid #f0d99e;
 }
 
+.status-badge.deleted,
+.status-badge.status-deleted,
 .status-deleted {
-  color: #b93636 !important;
-  background: var(--danger-bg);
-  border: 1px solid #f2cccc;
+  background: #fbeaea;
+  color: #b8403d;
+  border: 1px solid #efcaca;
 }
 
 .change-manager-button {

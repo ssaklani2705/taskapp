@@ -375,4 +375,31 @@ export class ViewClient {
 
     return `${day}-${month}-${year}`;
   }
+
+  
+  getStatusClass(status: number | string): string {
+    switch (+status) {
+      case 1:
+        return 'status-badge active';
+      case 2:
+        return 'status-badge inactive';
+      case 3:
+        return 'status-badge deleted';
+      default:
+        return 'status-badge';
+    }
+  }
+
+  getStatusLabel(status: number | string): string {
+    switch (+status) {
+      case 1:
+        return 'Active';
+      case 2:
+        return 'Inactive';
+      case 3:
+        return 'Deleted';
+      default:
+        return 'Unknown';
+    }
+  }
 }

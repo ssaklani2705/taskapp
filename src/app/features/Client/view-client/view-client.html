@@ -284,8 +284,8 @@
           <div class="info-field status-field">
             <span class="field-label">Status:</span>
 
-            <span class="status-badge" [ngClass]="common.getStatusClass(client.status)">
-              {{ common.getStatusLabel(client.status) }}
+            <span class="status-badge" [ngClass]="getStatusClass(client.status)">
+              {{ getStatusLabel(client.status) }}
             </span>
           </div>
         </div>
