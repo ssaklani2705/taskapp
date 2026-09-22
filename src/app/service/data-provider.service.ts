@@ -266,8 +266,8 @@ export class DataProviderService {
 
 
   //Reports mail
-  getMailLogDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}mailLog/getMailLogDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
+  getMailLogDetails(page: any, size: any, search: any): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}mailLog/getMailLogDetails?page=${page}&size=${size}&search=${search}`);
   }
 
   // data-provider.service.ts
@@ -275,10 +275,13 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}mailLog/getMailLogHtml?mailLogId=${mailLogId}`);
   }
 
-  getUserAccessDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}useraccesslog/getUserAccessDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
-  }
+  // getUserAccessDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
+  //   return this.http.get(`${environment.apiBaseUrl}useraccesslog/getUserAccessDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
+  // }
 
+   getUserAccessDetails(page: any, size: any, search: any): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}useraccesslog/getUserAccessDetails?page=${page}&size=${size}&search=${search}`);
+  }
 
 
   deleteUser(id: number, createdBy: string): Observable<any> {
@@ -1688,6 +1691,7 @@ return this.http.get<TaskCategoryDTO[]>(
     clientId: number = 0,
     type: number = 0,
     taskCatId: number = 0,
+    priority: number =0,
     sortColumn: string = 'title',
     sortDirection: string = 'asc',
     userId: number,
@@ -1702,6 +1706,7 @@ return this.http.get<TaskCategoryDTO[]>(
       clientId: clientId,
       type: type,
       taskCatId: taskCatId,
+      priority: priority,
       sortColumn: sortColumn,
       sortDirection: sortDirection,
       userId: userId,
@@ -1787,71 +1792,78 @@ return this.http.get<TaskCategoryDTO[]>(
     });
   }
 
-  countOfActiveTask(clientId:any): Observable<any> {
+  countOfActiveTask(clientId:any,userId:any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfActiveTask`,
       {
       params: {
-        clientId: clientId
+        clientId: clientId,
+        userId: userId
       }
     }
     );
   }
 
-  countOfCompletedTask(clientId:any): Observable<any> {
+  countOfCompletedTask(clientId:any,userId:any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfCompletedTask`,
       {
       params: {
-        clientId: clientId
+        clientId: clientId,
+        userId: userId
       }
     }
     );
   }
 
-  countOfPendingTask(clientId:any): Observable<any> {
+  countOfPendingTask(clientId:any,userId:any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfPendingTask`,
       {
       params: {
-        clientId: clientId
+        clientId: clientId,
+        userId: userId
       }
     }
     );
   }
 
-  countOfAssignedTask(clientId:any): Observable<any> {
+  countOfAssignedTask(clientId:any,userId:any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssignedTask`,
       {
       params: {
-        clientId: clientId
+        clientId: clientId,
+        userId: userId
       }
     }
     );
   }
 
-  countOfAssigneeClosureTask(clientId:any): Observable<any> {
+  countOfAssigneeClosureTask(clientId:any,userId:any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeClosureTask`,
       {
       params: {
-        clientId: clientId
+        clientId: clientId,
+        userId: userId
       }
     }
     );
   }
 
-  countOfReOpenTask(clientId:any): Observable<any> {
+  countOfReOpenTask(clientId:any,userId:any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfReOpenTask`,
       {
       params: {
-        clientId: clientId
+        clientId: clientId,
+        userId: userId
       }
     }
     );
   }
 
-  countOfAssigneeReClosureTask(clientId:any): Observable<any> {
+  countOfAssigneeReClosureTask(clientId:any,userId:any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeReClosureTask`,
       {
       params: {
-        clientId: clientId
+        clientId: clientId,
+        userId: userId
       }
     }
     );
@@ -1888,5 +1900,14 @@ return this.http.get<TaskCategoryDTO[]>(
     }
   );
 }
+
+// getUserAccessDetails(page: number, size: number, search: string) {
+//   const params = new HttpParams()
+//     .set('page', page)
+//     .set('size', size)
+//     .set('search', search || '');
+
+//   return this.http.get<any>(`${environment.apiBaseUrl}/getUserAccessDetails`, { params });
+// }
 
 }

@@ -70,9 +70,6 @@ export class AddRecurring implements OnInit {
     this.checkEditMode();
     this.loadClients();
     this.loadTaskCategories();
-
-    
-
   }
 
   private initializeForm(): void {
@@ -86,6 +83,7 @@ export class AddRecurring implements OnInit {
       date: [null],
       month: [null],
       taskCatId: [null, Validators.required],
+         priority: [null, Validators.required],
       status: [1],
     });
 
@@ -181,6 +179,10 @@ export class AddRecurring implements OnInit {
               ? Number(recurring.month)
               : null,
           taskCatId: recurring.taskCatId,
+          priority:
+  recurring.priority !== null && recurring.priority !== undefined
+    ? Number(recurring.priority)
+    : null,
           status:
             recurring.status !== null && recurring.status !== undefined
               ? Number(recurring.status)
@@ -273,6 +275,7 @@ export class AddRecurring implements OnInit {
       date: formValue.date !== null && formValue.date !== '' ? Number(formValue.date) : null,
       month: formValue.month !== null && formValue.month !== '' ? Number(formValue.month) : null,
       taskCatId: Number(formValue.taskCatId),
+       priority: Number(formValue.priority),
       status: this.isEditMode ? Number(formValue.status) : 1,
     };
 
@@ -342,6 +345,7 @@ export class AddRecurring implements OnInit {
       date: null,
       month: null,
       taskCatId: null,
+       priority: null,
       status: 1,
     });
 

@@ -77,6 +77,40 @@
               </div>
             </div>
 
+                        <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Priority
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="priority">
+                  <option [ngValue]="null">
+                    Select Priority
+                  </option>
+
+                  <option [ngValue]="1">
+                    High
+                  </option>
+
+                  <option [ngValue]="2">
+                    Medium
+                  </option>
+
+                  <option [ngValue]="3">
+                    Low
+                  </option>
+                </select>
+
+                <div class="user-error"  *ngIf="
+        recurringForm.get('priority')?.touched &&
+        recurringForm.get('priority')?.invalid
+      ">
+                  Priority is required
+                </div>
+              </div>
+            </div>
+
             <!-- STATUS -->
             <div class="user-form-col" *ngIf="isEditMode">
               <div class="user-form-group">

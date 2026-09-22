@@ -625,18 +625,34 @@ export class Sidebar implements OnInit {
       },
 
      
-
-      
-
-    
-
       {
-        label: 'Reports',
+        moduleId: 7,
+
+        label: 'Maillog Report',
 
         icon: 'bar_chart',
 
-        route: '/reports'
-      }
+        route: '/mail-log-report'
+      },
+      
+  {
+        moduleId: 6,
+
+        label: 'Access Report',
+
+        icon: 'bar_chart',
+
+        route: '/access-report'
+      },
+    
+
+      // {
+      //   label: 'Reports',
+
+      //   icon: 'bar_chart',
+
+      //   route: '/reports'
+      // }
 
     ];
   }

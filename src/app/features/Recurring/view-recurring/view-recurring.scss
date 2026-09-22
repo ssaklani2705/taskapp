@@ -668,3 +668,76 @@ mat-divider {
     border-color 0.15s ease;
 }
 
+
+
+/* =========================================================
+   PRIORITY
+========================================================= */
+
+.priority-badge {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 75px;
+
+  height: 32px;
+
+  padding: 0 13px;
+
+  border-radius: 3px;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+}
+
+
+.priority-high {
+
+  color: #b93636;
+
+  background: #fff0f0;
+
+  border: 1px solid #f2cccc;
+
+}
+
+
+.priority-medium {
+
+  color: #986b14;
+
+  background: #fff5dc;
+
+  border: 1px solid #ecd9a7;
+
+}
+
+
+.priority-low {
+
+  color: var(--success);
+
+  background: var(--success-bg);
+
+  border: 1px solid #c7e5d9;
+
+}
+
+
+.priority-default {
+
+  color: var(--text-muted);
+
+  background: #f3f5f7;
+
+  border: 1px solid var(--border);
+
+}

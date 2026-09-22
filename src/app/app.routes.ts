@@ -156,9 +156,14 @@ export const routes: Routes = [
       // {
       //   path: '',
       //   redirectTo: 'dashboard',
-      //   pathMatch: 'full'
+      //   pathMatch: 'full' 
       // },
 
+
+      // Reports
+      { path: 'access-report', loadComponent: () => import('./reports/access/access-report/access-report').then(m => m.AccessReportComponent) },
+      { path: 'mail-log-report', loadComponent: () => import('./reports/maillog/mail-log-report/mail-log-report').then(m => m.MailLogReportComponent) },
+      
 
       { path: 'plan-index', loadComponent: () => import('./features/plan/plan-index/plan-index').then(m => m.PlanIndex) },
       { path: 'add-plan', loadComponent: () => import('./features/plan/plan-add/plan-add').then(m => m.PlanAdd) },
