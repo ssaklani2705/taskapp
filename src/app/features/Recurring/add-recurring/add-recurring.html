@@ -217,6 +217,7 @@
             </div>
           </div>
 
+         
           <!-- ================= WEEKLY ================= -->
           <div class="user-form-row" *ngIf="recurringForm.get('type')?.value === 2">
             <div class="user-form-col">
@@ -228,23 +229,19 @@
 
                 <select class="user-input user-select" formControlName="day">
                   <option [ngValue]="null">Select Day</option>
-
                   <option [ngValue]="1">Monday</option>
-
                   <option [ngValue]="2">Tuesday</option>
-
                   <option [ngValue]="3">Wednesday</option>
-
                   <option [ngValue]="4">Thursday</option>
-
                   <option [ngValue]="5">Friday</option>
-
                   <option [ngValue]="6">Saturday</option>
-
                   <option [ngValue]="7">Sunday</option>
                 </select>
 
-                <div class="user-error" *ngIf="recurringForm.get('day')?.touched && recurringForm.get('day')?.invalid">
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('day')?.touched && recurringForm.get('day')?.invalid"
+                >
                   Day is required
                 </div>
               </div>
@@ -270,10 +267,13 @@
                   <option *ngFor="let date of dates" [ngValue]="date">
                     {{ date }}
                   </option>
+                  <option [ngValue]="-2">Last Day of the Month</option>
                 </select>
 
-                <div class="user-error"
-                  *ngIf="recurringForm.get('date')?.touched && recurringForm.get('date')?.invalid">
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('date')?.touched && recurringForm.get('date')?.invalid"
+                >
                   Date is required
                 </div>
               </div>
@@ -286,6 +286,44 @@
 
           <!-- ================= YEARLY ================= -->
           <div class="user-form-row" *ngIf="recurringForm.get('type')?.value === 4">
+
+              <!-- MONTH -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Month
+                  <span class="required">*</span>
+                </label>
+
+                <select
+                  class="user-input user-select"
+                  formControlName="month"
+                  (change)="onYearlyMonthChange()"
+                >
+                  <option [ngValue]="null">Select Month</option>
+                  <option [ngValue]="1">January</option>
+                  <option [ngValue]="2">February</option>
+                  <option [ngValue]="3">March</option>
+                  <option [ngValue]="4">April</option>
+                  <option [ngValue]="5">May</option>
+                  <option [ngValue]="6">June</option>
+                  <option [ngValue]="7">July</option>
+                  <option [ngValue]="8">August</option>
+                  <option [ngValue]="9">September</option>
+                  <option [ngValue]="10">October</option>
+                  <option [ngValue]="11">November</option>
+                  <option [ngValue]="12">December</option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('month')?.touched && recurringForm.get('month')?.invalid"
+                >
+                  Month is required
+                </div>
+              </div>
+            </div>
+
             <!-- DATE -->
             <div class="user-form-col">
               <div class="user-form-group">
@@ -302,55 +340,16 @@
                   </option>
                 </select>
 
-                <div class="user-error"
-                  *ngIf="recurringForm.get('date')?.touched && recurringForm.get('date')?.invalid">
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('date')?.touched && recurringForm.get('date')?.invalid"
+                >
                   Date is required
                 </div>
               </div>
             </div>
 
-            <!-- MONTH -->
-            <div class="user-form-col">
-              <div class="user-form-group">
-                <label class="user-label">
-                  Month
-                  <span class="required">*</span>
-                </label>
-
-                <select class="user-input user-select" formControlName="month">
-                  <option [ngValue]="null">Select Month</option>
-
-                  <option [ngValue]="1">January</option>
-
-                  <option [ngValue]="2">February</option>
-
-                  <option [ngValue]="3">March</option>
-
-                  <option [ngValue]="4">April</option>
-
-                  <option [ngValue]="5">May</option>
-
-                  <option [ngValue]="6">June</option>
-
-                  <option [ngValue]="7">July</option>
-
-                  <option [ngValue]="8">August</option>
-
-                  <option [ngValue]="9">September</option>
-
-                  <option [ngValue]="10">October</option>
-
-                  <option [ngValue]="11">November</option>
-
-                  <option [ngValue]="12">December</option>
-                </select>
-
-                <div class="user-error"
-                  *ngIf="recurringForm.get('month')?.touched && recurringForm.get('month')?.invalid">
-                  Month is required
-                </div>
-              </div>
-            </div>
+          
 
             <div class="user-form-col empty-column"></div>
             <div class="user-form-col empty-column"></div>
@@ -368,15 +367,21 @@
                 <select class="user-input user-select" formControlName="taskCatId">
                   <option [ngValue]="null">Select Task Category</option>
 
-                  <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
+                  <option
+                    *ngFor="let category of taskCategories"
+                    [ngValue]="category.taskcategoryId"
+                  >
                     {{ category.name }}
                   </option>
                 </select>
 
-                <div class="user-error" *ngIf="
+                <div
+                  class="user-error"
+                  *ngIf="
                     recurringForm.get('taskCatId')?.touched &&
                     recurringForm.get('taskCatId')?.invalid
-                  ">
+                  "
+                >
                   Task Category is required
                 </div>
               </div>

@@ -331,7 +331,7 @@
                   </span>
                 </td>
 
-                <td>
+                <!-- <td>
                   <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
                     (click)="openAssignUserModal(task)">
                     <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
@@ -340,35 +340,47 @@
                     </ng-container>
 
                     <ng-template #assignedBlock>
-                      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
+                     
                       {{ task.assignedToName }}
                       <span class="reassign-text" *ngIf="task.taskStatus === 1">
                         Re-assign
                       </span>
-                      <!-- <span class="reassign-text">Re-assign</span> -->
-                    </ng-template>
-                  </span>
-                </td>
-
-
-                <!-- <td>
-                  <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-                    (click)="
-      (!task.assignedToName || task.assignedToName === '0')
-        ? openAssignUserModal(task)
-        : null
-    ">
-                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
-                      <mat-icon class="assign-icon">person_add</mat-icon>
-                      Assign User
-                    </ng-container>
-
-                    <ng-template #assignedBlock>
-                      {{ task.assignedToName }}
+                      
                     </ng-template>
                   </span>
                 </td> -->
 
+                <td>
+  <span
+    class="wrap-text"
+    [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+    (click)="
+      (!task.assignedToName || task.assignedToName === '0' || task.taskStatus === 1)
+        && openAssignUserModal(task)
+    "
+  >
+
+    <ng-container
+      *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock"
+    >
+      <mat-icon class="assign-icon">person_add</mat-icon>
+      Assign User
+    </ng-container>
+
+    <ng-template #assignedBlock>
+      {{ task.assignedToName }}
+
+      <span
+        class="reassign-text"
+        *ngIf="task.taskStatus === 1"
+      >
+        Re-assign
+      </span>
+    </ng-template>
+
+  </span>
+</td>
+            
                 <!-- PRIORITY -->
                 <td>
 

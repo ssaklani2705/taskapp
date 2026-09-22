@@ -76,6 +76,7 @@ export class ManagerDashboard {
   statusIndex: number = 0;
   fromDate: Date | null = null;
   toDate: Date | null = null;
+  totalOutstanding = 0;
 
   search: string = '';
   loginType: any = '';
@@ -89,7 +90,7 @@ export class ManagerDashboard {
   pageSize = 20;
   pageIndex = 0;
 
-  searchText: any="";
+  searchText: any = '';
 
   designationName: any;
 
@@ -164,16 +165,13 @@ export class ManagerDashboard {
 
     this.userId = sessionStorage.getItem('userId');
 
-     this.designationName =
-  sessionStorage.getItem('designationName')?.trim() || '-';
+    this.designationName = sessionStorage.getItem('designationName')?.trim() || '-';
 
     this.loadFilterData();
     this.getTasks();
-    //this.getTaskCounts();
   }
 
   getTasks(): void {
-    
     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
 
     this.getTaskCounts();
@@ -187,6 +185,7 @@ export class ManagerDashboard {
           const taskList = response?.taskList || [];
 
           this.totalTasks = response?.totalTasks || 0;
+          this.totalOutstanding = response?.totalOutstanding || 0;
 
           this.tasks = taskList.map((task: any) => ({
             taskId: task.taskId,
@@ -205,6 +204,7 @@ export class ManagerDashboard {
           console.error('Error fetching tasks:', error);
           this.tasks = [];
           this.totalTasks = 0;
+          this.totalOutstanding = 0;
         },
       });
   }
@@ -233,7 +233,7 @@ export class ManagerDashboard {
   }
 
   getTaskCounts(): void {
-     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
+    const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
     // Active Tasks
     this.dataProvider.countOfActiveTask(clientId,this.userId).subscribe({
       next: (response: any) => {
@@ -518,7 +518,7 @@ export class ManagerDashboard {
         this.userId,
         taskStatusIds,
         this.loginType,
-        ""
+        '',
       )
       .subscribe({
         next: (response: any) => {
