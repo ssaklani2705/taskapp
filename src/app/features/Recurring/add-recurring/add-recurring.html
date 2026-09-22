@@ -66,12 +66,15 @@
                     </div>
 
                     <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">
+
                       No Client Found
+
                     </div>
+
                   </div>
+
                 </div>
-                <div class="user-error"
-                  *ngIf="recurringForm.get('clientId')?.touched && recurringForm.get('clientId')?.invalid">
+                <div class="user-error" *ngIf="recurringForm.get('clientId')?.touched && recurringForm.get('clientId')?.invalid">
                   Client Name is required
                 </div>
               </div>

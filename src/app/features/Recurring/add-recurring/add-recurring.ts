@@ -8,7 +8,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
@@ -38,6 +37,7 @@ export class AddRecurring implements OnInit {
   taskCategories: TaskCategory[] = [];
 
   dates: number[] = Array.from({ length: 28 }, (_, i) => i + 1);
+  monthlyDates: number[] = Array.from({ length: 28 }, (_, i) => i + 1);
 
   isEditMode = false;
   recurringId: number | null = null;
@@ -63,6 +63,7 @@ export class AddRecurring implements OnInit {
 
   loginType = '';
   isAdmin: any;
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.isAdmin = sessionStorage.getItem('isAdmin');
@@ -154,11 +155,11 @@ export class AddRecurring implements OnInit {
         this.taskCategories = response || [];
       },
 
-      error: (error) => {
-        console.error('Error fetching task categories:', error);
-        this.taskCategories = [];
-      },
-    });
+        error: (error) => {
+          console.error('Error fetching task categories:', error);
+          this.taskCategories = [];
+        },
+      });
   }
 
   private getRecurringById(recurringId: number): void {
@@ -215,6 +216,10 @@ export class AddRecurring implements OnInit {
         }
 
         this.updateTypeValidators(Number(recurring.type));
+
+        if (Number(recurring.type) === 4) {
+          this.onYearlyMonthChange();
+        }
 
         this.isLoading = false;
       },
@@ -378,6 +383,28 @@ export class AddRecurring implements OnInit {
 
     this.recurringForm.markAsPristine();
     this.recurringForm.markAsUntouched();
+  }
+
+  onYearlyMonthChange(): void {
+    const month = Number(this.recurringForm.get('month')?.value);
+
+    let maxDays = 28;
+
+    if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
+      maxDays = 31;
+    } else if ([4, 6, 9, 11].includes(month)) {
+      maxDays = 30;
+    }
+
+    this.dates = Array.from({ length: maxDays }, (_, i) => i + 1);
+
+    const selectedDate = Number(this.recurringForm.get('date')?.value);
+
+    // If the previously selected date doesn't exist in the new month,
+    // clear it.
+    if (selectedDate > maxDays) {
+      this.recurringForm.get('date')?.setValue(null);
+    }
   }
 
   backToIndexPage(): void {
