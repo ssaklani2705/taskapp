@@ -1934,7 +1934,9 @@ export class TaskIndex {
     const request = {
       taskId: this.selectedTask.taskId,
       note: this.taskNote.trim(),
-      userId: this.userId
+      userId: this.userId,
+      sendMail: this.sendMail,
+      isAdmin:this.isAdmin,
     };
 
     this.dataprovider.addTaskNote(request).subscribe({
@@ -1945,6 +1947,7 @@ export class TaskIndex {
 
         // Hide Add Note form after successful submit
         this.isAddingNote = false;
+        this.sendMail = false
 
         this.isSavingTaskNote = false;
 
@@ -2515,46 +2518,46 @@ export class TaskIndex {
 
   openAssignUserModal(task: any): void {
 
-  const currentAssignedUserId = Number(task.assignedTo || 0);
+    const currentAssignedUserId = Number(task.assignedTo || 0);
 
-  this.selectedAssignTask = {
-    ...task,
-    assignedTo: 0
-  };
+    this.selectedAssignTask = {
+      ...task,
+      assignedTo: 0
+    };
 
-  this.assignRemarks = '';
+    this.assignRemarks = '';
 
-  this.showAssignUserModal = true;
-  this.users = [];
+    this.showAssignUserModal = true;
+    this.users = [];
 
-  this.dataprovider.changesCategoryIdgetUserFilterData(
-    this.isAdmin,
-    this.userId,
-    this.loginType,
-    task.clientId,
-    task.taskCategoryId
-  ).subscribe({
-    next: (res: any) => {
+    this.dataprovider.changesCategoryIdgetUserFilterData(
+      this.isAdmin,
+      this.userId,
+      this.loginType,
+      task.clientId,
+      task.taskCategoryId
+    ).subscribe({
+      next: (res: any) => {
 
-      const data = res?.data || res;
+        const data = res?.data || res;
 
-      const allUsers = data?.assignedUsers || [];
+        const allUsers = data?.assignedUsers || [];
 
-      this.users = allUsers.filter(
-        (user: any) =>
-          Number(user.userId) !== currentAssignedUserId
-      );
+        this.users = allUsers.filter(
+          (user: any) =>
+            Number(user.userId) !== currentAssignedUserId
+        );
 
-      console.log('Current assigned user:', currentAssignedUserId);
-      console.log('Filtered users:', this.users);
-    },
+        console.log('Current assigned user:', currentAssignedUserId);
+        console.log('Filtered users:', this.users);
+      },
 
-    error: (error: any) => {
-      console.error('Error loading assigned users:', error);
-      this.users = [];
-    }
-  });
-}
+      error: (error: any) => {
+        console.error('Error loading assigned users:', error);
+        this.users = [];
+      }
+    });
+  }
 
 
   closeAssignUserModal(): void {
@@ -2564,82 +2567,82 @@ export class TaskIndex {
     this.users = [];
   }
 
- assignUser(): void {
+  assignUser(): void {
 
-  if (
-    !this.selectedAssignTask ||
-    !this.selectedAssignTask.assignedTo ||
-    this.selectedAssignTask.assignedTo == 0
-  ) {
-    return;
-  }
+    if (
+      !this.selectedAssignTask ||
+      !this.selectedAssignTask.assignedTo ||
+      this.selectedAssignTask.assignedTo == 0
+    ) {
+      return;
+    }
 
-  // Remarks required only when re-assigning an already-assigned task
-  if (
-    this.selectedAssignTask.taskStatus === 1 &&
-    !this.assignRemarks?.trim()
-  ) {
-    return;
-  }
+    // Remarks required only when re-assigning an already-assigned task
+    if (
+      this.selectedAssignTask.taskStatus === 1 &&
+      !this.assignRemarks?.trim()
+    ) {
+      return;
+    }
 
-  const taskId = this.selectedAssignTask.taskId;
-  const assignedTo = this.selectedAssignTask.assignedTo;
-  const remarks = this.assignRemarks?.trim() || '';
+    const taskId = this.selectedAssignTask.taskId;
+    const assignedTo = this.selectedAssignTask.assignedTo;
+    const remarks = this.assignRemarks?.trim() || '';
 
-  this.dataprovider.updateTaskAssignedUser(
-    taskId,
-    assignedTo,
-    this.userId,
-    remarks
-  ).subscribe({
-    next: (res: any) => {
+    this.dataprovider.updateTaskAssignedUser(
+      taskId,
+      assignedTo,
+      this.userId,
+      remarks
+    ).subscribe({
+      next: (res: any) => {
 
-      if (res?.success) {
+        if (res?.success) {
 
-        // Find selected user
-        const selectedUser = this.users.find(
-          (user: any) =>
-            user.userId == assignedTo
-        );
+          // Find selected user
+          const selectedUser = this.users.find(
+            (user: any) =>
+              user.userId == assignedTo
+          );
 
-        // Update original table task only after API success
-        const taskIndex = this.paginatedTasks.findIndex(
-          (task: any) =>
-            task.taskId == taskId
-        );
+          // Update original table task only after API success
+          const taskIndex = this.paginatedTasks.findIndex(
+            (task: any) =>
+              task.taskId == taskId
+          );
 
-        if (taskIndex !== -1) {
+          if (taskIndex !== -1) {
 
-          this.paginatedTasks[taskIndex].assignedTo =
-            assignedTo;
+            this.paginatedTasks[taskIndex].assignedTo =
+              assignedTo;
 
-          this.paginatedTasks[taskIndex].assignedToName =
-            selectedUser?.firstName || 'Unassigned User';
+            this.paginatedTasks[taskIndex].assignedToName =
+              selectedUser?.firstName || 'Unassigned User';
+          }
+
+          this.closeAssignUserModal();
+
+          // Optional: refresh table from backend
+          this.onSearch();
+
+        } else {
+
+          console.error(
+            'Failed to assign user:',
+            res?.message
+          );
         }
+      },
 
-        this.closeAssignUserModal();
-
-        // Optional: refresh table from backend
-        this.onSearch();
-
-      } else {
+      error: (error: any) => {
 
         console.error(
-          'Failed to assign user:',
-          res?.message
+          'Error assigning user:',
+          error
         );
       }
-    },
-
-    error: (error: any) => {
-
-      console.error(
-        'Error assigning user:',
-        error
-      );
-    }
-  });
-}
+    });
+  }
 
   onchangeloadUserDropdownData(task: any): void {
 
@@ -2691,18 +2694,8 @@ export class TaskIndex {
 
 
     if (selfAssigned) {
-
-      // For self-assigned tasks: only the manager can act when status is 4
-      // if (isManager  && task.taskStatus != 4 ) {
-      //   return true; // enabled — manager can open the modal
-      // }
-
-      // if (task.taskStatus == 4 && !isManager) {
-      //   return true; // disabled — no one else can open it at status 4
-      // }
-      return false; // any other status => self-assigned user can always change manager
+      return false;
     }
-
     return (
       (task.addedBy == this.userId &&
         (task.taskStatus == 1 || task.taskStatus == 3)) ||
@@ -2832,15 +2825,16 @@ export class TaskIndex {
 
   clearClientSearch(): void {
 
-  this.clientSearchText = '';
-  this.selectedClientId = 0;
-  this.selectedClient = '';
+    this.clientSearchText = '';
+    this.selectedClientId = 0;
+    this.selectedClient = '';
 
-  this.filteredClients = [];
-  this.showClientDropdown = false;
+    this.filteredClients = [];
+    this.showClientDropdown = false;
 
-  this.onSearch(); // Reload all records
-}
+    this.onSearch(); // Reload all records
+  }
+  sendMail: boolean = false;
 }
 
 

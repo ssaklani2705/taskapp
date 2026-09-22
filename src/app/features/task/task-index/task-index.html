@@ -516,6 +516,7 @@
           </div>
         </div>
       </div>
+
       <button type="button" class="modal-close-button" (click)="closeTaskNotesModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
@@ -526,6 +527,14 @@
       <div class="previous-notes-header">
         <div class="previous-notes-title">
           Previous Notes
+        </div>
+        <div  *ngIf="isAddingNote">
+
+          <label class="send-mail-checkbox">
+            <input type="checkbox" [checked]="sendMail"
+             (change)="sendMail = $any($event.target).checked"  />
+            Send Email Also
+          </label>
         </div>
         <!-- ADD NOTE BUTTON -->
         <button type="button" class="add-note-modal-button" *ngIf="!isAddingNote" (click)="startAddingNote()">
@@ -914,13 +923,8 @@
           <span class="required" *ngIf="selectedAssignTask?.taskStatus === 1">*</span>
         </label>
 
-        <textarea
-          class="user-input user-textarea"
-          [(ngModel)]="assignRemarks"
-          name="assignRemarksModal"
-          rows="3"
-          maxlength="2000"
-          placeholder="Enter remarks">
+        <textarea class="user-input user-textarea" [(ngModel)]="assignRemarks" name="assignRemarksModal" rows="3"
+          maxlength="2000" placeholder="Enter remarks">
         </textarea>
 
       </div>
@@ -935,14 +939,10 @@
         <span>Close</span>
       </button>
 
-      <button
-        type="button"
-        class="modal-save-button"
-        [disabled]="
+      <button type="button" class="modal-save-button" [disabled]="
           !selectedAssignTask?.assignedTo ||
           (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim())
-        "
-        (click)="assignUser()">
+        " (click)="assignUser()">
         <mat-icon>save</mat-icon>
         <span>{{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign' : 'Assign' }}</span>
       </button>
