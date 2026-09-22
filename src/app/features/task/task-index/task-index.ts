@@ -381,6 +381,8 @@ export class TaskIndex {
       }
       this.getTaskDetails();
     });
+
+    this.filteredClients = [...this.clients];
   }
 
   private restoreFilterState(): void {
@@ -403,7 +405,7 @@ export class TaskIndex {
           fromDate: qp.get('fromDate'),
           toDate: qp.get('toDate'),
           taskStatusId: qp.get('taskStatusIds') ? qp.get('taskStatusIds')!.split(',') : [],
-             dashboardFilter: qp.get('taskType')
+          dashboardFilter: qp.get('taskType')
         };
       }
     }
@@ -460,7 +462,7 @@ export class TaskIndex {
       ? stateData.taskStatusId.map((v: any) => String(v))
       : [];
     this.dashboardFilter =
-    stateData.dashboardFilter || '';
+      stateData.dashboardFilter || '';
     //
     if (Array.isArray(stateData.taskStatusId)) {
       this.selectedTaskStatuses = stateData.taskStatusId.map((v: any) => String(v));
@@ -557,21 +559,25 @@ export class TaskIndex {
       .subscribe({
 
         next: (response: any) => {
-          console.log(
-            'TASK FILTER DATA:',
-            response
-          );
-          this.clients =
-            response.clients || [];
-          this.taskCategories =
-            response.taskCategories || [];
 
+          this.clients = response.clients || [];
+          this.filteredClients = [...this.clients];
+
+          // Restore selected client name after page return
+          if (this.selectedClient) {
+
+            const selectedClientObj = this.clients.find(
+              (c: any) =>
+                String(c.clientId) === String(this.selectedClient)
+            );
+
+            if (selectedClientObj) {
+              this.clientSearchText = selectedClientObj.name;
+            }
+          }
           this.filterAvailableClients();
-
-
-
-          this.assignedUsers =
-            response.assignedUsers || [];
+          this.taskCategories = response.taskCategories || [];
+          this.assignedUsers = response.assignedUsers || [];
 
         },
         error: (error) => {
@@ -818,7 +824,7 @@ export class TaskIndex {
               this.selectedTaskStatuses.length
                 ? this.selectedTaskStatuses.join(',')
                 : null,
-                  taskType: this.dashboardFilter,
+            taskType: this.dashboardFilter,
 
 
           },
@@ -1002,8 +1008,8 @@ export class TaskIndex {
               this.selectedTaskStatuses.length
                 ? this.selectedTaskStatuses.join(',')
                 : null,
-                  taskType: this.dashboardFilter,
-                  
+            taskType: this.dashboardFilter,
+
 
 
 
@@ -1227,7 +1233,7 @@ export class TaskIndex {
           taskStatusIds: this.selectedTaskStatuses.length
             ? this.selectedTaskStatuses.join(',')
             : null,
-             taskType: this.dashboardFilter,
+          taskType: this.dashboardFilter,
         },
 
         state: {
@@ -1242,7 +1248,7 @@ export class TaskIndex {
           fromDate: this.formatDateForApi(this.fromDate),
           toDate: this.formatDateForApi(this.toDate),
           taskStatusIds: this.selectedTaskStatuses,
-          taskType:this.dashboardFilter
+          taskType: this.dashboardFilter
         }
       }
 
@@ -1295,7 +1301,7 @@ export class TaskIndex {
           taskStatusIds: this.selectedTaskStatuses.length
             ? this.selectedTaskStatuses.join(',')
             : null,
-            taskType: this.dashboardFilter,
+          taskType: this.dashboardFilter,
         },
 
         state: {
@@ -1354,7 +1360,7 @@ export class TaskIndex {
           taskStatusIds: this.selectedTaskStatuses.length
             ? this.selectedTaskStatuses.join(',')
             : null,
-             taskType: this.dashboardFilter,
+          taskType: this.dashboardFilter,
 
         },
 
@@ -1370,7 +1376,7 @@ export class TaskIndex {
           fromDate: this.formatDateForApi(this.fromDate),
           toDate: this.formatDateForApi(this.toDate),
           taskStatusIds: this.selectedTaskStatuses,
-           taskType: this.dashboardFilter,
+          taskType: this.dashboardFilter,
 
         }
       }
@@ -1673,6 +1679,8 @@ export class TaskIndex {
 
     // Clear dropdown filters
     this.selectedClient = '';
+    this.clientSearchText = '';
+    this.filteredClients = [...this.clients];
     this.selectedTaskCategory = '';
     this.selectedAssignedTo = '';
     this.selectedPriority = '';
@@ -2021,7 +2029,7 @@ export class TaskIndex {
     this.selectedTaskStatusIdForCondition = taskObject.taskStatus;
 
 
-// this. selectedTaskStatusId= taskObject.taskStatus;
+    // this. selectedTaskStatusId= taskObject.taskStatus;
     this.task = {
       taskId: taskObject.taskId,
       managerId: taskObject.managerId,
@@ -2552,46 +2560,46 @@ export class TaskIndex {
   //   });
   // }
 
-openAssignUserModal(task: any): void {
+  openAssignUserModal(task: any): void {
 
-  const currentAssignedUserId = Number(task.assignedTo || 0);
+    const currentAssignedUserId = Number(task.assignedTo || 0);
 
-  this.selectedAssignTask = {
-    ...task,
-    assignedTo: 0
-  };
+    this.selectedAssignTask = {
+      ...task,
+      assignedTo: 0
+    };
 
-  this.showAssignUserModal = true;
-  this.users = [];
+    this.showAssignUserModal = true;
+    this.users = [];
 
-  this.dataprovider.changesCategoryIdgetUserFilterData(
-    this.isAdmin,
-    this.userId,
-    this.loginType,
-    task.clientId,
-    task.taskCategoryId
-  ).subscribe({
-    next: (res: any) => {
+    this.dataprovider.changesCategoryIdgetUserFilterData(
+      this.isAdmin,
+      this.userId,
+      this.loginType,
+      task.clientId,
+      task.taskCategoryId
+    ).subscribe({
+      next: (res: any) => {
 
-      const data = res?.data || res;
+        const data = res?.data || res;
 
-      const allUsers = data?.assignedUsers || [];
+        const allUsers = data?.assignedUsers || [];
 
-      this.users = allUsers.filter(
-        (user: any) =>
-          Number(user.userId) !== currentAssignedUserId
-      );
+        this.users = allUsers.filter(
+          (user: any) =>
+            Number(user.userId) !== currentAssignedUserId
+        );
 
-      console.log('Current assigned user:', currentAssignedUserId);
-      console.log('Filtered users:', this.users);
-    },
+        console.log('Current assigned user:', currentAssignedUserId);
+        console.log('Filtered users:', this.users);
+      },
 
-    error: (error: any) => {
-      console.error('Error loading assigned users:', error);
-      this.users = [];
-    }
-  });
-}
+      error: (error: any) => {
+        console.error('Error loading assigned users:', error);
+        this.users = [];
+      }
+    });
+  }
 
 
 
@@ -2785,17 +2793,77 @@ openAssignUserModal(task: any): void {
   }
 
   removeZipFile(fileInput: HTMLInputElement): void {
-  this.fileOne = null;
-  this.fileOneName = '';
-  fileInput.value = '';
-}
+    this.fileOne = null;
+    this.fileOneName = '';
+    fileInput.value = '';
+  }
 
-removeNormalFile(fileInput: HTMLInputElement): void {
-  this.fileTwo = null;
-  this.fileTwoName = '';
-  fileInput.value = '';
-}
+  removeNormalFile(fileInput: HTMLInputElement): void {
+    this.fileTwo = null;
+    this.fileTwoName = '';
+    fileInput.value = '';
+  }
 
+
+  clientSearchText: string = '';
+  showClientDropdown: boolean = false;
+
+  selectedClientId: number = 0;
+
+  // filteredClients: any[] = [];
+
+
+
+  filterClients(): void {
+
+    const search = this.clientSearchText
+      .toLowerCase()
+      .trim();
+
+    if (search.length < 3) {
+      this.showClientDropdown = false;
+      this.filteredClients = [];
+      return;
+    }
+
+    this.filteredClients = this.clients.filter(
+      (client: any) =>
+        client.name &&
+        client.name.toLowerCase().includes(search)
+    );
+
+    this.showClientDropdown = true;
+
+    // If search is cleared, reset client filter
+    if (!search) {
+
+      this.selectedClient = '';
+
+      this.filteredClients = [...this.clients];
+    }
+  }
+
+  selectClient(client: any): void {
+
+    this.clientSearchText = client.name;
+
+    // This is the value used by your filters/API
+    this.selectedClient = String(client.clientId);
+
+    this.showClientDropdown = false;
+
+    // Load data immediately
+    this.onSearch();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick2(event: Event): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.client-dropdown-container')) {
+      this.showClientDropdown = false;
+    }
+  }
 }
 
 

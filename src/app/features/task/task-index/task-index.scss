@@ -1957,7 +1957,7 @@ button.btn-add-user .plus-icon {
   width: 100%;
 }
 
-.modal-body .manager-form-group + .manager-form-group {
+.modal-body .manager-form-group+.manager-form-group {
   margin-top: 17px;
 }
 
@@ -2481,8 +2481,13 @@ textarea.manager-select::placeholder {
   ========================================================= */
 
 @keyframes modalOverlayIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes modalIn {
@@ -2490,6 +2495,7 @@ textarea.manager-select::placeholder {
     opacity: 0;
     transform: translateY(-8px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -2513,6 +2519,7 @@ textarea.manager-select::placeholder {
   ========================================================= */
 
 @media (max-width: 1400px) {
+
   .page-content,
   .user-page-wrapper {
     padding: 20px 24px;
@@ -2525,6 +2532,7 @@ textarea.manager-select::placeholder {
   ========================================================= */
 
 @media (max-width: 1200px) {
+
   .page-content,
   .user-page-wrapper {
     padding: 18px;
@@ -2614,6 +2622,7 @@ textarea.manager-select::placeholder {
   ========================================================= */
 
 @media (max-width: 767px) {
+
   .page-content,
   .user-page-wrapper {
     padding: 10px;
@@ -2833,6 +2842,7 @@ textarea.manager-select::placeholder {
   ========================================================= */
 
 @media (max-width: 480px) {
+
   .page-content,
   .user-page-wrapper {
     padding: 7px;
@@ -2914,6 +2924,7 @@ textarea.manager-select::placeholder {
   ========================================================= */
 
 @media (max-width: 375px) {
+
   .page-content,
   .user-page-wrapper {
     padding: 5px;
@@ -3086,8 +3097,14 @@ textarea.manager-select::placeholder {
   background: #fde8e8;
   border: 1px solid #f5b5b5;
 
-  .due-date-row, .due-time-row { color: #c0392b; }
-  .due-icon { color: #e74c3c; }
+  .due-date-row,
+  .due-time-row {
+    color: #c0392b;
+  }
+
+  .due-icon {
+    color: #e74c3c;
+  }
 }
 
 /* DUE TODAY — orange/amber */
@@ -3095,8 +3112,14 @@ textarea.manager-select::placeholder {
   background: #fff4e0;
   border: 1px solid #ffd699;
 
-  .due-date-row, .due-time-row { color: #b8620a; }
-  .due-icon { color: #f39c12; }
+  .due-date-row,
+  .due-time-row {
+    color: #b8620a;
+  }
+
+  .due-icon {
+    color: #f39c12;
+  }
 }
 
 /* UPCOMING — blue */
@@ -3104,8 +3127,14 @@ textarea.manager-select::placeholder {
   background: #e8f4fd;
   border: 1px solid #a9d6f5;
 
-  .due-date-row, .due-time-row { color: #1565c0; }
-  .due-icon { color: #2196f3; }
+  .due-date-row,
+  .due-time-row {
+    color: #1565c0;
+  }
+
+  .due-icon {
+    color: #2196f3;
+  }
 }
 
 //FOr start date
@@ -3160,9 +3189,9 @@ textarea.manager-select::placeholder {
 .title-text {
   flex: 1;
   min-width: 0;
-  white-space: normal;      // allow wrapping instead of truncating
-  word-break: break-word;   // wrap long words if needed
-  overflow: visible;        // show full text, no clipping
+  white-space: normal; // allow wrapping instead of truncating
+  word-break: break-word; // wrap long words if needed
+  overflow: visible; // show full text, no clipping
   font-size: 13px;
   font-weight: 600;
   color: #1f2937;
@@ -3219,21 +3248,72 @@ textarea.manager-select::placeholder {
   transform: none;
 }
 
-
-.reassign-text {
-  display: inline-block;
-  margin-left: 8px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background-color: #e3f2fd;
-  color: #1976d2;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
+.client-dropdown-container {
+  position: relative;
+  width: 100%;
+  max-width: 280px;
 }
 
-.reassign-text:hover {
-  background-color: #1976d2;
-  color: #fff;
+.client-search-input {
+  width: 90%;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  outline: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.client-search-input:focus {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+}
+
+.client-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: #fff;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.client-dropdown-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.client-dropdown-item:hover {
+  background: #f5f9ff;
+  color: #1976d2;
+}
+
+.client-dropdown-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.client-dropdown-list::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 10px;
+}
+
+.no-client-found {
+  color: #6c757d;
+  // text-align: center;
+  cursor: default;
+  // font-style: italic;
+  padding: 12px;
+}
+
+.no-client-found:hover {
+  background: transparent;
 }

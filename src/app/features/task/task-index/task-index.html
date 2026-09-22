@@ -31,15 +31,26 @@
             </div>
           </div>
           <!-- CLIENT -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
-              <option value="">
-                --All Clients--
-              </option>
-              <option *ngFor="let client of filteredClients" [value]="client.clientId">
+          <div class="client-dropdown-container">
+
+            <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText"
+              (input)="filterClients()" (focus)="showClientDropdown = true" />
+
+            <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
+
+              <!-- <div class="client-dropdown-item"
+                (click)="selectedClient=''; clientSearchText=''; showClientDropdown=false; onSearch()">
+                -- All Clients --
+              </div> -->
+
+              <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
                 {{ client.name }}
-              </option>
-            </select>
+              </div>
+              <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">
+                No Client Found
+              </div>
+            </div>
+
           </div>
           <!-- TASK CATEGORY -->
           <div class="status-wrapper">
@@ -328,26 +339,21 @@
                   </span>
                 </td>
 
-<td>
-  <span
-    class="wrap-text"
-    [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-    (click)="openAssignUserModal(task)"
-  >
-    <ng-container
-      *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock"
-    >
-      <mat-icon class="assign-icon">person_add</mat-icon>
-      Assign User
-    </ng-container>
+                <td>
+                  <span class="wrap-text" [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+                    (click)="openAssignUserModal(task)">
+                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+                      <mat-icon class="assign-icon">person_add</mat-icon>
+                      Assign User
+                    </ng-container>
 
-    <ng-template #assignedBlock>
-      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
-      {{ task.assignedToName }}
-      <span class="reassign-text">Re-assign</span>
-    </ng-template>
-  </span>
-</td>
+                    <ng-template #assignedBlock>
+                      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
+                      {{ task.assignedToName }}
+                      <span class="reassign-text">Re-assign</span>
+                    </ng-template>
+                  </span>
+                </td>
 
 
                 <!-- <td>
@@ -710,17 +716,18 @@
           File
         </label>
 
-        <input type="file" #normalFileInput class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+        <input type="file" #normalFileInput class="manager-select" [disabled]="isChangingManager"
+          (change)="onFileTwoSelected($event)" />
 
         <div class="file-info" *ngIf="fileTwoName">
-        <span class="current-manager-name" >
-          {{ fileTwoName }}
-        </span>
-        <button type="button" class="remove-file-btn" (click)="removeNormalFile(normalFileInput)" title="Remove File">
+          <span class="current-manager-name">
+            {{ fileTwoName }}
+          </span>
+          <button type="button" class="remove-file-btn" (click)="removeNormalFile(normalFileInput)" title="Remove File">
 
-          <mat-icon>close</mat-icon>
+            <mat-icon>close</mat-icon>
 
-        </button>
+          </button>
         </div>
       </div>
 
@@ -735,27 +742,19 @@
         <input type="file" class="manager-select" #zipFileInput accept=".zip" [disabled]="isChangingManager"
           (change)="onFileOneSelected($event)" />
 
-          <div class="file-info" *ngIf="fileOneName">
-        <span class="current-manager-name" >
-          {{ fileOneName }}
-        </span>
+        <div class="file-info" *ngIf="fileOneName">
+          <span class="current-manager-name">
+            {{ fileOneName }}
+          </span>
 
-        <button type="button" class="remove-file-btn" (click)="removeZipFile(zipFileInput)" title="Remove ZIP">
+          <button type="button" class="remove-file-btn" (click)="removeZipFile(zipFileInput)" title="Remove ZIP">
 
-          <mat-icon>close</mat-icon>
+            <mat-icon>close</mat-icon>
 
-        </button>
+          </button>
         </div>
 
-
       </div>
-
-
-
-
-
-
-
     </div>
 
     <div class="modal-footer">
@@ -775,7 +774,6 @@
     </div>
   </div>
 </div>
-
 
 <!-- DESCRIPTION MODAL -->
 <div class="modal-overlay" *ngIf="showDescriptionModal" (click)="closeDescriptionModal()">
