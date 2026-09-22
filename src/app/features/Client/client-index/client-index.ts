@@ -86,7 +86,7 @@ export class ClientIndex {
   currentPage = 1;
   page = 0;
   // size = 5;
-  
+
   totalRecords = 0;
   totalPages = 1;
 
@@ -95,10 +95,8 @@ export class ClientIndex {
 
   isPanelVisible = true;
 
-    recordsPerPage: number =
-      environment.recordsPerPage;
-    size: number =
-      environment.size;
+  recordsPerPage: number = environment.recordsPerPage;
+  size: number = environment.size;
 
   addPer: string = 'N';
   editPer: string = 'N';
@@ -441,8 +439,8 @@ export class ClientIndex {
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it',
       customClass: {
-    popup: 'small-confirm-popup'
-  }
+        popup: 'small-confirm-popup',
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         this.dataprovider.deleteClient(clientId, this.userId).subscribe({
@@ -850,13 +848,13 @@ export class ClientIndex {
             Pincode: client.pincode || '',
             'Contact Name': client.contactName || '',
             'Contact Email': client.contactEmail || '',
-            'Contact Person 1 Name': client.name1 || '',
-            'Contact Person 1 Email': client.emailId1 || '',
-            'Contact Person 2 Name': client.name2 || '',
-            'Contact Person 2 Email': client.emailId2 || '',
-            'Contact Person 3 Name': client.name3 || '',
-            'Contact Person 3 Email': client.emailId3 || '',
-            Emails: client.emails || '',
+            'Chairman’s Name': client.name1 || '',
+            'Chairman’s Email ID': client.emailId1 || '',
+            'Secretary’s Name': client.name2 || '',
+            'Secretary’s Email ID': client.emailId2 || '',
+            'Treasurer’s Name': client.name3 || '',
+            'Treasurer’s Email ID': client.emailId3 || '',
+            'CC Email': client.emails || '',
             'Start Date': client.startDate || '',
             Plan: client.planName || '',
             Outstanding: client.outstanding ?? '',

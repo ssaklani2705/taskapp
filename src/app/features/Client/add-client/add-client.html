@@ -10,7 +10,7 @@
 
       <div class="user-actions">
         <button type="button" class="back-index-btn" (click)="backToIndexPage()">
-           <mat-icon>arrow_back</mat-icon>
+          <mat-icon>arrow_back</mat-icon>
           Back to Index
         </button>
       </div>
@@ -432,7 +432,7 @@
               <!-- Contact Person 1 Name -->
               <div class="user-form-col">
                 <div class="user-form-group">
-                  <label class="user-label"> Contact Person 1 Name </label>
+                  <label class="user-label"> Chairman’s Name </label>
 
                   <input type="text" class="user-input" formControlName="name1" maxlength="200" />
                 </div>
@@ -441,7 +441,7 @@
               <!-- Contact Person 1 Email -->
               <div class="user-form-col">
                 <div class="user-form-group">
-                  <label class="user-label"> Contact Person 1 Email </label>
+                  <label class="user-label"> Chairman’s Email ID </label>
 
                   <input
                     type="email"
@@ -468,7 +468,7 @@
               <!-- Contact Person 2 Name -->
               <div class="user-form-col">
                 <div class="user-form-group">
-                  <label class="user-label"> Contact Person 2 Name </label>
+                  <label class="user-label"> Secretary’s Name </label>
 
                   <input type="text" class="user-input" formControlName="name2" maxlength="200" />
                 </div>
@@ -477,7 +477,7 @@
               <!-- Contact Person 2 Email -->
               <div class="user-form-col">
                 <div class="user-form-group">
-                  <label class="user-label"> Contact Person 2 Email </label>
+                  <label class="user-label"> Secretary’s Email ID </label>
 
                   <input
                     type="email"
@@ -501,7 +501,7 @@
               <!-- Contact Person 3 Name -->
               <div class="user-form-col">
                 <div class="user-form-group">
-                  <label class="user-label"> Contact Person 3 Name </label>
+                  <label class="user-label"> Treasurer’s Name </label>
 
                   <input type="text" class="user-input" formControlName="name3" maxlength="200" />
                 </div>
@@ -510,7 +510,7 @@
               <!-- Contact Person 3 Email -->
               <div class="user-form-col">
                 <div class="user-form-group">
-                  <label class="user-label"> Contact Person 3 Email </label>
+                  <label class="user-label"> Treasurer’s Email ID </label>
 
                   <input
                     type="email"
@@ -537,7 +537,7 @@
               <!-- Emails -->
               <div class="user-form-col">
                 <div class="user-form-group">
-                  <label class="user-label"> Other Emails </label>
+                  <label class="user-label"> CC Email </label>
                   <input
                     type="text"
                     class="user-input"
@@ -564,7 +564,7 @@
             <!-- ROW 9 -->
             <div class="user-form-row">
               <!-- Start Date -->
-              <!-- <div class="user-form-col">
+              <div class="user-form-col">
                 <div class="user-form-group">
                   <label class="user-label">
                     Start Date
@@ -586,7 +586,12 @@
                       autocomplete="off"
                     />
 
-                    <mat-datepicker #startDatePicker [startAt]="minDate"></mat-datepicker>
+                    <mat-datepicker
+                      #startDatePicker
+                      [startAt]="minDate"
+                      panelClass="user-date-datepicker"
+                    >
+                    </mat-datepicker>
                   </div>
 
                   <div
@@ -599,55 +604,7 @@
                     Start Date is required
                   </div>
                 </div>
-              </div> -->
-
-              <div class="user-form-col">
-  <div class="user-form-group">
-
-    <label class="user-label">
-      Start Date
-      <span class="required">*</span>
-    </label>
-
-    <div class="user-date-group">
-
-      <span
-        class="user-date-icon"
-        (click)="startDatePicker.open()"
-      >
-        <i class="fa fa-calendar"></i>
-      </span>
-
-      <input
-        matInput
-        #startDatePickerInput
-        [matDatepicker]="startDatePicker"
-        class="user-input user-date-input"
-        placeholder="DD-MM-YYYY"
-        formControlName="startDate"
-        autocomplete="off"
-      />
-
-      <mat-datepicker
-        #startDatePicker
-        [startAt]="minDate"
-        panelClass="user-date-datepicker">
-      </mat-datepicker>
-
-    </div>
-
-    <div
-      class="user-error"
-      *ngIf="
-        clientForm.get('startDate')?.touched &&
-        clientForm.get('startDate')?.errors?.['required']
-      "
-    >
-      Start Date is required
-    </div>
-
-  </div>
-</div>
+              </div>
 
               <!-- Plan -->
               <div class="user-form-col">

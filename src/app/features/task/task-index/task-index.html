@@ -347,19 +347,16 @@
                       Assign User
                     </ng-container>
 
-    <ng-template #assignedBlock>
-      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
-      {{ task.assignedToName }}
-        <span
-        class="reassign-text"
-        *ngIf="task.taskStatus === 1"
-      >
-        Re-assign
-      </span>
-      <!-- <span class="reassign-text">Re-assign</span> -->
-    </ng-template>
-  </span>
-</td>
+                    <ng-template #assignedBlock>
+                      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
+                      {{ task.assignedToName }}
+                      <span class="reassign-text" *ngIf="task.taskStatus === 1">
+                        Re-assign
+                      </span>
+                      <!-- <span class="reassign-text">Re-assign</span> -->
+                    </ng-template>
+                  </span>
+                </td>
 
 
                 <!-- <td>
@@ -859,6 +856,7 @@
 
 
 <!-- ASSIGN USER MODAL -->
+<!-- ASSIGN USER MODAL -->
 <div class="modal-overlay" *ngIf="showAssignUserModal" (click)="closeAssignUserModal()">
   <div class="change-manager-modal description-modal" (click)="$event.stopPropagation()">
 
@@ -874,7 +872,7 @@
         <div>
 
           <div class="modal-title-text">
-            Assign User
+            {{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign User' : 'Assign User' }}
           </div>
 
           <div class="modal-subtitle">
@@ -908,12 +906,30 @@
             Select User
           </option>
 
-
           <option *ngFor="let user of users" [ngValue]="user.userId">
             {{ user.firstName }}
           </option>
 
         </select>
+
+      </div>
+
+      <!-- REMARKS -->
+      <div class="manager-form-group">
+
+        <label class="modal-field-label">
+          Remarks
+          <span class="required" *ngIf="selectedAssignTask?.taskStatus === 1">*</span>
+        </label>
+
+        <textarea
+          class="user-input user-textarea"
+          [(ngModel)]="assignRemarks"
+          name="assignRemarksModal"
+          rows="3"
+          maxlength="2000"
+          placeholder="Enter remarks">
+        </textarea>
 
       </div>
 
@@ -927,10 +943,16 @@
         <span>Close</span>
       </button>
 
-      <button type="button" class="modal-save-button" [disabled]="!selectedAssignTask?.assignedTo"
+      <button
+        type="button"
+        class="modal-save-button"
+        [disabled]="
+          !selectedAssignTask?.assignedTo ||
+          (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim())
+        "
         (click)="assignUser()">
         <mat-icon>save</mat-icon>
-        <span>Assign</span>
+        <span>{{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign' : 'Assign' }}</span>
       </button>
 
     </div>

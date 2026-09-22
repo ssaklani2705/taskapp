@@ -1225,6 +1225,12 @@ export class AddIndexComponent implements OnInit {
   }
 
   onClientChange(clientId: number | null): void {
+    this.task.taskCategoryId = null;
+  this.task.assignedTo = null;
+
+  this.taskCategories = [];
+  this.users = [];
+  
     if (!clientId) {
       this.task.assignedTo = null;
     }

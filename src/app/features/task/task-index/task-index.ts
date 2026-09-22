@@ -2509,172 +2509,137 @@ export class TaskIndex {
   //Assign To Model
   showAssignUserModal = false;
   selectedAssignTask: any = null;
-  // userId: any;
-  // isAdmin: any;
-  // loginType: any = '';
+  assignRemarks: string = '';
   users: any[] = [];
 
-  // openAssignUserModal(task: any): void {
-
-  //   // Create a copy so table data is not changed
-  //   // until user clicks Assign
-  //   this.selectedAssignTask = {
-  //     ...task
-  //   };
-
-  //   // Show "Select User" when task is unassigned
-  //   if (
-  //     this.selectedAssignTask.assignedTo === null ||
-  //     this.selectedAssignTask.assignedTo === undefined
-  //   ) {
-  //     this.selectedAssignTask.assignedTo = 0;
-  //   }
-
-  //   this.showAssignUserModal = true;
-
-  //   this.users = [];
-
-  //   this.dataprovider.changesCategoryIdgetUserFilterData(
-  //     this.isAdmin,
-  //     this.userId,
-  //     this.loginType,
-  //     task.clientId,
-  //     task.taskCategoryId
-  //   ).subscribe({
-  //     next: (res: any) => {
-
-  //       const data = res?.data || res;
-
-  //       this.users = data?.assignedUsers || [];
-
-  //     },
-  //     error: (error: any) => {
-
-  //       console.error(
-  //         'Error loading assigned users:',
-  //         error
-  //       );
-
-  //       this.users = [];
-  //     }
-  //   });
-  // }
 
   openAssignUserModal(task: any): void {
 
-    const currentAssignedUserId = Number(task.assignedTo || 0);
+  const currentAssignedUserId = Number(task.assignedTo || 0);
 
-    this.selectedAssignTask = {
-      ...task,
-      assignedTo: 0
-    };
+  this.selectedAssignTask = {
+    ...task,
+    assignedTo: 0
+  };
 
-    this.showAssignUserModal = true;
-    this.users = [];
+  this.assignRemarks = '';
 
-    this.dataprovider.changesCategoryIdgetUserFilterData(
-      this.isAdmin,
-      this.userId,
-      this.loginType,
-      task.clientId,
-      task.taskCategoryId
-    ).subscribe({
-      next: (res: any) => {
+  this.showAssignUserModal = true;
+  this.users = [];
 
-        const data = res?.data || res;
+  this.dataprovider.changesCategoryIdgetUserFilterData(
+    this.isAdmin,
+    this.userId,
+    this.loginType,
+    task.clientId,
+    task.taskCategoryId
+  ).subscribe({
+    next: (res: any) => {
 
-        const allUsers = data?.assignedUsers || [];
+      const data = res?.data || res;
 
-        this.users = allUsers.filter(
-          (user: any) =>
-            Number(user.userId) !== currentAssignedUserId
-        );
+      const allUsers = data?.assignedUsers || [];
 
-        console.log('Current assigned user:', currentAssignedUserId);
-        console.log('Filtered users:', this.users);
-      },
+      this.users = allUsers.filter(
+        (user: any) =>
+          Number(user.userId) !== currentAssignedUserId
+      );
 
-      error: (error: any) => {
-        console.error('Error loading assigned users:', error);
-        this.users = [];
-      }
-    });
-  }
+      console.log('Current assigned user:', currentAssignedUserId);
+      console.log('Filtered users:', this.users);
+    },
 
+    error: (error: any) => {
+      console.error('Error loading assigned users:', error);
+      this.users = [];
+    }
+  });
+}
 
 
   closeAssignUserModal(): void {
     this.showAssignUserModal = false;
     this.selectedAssignTask = null;
+    this.assignRemarks = '';
     this.users = [];
   }
 
-  assignUser(): void {
+ assignUser(): void {
 
-    if (
-      !this.selectedAssignTask ||
-      !this.selectedAssignTask.assignedTo ||
-      this.selectedAssignTask.assignedTo == 0
-    ) {
-      return;
-    }
+  if (
+    !this.selectedAssignTask ||
+    !this.selectedAssignTask.assignedTo ||
+    this.selectedAssignTask.assignedTo == 0
+  ) {
+    return;
+  }
 
-    const taskId = this.selectedAssignTask.taskId;
-    const assignedTo = this.selectedAssignTask.assignedTo;
+  // Remarks required only when re-assigning an already-assigned task
+  if (
+    this.selectedAssignTask.taskStatus === 1 &&
+    !this.assignRemarks?.trim()
+  ) {
+    return;
+  }
 
-    this.dataprovider.updateTaskAssignedUser(
-      taskId,
-      assignedTo,
-      this.userId
-    ).subscribe({
-      next: (res: any) => {
+  const taskId = this.selectedAssignTask.taskId;
+  const assignedTo = this.selectedAssignTask.assignedTo;
+  const remarks = this.assignRemarks?.trim() || '';
 
-        if (res?.success) {
+  this.dataprovider.updateTaskAssignedUser(
+    taskId,
+    assignedTo,
+    this.userId,
+    remarks
+  ).subscribe({
+    next: (res: any) => {
 
-          // Find selected user
-          const selectedUser = this.users.find(
-            (user: any) =>
-              user.userId == assignedTo
-          );
+      if (res?.success) {
 
-          // Update original table task only after API success
-          const taskIndex = this.paginatedTasks.findIndex(
-            (task: any) =>
-              task.taskId == taskId
-          );
+        // Find selected user
+        const selectedUser = this.users.find(
+          (user: any) =>
+            user.userId == assignedTo
+        );
 
-          if (taskIndex !== -1) {
+        // Update original table task only after API success
+        const taskIndex = this.paginatedTasks.findIndex(
+          (task: any) =>
+            task.taskId == taskId
+        );
 
-            this.paginatedTasks[taskIndex].assignedTo =
-              assignedTo;
+        if (taskIndex !== -1) {
 
-            this.paginatedTasks[taskIndex].assignedToName =
-              selectedUser?.firstName || 'Unassigned User';
-          }
+          this.paginatedTasks[taskIndex].assignedTo =
+            assignedTo;
 
-          this.closeAssignUserModal();
-
-          // Optional: refresh table from backend
-          this.onSearch();
-
-        } else {
-
-          console.error(
-            'Failed to assign user:',
-            res?.message
-          );
+          this.paginatedTasks[taskIndex].assignedToName =
+            selectedUser?.firstName || 'Unassigned User';
         }
-      },
 
-      error: (error: any) => {
+        this.closeAssignUserModal();
+
+        // Optional: refresh table from backend
+        this.onSearch();
+
+      } else {
 
         console.error(
-          'Error assigning user:',
-          error
+          'Failed to assign user:',
+          res?.message
         );
       }
-    });
-  }
+    },
+
+    error: (error: any) => {
+
+      console.error(
+        'Error assigning user:',
+        error
+      );
+    }
+  });
+}
 
   onchangeloadUserDropdownData(task: any): void {
 

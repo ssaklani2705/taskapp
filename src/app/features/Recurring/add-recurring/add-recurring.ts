@@ -8,7 +8,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
@@ -27,7 +26,7 @@ interface TaskCategory {
 @Component({
   selector: 'app-add-recurring',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule,MatIconModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule],
   templateUrl: './add-recurring.html',
   styleUrl: './add-recurring.scss',
 })
@@ -38,6 +37,7 @@ export class AddRecurring implements OnInit {
   taskCategories: TaskCategory[] = [];
 
   dates: number[] = Array.from({ length: 28 }, (_, i) => i + 1);
+  monthlyDates: number[] = Array.from({ length: 28 }, (_, i) => i + 1);
 
   isEditMode = false;
   recurringId: number | null = null;
@@ -60,11 +60,13 @@ export class AddRecurring implements OnInit {
 
   loginType = '';
   isAdmin: any;
+
   ngOnInit(): void {
-     if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       this.isAdmin = sessionStorage.getItem('isAdmin');
       this.loginType = sessionStorage.getItem('loginType') || 'other';
-     }
+    }
+
     this.initializeForm();
     this.getUserId();
     this.checkEditMode();
@@ -83,7 +85,7 @@ export class AddRecurring implements OnInit {
       date: [null],
       month: [null],
       taskCatId: [null, Validators.required],
-         priority: [null, Validators.required],
+      priority: [null, Validators.required],
       status: [1],
     });
 
@@ -117,7 +119,7 @@ export class AddRecurring implements OnInit {
   }
 
   private loadClients(): void {
-    this.dataprovider.getRecurringClients(this.userId,this.isAdmin,this.loginType).subscribe({
+    this.dataprovider.getRecurringClients(this.userId, this.isAdmin, this.loginType).subscribe({
       next: (response: any) => {
         this.clients = response || [];
 
@@ -132,16 +134,18 @@ export class AddRecurring implements OnInit {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId,this.isAdmin,this.loginType).subscribe({
-      next: (response: any) => {
-        this.taskCategories = response || [];
-      },
+    this.dataprovider
+      .getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType)
+      .subscribe({
+        next: (response: any) => {
+          this.taskCategories = response || [];
+        },
 
-      error: (error) => {
-        console.error('Error fetching task categories:', error);
-        this.taskCategories = [];
-      },
-    });
+        error: (error) => {
+          console.error('Error fetching task categories:', error);
+          this.taskCategories = [];
+        },
+      });
   }
 
   private getRecurringById(recurringId: number): void {
@@ -180,9 +184,9 @@ export class AddRecurring implements OnInit {
               : null,
           taskCatId: recurring.taskCatId,
           priority:
-  recurring.priority !== null && recurring.priority !== undefined
-    ? Number(recurring.priority)
-    : null,
+            recurring.priority !== null && recurring.priority !== undefined
+              ? Number(recurring.priority)
+              : null,
           status:
             recurring.status !== null && recurring.status !== undefined
               ? Number(recurring.status)
@@ -190,6 +194,10 @@ export class AddRecurring implements OnInit {
         });
 
         this.updateTypeValidators(Number(recurring.type));
+
+        if (Number(recurring.type) === 4) {
+          this.onYearlyMonthChange();
+        }
 
         this.isLoading = false;
       },
@@ -275,7 +283,7 @@ export class AddRecurring implements OnInit {
       date: formValue.date !== null && formValue.date !== '' ? Number(formValue.date) : null,
       month: formValue.month !== null && formValue.month !== '' ? Number(formValue.month) : null,
       taskCatId: Number(formValue.taskCatId),
-       priority: Number(formValue.priority),
+      priority: Number(formValue.priority),
       status: this.isEditMode ? Number(formValue.status) : 1,
     };
 
@@ -345,7 +353,7 @@ export class AddRecurring implements OnInit {
       date: null,
       month: null,
       taskCatId: null,
-       priority: null,
+      priority: null,
       status: 1,
     });
 
@@ -353,6 +361,28 @@ export class AddRecurring implements OnInit {
 
     this.recurringForm.markAsPristine();
     this.recurringForm.markAsUntouched();
+  }
+
+  onYearlyMonthChange(): void {
+    const month = Number(this.recurringForm.get('month')?.value);
+
+    let maxDays = 28;
+
+    if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
+      maxDays = 31;
+    } else if ([4, 6, 9, 11].includes(month)) {
+      maxDays = 30;
+    }
+
+    this.dates = Array.from({ length: maxDays }, (_, i) => i + 1);
+
+    const selectedDate = Number(this.recurringForm.get('date')?.value);
+
+    // If the previously selected date doesn't exist in the new month,
+    // clear it.
+    if (selectedDate > maxDays) {
+      this.recurringForm.get('date')?.setValue(null);
+    }
   }
 
   backToIndexPage(): void {

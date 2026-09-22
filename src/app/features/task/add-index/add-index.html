@@ -100,7 +100,7 @@
                 </label>
 
                 <select class="user-input user-select" [(ngModel)]="task.clientId"
-                  (ngModelChange)="onClientChange($event);onchangeloadDropdownData()" name="clientId" required
+                  (ngModelChange)="onClientChange($event);onchangeloadDropdownData();" name="clientId" required
                   #clientCtrl="ngModel">
 
                   <option [ngValue]="null">
