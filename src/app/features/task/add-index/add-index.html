@@ -99,26 +99,37 @@
                   <span class="required">*</span>
                 </label>
 
-                <select class="user-input user-select" [(ngModel)]="task.clientId"
-                  (ngModelChange)="onClientChange($event);onchangeloadDropdownData()" name="clientId" required
-                  #clientCtrl="ngModel">
+                <div class="client-dropdown-container">
 
-                  <option [ngValue]="null">
-                    Select Client
-                  </option>
+                  <input type="text" class="user-input client-search-input" placeholder="Search Client..."
+                    [(ngModel)]="clientSearchText" (input)="filterClients()" [ngModelOptions]="{standalone: true}"
+                    autocomplete="off">
 
-                  <option *ngFor="let client of clients" [ngValue]="client.clientId">
+                  <button *ngIf="clientSearchText" type="button" class="clear-client-btn"
+                    (click)="clearClientSelection()">
+                    ×
+                  </button>
 
-                    {{ client.name }}
+                  <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
 
-                  </option>
+                    <div class="client-dropdown-item" *ngFor="let client of filteredClients"
+                      (click)="selectClient(client)">
+                      {{ client.name }}
+                    </div>
 
-                </select>
+                    <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">
+                      No Client Found
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <!-- Hidden field for form validation and save -->
+                <input type="hidden" [(ngModel)]="task.clientId" name="clientId" required #clientCtrl="ngModel">
 
                 <div class="user-error" *ngIf="clientCtrl.invalid && clientCtrl.touched">
-
                   Client is required
-
                 </div>
 
               </div>
@@ -379,9 +390,7 @@
 
                 </select>
 
-                <div
-                  class="user-error"
-                  *ngIf="
+                <div class="user-error" *ngIf="
                     assignedCtrl.invalid &&
                     assignedCtrl.touched
                   ">

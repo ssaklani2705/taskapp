@@ -282,7 +282,7 @@ export class AddIndexComponent implements OnInit {
     this.toDate =
       queryParams.get('toDate') || '';
 
-      this.dashboardFilter =  queryParams.get('taskType') || '';
+    this.dashboardFilter = queryParams.get('taskType') || '';
 
 
 
@@ -388,60 +388,37 @@ export class AddIndexComponent implements OnInit {
   // ============================================================
 
   loadTask(taskId: any): void {
-
-    this.dataprovider
-      .getTaskById(taskId)
-      .subscribe({
-
-        next: (res: any) => {
-
-          if (res && res.data) {
-
-            this.task = {
-              ...res.data
-            };
-
-
-            this.originalTask = {
-              ...res.data
-            };
-
-
-            // Convert API date to Date
-            if (this.task.date) {
-
-              this.task.date =
-                new Date(
-                  this.task.date
-                );
-
-            }
-
-            if (this.task.clientId) {
-              this.onchangeloadDropdownData();
-            }
-
-            if (this.task.clientId && this.task.taskCategoryId) { this.onchangeloadUserDropdownData(); }
+    this.dataprovider.getTaskById(taskId).subscribe({
+      next: (res: any) => {
+        if (res && res.data) {
+          this.task = { ...res.data };
+          this.originalTask = { ...res.data };
+          // Convert API date to Date
+          if (this.task.date) {
+            this.task.date = new Date(this.task.date);
           }
+          if (this.task.clientId) {
+            this.onchangeloadDropdownData();
+          }
+          if (this.task.clientId && this.task.taskCategoryId) { this.onchangeloadUserDropdownData(); }
 
-        },
+          if (this.clients?.length) {
 
-        error: (error: any) => {
+            const selectedClient = this.clients.find(
+              (x: any) => Number(x.clientId) === Number(this.task.clientId)
+            );
 
-          console.error(
-            'Error fetching task:',
-            error
-          );
-
-          Swal.fire(
-            'Error',
-            'Unable to load task details.',
-            'error'
-          );
-
+            if (selectedClient) {
+              this.clientSearchText = selectedClient.name;
+            }
+          }
         }
-
-      });
+      },
+      error: (error: any) => {
+        console.error('Error fetching task:', error);
+        Swal.fire('Error', 'Unable to load task details.', 'error');
+      }
+    });
 
   }
 
@@ -1119,7 +1096,7 @@ export class AddIndexComponent implements OnInit {
 
           toDate:
             this.toDate || null,
-               taskType: this.dashboardFilter,
+          taskType: this.dashboardFilter,
 
         }
       }
@@ -1192,11 +1169,17 @@ export class AddIndexComponent implements OnInit {
         next: (res: any) => {
           const data = res?.data || res;
           this.clients = data?.clients || [];
-          // this.taskCategories = data?.taskCategories || [];
-          // this.users = data?.assignedUsers || [];
-          // console.log('CLIENTS:', this.clients);
-          // console.log('TASK CATEGORIES:', this.taskCategories);
-          // console.log('ASSIGNED USERS:', this.users);
+          this.filteredClients = [...this.clients];
+          if (this.task.clientId) {
+
+            const selectedClient = this.clients.find(
+              (x: any) => Number(x.clientId) === Number(this.task.clientId)
+            );
+
+            if (selectedClient) {
+              this.clientSearchText = selectedClient.name;
+            }
+          }
         },
 
         error: (error: any) => {
@@ -1251,5 +1234,50 @@ export class AddIndexComponent implements OnInit {
       this.zipInput.nativeElement.value = '';
     }
 
+  }
+
+
+  clientSearchText = '';
+  filteredClients: any[] = [];
+  showClientDropdown = false;
+
+  filterClients(): void {
+
+    const search = this.clientSearchText.trim().toLowerCase();
+
+    if (search.length < 3) {
+      this.showClientDropdown = false;
+      this.filteredClients = [];
+      return;
+    }
+
+    this.filteredClients = this.clients.filter(client =>
+      client.name.toLowerCase().includes(search)
+    );
+
+    this.showClientDropdown = true;
+  }
+
+  selectClient(client: any): void {
+
+    this.task.clientId = client.clientId; // value used in save API
+
+    this.clientSearchText = client.name;
+
+    this.showClientDropdown = false;
+
+    this.onClientChange(client.clientId);
+    this.onchangeloadDropdownData();
+  }
+
+  clearClientSelection(): void {
+
+    this.task.clientId = null;
+
+    this.clientSearchText = '';
+
+    this.filteredClients = [];
+
+    this.showClientDropdown = false;
   }
 }

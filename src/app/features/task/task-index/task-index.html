@@ -32,17 +32,16 @@
           </div>
           <!-- CLIENT -->
           <div class="client-dropdown-container">
-
             <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText"
               (input)="filterClients()" (focus)="showClientDropdown = true" />
-
+            <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">
+              ×
+            </button>
             <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
-
               <!-- <div class="client-dropdown-item"
                 (click)="selectedClient=''; clientSearchText=''; showClientDropdown=false; onSearch()">
                 -- All Clients --
               </div> -->
-
               <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
                 {{ client.name }}
               </div>
@@ -50,7 +49,6 @@
                 No Client Found
               </div>
             </div>
-
           </div>
           <!-- TASK CATEGORY -->
           <div class="status-wrapper">
@@ -220,19 +218,13 @@
                         ">
                         ▼
                       </span>
-
                     </span>
-
                   </div>
-
                 </th>
-
                 <th class="action-column" style="width: 200px;">
                   Action
                 </th>
-
               </tr>
-
             </thead>
 
 
@@ -347,19 +339,16 @@
                       Assign User
                     </ng-container>
 
-    <ng-template #assignedBlock>
-      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
-      {{ task.assignedToName }}
-        <span
-        class="reassign-text"
-        *ngIf="task.taskStatus === 1"
-      >
-        Re-assign
-      </span>
-      <!-- <span class="reassign-text">Re-assign</span> -->
-    </ng-template>
-  </span>
-</td>
+                    <ng-template #assignedBlock>
+                      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
+                      {{ task.assignedToName }}
+                      <span class="reassign-text" *ngIf="task.taskStatus === 1">
+                        Re-assign
+                      </span>
+                      <!-- <span class="reassign-text">Re-assign</span> -->
+                    </ng-template>
+                  </span>
+                </td>
 
 
                 <!-- <td>

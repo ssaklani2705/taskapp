@@ -31,33 +31,34 @@
 
       <!-- CLIENT DROPDOWN -->
 
-      <div class="client-filter">
+      <div class="dashboard-client-container">
 
-        <div class="client-select-wrapper">
+      
 
-          <mat-icon class="client-icon">
-            groups
-          </mat-icon>
+        <div class="client-dropdown-container">
 
-          <select
-            class="status-select"
-            [(ngModel)]="selectedClientId"
-            (change)="onClientChange(selectedClientId)"
-          >
+          <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText"
+            (input)="filterClients()" (focus)="showClientDropdown = true" />
 
-            <option [value]="0">
+          <button *ngIf="clientSearchText" type="button" class="client-clear-btn" (click)="clearClientFilter()">
+            ×
+          </button>
+
+          <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
+
+            <!-- <div class="client-dropdown-item" (click)="selectClient(null)">
               All Clients
-            </option>
+            </div> -->
 
-            @for (client of clients; track client.clientId) {
+            <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
+              {{ client.clientName }}
+            </div>
 
-              <option [value]="client.clientId">
-                {{ client.clientName }}
-              </option>
+            <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">
+              No Client Found
+            </div>
 
-            }
-
-          </select>
+          </div>
 
         </div>
 
@@ -74,69 +75,65 @@
 
       @for (stat of stats(); track stat.label) {
 
-        <mat-card
-          class="stat-card"
-          [class.stat-danger]="stat.color === 'danger'"
-          (click)="openTaskIndex(stat)"
-        >
+      <mat-card class="stat-card" [class.stat-danger]="stat.color === 'danger'" (click)="openTaskIndex(stat)">
 
-          <!-- STAT ICON -->
+        <!-- STAT ICON -->
 
-          <div class="stat-icon">
+        <div class="stat-icon">
 
-            @if (stat.label === 'My tasks today') {
+          @if (stat.label === 'My tasks today') {
 
-              <mat-icon>
-                assignment
-              </mat-icon>
+          <mat-icon>
+            assignment
+          </mat-icon>
 
-            }
+          }
 
-            @else if (stat.label === 'Due this week') {
+          @else if (stat.label === 'Due this week') {
 
-              <mat-icon>
-                calendar_month
-              </mat-icon>
+          <mat-icon>
+            calendar_month
+          </mat-icon>
 
-            }
+          }
 
-            @else if (stat.label === 'Overdue') {
+          @else if (stat.label === 'Overdue') {
 
-              <mat-icon>
-                warning
-              </mat-icon>
+          <mat-icon>
+            warning
+          </mat-icon>
 
-            }
+          }
 
+        </div>
+
+
+        <!-- STAT TEXT -->
+
+        <div class="stat-content">
+
+          <div class="stat-label">
+            {{ stat.label }}
           </div>
 
-
-          <!-- STAT TEXT -->
-
-          <div class="stat-content">
-
-            <div class="stat-label">
-              {{ stat.label }}
-            </div>
-
-            <div class="stat-value">
-              {{ stat.value }}
-            </div>
-
+          <div class="stat-value">
+            {{ stat.value }}
           </div>
 
+        </div>
 
-          <!-- RIGHT ARROW -->
 
-          <div class="stat-arrow">
+        <!-- RIGHT ARROW -->
 
-            <mat-icon>
-              chevron_right
-            </mat-icon>
+        <div class="stat-arrow">
 
-          </div>
+          <mat-icon>
+            chevron_right
+          </mat-icon>
 
-        </mat-card>
+        </div>
+
+      </mat-card>
 
       }
 
@@ -151,330 +148,309 @@
 
       @for (column of columns(); track column.title) {
 
-        <section class="task-section">
+      <section class="task-section">
 
-          <!-- COLUMN HEADER -->
+        <!-- COLUMN HEADER -->
 
-          <div class="column-header">
+        <div class="column-header">
 
-            <h2>
+          <h2>
 
-              {{ column.title }}
+            {{ column.title }}
 
-              <span
-                class="column-count"
-                [class.count-progress]="column.title === 'In progress'"
-                [class.count-completed]="column.title === 'Completed Tasks'"
-              >
-                {{ column.count }}
-              </span>
+            <span class="column-count" [class.count-progress]="column.title === 'In progress'"
+              [class.count-completed]="column.title === 'Completed Tasks'">
+              {{ column.count }}
+            </span>
 
-            </h2>
+          </h2>
 
-          </div>
+        </div>
 
 
-          <!-- TASK LIST -->
+        <!-- TASK LIST -->
 
-          @if (column.tasks.length > 0) {
+        @if (column.tasks.length > 0) {
 
-            <div class="tasks-grid">
+        <div class="tasks-grid">
 
-              @for (task of column.tasks; track task.title) {
+          @for (task of column.tasks; track task.title) {
 
-                <article
-                  class="task-card"
+          <article class="task-card" [class.task-high]="task.type === 'high'"
+            [class.task-medium]="task.type === 'medium'" [class.task-low]="task.type === 'low'"
+            [class.task-progress]="task.type === 'progress'" [class.task-done]="task.type === 'done'">
 
-                  [class.task-high]="task.type === 'high'"
-                  [class.task-medium]="task.type === 'medium'"
-                  [class.task-low]="task.type === 'low'"
-                  [class.task-progress]="task.type === 'progress'"
-                  [class.task-done]="task.type === 'done'"
-                >
-
-                  <!-- =================================================
+            <!-- =================================================
                        TASK MAIN
                   ================================================== -->
 
-                  <div class="task-main">
+            <div class="task-main">
 
-                    <!-- LEFT -->
+              <!-- LEFT -->
 
-                    <div class="task-left">
+              <div class="task-left">
 
-                      <div class="task-title">
-                        {{ task.title }}
-                      </div>
+                <div class="task-title">
+                  {{ task.title }}
+                </div>
 
 
-                      <!-- CLIENT -->
+                <!-- CLIENT -->
 
-                      <div class="task-info-row">
+                <div class="task-info-row">
 
-                        <div class="info-icon">
+                  <div class="info-icon">
 
-                          <mat-icon>
-                            business
-                          </mat-icon>
-
-                        </div>
-
-                        <div class="task-info-content">
-
-                          <span class="task-label">
-                            CLIENT
-                          </span>
-
-                          <span class="task-value">
-                            {{ task.clientName || '-' }}
-                          </span>
-
-                        </div>
-
-                      </div>
-
-
-                      <!-- ASSIGNED TO -->
-
-                      <div class="task-info-row">
-
-                        <div class="info-icon">
-
-                          <mat-icon>
-                            person
-                          </mat-icon>
-
-                        </div>
-
-                        <div class="task-info-content">
-
-                          <span class="task-label">
-                            ASSIGNED TO
-                          </span>
-
-                          <span class="task-value">
-                            {{ task.assignedToName || 'Not Assigned' }}
-                          </span>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-
-                    <!-- RIGHT -->
-
-                    <div class="task-right">
-
-                      <!-- PRIORITY -->
-
-                      <div class="priority-wrapper">
-
-                        <span
-                          class="priority-badge"
-
-                          [class.priority-high]="task.type === 'high'"
-                          [class.priority-medium]="task.type === 'medium'"
-                          [class.priority-low]="task.type === 'low'"
-                          [class.priority-progress]="task.type === 'progress'"
-                          [class.priority-done]="task.type === 'done'"
-                        >
-
-                          @if (task.type === 'high') {
-
-                            High
-
-                          }
-
-                          @else if (task.type === 'medium') {
-
-                            Medium
-
-                          }
-
-                          @else if (task.type === 'low') {
-
-                            Low
-
-                          }
-
-                          @else if (task.type === 'progress') {
-
-                            In Progress
-
-                          }
-
-                          @else if (task.type === 'done') {
-
-                            Done
-
-                          }
-
-                          @else {
-
-                            {{ task.subtitle }}
-
-                          }
-
-                        </span>
-
-                      </div>
-
-
-                      <!-- START DATE -->
-
-                      <div class="date-row">
-
-                        <div class="date-icon">
-
-                          <mat-icon>
-                            calendar_month
-                          </mat-icon>
-
-                        </div>
-
-                        <div class="date-content">
-
-                          <span class="date-label">
-                            START DATE
-                          </span>
-
-                          <span class="date-value">
-                            {{ task.startDay }}
-                          </span>
-
-                        </div>
-
-                      </div>
-
-
-                      <!-- DUE DATE -->
-
-                      <div class="date-row">
-
-                        <div class="date-icon clock-icon">
-
-                          <mat-icon>
-                            schedule
-                          </mat-icon>
-
-                        </div>
-
-                        <div class="date-content">
-
-                          <span class="date-label">
-                            DUE DATE
-                          </span>
-
-                          <span class="date-value">
-                            {{ task.dueDate }}
-                          </span>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-
-                  <!-- =================================================
-                       BOTTOM STATUS
-                  ================================================== -->
-
-                  <div
-                    class="task-bottom-status"
-                    [class.approved]="task.type === 'done'"
-                  >
-
-                    <div class="bottom-status-icon">
-
-                      @if (task.type === 'done') {
-
-                        <mat-icon>
-                          check
-                        </mat-icon>
-
-                      }
-
-                      @else {
-
-                        <mat-icon>
-                          description
-                        </mat-icon>
-
-                      }
-
-                    </div>
-
-
-                    <span>
-
-                      @if (task.type === 'done') {
-
-                        Completed
-
-                      }
-
-                      @else {
-
-                        Assigned by
-
-                        <strong>
-                          {{ task.assignedByUser || '—' }}
-                        </strong>
-
-                      }
-
-                    </span>
-
-
-                    <mat-icon class="more-icon">
-                      more_vert
+                    <mat-icon>
+                      business
                     </mat-icon>
 
                   </div>
 
+                  <div class="task-info-content">
 
-                  <!-- PROGRESS -->
+                    <span class="task-label">
+                      CLIENT
+                    </span>
 
-                  @if (task.type === 'progress') {
+                    <span class="task-value">
+                      {{ task.clientName || '-' }}
+                    </span>
 
-                    <div class="progress-wrapper">
+                  </div>
 
-                      <div class="progress-track">
+                </div>
 
-                        <div
-                          class="progress-bar"
-                          [style.width.%]="task.progress"
-                        >
-                        </div>
 
-                      </div>
+                <!-- ASSIGNED TO -->
 
-                    </div>
+                <div class="task-info-row">
 
-                  }
+                  <div class="info-icon">
 
-                </article>
+                    <mat-icon>
+                      person
+                    </mat-icon>
 
-              }
+                  </div>
+
+                  <div class="task-info-content">
+
+                    <span class="task-label">
+                      ASSIGNED TO
+                    </span>
+
+                    <span class="task-value">
+                      {{ task.assignedToName || 'Not Assigned' }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <!-- RIGHT -->
+
+              <div class="task-right">
+
+                <!-- PRIORITY -->
+
+                <div class="priority-wrapper">
+
+                  <span class="priority-badge" [class.priority-high]="task.type === 'high'"
+                    [class.priority-medium]="task.type === 'medium'" [class.priority-low]="task.type === 'low'"
+                    [class.priority-progress]="task.type === 'progress'" [class.priority-done]="task.type === 'done'">
+
+                    @if (task.type === 'high') {
+
+                    High
+
+                    }
+
+                    @else if (task.type === 'medium') {
+
+                    Medium
+
+                    }
+
+                    @else if (task.type === 'low') {
+
+                    Low
+
+                    }
+
+                    @else if (task.type === 'progress') {
+
+                    In Progress
+
+                    }
+
+                    @else if (task.type === 'done') {
+
+                    Done
+
+                    }
+
+                    @else {
+
+                    {{ task.subtitle }}
+
+                    }
+
+                  </span>
+
+                </div>
+
+
+                <!-- START DATE -->
+
+                <div class="date-row">
+
+                  <div class="date-icon">
+
+                    <mat-icon>
+                      calendar_month
+                    </mat-icon>
+
+                  </div>
+
+                  <div class="date-content">
+
+                    <span class="date-label">
+                      START DATE
+                    </span>
+
+                    <span class="date-value">
+                      {{ task.startDay }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <!-- DUE DATE -->
+
+                <div class="date-row">
+
+                  <div class="date-icon clock-icon">
+
+                    <mat-icon>
+                      schedule
+                    </mat-icon>
+
+                  </div>
+
+                  <div class="date-content">
+
+                    <span class="date-label">
+                      DUE DATE
+                    </span>
+
+                    <span class="date-value">
+                      {{ task.dueDate }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
 
             </div>
 
-          }
 
-          @else {
+            <!-- =================================================
+                       BOTTOM STATUS
+                  ================================================== -->
 
-            <div class="column-empty">
-              No tasks
+            <div class="task-bottom-status" [class.approved]="task.type === 'done'">
+
+              <div class="bottom-status-icon">
+
+                @if (task.type === 'done') {
+
+                <mat-icon>
+                  check
+                </mat-icon>
+
+                }
+
+                @else {
+
+                <mat-icon>
+                  description
+                </mat-icon>
+
+                }
+
+              </div>
+
+
+              <span>
+
+                @if (task.type === 'done') {
+
+                Completed
+
+                }
+
+                @else {
+
+                Assigned by
+
+                <strong>
+                  {{ task.assignedByUser || '—' }}
+                </strong>
+
+                }
+
+              </span>
+
+
+              <mat-icon class="more-icon">
+                more_vert
+              </mat-icon>
+
             </div>
 
+
+            <!-- PROGRESS -->
+
+            @if (task.type === 'progress') {
+
+            <div class="progress-wrapper">
+
+              <div class="progress-track">
+
+                <div class="progress-bar" [style.width.%]="task.progress">
+                </div>
+
+              </div>
+
+            </div>
+
+            }
+
+          </article>
+
           }
 
-        </section>
+        </div>
+
+        }
+
+        @else {
+
+        <div class="column-empty">
+          No tasks
+        </div>
+
+        }
+
+      </section>
 
       }
 

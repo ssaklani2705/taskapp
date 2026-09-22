@@ -2864,6 +2864,18 @@ export class TaskIndex {
       this.showClientDropdown = false;
     }
   }
+
+  clearClientSearch(): void {
+
+  this.clientSearchText = '';
+  this.selectedClientId = 0;
+  this.selectedClient = '';
+
+  this.filteredClients = [];
+  this.showClientDropdown = false;
+
+  this.onSearch(); // Reload all records
+}
 }
 
 

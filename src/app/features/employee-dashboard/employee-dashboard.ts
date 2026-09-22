@@ -1,5 +1,6 @@
 import {
   Component,
+  HostListener,
   OnInit,
   signal
 } from '@angular/core';
@@ -180,10 +181,10 @@ export class EmployeeDashboard implements OnInit {
   loginType: string = '';
   isAdmin: any;
   userId: any;
-  designationName:any;
+  designationName: any;
   ngOnInit(): void {
     this.username = sessionStorage.getItem('username') || 'Society 123';
-  this.designationName = sessionStorage.getItem('designationName')?.trim() || '-';
+    this.designationName = sessionStorage.getItem('designationName')?.trim() || '-';
 
     this.isAdmin =
       sessionStorage.getItem(
@@ -666,6 +667,18 @@ export class EmployeeDashboard implements OnInit {
       .subscribe({
         next: (res: any[]) => {
           this.clients = res;
+          if (this.selectedClientId > 0) {
+
+            const client =
+              this.clients.find(
+                x => x.clientId == this.selectedClientId
+              );
+
+            if (client) {
+              this.clientSearchText =
+                client.clientName;
+            }
+          }
         },
         error: (error) => {
           console.error('Error loading dashboard clients:', error);
@@ -709,5 +722,80 @@ export class EmployeeDashboard implements OnInit {
         }
       }
     );
+  }
+
+  clientSearchText = '';
+  showClientDropdown = false;
+  filteredClients: any[] = [];
+
+  filterClients(): void {
+
+    const search =
+      this.clientSearchText
+        ?.trim()
+        .toLowerCase();
+
+    if (!search || search.length < 3) {
+
+      this.filteredClients = [];
+      this.showClientDropdown = false;
+
+      return;
+    }
+
+    this.filteredClients =
+      this.clients.filter(
+        (client: any) =>
+          client.clientName &&
+          client.clientName
+            .toLowerCase()
+            .includes(search)
+      );
+
+    this.showClientDropdown = true;
+  }
+
+  selectClient(client: any): void {
+
+    if (!client) {
+
+      this.selectedClientId = 0;
+      this.clientSearchText = '';
+
+    } else {
+
+      this.selectedClientId = client.clientId;
+      this.clientSearchText = client.clientName;
+
+    }
+
+    this.showClientDropdown = false;
+
+    this.loadDashboard();
+  }
+
+  clearClientFilter(): void {
+
+    this.clientSearchText = '';
+    this.selectedClientId = 0;
+    this.filteredClients = [];
+    this.showClientDropdown = false;
+
+    this.loadDashboard();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+
+    const target =
+      event.target as HTMLElement;
+
+    if (
+      !target.closest(
+        '.dashboard-client-container'
+      )
+    ) {
+      this.showClientDropdown = false;
+    }
   }
 }

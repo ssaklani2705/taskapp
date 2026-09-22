@@ -39,9 +39,16 @@ interface TaskCategory {
   styleUrl: './recurring-index.scss',
 })
 export class RecurringIndex {
+
+  clientSearchText: string = '';
+  selectedClient: string = '';
+  showClientDropdown: boolean = false;
+  filteredClients: any[] = [];
+  // selectedClientId: number = 0;
   recurring: Recurring[] = [];
   userId!: number;
   isLoading = false;
+
 
   currentPage = 1;
   page = 0;
@@ -139,6 +146,16 @@ export class RecurringIndex {
         console.log('Recurring Clients:', response);
 
         this.clients = response || [];
+        if (this.selectedClientId > 0) {
+
+          const selectedClient = this.clients.find(
+            (x: any) => x.clientId == this.selectedClientId
+          );
+
+          if (selectedClient) {
+            this.clientSearchText = selectedClient.name;
+          }
+        }
       },
 
       error: (error) => {
@@ -177,11 +194,11 @@ export class RecurringIndex {
         this.selectedClientId,
         this.selectedType,
         this.selectedTaskCatId,
-         this.selectedPriority,
+        this.selectedPriority,
         this.sortColumn || 'title',
         this.sortDirection,
         this.userId,
-        this.isAdmin, 
+        this.isAdmin,
         this.loginType
       )
       .subscribe({
@@ -239,13 +256,16 @@ export class RecurringIndex {
     this.selectedClientId = 0;
     this.selectedType = 0;
     this.selectedTaskCatId = 0;
-      this.selectedPriority = 0;
+    this.selectedPriority = 0;
 
     this.currentPage = 1;
     this.page = 0;
 
     this.sortColumn = 'title';
     this.sortDirection = 'asc';
+    this.filteredClients = [];
+    this.clientSearchText = '';
+    this.showClientDropdown = false;
 
     this.saveFilterState();
 
@@ -292,7 +312,7 @@ export class RecurringIndex {
       clientId: this.selectedClientId,
       type: this.selectedType,
       taskCatId: this.selectedTaskCatId,
-        priority: this.selectedPriority,
+      priority: this.selectedPriority,
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
     };
@@ -313,7 +333,7 @@ export class RecurringIndex {
       clientId: this.selectedClientId,
       type: this.selectedType,
       taskCatId: this.selectedTaskCatId,
-        priority: this.selectedPriority,
+      priority: this.selectedPriority,
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
     };
@@ -334,7 +354,7 @@ export class RecurringIndex {
       clientId: this.selectedClientId,
       type: this.selectedType,
       taskCatId: this.selectedTaskCatId,
-        priority: this.selectedPriority,
+      priority: this.selectedPriority,
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
     };
@@ -409,7 +429,7 @@ export class RecurringIndex {
       clientId: this.selectedClientId,
       type: this.selectedType,
       taskCatId: this.selectedTaskCatId,
-       priority: this.selectedPriority,
+      priority: this.selectedPriority,
 
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
@@ -469,8 +489,8 @@ export class RecurringIndex {
       }
 
       if (filterState.priority !== undefined) {
-  this.selectedPriority = Number(filterState.priority);
-}
+        this.selectedPriority = Number(filterState.priority);
+      }
 
       if (filterState.sortColumn) {
         this.sortColumn = filterState.sortColumn;
@@ -544,7 +564,7 @@ export class RecurringIndex {
     }
   }
 
-    getPriorityClass(
+  getPriorityClass(
     priority: number
   ): string {
 
@@ -565,7 +585,7 @@ export class RecurringIndex {
     }
   }
 
-   getPriorityLabel(
+  getPriorityLabel(
     priority: number
   ): string {
 
@@ -681,7 +701,7 @@ export class RecurringIndex {
       label: 'Task Category',
       sortable: true,
     },
-        {
+    {
       key: 'priority',
       label: 'Priority',
       sortable: true,
@@ -745,7 +765,7 @@ export class RecurringIndex {
   selectedDescriptionRecurring: any = null;
 
   openDescriptionModal(recurring: Recurring): void {
-  //  alert(1)
+    //  alert(1)
     this.selectedDescriptionRecurring = recurring;
     this.showDescriptionModal = true;
     console.log(this.showDescriptionModal)
@@ -759,15 +779,79 @@ export class RecurringIndex {
   }
 
 
- @HostListener('document:click', ['$event'])
-onDocumentClick(event: MouseEvent): void {
-  const target = event.target as HTMLElement;
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
 
-  if (
-    !target.closest('.description-modal') &&
-    !target.closest('.description-icon-button')
-  ) {
-    this.closeDescriptionModal();
+    if (
+      !target.closest('.description-modal') &&
+      !target.closest('.description-icon-button')
+    ) {
+      this.closeDescriptionModal();
+    }
   }
-}
+
+
+
+
+
+
+  // selectedClientId: number = 0;
+
+  // filteredClients: any[] = [];
+
+
+
+  filterClients(): void {
+
+    const search = this.clientSearchText?.trim().toLowerCase();
+
+    if (!search || search.length < 3) {
+      this.filteredClients = [];
+      this.showClientDropdown = false;
+      return;
+    }
+
+    this.filteredClients = this.clients.filter(
+      (client: any) =>
+        client.name &&
+        client.name.toLowerCase().includes(search)
+    );
+
+    this.showClientDropdown = true;
+  }
+
+  selectClient(client: any): void {
+
+    this.clientSearchText = client.name;
+
+    // This is the value used by your filters/API
+    this.selectedClientId = Number(client.clientId);
+
+    this.showClientDropdown = false;
+
+    // Load data immediately
+    this.onSearch();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick2(event: Event): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.client-dropdown-container')) {
+      this.showClientDropdown = false;
+    }
+  }
+
+
+  clearClientFilter(): void {
+
+    this.clientSearchText = '';
+    this.selectedClientId = 0;
+
+    this.filteredClients = [];
+    this.showClientDropdown = false;
+
+    this.onSearch();
+  }
 }

@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -27,7 +27,7 @@ interface TaskCategory {
 @Component({
   selector: 'app-add-recurring',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule,MatIconModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MatIconModule],
   templateUrl: './add-recurring.html',
   styleUrl: './add-recurring.scss',
 })
@@ -48,6 +48,9 @@ export class AddRecurring implements OnInit {
   isLoading = false;
 
   filterKey = SESSION_KEYS.RECURRING_FILTER;
+  clientSearchText: string = '';
+  showClientDropdown: boolean = false;
+  filteredClients: Client[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -56,15 +59,15 @@ export class AddRecurring implements OnInit {
     private route: ActivatedRoute,
     @Inject(PLATFORM_ID)
     private platformId: Object,
-  ) {}
+  ) { }
 
   loginType = '';
   isAdmin: any;
   ngOnInit(): void {
-     if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId)) {
       this.isAdmin = sessionStorage.getItem('isAdmin');
       this.loginType = sessionStorage.getItem('loginType') || 'other';
-     }
+    }
     this.initializeForm();
     this.getUserId();
     this.checkEditMode();
@@ -83,7 +86,7 @@ export class AddRecurring implements OnInit {
       date: [null],
       month: [null],
       taskCatId: [null, Validators.required],
-         priority: [null, Validators.required],
+      priority: [null, Validators.required],
       status: [1],
     });
 
@@ -117,11 +120,25 @@ export class AddRecurring implements OnInit {
   }
 
   private loadClients(): void {
-    this.dataprovider.getRecurringClients(this.userId,this.isAdmin,this.loginType).subscribe({
+    this.dataprovider.getRecurringClients(this.userId, this.isAdmin, this.loginType).subscribe({
       next: (response: any) => {
         this.clients = response || [];
+        this.filteredClients = [...this.clients];
 
-        console.log(response);
+        // Edit case
+        const selectedClientId = this.recurringForm.get('clientId')?.value;
+
+        if (selectedClientId) {
+
+          const client = this.clients.find(
+            x => x.clientId == selectedClientId
+          );
+
+          if (client) {
+            this.clientSearchText = client.name;
+          }
+        }
+
       },
 
       error: (error) => {
@@ -132,7 +149,7 @@ export class AddRecurring implements OnInit {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId,this.isAdmin,this.loginType).subscribe({
+    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType).subscribe({
       next: (response: any) => {
         this.taskCategories = response || [];
       },
@@ -180,14 +197,22 @@ export class AddRecurring implements OnInit {
               : null,
           taskCatId: recurring.taskCatId,
           priority:
-  recurring.priority !== null && recurring.priority !== undefined
-    ? Number(recurring.priority)
-    : null,
+            recurring.priority !== null && recurring.priority !== undefined
+              ? Number(recurring.priority)
+              : null,
           status:
             recurring.status !== null && recurring.status !== undefined
               ? Number(recurring.status)
               : 1,
         });
+
+        const client = this.clients.find(
+          x => x.clientId == recurring.clientId
+        );
+
+        if (client) {
+          this.clientSearchText = client.name;
+        }
 
         this.updateTypeValidators(Number(recurring.type));
 
@@ -275,7 +300,7 @@ export class AddRecurring implements OnInit {
       date: formValue.date !== null && formValue.date !== '' ? Number(formValue.date) : null,
       month: formValue.month !== null && formValue.month !== '' ? Number(formValue.month) : null,
       taskCatId: Number(formValue.taskCatId),
-       priority: Number(formValue.priority),
+      priority: Number(formValue.priority),
       status: this.isEditMode ? Number(formValue.status) : 1,
     };
 
@@ -345,7 +370,7 @@ export class AddRecurring implements OnInit {
       date: null,
       month: null,
       taskCatId: null,
-       priority: null,
+      priority: null,
       status: 1,
     });
 
@@ -371,5 +396,54 @@ export class AddRecurring implements OnInit {
     }
 
     this.router.navigate(['/recurring-index']);
+  }
+
+  filterClients(): void {
+
+    const search = this.clientSearchText.trim().toLowerCase();
+
+    if (search.length < 3) {
+      this.filteredClients = [];
+      this.showClientDropdown = false;
+      return;
+    }
+
+    this.filteredClients = this.clients.filter(client =>
+      client.name.toLowerCase().includes(search)
+    );
+
+    this.showClientDropdown = true;
+  }
+  selectClient(client: Client): void {
+
+    this.clientSearchText = client.name;
+
+    this.recurringForm.patchValue({
+      clientId: client.clientId
+    });
+
+    this.showClientDropdown = false;
+  }
+
+  clearClientSelection(): void {
+
+    this.clientSearchText = '';
+
+    this.recurringForm.patchValue({
+      clientId: null
+    });
+
+    this.filteredClients = [];
+
+    this.showClientDropdown = false;
+  }
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.client-dropdown-container')) {
+      this.showClientDropdown = false;
+    }
   }
 }
