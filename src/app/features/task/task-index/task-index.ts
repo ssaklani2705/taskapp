@@ -2683,6 +2683,12 @@ export class TaskIndex {
 
 
   canDisableChangeManager(task: any): boolean {
+
+    // Admin can perform any action
+      if (this.isAdmin === 'Y') {
+        return false;
+      }
+
     const isManager = Number(task.managerId) === Number(this.userId);
 
     // Status 5 => closed, locked for everyone, no exceptions
