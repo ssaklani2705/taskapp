@@ -347,13 +347,19 @@
                       Assign User
                     </ng-container>
 
-                    <ng-template #assignedBlock>
-                      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
-                      {{ task.assignedToName }}
-                      <span class="reassign-text">Re-assign</span>
-                    </ng-template>
-                  </span>
-                </td>
+    <ng-template #assignedBlock>
+      <!-- <mat-icon class="assign-icon">person</mat-icon> -->
+      {{ task.assignedToName }}
+        <span
+        class="reassign-text"
+        *ngIf="task.taskStatus === 1"
+      >
+        Re-assign
+      </span>
+      <!-- <span class="reassign-text">Re-assign</span> -->
+    </ng-template>
+  </span>
+</td>
 
 
                 <!-- <td>

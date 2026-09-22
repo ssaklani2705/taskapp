@@ -78,6 +78,18 @@
 
           <!-- ================= RIGHT COLUMN ================= -->
           <div class="user-column">
+
+
+
+          <!-- priority -->
+          <div class="info-row status-row">
+              <span class="info-label">Priority:</span>
+
+              <span class="priority-badge" [ngClass]="getPriorityClass(recurring.status)">
+                {{ getPriorityLabel(recurring.priority) }}
+              </span>
+            </div>
+
             <!-- STATUS -->
             <div class="info-row status-row">
               <span class="info-label">Status:</span>

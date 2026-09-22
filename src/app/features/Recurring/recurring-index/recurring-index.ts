@@ -24,6 +24,7 @@ interface Recurring {
   taskCatId: number;
   taskCatName: string;
   status: number;
+  priority: number;
 }
 
 interface TaskCategory {
@@ -72,6 +73,7 @@ export class RecurringIndex {
   selectedClientId = 0;
   selectedType = 0;
   selectedTaskCatId = 0;
+  selectedPriority = 0;
 
   clients: any[] = [];
   taskCategories: TaskCategory[] = [];
@@ -175,6 +177,7 @@ export class RecurringIndex {
         this.selectedClientId,
         this.selectedType,
         this.selectedTaskCatId,
+         this.selectedPriority,
         this.sortColumn || 'title',
         this.sortDirection,
         this.userId,
@@ -236,6 +239,7 @@ export class RecurringIndex {
     this.selectedClientId = 0;
     this.selectedType = 0;
     this.selectedTaskCatId = 0;
+      this.selectedPriority = 0;
 
     this.currentPage = 1;
     this.page = 0;
@@ -269,6 +273,7 @@ export class RecurringIndex {
     this.selectedType = Number(this.selectedType || 0);
     this.selectedTaskCatId = Number(this.selectedTaskCatId || 0);
     this.search = this.searchQuery.trim();
+    this.selectedPriority = Number(this.selectedPriority || 0);
 
     this.currentPage = 1;
     this.page = 0;
@@ -287,6 +292,7 @@ export class RecurringIndex {
       clientId: this.selectedClientId,
       type: this.selectedType,
       taskCatId: this.selectedTaskCatId,
+        priority: this.selectedPriority,
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
     };
@@ -307,6 +313,7 @@ export class RecurringIndex {
       clientId: this.selectedClientId,
       type: this.selectedType,
       taskCatId: this.selectedTaskCatId,
+        priority: this.selectedPriority,
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
     };
@@ -327,6 +334,7 @@ export class RecurringIndex {
       clientId: this.selectedClientId,
       type: this.selectedType,
       taskCatId: this.selectedTaskCatId,
+        priority: this.selectedPriority,
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
     };
@@ -401,6 +409,7 @@ export class RecurringIndex {
       clientId: this.selectedClientId,
       type: this.selectedType,
       taskCatId: this.selectedTaskCatId,
+       priority: this.selectedPriority,
 
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
@@ -458,6 +467,10 @@ export class RecurringIndex {
       if (filterState.taskCatId !== undefined) {
         this.selectedTaskCatId = Number(filterState.taskCatId);
       }
+
+      if (filterState.priority !== undefined) {
+  this.selectedPriority = Number(filterState.priority);
+}
 
       if (filterState.sortColumn) {
         this.sortColumn = filterState.sortColumn;
@@ -528,6 +541,47 @@ export class RecurringIndex {
 
       default:
         return 'Unknown';
+    }
+  }
+
+    getPriorityClass(
+    priority: number
+  ): string {
+
+    switch (priority) {
+
+      case 1:
+        return 'priority-high';
+
+      case 2:
+        return 'priority-medium';
+
+      case 3:
+        return 'priority-low';
+
+      default:
+        return '';
+
+    }
+  }
+
+   getPriorityLabel(
+    priority: number
+  ): string {
+
+    switch (priority) {
+
+      case 1:
+        return 'High';
+
+      case 2:
+        return 'Medium';
+
+      case 3:
+        return 'Low';
+
+      default:
+        return '-';
     }
   }
 
@@ -625,6 +679,11 @@ export class RecurringIndex {
     {
       key: 'taskCatName',
       label: 'Task Category',
+      sortable: true,
+    },
+        {
+      key: 'priority',
+      label: 'Priority',
       sortable: true,
     },
     {

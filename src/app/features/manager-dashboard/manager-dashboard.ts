@@ -235,7 +235,7 @@ export class ManagerDashboard {
   getTaskCounts(): void {
      const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
     // Active Tasks
-    this.dataProvider.countOfActiveTask(clientId).subscribe({
+    this.dataProvider.countOfActiveTask(clientId,this.userId).subscribe({
       next: (response: any) => {
         console.log('Active Task Count:', response);
 
@@ -250,7 +250,7 @@ export class ManagerDashboard {
     });
 
     // Completed Tasks
-    this.dataProvider.countOfCompletedTask(clientId).subscribe({
+    this.dataProvider.countOfCompletedTask(clientId,this.userId).subscribe({
       next: (response: any) => {
         console.log('Completed Task Count:', response);
 
@@ -265,7 +265,7 @@ export class ManagerDashboard {
     });
 
     // Pending Tasks
-    this.dataProvider.countOfPendingTask(clientId).subscribe({
+    this.dataProvider.countOfPendingTask(clientId,this.userId).subscribe({
       next: (response: any) => {
         console.log('Pending Task Count:', response);
 
@@ -280,7 +280,7 @@ export class ManagerDashboard {
     });
 
     // Assigned Tasks
-    this.dataProvider.countOfAssignedTask(clientId).subscribe({
+    this.dataProvider.countOfAssignedTask(clientId,this.userId).subscribe({
       next: (response: any) => {
         console.log('Assigned Task Count:', response);
 
@@ -295,7 +295,7 @@ export class ManagerDashboard {
     });
 
     // Assignee Closure Tasks
-    this.dataProvider.countOfAssigneeClosureTask(clientId).subscribe({
+    this.dataProvider.countOfAssigneeClosureTask(clientId,this.userId).subscribe({
       next: (response: any) => {
         console.log('Assignee Closure Task Count:', response);
 
@@ -310,7 +310,7 @@ export class ManagerDashboard {
     });
 
     // Re Open Tasks
-    this.dataProvider.countOfReOpenTask(clientId).subscribe({
+    this.dataProvider.countOfReOpenTask(clientId,this.userId).subscribe({
       next: (response: any) => {
         console.log('Re Open Task Count:', response);
 
@@ -325,7 +325,7 @@ export class ManagerDashboard {
     });
 
     // Assignee Re-Closure Tasks
-    this.dataProvider.countOfAssigneeReClosureTask(clientId).subscribe({
+    this.dataProvider.countOfAssigneeReClosureTask(clientId,this.userId).subscribe({
       next: (response: any) => {
         console.log('Assignee Re-Closure Task Count:', response);
 

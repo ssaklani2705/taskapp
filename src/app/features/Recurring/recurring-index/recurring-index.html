@@ -64,6 +64,15 @@
         </div>
 
         <div class="filter-row">
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedPriority" (change)="onFilterChange()">
+              <option value="0">--All Priority--</option>
+              <option value="1">High</option>
+              <option value="2">Medium</option>
+              <option value="3">Low</option>
+            </select>
+          </div>
+
           <!-- STATUS -->
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
@@ -147,7 +156,7 @@
               <td class="plan-name-cell">
                 <span class="user-name">
                   {{ item.clientName || '-' }}
-                  
+
                 </span>
                 <button type="button" class="description-icon-button" *ngIf="item.description"
                   (click)="openDescriptionModal(item)" aria-label="View Description">
@@ -165,6 +174,12 @@
 
               <td class="plan-name-cell">
                 {{ item.taskCatName || '-' }}
+              </td>
+
+                            <td class="status-cell">
+                <span class="priority-badge" [ngClass]="getPriorityClass(item.priority)">
+                  {{ getPriorityLabel(item.priority) }}
+                </span>
               </td>
 
               <td class="status-cell">
@@ -201,7 +216,7 @@
             </tr>
 
             <tr *ngIf="!recurring || recurring.length === 0">
-              <td colspan="7" class="no-records">
+              <td colspan="8" class="no-records">
                 <mat-icon> info_outline </mat-icon>
 
                 <span> No records found </span>

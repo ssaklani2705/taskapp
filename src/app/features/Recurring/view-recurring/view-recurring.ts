@@ -22,6 +22,7 @@ interface Recurring {
   status: number;
   regDate?: string | null;
   modDate?: string | null;
+  priority:any;
 
   transactionHistory?: any[];
 }
@@ -428,4 +429,84 @@ export class ViewRecurring implements OnInit {
   get hasTransactionHistory(): boolean {
     return Array.isArray(this.transactionHistory) && this.transactionHistory.length > 0;
   }
+
+   getPriorityLabel(
+    priority: number | null | undefined
+  ): string {
+
+    if (
+      priority === null ||
+      priority === undefined
+    ) {
+
+      return '-';
+
+    }
+
+
+    switch (
+    Number(priority)
+    ) {
+
+      case 1:
+        return 'Low';
+
+      case 2:
+        return 'Medium';
+
+      case 3:
+        return 'High';
+
+      case 4:
+        return 'Critical';
+
+      default:
+        return String(priority);
+
+    }
+
+  }
+
+
+  // =========================================================
+  // PRIORITY CSS CLASS
+  // =========================================================
+
+  getPriorityClass(
+    priority: number | null | undefined
+  ): string {
+
+    if (
+      priority === null ||
+      priority === undefined
+    ) {
+
+      return '';
+
+    }
+
+
+    switch (
+    Number(priority)
+    ) {
+
+      case 1:
+        return 'priority-low';
+
+      case 2:
+        return 'priority-medium';
+
+      case 3:
+        return 'priority-high';
+
+      case 4:
+        return 'priority-critical';
+
+      default:
+        return '';
+
+    }
+
+  }
+
 }

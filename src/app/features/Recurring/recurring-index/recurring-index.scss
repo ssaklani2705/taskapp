@@ -603,6 +603,38 @@ mat-divider {
   border: 1px solid #efcaca;
 }
 
+
+.priority-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 68px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.priority-low {
+  background: #edf7f2;
+  color: #2d7d5f;
+  border: 1px solid #cde6da;
+}
+
+.priority-medium {
+  background: #fff6df;
+  color: #9a700e;
+  border: 1px solid #eedca9;
+}
+
+.priority-high {
+  background: #fbeaea;
+  color: #b8403d;
+  border: 1px solid #efcaca;
+}
+
 .no-records {
   height: 150px;
   padding: 20px !important;
