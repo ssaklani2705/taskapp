@@ -52,7 +52,7 @@
           </div>
           <!-- TASK CATEGORY -->
           <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()">
+            <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
               <option value="">
                 --All Task Categories--
               </option>
@@ -372,8 +372,7 @@
 
       <span
         class="reassign-text"
-        *ngIf="task.taskStatus === 1"
-      >
+        *ngIf="task.taskStatus === 1">
         Re-assign
       </span>
     </ng-template>
