@@ -65,6 +65,7 @@ interface Task {
   assignedTo: string;
   assignedbyName: string;
   description: string;
+  taskCategoryId: any;
 }
 
 interface Client {
@@ -554,7 +555,7 @@ export class TaskIndex {
   private loadFilterData(): void {
 
     this.dataprovider
-      .getTaskFilterData(this.isAdmin,
+      .getTaskFilterDataForIndex(this.isAdmin,
         this.userId, this.loginType)
       .subscribe({
 

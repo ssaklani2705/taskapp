@@ -1491,6 +1491,22 @@ return this.http.get<TaskCategoryDTO[]>(
 
   }
 
+  getTaskFilterDataForIndex(isAdmin: string, userId: number, loginType: string): Observable<any> {
+
+    return this.http.get<any>(
+      `${environment.apiBaseUrl}admin/task/getTaskFilterDataForIndex`,
+      {
+        params: {
+          isAdmin: isAdmin.toString(),
+          userId: userId.toString(),
+          loginType: loginType.toString(),
+          // clientId: clientId ?? ''
+        }
+      }
+    );
+
+  }
+
   changesClientIdgetTaskFilterData(isAdmin: string, userId: number, loginType: string, clientId: number): Observable<any> {
 
     return this.http.get<any>(
@@ -1666,6 +1682,16 @@ return this.http.get<TaskCategoryDTO[]>(
     });
   }
 
+  getRecurringClientsForIndex(userId: number,isAdmin: string,loginType: string) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/getRecurringClientsForIndex`, {
+      params: {
+        userId: userId,
+        isAdmin: isAdmin,
+        loginType: loginType
+      },
+    });
+  }
+
   addOrUpdateRecurring(data: any, userId: number) {
     return this.http.post<any>(`${environment.apiBaseUrl}admin/addOrUpdateRecurring`, data, {
       params: {
@@ -1737,6 +1763,16 @@ return this.http.get<TaskCategoryDTO[]>(
 
    getActiveTaskCategoriesForRecurring(userId: any,isAdmin: any,loginType:any) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/recurring/active`,{
+      params: {
+        userId: userId,
+        isAdmin: isAdmin,
+        loginType: loginType
+      },
+    });
+  }
+
+    getActiveTaskCategoriesForRecurringForIndex(userId: any,isAdmin: any,loginType:any) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/recurringForindex/active`,{
       params: {
         userId: userId,
         isAdmin: isAdmin,

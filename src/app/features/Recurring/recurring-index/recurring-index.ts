@@ -141,7 +141,7 @@ export class RecurringIndex {
       return;
     }
 
-    this.dataprovider.getRecurringClients(this.userId, this.isAdmin, this.loginType).subscribe({
+    this.dataprovider.getRecurringClientsForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
       next: (response: any) => {
         console.log('Recurring Clients:', response);
 
@@ -167,7 +167,7 @@ export class RecurringIndex {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType).subscribe({
+    this.dataprovider.getActiveTaskCategoriesForRecurringForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
       next: (response: any) => {
         console.log('Task Categories:', response);
 
