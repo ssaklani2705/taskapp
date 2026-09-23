@@ -52,7 +52,7 @@
           </div>
           <!-- TASK CATEGORY -->
           <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()">
+            <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
               <option value="">
                 --All Task Categories--
               </option>

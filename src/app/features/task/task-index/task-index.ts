@@ -1937,7 +1937,7 @@ export class TaskIndex {
       note: this.taskNote.trim(),
       userId: this.userId,
       sendMail: this.sendMail,
-      isAdmin:this.isAdmin,
+      isAdmin: this.isAdmin,
     };
 
     this.dataprovider.addTaskNote(request).subscribe({
@@ -2501,14 +2501,7 @@ export class TaskIndex {
   }
 
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
 
-    if (!target.closest('.status-dropdown')) {
-      this.showStatusDropdown = false;
-    }
-  }
 
 
   //Assign To Model
@@ -2686,9 +2679,9 @@ export class TaskIndex {
   canDisableChangeManager(task: any): boolean {
 
     // Admin can perform any action
-      if (this.isAdmin === 'Y') {
-        return false;
-      }
+    if (this.isAdmin === 'Y') {
+      return false;
+    }
 
     const isManager = Number(task.managerId) === Number(this.userId);
 
@@ -2822,14 +2815,7 @@ export class TaskIndex {
     this.onSearch();
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick2(event: Event): void {
-    const target = event.target as HTMLElement;
-
-    if (!target.closest('.client-dropdown-container')) {
-      this.showClientDropdown = false;
-    }
-  }
+  
 
   clearClientSearch(): void {
 
@@ -2843,6 +2829,29 @@ export class TaskIndex {
     this.onSearch(); // Reload all records
   }
   sendMail: boolean = false;
+  showTaskCategoryDropdown = false;
+
+
+   @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+
+    const target = event.target as HTMLElement;
+
+    // Status dropdown
+    if (!target.closest('.status-dropdown')) {
+      this.showStatusDropdown = false;
+    }
+
+    // Client dropdown
+    if (!target.closest('.client-dropdown-container')) {
+      this.showClientDropdown = false;
+    }
+
+    // Task Category dropdown
+    if (!target.closest('.task-category-dropdown')) {
+      this.showTaskCategoryDropdown = false;
+    }
+  }
 }
 
 
