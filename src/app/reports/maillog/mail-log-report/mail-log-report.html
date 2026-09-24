@@ -21,19 +21,10 @@
           <label>Name / Email / Subject</label>
 
           <div class="search-input-wrapper">
-            <input
-              type="text"
-              [(ngModel)]="searchQuery"
-              placeholder="Search By Name, Email, Subject"
-              (keyup.enter)="onSearch()"
-            />
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search By Name, Email, Subject"
+              (keyup.enter)="onSearch()" />
 
-            <button
-              type="button"
-              class="search-button"
-              (click)="onSearch()"
-              title="Search"
-            >
+            <button type="button" class="search-button" (click)="onSearch()" title="Search">
               <mat-icon>search</mat-icon>
             </button>
           </div>
@@ -47,12 +38,7 @@
 
           &nbsp;
 
-          <button
-            type="button"
-            class="btn-clear"
-            (click)="clearFilters()"
-            title="Clear Filters"
-          >
+          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
             Clear
           </button>
         </div>
@@ -75,16 +61,13 @@
           <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
           <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            type="button"
-            *ngFor="let p of pages()"
-            (click)="goToPage(p)"
-            [class.active-pagination]="p === currentPage"
-          >
+          <button type="button" *ngFor="let p of pages()" (click)="goToPage(p)"
+            [class.active-pagination]="p === currentPage">
             {{ p }}
           </button>
 
-          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next
+            ›</button>
           <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
 
@@ -129,19 +112,14 @@
 
               <td class="text-left">{{ log.localIp }}</td>
 
-             <td>
-  <span class="status-badge" [ngClass]="getStatusClass(log.status)">
-    {{ log.status === 1 ? 'Sent' : log.status === 2 ? 'Failed' : log.status }}
-  </span>
-</td>
+              <td>
+                <span class="status-badge" [ngClass]="getStatusClass(log.status)">
+                  {{ log.status === 1 ? 'Sent' : log.status === 2 ? 'Failed' : log.status }}
+                </span>
+              </td>
 
               <td>
-                <button
-                  type="button"
-                  class="action-button view-button"
-                  title="View Mail"
-                  (click)="viewMail(log)"
-                >
+                <button type="button" class="action-button view-button" title="View Mail" (click)="viewMail(log)">
                   <mat-icon>mail_outline</mat-icon>
                 </button>
               </td>
@@ -171,16 +149,13 @@
           <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
           <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            type="button"
-            *ngFor="let p of pages()"
-            (click)="goToPage(p)"
-            [class.active-pagination]="p === currentPage"
-          >
+          <button type="button" *ngFor="let p of pages()" (click)="goToPage(p)"
+            [class.active-pagination]="p === currentPage">
             {{ p }}
           </button>
 
-          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next
+            ›</button>
           <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
 

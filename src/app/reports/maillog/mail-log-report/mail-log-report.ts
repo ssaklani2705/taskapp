@@ -12,6 +12,8 @@ import { environment } from '../../../../environments/environment';
 import { DataProviderService } from '../../../service/data-provider.service';
 
 interface MailLog {
+  mailLogId: any,
+  cc: any,
   name: string;
   to: string;
   subject: string;
@@ -57,7 +59,7 @@ export class MailLogReportComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
-  ) {}
+  ) { }
 
   // ================= INIT =================
   ngOnInit(): void {
@@ -81,6 +83,9 @@ export class MailLogReportComponent implements OnInit {
         next: (response) => {
           this.apiResponse = response;
           this.mailLogs = response.data || [];
+
+
+          console.log(this.mailLogs)
         },
         error: (error) => {
           console.error('Error fetching mail log report:', error);
@@ -104,48 +109,112 @@ export class MailLogReportComponent implements OnInit {
   }
 
   // ================= STATUS CLASS =================
- getStatusClass(status: number): string {
+  getStatusClass(status: number): string {
 
-  if (status === 1) {
-    return 'status-sent';
+    if (status === 1) {
+      return 'status-sent';
+    }
+    if (status === 2) {
+      return 'status-failed';
+    }
+    return 'status-other';
   }
-  if (status === 2) {
-    return 'status-failed';
-  }
-  return 'status-other';
-}
 
   // ================= VIEW MAIL =================
   viewMail(log: MailLog): void {
+
     Swal.fire({
       title: log.subject || 'Mail',
       html: `
-        <div class="mail-meta">
-          <div><strong>To:</strong> <span id="mail-to"></span></div>
-          <div><strong>Date:</strong> <span id="mail-date"></span></div>
-        </div>
-        <iframe id="mail-frame" sandbox=""
-          style="width:100%;height:320px;border:1px solid #d5dee7;margin-top:10px;background:#fff;">
-        </iframe>
-      `,
+      <div class="mail-meta">
+        <div><strong>To:</strong> <span id="mail-to"></span></div>
+          <div  id="mail-cc-row"><strong>CC:</strong> <span id="mail-cc"></span></div>
+        <div><strong>Date:</strong> <span id="mail-date"></span></div>
+      </div>
+
+      <iframe id="mail-frame"
+        style="width:100%;height:320px;border:1px solid #d5dee7;margin-top:10px;background:#fff;">
+      </iframe>
+    `,
       width: 720,
       confirmButtonText: 'Close',
+
       didOpen: () => {
-        // Set content via DOM properties (not string interpolation) to avoid HTML injection
+
         const to = document.getElementById('mail-to');
         const date = document.getElementById('mail-date');
         const frame = document.getElementById('mail-frame') as HTMLIFrameElement;
-
+        const cc = document.getElementById('mail-cc');
+        const ccRow = document.getElementById('mail-cc-row');
         if (to) {
-          to.textContent = `${log.name || ''} <${log.to || ''}>`;
+          const emails = (log.to || '')
+            .split(',')
+            .map(email => email.trim())
+            .join('<br>');
+
+          to.innerHTML = `${log.name || ''}
+          <br>
+          ${emails}`;
         }
+
+        if (cc && ccRow) {
+          const ccEmails = (log.cc || '')
+            .split(',')
+            .map((email: string) => email.trim())
+            .filter((email: string) => email)
+            .join('<br>');
+          if (ccEmails) {
+            cc.innerHTML = ccEmails;
+            ccRow.style.display = 'block';
+          } else {
+            ccRow.style.display = 'none';
+          }
+          cc.innerHTML = ccEmails || '-';
+        }
+
+
         if (date) {
           date.textContent = this.formatDateTime(log.regDate);
         }
+
         if (frame) {
-          frame.srcdoc = log.mailBody || '<p>No mail content available.</p>';
+          frame.srcdoc = '<p style="padding:10px">Loading...</p>';
         }
-      },
+
+        this.dataprovider.getMailLogHtml(log.mailLogId)
+          .subscribe({
+            next: (response: any) => {
+
+              if (frame) {
+
+                // If API returns plain HTML string
+                if (typeof response === 'string') {
+                  frame.srcdoc = response;
+                }
+
+                // If API returns { data: "<html>..." }
+                else if (response?.data) {
+                  frame.srcdoc = response.data;
+                }
+
+                // If API returns { htmlContent: "<html>..." }
+                else if (response?.htmlContent) {
+                  frame.srcdoc = response.htmlContent;
+                }
+
+                else {
+                  frame.srcdoc = '<p>No mail content available.</p>';
+                }
+              }
+            },
+            error: () => {
+              if (frame) {
+                frame.srcdoc =
+                  '<p style="color:red;padding:10px;">Unable to load mail content.</p>';
+              }
+            }
+          });
+      }
     });
   }
 
