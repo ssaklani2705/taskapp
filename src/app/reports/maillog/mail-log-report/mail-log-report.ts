@@ -22,6 +22,7 @@ interface MailLog {
   localIp: string;
   status: any;
   mailBody?: string;
+  mailLogId:any;
 }
 
 @Component({

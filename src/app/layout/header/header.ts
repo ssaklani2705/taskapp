@@ -1,17 +1,23 @@
 import {
   Component,
   EventEmitter,
+  Inject,
   OnInit,
-  Output
+  Output,
+  PLATFORM_ID
 } from '@angular/core';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { LoginService } from '../../service/login.service';
+import { Router } from '@angular/router';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   standalone: true,
   imports: [
+    CommonModule,
     MatIconModule,
     MatButtonModule
   ],
@@ -20,12 +26,26 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class Header implements OnInit {
 
+
+    constructor(
+    private router: Router,
+
+    private loginService: LoginService,
+
+    @Inject(PLATFORM_ID)
+    private platformId: Object,
+
+    // private elementRef: ElementRef
+  ) {}
+
   @Output()
   menuToggle = new EventEmitter<void>();
 
   username: string = '';
+  showProfileMenu: boolean = false;
 
-   ngOnInit(): void {
+
+  ngOnInit(): void {
     this.username =
       sessionStorage.getItem('username') || '';
   }
@@ -34,22 +54,112 @@ export class Header implements OnInit {
     this.menuToggle.emit();
   }
 
-
-  getInitials(name: string): string {
-  if (!name) {
-    return '';
-  }
-
-  const parts = name.trim().split(/\s+/);
-
-  if (parts.length === 1) {
-    return parts[0].substring(0, 2).toUpperCase();
-  }
-
-  return (
-    parts[0].charAt(0) +
-    parts[parts.length - 1].charAt(0)
-  ).toUpperCase();
+ toggleProfileMenu(): void {
+  this.showProfileMenu = !this.showProfileMenu;
 }
 
+  getInitials(name: string): string {
+    if (!name) {
+      return '';
+    }
+
+    const parts = name.trim().split(/\s+/);
+
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+
+    return (
+      parts[0].charAt(0) +
+      parts[parts.length - 1].charAt(0)
+    ).toUpperCase();
+  }
+
+   onLogout(): void {
+
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+
+
+    // ---------------------------------------------
+    // Get login type BEFORE clearing session
+    // ---------------------------------------------
+
+    const loginType =
+      sessionStorage.getItem(
+        'loginType'
+      ) || 'other';
+
+
+    // ---------------------------------------------
+    // Redirect URL
+    // ---------------------------------------------
+
+    const redirectUrl =
+      loginType === 'manager'
+        ? '/manager-login'
+        : '/login';
+
+
+    // ---------------------------------------------
+    // Logout API
+    // ---------------------------------------------
+
+    const logoutRequest =
+      this.loginService.logout();
+
+
+    // ---------------------------------------------
+    // No logout request
+    // ---------------------------------------------
+
+    if (!logoutRequest) {
+
+      this.loginService.clearSession();
+
+      this.router.navigate([
+        redirectUrl
+      ]);
+
+      return;
+    }
+
+
+    // ---------------------------------------------
+    // Logout request
+    // ---------------------------------------------
+
+    logoutRequest.subscribe({
+
+      next: () => {
+
+        this.loginService.clearSession();
+
+        this.router.navigate([
+          redirectUrl
+        ]);
+      },
+
+      error: () => {
+
+        this.loginService.clearSession();
+
+        this.router.navigate([
+          redirectUrl
+        ]);
+      }
+
+    });
+  }
+
+   onProfileClick(): void {
+    this.closeProfileMenu();
+    // Navigate to a profile page if you have one, e.g.:
+    // this.router.navigate(['/profile']);
+  }
+
+   closeProfileMenu(): void {
+    this.showProfileMenu = false;
+  }
 }

@@ -166,16 +166,26 @@
                 {{ (currentPage - 1) * size + i + 1 }}
               </td>
 
-              <td class="plan-name-cell">
-                <span class="user-name">
-                  {{ item.clientName || '-' }}
+             <td class="title-cell">
+  <div class="title-cell-inner">
 
-                </span>
-                <button type="button" class="description-icon-button" *ngIf="item.description"
-                  (click)="openDescriptionModal(item)" aria-label="View Description">
-                  <i class="fa fa-file-text"></i>
-                </button>
-              </td>
+    <span class="title-accent-bar"></span>
+
+    <span class="title-text">
+      {{ item.title || '-' }}
+    </span>
+
+    <button
+      type="button"
+      class="description-icon-button"
+      *ngIf="item.description"
+      (click)="openDescriptionModal(item)"
+      aria-label="View Description">
+      <i class="fa fa-file-text"></i>
+    </button>
+
+  </div>
+</td>
 
               <td class="plan-name-cell">
                 {{ item.title || '-' }}
