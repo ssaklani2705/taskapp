@@ -1535,3 +1535,34 @@ textarea.manager-select::placeholder {
   cursor: pointer;
   font-size: 14px;
 }
+
+
+.title-cell {
+  text-align: center !important;
+}
+
+.title-cell-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.title-accent-bar {
+  width: 3px;
+  height: 22px;
+  flex: 0 0 3px;
+  background: var(--primary-blue);
+  // background: 3px solid #6366f1;
+  border-radius: 2px;
+}
+
+.title-text {
+  color: var(--text-dark);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  text-align: left;
+}

@@ -20,6 +20,7 @@ interface MailLog {
   localIp: string;
   status: any;
   mailBody?: string;
+  mailLogId:any;
 }
 
 @Component({
@@ -116,38 +117,31 @@ export class MailLogReportComponent implements OnInit {
 }
 
   // ================= VIEW MAIL =================
-  viewMail(log: MailLog): void {
-    Swal.fire({
-      title: log.subject || 'Mail',
-      html: `
-        <div class="mail-meta">
-          <div><strong>To:</strong> <span id="mail-to"></span></div>
-          <div><strong>Date:</strong> <span id="mail-date"></span></div>
-        </div>
-        <iframe id="mail-frame" sandbox=""
-          style="width:100%;height:320px;border:1px solid #d5dee7;margin-top:10px;background:#fff;">
-        </iframe>
-      `,
-      width: 720,
-      confirmButtonText: 'Close',
-      didOpen: () => {
-        // Set content via DOM properties (not string interpolation) to avoid HTML injection
-        const to = document.getElementById('mail-to');
-        const date = document.getElementById('mail-date');
-        const frame = document.getElementById('mail-frame') as HTMLIFrameElement;
+viewMail(log: MailLog): void {
+  this.dataprovider.getMailLogHtml(log.mailLogId).subscribe({
+    next: (response) => {
+      const htmlContent = response.htmlContent || '<p>No mail content available.</p>';
 
-        if (to) {
-          to.textContent = `${log.name || ''} <${log.to || ''}>`;
-        }
-        if (date) {
-          date.textContent = this.formatDateTime(log.regDate);
-        }
-        if (frame) {
-          frame.srcdoc = log.mailBody || '<p>No mail content available.</p>';
-        }
-      },
-    });
-  }
+      Swal.fire({
+        html: `<iframe id="mail-frame" sandbox=""
+                 style="width:100%;height:420px;border:0;background:#fff;"></iframe>`,
+        width: 720,
+        showConfirmButton: false,
+        showCloseButton: true,
+        didOpen: () => {
+          const frame = document.getElementById('mail-frame') as HTMLIFrameElement;
+          if (frame) {
+            frame.srcdoc = htmlContent;
+          }
+        },
+      });
+    },
+    error: (err) => {
+      console.error('Error fetching mail log HTML:', err);
+      Swal.fire('Error', 'Unable to load mail content.', 'error');
+    },
+  });
+}
 
   // ================= PAGINATION =================
   get paginatedLogs(): MailLog[] {
