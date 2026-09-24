@@ -119,21 +119,21 @@
 
               <td class="text-left">{{ log.name }}</td>
 
-              <td class="text-left">{{ log.email }}</td>
+              <td class="text-left">{{ log.to }}</td>
 
               <td class="text-left">{{ log.subject }}</td>
 
-              <td class="text-left">{{ formatDateTime(log.mailDate) }}</td>
+              <td class="text-left">{{ formatDateTime(log.regDate) }}</td>
 
               <td class="text-left">{{ log.ipAddress }}</td>
 
               <td class="text-left">{{ log.localIp }}</td>
 
-              <td>
-                <span class="status-badge" [ngClass]="getStatusClass(log.status)">
-                  {{ log.status }}
-                </span>
-              </td>
+             <td>
+  <span class="status-badge" [ngClass]="getStatusClass(log.status)">
+    {{ log.status === 1 ? 'Sent' : log.status === 2 ? 'Failed' : log.status }}
+  </span>
+</td>
 
               <td>
                 <button

@@ -13,12 +13,12 @@ import { DataProviderService } from '../../../service/data-provider.service';
 
 interface MailLog {
   name: string;
-  email: string;
+  to: string;
   subject: string;
-  mailDate: any;
+  regDate: any;
   ipAddress: string;
   localIp: string;
-  status: string;
+  status: any;
   mailBody?: string;
 }
 
@@ -104,17 +104,16 @@ export class MailLogReportComponent implements OnInit {
   }
 
   // ================= STATUS CLASS =================
-  getStatusClass(status: string): string {
-    const s = (status || '').toLowerCase();
+ getStatusClass(status: number): string {
 
-    if (s === 'sent') {
-      return 'status-sent';
-    }
-    if (s === 'failed' || s === 'error') {
-      return 'status-failed';
-    }
-    return 'status-other';
+  if (status === 1) {
+    return 'status-sent';
   }
+  if (status === 2) {
+    return 'status-failed';
+  }
+  return 'status-other';
+}
 
   // ================= VIEW MAIL =================
   viewMail(log: MailLog): void {
@@ -138,10 +137,10 @@ export class MailLogReportComponent implements OnInit {
         const frame = document.getElementById('mail-frame') as HTMLIFrameElement;
 
         if (to) {
-          to.textContent = `${log.name || ''} <${log.email || ''}>`;
+          to.textContent = `${log.name || ''} <${log.to || ''}>`;
         }
         if (date) {
-          date.textContent = this.formatDateTime(log.mailDate);
+          date.textContent = this.formatDateTime(log.regDate);
         }
         if (frame) {
           frame.srcdoc = log.mailBody || '<p>No mail content available.</p>';

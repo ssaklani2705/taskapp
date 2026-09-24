@@ -246,33 +246,76 @@ export class AddRecurring implements OnInit {
     this.updateTypeValidators(type);
   }
 
+  // private updateTypeValidators(type: number): void {
+  //   const dayControl = this.recurringForm.get('day');
+  //   const dateControl = this.recurringForm.get('date');
+  //   const monthControl = this.recurringForm.get('month');
+
+  //   dayControl?.clearValidators();
+  //   dateControl?.clearValidators();
+  //   monthControl?.clearValidators();
+
+  //   if (type === 1) {
+  //     dayControl?.setValue(null);
+  //     dateControl?.setValue(null);
+  //     monthControl?.setValue(null);
+  //   } else if (type === 2) {
+  //     dayControl?.setValidators(Validators.required);
+  //     dateControl?.setValue(null);
+  //     monthControl?.setValue(null);
+  //   } else if (type === 3) {
+  //     dateControl?.setValidators(Validators.required);
+  //     dayControl?.setValue(null);
+  //     monthControl?.setValue(null);
+  //   } else if (type === 4) {
+  //     dateControl?.setValidators(Validators.required);
+  //     monthControl?.setValidators(Validators.required);
+  //     dayControl?.setValue(null);
+  //   }
+
+  //   dayControl?.updateValueAndValidity();
+  //   dateControl?.updateValueAndValidity();
+  //   monthControl?.updateValueAndValidity();
+  // }
+
   private updateTypeValidators(type: number): void {
     const dayControl = this.recurringForm.get('day');
     const dateControl = this.recurringForm.get('date');
     const monthControl = this.recurringForm.get('month');
-
     dayControl?.clearValidators();
     dateControl?.clearValidators();
     monthControl?.clearValidators();
-
+    // Make sure date is enabled by default
+    dateControl?.enable({ emitEvent: false });
     if (type === 1) {
       dayControl?.setValue(null);
       dateControl?.setValue(null);
       monthControl?.setValue(null);
+      this.dates = [];
     } else if (type === 2) {
       dayControl?.setValidators(Validators.required);
       dateControl?.setValue(null);
       monthControl?.setValue(null);
+      this.dates = [];
     } else if (type === 3) {
       dateControl?.setValidators(Validators.required);
       dayControl?.setValue(null);
       monthControl?.setValue(null);
+      this.dates = Array.from({ length: 28 }, (_, i) => i + 1);
     } else if (type === 4) {
       dateControl?.setValidators(Validators.required);
       monthControl?.setValidators(Validators.required);
       dayControl?.setValue(null);
+      const monthValue = monthControl?.value;
+      // Yearly: Date remains disabled until Month is selected
+      if (monthValue === null || monthValue === undefined || monthValue === '') {
+        dateControl?.setValue(null);
+        dateControl?.disable({ emitEvent: false });
+        this.dates = [];
+      } else {
+        dateControl?.enable({ emitEvent: false });
+      }
     }
-
     dayControl?.updateValueAndValidity();
     dateControl?.updateValueAndValidity();
     monthControl?.updateValueAndValidity();
@@ -385,27 +428,58 @@ export class AddRecurring implements OnInit {
     this.recurringForm.markAsUntouched();
   }
 
-  onYearlyMonthChange(): void {
-    const month = Number(this.recurringForm.get('month')?.value);
+  // onYearlyMonthChange(): void {
+  //   const month = Number(this.recurringForm.get('month')?.value);
 
+  //   let maxDays = 28;
+
+  //   if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
+  //     maxDays = 31;
+  //   } else if ([4, 6, 9, 11].includes(month)) {
+  //     maxDays = 30;
+  //   }
+
+  //   this.dates = Array.from({ length: maxDays }, (_, i) => i + 1);
+
+  //   const selectedDate = Number(this.recurringForm.get('date')?.value);
+
+  //   // If the previously selected date doesn't exist in the new month,
+  //   // clear it.
+  //   if (selectedDate > maxDays) {
+  //     this.recurringForm.get('date')?.setValue(null);
+  //   }
+  // }
+
+
+   onYearlyMonthChange(): void {
+    const monthValue = this.recurringForm.get('month')?.value;
+    const dateControl = this.recurringForm.get('date');
+    // No month selected
+    if (monthValue === null || monthValue === undefined || monthValue === '') {
+      dateControl?.setValue(null);
+      dateControl?.disable({ emitEvent: false });
+      this.dates = [];
+      return;
+    }
+    // Month selected → enable Date
+    dateControl?.enable({ emitEvent: false });
+    const month = Number(monthValue);
     let maxDays = 28;
-
     if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
       maxDays = 31;
     } else if ([4, 6, 9, 11].includes(month)) {
       maxDays = 30;
     }
-
     this.dates = Array.from({ length: maxDays }, (_, i) => i + 1);
-
-    const selectedDate = Number(this.recurringForm.get('date')?.value);
-
-    // If the previously selected date doesn't exist in the new month,
-    // clear it.
-    if (selectedDate > maxDays) {
-      this.recurringForm.get('date')?.setValue(null);
+    const selectedDate = dateControl?.value;
+    // Clear previously selected date if it is invalid
+    // for the newly selected month.
+    if (selectedDate !== null && selectedDate !== undefined && Number(selectedDate) > maxDays) {
+      dateControl?.setValue(null);
     }
+    dateControl?.updateValueAndValidity();
   }
+
 
   backToIndexPage(): void {
     if (isPlatformBrowser(this.platformId)) {
