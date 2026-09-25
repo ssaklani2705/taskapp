@@ -19,42 +19,23 @@ interface Department {
 }
 @Component({
   selector: 'app-department-index',
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    MatCardModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIconModule],
   templateUrl: './department-index.html',
-  styleUrl: './department-index.scss'
+  styleUrl: './department-index.scss',
 })
 export class DepartmentIndexComponent {
-
-
   // =========================================================
   // DATA
   // =========================================================
-
   departments: Department[] = [];
-
   apiResponseDepartmentDetails: any = {};
-
   searchQuery: string = '';
   search: string = '';
-
-  // =========================================================
-  // PAGINATION
-  // =========================================================
-
   currentPage: number = 1;
   page: number = 0;
+  recordsPerPage: number = environment.recordsPerPage;
 
-  recordsPerPage: number =
-    environment.recordsPerPage;
-
-  size: number =
-    environment.size;
+  size: number = environment.size;
 
   // =========================================================
   // STATUS FILTER
@@ -96,8 +77,7 @@ export class DepartmentIndexComponent {
   // SESSION FILTER
   // =========================================================
 
-  filterKey =
-    SESSION_KEYS.DEPARTMENT_MASTER_FILTER;
+  filterKey = SESSION_KEYS.DEPARTMENT_MASTER_FILTER;
 
   // =========================================================
   // PANEL
@@ -118,22 +98,22 @@ export class DepartmentIndexComponent {
     label: string;
     sortable: boolean;
   }[] = [
-      {
-        key: 'name',
-        label: 'Department Name',
-        sortable: true,
-      },
-      {
-        key: 'sequence',
-        label: 'Sequence',
-        sortable: true,
-      },
-      {
-        key: 'status',
-        label: 'Status',
-        sortable: true,
-      },
-    ];
+    {
+      key: 'name',
+      label: 'Department Name',
+      sortable: true,
+    },
+    {
+      key: 'sequence',
+      label: 'Sequence',
+      sortable: true,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      sortable: true,
+    },
+  ];
 
   // =========================================================
   // CONSTRUCTOR
@@ -150,186 +130,85 @@ export class DepartmentIndexComponent {
     private route: ActivatedRoute,
 
     private sessionService: SessionStorageService,
-  ) { }
+  ) {}
 
   // =========================================================
   // INIT
   // =========================================================
 
   ngOnInit() {
+    this.sessionService.clearOtherSessions(this.filterKey);
+    if (isPlatformBrowser(this.platformId)) {
+      this.userId = sessionStorage.getItem('userId');
+    }
+    if (isPlatformBrowser(this.platformId)) {
+      const storedModules = sessionStorage.getItem('selectedModuleDetail');
+      if (storedModules) {
+        const parsed = JSON.parse(storedModules);
 
-    this.sessionService.clearOtherSessions(
-      this.filterKey
-    );
+        this.moduleName = parsed.name ?? '';
 
-    this.route.queryParams.subscribe(
-      (params) => {
+        this.addPer = parsed.addPer ?? 'N';
 
-        // -----------------------------------------------------
-        // USER ID
-        // -----------------------------------------------------
+        this.editPer = parsed.editPer ?? 'N';
 
-        if (
-          isPlatformBrowser(
-            this.platformId
-          )
-        ) {
-          this.userId =
-            sessionStorage.getItem(
-              'userId'
-            );
-        }
+        this.deletePer = parsed.deletePer ?? 'N';
 
-        // -----------------------------------------------------
-        // MODULE PERMISSIONS
-        // -----------------------------------------------------
+        this.viewPer = parsed.viewPer ?? 'N';
 
-        if (
-          isPlatformBrowser(
-            this.platformId
-          )
-        ) {
+        this.approvePer = parsed.approvePer ?? 'N';
 
-          const storedModules =
-            sessionStorage.getItem(
-              'selectedModuleDetail'
-            );
-          // alert(storedModules);
-          if (storedModules) {
-
-            const parsed =
-              JSON.parse(
-                storedModules
-              );
-
-            this.moduleName =
-              parsed.name ?? '';
-
-            this.addPer =
-              parsed.addPer ?? 'N';
-
-            this.editPer =
-              parsed.editPer ?? 'N';
-
-            this.deletePer =
-              parsed.deletePer ?? 'N';
-
-            this.viewPer =
-              parsed.viewPer ?? 'N';
-
-            this.approvePer =
-              parsed.approvePer ?? 'N';
-
-            this.adminApprovePer =
-              parsed.adminApprovePer ?? 'N';
-          }
-        }
-
-        // -----------------------------------------------------
-        // FILTER STATE
-        // -----------------------------------------------------
-
-        let stateData: any = null;
-
-        const nav =
-          this.router.getCurrentNavigation();
-
-        stateData =
-          nav?.extras?.state;
-
-        if (!stateData) {
-
-          const saved =
-            sessionStorage.getItem(
-              this.filterKey
-            );
-
-          if (saved) {
-            stateData =
-              JSON.parse(saved);
-          }
-        }
-
-        if (stateData) {
-
-          this.currentPage =
-            stateData.currentPage || 1;
-
-          this.page =
-            this.currentPage - 1;
-
-          this.statusIndex =
-            stateData.statusIndex || 0;
-
-          this.search =
-            stateData.searchText || '';
-
-          this.size =
-            stateData.size || this.size;
-
-          this.recordsPerPage =
-            this.size;
-
-          // Sync UI
-          this.searchQuery =
-            this.search;
-
-          this.selectedStatus =
-            this.statusIndex
-              ? String(
-                this.statusIndex
-              )
-              : '';
-        }
-
-        // -----------------------------------------------------
-        // GET DATA
-        // -----------------------------------------------------
-
-        this.getDepartmentDetails();
+        this.adminApprovePer = parsed.adminApprovePer ?? 'N';
       }
-    );
-  }
+    }
 
-  // =========================================================
-  // TOGGLE PANEL
-  // =========================================================
+    let stateData: any = null;
+
+    const nav = this.router.getCurrentNavigation();
+
+    stateData = nav?.extras?.state;
+
+    if (!stateData) {
+      const saved = sessionStorage.getItem(this.filterKey);
+
+      if (saved) {
+        stateData = JSON.parse(saved);
+      }
+    }
+
+    if (stateData) {
+      this.currentPage = stateData.currentPage || 1;
+
+      this.page = this.currentPage - 1;
+
+      this.statusIndex = stateData.statusIndex || 0;
+
+      this.search = stateData.searchText || '';
+      this.size = stateData.size || this.size;
+      this.recordsPerPage = this.size;
+      this.searchQuery = this.search;
+      this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
+    }
+
+    this.getDepartmentDetails();
+  }
 
   togglePanel() {
-    this.isPanelVisible =
-      !this.isPanelVisible;
+    this.isPanelVisible = !this.isPanelVisible;
   }
-
-  // =========================================================
-  // GET DEPARTMENT DETAILS
-  // =========================================================
-
   getDepartmentDetails() {
-
     this.dataprovider
-      .getDepartmentDetails(
-        this.page,
-        this.size,
-        this.statusIndex,
-        this.search
-      )
+      .getDepartmentDetails(this.page, this.size, this.statusIndex, this.search)
       .subscribe(
         (response) => {
+          this.apiResponseDepartmentDetails = response;
 
-          this.apiResponseDepartmentDetails =
-            response;
-
-          this.departments =
-            response.data;
+          this.departments = response.data;
         },
 
         (error) => {
-
-          console.error(
-            'Error fetching department details:',
-            error
-          );
-        }
+          console.error('Error fetching department details:', error);
+        },
       );
   }
 
@@ -345,49 +224,36 @@ export class DepartmentIndexComponent {
   // GO TO PAGE
   // =========================================================
 
-  goToPage(
-    pageNumber: number
-  ) {
-
-    if (
-      pageNumber < 1 ||
-      pageNumber > this.totalPages
-    ) {
+  goToPage(pageNumber: number) {
+    if (pageNumber < 1 || pageNumber > this.totalPages) {
       return;
     }
 
-    this.currentPage =
-      pageNumber;
+    this.currentPage = pageNumber;
 
-    this.page =
-      pageNumber - 1;
+    this.page = pageNumber - 1;
 
     this.router
       .navigate(
         ['/department-master'],
+
         {
-          queryParams: {
-            currentPage:
-              this.currentPage,
+          replaceUrl: true,
+          state: {
+            currentPage: this.currentPage,
 
-            statusIndex:
-              this.statusIndex || 0,
+            statusIndex: this.statusIndex || 0,
 
-            searchText:
-              this.search || '',
+            searchText: this.search || '',
 
-            page:
-              this.page,
+            page: this.page,
 
-            size:
-              this.size || 5,
+            size: this.size || 5,
           },
-        }
+        },
       )
       .then(() => {
-
         this.getDepartmentDetails();
-
       });
   }
 
@@ -396,7 +262,6 @@ export class DepartmentIndexComponent {
   // =========================================================
 
   goToFirstPage() {
-
     this.goToPage(1);
   }
 
@@ -405,10 +270,7 @@ export class DepartmentIndexComponent {
   // =========================================================
 
   goToLastPage() {
-
-    this.goToPage(
-      this.totalPages
-    );
+    this.goToPage(this.totalPages);
   }
 
   // =========================================================
@@ -416,46 +278,30 @@ export class DepartmentIndexComponent {
   // =========================================================
 
   onSearch() {
+    this.search = this.searchQuery.trim();
 
-    this.search =
-      this.searchQuery.trim();
-
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : +this.selectedStatus;
+    this.statusIndex = this.selectedStatus === '' ? 0 : +this.selectedStatus;
 
     this.currentPage = 1;
 
     this.page = 0;
 
     this.router
-      .navigate(
-        ['/department-master'],
-        {
-          state: {
+      .navigate(['/department-master'], {
+        state: {
+          currentPage: this.currentPage,
 
-            currentPage:
-              this.currentPage,
+          statusIndex: this.statusIndex || 0,
 
-            statusIndex:
-              this.statusIndex || 0,
+          searchText: this.search || '',
 
-            searchText:
-              this.search || '',
+          page: this.page,
 
-            page:
-              this.page,
-
-            size:
-              this.size || 5,
-          },
-        }
-      )
+          size: this.size || 5,
+        },
+      })
       .then(() => {
-
         this.getDepartmentDetails();
-
       });
   }
 
@@ -464,17 +310,11 @@ export class DepartmentIndexComponent {
   // =========================================================
 
   onChangeRecordsPerPage(): void {
+    this.statusIndex = this.selectedStatus === '' ? 0 : +this.selectedStatus;
 
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : +this.selectedStatus;
-
-    this.search =
-      this.searchQuery.trim();
+    this.search = this.searchQuery.trim();
 
     if (!this.search) {
-
       this.search = '';
 
       this.searchQuery = '';
@@ -491,177 +331,97 @@ export class DepartmentIndexComponent {
   // DELETE DEPARTMENT
   // =========================================================
 
-  onDeleteDepartment(
-    departmentId: any
-  ) {
+  onDeleteDepartment(departmentId: any) {
+    this.department.departmentId = departmentId;
 
-    this.department.departmentId =
-      departmentId;
-
-    this.department.userId =
-      this.userId
-        ? Number(this.userId)
-        : null;
+    this.department.userId = this.userId ? Number(this.userId) : null;
 
     Swal.fire({
-
       title: 'Are you sure?',
 
-      text:
-        'Do you really want to delete this department?',
+      text: 'Do you really want to delete this department?',
 
       icon: 'warning',
 
       showCancelButton: true,
 
-      confirmButtonText:
-        'Yes, delete it!',
+      confirmButtonText: 'Yes, delete it!',
 
-      cancelButtonText:
-        'No, keep it',
-        customClass: {
-    popup: 'small-confirm-popup'
-  }
+      cancelButtonText: 'No, keep it',
+      customClass: {
+        popup: 'small-confirm-popup',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.dataprovider.deleteDepartment(this.department).subscribe({
+          next: (response) => {
+            if (response.success) {
+              Swal.fire('Deleted!', response.message, 'success');
 
-    }).then(
-      (result) => {
+              this.getDepartmentDetails();
+            } else {
+              Swal.fire('Error', response.message, 'error');
+            }
+          },
 
-        if (
-          result.isConfirmed
-        ) {
+          error: (err) => {
+            console.error('error:', err);
 
-          this.dataprovider
-            .deleteDepartment(
-              this.department
-            )
-            .subscribe({
+            const message = err?.error?.message || 'Something went wrong';
 
-              next:
-                (response) => {
-
-                  if (
-                    response.success
-                  ) {
-
-                    Swal.fire(
-                      'Deleted!',
-                      response.message,
-                      'success'
-                    );
-
-                    this.getDepartmentDetails();
-
-                  } else {
-
-                    Swal.fire(
-                      'Error',
-                      response.message,
-                      'error'
-                    );
-                  }
-                },
-
-              error: (err) => {
-                console.error('error:', err);
-
-                const message =
-                  err?.error?.message ||
-                  'Something went wrong';
-
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error',
-                  text: message
-                });
-              },
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: message,
             });
-        }
+          },
+        });
       }
-    );
+    });
   }
 
   // =========================================================
   // VIEW DEPARTMENT
   // =========================================================
 
-  viewDepartment(
-    departmentId: any
-  ) {
-
+  viewDepartment(departmentId: any) {
     const filterState = {
+      currentPage: this.currentPage,
 
-      currentPage:
-        this.currentPage,
+      statusIndex: this.statusIndex,
 
-      statusIndex:
-        this.statusIndex,
+      searchText: this.search,
 
-      searchText:
-        this.search,
-
-      size:
-        this.size,
+      size: this.size,
     };
 
-    sessionStorage.setItem(
-      this.filterKey,
-      JSON.stringify(
-        filterState
-      )
-    );
+    sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
 
-    this.router.navigate(
-      [
-        '/view-department',
-        departmentId
-      ],
-      {
-        state:
-          filterState
-      }
-    );
+    this.router.navigate(['/view-department', departmentId], {
+      state: filterState,
+    });
   }
 
   // =========================================================
   // EDIT DEPARTMENT
   // =========================================================
 
-  editDepartment(
-    departmentId: any
-  ) {
-
+  editDepartment(departmentId: any) {
     const filterState = {
+      currentPage: this.currentPage,
 
-      currentPage:
-        this.currentPage,
+      statusIndex: this.statusIndex,
 
-      statusIndex:
-        this.statusIndex,
+      searchText: this.search,
 
-      searchText:
-        this.search,
-
-      size:
-        this.size,
+      size: this.size,
     };
 
-    sessionStorage.setItem(
-      this.filterKey,
-      JSON.stringify(
-        filterState
-      )
-    );
+    sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
 
-    this.router.navigate(
-      [
-        '/edit-department',
-        departmentId
-      ],
-      {
-        state:
-          filterState
-      }
-    );
+    this.router.navigate(['/edit-department', departmentId], {
+      state: filterState,
+    });
   }
 
   // =========================================================
@@ -669,36 +429,21 @@ export class DepartmentIndexComponent {
   // =========================================================
 
   addDepartment() {
-
     const filterState = {
+      currentPage: this.currentPage,
 
-      currentPage:
-        this.currentPage,
+      statusIndex: this.statusIndex,
 
-      statusIndex:
-        this.statusIndex,
+      searchText: this.search,
 
-      searchText:
-        this.search,
-
-      size:
-        this.size,
+      size: this.size,
     };
 
-    sessionStorage.setItem(
-      this.filterKey,
-      JSON.stringify(
-        filterState
-      )
-    );
+    sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
 
-    this.router.navigate(
-      ['/add-department'],
-      {
-        state:
-          filterState
-      }
-    );
+    this.router.navigate(['/add-department'], {
+      state: filterState,
+    });
   }
 
   // =========================================================
@@ -706,34 +451,19 @@ export class DepartmentIndexComponent {
   // =========================================================
 
   pages(): number[] {
+    const total = this.totalPages;
 
-    const total =
-      this.totalPages;
-
-    const current =
-      this.currentPage;
+    const current = this.currentPage;
 
     const delta = 5;
 
-    const start =
-      Math.max(
-        1,
-        current - delta
-      );
+    const start = Math.max(1, current - delta);
 
-    const end =
-      Math.min(
-        total,
-        current + delta
-      );
+    const end = Math.min(total, current + delta);
 
     const arr: number[] = [];
 
-    for (
-      let i = start;
-      i <= end;
-      i++
-    ) {
+    for (let i = start; i <= end; i++) {
       arr.push(i);
     }
 
@@ -745,32 +475,15 @@ export class DepartmentIndexComponent {
   // =========================================================
 
   get recordSummary(): string {
+    const totalRecords = this.apiResponseDepartmentDetails.totalElements || 0;
 
-    const totalRecords =
-      this.apiResponseDepartmentDetails
-        .totalElements || 0;
+    const startRecord = totalRecords === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
 
-    const startRecord =
-      totalRecords === 0
-        ? 0
-        : (
-          (this.currentPage - 1) *
-          this.recordsPerPage
-        ) + 1;
+    const endRecord = Math.min(this.currentPage * this.recordsPerPage, totalRecords);
 
-    const endRecord =
-      Math.min(
-        this.currentPage *
-        this.recordsPerPage,
-        totalRecords
-      );
-
-    return `Page ${this.currentPage} of ${this.totalPages
-      }, (${startRecord} - ${endRecord} of ${totalRecords
-      } record${totalRecords > 1
-        ? 's'
-        : ''
-      })`;
+    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${
+      totalRecords
+    } record${totalRecords > 1 ? 's' : ''})`;
   }
 
   // =========================================================
@@ -778,120 +491,64 @@ export class DepartmentIndexComponent {
   // =========================================================
 
   get totalPages(): number {
+    const total = this.apiResponseDepartmentDetails.totalElements || 0;
 
-    const total =
-      this.apiResponseDepartmentDetails
-        .totalElements || 0;
-
-    return Math.max(
-      1,
-      Math.ceil(
-        total /
-        this.recordsPerPage
-      )
-    );
+    return Math.max(1, Math.ceil(total / this.recordsPerPage));
   }
 
   // =========================================================
   // SORT DATA
   // =========================================================
 
-  sortData(
-    column: string
-  ): void {
-
+  sortData(column: string): void {
     if (!column) {
       return;
     }
 
     // Toggle direction
-    if (
-      this.sortColumn === column
-    ) {
-
-      this.sortDirection =
-        this.sortDirection === 'asc'
-          ? 'desc'
-          : 'asc';
-
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
+      this.sortColumn = column;
 
-      this.sortColumn =
-        column;
-
-      this.sortDirection =
-        'asc';
+      this.sortDirection = 'asc';
     }
 
     // Sort
-    this.departments.sort(
-      (a: any, b: any) => {
+    this.departments.sort((a: any, b: any) => {
+      let valA = a[column];
 
-        let valA =
-          a[column];
+      let valB = b[column];
 
-        let valB =
-          b[column];
+      // Null / undefined
+      valA = valA ?? '';
 
-        // Null / undefined
-        valA =
-          valA ?? '';
+      valB = valB ?? '';
 
-        valB =
-          valB ?? '';
+      // Number
+      if (!isNaN(valA) && !isNaN(valB)) {
+        valA = Number(valA);
 
-        // Number
-        if (
-          !isNaN(valA) &&
-          !isNaN(valB)
-        ) {
+        valB = Number(valB);
+      } else {
+        valA = valA.toString().toLowerCase();
 
-          valA =
-            Number(valA);
-
-          valB =
-            Number(valB);
-
-        } else {
-
-          valA =
-            valA
-              .toString()
-              .toLowerCase();
-
-          valB =
-            valB
-              .toString()
-              .toLowerCase();
-        }
-
-        if (
-          valA < valB
-        ) {
-
-          return this.sortDirection ===
-            'asc'
-            ? -1
-            : 1;
-        }
-
-        if (
-          valA > valB
-        ) {
-
-          return this.sortDirection ===
-            'asc'
-            ? 1
-            : -1;
-        }
-
-        return 0;
+        valB = valB.toString().toLowerCase();
       }
-    );
+
+      if (valA < valB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+
+      if (valA > valB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
   }
 
   clearFilters(): void {
-
     this.searchQuery = '';
     this.selectedStatus = '';
 
@@ -899,5 +556,4 @@ export class DepartmentIndexComponent {
 
     this.onSearch();
   }
-
 }
