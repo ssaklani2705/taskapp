@@ -1893,12 +1893,42 @@ export class DataProviderService {
     });
   }
 
-  // getUserAccessDetails(page: number, size: number, search: string) {
-  //   const params = new HttpParams()
-  //     .set('page', page)
-  //     .set('size', size)
-  //     .set('search', search || '');
 
-  //   return this.http.get<any>(`${environment.apiBaseUrl}/getUserAccessDetails`, { params });
-  // }
+  // ============================================================
+// HOLIDAY
+// ============================================================
+
+getHolidayDetails(
+  page: number,
+  size: number,
+  statusIndex: number,
+  search: string,
+): Observable<any> {
+  const params = {
+    page: page.toString(),
+    size: size.toString(),
+    statusIndex: statusIndex.toString(),
+    search: search || '',
+  };
+
+  return this.http.get(`${environment.apiBaseUrl}admin/holiday/getHolidayDetails`, {
+    params,
+  });
+}
+
+deleteHoliday(holiday: any): Observable<any> {
+  return this.http.post(`${environment.apiBaseUrl}admin/holiday/deleteHoliday`, holiday);
+}
+
+saveHoliday(holiday: any): Observable<any> {
+  return this.http.post(`${environment.apiBaseUrl}admin/holiday/saveHoliday`, holiday);
+}
+
+getHolidayById(holidayId: number): Observable<any> {
+  return this.http.get(`${environment.apiBaseUrl}admin/holiday/${holidayId}`);
+}
+
+getActiveHolidays(): Observable<any> {
+  return this.http.get(`${environment.apiBaseUrl}admin/holiday/active`);
+}
 }

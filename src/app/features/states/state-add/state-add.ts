@@ -10,19 +10,20 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 import { MatIconModule } from '@angular/material/icon';
 
-
 export interface State {
-  stateId: any
+  stateId: any;
   name: string;
   code: string;
   status: any;
-  userId: any
+  userId: any;
 }
+
 export interface ApiResponse<T> {
   success: boolean;
   message: string;
   data: T;
 }
+
 @Component({
   selector: 'app-state-add',
   standalone: true,
@@ -33,13 +34,12 @@ export interface ApiResponse<T> {
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './state-add.html',
   styleUrl: './state-add.scss',
 })
 export class StateAdd implements OnInit {
-
   state: State = {
     stateId: null,
     name: '',
@@ -67,43 +67,27 @@ export class StateAdd implements OnInit {
     private dataprovider: DataProviderService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
+    // const queryParams = this.route.snapshot.queryParamMap;
 
-    /* --------------------------------
-       Get pagination/filter parameters
-    --------------------------------- */
-
-    const queryParams = this.route.snapshot.queryParamMap;
-
-    this.currentPage = Number(queryParams.get('currentPage')) || 1;
-    this.searchText = queryParams.get('searchText') || '';
-    this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
-    this.page = Number(queryParams.get('page')) || this.currentPage - 1;
-    this.size = Number(queryParams.get('size')) || 5;
-
-    /* --------------------------------
-       User ID
-    --------------------------------- */
+    // this.currentPage = Number(queryParams.get('currentPage')) || 1;
+    // this.searchText = queryParams.get('searchText') || '';
+    // this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
+    // this.page = Number(queryParams.get('page')) || this.currentPage - 1;
+    // this.size = Number(queryParams.get('size')) || 5;
 
     if (isPlatformBrowser(this.platformId)) {
       this.userId = sessionStorage.getItem('userId');
     }
 
-    /* --------------------------------
-       Check Edit Mode
-    --------------------------------- */
-
     const stateId = this.route.snapshot.params['stateId'];
-    console.log('Route params:', this.route.snapshot.params);
-    console.log('stateId value:', stateId);
 
     if (stateId) {
       this.isEditMode = true;
 
       this.dataprovider.getStateById(stateId).subscribe({
-
         next: (res: ApiResponse<State>) => {
           if (res && res.data) {
             this.state = {
@@ -117,19 +101,13 @@ export class StateAdd implements OnInit {
             this.originalState = { ...this.state };
           }
         },
-
         error: (err) => {
           console.error('Failed to fetch state', err);
           Swal.fire('Error', 'Unable to load state', 'error');
         },
-
       });
     }
   }
-
-  /* =========================================
-     CAPITALIZE FIRST CHARACTER
-  ========================================= */
 
   capitalizeFirstCharOnly(value: string): string {
     if (!value) {
@@ -138,23 +116,15 @@ export class StateAdd implements OnInit {
     return value.charAt(0).toUpperCase() + value.slice(1);
   }
 
-  /* =========================================
-     SUBMIT
-  ========================================= */
-
   onSubmit(form: NgForm): void {
-
     if (form.invalid || this.nameError) {
       form.control.markAllAsTouched();
       return;
     }
 
-    /* User ID */
     this.state.userId = this.userId ? Number(this.userId) : null;
 
-    /* Save */
     this.dataprovider.saveState(this.state).subscribe({
-
       next: (response: ApiResponse<State>) => {
         if (response.success) {
           Swal.fire('Success', response.message, 'success');
@@ -165,35 +135,23 @@ export class StateAdd implements OnInit {
       },
 
       error: (err) => {
-
         console.error('Save state error:', err);
 
-        const message =
-          err?.error?.message ||
-          'Something went wrong';
+        const message = err?.error?.message || 'Something went wrong';
 
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: message
+          text: message,
         });
-      }
-
+      },
     });
   }
 
-  /* =========================================
-     RESET
-  ========================================= */
-
   onReset(): void {
-
     if (this.isEditMode) {
-
       this.state = { ...this.originalState };
-
     } else {
-
       this.state = {
         stateId: null,
         name: '',
@@ -206,20 +164,19 @@ export class StateAdd implements OnInit {
     this.nameError = '';
   }
 
-  /* =========================================
-     BACK TO INDEX
-  ========================================= */
+  // backToIndexPage(): void {
+  //   this.router.navigate(['/state-index'], {
+  //     queryParams: {
+  //       currentPage: this.currentPage,
+  //       statusIndex: this.statusIndex,
+  //       searchText: this.searchText,
+  //       page: this.page,
+  //       size: this.size || 5,
+  //     },
+  //   });
+  // }
 
   backToIndexPage(): void {
-
-    this.router.navigate(['/state-index'], {
-      queryParams: {
-        currentPage: this.currentPage,
-        statusIndex: this.statusIndex,
-        searchText: this.searchText,
-        page: this.page,
-        size: this.size || 5,
-      },
-    });
+    this.router.navigate(['/state-index']);
   }
 }

@@ -30,4 +30,9 @@ export const SESSION_KEYS = {
   STATE_FILTER: 'stateFilter',
   PLAN_FILTER: 'planFilter',
   RECURRING_FILTER: 'recurringFilter',
+
+  HOLIDAY_MASTER_FILTER: 'holidayFilter',
+
+  ACCESS_REPORT_FILTER: 'accessreportFilter',
+  MAIL_LOG_FILTER: 'maillogFilter'
 };

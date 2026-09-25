@@ -16,31 +16,24 @@ import { Plan } from '../plan-add/plan-add';
 @Component({
   selector: 'app-plan-index',
   imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIcon, MatDivider],
-
   templateUrl: './plan-index.html',
   styleUrl: './plan-index.scss',
 })
 export class PlanIndex {
   plans: Plan[] = [];
-
   apiResponsePlan: any = {};
 
   searchQuery: string = '';
   search: string = '';
 
-  /* Pagination */
   currentPage: number = 1;
   page: number = 0;
-
   recordsPerPage: number = environment.recordsPerPage;
-
   size: number = environment.size;
 
-  /* Status */
   selectedStatus: string = '';
   statusIndex: number = 0;
 
-  /* Permissions */
   addPer: string = 'N';
   editPer: string = 'N';
   deletePer: string = 'N';
@@ -56,38 +49,65 @@ export class PlanIndex {
   moduleName: string = '';
 
   common = new Common();
-
   taskCategory: any = {};
 
   isPanelVisible: boolean = true;
-
   showHeaderBar: boolean = true;
 
   filterKey = SESSION_KEYS.PLAN_FILTER;
 
   constructor(
     private dataprovider: DataProviderService,
-
     @Inject(PLATFORM_ID)
     private platformId: Object,
-
     private router: Router,
-
     private route: ActivatedRoute,
-
     private sessionService: SessionStorageService,
   ) {}
+
+  // ngOnInit(): void {
+  //   this.sessionService.clearOtherSessions(this.filterKey);
+
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     this.userId = sessionStorage.getItem('userId');
+  //   }
+
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     const storedModules = sessionStorage.getItem('selectedModuleDetail');
+
+  //     if (storedModules) {
+  //       const parsed = JSON.parse(storedModules);
+
+  //       this.moduleName = parsed.name ?? '';
+  //       this.addPer = parsed.addPer ?? 'N';
+  //       this.editPer = parsed.editPer ?? 'N';
+  //       this.deletePer = parsed.deletePer ?? 'N';
+  //       this.viewPer = parsed.viewPer ?? 'N';
+  //       this.approvePer = parsed.approvePer ?? 'N';
+  //       this.adminApprovePer = parsed.adminApprovePer ?? 'N';
+  //     }
+  //   }
+
+  //   this.route.queryParams.subscribe((params) => {
+  //     this.currentPage = +(params['currentPage'] || 1);
+  //     this.page = +(params['page'] || this.currentPage - 1);
+  //     this.size = +(params['size'] || environment.size);
+  //     this.searchQuery = params['searchText'] || '';
+  //     this.search = this.searchQuery;
+  //     this.statusIndex = +(params['statusIndex'] || 0);
+  //     this.selectedStatus = this.statusIndex > 0 ? String(this.statusIndex) : '';
+  //     this.recordsPerPage = this.size;
+
+  //     this.getPlanDetails();
+  //   });
+  // }
 
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
 
-    // User ID
     if (isPlatformBrowser(this.platformId)) {
       this.userId = sessionStorage.getItem('userId');
-    }
 
-    // Permissions
-    if (isPlatformBrowser(this.platformId)) {
       const storedModules = sessionStorage.getItem('selectedModuleDetail');
 
       if (storedModules) {
@@ -101,27 +121,38 @@ export class PlanIndex {
         this.approvePer = parsed.approvePer ?? 'N';
         this.adminApprovePer = parsed.adminApprovePer ?? 'N';
       }
+
+      const filterState = this.sessionService.getItem(this.filterKey);
+
+      if (filterState) {
+        this.currentPage = filterState.currentPage ?? 1;
+        this.page = filterState.page ?? this.currentPage - 1;
+        this.size = filterState.size ?? environment.size;
+        this.recordsPerPage = this.size;
+
+        this.statusIndex = filterState.statusIndex ?? 0;
+        this.selectedStatus = this.statusIndex > 0 ? String(this.statusIndex) : '';
+
+        this.search = filterState.searchText ?? '';
+        this.searchQuery = this.search;
+      }
     }
 
-    // Restore from URL
-    this.route.queryParams.subscribe((params) => {
-      this.currentPage = +(params['currentPage'] || 1);
-      this.page = +(params['page'] || this.currentPage - 1);
-      this.size = +(params['size'] || environment.size);
-
-      this.searchQuery = params['searchText'] || '';
-      this.search = this.searchQuery;
-
-      this.statusIndex = +(params['statusIndex'] || 0);
-
-      this.selectedStatus = this.statusIndex > 0 ? String(this.statusIndex) : '';
-
-      this.recordsPerPage = this.size;
-
-      this.getPlanDetails();
-    });
+    this.getPlanDetails();
   }
-  /* Panel */
+
+  saveFilterState(): void {
+    const filterState = {
+      currentPage: this.currentPage,
+      statusIndex: this.statusIndex,
+      searchText: this.search.trim(),
+      page: this.page,
+      size: this.size,
+    };
+
+    this.sessionService.setItem(this.filterKey, filterState);
+  }
+
   togglePanel(): void {
     this.isPanelVisible = !this.isPanelVisible;
   }
@@ -129,9 +160,8 @@ export class PlanIndex {
   getPlanDetails(): void {
     this.dataprovider.getPlanList(this.page, this.size, this.statusIndex, this.search).subscribe({
       next: (response: any) => {
-        this.apiResponsePlan = response?.data || {}; // ✅ the inner map: { data, totalElements }
-
-        this.plans = response?.data?.data || []; // ✅ the actual array
+        this.apiResponsePlan = response?.data || {};
+        this.plans = response?.data?.data || [];
       },
 
       error: (error) => {
@@ -147,85 +177,73 @@ export class PlanIndex {
     });
   }
 
-  /* Current page records */
   get paginatedPlans(): Plan[] {
     return this.plans;
   }
 
-  /* Search */
   onSearch(): void {
     this.search = this.searchQuery.trim();
-
     this.statusIndex = this.selectedStatus === '' ? 0 : +this.selectedStatus;
 
     this.currentPage = 1;
-
     this.page = 0;
 
-    const state = {
-      currentPage: this.currentPage,
+    // const state = {
+    //   currentPage: this.currentPage,
+    //   statusIndex: this.statusIndex,
+    //   searchText: this.search,
+    //   page: this.page,
+    //   size: this.size,
+    // };
 
-      statusIndex: this.statusIndex,
+    // this.sessionService.setItem(this.filterKey, JSON.stringify(state));
 
-      searchText: this.search,
+    // this.router
+    //   .navigate(['/plan-index'], {
+    //     state: state,
+    //   })
+    //   .then(() => {
+    //     this.getPlanDetails();
+    //   });
 
-      page: this.page,
-
-      size: this.size,
-    };
-
-    this.sessionService.setItem(this.filterKey, JSON.stringify(state));
-
-    this.router
-      .navigate(['/plan-index'], {
-        state: state,
-      })
-      .then(() => {
-        this.getPlanDetails();
-      });
+    this.saveFilterState();
+    this.getPlanDetails();
   }
 
-  /* Pagination */
   goToPage(pageNumber: number): void {
     if (pageNumber < 1 || pageNumber > this.totalPages) {
       return;
     }
 
     this.currentPage = pageNumber;
-
     this.page = pageNumber - 1;
 
-    const state = {
-      currentPage: this.currentPage,
+    // const state = {
+    //   currentPage: this.currentPage,
+    //   statusIndex: this.statusIndex,
+    //   searchText: this.search,
+    //   page: this.page,
+    //   size: this.size,
+    // };
 
-      statusIndex: this.statusIndex,
+    // this.sessionService.setItem(this.filterKey, JSON.stringify(state));
 
-      searchText: this.search,
+    // this.router
+    //   .navigate(['/plan-index'], {
+    //     queryParams: {
+    //       currentPage: this.currentPage,
+    //       statusIndex: this.statusIndex || 0,
+    //       searchText: this.search || '',
+    //       page: this.page,
+    //       size: this.size || 5,
+    //     },
+    //   })
+    //   .then(() => {
+    //     this.getPlanDetails();
+    //   });
 
-      page: this.page,
-
-      size: this.size,
-    };
-
-    this.sessionService.setItem(this.filterKey, JSON.stringify(state));
-
-    this.router
-      .navigate(['/plan-index'], {
-        queryParams: {
-          currentPage: this.currentPage,
-
-          statusIndex: this.statusIndex || 0,
-
-          searchText: this.search || '',
-
-          page: this.page,
-
-          size: this.size || 5,
-        },
-      })
-      .then(() => {
-        this.getPlanDetails();
-      });
+    this.saveFilterState();
+    this.getPlanDetails();
   }
 
   goToFirstPage(): void {
@@ -275,71 +293,72 @@ export class PlanIndex {
     });
   }
 
-  /* View */
+  // viewPlan(planId: number): void {
+  //   const filterState = {
+  //     currentPage: this.currentPage,
+  //     statusIndex: this.statusIndex,
+  //     searchText: this.searchQuery.trim(),
+  //     size: this.size,
+  //   };
+
+  //   this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
+
+  //   this.router.navigate(['/view-plan', planId], {
+  //     queryParams: filterState,
+  //   });
+  // }
+
   viewPlan(planId: number): void {
-    const filterState = {
-      currentPage: this.currentPage,
-
-      statusIndex: this.statusIndex,
-      searchText: this.searchQuery.trim(),
-      size: this.size,
-    };
-
-    this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
-
-    this.router.navigate(['/view-plan', planId], {
-      queryParams: filterState,
-    });
+    this.saveFilterState();
+    this.router.navigate(['/view-plan', planId]);
   }
 
-  /* Edit */
+  // editPlan(planId: number): void {
+  //   const filterState = {
+  //     currentPage: this.currentPage,
+  //     statusIndex: this.statusIndex,
+  //     searchText: this.searchQuery.trim(),
+  //     size: this.size,
+  //   };
+
+  //   this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
+
+  //   this.router.navigate(['/edit-plan', planId], {
+  //     queryParams: filterState,
+  //   });
+  // }
+
   editPlan(planId: number): void {
-    const filterState = {
-      currentPage: this.currentPage,
-
-      statusIndex: this.statusIndex,
-
-      searchText: this.searchQuery.trim(),
-      size: this.size,
-    };
-
-    this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
-
-    this.router.navigate(['/edit-plan', planId], {
-      queryParams: filterState,
-    });
+    this.saveFilterState();
+    this.router.navigate(['/edit-plan', planId]);
   }
 
-  /* Add */
+  // addPlan(): void {
+  //   const filterState = {
+  //     currentPage: this.currentPage,
+  //     statusIndex: this.statusIndex,
+  //     searchText: this.searchQuery.trim(),
+  //     size: this.size,
+  //   };
+
+  //   this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
+
+  //   this.router.navigate(['/add-plan'], {
+  //     queryParams: filterState,
+  //   });
+  // }
+
   addPlan(): void {
-    const filterState = {
-      currentPage: this.currentPage,
-
-      statusIndex: this.statusIndex,
-
-      searchText: this.searchQuery.trim(),
-      size: this.size,
-    };
-
-    this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
-
-    this.router.navigate(['/add-plan'], {
-      queryParams: filterState,
-    });
+    this.saveFilterState();
+    this.router.navigate(['/add-plan']);
   }
 
-  /* Page numbers */
   pages(): number[] {
     const total = this.totalPages;
-
     const current = this.currentPage;
-
     const delta = 5;
-
     const start = Math.max(1, current - delta);
-
     const end = Math.min(total, current + delta);
-
     const arr: number[] = [];
 
     for (let i = start; i <= end; i++) {
@@ -349,27 +368,23 @@ export class PlanIndex {
     return arr;
   }
 
-  /* Record summary */
   get recordSummary(): string {
     const totalRecords = this.apiResponsePlan?.totalElements || 0;
-
     const startRecord = totalRecords === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
-
     const endRecord = Math.min(this.currentPage * this.recordsPerPage, totalRecords);
 
-    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${totalRecords > 1 ? 's' : ''})`;
+    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${
+      totalRecords > 1 ? 's' : ''
+    })`;
   }
 
-  /* Total pages */
   get totalPages(): number {
     const total = this.apiResponsePlan?.totalElements || 0;
 
     return Math.max(1, Math.ceil(total / this.recordsPerPage));
   }
 
-  /* Sorting */
   sortColumn: string = '';
-
   sortDirection: 'asc' | 'desc' = 'asc';
 
   columns: {
@@ -379,31 +394,22 @@ export class PlanIndex {
   }[] = [
     {
       key: 'planName',
-
       label: 'Plan Name',
-
       sortable: true,
     },
     {
       key: 'description',
-
       label: 'Description',
-
       sortable: true,
     },
     {
       key: 'rate',
-
       label: 'Rate',
-
       sortable: true,
     },
-
     {
       key: 'status',
-
       label: 'Status',
-
       sortable: true,
     },
   ];
@@ -417,26 +423,21 @@ export class PlanIndex {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortColumn = column;
-
       this.sortDirection = 'asc';
     }
 
     this.plans.sort((a: any, b: any) => {
       let valA = a[column];
-
       let valB = b[column];
 
       valA = valA ?? '';
-
       valB = valB ?? '';
 
       if (!isNaN(valA) && !isNaN(valB)) {
         valA = Number(valA);
-
         valB = Number(valB);
       } else {
         valA = valA.toString().toLowerCase();
-
         valB = valB.toString().toLowerCase();
       }
 
@@ -455,7 +456,6 @@ export class PlanIndex {
   clearFilters(): void {
     this.searchQuery = '';
     this.selectedStatus = '';
-
     this.currentPage = 1;
 
     this.onSearch();

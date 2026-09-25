@@ -5,11 +5,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-
 import Swal from 'sweetalert2';
-
 import { environment } from '../../../../environments/environment';
 import { DataProviderService } from '../../../service/data-provider.service';
+import { SESSION_KEYS } from '../../../service/session-storage.keys';
+import { SessionStorageService } from '../../../service/session-storage.service';
 
 interface MailLog {
   mailLogId: any;
@@ -26,48 +26,82 @@ interface MailLog {
 
 @Component({
   selector: 'app-mail-log-report',
-  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIconModule, MatDividerModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatCardModule,
+    MatIconModule,
+    MatDividerModule,
+  ],
   providers: [DatePipe],
   templateUrl: './mail-log-report.html',
   styleUrl: './mail-log-report.scss',
 })
 export class MailLogReportComponent implements OnInit {
-  // ================= DATA =================
   mailLogs: MailLog[] = [];
   apiResponse: any = {};
 
-  // ================= SEARCH =================
   searchQuery = '';
   search = '';
 
-  // ================= PAGINATION =================
   currentPage = 1;
   page = 0;
   size: number = environment.size;
   recordsPerPage: number = environment.recordsPerPage;
+
+  filterKey = SESSION_KEYS.MAIL_LOG_FILTER;
 
   constructor(
     private dataprovider: DataProviderService,
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private sessionService: SessionStorageService,
   ) {}
 
-  // ================= INIT =================
+  // ngOnInit(): void {
+  //   this.route.queryParams.subscribe((params) => {
+  //     this.currentPage = +(params['currentPage'] || 1);
+  //     this.page = +(params['page'] || this.currentPage - 1);
+  //     this.size = +(params['size'] || environment.size);
+  //     this.searchQuery = params['searchText'] || '';
+  //     this.search = this.searchQuery;
+  //     this.recordsPerPage = this.size;
+
+  //     this.getMailLogDetails();
+  //   });
+  // }
+
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.currentPage = +(params['currentPage'] || 1);
-      this.page = +(params['page'] || this.currentPage - 1);
-      this.size = +(params['size'] || environment.size);
-      this.searchQuery = params['searchText'] || '';
-      this.search = this.searchQuery;
+    this.sessionService.clearOtherSessions(this.filterKey);
+
+    const filterState = this.sessionService.getItem(this.filterKey);
+
+    if (filterState) {
+      this.currentPage = filterState.currentPage ?? 1;
+      this.page = filterState.page ?? this.currentPage - 1;
+      this.size = filterState.size ?? environment.size;
       this.recordsPerPage = this.size;
 
-      this.getMailLogDetails();
-    });
+      this.search = filterState.searchText ?? '';
+      this.searchQuery = this.search;
+    }
+
+    this.getMailLogDetails();
   }
 
-  // ================= API =================
+  saveFilterState(): void {
+    const filterState = {
+      currentPage: this.currentPage,
+      searchText: this.search.trim(),
+      page: this.page,
+      size: this.size,
+    };
+
+    this.sessionService.setItem(this.filterKey, filterState);
+  }
+
   getMailLogDetails(): void {
     this.dataprovider.getMailLogDetails(this.page, this.size, this.search).subscribe({
       next: (response) => {
@@ -82,14 +116,11 @@ export class MailLogReportComponent implements OnInit {
     });
   }
 
-  // ================= DATE FORMAT =================
-  // Output: 01 Sep 2026 17:46
   formatDateTime(value: any): string {
     if (!value) {
       return '';
     }
 
-    // Already formatted by backend -> show as is
     if (typeof value === 'string' && /^\d{2} [A-Za-z]{3} \d{4}/.test(value)) {
       return value;
     }
@@ -97,7 +128,6 @@ export class MailLogReportComponent implements OnInit {
     return this.datePipe.transform(value, 'dd MMM yyyy HH:mm') || '';
   }
 
-  // ================= STATUS CLASS =================
   getStatusClass(status: number): string {
     if (status === 1) {
       return 'status-sent';
@@ -108,7 +138,6 @@ export class MailLogReportComponent implements OnInit {
     return 'status-other';
   }
 
-  // ================= VIEW MAIL =================
   viewMail(log: MailLog): void {
     Swal.fire({
       title: log.subject || 'Mail',
@@ -172,15 +201,9 @@ export class MailLogReportComponent implements OnInit {
               // If API returns plain HTML string
               if (typeof response === 'string') {
                 frame.srcdoc = response;
-              }
-
-              // If API returns { data: "<html>..." }
-              else if (response?.data) {
+              } else if (response?.data) {
                 frame.srcdoc = response.data;
-              }
-
-              // If API returns { htmlContent: "<html>..." }
-              else if (response?.htmlContent) {
+              } else if (response?.htmlContent) {
                 frame.srcdoc = response.htmlContent;
               } else {
                 frame.srcdoc = '<p>No mail content available.</p>';
@@ -197,7 +220,6 @@ export class MailLogReportComponent implements OnInit {
     });
   }
 
-  // ================= PAGINATION =================
   get paginatedLogs(): MailLog[] {
     return this.mailLogs;
   }
@@ -210,16 +232,19 @@ export class MailLogReportComponent implements OnInit {
     this.currentPage = pageNumber;
     this.page = pageNumber - 1;
 
-    this.router
-      .navigate(['/mail-log-report'], {
-        queryParams: {
-          currentPage: this.currentPage,
-          searchText: this.search || '',
-          page: this.page,
-          size: this.size || 10,
-        },
-      })
-      .then(() => this.getMailLogDetails());
+    // this.router
+    //   .navigate(['/mail-log-report'], {
+    //     queryParams: {
+    //       currentPage: this.currentPage,
+    //       searchText: this.search || '',
+    //       page: this.page,
+    //       size: this.size || 10,
+    //     },
+    //   })
+    //   .then(() => this.getMailLogDetails());
+
+    this.saveFilterState();
+    this.getMailLogDetails();
   }
 
   goToFirstPage(): void {
@@ -242,20 +267,22 @@ export class MailLogReportComponent implements OnInit {
     return arr;
   }
 
-  // ================= SEARCH =================
   onSearch(): void {
     this.search = this.searchQuery.trim();
     this.currentPage = 1;
     this.page = 0;
 
-    this.router.navigate(['/mail-log-report'], {
-      queryParams: {
-        currentPage: this.currentPage,
-        searchText: this.search,
-        page: this.page,
-        size: this.size,
-      },
-    });
+    // this.router.navigate(['/mail-log-report'], {
+    //   queryParams: {
+    //     currentPage: this.currentPage,
+    //     searchText: this.search,
+    //     page: this.page,
+    //     size: this.size,
+    //   },
+    // });
+
+    this.saveFilterState();
+    this.getMailLogDetails();
   }
 
   clearFilters(): void {
@@ -263,7 +290,6 @@ export class MailLogReportComponent implements OnInit {
     this.onSearch();
   }
 
-  // ================= SUMMARY =================
   get totalRecords(): number {
     return this.apiResponse?.totalElements || 0;
   }
@@ -276,7 +302,6 @@ export class MailLogReportComponent implements OnInit {
     const total = this.totalRecords;
 
     const startRecord = total === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
-
     const endRecord = Math.min(this.currentPage * this.recordsPerPage, total);
 
     return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${total} record${total > 1 ? 's' : ''})`;

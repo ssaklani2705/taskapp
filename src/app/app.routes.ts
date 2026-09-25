@@ -169,6 +169,14 @@ export const routes: Routes = [
       { path: 'add-plan', loadComponent: () => import('./features/plan/plan-add/plan-add').then(m => m.PlanAdd) },
       { path: 'edit-plan/:planId', loadComponent: () => import('./features/plan/plan-add/plan-add').then(m => m.PlanAdd) },
       { path: 'view-plan/:planId', loadComponent: () => import('./features/plan/plan-view/plan-view').then(m => m.PlanView) },
+
+      { path: 'hodiday-index', loadComponent: () => import('./features/holiday/holiday-index/holiday-index').then(m => m.HolidayIndexComponent) },
+      { path: 'add-holiday', loadComponent: () => import('./features/holiday/add-holiday/add-holiday').then(m => m.AddHolidayComponent) },
+      { path: 'edit-holiday/:holidayId', loadComponent: () => import('./features/holiday/add-holiday/add-holiday').then(m => m.AddHolidayComponent) },
+      { path: 'view-holiday/:holidayId', loadComponent: () => import('./features/holiday/view-holiday/view-holiday').then(m => m.ViewHolidayComponent) },
+
+
+      
     ]
   },
 

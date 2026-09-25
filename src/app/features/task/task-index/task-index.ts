@@ -2243,49 +2243,49 @@ export class TaskIndex {
   // }
 
 
-  canDisableChangeManager(task: any): boolean {
+//   canDisableChangeManager(task: any): boolean {
 
-  // Status 5 => closed, locked for everyone, no exceptions (including admin)
-  if (task.taskStatus == 5) {
-    return true;
-  }
+//   // Status 5 => closed, locked for everyone, no exceptions (including admin)
+//   if (task.taskStatus == 5) {
+//     return true;
+//   }
 
-  // Admin can perform any action
-  if (this.isAdmin === 'Y') {
-    return false;
-  }
+//   // Admin can perform any action
+//   if (this.isAdmin === 'Y') {
+//     return false;
+//   }
 
-  const selfAssigned = task.addedBy == task.assignedTo;
+//   const selfAssigned = task.addedBy == task.assignedTo;
 
-  if (selfAssigned) {
-    return false;
-  }
+//   if (selfAssigned) {
+//     return false;
+//   }
 
-  // ============================================================
-  // MANAGER
-  // ============================================================
-  if (this.loginType === 'manager') {
+//   // ============================================================
+//   // MANAGER
+//   // ============================================================
+//   if (this.loginType === 'manager') {
 
-    const canAct =
-      (task.addedBy == this.userId &&
-        (task.taskStatus == 1 || task.taskStatus == 3)) ||
-      (task.assignedTo == this.userId &&
-        (task.taskStatus == 2 || task.taskStatus == 4));
+//     const canAct =
+//       (task.addedBy == this.userId &&
+//         (task.taskStatus == 1 || task.taskStatus == 3)) ||
+//       (task.assignedTo == this.userId &&
+//         (task.taskStatus == 2 || task.taskStatus == 4));
 
-    return canAct;
-  }
+//     return canAct;
+//   }
 
-  // ============================================================
-  // EMPLOYEE
-  // ============================================================
-  return (
-    (task.addedBy == this.userId &&
-      (task.taskStatus == 1 || task.taskStatus == 3)) ||
+//   // ============================================================
+//   // EMPLOYEE
+//   // ============================================================
+//   return (
+//     (task.addedBy == this.userId &&
+//       (task.taskStatus == 1 || task.taskStatus == 3)) ||
 
-    (task.assignedTo == this.userId &&
-      (task.taskStatus == 2 || task.taskStatus == 4))
-  );
-}
+//     (task.assignedTo == this.userId &&
+//       (task.taskStatus == 2 || task.taskStatus == 4))
+//   );
+// }
 
   isStatusRadioDisabled(task: any): boolean {
     const selfAssigned = task.addedBy == this.userId && task.assignedTo == this.userId;
@@ -2413,4 +2413,49 @@ export class TaskIndex {
       this.showTaskCategoryDropdown = false;
     }
   }
+
+
+  canDisableChangeManager(task: any): boolean {
+
+  // Status 5 => closed, locked for everyone, no exceptions (including admin)
+  if (task.taskStatus == 5) {
+    return true;
+  }
+
+  // Admin can perform any action
+  if (this.isAdmin === 'Y') {
+    return false;
+  }
+
+  const selfAssigned = task.addedBy == task.assignedTo;
+
+  if (selfAssigned) {
+    return false;
+  }
+
+  // ============================================================
+  // MANAGER
+  // ============================================================
+  if (this.loginType === 'manager') {
+
+    const canAct =
+      (task.addedBy == this.userId &&
+        (task.taskStatus == 1 || task.taskStatus == 3)) ||
+      (task.assignedTo == this.userId &&
+        (task.taskStatus == 2 || task.taskStatus == 4));
+
+    return canAct;
+  }
+
+  // ============================================================
+  // EMPLOYEE
+  // ============================================================
+  return (
+    (task.addedBy == this.userId &&
+      (task.taskStatus == 1 || task.taskStatus == 3)) ||
+
+    (task.assignedTo == this.userId &&
+      (task.taskStatus == 2 || task.taskStatus == 4))
+  );
+}
 }

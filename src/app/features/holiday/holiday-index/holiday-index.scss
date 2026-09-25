@@ -1,0 +1,1459 @@
+:host {
+  display: block;
+  width: 100%;
+
+  --navy: #19345a;
+  --navy-dark: #152f54;
+
+  --primary-blue: #2f6fa3;
+  --primary-blue-dark: #285f8d;
+
+  --page-bg: #f7f9fb;
+  --white: #ffffff;
+
+  --border: #d2dde7;
+  --border-light: #e0e7ed;
+
+  --text: #17375e;
+  --text-muted: #6c8299;
+
+  --success: #17805f;
+  --success-bg: #e5f3ee;
+
+  --danger: #e84a4a;
+}
+
+
+.mat-icon{
+  color: var(--primary-blue);
+}
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.page-content-wrapper {
+  width: 100%;
+  min-height: 100%;
+  background: var(--page-bg);
+}
+
+.page-content {
+  width: 100%;
+  padding: 24px 34px;
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MAIN CONTAINER
+========================================================= */
+
+.user-management-container {
+  width: 100%;
+  background: var(--white);
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.page-header {
+  min-height: 94px;
+
+  padding: 0 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  border-bottom: 1px solid var(--border);
+
+  box-sizing: border-box;
+}
+
+
+.header-title-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.header-title-section h2 {
+  margin: 0;
+
+  color: var(--navy);
+
+  font-family: Georgia, "Times New Roman", serif;
+
+  font-size: 27px;
+  line-height: 1.2;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   COLLAPSE BUTTON
+========================================================= */
+
+.collapse-btn {
+  border: 0;
+  background: transparent;
+
+  color: var(--primary-blue);
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+  padding: 4px 6px;
+}
+
+
+/* =========================================================
+   SEARCH PANEL
+========================================================= */
+
+.search-panel {
+  width: 100%;
+
+  padding: 24px 25px;
+
+  border-bottom: 1px solid var(--border);
+
+  box-sizing: border-box;
+}
+
+
+.search-row {
+  display: flex;
+  align-items: flex-end;
+
+  width: 100%;
+
+  gap: 22px;
+}
+
+
+/* =========================================================
+   ADD BUTTON
+========================================================= */
+
+.add-user-wrapper {
+  flex: 0 0 auto;
+  margin-right: auto;
+}
+
+
+.btn-add-user {
+  height: 38px;
+
+  padding: 0 17px;
+
+  border: 0;
+  border-radius: 4px;
+
+  background: var(--navy);
+  color: #fff;
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+}
+
+
+.btn-add-user:hover {
+  background: var(--navy-dark);
+}
+
+
+.plus-icon {
+  font-size: 19px;
+  line-height: 1;
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+.search-wrapper {
+  width: 46%;
+}
+
+
+.search-box {
+  display: flex;
+  width: 100%;
+}
+
+
+.search-input {
+  width: 100%;
+  height: 38px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #c6d3df;
+  border-right: 0;
+
+  border-radius: 3px 0 0 3px;
+
+  background: #fff;
+
+  color: var(--text);
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+
+  outline: none;
+}
+
+
+.search-input::placeholder {
+  color: #7d94aa;
+}
+
+
+.search-input:focus {
+  border-color: var(--primary-blue);
+}
+
+
+.search-btn {
+  width: 52px;
+  height: 38px;
+
+  border: 0;
+
+  border-radius: 0 3px 3px 0;
+
+  background: var(--primary-blue);
+
+  color: #fff;
+
+  cursor: pointer;
+}
+
+
+.search-btn:hover {
+  background: var(--primary-blue-dark);
+}
+
+
+.search-btn i {
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-wrapper {
+  width: 29%;
+}
+
+
+.status-select {
+  width: 100%;
+  height: 38px;
+
+  padding: 0 11px;
+
+  border: 1px solid #c6d3df;
+
+  border-radius: 3px;
+
+  background: #fff;
+
+  color: var(--text);
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+
+  outline: none;
+}
+
+
+.status-select:focus {
+  border-color: var(--primary-blue);
+}
+
+
+/* =========================================================
+   GO BUTTON
+========================================================= */
+
+.go-wrapper {
+  flex: 0 0 auto;
+}
+
+
+.btn-go {
+  height: 38px;
+
+  min-width: 75px;
+
+  padding: 0 15px;
+
+  border: 0;
+  border-radius: 3px;
+
+  background: var(--primary-blue);
+
+  color: #fff;
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+.btn-go:hover {
+  background: var(--primary-blue-dark);
+}
+
+
+/* =========================================================
+   TABLE TOP
+========================================================= */
+
+.table-top-section,
+.table-bottom-section {
+  min-height: 72px;
+
+  padding: 0 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  box-sizing: border-box;
+}
+
+
+.record-summary {
+  color: #58718a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px;
+
+  line-height: 1.4;
+}
+
+
+/* =========================================================
+   PAGINATION
+========================================================= */
+
+.pagination {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+
+.pagination-btn {
+  min-width: 45px;
+  height: 38px;
+
+  padding: 0 10px;
+
+  border: 1px solid #d9e2ea;
+
+  border-radius: 4px;
+
+  background: #fff;
+
+  color: #71869a;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+
+.pagination-btn:hover:not(:disabled) {
+  border-color: var(--primary-blue);
+  color: var(--primary-blue);
+}
+
+
+.pagination-btn:disabled {
+  color: #c4ced7;
+
+  background: #fafbfd;
+
+  cursor: not-allowed;
+}
+
+
+.pagination-btn.active-pagination {
+  background: var(--navy);
+
+  border-color: var(--navy);
+
+  color: #fff;
+
+  font-weight: 600;
+}
+
+
+.first-btn,
+.last-btn {
+  min-width: 70px;
+}
+
+
+/* =========================================================
+   TABLE CONTAINER
+========================================================= */
+
+.table-container {
+  width: 100%;
+
+  padding: 0 25px;
+
+  box-sizing: border-box;
+}
+
+
+.table-responsive {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.user-table {
+  width: 100%;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+
+  background: #fff;
+
+  font-family: Arial, sans-serif;
+
+  font-size: 14px;
+
+  color: var(--text);
+}
+
+
+/* =========================================================
+   TABLE HEADER
+========================================================= */
+
+.user-table thead th {
+  height: 59px;
+
+  padding: 8px 12px;
+
+  box-sizing: border-box;
+
+  background: #edf4f8;
+
+  border: 1px solid var(--border);
+
+  color: #172f4c;
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  font-size: 14px;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   TABLE BODY
+========================================================= */
+
+.user-table tbody td {
+  height: 58px;
+
+  padding: 8px 14px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+
+  background: #fff;
+
+  color: var(--text);
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  font-size: 14px;
+}
+
+
+.user-table tbody tr:hover td {
+  background: #f8fbfd;
+}
+
+
+/* =========================================================
+   COLUMN WIDTHS
+   (5 columns: Sr.No | Name | Start Date | End Date | Status | Action)
+========================================================= */
+
+.user-table th.serial-column,
+.user-table td.serial-number {
+  width: 6%;
+}
+
+
+.user-table th:nth-child(2),
+.user-table td:nth-child(2) {
+  width: 28%;
+}
+
+
+.user-table th:nth-child(3),
+.user-table td:nth-child(3) {
+  width: 16%;
+}
+
+
+.user-table th:nth-child(4),
+.user-table td:nth-child(4) {
+  width: 16%;
+}
+
+
+.user-table th:nth-child(5),
+.user-table td:nth-child(5) {
+  width: 16%;
+}
+
+
+.user-table th.action-column,
+.user-table td:last-child {
+  width: 18%;
+}
+
+
+/* =========================================================
+   COLUMN HEADER
+========================================================= */
+
+.column-header {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+}
+
+
+.sortable-column {
+  cursor: pointer;
+}
+
+
+.sort-icons {
+  display: inline-flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 0;
+
+  line-height: 7px;
+
+  color: #a8bfd1;
+
+  font-size: 9px;
+}
+
+
+.sort-icons span {
+  height: 7px;
+
+  line-height: 7px;
+}
+
+
+.sort-icons .sort-active {
+  color: var(--primary-blue);
+}
+
+
+/* =========================================================
+   HOLIDAY NAME
+========================================================= */
+
+.user-name {
+  display: block;
+
+  text-align: left;
+
+  color: #244f78;
+
+  font-size: 14px;
+
+  font-weight: 400;
+}
+
+
+.wrap-text {
+  overflow-wrap: anywhere;
+
+  word-break: break-word;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status-badge {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  min-width: 70px;
+
+  height: 30px;
+
+  padding: 0 10px;
+
+  box-sizing: border-box;
+
+  border-radius: 2px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+.status-active {
+  color: var(--success) !important;
+
+  background: var(--success-bg);
+
+  border: 1px solid #c7e5d9;
+}
+
+
+.status-inactive {
+  color: #986b14 !important;
+
+  background: #fff5dc;
+
+  border: 1px solid #ecd9a7;
+}
+
+
+.status-deleted {
+  color: #b93636 !important;
+
+  background: #fff0f0;
+
+  border: 1px solid #f2cccc;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.action-buttons {
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+}
+
+
+.action-btn {
+  width: 40px;
+  height: 40px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  background: #fff;
+
+  border: 1px solid #cbd8e3;
+
+  border-radius: 4px;
+
+  cursor: pointer;
+
+  text-decoration: none;
+
+  transition: all 0.15s ease;
+}
+
+
+.action-btn i {
+  font-size: 15px;
+}
+
+
+/* VIEW */
+
+.view-btn {
+  color: #2f628c;
+
+  border-color: #b9ccdc;
+}
+
+
+.view-btn:hover {
+  background: #edf5fa;
+}
+
+
+/* EDIT */
+
+.edit-btn {
+  color: #16866d;
+
+  border-color: #b9dfd4;
+}
+
+
+.edit-btn:hover {
+  background: #eef9f5;
+}
+
+
+/* DELETE */
+
+.delete-btn {
+  color: #e84a4a;
+
+  border-color: #efc0c0;
+}
+
+
+.delete-btn:hover {
+  background: #fff2f2;
+}
+
+
+/* =========================================================
+   NO RECORDS
+========================================================= */
+
+.no-records {
+  height: 80px !important;
+
+  color: var(--text-muted) !important;
+
+  text-align: center !important;
+
+  font-size: 14px;
+
+  background: #fff !important;
+}
+
+
+/* =========================================================
+   BOTTOM SECTION
+========================================================= */
+
+.table-bottom-section {
+  margin-top: 18px;
+
+  border-top: 1px solid var(--border);
+}
+
+
+.btn-clear {
+  height: 38px;
+  width: 65px;
+  padding: 0 18px;
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+  background: #fff;
+  color: #dc3545;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-clear:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+.btn-clear:active {
+  transform: scale(0.98);
+}
+
+
+
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 82px;
+  height: 32px;
+  padding: 0 13px;
+  border-radius: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.status-badge.active,
+.status-badge.status-active,
+.status-active {
+  background: #e6f4ee;
+  color: #287d5e;
+  border: 1px solid #c8e7da;
+}
+
+.status-badge.inactive,
+.status-badge.status-inactive,
+.status-inactive {
+  background: #fff5df;
+  color: #a87308;
+  border: 1px solid #f0d99e;
+}
+
+.status-badge.deleted,
+.status-badge.status-deleted {
+  background: #fbeaea;
+  color: #b8403d;
+  border: 1px solid #efcaca;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.action-btn {
+  width: 38px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 1px;
+  background: var(--white);
+  font-size: 14px;
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET / IPAD
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+  .page-content {
+    padding: 20px;
+  }
+
+  .search-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+  }
+
+  .add-user-wrapper {
+    width: auto;
+    margin-right: auto;
+  }
+
+  .search-wrapper {
+    width: 45%;
+  }
+
+  .status-wrapper {
+    width: 28%;
+  }
+
+  .go-wrapper {
+    width: auto;
+  }
+
+  .btn-add-user {
+    width: auto;
+    min-width: 120px;
+  }
+
+  .btn-go {
+    min-width: 70px;
+  }
+
+  .table-container {
+    padding: 0 20px;
+  }
+
+  .table-top-section,
+  .table-bottom-section {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+
+/* =========================================================
+   TABLET / IPAD
+   768px - 1024px
+   ========================================================= */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+
+  .page-content {
+    padding: 16px;
+  }
+
+  .page-header {
+    min-height: 78px;
+    padding: 0 18px;
+  }
+
+  .header-title-section h2 {
+    font-size: 24px;
+  }
+
+  .search-panel {
+    padding: 18px;
+  }
+
+  .search-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+  }
+
+  .add-user-wrapper {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin: 0;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+  .status-wrapper {
+    width: 100%;
+  }
+
+  .go-wrapper {
+    width: auto;
+  }
+
+  .btn-add-user {
+    width: auto;
+    min-width: 125px;
+    height: 40px;
+  }
+
+  .btn-go {
+    width: 80px;
+    height: 40px;
+  }
+
+  .btn-clear {
+    margin-top: 0;
+  }
+
+  .table-top-section,
+  .table-bottom-section {
+    min-height: 65px;
+    padding: 14px 18px;
+  }
+
+  .table-container {
+    padding: 0 18px;
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .user-table {
+    min-width: 800px;
+  }
+
+  .pagination {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+
+/* =========================================================
+   MOBILE / IPHONE
+   481px - 768px
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .page-content {
+    padding: 10px;
+  }
+
+  .user-management-container {
+    width: 100%;
+    border-radius: 2px;
+  }
+
+  /* HEADER */
+
+  .page-header {
+    min-height: 64px;
+    padding: 0 14px;
+  }
+
+  .header-title-section {
+    gap: 7px;
+  }
+
+  .header-title-section h2 {
+    font-size: 21px;
+    line-height: 1.25;
+  }
+
+  .collapse-btn {
+    font-size: 12px;
+    padding: 4px;
+  }
+
+
+  /* SEARCH */
+
+  .search-panel {
+    padding: 15px 14px;
+  }
+
+  .search-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .add-user-wrapper,
+  .search-wrapper,
+  .status-wrapper,
+  .go-wrapper {
+    width: 100%;
+    margin: 0;
+  }
+
+  .btn-add-user,
+  .btn-go,
+  .btn-clear {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .btn-add-user {
+    height: 40px;
+  }
+
+  .search-input,
+  .search-btn,
+  .status-select {
+    height: 40px;
+  }
+
+
+  /* TABLE TOP */
+
+  .table-top-section,
+  .table-bottom-section {
+    min-height: auto;
+    padding: 14px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .record-summary {
+    font-size: 13px;
+    text-align: left;
+  }
+
+
+  /* PAGINATION */
+
+  .pagination {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    gap: 5px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .pagination::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pagination-btn {
+    flex: 0 0 auto;
+    min-width: 40px;
+    height: 36px;
+    padding: 0 9px;
+    font-size: 12px;
+  }
+
+  .first-btn,
+  .last-btn {
+    min-width: 58px;
+  }
+
+
+  /* TABLE */
+
+  .table-container {
+    width: 100%;
+    padding: 0 14px;
+    box-sizing: border-box;
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .user-table {
+    min-width: 760px;
+    table-layout: fixed;
+  }
+
+  .user-table thead th {
+    height: 52px;
+    padding: 7px 9px;
+    font-size: 13px;
+  }
+
+  .user-table tbody td {
+    height: 54px;
+    padding: 7px 9px;
+    font-size: 13px;
+  }
+
+  .user-name {
+    font-size: 13px;
+  }
+
+  .status-badge {
+    min-width: 70px;
+    height: 29px;
+    padding: 0 9px;
+    font-size: 12px;
+  }
+
+
+  /* ACTION BUTTONS */
+
+  .action-buttons {
+    gap: 5px;
+  }
+
+  .action-btn {
+    width: 36px;
+    height: 34px;
+  }
+
+  .action-btn i {
+    font-size: 14px;
+  }
+}
+
+
+/* =========================================================
+   IPHONE / SMALL MOBILE
+   max-width: 480px
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .page-content {
+    padding: 7px;
+  }
+
+  .page-header {
+    min-height: 58px;
+    padding: 0 11px;
+  }
+
+  .header-title-section {
+    gap: 5px;
+  }
+
+  .header-title-section h2 {
+    font-size: 18px;
+  }
+
+  .collapse-btn {
+    font-size: 11px;
+  }
+
+
+  /* SEARCH */
+
+  .search-panel {
+    padding: 12px 11px;
+  }
+
+  .search-row {
+    gap: 9px;
+  }
+
+  .btn-add-user,
+  .btn-go,
+  .btn-clear {
+    height: 39px;
+    font-size: 13px;
+  }
+
+  .search-input,
+  .status-select {
+    height: 39px;
+    font-size: 13px;
+  }
+
+  .search-btn {
+    width: 45px;
+    height: 39px;
+  }
+
+
+  /* TABLE TOP */
+
+  .table-top-section,
+  .table-bottom-section {
+    padding: 12px 11px;
+    gap: 10px;
+  }
+
+  .record-summary {
+    font-size: 12px;
+  }
+
+
+  /* PAGINATION */
+
+  .pagination-btn {
+    min-width: 36px;
+    height: 34px;
+    padding: 0 7px;
+    font-size: 11px;
+  }
+
+  .first-btn,
+  .last-btn {
+    min-width: 52px;
+  }
+
+
+  /* TABLE */
+
+  .table-container {
+    padding: 0 11px;
+  }
+
+  .user-table {
+    min-width: 720px;
+  }
+
+  .user-table thead th {
+    height: 50px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .user-table tbody td {
+    height: 52px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .user-name {
+    font-size: 12px;
+  }
+
+  .status-badge {
+    min-width: 64px;
+    height: 27px;
+    padding: 0 8px;
+    font-size: 11px;
+  }
+
+  .action-buttons {
+    gap: 4px;
+  }
+
+  .action-btn {
+    width: 33px;
+    height: 32px;
+  }
+
+  .action-btn i {
+    font-size: 13px;
+  }
+  .btn-add-user{
+    width: 110px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL IPHONE
+   max-width: 375px
+   ========================================================= */
+
+@media (max-width: 375px) {
+
+  .page-content {
+    padding: 5px;
+  }
+
+  .btn-add-user{
+    width: 110px;
+  }
+
+  .page-header {
+    padding: 0 9px;
+  }
+
+  .header-title-section h2 {
+    font-size: 17px;
+  }
+
+  .search-panel {
+    padding: 10px 9px;
+  }
+
+  .table-container {
+    padding: 0 9px;
+  }
+
+  .user-table {
+    min-width: 700px;
+  }
+
+  .table-top-section,
+  .table-bottom-section {
+    padding: 10px 9px;
+  }
+
+  .pagination-btn {
+    min-width: 34px;
+    height: 32px;
+    font-size: 10px;
+  }
+
+  .first-btn,
+  .last-btn {
+    min-width: 48px;
+  }
+
+  .action-btn {
+    width: 31px;
+    height: 30px;
+  }
+}
+
+
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
+
+@media (hover: none) and (pointer: coarse) {
+
+  .btn-add-user,
+  .btn-go,
+  .btn-clear,
+  .pagination-btn,
+  .action-btn,
+  .search-btn {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .action-btn,
+  .pagination-btn {
+    touch-action: manipulation;
+  }
+
+  .btn-add-user,
+  .btn-go,
+  .btn-clear {
+    touch-action: manipulation;
+  }
+}
+
+@media (max-width: 1024px) {
+    .page-content-wrapper{
+        margin-top: 20px;
+    }
+}

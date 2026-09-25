@@ -317,7 +317,7 @@ export class Sidebar implements OnInit {
           icon: 'task_alt',
 
           route: '/task-index',
-        },
+        }
       ];
     }
 
@@ -443,13 +443,15 @@ export class Sidebar implements OnInit {
         route: '/access-report',
       },
 
-      // {
-      //   label: 'Reports',
+        {
+          moduleId: 12,
 
-      //   icon: 'bar_chart',
+          label: 'Holiday',
 
-      //   route: '/reports'
-      // }
+          icon: 'task_alt',
+
+          route: '/hodiday-index',
+        }
     ];
   }
 
@@ -823,6 +825,12 @@ export class Sidebar implements OnInit {
         label: 'Plan Master',
         moduleId: 9,
         routes: ['/plan-index', '/add-plan', '/edit-plan', '/view-plan'],
+      },
+
+      {
+        label: 'Holiday Master',
+        moduleId: 9,
+        routes: ['/hodiday-index'],
       },
     ];
     const activeModule = moduleRoutes.find((module) => module.routes.some((route) => currentUrl === route || currentUrl.startsWith(route + '/')));

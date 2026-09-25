@@ -1,8 +1,4 @@
 <div class="page-container">
-  <!-- ===================================== -->
-  <!-- VIEW TASK CATEGORY -->
-  <!-- ===================================== -->
-
   <mat-card class="view-card">
     <div class="card-header">
       <div class="page-title">
@@ -53,10 +49,6 @@
     </div>
   </mat-card>
 
-  <!-- ===================================== -->
-  <!-- ACTION HISTORY -->
-  <!-- ===================================== -->
-
   <mat-card class="history-card">
     <div class="section-header">
       <div class="section-title">
@@ -81,11 +73,8 @@
         <tbody>
           <tr *ngFor="let history of transactionHistory; let i = index">
             <td>{{ i + 1 }}</td>
-
             <td>{{ history.name }}</td>
-
             <td>{{ history.entryDate }}</td>
-
             <td>
               <span class="action-badge">
                 {{ history.action }}

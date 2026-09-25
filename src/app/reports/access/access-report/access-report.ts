@@ -1,13 +1,14 @@
-import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-
+import { RouterModule } from '@angular/router';
 import { environment } from '../../../../environments/environment';
 import { DataProviderService } from '../../../service/data-provider.service';
+import { SESSION_KEYS } from '../../../service/session-storage.keys';
+import { SessionStorageService } from '../../../service/session-storage.service';
 
 interface UserAccessLog {
   userName: string;
@@ -18,56 +19,86 @@ interface UserAccessLog {
 
 @Component({
   selector: 'app-access-report',
-  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIconModule, MatDividerModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatCardModule,
+    MatIconModule,
+    MatDividerModule,
+  ],
   providers: [DatePipe],
   templateUrl: './access-report.html',
   styleUrl: './access-report.scss',
 })
 export class AccessReportComponent implements OnInit {
-  // ================= DATA =================
   accessLogs: UserAccessLog[] = [];
   apiResponse: any = {};
 
-  // ================= SEARCH =================
   searchQuery = '';
   search = '';
 
-  // ================= PAGINATION =================
   currentPage = 1;
   page = 0;
   size: number = environment.size;
   recordsPerPage: number = environment.recordsPerPage;
 
-  // ================= PANEL =================
   isPanelVisible = true;
+
+  filterKey = SESSION_KEYS.ACCESS_REPORT_FILTER;
 
   constructor(
     private dataprovider: DataProviderService,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    private router: Router,
-    private route: ActivatedRoute,
     private datePipe: DatePipe,
+    private sessionService: SessionStorageService,
   ) {}
 
-  // ================= INIT =================
+  // ngOnInit(): void {
+  //   this.route.queryParams.subscribe((params) => {
+  //     this.currentPage = +(params['currentPage'] || 1);
+  //     this.page = +(params['page'] || this.currentPage - 1);
+  //     this.size = +(params['size'] || environment.size);
+  //     this.searchQuery = params['searchText'] || '';
+  //     this.search = this.searchQuery;
+  //     this.recordsPerPage = this.size;
+
+  //     this.getUserAccessDetails();
+  //   });
+  // }
+
   ngOnInit(): void {
-    this.route.queryParams.subscribe((params) => {
-      this.currentPage = +(params['currentPage'] || 1);
-      this.page = +(params['page'] || this.currentPage - 1);
-      this.size = +(params['size'] || environment.size);
-      this.searchQuery = params['searchText'] || '';
-      this.search = this.searchQuery;
+    this.sessionService.clearOtherSessions(this.filterKey);
+
+    const filterState = this.sessionService.getItem(this.filterKey);
+
+    if (filterState) {
+      this.currentPage = filterState.currentPage ?? 1;
+      this.page = filterState.page ?? this.currentPage - 1;
+      this.size = filterState.size ?? environment.size;
       this.recordsPerPage = this.size;
 
-      this.getUserAccessDetails();
-    });
+      this.search = filterState.searchText ?? '';
+      this.searchQuery = this.search;
+    }
+
+    this.getUserAccessDetails();
+  }
+
+  saveFilterState(): void {
+    const filterState = {
+      currentPage: this.currentPage,
+      searchText: this.search.trim(),
+      page: this.page,
+      size: this.size,
+    };
+
+    this.sessionService.setItem(this.filterKey, filterState);
   }
 
   togglePanel(): void {
     this.isPanelVisible = !this.isPanelVisible;
   }
 
-  // ================= API =================
   getUserAccessDetails(): void {
     this.dataprovider.getUserAccessDetails(this.page, this.size, this.search).subscribe({
       next: (response) => {
@@ -80,14 +111,11 @@ export class AccessReportComponent implements OnInit {
     });
   }
 
-  // ================= DATE FORMAT =================
-  // Output: 21-09-2026 04:05 PM
   formatDateTime(value: any): string {
     if (!value) {
       return '';
     }
 
-    // Already formatted by backend (dd-MM-yyyy hh:mm a) -> show as is
     if (typeof value === 'string' && /^\d{2}-\d{2}-\d{4}/.test(value)) {
       return value;
     }
@@ -95,7 +123,6 @@ export class AccessReportComponent implements OnInit {
     return this.datePipe.transform(value, 'dd-MM-yyyy hh:mm a') || '';
   }
 
-  // ================= PAGINATION =================
   get paginatedLogs(): UserAccessLog[] {
     return this.accessLogs;
   }
@@ -108,16 +135,19 @@ export class AccessReportComponent implements OnInit {
     this.currentPage = pageNumber;
     this.page = pageNumber - 1;
 
-    this.router
-      .navigate(['/access-report'], {
-        queryParams: {
-          currentPage: this.currentPage,
-          searchText: this.search || '',
-          page: this.page,
-          size: this.size || 10,
-        },
-      })
-      .then(() => this.getUserAccessDetails());
+    // this.router
+    //   .navigate(['/access-report'], {
+    //     queryParams: {
+    //       currentPage: this.currentPage,
+    //       searchText: this.search || '',
+    //       page: this.page,
+    //       size: this.size || 10,
+    //     },
+    //   })
+    //   .then(() => this.getUserAccessDetails());
+
+    this.saveFilterState();
+    this.getUserAccessDetails();
   }
 
   goToFirstPage(): void {
@@ -140,20 +170,22 @@ export class AccessReportComponent implements OnInit {
     return arr;
   }
 
-  // ================= SEARCH =================
   onSearch(): void {
     this.search = this.searchQuery.trim();
     this.currentPage = 1;
     this.page = 0;
 
-    this.router.navigate(['/access-report'], {
-      queryParams: {
-        currentPage: this.currentPage,
-        searchText: this.search,
-        page: this.page,
-        size: this.size,
-      },
-    });
+    // this.router.navigate(['/access-report'], {
+    //   queryParams: {
+    //     currentPage: this.currentPage,
+    //     searchText: this.search,
+    //     page: this.page,
+    //     size: this.size,
+    //   },
+    // });
+
+    this.saveFilterState();
+    this.getUserAccessDetails();
   }
 
   clearFilters(): void {
@@ -161,7 +193,6 @@ export class AccessReportComponent implements OnInit {
     this.onSearch();
   }
 
-  // ================= SUMMARY =================
   get totalRecords(): number {
     return this.apiResponse?.totalElements || 0;
   }
@@ -174,7 +205,6 @@ export class AccessReportComponent implements OnInit {
     const total = this.totalRecords;
 
     const startRecord = total === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
-
     const endRecord = Math.min(this.currentPage * this.recordsPerPage, total);
 
     return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${total} record${total > 1 ? 's' : ''})`;

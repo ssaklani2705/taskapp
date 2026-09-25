@@ -1,8 +1,5 @@
 <div class="page-container">
   <div class="main-card">
-    <!-- =========================================================
-         PAGE HEADER
-    ========================================================== -->
     <div class="page-header">
       <div class="page-title">
         <mat-icon>event_note</mat-icon>
@@ -21,9 +18,6 @@
 
     <mat-divider></mat-divider>
 
-    <!-- =========================================================
-         SEARCH SECTION
-    ========================================================== -->
     <div class="search-section">
       <div class="search-grid">
         <!-- Search -->
@@ -31,7 +25,12 @@
           <label>Plan Name</label>
 
           <div class="search-input-wrapper">
-            <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Plan Name / Description" (keyup.enter)="onSearch()" />
+            <input
+              type="text"
+              [(ngModel)]="searchQuery"
+              placeholder="Search by Plan Name / Description"
+              (keyup.enter)="onSearch()"
+            />
 
             <button type="button" class="search-button" (click)="onSearch()">
               <mat-icon>search</mat-icon>
@@ -40,7 +39,6 @@
         </div>
 
         <!-- Department -->
-
         <!-- Status -->
         <div class="search-field">
           <label>Status</label>
@@ -62,7 +60,6 @@
           &nbsp;
           <!-- Clear -->
           <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
-            <!-- <mat-icon>clear</mat-icon> -->
             Clear
           </button>
         </div>
@@ -70,10 +67,6 @@
     </div>
 
     <mat-divider></mat-divider>
-
-    <!-- =========================================================
-         TABLE SECTION
-    ========================================================== -->
 
     <div class="table-section">
       <!-- Top Toolbar -->
@@ -87,34 +80,47 @@
 
           <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+          <button
+            *ngFor="let page of pages()"
+            (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage"
+          >
             {{ page }}
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+            Next ›
+          </button>
 
           <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
 
       <!-- Table -->
-
       <div class="table-wrapper">
         <table class="designation-table">
           <thead>
             <tr>
               <th class="serial-column">Sr. No.</th>
 
-              <th *ngFor="let col of columns" [class.sortable]="col.sortable" (click)="col.sortable && sortData(col.key)">
+              <th
+                *ngFor="let col of columns"
+                [class.sortable]="col.sortable"
+                (click)="col.sortable && sortData(col.key)"
+              >
                 <div class="column-header">
                   <span>
                     {{ col.label }}
                   </span>
 
                   <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'">
+                      ▲
+                    </span>
 
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'">
+                      ▼
+                    </span>
                   </span>
                 </div>
               </th>
@@ -159,20 +165,35 @@
               <!-- ACTION -->
               <td class="action-cell">
                 @if (viewPer === 'Y') {
-                  <button type="button" class="action-button view-button" (click)="viewPlan(rows.planId)" title="View">
+                  <button
+                    type="button"
+                    class="action-button view-button"
+                    (click)="viewPlan(rows.planId)"
+                    title="View"
+                  >
                     <mat-icon> visibility </mat-icon>
                   </button>
                 }
 
                 <ng-container *ngIf="rows.status === 1 || rows.status === 2">
                   @if (editPer === 'Y') {
-                    <button type="button" class="action-button edit-button" (click)="editPlan(rows.planId)" title="Edit">
+                    <button
+                      type="button"
+                      class="action-button edit-button"
+                      (click)="editPlan(rows.planId)"
+                      title="Edit"
+                    >
                       <mat-icon> edit </mat-icon>
                     </button>
                   }
 
                   @if (deletePer === 'Y') {
-                    <button type="button" class="action-button delete-button" (click)="onDeletePlan(rows.planId)" title="Delete">
+                    <button
+                      type="button"
+                      class="action-button delete-button"
+                      (click)="onDeletePlan(rows.planId)"
+                      title="Delete"
+                    >
                       <mat-icon> delete </mat-icon>
                     </button>
                   }
@@ -181,7 +202,6 @@
             </tr>
 
             <!-- NO RECORDS -->
-
             <tr *ngIf="!paginatedPlans || paginatedPlans.length === 0">
               <td colspan="6" class="no-records">
                 <mat-icon> info_outline </mat-icon>
@@ -194,7 +214,6 @@
       </div>
 
       <!-- Bottom Toolbar -->
-
       <div class="table-toolbar bottom-toolbar">
         <div class="record-summary">
           {{ recordSummary }}
@@ -205,11 +224,17 @@
 
           <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+          <button
+            *ngFor="let page of pages()"
+            (click)="goToPage(page)"
+            [class.active-pagination]="page === currentPage"
+          >
             {{ page }}
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+            Next ›
+          </button>
 
           <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>

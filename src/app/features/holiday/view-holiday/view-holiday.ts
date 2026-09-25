@@ -16,7 +16,7 @@ import { Common } from '../../../classes/common';
 import { DataProviderService } from '../../../service/data-provider.service';
 
 @Component({
-  selector: 'app-view-department',
+  selector: 'app-view-holiday',
   imports: [
     CommonModule,
     MatCardModule,
@@ -28,14 +28,14 @@ import { DataProviderService } from '../../../service/data-provider.service';
     MatSortModule,
     MatListModule,
   ],
-  templateUrl: './view-department.html',
-  styleUrl: './view-department.scss',
+  templateUrl: './view-holiday.html',
+  styleUrl: './view-holiday.scss',
 })
-export class ViewDepartmentComponent implements OnInit {
+export class ViewHolidayComponent implements OnInit {
 
-  departmentId!: number;
+  holidayId!: number;
 
-  department: any = {};
+  holiday: any = {};
 
   transactionHistory: any[] = [];
 
@@ -56,9 +56,9 @@ export class ViewDepartmentComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // Get Department ID from route
-    this.departmentId =
-      +this.route.snapshot.paramMap.get('departmentId')!;
+    // Get Holiday ID from route
+    this.holidayId =
+      +this.route.snapshot.paramMap.get('holidayId')!;
 
     // Get pagination/filter values
     const queryParams = this.route.snapshot.queryParamMap;
@@ -79,25 +79,26 @@ export class ViewDepartmentComponent implements OnInit {
     this.size =
       Number(queryParams.get('size')) || 5;
 
-    // Load department
-    this.getDepartmentDetails();
+    // Load holiday
+    this.getHolidayDetails();
   }
 
-  getDepartmentDetails(): void {
+  getHolidayDetails(): void {
 
     this.dataprovider
-      .getDepartmentById(this.departmentId)
+      .getHolidayById(this.holidayId)
       .subscribe({
         next: (response) => {
 
-          console.log('Department response:', response);
+          console.log('Holiday response:', response);
 
           if (response && response.data) {
 
-            this.department = {
-              departmentId: response.data.departmentId,
+            this.holiday = {
+              holidayId: response.data.holidayId,
               name: response.data.name,
-              sequence: response.data.sequence,
+              startDate: response.data.startDate,
+              endDate: response.data.endDate,
               status: response.data.status,
               userId: response.data.userId,
               regdate: response.data.regdate,
@@ -129,7 +130,7 @@ export class ViewDepartmentComponent implements OnInit {
 
         error: (err) => {
           console.error(
-            'Failed to fetch department details',
+            'Failed to fetch holiday details',
             err,
           );
         },
@@ -147,15 +148,15 @@ export class ViewDepartmentComponent implements OnInit {
   backToIndexPage(): void {
 
     this.router.navigate(
-      ['/department-master'],
+      ['/hodiday-index'],
       {
-        // queryParams: {
-        //   currentPage: this.currentPage,
-        //   statusIndex: this.statusIndex,
-        //   searchText: this.searchText,
-        //   page: this.page,
-        //   size: this.size || 5,
-        // },
+        queryParams: {
+          currentPage: this.currentPage,
+          statusIndex: this.statusIndex,
+          searchText: this.searchText,
+          page: this.page,
+          size: this.size || 5,
+        },
       },
     );
   }

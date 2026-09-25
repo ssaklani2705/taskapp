@@ -1,0 +1,1526 @@
+/* =========================================================
+   USER PAGE
+   Color scheme matched to VIEW TEAM page
+   ========================================================= */
+
+:host {
+    display: block;
+    width: 100%;
+    color: #193b63;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+/* =========================================================
+   COLOR VARIABLES
+   ========================================================= */
+
+:host {
+    --navy: #1b3b63;
+    --navy-dark: #142f50;
+    --navy-hover: #244c7b;
+
+    --primary-blue: #3378a9;
+    --primary-blue-dark: #28658f;
+
+    --heading-blue: #3378a9;
+    --link-blue: #008fd3;
+
+    --text-navy: #193b63;
+    --text-blue: #416789;
+
+    --border: #dce4ec;
+    --border-dark: #bccbda;
+
+    --table-header: #edf4f8;
+    --table-group: #f4f7f9;
+
+    --white: #ffffff;
+
+    --success-bg: #e7f5ef;
+    --success-border: #b9dfcf;
+    --success-text: #21845d;
+
+    --danger: #d9534f;
+}
+/* =========================================================
+   MAIN WRAPPER
+   ========================================================= */
+.user-page-wrapper {
+    background: #ffffff;
+    width: 100%;
+    padding: 24px 34px;
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PORTLET
+   ========================================================= */
+
+.user-portlet {
+    width: 100%;
+
+    background: #ffffff;
+
+    border: 1px solid var(--border);
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.user-portlet-title {
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 14px;
+
+    border-bottom: 1px solid var(--border);
+
+    background: #ffffff;
+
+    box-sizing: border-box;
+}
+
+
+.user-title {
+    display: flex;
+    align-items: center;
+}
+
+
+/* =========================================================
+   ADD USER / EDIT USER
+   MATCHES VIEW TEAM NAVY HEADING
+   ========================================================= */
+
+.user-page-title {
+    color: var(--navy) !important;
+
+    font-size: 24px !important;
+
+    font-weight: 700 !important;
+
+    line-height: 1.2;
+
+    letter-spacing: 0;
+
+    font-family: Georgia, "Times New Roman", serif !important;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+   MATCHES VIEW TEAM
+   ========================================================= */
+
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+
+
+.back-index-btn {
+    height: 44px !important;
+
+    min-width: 176px;
+
+    padding: 0 20px !important;
+
+    border: 0 !important;
+
+    border-radius: 4px !important;
+
+    background: var(--navy) !important;
+
+    color: #ffffff !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    line-height: 1.2;
+
+    cursor: pointer;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    transition:
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.back-index-btn:hover {
+    background: var(--navy-hover) !important;
+
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.user-portlet-body {
+    width: 100%;
+
+    background: #ffffff;
+}
+
+
+.user-form-body {
+    padding: 18px 14px 24px 14px;
+
+    background: #ffffff;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================================================
+   MANDATORY MESSAGE
+   ========================================================= */
+
+.mandatory-message {
+    color: var(--text-navy) !important;
+
+    font-size: 14px !important;
+
+    line-height: 22px;
+
+    margin-bottom: 25px;
+}
+
+
+.required {
+    color: var(--danger) !important;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   FORM COLUMN
+   ========================================================= */
+
+.empty-column {
+    min-height: 1px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.user-form-group {
+    width: 100%;
+
+    margin: 0;
+
+    padding: 0;
+}
+
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.user-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--text-navy) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 700 !important;
+
+    line-height: 20px;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.user-input {
+    display: block;
+
+    width: 100% !important;
+
+    height: 43px !important;
+
+    min-height: 43px !important;
+
+    padding: 8px 14px !important;
+
+    box-sizing: border-box;
+
+    border: 1px solid var(--border-dark) !important;
+
+    border-radius: 2px !important;
+
+    background: #ffffff !important;
+
+    color: var(--text-blue) !important;
+
+    font-size: 15px !important;
+
+    font-weight: 400 !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    outline: none !important;
+
+    box-shadow: none !important;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+.user-input:hover {
+    border-color: #9fb2c4 !important;
+}
+
+
+.user-input:focus {
+    border-color: var(--primary-blue) !important;
+
+    background: #ffffff !important;
+
+    box-shadow:
+        0 0 0 1px rgba(51, 120, 169, 0.12) !important;
+}
+
+
+.user-input::placeholder {
+    color: #8794a2 !important;
+
+    opacity: 1;
+}
+
+
+/* =========================================================
+   SELECT
+   ========================================================= */
+
+.user-select {
+    appearance: auto;
+
+    cursor: pointer;
+
+    background-color: #ffffff !important;
+
+    color: var(--text-blue) !important;
+}
+
+
+/* =========================================================
+   DATE
+   ========================================================= */
+
+.user-date-group {
+    display: flex;
+
+    width: 100%;
+
+    height: 43px;
+
+    box-sizing: border-box;
+}
+
+
+.user-date-icon {
+    width: 52px;
+
+    min-width: 52px;
+
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #e7ebef;
+
+    color: #52616e;
+
+    border: 1px solid #d2dbe3;
+
+    border-right: 0;
+
+    box-sizing: border-box;
+}
+
+
+.user-date-icon i {
+    font-size: 16px;
+}
+
+
+.user-date-group .user-date-input {
+    flex: 1;
+
+    width: auto !important;
+
+    border-left: 1px solid var(--border-dark) !important;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.user-error {
+    color: var(--danger) !important;
+
+    font-size: 16px !important;
+
+    margin-top: 5px;
+
+    line-height: 16px;
+}
+
+
+/* =========================================================
+   BUTTON AREA
+   ========================================================= */
+
+.user-buttons {
+    width: 100%;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 28px;
+}
+
+
+/* =========================================================
+   RESET BUTTON
+   WHITE + NAVY BORDER
+   ========================================================= */
+
+.user-reset-btn {
+    min-width: 90px;
+
+    height: 40px;
+
+    padding: 8px 20px;
+
+    border: 1px solid var(--navy) !important;
+
+    border-radius: 4px !important;
+
+    background: #ffffff !important;
+
+    color: var(--navy) !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.user-reset-btn:hover {
+    background: #eef4f9 !important;
+
+    border-color: var(--navy-hover) !important;
+
+    color: var(--navy-hover) !important;
+}
+
+
+/* =========================================================
+   SUBMIT / UPDATE BUTTON
+   SAME NAVY AS VIEW TEAM BACK BUTTON
+   ========================================================= */
+
+.user-submit-btn {
+    min-width: 90px;
+
+    height: 40px;
+
+    padding: 8px 20px;
+
+    border: 1px solid var(--navy) !important;
+
+    border-radius: 4px !important;
+
+    background: var(--navy) !important;
+
+    color: #ffffff !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.user-submit-btn:hover {
+    background: var(--navy-hover) !important;
+
+    border-color: var(--navy-hover) !important;
+}
+
+
+.user-submit-btn:active {
+    background: var(--navy-dark) !important;
+
+    border-color: var(--navy-dark) !important;
+}
+
+
+.user-submit-btn:disabled {
+    background: #7f91a5 !important;
+
+    border-color: #7f91a5 !important;
+
+    color: #ffffff !important;
+
+    opacity: 0.7;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   OLD BACK-BUTTON CLASS
+   If used elsewhere in this component
+   ========================================================= */
+
+.back-button {
+    height: 38px !important;
+
+    min-width: 130px;
+
+    padding: 0 18px !important;
+
+    border-radius: 4px !important;
+
+    background: var(--navy) !important;
+
+    color: #ffffff !important;
+
+    font-family: Arial, Helvetica, sans-serif !important;
+
+    font-size: 14px !important;
+
+    font-weight: 600 !important;
+
+    box-shadow: none !important;
+
+    display: inline-flex !important;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    border: 0 !important;
+
+    cursor: pointer;
+}
+
+
+.back-button:hover {
+    background: var(--navy-hover) !important;
+}
+
+
+.back-button mat-icon {
+    width: 18px;
+
+    height: 18px;
+
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   FORM ROW / COLUMN
+   ========================================================= */
+
+
+.user-form-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 30px;
+    width: 100%;
+}
+
+.user-form-col {
+    min-width: 0;
+    width: 100%;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .user-form-row {
+        column-gap: 20px;
+    }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    .user-form-row {
+        grid-template-columns: repeat(2, 1fr);
+
+        row-gap: 18px;
+
+        column-gap: 20px;
+    }
+
+
+    .empty-column {
+        display: none;
+    }
+
+}
+
+@media (max-width: 1024px) {
+  .user-form-body {
+        padding: 15px 10px;
+        width: 461px;
+    }
+
+    .user-buttons {
+        margin-left: 24%;
+    }
+
+    .user-page-wrapper {
+        margin-top: 20px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .user-portlet-title {
+        min-height: 55px;
+
+        padding: 8px 10px;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 10px;
+    }
+
+
+    .user-actions {
+        width: 100%;
+    }
+
+
+    .back-index-btn {
+        width: auto;
+
+        min-width: 150px;
+    }
+
+
+    .user-form-body {
+        padding: 15px 10px;
+        width: 250px;
+    }
+
+
+    .user-form-row {
+        grid-template-columns: 1fr;
+
+        row-gap: 15px;
+    }
+
+
+    .user-page-title {
+        font-size: 20px !important;
+    }
+
+
+    .user-buttons {
+        margin-top: 22px;
+    }
+
+}
+
+
+/* =========================================================
+   MATERIAL DATEPICKER - COMPACT COMPLETE STYLING
+   ========================================================= */
+
+.user-date-material-field {
+  width: 100% !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  max-height: 42px !important;
+
+  display: block !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+
+  box-sizing: border-box !important;
+
+
+  /* =======================================================
+     REMOVE MATERIAL BOTTOM SPACING
+     ======================================================= */
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+  }
+
+  .mat-mdc-form-field-bottom-align {
+    display: none !important;
+  }
+
+
+  /* =======================================================
+     MAIN TEXT FIELD WRAPPER
+     ======================================================= */
+
+  .mat-mdc-text-field-wrapper {
+    width: 100% !important;
+
+    height: 42px !important;
+    min-height: 42px !important;
+    max-height: 42px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    background: #ffffff !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =======================================================
+     FORM FIELD FLEX
+     ======================================================= */
+
+  .mat-mdc-form-field-flex {
+    width: 100% !important;
+
+    height: 42px !important;
+    min-height: 42px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    align-items: center !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =======================================================
+     INFIX
+     ======================================================= */
+
+  .mat-mdc-form-field-infix {
+    height: 40px !important;
+    min-height: 40px !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =======================================================
+     OUTLINE
+     ======================================================= */
+
+  .mdc-notched-outline {
+    height: 42px !important;
+
+    border-width: 1px !important;
+
+    border-color: #c3d0df !important;
+
+    border-radius: 2px !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =======================================================
+     HOVER
+     ======================================================= */
+
+  &:hover {
+
+    .mdc-notched-outline {
+      border-color: #9aaabd !important;
+    }
+
+  }
+
+
+  /* =======================================================
+     FOCUS
+     ======================================================= */
+
+  &.mat-focused {
+
+    .mdc-notched-outline {
+      border-color: #214b78 !important;
+
+      border-width: 1px !important;
+    }
+
+  }
+
+
+  /* =======================================================
+     INPUT
+     ======================================================= */
+
+  .mat-mdc-input-element {
+    width: 100% !important;
+
+    height: 40px !important;
+    min-height: 40px !important;
+    max-height: 40px !important;
+
+    padding: 0 45px 0 12px !important;
+
+    margin: 0 !important;
+
+    font-size: 14px !important;
+
+    font-family: inherit !important;
+
+    font-weight: 400 !important;
+
+    color: #333333 !important;
+
+    line-height: 40px !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =======================================================
+     PLACEHOLDER
+     ======================================================= */
+
+  .mat-mdc-input-element::placeholder {
+    color: #777777 !important;
+
+    opacity: 1 !important;
+  }
+
+
+  /* =======================================================
+     CALENDAR ICON SUFFIX
+     ======================================================= */
+
+  .mat-mdc-form-field-icon-suffix {
+    height: 40px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    padding: 0 4px 0 0 !important;
+
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =======================================================
+     DATEPICKER TOGGLE
+     ======================================================= */
+
+  .mat-datepicker-toggle {
+    width: 40px !important;
+
+    height: 40px !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+
+    justify-content: center !important;
+
+    margin: 0 !important;
+  }
+
+
+  /* =======================================================
+     CALENDAR BUTTON
+     ======================================================= */
+
+  .mat-mdc-icon-button {
+    width: 36px !important;
+    height: 36px !important;
+
+    min-width: 36px !important;
+    min-height: 36px !important;
+
+    max-width: 36px !important;
+    max-height: 36px !important;
+
+    padding: 6px !important;
+
+    margin: 0 !important;
+
+    box-sizing: border-box !important;
+  }
+
+
+  /* =======================================================
+     CALENDAR ICON
+     ======================================================= */
+
+  .mat-mdc-icon-button .mat-icon {
+    width: 20px !important;
+    height: 20px !important;
+
+    font-size: 20px !important;
+
+    line-height: 20px !important;
+
+    color: #214b78 !important;
+  }
+
+
+  /* =======================================================
+     RIPPLE
+     ======================================================= */
+
+  .mat-mdc-icon-button
+  .mat-mdc-button-persistent-ripple {
+    border-radius: 50% !important;
+  }
+
+}
+
+
+/* =========================================================
+   CDK OVERLAY
+   ========================================================= */
+
+::ng-deep .cdk-overlay-container {
+  z-index: 1000 !important;
+}
+
+
+/* =========================================================
+   DATEPICKER POPUP
+   ========================================================= */
+
+::ng-deep .user-date-datepicker {
+  width: 280px !important;
+
+  min-width: 280px !important;
+  max-width: 280px !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  overflow: hidden !important;
+
+  background: #ffffff !important;
+
+  border-radius: 7px !important;
+
+  box-shadow:
+    0 6px 18px rgba(33, 75, 120, 0.18) !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   MATERIAL DATEPICKER CONTENT
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker.mat-datepicker-content {
+
+  width: 280px !important;
+
+  min-width: 280px !important;
+  max-width: 280px !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: #ffffff !important;
+
+  border-radius: 7px !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   CONTENT CONTAINER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-datepicker-content-container {
+
+  width: 280px !important;
+
+  min-width: 280px !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   CALENDAR
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar {
+
+  width: 280px !important;
+
+  min-width: 280px !important;
+  max-width: 280px !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: #ffffff !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   CALENDAR HEADER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-header {
+
+  width: 100% !important;
+
+  height: 44px !important;
+  min-height: 44px !important;
+
+  padding: 4px 6px !important;
+
+  background: #214b78 !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   MONTH / YEAR BUTTON
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-period-button {
+
+  min-width: 0 !important;
+
+  height: 36px !important;
+
+  padding: 0 6px !important;
+
+  font-size: 13px !important;
+
+  font-weight: 600 !important;
+
+  color: #ffffff !important;
+}
+
+
+/* Month/year text */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-period-button
+.mat-button-wrapper {
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CALENDAR ARROW
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-arrow {
+
+  margin-left: 3px !important;
+
+  fill: #ffffff !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   PREVIOUS / NEXT BUTTON
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-previous-button,
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-next-button {
+
+  width: 36px !important;
+  height: 36px !important;
+
+  min-width: 36px !important;
+  min-height: 36px !important;
+
+  padding: 7px !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   NAVIGATION SVG
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-previous-button svg,
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-next-button svg {
+
+  fill: #ffffff !important;
+}
+
+
+/* =========================================================
+   CALENDAR CONTENT
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-content {
+
+  width: 100% !important;
+
+  height: auto !important;
+  min-height: 0 !important;
+
+  padding: 4px 6px 6px !important;
+
+  margin: 0 !important;
+
+  background: #ffffff !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   CALENDAR TABLE
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-table {
+
+  width: 100% !important;
+
+  table-layout: fixed !important;
+
+  margin: 0 !important;
+}
+
+
+/* =========================================================
+   WEEKDAY HEADER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-table-header {
+
+  height: 26px !important;
+}
+
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-table-header th {
+
+  height: 26px !important;
+
+  padding: 0 !important;
+
+  font-size: 11px !important;
+
+  font-weight: 600 !important;
+
+  color: #214b78 !important;
+
+  text-align: center !important;
+}
+
+
+/* =========================================================
+   DATE CELLS
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-cell {
+
+  width: 14.28% !important;
+
+  height: 34px !important;
+
+  padding: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   DATE NUMBER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-cell-content {
+
+  width: 28px !important;
+  height: 28px !important;
+
+  line-height: 28px !important;
+
+  font-size: 12px !important;
+
+  font-weight: 400 !important;
+
+  color: #333333 !important;
+
+  border-radius: 50% !important;
+
+  box-sizing: border-box !important;
+}
+
+
+/* =========================================================
+   SELECTED DATE
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-selected {
+
+  width: 28px !important;
+  height: 28px !important;
+
+  line-height: 28px !important;
+
+  background-color: #214b78 !important;
+
+  color: #ffffff !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   TODAY
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-today {
+
+  border: 1px solid #214b78 !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   TODAY + SELECTED
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-today.mat-calendar-body-selected {
+
+  border: none !important;
+
+  background-color: #214b78 !important;
+
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+.mat-calendar-body-cell-content {
+
+  background-color: #e7f0f8 !important;
+
+  color: #214b78 !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   ACTIVE DATE
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-active
+.mat-calendar-body-cell-content {
+
+  background-color: #e7f0f8 !important;
+
+  color: #214b78 !important;
+
+  border-radius: 50% !important;
+}
+
+
+/* =========================================================
+   DISABLED DATES
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-disabled {
+
+  color: #b8b8b8 !important;
+
+  opacity: 0.6 !important;
+}
+
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-disabled
+.mat-calendar-body-cell-content {
+
+  color: #b8b8b8 !important;
+
+  background: transparent !important;
+}
+
+
+/* =========================================================
+   MONTH / YEAR LABEL
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-body-label {
+
+  font-size: 11px !important;
+
+  font-weight: 500 !important;
+
+  color: #555555 !important;
+}
+
+
+/* =========================================================
+   CALENDAR CONTROLS
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-controls {
+
+  height: 36px !important;
+
+  margin: 0 !important;
+}
+
+
+/* =========================================================
+   REMOVE EXTRA CALENDAR SPACING
+   ========================================================= */
+
+::ng-deep
+.user-date-datepicker
+.mat-calendar-table-header-divider {
+
+  display: none !important;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .user-date-material-field {
+    width: 100% !important;
+
+    height: 42px !important;
+  }
+
+
+  ::ng-deep
+  .user-date-datepicker,
+  ::ng-deep
+  .user-date-datepicker.mat-datepicker-content,
+  ::ng-deep
+  .user-date-datepicker
+  .mat-datepicker-content-container,
+  ::ng-deep
+  .user-date-datepicker
+  .mat-calendar {
+
+    width: 270px !important;
+
+    min-width: 270px !important;
+    max-width: 270px !important;
+  }
+
+
+  ::ng-deep
+  .user-date-datepicker
+  .mat-calendar-body-cell {
+
+    height: 32px !important;
+  }
+
+
+  ::ng-deep
+  .user-date-datepicker
+  .mat-calendar-body-cell-content {
+
+    width: 27px !important;
+    height: 27px !important;
+
+    line-height: 27px !important;
+  }
+}
+
+
+.user-input.readonly-input {
+  background-color: #e9ecef !important;
+  color: #6c757d !important;
+  border-color: #ced4da !important;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.user-input.readonly-input:focus {
+  background-color: #f1f3f5;
+  color: #6c757d;
+  border-color: #d6d9dc;
+  box-shadow: none;
+  outline: none;
+}
+
+@media (max-width: 1024px) {
+.user-page-wrapper{
+    margin-top: 20px;
+  }
+}
