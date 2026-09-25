@@ -1,41 +1,20 @@
-import {
-  Component,
-  Inject,
-  PLATFORM_ID,
-  OnInit
-} from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 
-import {
-  isPlatformBrowser,
-  CommonModule
-} from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 
-import {
-  FormsModule
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  Router
-} from '@angular/router';
+import { Router } from '@angular/router';
 
-import {
-  DataProviderService,
-  DepartmentDTO,
-  DesignationDTO,
-  TaskCategoryDTO
-} from '../../../service/data-provider.service';
+import { DataProviderService, DepartmentDTO, DesignationDTO, TaskCategoryDTO } from '../../../service/data-provider.service';
 
-import {
-  MatIconModule
-} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import Swal from 'sweetalert2';
 import { environment } from '../../../../environments/environment';
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
 import { SessionStorageService } from '../../../service/session-storage.service';
 
-
 interface User {
-
   userId: number;
 
   firstName: string;
@@ -51,28 +30,18 @@ interface User {
   designationName: string;
 
   taskCategoryNames: string;
-
 }
 
-
 @Component({
-
   selector: 'app-my-team',
 
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, FormsModule, MatIconModule],
 
   templateUrl: './my-team.html',
 
   styleUrl: './my-team.scss',
-
 })
 export class MyTeam implements OnInit {
-
-
   // =========================================================
   // API RESPONSE
   // =========================================================
@@ -81,13 +50,11 @@ export class MyTeam implements OnInit {
 
   apiResponseUserDetails: any;
 
-
   // =========================================================
   // USER DATA
   // =========================================================
 
   users: User[] = [];
-
 
   // =========================================================
   // SEARCH
@@ -101,7 +68,6 @@ export class MyTeam implements OnInit {
 
   statusIndex: number = 0;
 
-
   // =========================================================
   // DEPARTMENT / DESIGNATION
   // =========================================================
@@ -114,7 +80,6 @@ export class MyTeam implements OnInit {
 
   selectedDesignationId: number | null = null;
 
-
   // =========================================================
   // PAGINATION
   // =========================================================
@@ -124,16 +89,13 @@ export class MyTeam implements OnInit {
   page: number = 0;
 
   // size: number = 5;
-  recordsPerPage: number =
-    environment.recordsPerPage;
+  recordsPerPage: number = environment.recordsPerPage;
 
-  size: number =
-    environment.size;
+  size: number = environment.size;
 
   totalRecords: number = 0;
 
   totalPages: number = 1;
-
 
   // =========================================================
   // SORTING
@@ -143,13 +105,11 @@ export class MyTeam implements OnInit {
 
   sortDirection: 'asc' | 'desc' = 'asc';
 
-
   // =========================================================
   // PANEL
   // =========================================================
 
   isPanelVisible: boolean = true;
-
 
   // =========================================================
   // PERMISSIONS
@@ -169,89 +129,83 @@ export class MyTeam implements OnInit {
 
   moduleName: string = '';
 
-
   // =========================================================
   // LOADING
   // =========================================================
 
   isLoading: boolean = false;
 
-
   // =========================================================
   // SESSION STORAGE KEY
   // =========================================================
 
-  filterKey =
-    SESSION_KEYS.USER_MODULE_FILTER;
-
+  filterKey = SESSION_KEYS.USER_MODULE_FILTER;
 
   // =========================================================
   // TABLE COLUMNS
   // =========================================================
 
   columns = [
-
     {
       key: 'firstName',
       label: 'User Name',
-      sortable: true
+      sortable: true,
     },
 
     {
       key: 'email',
       label: 'Email Id',
-      sortable: true
+      sortable: true,
     },
 
     {
       key: 'mobile',
       label: 'Mobile No.',
-      sortable: true
+      sortable: true,
     },
 
     {
       key: 'departmentName',
       label: 'Department Name',
-      sortable: true
+      sortable: true,
     },
 
     {
       key: 'designationName',
       label: 'Designation Name',
-      sortable: true
+      sortable: true,
     },
 
     {
       key: 'taskCategoryNames',
       label: 'Task Category',
-      sortable: true
+      sortable: true,
     },
 
     {
       key: 'status',
       label: 'Status',
-      sortable: true
-    }
-
+      sortable: true,
+    },
   ];
-
 
   // =========================================================
   // CONSTRUCTOR
   // =========================================================
 
   constructor(
-    private dataprovider: DataProviderService, private router: Router,
+    private dataprovider: DataProviderService,
+    private router: Router,
     @Inject(PLATFORM_ID)
-    private platformId: Object, private sessionService: SessionStorageService,) { }
-
+    private platformId: Object,
+    private sessionService: SessionStorageService,
+  ) {}
 
   // =========================================================
   // INIT
   // =========================================================
 
   ngOnInit(): void {
-
     this.sessionService.clearOtherSessions(this.filterKey);
 
     this.restoreFilterState();
@@ -271,80 +225,46 @@ export class MyTeam implements OnInit {
       const storedModules = sessionStorage.getItem('selectedModuleDetail');
       if (storedModules) {
         try {
+          const parsed = JSON.parse(storedModules);
 
-          const parsed =
-            JSON.parse(storedModules);
+          this.moduleName = parsed.name ?? '';
 
+          this.addPer = parsed.addPer ?? 'N';
 
-          this.moduleName =
-            parsed.name ?? '';
+          this.editPer = parsed.editPer ?? 'N';
 
+          this.deletePer = parsed.deletePer ?? 'N';
 
-          this.addPer =
-            parsed.addPer ?? 'N';
+          this.viewPer = parsed.viewPer ?? 'N';
 
+          this.approvePer = parsed.approvePer ?? 'N';
 
-          this.editPer =
-            parsed.editPer ?? 'N';
-
-
-          this.deletePer =
-            parsed.deletePer ?? 'N';
-
-
-          this.viewPer =
-            parsed.viewPer ?? 'N';
-
-
-          this.approvePer =
-            parsed.approvePer ?? 'N';
-
-
-          this.adminApprovePer =
-            parsed.adminApprovePer ?? 'N';
-
+          this.adminApprovePer = parsed.adminApprovePer ?? 'N';
+        } catch (error) {
+          console.error('Error parsing selectedModuleDetail:', error);
         }
-        catch (error) {
-
-          console.error(
-            'Error parsing selectedModuleDetail:',
-            error
-          );
-
-        }
-
       }
-
     }
-
   }
-
 
   // =========================================================
   // GET USERS
   // =========================================================
 
   getUserDetails(): void {
-
     this.isLoading = true;
 
-
-    console.log(
-      'GET USERS PARAMS:',
-      {
-        page: this.page,
-        size: this.size,
-        statusIndex: this.statusIndex,
-        search: this.search,
-        departmentId: this.selectedDepartmentId,
-        designationId: this.selectedDesignationId
-      }
-    );
-
+    console.log('GET USERS PARAMS:', {
+      page: this.page,
+      size: this.size,
+      statusIndex: this.statusIndex,
+      search: this.search,
+      departmentId: this.selectedDepartmentId,
+      designationId: this.selectedDesignationId,
+    });
 
     this.dataprovider
       .getUserManagementDetails(
-
         this.page,
 
         this.size,
@@ -356,113 +276,63 @@ export class MyTeam implements OnInit {
         this.selectedDepartmentId,
 
         this.selectedDesignationId,
-         this.selectedCategoryId
-
+        this.selectedCategoryId,
       )
       .subscribe({
-
         next: (response: any) => {
+          console.log('API RESPONSE:', response);
 
-          console.log(
-            'API RESPONSE:',
-            response
-          );
-
-
-          this.apiResponseUserDetails =
-            response;
-
+          this.apiResponseUserDetails = response;
 
           // =================================================
           // USERS
           // =================================================
 
-          this.users =
-            response?.data ?? [];
-
+          this.users = response?.data ?? [];
 
           // =================================================
           // TOTAL RECORDS
           // =================================================
 
-          this.totalRecords =
-            Number(
-              response?.totalElements ?? 0
-            );
-
+          this.totalRecords = Number(response?.totalElements ?? 0);
 
           // =================================================
           // TOTAL PAGES
           // =================================================
 
-          this.totalPages =
-            Math.ceil(
-              this.totalRecords / this.size
-            );
+          this.totalPages = Math.ceil(this.totalRecords / this.size);
 
-
-          if (
-            this.totalPages < 1
-          ) {
-
+          if (this.totalPages < 1) {
             this.totalPages = 1;
-
           }
-
 
           // =================================================
           // PAGE SAFETY
           // =================================================
 
-          if (
-            this.currentPage >
-            this.totalPages
-          ) {
+          if (this.currentPage > this.totalPages) {
+            this.currentPage = this.totalPages;
 
-            this.currentPage =
-              this.totalPages;
-
-            this.page =
-              this.currentPage - 1;
-
+            this.page = this.currentPage - 1;
           }
-
 
           // =================================================
           // PROCESS LIST
           // =================================================
 
-          if (
-            isPlatformBrowser(
-              this.platformId
-            )
-          ) {
-
+          if (isPlatformBrowser(this.platformId)) {
             sessionStorage.setItem(
-
               'processList',
 
-              JSON.stringify(
-                response?.processList ?? []
-              )
-
+              JSON.stringify(response?.processList ?? []),
             );
-
           }
 
-
           this.isLoading = false;
-
         },
 
-
         error: (error: any) => {
-
-          console.error(
-            'Error fetching user details:',
-            error
-          );
-
+          console.error('Error fetching user details:', error);
 
           this.users = [];
 
@@ -471,29 +341,18 @@ export class MyTeam implements OnInit {
           this.totalPages = 1;
 
           this.isLoading = false;
-
-        }
-
+        },
       });
-
   }
-
 
   // =========================================================
   // SEARCH
   // =========================================================
 
   onSearch(): void {
+    this.search = this.searchQuery.trim();
 
-    this.search =
-      this.searchQuery.trim();
-
-
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : Number(this.selectedStatus);
-
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
 
     /*
      * Reset pagination
@@ -502,36 +361,25 @@ export class MyTeam implements OnInit {
 
     this.page = 0;
 
-
     /*
      * Save ALL filters
      */
     this.saveFilterState();
 
-
     /*
      * Load users
      */
     this.getUserDetails();
-
   }
-
 
   // =========================================================
   // STATUS CHANGE
   // =========================================================
 
   onStatusChange(): void {
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
 
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : Number(this.selectedStatus);
-
-
-    this.search =
-      this.searchQuery.trim();
-
+    this.search = this.searchQuery.trim();
 
     /*
      * Reset pagination
@@ -540,562 +388,312 @@ export class MyTeam implements OnInit {
 
     this.page = 0;
 
-
     /*
      * Save ALL filters
      */
     this.saveFilterState();
 
-
     /*
      * Load users
      */
     this.getUserDetails();
-
   }
-
 
   // =========================================================
   // DEPARTMENT / DESIGNATION FILTER
   // =========================================================
 
-onDepartmentChange(): void {
+  onDepartmentChange(): void {
+    this.currentPage = 1;
 
-  this.currentPage = 1;
+    this.page = 0;
 
-  this.page = 0;
+    this.search = this.searchQuery.trim();
 
-  this.search =
-    this.searchQuery.trim();
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
 
-  this.statusIndex =
-    this.selectedStatus === ''
-      ? 0
-      : Number(this.selectedStatus);
+    // Reset category when department changes
+    this.selectedCategoryId = null;
 
-  // Reset category when department changes
-  this.selectedCategoryId = null;
+    // Clear old category list
+    this.categoryList = [];
 
-  // Clear old category list
-  this.categoryList = [];
+    // Load categories for selected department
+    // if (this.selectedDepartmentId) {
+    //   this.loadCategories();
+    // }
 
-  // Load categories for selected department
-  // if (this.selectedDepartmentId) {
-  //   this.loadCategories();
-  // }
+    this.loadCategories();
 
-   this.loadCategories();
+    this.saveFilterState();
 
-  this.saveFilterState();
-
-  this.getUserDetails();
-}
-
+    this.getUserDetails();
+  }
 
   onDesignationChange(): void {
     this.currentPage = 1;
     this.page = 0;
-    this.search =
-      this.searchQuery.trim();
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : Number(this.selectedStatus);
+    this.search = this.searchQuery.trim();
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
     this.saveFilterState();
     this.getUserDetails();
   }
-
 
   // =========================================================
   // PAGE NAVIGATION
   // =========================================================
 
-  goToPage(
-    pageNumber: number
-  ): void {
-
-    if (
-      pageNumber < 1 ||
-      pageNumber > this.totalPages
-    ) {
-
+  goToPage(pageNumber: number): void {
+    if (pageNumber < 1 || pageNumber > this.totalPages) {
       return;
-
     }
 
-
-    if (
-      pageNumber === this.currentPage
-    ) {
-
+    if (pageNumber === this.currentPage) {
       return;
-
     }
 
-
-    this.currentPage =
-      pageNumber;
-
+    this.currentPage = pageNumber;
 
     /*
      * Backend is zero based
      */
-    this.page =
-      pageNumber - 1;
-
+    this.page = pageNumber - 1;
 
     this.saveFilterState();
 
-
     this.getUserDetails();
-
   }
-
 
   // =========================================================
   // FIRST PAGE
   // =========================================================
 
   goToFirstPage(): void {
-
-    if (
-      this.currentPage !== 1
-    ) {
-
+    if (this.currentPage !== 1) {
       this.goToPage(1);
-
     }
-
   }
-
 
   // =========================================================
   // PREVIOUS PAGE
   // =========================================================
 
   goToPreviousPage(): void {
-
-    if (
-      this.currentPage > 1
-    ) {
-
-      this.goToPage(
-        this.currentPage - 1
-      );
-
+    if (this.currentPage > 1) {
+      this.goToPage(this.currentPage - 1);
     }
-
   }
-
 
   // =========================================================
   // NEXT PAGE
   // =========================================================
 
   goToNextPage(): void {
-
-    if (
-      this.currentPage <
-      this.totalPages
-    ) {
-
-      this.goToPage(
-        this.currentPage + 1
-      );
-
+    if (this.currentPage < this.totalPages) {
+      this.goToPage(this.currentPage + 1);
     }
-
   }
-
 
   // =========================================================
   // LAST PAGE
   // =========================================================
 
   goToLastPage(): void {
-
-    if (
-      this.currentPage !==
-      this.totalPages
-    ) {
-
-      this.goToPage(
-        this.totalPages
-      );
-
+    if (this.currentPage !== this.totalPages) {
+      this.goToPage(this.totalPages);
     }
-
   }
-
 
   // =========================================================
   // PAGE NUMBERS
   // =========================================================
 
   pages(): number[] {
-
     const pages: number[] = [];
 
-
-    if (
-      this.totalPages <= 0
-    ) {
-
+    if (this.totalPages <= 0) {
       return pages;
-
     }
 
-
-    if (
-      this.totalPages <= 5
-    ) {
-
-      for (
-        let i = 1;
-        i <= this.totalPages;
-        i++
-      ) {
-
+    if (this.totalPages <= 5) {
+      for (let i = 1; i <= this.totalPages; i++) {
         pages.push(i);
-
       }
 
       return pages;
-
     }
 
+    let start = Math.max(1, this.currentPage - 2);
 
-    let start =
-      Math.max(
-        1,
-        this.currentPage - 2
-      );
+    let end = Math.min(this.totalPages, start + 4);
 
-
-    let end =
-      Math.min(
-        this.totalPages,
-        start + 4
-      );
-
-
-    if (
-      end - start < 4
-    ) {
-
-      start =
-        Math.max(
-          1,
-          end - 4
-        );
-
+    if (end - start < 4) {
+      start = Math.max(1, end - 4);
     }
 
-
-    for (
-      let i = start;
-      i <= end;
-      i++
-    ) {
-
+    for (let i = start; i <= end; i++) {
       pages.push(i);
-
     }
-
 
     return pages;
-
   }
-
 
   // =========================================================
   // RECORD SUMMARY
   // =========================================================
 
   get recordSummary(): string {
-
-    if (
-      this.totalRecords === 0
-    ) {
-
+    if (this.totalRecords === 0) {
       return 'Page 0 of 0, (0 - 0 of 0 records)';
-
     }
 
+    const start = (this.currentPage - 1) * this.size + 1;
 
-    const start =
-      (
-        (this.currentPage - 1)
-        * this.size
-      ) + 1;
+    const end = Math.min(this.currentPage * this.size, this.totalRecords);
 
-
-    const end =
-      Math.min(
-        this.currentPage * this.size,
-        this.totalRecords
-      );
-
-
-    return (
-      `Page ${this.currentPage} of ${this.totalPages}, ` +
-      `(${start} - ${end} of ${this.totalRecords} records)`
-    );
-
+    return `Page ${this.currentPage} of ${this.totalPages}, ` + `(${start} - ${end} of ${this.totalRecords} records)`;
   }
-
 
   // =========================================================
   // RECORDS PER PAGE
   // =========================================================
 
   onChangeRecordsPerPage(): void {
+    this.size = Number(this.size);
 
-    this.size =
-      Number(this.size);
-
-
-    if (
-      !this.size ||
-      this.size < 1
-    ) {
-
+    if (!this.size || this.size < 1) {
       this.size = 5;
-
     }
-
 
     this.currentPage = 1;
 
     this.page = 0;
 
-
     this.saveFilterState();
 
-
     this.getUserDetails();
-
   }
-
 
   // =========================================================
   // SORT
   // =========================================================
 
-  sortData(
-    column: string
-  ): void {
-
+  sortData(column: string): void {
     /*
      * Same column
      */
-    if (
-      this.sortColumn === column
-    ) {
-
-      this.sortDirection =
-        this.sortDirection === 'asc'
-          ? 'desc'
-          : 'asc';
-
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     }
-
 
     /*
      * New column
      */
     else {
+      this.sortColumn = column;
 
-      this.sortColumn =
-        column;
-
-      this.sortDirection =
-        'asc';
-
+      this.sortDirection = 'asc';
     }
 
+    this.users = [...this.users].sort((a: any, b: any) => {
+      let valueA = a[column];
 
-    this.users =
-      [...this.users].sort(
+      let valueB = b[column];
 
-        (a: any, b: any) => {
+      /*
+       * Status
+       */
+      if (column === 'status') {
+        valueA = Number(valueA);
 
-          let valueA =
-            a[column];
+        valueB = Number(valueB);
+      }
 
-          let valueB =
-            b[column];
+      /*
+       * Null handling
+       */
+      if (valueA === null || valueA === undefined) {
+        valueA = '';
+      }
 
+      if (valueB === null || valueB === undefined) {
+        valueB = '';
+      }
 
-          /*
-           * Status
-           */
-          if (
-            column === 'status'
-          ) {
+      /*
+       * String comparison
+       */
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        valueA = valueA.toLowerCase();
 
-            valueA =
-              Number(valueA);
+        valueB = valueB.toLowerCase();
+      }
 
-            valueB =
-              Number(valueB);
+      if (valueA < valueB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
 
-          }
+      if (valueA > valueB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
 
-
-          /*
-           * Null handling
-           */
-          if (
-            valueA === null ||
-            valueA === undefined
-          ) {
-
-            valueA = '';
-
-          }
-
-
-          if (
-            valueB === null ||
-            valueB === undefined
-          ) {
-
-            valueB = '';
-
-          }
-
-
-          /*
-           * String comparison
-           */
-          if (
-            typeof valueA === 'string' &&
-            typeof valueB === 'string'
-          ) {
-
-            valueA =
-              valueA.toLowerCase();
-
-            valueB =
-              valueB.toLowerCase();
-
-          }
-
-
-          if (
-            valueA < valueB
-          ) {
-
-            return this.sortDirection === 'asc'
-              ? -1
-              : 1;
-
-          }
-
-
-          if (
-            valueA > valueB
-          ) {
-
-            return this.sortDirection === 'asc'
-              ? 1
-              : -1;
-
-          }
-
-
-          return 0;
-
-        }
-
-      );
-
+      return 0;
+    });
   }
-
 
   // =========================================================
   // PANEL TOGGLE
   // =========================================================
 
   togglePanel(): void {
-
-    this.isPanelVisible =
-      !this.isPanelVisible;
-
+    this.isPanelVisible = !this.isPanelVisible;
   }
-
 
   // =========================================================
   // GET CURRENT FILTER STATE
   // =========================================================
 
   private getCurrentFilterState(): any {
-
     return {
+      currentPage: this.currentPage,
 
-      currentPage:
-        this.currentPage,
+      statusIndex: this.statusIndex,
 
-      statusIndex:
-        this.statusIndex,
+      searchText: this.search,
 
-      searchText:
-        this.search,
+      size: this.size,
 
-      size:
-        this.size,
+      departmentId: this.selectedDepartmentId,
 
-      departmentId:
-        this.selectedDepartmentId,
+      designationId: this.selectedDesignationId,
 
-      designationId:
-        this.selectedDesignationId,
-
-      categoryId:
-      this.selectedCategoryId
-
+      categoryId: this.selectedCategoryId,
     };
-
   }
-
 
   // =========================================================
   // SAVE FILTER STATE
   // =========================================================
 
   private saveFilterState(): void {
-
-    if (
-      !isPlatformBrowser(
-        this.platformId
-      )
-    ) {
+    if (!isPlatformBrowser(this.platformId)) {
       return;
     }
 
-    const filterState =
-      this.getCurrentFilterState();
+    const filterState = this.getCurrentFilterState();
 
     sessionStorage.setItem(
-
       this.filterKey,
 
-      JSON.stringify(
-        filterState
-      )
-
+      JSON.stringify(filterState),
     );
-
   }
-
 
   // =========================================================
   // RESTORE FILTER STATE
   // =========================================================
 
   private restoreFilterState(): void {
-
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -1107,39 +705,22 @@ onDepartmentChange(): void {
     }
 
     try {
-
       const filterState = JSON.parse(stored);
 
       // =====================================================
       // PAGE
       // =====================================================
 
-      if (
-        filterState.currentPage !== undefined &&
-        filterState.currentPage !== null
-      ) {
+      if (filterState.currentPage !== undefined && filterState.currentPage !== null) {
+        const restoredPage = Number(filterState.currentPage);
 
-        const restoredPage = Number(
-          filterState.currentPage
-        );
-
-        if (
-          Number.isFinite(restoredPage) &&
-          restoredPage >= 1
-        ) {
-
+        if (Number.isFinite(restoredPage) && restoredPage >= 1) {
           this.currentPage = restoredPage;
-
         } else {
-
           this.currentPage = 1;
-
         }
-
       } else {
-
         this.currentPage = 1;
-
       }
 
       /*
@@ -1147,228 +728,122 @@ onDepartmentChange(): void {
        */
       this.page = this.currentPage - 1;
 
-
       // =====================================================
       // STATUS
       // =====================================================
 
-      if (
-        filterState.statusIndex !== undefined &&
-        filterState.statusIndex !== null
-      ) {
-
-        const restoredStatus = Number(
-          filterState.statusIndex
-        );
+      if (filterState.statusIndex !== undefined && filterState.statusIndex !== null) {
+        const restoredStatus = Number(filterState.statusIndex);
 
         if (Number.isFinite(restoredStatus)) {
-
           this.statusIndex = restoredStatus;
-
         } else {
-
           this.statusIndex = 0;
-
         }
-
       } else {
-
         this.statusIndex = 0;
-
       }
-
 
       // =====================================================
       // SELECTED STATUS
       // =====================================================
 
       if (this.statusIndex > 0) {
-
-        this.selectedStatus =
-          String(this.statusIndex);
-
+        this.selectedStatus = String(this.statusIndex);
       } else {
-
         this.selectedStatus = '';
-
       }
-
 
       // =====================================================
       // SEARCH
       // =====================================================
 
-      if (
-        filterState.searchText !== undefined &&
-        filterState.searchText !== null
-      ) {
+      if (filterState.searchText !== undefined && filterState.searchText !== null) {
+        this.search = String(filterState.searchText);
 
-        this.search =
-          String(filterState.searchText);
-
-        this.searchQuery =
-          String(filterState.searchText);
-
+        this.searchQuery = String(filterState.searchText);
       } else {
-
         this.search = '';
         this.searchQuery = '';
-
       }
-
 
       // =====================================================
       // PAGE SIZE
       // =====================================================
 
-      if (
-        filterState.size !== undefined &&
-        filterState.size !== null
-      ) {
+      if (filterState.size !== undefined && filterState.size !== null) {
+        const restoredSize = Number(filterState.size);
 
-        const restoredSize =
-          Number(filterState.size);
-
-        if (
-          Number.isFinite(restoredSize) &&
-          restoredSize > 0
-        ) {
-
+        if (Number.isFinite(restoredSize) && restoredSize > 0) {
           this.size = restoredSize;
-
         }
-
       }
-
 
       // =====================================================
       // DEPARTMENT
       // =====================================================
 
-      if (
-        filterState.departmentId !== undefined &&
-        filterState.departmentId !== null &&
-        filterState.departmentId !== ''
-      ) {
+      if (filterState.departmentId !== undefined && filterState.departmentId !== null && filterState.departmentId !== '') {
+        const departmentId = Number(filterState.departmentId);
 
-        const departmentId =
-          Number(filterState.departmentId);
-
-        if (
-          Number.isFinite(departmentId) &&
-          departmentId > 0
-        ) {
-
-          this.selectedDepartmentId =
-            departmentId;
-
+        if (Number.isFinite(departmentId) && departmentId > 0) {
+          this.selectedDepartmentId = departmentId;
         } else {
-
           this.selectedDepartmentId = null;
-
         }
-
       } else {
-
         this.selectedDepartmentId = null;
-
       }
-
 
       // =====================================================
       // DESIGNATION
       // =====================================================
 
-      if (
-        filterState.designationId !== undefined &&
-        filterState.designationId !== null &&
-        filterState.designationId !== ''
-      ) {
+      if (filterState.designationId !== undefined && filterState.designationId !== null && filterState.designationId !== '') {
+        const designationId = Number(filterState.designationId);
 
-        const designationId =
-          Number(filterState.designationId);
-
-        if (
-          Number.isFinite(designationId) &&
-          designationId > 0
-        ) {
-
-          this.selectedDesignationId =
-            designationId;
-
+        if (Number.isFinite(designationId) && designationId > 0) {
+          this.selectedDesignationId = designationId;
         } else {
-
           this.selectedDesignationId = null;
-
         }
-
       } else {
-
         this.selectedDesignationId = null;
-
       }
 
+      // =====================================================
+      // CATEGORY
+      // =====================================================
 
-       // =====================================================
-    // CATEGORY
-    // =====================================================
+      if (filterState.categoryId !== undefined && filterState.categoryId !== null && filterState.categoryId !== '') {
+        const categoryId = Number(filterState.categoryId);
 
-    if (
-      filterState.categoryId !== undefined &&
-      filterState.categoryId !== null &&
-      filterState.categoryId !== ''
-    ) {
-
-      const categoryId =
-        Number(filterState.categoryId);
-
-      if (
-        Number.isFinite(categoryId) &&
-        categoryId > 0
-      ) {
-
-        this.selectedCategoryId =
-          categoryId;
-
+        if (Number.isFinite(categoryId) && categoryId > 0) {
+          this.selectedCategoryId = categoryId;
+        } else {
+          this.selectedCategoryId = null;
+        }
       } else {
-
         this.selectedCategoryId = null;
-
       }
-
-    } else {
-
-      this.selectedCategoryId = null;
-
-    }
-
 
       // =====================================================
       // DEBUG
       // =====================================================
 
-      console.log(
-        'RESTORED FILTER STATE:',
-        {
-          currentPage: this.currentPage,
-          page: this.page,
-          size: this.size,
-          search: this.search,
-          statusIndex: this.statusIndex,
-          selectedStatus: this.selectedStatus,
-          departmentId: this.selectedDepartmentId,
-          designationId: this.selectedDesignationId,
-          categoryId: this.selectedCategoryId
-        }
-      );
-
-    }
-    catch (error) {
-
-      console.error(
-        'Error restoring filter state:',
-        error
-      );
+      console.log('RESTORED FILTER STATE:', {
+        currentPage: this.currentPage,
+        page: this.page,
+        size: this.size,
+        search: this.search,
+        statusIndex: this.statusIndex,
+        selectedStatus: this.selectedStatus,
+        departmentId: this.selectedDepartmentId,
+        designationId: this.selectedDesignationId,
+        categoryId: this.selectedCategoryId,
+      });
+    } catch (error) {
+      console.error('Error restoring filter state:', error);
 
       /*
        * If corrupted JSON is present,
@@ -1376,174 +851,97 @@ onDepartmentChange(): void {
        * the same problem.
        */
       sessionStorage.removeItem(this.filterKey);
-
     }
-
   }
-
 
   // =========================================================
   // ADD USER
   // =========================================================
 
   addUser(): void {
-
-    const filterState =
-      this.getCurrentFilterState();
-
+    const filterState = this.getCurrentFilterState();
 
     /*
      * Save complete filter state
      */
-    if (
-      isPlatformBrowser(
-        this.platformId
-      )
-    ) {
-
+    if (isPlatformBrowser(this.platformId)) {
       sessionStorage.setItem(
-
         this.filterKey,
 
-        JSON.stringify(
-          filterState
-        )
-
+        JSON.stringify(filterState),
       );
-
     }
-    sessionStorage.setItem(
-      'userManagementReturnFromDetail',
-      'Y'
-    );
+    sessionStorage.setItem('userManagementReturnFromDetail', 'Y');
 
     /*
      * Navigate
      */
-    this.router.navigate(
-      ['/add-team'],
-      {
-        state: filterState
-      }
-    );
-
+    this.router.navigate(['/add-team'], {
+      state: filterState,
+    });
   }
-
 
   // =========================================================
   // VIEW USER
   // =========================================================
 
-  viewUser(
-    userId: any
-  ): void {
-
-
-
-    const filterState =
-      this.getCurrentFilterState();
-
+  viewUser(userId: any): void {
+    const filterState = this.getCurrentFilterState();
 
     /*
      * Save complete filter state
      */
-    if (
-      isPlatformBrowser(
-        this.platformId
-      )
-    ) {
-
+    if (isPlatformBrowser(this.platformId)) {
       sessionStorage.setItem(
-
         this.filterKey,
 
-        JSON.stringify(
-          filterState
-        )
-
+        JSON.stringify(filterState),
       );
-
     }
 
-    sessionStorage.setItem(
-      'userManagementReturnFromDetail',
-      'Y'
-    );
+    sessionStorage.setItem('userManagementReturnFromDetail', 'Y');
     /*
      * Navigate
      */
     this.router.navigate(
-
-      [
-        '/view-team',
-        userId
-      ],
+      ['/view-team', userId],
 
       {
-        state: filterState
-      }
-
+        state: filterState,
+      },
     );
-
   }
-
 
   // =========================================================
   // EDIT USER
   // =========================================================
 
-  editUser(
-    userId: any
-  ): void {
-
-
-    const filterState =
-      this.getCurrentFilterState();
-
+  editUser(userId: any): void {
+    const filterState = this.getCurrentFilterState();
 
     /*
      * Save complete filter state
      */
-    if (
-      isPlatformBrowser(
-        this.platformId
-      )
-    ) {
-
+    if (isPlatformBrowser(this.platformId)) {
       sessionStorage.setItem(
-
         this.filterKey,
 
-        JSON.stringify(
-          filterState
-        )
-
+        JSON.stringify(filterState),
       );
-
     }
 
-    sessionStorage.setItem(
-      'userManagementReturnFromDetail',
-      'Y'
-    );
+    sessionStorage.setItem('userManagementReturnFromDetail', 'Y');
     /*
      * Navigate
      */
     this.router.navigate(
-
-      [
-        '/edit-team',
-        userId
-      ],
+      ['/edit-team', userId],
 
       {
-        state: filterState
-      }
-
+        state: filterState,
+      },
     );
-
   }
-
 
   // =========================================================
   // DELETE USER
@@ -1560,16 +958,13 @@ onDepartmentChange(): void {
   // }
 
   onDeleteUser(userId: number): void {
-
-    const createdBy = Number(
-      sessionStorage.getItem('userId') || 0
-    );
+    const createdBy = Number(sessionStorage.getItem('userId') || 0);
 
     if (!userId) {
       Swal.fire({
         icon: 'error',
         title: 'Invalid User',
-        text: 'User ID is missing.'
+        text: 'User ID is missing.',
       });
 
       return;
@@ -1579,7 +974,7 @@ onDepartmentChange(): void {
       Swal.fire({
         icon: 'error',
         title: 'Session Expired',
-        text: 'Unable to identify the logged-in user.'
+        text: 'Unable to identify the logged-in user.',
       });
 
       return;
@@ -1593,305 +988,194 @@ onDepartmentChange(): void {
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel',
       customClass: {
-        popup: 'small-confirm-popup'
+        popup: 'small-confirm-popup',
       },
-      reverseButtons: true
+      reverseButtons: true,
     }).then((result) => {
-
       if (!result.isConfirmed) {
         return;
       }
 
-      this.dataprovider
-        .deleteUserManagement(userId, String(createdBy))
-        .subscribe({
-
-          next: (response: any) => {
-
-            if (response?.success) {
-
-              Swal.fire({
-                icon: 'success',
-                title: 'Deleted!',
-                text: response.message || 'User deleted successfully.',
-                timer: 1500,
-                showConfirmButton: false
-              });
-
-              // Reload user list
-              this.getUserDetails();
-
-            } else {
-
-              Swal.fire({
-                icon: 'error',
-                title: 'Delete Failed',
-                text: response?.message || 'Unable to delete user.'
-              });
-
-            }
-
-          },
-
-          error: (error) => {
-
-            console.error(
-              'Delete user error:',
-              error
-            );
-
+      this.dataprovider.deleteUserManagement(userId, String(createdBy)).subscribe({
+        next: (response: any) => {
+          if (response?.success) {
             Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text:
-                error?.error?.message ||
-                'Something went wrong while deleting the user.'
+              icon: 'success',
+              title: 'Deleted!',
+              text: response.message || 'User deleted successfully.',
+              timer: 1500,
+              showConfirmButton: false,
             });
 
+            // Reload user list
+            this.getUserDetails();
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Delete Failed',
+              text: response?.message || 'Unable to delete user.',
+            });
           }
+        },
 
-        });
+        error: (error) => {
+          console.error('Delete user error:', error);
 
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error?.error?.message || 'Something went wrong while deleting the user.',
+          });
+        },
+      });
     });
   }
-
 
   // =========================================================
   // STATUS LABEL
   // =========================================================
 
-  getStatusLabel(
-    status: number | string
-  ): string {
-
+  getStatusLabel(status: number | string): string {
     switch (+status) {
-
       case 1:
-
         return 'Active';
 
-
       case 2:
-
         return 'Inactive';
 
-
       case 3:
-
         return 'Deleted';
 
-
       default:
-
         return 'Unknown';
-
     }
-
   }
-
 
   // =========================================================
   // STATUS CLASS
   // =========================================================
 
-  getStatusClass(
-    status: number | string
-  ): string {
-
+  getStatusClass(status: number | string): string {
     switch (+status) {
-
       case 1:
-
         return 'status-badge active';
 
-
       case 2:
-
         return 'status-badge inactive';
 
-
       case 3:
-
         return 'status-badge deleted';
 
-
       default:
-
         return 'status-badge';
-
     }
-
   }
-
 
   // =========================================================
   // LOAD DEPARTMENTS
   // =========================================================
 
   loadDepartments(): void {
+    this.dataprovider.getActiveDepartments().subscribe({
+      next: (response: DepartmentDTO[]) => {
+        this.departmentList = response;
+      },
 
-    this.dataprovider
-      .getActiveDepartments()
-      .subscribe({
-
-        next:
-          (
-            response: DepartmentDTO[]
-          ) => {
-
-            this.departmentList =
-              response;
-
-          },
-
-        error:
-          (error) => {
-
-            console.error(
-              'Error loading departments',
-              error
-            );
-
-          }
-
-      });
-
+      error: (error) => {
+        console.error('Error loading departments', error);
+      },
+    });
   }
-
 
   // =========================================================
   // LOAD DESIGNATIONS
   // =========================================================
 
   loadDesignations(): void {
+    this.dataprovider.getActiveDesigmations().subscribe({
+      next: (response: DesignationDTO[]) => {
+        this.designationList = response;
+      },
 
-    this.dataprovider
-      .getActiveDesigmations()
-      .subscribe({
-
-        next:
-          (
-            response: DesignationDTO[]
-          ) => {
-
-            this.designationList =
-              response;
-
-          },
-
-        error:
-          (error) => {
-
-            console.error(
-              'Error loading designations',
-              error
-            );
-
-          }
-
-      });
-
+      error: (error) => {
+        console.error('Error loading designations', error);
+      },
+    });
   }
 
   // =========================================================
   // CLEAR FILTERS
   // =========================================================
 
- clearFilters(): void {
+  clearFilters(): void {
+    // Clear search
+    this.searchQuery = '';
+    this.search = '';
 
-  // Clear search
-  this.searchQuery = '';
-  this.search = '';
+    // Clear department
+    this.selectedDepartmentId = null;
 
-  // Clear department
-  this.selectedDepartmentId = null;
+    // Clear category
+    this.selectedCategoryId = null;
+    this.categoryList = [];
 
-  // Clear category
-  this.selectedCategoryId = null;
-  this.categoryList = [];
+    // Clear designation
+    this.selectedDesignationId = null;
 
-  // Clear designation
-  this.selectedDesignationId = null;
+    // Clear status
+    this.selectedStatus = '';
 
-  // Clear status
-  this.selectedStatus = '';
+    // Reset status index
+    this.statusIndex = 0;
 
-  // Reset status index
-  this.statusIndex = 0;
+    // Reset pagination
+    this.currentPage = 1;
+    this.page = 0;
 
-  // Reset pagination
-  this.currentPage = 1;
-  this.page = 0;
+    // Reload the first page with cleared filters
+    this.onSearch();
+  }
 
-  // Reload the first page with cleared filters
-  this.onSearch();
+  //Category
+  // selectedDepartmentId: number | null = null;
 
-}
+  selectedCategoryId: number | null = null;
 
+  categoryList: TaskCategoryDTO[] = [];
 
-//Category
-// selectedDepartmentId: number | null = null;
+  categoriesLoading = false;
 
-selectedCategoryId: number | null = null;
+  loadCategories(): void {
+    this.categoriesLoading = true;
 
-categoryList: TaskCategoryDTO[] = [];
-
-categoriesLoading = false;
-
-
-loadCategories(): void {
-
-  this.categoriesLoading = true;
-
-  this.dataprovider
-    .getCategoriesByDepartmentId(
-      this.selectedDepartmentId || 0
-    )
-    .subscribe({
-
+    this.dataprovider.getCategoriesByDepartmentId(this.selectedDepartmentId || 0).subscribe({
       next: (response: TaskCategoryDTO[]) => {
-
-        this.categoryList =
-          response || [];
+        this.categoryList = response || [];
 
         this.categoriesLoading = false;
-
       },
 
       error: (error) => {
-
-        console.error(
-          'Error loading categories:',
-          error
-        );
+        console.error('Error loading categories:', error);
 
         this.categoryList = [];
 
         this.categoriesLoading = false;
-      }
-
+      },
     });
-}
+  }
 
+  onCategoryChange(): void {
+    this.currentPage = 1;
 
-onCategoryChange(): void {
+    this.page = 0;
 
-  this.currentPage = 1;
+    this.search = this.searchQuery.trim();
 
-  this.page = 0;
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
 
-  this.search =
-    this.searchQuery.trim();
+    this.saveFilterState();
 
-  this.statusIndex =
-    this.selectedStatus === ''
-      ? 0
-      : Number(this.selectedStatus);
-
-  this.saveFilterState();
-
-  this.getUserDetails();
-}
-
-
+    this.getUserDetails();
+  }
 }

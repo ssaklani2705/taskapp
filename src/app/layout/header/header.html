@@ -1,40 +1,22 @@
 <header class="header">
-
-  <button
-    type="button"
-    class="menu-toggle"
-    mat-icon-button
-    (click)="toggleMenu()">
-
-    <mat-icon>
-      menu
-    </mat-icon>
-
+  <button type="button" class="menu-toggle" mat-icon-button (click)="toggleMenu()">
+    <mat-icon> menu </mat-icon>
   </button>
 
   <div class="header-title">
-    <img
-      src="assets/logo/logo.png"
-      alt="Logo"
-      class="header-logo"
-    />
+    <img src="assets/logo/logo.png" alt="Logo" class="header-logo" />
   </div>
 
   <div class="header-right">
-
-  <!-- <div class="client-assignment-warning" *ngIf="clientAssignmentMessage">
+    <!-- <div class="client-assignment-warning" *ngIf="clientAssignmentMessage">
     <mat-icon>warning</mat-icon>
     <span>{{ clientAssignmentMessage }}</span>
   </div> -->
 
     <div class="header-identity">
-
-      <div class="organization">
-        Society 123 · Business Process Automation
-      </div>
+      <div class="organization">Society 123 · Business Process Automation</div>
 
       <div class="header-actions">
-
         <!-- <div class="search-box">
 
           <mat-icon>
@@ -48,46 +30,34 @@
 
         </div> -->
 
-       <div class="profile-wrapper" (clickOutside)="closeProfileMenu()">
+        <div class="profile-wrapper" (clickOutside)="closeProfileMenu()">
+          <div class="profile" (click)="toggleProfileMenu()">
+            <div class="profile-avatar">
+              {{ getInitials(username) }}
+            </div>
 
-  <div class="profile" (click)="toggleProfileMenu()">
+            <div class="profile-meta">
+              <span class="profile-name">{{ username }}</span>
+            </div>
 
-    <div class="profile-avatar">
-      {{ getInitials(username) }}
-    </div>
+            <mat-icon class="profile-caret" [class.open]="showProfileMenu"> expand_more </mat-icon>
+          </div>
 
-    <div class="profile-meta">
-      <span class="profile-name">{{ username }}</span>
-    </div>
+          <div class="profile-dropdown" *ngIf="showProfileMenu">
+            <button type="button" class="dropdown-item" (click)="onProfileClick()">
+              <mat-icon>person</mat-icon>
+              <span>Profile</span>
+            </button>
 
-    <mat-icon class="profile-caret" [class.open]="showProfileMenu">
-      expand_more
-    </mat-icon>
+            <div class="dropdown-divider"></div>
 
-  </div>
-
-  <div class="profile-dropdown" *ngIf="showProfileMenu">
-
-    <button type="button" class="dropdown-item" (click)="onProfileClick()">
-      <mat-icon>person</mat-icon>
-      <span>Profile</span>
-    </button>
-
-    <div class="dropdown-divider"></div>
-
-    <button type="button" class="dropdown-item logout" (click)="onLogout()">
-      <mat-icon>logout</mat-icon>
-      <span>Logout</span>
-    </button>
-
-  </div>
-
-</div>
-
+            <button type="button" class="dropdown-item logout" (click)="onLogout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
       </div>
-
     </div>
-
   </div>
-
 </header>

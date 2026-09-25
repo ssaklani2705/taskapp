@@ -22,7 +22,7 @@ interface Recurring {
   status: number;
   regDate?: string | null;
   modDate?: string | null;
-  priority:any;
+  priority: any;
 
   transactionHistory?: any[];
 }
@@ -206,62 +206,45 @@ export class ViewRecurring implements OnInit {
       return '-';
     }
 
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     return months[Number(month) - 1] || String(month);
   }
 
   getSchedule(): string {
-  if (!this.recurring) {
-    return '-';
-  }
-
-  switch (Number(this.recurring.type)) {
-    case 1:
-      return 'Daily';
-
-    case 2:
-      return this.getDayLabel(this.recurring.day);
-
-    case 3:
-      if (Number(this.recurring.date) === -2) {
-        return 'On the Last Day of each Month';
-      }
-
-      return this.recurring.date
-        ? `On the ${this.recurring.date}${this.getOrdinalSuffix(this.recurring.date)} of each month`
-        : '-';
-
-    case 4:
-      if (Number(this.recurring.date) === -2 && this.recurring.month) {
-        return `On the Last Day of ${this.getMonthLabel(this.recurring.month)}`;
-      }
-
-      if (this.recurring.date && this.recurring.month) {
-        return `Every ${this.recurring.date}${this.getOrdinalSuffix(
-          this.recurring.date
-        )} ${this.getMonthLabel(this.recurring.month)}`;
-      }
-
+    if (!this.recurring) {
       return '-';
+    }
 
-    default:
-      return '-';
+    switch (Number(this.recurring.type)) {
+      case 1:
+        return 'Daily';
+
+      case 2:
+        return this.getDayLabel(this.recurring.day);
+
+      case 3:
+        if (Number(this.recurring.date) === -2) {
+          return 'On the Last Day of each Month';
+        }
+
+        return this.recurring.date ? `On the ${this.recurring.date}${this.getOrdinalSuffix(this.recurring.date)} of each month` : '-';
+
+      case 4:
+        if (Number(this.recurring.date) === -2 && this.recurring.month) {
+          return `On the Last Day of ${this.getMonthLabel(this.recurring.month)}`;
+        }
+
+        if (this.recurring.date && this.recurring.month) {
+          return `Every ${this.recurring.date}${this.getOrdinalSuffix(this.recurring.date)} ${this.getMonthLabel(this.recurring.month)}`;
+        }
+
+        return '-';
+
+      default:
+        return '-';
+    }
   }
-}
 
   // getSchedule(): string {
   //   if (!this.recurring) {
@@ -403,11 +386,8 @@ export class ViewRecurring implements OnInit {
 
     const hourString = String(hours).padStart(2, '0');
 
-    return (
-      day + '-' + month + '-' + year + ' ' + hourString + ':' + minutes + ':' + seconds + ' ' + ampm
-    );
+    return day + '-' + month + '-' + year + ' ' + hourString + ':' + minutes + ':' + seconds + ' ' + ampm;
   }
-
 
   private parseDate(value: any): Date {
     if (!value) {
@@ -455,7 +435,7 @@ export class ViewRecurring implements OnInit {
   backToIndexPage(): void {
     this.router.navigate(['/recurring-index'], {
       state: {
-       currentPage: this.currentPage,
+        currentPage: this.currentPage,
         statusIndex: this.statusIndex,
         searchText: this.searchText,
         page: this.page,
@@ -464,29 +444,16 @@ export class ViewRecurring implements OnInit {
     });
   }
 
-
   get hasTransactionHistory(): boolean {
     return Array.isArray(this.transactionHistory) && this.transactionHistory.length > 0;
   }
 
-   getPriorityLabel(
-    priority: number | null | undefined
-  ): string {
-
-    if (
-      priority === null ||
-      priority === undefined
-    ) {
-
+  getPriorityLabel(priority: number | null | undefined): string {
+    if (priority === null || priority === undefined) {
       return '-';
-
     }
 
-
-    switch (
-    Number(priority)
-    ) {
-
+    switch (Number(priority)) {
       case 1:
         return 'Low';
 
@@ -501,34 +468,19 @@ export class ViewRecurring implements OnInit {
 
       default:
         return String(priority);
-
     }
-
   }
-
 
   // =========================================================
   // PRIORITY CSS CLASS
   // =========================================================
 
-  getPriorityClass(
-    priority: number | null | undefined
-  ): string {
-
-    if (
-      priority === null ||
-      priority === undefined
-    ) {
-
+  getPriorityClass(priority: number | null | undefined): string {
+    if (priority === null || priority === undefined) {
       return '';
-
     }
 
-
-    switch (
-    Number(priority)
-    ) {
-
+    switch (Number(priority)) {
       case 1:
         return 'priority-low';
 
@@ -543,9 +495,6 @@ export class ViewRecurring implements OnInit {
 
       default:
         return '';
-
     }
-
   }
-
 }

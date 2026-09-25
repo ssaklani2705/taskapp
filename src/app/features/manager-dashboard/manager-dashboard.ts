@@ -31,15 +31,7 @@ interface Client {
 
 @Component({
   selector: 'app-manager-dashboard',
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatPaginatorModule,
-  ],
+  imports: [CommonModule, FormsModule, MatCardModule, MatIconModule, MatButtonModule, MatDividerModule, MatPaginatorModule],
   templateUrl: './manager-dashboard.html',
   styleUrl: './manager-dashboard.scss',
 })
@@ -177,37 +169,35 @@ export class ManagerDashboard {
 
     this.getTaskCounts();
 
-    this.dataProvider
-      .getTasksByStatus(this.pageIndex, this.pageSize, clientId, this.userId)
-      .subscribe({
-        next: (response: any) => {
-          console.log('Task API Response:', response);
+    this.dataProvider.getTasksByStatus(this.pageIndex, this.pageSize, clientId, this.userId).subscribe({
+      next: (response: any) => {
+        console.log('Task API Response:', response);
 
-          const taskList = response?.taskList || [];
+        const taskList = response?.taskList || [];
 
-          this.totalTasks = response?.totalTasks || 0;
-          this.totalOutstanding = response?.totalOutstanding || 0;
+        this.totalTasks = response?.totalTasks || 0;
+        this.totalOutstanding = response?.totalOutstanding || 0;
 
-          this.tasks = taskList.map((task: any) => ({
-            taskId: task.taskId,
-            title: task.title || '',
-            assignedTo: task.assignedTo || '',
-            assignedUserName: task.assignedUserName || '',
-            taskStatus: task.taskStatus,
-            addedByName: task.addedByName,
-            date: task.date,
-            priority: task.priority,
-            clientName: task.clientName,
-            duedatetime: task.dueDateTime,
-          }));
-        },
-        error: (error) => {
-          console.error('Error fetching tasks:', error);
-          this.tasks = [];
-          this.totalTasks = 0;
-          this.totalOutstanding = 0;
-        },
-      });
+        this.tasks = taskList.map((task: any) => ({
+          taskId: task.taskId,
+          title: task.title || '',
+          assignedTo: task.assignedTo || '',
+          assignedUserName: task.assignedUserName || '',
+          taskStatus: task.taskStatus,
+          addedByName: task.addedByName,
+          date: task.date,
+          priority: task.priority,
+          clientName: task.clientName,
+          duedatetime: task.dueDateTime,
+        }));
+      },
+      error: (error) => {
+        console.error('Error fetching tasks:', error);
+        this.tasks = [];
+        this.totalTasks = 0;
+        this.totalOutstanding = 0;
+      },
+    });
   }
 
   private loadFilterData(): void {
@@ -236,7 +226,7 @@ export class ManagerDashboard {
   getTaskCounts(): void {
     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
     // Active Tasks
-    this.dataProvider.countOfActiveTask(clientId,this.userId).subscribe({
+    this.dataProvider.countOfActiveTask(clientId, this.userId).subscribe({
       next: (response: any) => {
         console.log('Active Task Count:', response);
 
@@ -251,7 +241,7 @@ export class ManagerDashboard {
     });
 
     // Completed Tasks
-    this.dataProvider.countOfCompletedTask(clientId,this.userId).subscribe({
+    this.dataProvider.countOfCompletedTask(clientId, this.userId).subscribe({
       next: (response: any) => {
         console.log('Completed Task Count:', response);
 
@@ -266,7 +256,7 @@ export class ManagerDashboard {
     });
 
     // Pending Tasks
-    this.dataProvider.countOfPendingTask(clientId,this.userId).subscribe({
+    this.dataProvider.countOfPendingTask(clientId, this.userId).subscribe({
       next: (response: any) => {
         console.log('Pending Task Count:', response);
 
@@ -281,7 +271,7 @@ export class ManagerDashboard {
     });
 
     // Assigned Tasks
-    this.dataProvider.countOfAssignedTask(clientId,this.userId).subscribe({
+    this.dataProvider.countOfAssignedTask(clientId, this.userId).subscribe({
       next: (response: any) => {
         console.log('Assigned Task Count:', response);
 
@@ -296,7 +286,7 @@ export class ManagerDashboard {
     });
 
     // Assignee Closure Tasks
-    this.dataProvider.countOfAssigneeClosureTask(clientId,this.userId).subscribe({
+    this.dataProvider.countOfAssigneeClosureTask(clientId, this.userId).subscribe({
       next: (response: any) => {
         console.log('Assignee Closure Task Count:', response);
 
@@ -311,7 +301,7 @@ export class ManagerDashboard {
     });
 
     // Re Open Tasks
-    this.dataProvider.countOfReOpenTask(clientId,this.userId).subscribe({
+    this.dataProvider.countOfReOpenTask(clientId, this.userId).subscribe({
       next: (response: any) => {
         console.log('Re Open Task Count:', response);
 
@@ -326,7 +316,7 @@ export class ManagerDashboard {
     });
 
     // Assignee Re-Closure Tasks
-    this.dataProvider.countOfAssigneeReClosureTask(clientId,this.userId).subscribe({
+    this.dataProvider.countOfAssigneeReClosureTask(clientId, this.userId).subscribe({
       next: (response: any) => {
         console.log('Assignee Re-Closure Task Count:', response);
 
@@ -485,11 +475,7 @@ export class ManagerDashboard {
         this.isChangingManager = false;
         console.error('Full error:', error);
         console.error('Backend message:', error?.error?.message);
-        Swal.fire(
-          'Error',
-          error?.error?.message || 'Something went wrong while updating the task.',
-          'error',
-        );
+        Swal.fire('Error', error?.error?.message || 'Something went wrong while updating the task.', 'error');
       },
     });
   }
@@ -681,33 +667,22 @@ export class ManagerDashboard {
     });
   }
 
-   clientAssignmentMessage: string = '';
-   private checkClientAssignment(): void {
-
-    const managerId =
-      Number(sessionStorage.getItem('userId'));
+  clientAssignmentMessage: string = '';
+  private checkClientAssignment(): void {
+    const managerId = Number(sessionStorage.getItem('userId'));
 
     if (!managerId) {
       return;
     }
 
-    this.dataProvider
-      .checkClientAssignment(managerId)
-      .subscribe({
+    this.dataProvider.checkClientAssignment(managerId).subscribe({
+      next: (response: { assigned: boolean; message: string }) => {
+        this.clientAssignmentMessage = response.assigned ? '' : response.message;
+      },
 
-        next: (response: { assigned: boolean; message: string }) => {
-
-          this.clientAssignmentMessage =
-            response.assigned ? '' : response.message;
-        },
-
-        error: (err) => {
-
-          console.error(
-            'Failed to check client assignment',
-            err
-          );
-        }
-      });
+      error: (err) => {
+        console.error('Failed to check client assignment', err);
+      },
+    });
   }
 }

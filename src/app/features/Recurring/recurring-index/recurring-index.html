@@ -23,13 +23,7 @@
         <div class="search-row">
           <div class="search-wrapper">
             <div class="search-box">
-              <input
-                type="text"
-                [(ngModel)]="searchQuery"
-                placeholder="Search Title and Description"
-                (keyup.enter)="onSearch()"
-                class="search-input"
-              />
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search Title and Description" (keyup.enter)="onSearch()" class="search-input" />
 
               <button type="button" class="search-btn" (click)="onSearch()" title="Search">
                 <i class="fa fa-search"></i>
@@ -38,41 +32,15 @@
           </div>
 
           <div class="client-dropdown-container">
-            <input
-              type="text"
-              class="client-search-input"
-              placeholder="Search Client..."
-              [(ngModel)]="clientSearchText"
-              (input)="filterClients()"
-              (focus)="showClientDropdown = true"
-            />
-            <button
-              *ngIf="clientSearchText"
-              type="button"
-              class="clear-search-btn"
-              (click)="clearClientFilter()"
-            >
-              ×
-            </button>
+            <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
+            <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientFilter()">×</button>
 
-            <div
-              class="client-dropdown-list"
-              *ngIf="showClientDropdown && clientSearchText.trim().length >= 3"
-            >
-              <div
-                class="client-dropdown-item"
-                *ngFor="let client of filteredClients"
-                (click)="selectClient(client)"
-              >
+            <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
+              <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
                 {{ client.name }}
               </div>
 
-              <div
-                class="client-dropdown-item no-client-found"
-                *ngIf="filteredClients.length === 0"
-              >
-                No Client Found
-              </div>
+              <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
             </div>
           </div>
 
@@ -87,11 +55,7 @@
           </div>
 
           <div class="status-wrapper">
-            <select
-              class="status-select"
-              [(ngModel)]="selectedTaskCatId"
-              (change)="onFilterChange()"
-            >
+            <select class="status-select" [(ngModel)]="selectedTaskCatId" (change)="onFilterChange()">
               <option [ngValue]="0">--All Task Categories--</option>
 
               <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
@@ -103,11 +67,7 @@
 
         <div class="filter-row">
           <div class="status-wrapper">
-            <select
-              class="status-select"
-              [(ngModel)]="selectedPriority"
-              (change)="onFilterChange()"
-            >
+            <select class="status-select" [(ngModel)]="selectedPriority" (change)="onFilterChange()">
               <option value="0">--All Priority--</option>
               <option value="1">High</option>
               <option value="2">Medium</option>
@@ -151,11 +111,7 @@
 
           <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            *ngFor="let pageNumber of pages()"
-            (click)="goToPage(pageNumber)"
-            [class.active-pagination]="pageNumber === currentPage"
-          >
+          <button *ngFor="let pageNumber of pages()" (click)="goToPage(pageNumber)" [class.active-pagination]="pageNumber === currentPage">
             {{ pageNumber }}
           </button>
 
@@ -171,22 +127,14 @@
             <tr>
               <th class="serial-column">#</th>
 
-              <th
-                *ngFor="let col of columns"
-                [class.sortable-column]="col.sortable"
-                (click)="col.sortable && sortData(col.key)"
-              >
+              <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
                 <div class="column-header">
                   <span>{{ col.label }}</span>
 
                   <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'">
-                      ▲
-                    </span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
 
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'">
-                      ▼
-                    </span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
                   </span>
                 </div>
               </th>
@@ -209,13 +157,7 @@
                     {{ item.clientName || '-' }}
                   </span>
 
-                  <button
-                    type="button"
-                    class="description-icon-button"
-                    *ngIf="item.description"
-                    (click)="openDescriptionModal(item)"
-                    aria-label="View Description"
-                  >
+                  <button type="button" class="description-icon-button" *ngIf="item.description" (click)="openDescriptionModal(item)" aria-label="View Description">
                     <i class="fa fa-file-text"></i>
                   </button>
                 </div>
@@ -247,36 +189,21 @@
 
               <td class="action-cell">
                 @if (viewPer === 'Y') {
-                  <button
-                    type="button"
-                    class="action-button view-button"
-                    title="View"
-                    (click)="viewRecurring(item.recurringId)"
-                  >
+                  <button type="button" class="action-button view-button" title="View" (click)="viewRecurring(item.recurringId)">
                     <mat-icon> visibility </mat-icon>
                   </button>
                 }
 
                 <ng-container *ngIf="item.status === 1 || item.status === 2">
                   @if (editPer === 'Y') {
-                    <button
-                      type="button"
-                      class="action-button edit-button"
-                      title="Edit"
-                      (click)="editRecurring(item.recurringId)"
-                    >
+                    <button type="button" class="action-button edit-button" title="Edit" (click)="editRecurring(item.recurringId)">
                       <mat-icon> edit </mat-icon>
                     </button>
                   }
 
                   <!-- DELETE -->
                   @if (deletePer === 'Y') {
-                    <button
-                      type="button"
-                      class="action-button delete-button"
-                      title="Delete"
-                      (click)="onDeleteUser(item.recurringId)"
-                    >
+                    <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteUser(item.recurringId)">
                       <mat-icon> delete </mat-icon>
                     </button>
                   }
@@ -305,11 +232,7 @@
 
           <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            *ngFor="let pageNumber of pages()"
-            (click)="goToPage(pageNumber)"
-            [class.active-pagination]="pageNumber === currentPage"
-          >
+          <button *ngFor="let pageNumber of pages()" (click)="goToPage(pageNumber)" [class.active-pagination]="pageNumber === currentPage">
             {{ pageNumber }}
           </button>
 
@@ -339,12 +262,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeDescriptionModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeDescriptionModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>

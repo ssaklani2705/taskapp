@@ -1,20 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-  ViewEncapsulation,
-} from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -181,13 +168,7 @@ export class AddClient implements OnInit {
       pan: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)]],
       status: [1, Validators.required],
       gstFlag: [false],
-      gstNo: [
-        '',
-        [
-          Validators.maxLength(15),
-          Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/),
-        ],
-      ],
+      gstNo: ['', [Validators.maxLength(15), Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)]],
       taxFlag: [false],
       stateId: [null, Validators.required],
       planId: [null, Validators.required],
@@ -216,16 +197,9 @@ export class AddClient implements OnInit {
       const gstNoControl = this.clientForm.get('gstNo');
 
       if (checked) {
-        gstNoControl?.setValidators([
-          Validators.required,
-          Validators.maxLength(15),
-          Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/),
-        ]);
+        gstNoControl?.setValidators([Validators.required, Validators.maxLength(15), Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)]);
       } else {
-        gstNoControl?.setValidators([
-          Validators.maxLength(15),
-          Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/),
-        ]);
+        gstNoControl?.setValidators([Validators.maxLength(15), Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)]);
       }
 
       gstNoControl?.updateValueAndValidity();
@@ -348,9 +322,7 @@ export class AddClient implements OnInit {
         Swal.fire({
           icon: 'error',
           title: this.isEditMode ? 'Update Failed' : 'Save Failed',
-          text:
-            err?.error?.message ||
-            (this.isEditMode ? 'Failed to update client.' : 'Failed to save client.'),
+          text: err?.error?.message || (this.isEditMode ? 'Failed to update client.' : 'Failed to save client.'),
           confirmButtonText: 'OK',
           confirmButtonColor: '#d33',
         });

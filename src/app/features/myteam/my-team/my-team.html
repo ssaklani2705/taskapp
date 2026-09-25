@@ -1,556 +1,271 @@
 <div class="page-content-wrapper">
-
   <div class="page-content">
-
     <div class="user-management-container">
-
       <!-- ================= HEADER ================= -->
       <!-- ================= HEADER ================= -->
       <div class="page-header">
-
         <div class="header-title-section">
-
           <h2>
             <mat-icon>person</mat-icon>
             User Management
           </h2>
 
-          <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible"
-            title="Toggle Search Panel">
+          <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
             {{ isPanelVisible ? '▲' : '▼' }}
           </button>
-
         </div>
 
         @if (addPer === 'Y') {
-
-        <button type="button" class="btn-add-user" (click)="addUser()">
-          <span class="plus-icon">+</span>
-          Add New
-        </button>
-
+          <button type="button" class="btn-add-user" (click)="addUser()">
+            <span class="plus-icon">+</span>
+            Add New
+          </button>
         }
-
       </div>
-
-
 
       <!-- ================= SEARCH PANEL ================= -->
       <div class="search-panel" *ngIf="isPanelVisible">
+        <div class="search-row">
+          <!-- SEARCH -->
+          <div class="search-wrapper">
+            <div class="search-box">
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by User name / Email id / Mobile No" (keyup.enter)="onSearch()" class="search-input" />
 
-      <div class="search-row">
+              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
 
-  <!-- SEARCH -->
-  <div class="search-wrapper">
+          <!-- DEPARTMENT -->
+          <div class="department-wrapper">
+            <select class="status-select" [(ngModel)]="selectedDepartmentId" (change)="onDepartmentChange()">
+              <option [ngValue]="null">--All Departments--</option>
 
-    <div class="search-box">
+              <option *ngFor="let department of departmentList" [ngValue]="department.departmentId">
+                {{ department.name }}
+              </option>
+            </select>
+          </div>
 
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        placeholder="Search by User name / Email id / Mobile No"
-        (keyup.enter)="onSearch()"
-        class="search-input" />
+          <!-- Category  -->
+          <div class="department-wrapper">
+            <select class="status-select" [(ngModel)]="selectedCategoryId" (change)="onCategoryChange()">
+              <option [ngValue]="null">--All Task Categories--</option>
 
-      <button
-        type="button"
-        class="search-btn"
-        (click)="onSearch()"
-        title="Search">
+              <option *ngFor="let category of categoryList" [ngValue]="category.taskcategoryId">
+                {{ category.name }}
+              </option>
+            </select>
+          </div>
 
-        <i class="fa fa-search"></i>
+          <!-- DESIGNATION -->
+          <div class="designation-wrapper">
+            <select class="status-select" [(ngModel)]="selectedDesignationId" (change)="onDesignationChange()">
+              <option [ngValue]="null">--All Designations--</option>
 
-      </button>
+              <option *ngFor="let designation of designationList" [ngValue]="designation.desigmationId">
+                {{ designation.name }}
+              </option>
+            </select>
+          </div>
 
-    </div>
+          <!-- STATUS -->
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+              <option value="">--All Status--</option>
 
-  </div>
+              <option value="1">Active</option>
 
+              <option value="2">Inactive</option>
 
-  <!-- DEPARTMENT -->
-  <div class="department-wrapper">
+              <option value="3">Deleted</option>
+            </select>
+          </div>
 
-    <select
-      class="status-select"
-      [(ngModel)]="selectedDepartmentId" (change)="onDepartmentChange()">
+          <!-- GO -->
+          <div class="go-wrapper">
+            <button type="button" class="btn-go" (click)="onSearch()">Go</button>
+          </div>
 
-      <option [ngValue]="null">
-        --All Departments--
-      </option>
-
-      <option
-        *ngFor="let department of departmentList"
-        [ngValue]="department.departmentId">
-
-        {{ department.name }}
-
-      </option>
-
-    </select>
-
-  </div>
-
-  <!-- Category  -->
-<div class="department-wrapper">
-
-  <select
-    class="status-select"
-    [(ngModel)]="selectedCategoryId"
-    (change)="onCategoryChange()">
-
-    <option [ngValue]="null">
-      --All Task Categories--
-    </option>
-
-    <option
-      *ngFor="let category of categoryList"
-      [ngValue]="category.taskcategoryId">
-
-      {{ category.name }}
-
-    </option>
-
-  </select>
-
-</div>
-
-
-  <!-- DESIGNATION -->
-  <div class="designation-wrapper">
-
-    <select
-      class="status-select"
-      [(ngModel)]="selectedDesignationId"  (change)="onDesignationChange()">
-
-      <option [ngValue]="null">
-        --All Designations--
-      </option>
-
-      <option
-        *ngFor="let designation of designationList"
-        [ngValue]="designation.desigmationId">
-
-        {{ designation.name }}
-
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <!-- STATUS -->
-  <div class="status-wrapper">
-
-    <select
-      class="status-select"
-      [(ngModel)]="selectedStatus"
-      (change)="onStatusChange()">
-
-      <option value="">
-        --All Status--
-      </option>
-
-      <option value="1">
-        Active
-      </option>
-
-      <option value="2">
-        Inactive
-      </option>
-
-      <option value="3">
-        Deleted
-      </option>
-
-    </select>
-
-  </div>
-
-
-  <!-- GO -->
-  <div class="go-wrapper">
-
-    <button
-      type="button"
-      class="btn-go"
-      (click)="onSearch()">
-
-      Go
-
-    </button>
-
-  </div>
-
-    <button
-    type="button"
-    class="btn-clear"
-    (click)="clearFilters()">
-
-    Clear
-
-  </button>
-
-</div>
-
+          <button type="button" class="btn-clear" (click)="clearFilters()">Clear</button>
+        </div>
       </div>
-
 
       <!-- ================= TABLE HEADER / PAGINATION ================= -->
       <div class="table-top-section">
-
         <!-- RECORD SUMMARY -->
         <div class="record-summary">
-
           {{ recordSummary }}
-
         </div>
-
 
         <!-- PAGINATION -->
         <div class="pagination">
-
           <!-- FIRST -->
-          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()"
-            [disabled]="currentPage === 1">
-
-            « First
-
-          </button>
-
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
           <!-- PREVIOUS -->
-          <button type="button" class="pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">
-
-            ‹ Prev
-
-          </button>
-
+          <button type="button" class="pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">‹ Prev</button>
 
           <!-- PAGE NUMBERS -->
-          <button type="button" class="pagination-btn page-number" *ngFor="let pageNumber of pages()"
-            (click)="goToPage(pageNumber)" [class.active-pagination]="pageNumber === currentPage">
-
+          <button type="button" class="pagination-btn page-number" *ngFor="let pageNumber of pages()" (click)="goToPage(pageNumber)" [class.active-pagination]="pageNumber === currentPage">
             {{ pageNumber }}
-
           </button>
-
 
           <!-- NEXT -->
-          <button type="button" class="pagination-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">
-
-            Next ›
-
-          </button>
-
+          <button type="button" class="pagination-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next ›</button>
 
           <!-- LAST -->
-          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()"
-            [disabled]="currentPage === totalPages">
-
-            Last »
-
-          </button>
-
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
-
       </div>
-
 
       <!-- ================= TABLE ================= -->
       <div class="table-container">
-
         <div class="table-responsive">
-
           <table class="user-table">
-
             <thead>
-
               <tr>
-
                 <!-- NUMBER -->
-                <th class="serial-column">
-                  Sr. No.
-                </th>
-
+                <th class="serial-column">Sr. No.</th>
 
                 <!-- DYNAMIC COLUMNS -->
-                <th *ngFor="let col of columns" [class.sortable-column]="col.sortable"
-                  (click)="col.sortable && sortData(col.key)">
-
+                <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
                   <div class="column-header">
-
                     <span>
                       {{ col.label }}
                     </span>
 
                     <span *ngIf="col.sortable" class="sort-icons">
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
 
-                      <span [class.sort-active]="
-                          sortColumn === col.key &&
-                          sortDirection === 'asc'
-                        ">
-
-                        ▲
-
-                      </span>
-
-                      <span [class.sort-active]="
-                          sortColumn === col.key &&
-                          sortDirection === 'desc'
-                        ">
-
-                        ▼
-
-                      </span>
-
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
                     </span>
-
                   </div>
-
                 </th>
-
 
                 <!-- ACTION -->
-                <th class="action-column">
-                  Action
-                </th>
-
+                <th class="action-column">Action</th>
               </tr>
-
             </thead>
 
-
             <tbody>
-
               <!-- LOADING -->
               <tr *ngIf="isLoading">
-
                 <td [attr.colspan]="columns.length + 2" class="loading-cell">
-
                   <div class="loading-spinner"></div>
 
                   Loading users...
-
                 </td>
-
               </tr>
-
 
               <!-- NO RECORDS -->
               <tr *ngIf="!isLoading && users.length === 0">
-
-                <td [attr.colspan]="columns.length + 2" class="no-records">
-
-                  No users found.
-
-                </td>
-
+                <td [attr.colspan]="columns.length + 2" class="no-records">No users found.</td>
               </tr>
 
-
               <!-- USER RECORDS -->
-              <tr *ngFor="
-                  let user of users;
-                  let i = index
-                " class="user-row">
-
-
+              <tr *ngFor="let user of users; let i = index" class="user-row">
                 <!-- SERIAL NUMBER -->
                 <td class="serial-number">
-
-                  {{
-                  ((currentPage - 1) * size) + i + 1
-                  }}
-
+                  {{ (currentPage - 1) * size + i + 1 }}
                 </td>
-
 
                 <!-- NAME -->
                 <td>
-
                   <span class="user-name">
-
                     {{ user.firstName }}
-
                   </span>
-
                 </td>
-
 
                 <!-- EMAIL -->
                 <td>
-
                   <span class="email-text">
-
                     {{ user.email }}
-
                   </span>
-
                 </td>
-
 
                 <!-- MOBILE -->
                 <td>
-
                   {{ user.mobile }}
-
                 </td>
                 <td>
-
                   {{ user.departmentName }}
-
                 </td>
 
                 <td>
-
                   {{ user.designationName }}
-
                 </td>
 
                 <td>
-
                   {{ user.taskCategoryNames }}
-
                 </td>
 
-                
                 <!-- STATUS -->
                 <td>
-
-                  <span class="status-badge" [ngClass]="
-                      getStatusClass(user.status)
-                    ">
-
+                  <span class="status-badge" [ngClass]="getStatusClass(user.status)">
                     {{ getStatusLabel(user.status) }}
-
                   </span>
-
                 </td>
-
 
                 <!-- ACTION -->
                 <td>
-
                   <div class="action-buttons">
-
-
                     <!-- VIEW -->
                     <button type="button" class="action-btn view-btn" title="View" (click)="viewUser(user.userId)">
-
                       <i class="fa fa-eye"></i>
-
                     </button>
 
-
                     <!-- EDIT -->
-                    <ng-container *ngIf="
-                        user.status === 1 ||
-                        user.status === 2
-                      ">
-
+                    <ng-container *ngIf="user.status === 1 || user.status === 2">
                       @if (editPer === 'Y') {
-
-                      <button type="button" class="action-btn edit-btn" title="Edit" (click)="editUser(user.userId)">
-
-                        <i class="fa fa-pencil"></i>
-
-                      </button>
-
+                        <button type="button" class="action-btn edit-btn" title="Edit" (click)="editUser(user.userId)">
+                          <i class="fa fa-pencil"></i>
+                        </button>
                       }
-
 
                       <!-- DELETE -->
                       @if (deletePer === 'Y') {
-
-                      <button type="button" class="action-btn delete-btn" title="Delete"
-                        (click)="onDeleteUser(user.userId)">
-
-                        <i class="fa fa-trash"></i>
-
-                      </button>
-
+                        <button type="button" class="action-btn delete-btn" title="Delete" (click)="onDeleteUser(user.userId)">
+                          <i class="fa fa-trash"></i>
+                        </button>
                       }
-
                     </ng-container>
-
                   </div>
-
                 </td>
-
               </tr>
-
             </tbody>
-
           </table>
-
         </div>
-
       </div>
-
 
       <!-- ================= BOTTOM SECTION ================= -->
       <div class="table-top-section">
-
         <!-- RECORD SUMMARY -->
         <div class="record-summary">
-
           {{ recordSummary }}
-
         </div>
-
 
         <!-- PAGINATION -->
         <div class="pagination">
-
           <!-- FIRST -->
-          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()"
-            [disabled]="currentPage === 1">
-
-            « First
-
-          </button>
-
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
           <!-- PREVIOUS -->
-          <button type="button" class="pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">
-
-            ‹ Prev
-
-          </button>
-
+          <button type="button" class="pagination-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">‹ Prev</button>
 
           <!-- PAGE NUMBERS -->
-          <button type="button" class="pagination-btn page-number" *ngFor="let pageNumber of pages()"
-            (click)="goToPage(pageNumber)" [class.active-pagination]="pageNumber === currentPage">
-
+          <button type="button" class="pagination-btn page-number" *ngFor="let pageNumber of pages()" (click)="goToPage(pageNumber)" [class.active-pagination]="pageNumber === currentPage">
             {{ pageNumber }}
-
           </button>
-
 
           <!-- NEXT -->
-          <button type="button" class="pagination-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">
-
-            Next ›
-
-          </button>
-
+          <button type="button" class="pagination-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">Next ›</button>
 
           <!-- LAST -->
-          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()"
-            [disabled]="currentPage === totalPages">
-
-            Last »
-
-          </button>
-
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </div>

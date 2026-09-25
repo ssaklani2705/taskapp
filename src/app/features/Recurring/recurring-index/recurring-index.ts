@@ -139,48 +139,42 @@ export class RecurringIndex {
       return;
     }
 
-    this.dataprovider
-      .getRecurringClientsForIndex(this.userId, this.isAdmin, this.loginType)
-      .subscribe({
-        next: (response: any) => {
-          console.log('Recurring Clients:', response);
+    this.dataprovider.getRecurringClientsForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
+      next: (response: any) => {
+        console.log('Recurring Clients:', response);
 
-          this.clients = response || [];
-          if (this.selectedClientId > 0) {
-            const selectedClient = this.clients.find(
-              (x: any) => x.clientId == this.selectedClientId,
-            );
+        this.clients = response || [];
+        if (this.selectedClientId > 0) {
+          const selectedClient = this.clients.find((x: any) => x.clientId == this.selectedClientId);
 
-            if (selectedClient) {
-              this.clientSearchText = selectedClient.name;
-            }
+          if (selectedClient) {
+            this.clientSearchText = selectedClient.name;
           }
-        },
+        }
+      },
 
-        error: (error) => {
-          console.error('Error fetching recurring clients:', error);
+      error: (error) => {
+        console.error('Error fetching recurring clients:', error);
 
-          this.clients = [];
-        },
-      });
+        this.clients = [];
+      },
+    });
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider
-      .getActiveTaskCategoriesForRecurringForIndex(this.userId, this.isAdmin, this.loginType)
-      .subscribe({
-        next: (response: any) => {
-          console.log('Task Categories:', response);
+    this.dataprovider.getActiveTaskCategoriesForRecurringForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
+      next: (response: any) => {
+        console.log('Task Categories:', response);
 
-          this.taskCategories = response || [];
-        },
+        this.taskCategories = response || [];
+      },
 
-        error: (error) => {
-          console.error('Error fetching task categories:', error);
+      error: (error) => {
+        console.error('Error fetching task categories:', error);
 
-          this.taskCategories = [];
-        },
-      });
+        this.taskCategories = [];
+      },
+    });
   }
 
   getRecurringDetails(): void {
@@ -514,10 +508,7 @@ export class RecurringIndex {
 
     const end = Math.min(this.currentPage * this.size, this.totalRecords);
 
-    return (
-      `Page ${this.currentPage} of ${this.totalPages}, ` +
-      `(${start} - ${end} of ${this.totalRecords} records)`
-    );
+    return `Page ${this.currentPage} of ${this.totalPages}, ` + `(${start} - ${end} of ${this.totalRecords} records)`;
   }
 
   getStatusClass(status: number | string): string {
@@ -789,9 +780,7 @@ export class RecurringIndex {
       return;
     }
 
-    this.filteredClients = this.clients.filter(
-      (client: any) => client.name && client.name.toLowerCase().includes(search),
-    );
+    this.filteredClients = this.clients.filter((client: any) => client.name && client.name.toLowerCase().includes(search));
 
     this.showClientDropdown = true;
   }

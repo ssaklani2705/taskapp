@@ -4,14 +4,10 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-footer',
   // standalone: true,
-  imports: [
-    MatIconModule
-  ],
+  imports: [MatIconModule],
   templateUrl: './footer.html',
-  styleUrl: './footer.scss'
+  styleUrl: './footer.scss',
 })
 export class FooterComponent {
-
   currentYear = new Date().getFullYear();
-
 }

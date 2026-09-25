@@ -55,16 +55,7 @@ interface Client {
 
 @Component({
   selector: 'app-client-index',
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatCardModule,
-    MatIcon,
-    MatDivider,
-  ],
+  imports: [CommonModule, FormsModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatIcon, MatDivider],
   templateUrl: './client-index.html',
   styleUrl: './client-index.scss',
   providers: [
@@ -778,8 +769,7 @@ export class ClientIndex {
         Swal.fire({
           icon: 'error',
           title: 'Upload Error',
-          text:
-            error?.error?.message || 'Upload failed. Please check your Excel file and try again.',
+          text: error?.error?.message || 'Upload failed. Please check your Excel file and try again.',
           confirmButtonColor: '#d33',
           confirmButtonText: 'OK',
         });
@@ -924,10 +914,7 @@ export class ClientIndex {
 
     const end = Math.min(this.currentPage * this.size, this.totalRecords);
 
-    return (
-      `Page ${this.currentPage} of ${this.totalPages}, ` +
-      `(${start} - ${end} of ${this.totalRecords} records)`
-    );
+    return `Page ${this.currentPage} of ${this.totalPages}, ` + `(${start} - ${end} of ${this.totalRecords} records)`;
   }
 
   private restoreFilterState(): void {

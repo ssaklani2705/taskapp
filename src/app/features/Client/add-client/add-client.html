@@ -46,14 +46,7 @@
                     </option>
                   </select>
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('managerId')?.touched && clientForm.get('managerId')?.invalid
-                    "
-                  >
-                    Society Manager is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('managerId')?.touched && clientForm.get('managerId')?.invalid">Society Manager is required</div>
                 </div>
               </div>
 
@@ -82,12 +75,7 @@
 
                   <input type="text" class="user-input" formControlName="name" maxlength="200" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="clientForm.get('name')?.touched && clientForm.get('name')?.invalid"
-                  >
-                    Client Name is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('name')?.touched && clientForm.get('name')?.invalid">Client Name is required</div>
                 </div>
               </div>
 
@@ -101,12 +89,7 @@
 
                   <input type="text" class="user-input" formControlName="code" maxlength="50" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="clientForm.get('code')?.touched && clientForm.get('code')?.invalid"
-                  >
-                    Client Code is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('code')?.touched && clientForm.get('code')?.invalid">Client Code is required</div>
                 </div>
               </div>
 
@@ -120,23 +103,9 @@
 
                   <input type="text" class="user-input" formControlName="pan" maxlength="10" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('pan')?.touched && clientForm.get('pan')?.errors?.['required']
-                    "
-                  >
-                    PAN is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('pan')?.touched && clientForm.get('pan')?.errors?.['required']">PAN is required</div>
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('pan')?.touched && clientForm.get('pan')?.errors?.['pattern']
-                    "
-                  >
-                    Enter a valid PAN (e.g. GRBPA4562J)
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('pan')?.touched && clientForm.get('pan')?.errors?.['pattern']">Enter a valid PAN (e.g. GRBPA4562J)</div>
                 </div>
               </div>
 
@@ -164,25 +133,9 @@
 
                   <input type="text" class="user-input" formControlName="gstNo" maxlength="15" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('gstNo')?.touched &&
-                      clientForm.get('gstNo')?.errors?.['required']
-                    "
-                  >
-                    GST Number is required when GST Applicable is selected
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('gstNo')?.touched && clientForm.get('gstNo')?.errors?.['required']">GST Number is required when GST Applicable is selected</div>
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('gstNo')?.touched &&
-                      clientForm.get('gstNo')?.errors?.['pattern']
-                    "
-                  >
-                    Enter a valid GST Number
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('gstNo')?.touched && clientForm.get('gstNo')?.errors?.['pattern']">Enter a valid GST Number</div>
                 </div>
               </div>
 
@@ -219,22 +172,9 @@
                     <span class="required">*</span>
                   </label>
 
-                  <input
-                    type="text"
-                    class="user-input"
-                    formControlName="addressLine1"
-                    maxlength="250"
-                  />
+                  <input type="text" class="user-input" formControlName="addressLine1" maxlength="250" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('addressLine1')?.touched &&
-                      clientForm.get('addressLine1')?.invalid
-                    "
-                  >
-                    Address Line 1 is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('addressLine1')?.touched && clientForm.get('addressLine1')?.invalid">Address Line 1 is required</div>
                 </div>
               </div>
 
@@ -243,12 +183,7 @@
                 <div class="user-form-group">
                   <label class="user-label"> Address Line 2 </label>
 
-                  <input
-                    type="text"
-                    class="user-input"
-                    formControlName="addressLine2"
-                    maxlength="250"
-                  />
+                  <input type="text" class="user-input" formControlName="addressLine2" maxlength="250" />
                 </div>
               </div>
 
@@ -262,12 +197,7 @@
 
                   <input type="text" class="user-input" formControlName="city" maxlength="100" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="clientForm.get('city')?.touched && clientForm.get('city')?.invalid"
-                  >
-                    City is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('city')?.touched && clientForm.get('city')?.invalid">City is required</div>
                 </div>
               </div>
 
@@ -287,12 +217,7 @@
                     </option>
                   </select>
 
-                  <div
-                    class="user-error"
-                    *ngIf="clientForm.get('stateId')?.touched && clientForm.get('stateId')?.invalid"
-                  >
-                    State is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('stateId')?.touched && clientForm.get('stateId')?.invalid">State is required</div>
                 </div>
               </div>
             </div>
@@ -304,22 +229,9 @@
                 <div class="user-form-group">
                   <label class="user-label"> Location <span class="required">*</span> </label>
 
-                  <input
-                    type="text"
-                    class="user-input"
-                    formControlName="location"
-                    maxlength="200"
-                  />
+                  <input type="text" class="user-input" formControlName="location" maxlength="200" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('location')?.touched &&
-                      clientForm.get('location')?.errors?.['required']
-                    "
-                  >
-                    Location is required.
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('location')?.touched && clientForm.get('location')?.errors?.['required']">Location is required.</div>
                 </div>
               </div>
 
@@ -331,33 +243,11 @@
                     <span class="required">*</span>
                   </label>
 
-                  <input
-                    type="text"
-                    class="user-input"
-                    formControlName="pincode"
-                    maxlength="6"
-                    (keypress)="allowOnlyNumbers($event)"
-                  />
+                  <input type="text" class="user-input" formControlName="pincode" maxlength="6" (keypress)="allowOnlyNumbers($event)" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('pincode')?.touched &&
-                      clientForm.get('pincode')?.errors?.['required']
-                    "
-                  >
-                    Pincode is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('pincode')?.touched && clientForm.get('pincode')?.errors?.['required']">Pincode is required</div>
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('pincode')?.touched &&
-                      clientForm.get('pincode')?.errors?.['pattern']
-                    "
-                  >
-                    Enter a valid 6-digit Pincode
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('pincode')?.touched && clientForm.get('pincode')?.errors?.['pattern']">Enter a valid 6-digit Pincode</div>
                 </div>
               </div>
 
@@ -383,22 +273,9 @@
                     <span class="required">*</span>
                   </label>
 
-                  <input
-                    type="text"
-                    class="user-input"
-                    formControlName="contactName"
-                    maxlength="200"
-                  />
+                  <input type="text" class="user-input" formControlName="contactName" maxlength="200" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('contactName')?.touched &&
-                      clientForm.get('contactName')?.errors?.['required']
-                    "
-                  >
-                    Contact Name is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('contactName')?.touched && clientForm.get('contactName')?.errors?.['required']">Contact Name is required</div>
                 </div>
               </div>
 
@@ -410,32 +287,11 @@
                     <span class="required">*</span>
                   </label>
 
-                  <input
-                    type="email"
-                    class="user-input"
-                    formControlName="contactEmail"
-                    maxlength="100"
-                  />
+                  <input type="email" class="user-input" formControlName="contactEmail" maxlength="100" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('contactEmail')?.touched &&
-                      clientForm.get('contactEmail')?.errors?.['required']
-                    "
-                  >
-                    Contact Email is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('contactEmail')?.touched && clientForm.get('contactEmail')?.errors?.['required']">Contact Email is required</div>
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('contactEmail')?.touched &&
-                      clientForm.get('contactEmail')?.errors?.['email']
-                    "
-                  >
-                    Enter a valid email
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('contactEmail')?.touched && clientForm.get('contactEmail')?.errors?.['email']">Enter a valid email</div>
                 </div>
               </div>
 
@@ -453,22 +309,9 @@
                 <div class="user-form-group">
                   <label class="user-label"> Chairman’s Email ID </label>
 
-                  <input
-                    type="email"
-                    class="user-input"
-                    formControlName="emailId1"
-                    maxlength="100"
-                  />
+                  <input type="email" class="user-input" formControlName="emailId1" maxlength="100" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('emailId1')?.touched &&
-                      clientForm.get('emailId1')?.errors?.['email']
-                    "
-                  >
-                    Enter a valid email
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('emailId1')?.touched && clientForm.get('emailId1')?.errors?.['email']">Enter a valid email</div>
                 </div>
               </div>
             </div>
@@ -489,22 +332,9 @@
                 <div class="user-form-group">
                   <label class="user-label"> Secretary’s Email ID </label>
 
-                  <input
-                    type="email"
-                    class="user-input"
-                    formControlName="emailId2"
-                    maxlength="100"
-                  />
+                  <input type="email" class="user-input" formControlName="emailId2" maxlength="100" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('emailId2')?.touched &&
-                      clientForm.get('emailId2')?.errors?.['email']
-                    "
-                  >
-                    Enter a valid email
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('emailId2')?.touched && clientForm.get('emailId2')?.errors?.['email']">Enter a valid email</div>
                 </div>
               </div>
 
@@ -522,22 +352,9 @@
                 <div class="user-form-group">
                   <label class="user-label"> Treasurer’s Email ID </label>
 
-                  <input
-                    type="email"
-                    class="user-input"
-                    formControlName="emailId3"
-                    maxlength="100"
-                  />
+                  <input type="email" class="user-input" formControlName="emailId3" maxlength="100" />
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('emailId3')?.touched &&
-                      clientForm.get('emailId3')?.errors?.['email']
-                    "
-                  >
-                    Enter a valid email
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('emailId3')?.touched && clientForm.get('emailId3')?.errors?.['email']">Enter a valid email</div>
                 </div>
               </div>
             </div>
@@ -548,13 +365,7 @@
               <div class="user-form-col cc-email-col">
                 <div class="user-form-group">
                   <label class="user-label"> CC Email </label>
-                  <input
-                    type="text"
-                    class="user-input"
-                    formControlName="emails"
-                    maxlength="500"
-                    placeholder="Enter multiple emails"
-                  />
+                  <input type="text" class="user-input" formControlName="emails" maxlength="500" placeholder="Enter multiple emails" />
                   <div class="user-help-text">Emails should be separated by commas (,)</div>
                 </div>
               </div>
@@ -596,23 +407,10 @@
                       autocomplete="off"
                     />
 
-                    <mat-datepicker
-                      #startDatePicker
-                      [startAt]="minDate"
-                      panelClass="user-date-datepicker"
-                    >
-                    </mat-datepicker>
+                    <mat-datepicker #startDatePicker [startAt]="minDate" panelClass="user-date-datepicker"> </mat-datepicker>
                   </div>
 
-                  <div
-                    class="user-error"
-                    *ngIf="
-                      clientForm.get('startDate')?.touched &&
-                      clientForm.get('startDate')?.errors?.['required']
-                    "
-                  >
-                    Start Date is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('startDate')?.touched && clientForm.get('startDate')?.errors?.['required']">Start Date is required</div>
                 </div>
               </div>
 
@@ -632,12 +430,7 @@
                     </option>
                   </select>
 
-                  <div
-                    class="user-error"
-                    *ngIf="clientForm.get('planId')?.touched && clientForm.get('planId')?.invalid"
-                  >
-                    Plan is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('planId')?.touched && clientForm.get('planId')?.invalid">Plan is required</div>
                 </div>
               </div>
 
@@ -646,13 +439,7 @@
                 <div class="user-form-group">
                   <label class="user-label"> Outstanding </label>
 
-                  <input
-                    type="number"
-                    class="user-input"
-                    formControlName="outstanding"
-                    min="0"
-                    step="0.01"
-                  />
+                  <input type="number" class="user-input" formControlName="outstanding" min="0" step="0.01" />
                 </div>
               </div>
 
@@ -670,12 +457,7 @@
                     <option [value]="2">Inactive</option>
                   </select>
 
-                  <div
-                    class="user-error"
-                    *ngIf="clientForm.get('status')?.touched && clientForm.get('status')?.invalid"
-                  >
-                    Status is required
-                  </div>
+                  <div class="user-error" *ngIf="clientForm.get('status')?.touched && clientForm.get('status')?.invalid">Status is required</div>
                 </div>
               </div>
             </div>

@@ -1,10 +1,9 @@
 <div class="dashboard">
-
-    <div class="client-assignment-banner" *ngIf="clientAssignmentMessage">
+  <div class="client-assignment-banner" *ngIf="clientAssignmentMessage">
     <mat-icon>warning</mat-icon>
     <span>{{ clientAssignmentMessage }}</span>
   </div>
-  
+
   <div class="welcome-row">
     <div class="welcome-content">
       <div class="welcome-icon">
@@ -49,12 +48,7 @@
   </div>
 
   <section class="kpi-grid">
-    <mat-card
-      class="kpi-card"
-      *ngFor="let kpi of kpis"
-      [class]="kpi.className"
-      (click)="onKpiClick(kpi)"
-    >
+    <mat-card class="kpi-card" *ngFor="let kpi of kpis" [class]="kpi.className" (click)="onKpiClick(kpi)">
       <div class="kpi-icon-box">
         <mat-icon>{{ kpi.icon }}</mat-icon>
       </div>
@@ -158,9 +152,7 @@
               <td>
                 <div class="owner">
                   <span class="owner-avatar">
-                    {{
-                      task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?'
-                    }}
+                    {{ task.assignedUserName ? task.assignedUserName.charAt(0).toUpperCase() : '?' }}
                   </span>
 
                   <span class="owner-name">
@@ -211,15 +203,7 @@
               <td>
                 <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
                   <mat-icon class="priority-icon">
-                    {{
-                      task.priority === 1
-                        ? 'keyboard_double_arrow_up'
-                        : task.priority === 2
-                          ? 'drag_handle'
-                          : task.priority === 3
-                            ? 'keyboard_double_arrow_down'
-                            : 'remove'
-                    }}
+                    {{ task.priority === 1 ? 'keyboard_double_arrow_up' : task.priority === 2 ? 'drag_handle' : task.priority === 3 ? 'keyboard_double_arrow_down' : 'remove' }}
                   </mat-icon>
 
                   {{ getPriorityLabel(task.priority) }}
@@ -279,14 +263,7 @@
       </div>
 
       <!-- PAGINATION -->
-      <mat-paginator
-        [length]="totalTasks"
-        [pageSize]="20"
-        [pageSizeOptions]="[20]"
-        [showFirstLastButtons]="true"
-        (page)="onPageChange($event)"
-      >
-      </mat-paginator>
+      <mat-paginator [length]="totalTasks" [pageSize]="20" [pageSizeOptions]="[20]" [showFirstLastButtons]="true" (page)="onPageChange($event)"> </mat-paginator>
     </mat-card>
   </section>
 </div>
@@ -304,12 +281,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeChangeManagerModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -325,8 +297,7 @@
           <span class="required">*</span>
         </label>
 
-        <textarea class="manager-select" rows="4" [(ngModel)]="taskDescription" [disabled]="isChangingManager"
-          placeholder="Enter description"></textarea>
+        <textarea class="manager-select" rows="4" [(ngModel)]="taskDescription" [disabled]="isChangingManager" placeholder="Enter description"></textarea>
 
         <div class="manager-validation-error" *ngIf="descriptionValidationError">
           <mat-icon>error_outline</mat-icon>
@@ -336,8 +307,7 @@
 
       <div class="manager-form-group">
         <label class="modal-field-label">Zip File</label>
-        <input type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager"
-          (change)="onFileOneSelected($event)" />
+        <input type="file" class="manager-select" accept=".zip" [disabled]="isChangingManager" (change)="onFileOneSelected($event)" />
         <span class="current-manager-name" *ngIf="fileOneName">{{ fileOneName }}</span>
       </div>
 
@@ -349,21 +319,9 @@
     </div>
 
     <div class="modal-footer">
-      <button
-        type="button"
-        class="modal-cancel-button"
-        (click)="closeChangeManagerModal()"
-        [disabled]="isChangingManager"
-      >
-        Cancel
-      </button>
+      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()" [disabled]="isChangingManager">Cancel</button>
 
-      <button
-        type="button"
-        class="modal-save-button"
-        (click)="changeManager()"
-        [disabled]="isChangingManager"
-      >
+      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
         <mat-icon>{{ isChangingManager ? 'hourglass_top' : 'save' }}</mat-icon>
         <span>{{ isChangingManager ? 'Updating...' : 'Submit' }}</span>
       </button>

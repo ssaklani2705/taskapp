@@ -12,8 +12,8 @@ import { environment } from '../../../../environments/environment';
 import { DataProviderService } from '../../../service/data-provider.service';
 
 interface MailLog {
-  mailLogId: any,
-  cc: any,
+  mailLogId: any;
+  cc: any;
   name: string;
   to: string;
   subject: string;
@@ -26,20 +26,12 @@ interface MailLog {
 
 @Component({
   selector: 'app-mail-log-report',
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    MatCardModule,
-    MatIconModule,
-    MatDividerModule,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIconModule, MatDividerModule],
   providers: [DatePipe],
   templateUrl: './mail-log-report.html',
   styleUrl: './mail-log-report.scss',
 })
 export class MailLogReportComponent implements OnInit {
-
   // ================= DATA =================
   mailLogs: MailLog[] = [];
   apiResponse: any = {};
@@ -59,11 +51,11 @@ export class MailLogReportComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
-  ) { }
+  ) {}
 
   // ================= INIT =================
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.currentPage = +(params['currentPage'] || 1);
       this.page = +(params['page'] || this.currentPage - 1);
       this.size = +(params['size'] || environment.size);
@@ -77,20 +69,17 @@ export class MailLogReportComponent implements OnInit {
 
   // ================= API =================
   getMailLogDetails(): void {
-    this.dataprovider
-      .getMailLogDetails(this.page, this.size, this.search)
-      .subscribe({
-        next: (response) => {
-          this.apiResponse = response;
-          this.mailLogs = response.data || [];
+    this.dataprovider.getMailLogDetails(this.page, this.size, this.search).subscribe({
+      next: (response) => {
+        this.apiResponse = response;
+        this.mailLogs = response.data || [];
 
-
-          console.log(this.mailLogs)
-        },
-        error: (error) => {
-          console.error('Error fetching mail log report:', error);
-        },
-      });
+        console.log(this.mailLogs);
+      },
+      error: (error) => {
+        console.error('Error fetching mail log report:', error);
+      },
+    });
   }
 
   // ================= DATE FORMAT =================
@@ -110,7 +99,6 @@ export class MailLogReportComponent implements OnInit {
 
   // ================= STATUS CLASS =================
   getStatusClass(status: number): string {
-
     if (status === 1) {
       return 'status-sent';
     }
@@ -122,7 +110,6 @@ export class MailLogReportComponent implements OnInit {
 
   // ================= VIEW MAIL =================
   viewMail(log: MailLog): void {
-
     Swal.fire({
       title: log.subject || 'Mail',
       html: `
@@ -140,7 +127,6 @@ export class MailLogReportComponent implements OnInit {
       confirmButtonText: 'Close',
 
       didOpen: () => {
-
         const to = document.getElementById('mail-to');
         const date = document.getElementById('mail-date');
         const frame = document.getElementById('mail-frame') as HTMLIFrameElement;
@@ -149,7 +135,7 @@ export class MailLogReportComponent implements OnInit {
         if (to) {
           const emails = (log.to || '')
             .split(',')
-            .map(email => email.trim())
+            .map((email) => email.trim())
             .join('<br>');
 
           to.innerHTML = `${log.name || ''}
@@ -172,7 +158,6 @@ export class MailLogReportComponent implements OnInit {
           cc.innerHTML = ccEmails || '-';
         }
 
-
         if (date) {
           date.textContent = this.formatDateTime(log.regDate);
         }
@@ -181,40 +166,34 @@ export class MailLogReportComponent implements OnInit {
           frame.srcdoc = '<p style="padding:10px">Loading...</p>';
         }
 
-        this.dataprovider.getMailLogHtml(log.mailLogId)
-          .subscribe({
-            next: (response: any) => {
-
-              if (frame) {
-
-                // If API returns plain HTML string
-                if (typeof response === 'string') {
-                  frame.srcdoc = response;
-                }
-
-                // If API returns { data: "<html>..." }
-                else if (response?.data) {
-                  frame.srcdoc = response.data;
-                }
-
-                // If API returns { htmlContent: "<html>..." }
-                else if (response?.htmlContent) {
-                  frame.srcdoc = response.htmlContent;
-                }
-
-                else {
-                  frame.srcdoc = '<p>No mail content available.</p>';
-                }
+        this.dataprovider.getMailLogHtml(log.mailLogId).subscribe({
+          next: (response: any) => {
+            if (frame) {
+              // If API returns plain HTML string
+              if (typeof response === 'string') {
+                frame.srcdoc = response;
               }
-            },
-            error: () => {
-              if (frame) {
-                frame.srcdoc =
-                  '<p style="color:red;padding:10px;">Unable to load mail content.</p>';
+
+              // If API returns { data: "<html>..." }
+              else if (response?.data) {
+                frame.srcdoc = response.data;
+              }
+
+              // If API returns { htmlContent: "<html>..." }
+              else if (response?.htmlContent) {
+                frame.srcdoc = response.htmlContent;
+              } else {
+                frame.srcdoc = '<p>No mail content available.</p>';
               }
             }
-          });
-      }
+          },
+          error: () => {
+            if (frame) {
+              frame.srcdoc = '<p style="color:red;padding:10px;">Unable to load mail content.</p>';
+            }
+          },
+        });
+      },
     });
   }
 
@@ -296,8 +275,7 @@ export class MailLogReportComponent implements OnInit {
   get recordSummary(): string {
     const total = this.totalRecords;
 
-    const startRecord =
-      total === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
+    const startRecord = total === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
 
     const endRecord = Math.min(this.currentPage * this.recordsPerPage, total);
 

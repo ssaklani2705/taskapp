@@ -1,11 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  OnInit,
-  Output,
-  PLATFORM_ID
-} from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Output, PLATFORM_ID } from '@angular/core';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,18 +10,12 @@ import { DataProviderService } from '../../service/data-provider.service';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule
-  ],
+  imports: [CommonModule, MatIconModule, MatButtonModule],
   templateUrl: './header.html',
-  styleUrl: './header.scss'
+  styleUrl: './header.scss',
 })
 export class Header implements OnInit {
-
-
-    constructor(
+  constructor(
     private router: Router,
 
     private loginService: LoginService,
@@ -49,54 +36,40 @@ export class Header implements OnInit {
   clientAssignmentMessage: string = '';
 
   ngOnInit(): void {
-    this.username =
-      sessionStorage.getItem('username') || '';
+    this.username = sessionStorage.getItem('username') || '';
 
-      // this.checkClientAssignment();
+    // this.checkClientAssignment();
   }
-
 
   // ============================================================
   // CLIENT ASSIGNMENT CHECK
   // ============================================================
 
- private checkClientAssignment(): void {
-
-    const managerId =
-      Number(sessionStorage.getItem('userId'));
+  private checkClientAssignment(): void {
+    const managerId = Number(sessionStorage.getItem('userId'));
 
     if (!managerId) {
       return;
     }
 
-    this.dataProvider
-      .checkClientAssignment(managerId)
-      .subscribe({
+    this.dataProvider.checkClientAssignment(managerId).subscribe({
+      next: (response: { assigned: boolean; message: string }) => {
+        this.clientAssignmentMessage = response.assigned ? '' : response.message;
+      },
 
-        next: (response: { assigned: boolean; message: string }) => {
-
-          this.clientAssignmentMessage =
-            response.assigned ? '' : response.message;
-        },
-
-        error: (err) => {
-
-          console.error(
-            'Failed to check client assignment',
-            err
-          );
-        }
-      });
+      error: (err) => {
+        console.error('Failed to check client assignment', err);
+      },
+    });
   }
-
 
   toggleMenu(): void {
     this.menuToggle.emit();
   }
 
- toggleProfileMenu(): void {
-  this.showProfileMenu = !this.showProfileMenu;
-}
+  toggleProfileMenu(): void {
+    this.showProfileMenu = !this.showProfileMenu;
+  }
 
   getInitials(name: string): string {
     if (!name) {
@@ -109,97 +82,70 @@ export class Header implements OnInit {
       return parts[0].substring(0, 2).toUpperCase();
     }
 
-    return (
-      parts[0].charAt(0) +
-      parts[parts.length - 1].charAt(0)
-    ).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
   }
 
-   onLogout(): void {
-
+  onLogout(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-
 
     // ---------------------------------------------
     // Get login type BEFORE clearing session
     // ---------------------------------------------
 
-    const loginType =
-      sessionStorage.getItem(
-        'loginType'
-      ) || 'other';
-
+    const loginType = sessionStorage.getItem('loginType') || 'other';
 
     // ---------------------------------------------
     // Redirect URL
     // ---------------------------------------------
 
-    const redirectUrl =
-      loginType === 'manager'
-        ? '/manager-login'
-        : '/login';
-
+    const redirectUrl = loginType === 'manager' ? '/manager-login' : '/login';
 
     // ---------------------------------------------
     // Logout API
     // ---------------------------------------------
 
-    const logoutRequest =
-      this.loginService.logout();
-
+    const logoutRequest = this.loginService.logout();
 
     // ---------------------------------------------
     // No logout request
     // ---------------------------------------------
 
     if (!logoutRequest) {
-
       this.loginService.clearSession();
 
-      this.router.navigate([
-        redirectUrl
-      ]);
+      this.router.navigate([redirectUrl]);
 
       return;
     }
-
 
     // ---------------------------------------------
     // Logout request
     // ---------------------------------------------
 
     logoutRequest.subscribe({
-
       next: () => {
-
         this.loginService.clearSession();
 
-        this.router.navigate([
-          redirectUrl
-        ]);
+        this.router.navigate([redirectUrl]);
       },
 
       error: () => {
-
         this.loginService.clearSession();
 
-        this.router.navigate([
-          redirectUrl
-        ]);
-      }
-
+        this.router.navigate([redirectUrl]);
+      },
     });
   }
 
-   onProfileClick(): void {
+  onProfileClick(): void {
     this.closeProfileMenu();
     // Navigate to a profile page if you have one, e.g.:
     // this.router.navigate(['/profile']);
   }
 
-   closeProfileMenu(): void {
+  closeProfileMenu(): void {
     this.showProfileMenu = false;
   }
 }

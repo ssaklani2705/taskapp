@@ -24,17 +24,7 @@ import { LoginService } from '../../../../service/login.service';
   selector: 'app-manager-login',
   standalone: true,
 
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatProgressSpinnerModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, MatIconModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatProgressSpinnerModule],
   templateUrl: './manager-login.html',
   styleUrl: './manager-login.scss',
 })
@@ -45,27 +35,15 @@ export class ManagerLogin {
 
   private readonly router = inject(Router);
 
-  /* =====================================================
-     LOGIN STATE
-  ===================================================== */
-
   loading = false;
 
   errorMessage = '';
 
   hidePassword = true;
 
-  /* =====================================================
-     CAPTCHA
-  ===================================================== */
-
   captchaText = '';
 
   captchaError = false;
-
-  /* =====================================================
-     LOGIN FORM
-  ===================================================== */
 
   loginForm = this.fb.nonNullable.group({
     username: ['', Validators.required],
@@ -229,8 +207,7 @@ export class ManagerLogin {
 
         console.error('LOGIN ERROR:', error);
 
-        this.errorMessage =
-          error?.error?.message || 'Invalid username or password. Please try again.';
+        this.errorMessage = error?.error?.message || 'Invalid username or password. Please try again.';
 
         // Refresh CAPTCHA
         this.loadCaptcha();
@@ -245,20 +222,6 @@ export class ManagerLogin {
   togglePassword(): void {
     this.hidePassword = !this.hidePassword;
   }
-
-  /* =====================================================
-     FORGOT PASSWORD
-  ===================================================== */
-
-  // forgotPassword(): void {
-
-  //   console.log(
-  //     'Forgot password clicked'
-  //   );
-
-  //   // this.router.navigate(['/forgot-password']);
-
-  // }
 
   isProcessingForgotPassword: boolean = false;
   forgotPassword() {

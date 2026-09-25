@@ -30,13 +30,7 @@
               {{ client.managerName || '-' }}
             </span>
 
-            <button
-              *ngIf="client.status !== 3"
-              type="button"
-              class="change-manager-button"
-              (click)="openChangeManagerModal()"
-              matTooltip="Change Manager"
-            >
+            <button *ngIf="client.status !== 3" type="button" class="change-manager-button" (click)="openChangeManagerModal()" matTooltip="Change Manager">
               <mat-icon>edit</mat-icon>
               <span>Change</span>
             </button>
@@ -268,13 +262,7 @@
                 {{ client.outstanding ?? 0 }}
               </span>
 
-              <button
-                *ngIf="client.status !== 3"
-                type="button"
-                class="change-outstanding-button"
-                (click)="openChangeOutstandingModal()"
-                matTooltip="Change Outstanding"
-              >
+              <button *ngIf="client.status !== 3" type="button" class="change-outstanding-button" (click)="openChangeOutstandingModal()" matTooltip="Change Outstanding">
                 <mat-icon>edit</mat-icon>
                 <span>Change</span>
               </button>
@@ -371,13 +359,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeChangeManagerModal()"
-        [disabled]="isChangingManager"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" [disabled]="isChangingManager" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -415,11 +397,7 @@
           <span class="required">*</span>
         </label>
 
-        <select
-          class="manager-select"
-          [(ngModel)]="selectedManagerId"
-          [disabled]="isChangingManager"
-        >
+        <select class="manager-select" [(ngModel)]="selectedManagerId" [disabled]="isChangingManager">
           <option [ngValue]="null">Select Society Manager</option>
 
           <option *ngFor="let manager of managers" [ngValue]="manager.userId">
@@ -435,21 +413,9 @@
     </div>
 
     <div class="modal-footer">
-      <button
-        type="button"
-        class="modal-cancel-button"
-        (click)="closeChangeManagerModal()"
-        [disabled]="isChangingManager"
-      >
-        Cancel
-      </button>
+      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()" [disabled]="isChangingManager">Cancel</button>
 
-      <button
-        type="button"
-        class="modal-save-button"
-        (click)="changeManager()"
-        [disabled]="isChangingManager"
-      >
+      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
         <mat-icon>
           {{ isChangingManager ? 'hourglass_top' : 'save' }}
         </mat-icon>
@@ -466,11 +432,7 @@
 <!-- CHANGE OUTSTANDING MODAL -->
 <!-- ================================================================ -->
 
-<div
-  class="modal-overlay"
-  *ngIf="showChangeOutstandingModal"
-  (click)="closeChangeOutstandingModal()"
->
+<div class="modal-overlay" *ngIf="showChangeOutstandingModal" (click)="closeChangeOutstandingModal()">
   <div class="change-manager-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <div class="modal-title">
@@ -484,13 +446,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeChangeOutstandingModal()"
-        [disabled]="isChangingOutstanding"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeChangeOutstandingModal()" [disabled]="isChangingOutstanding" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -528,15 +484,7 @@
           <span class="required">*</span>
         </label>
 
-        <input
-          type="number"
-          class="manager-select"
-          [(ngModel)]="newOutstanding"
-          min="0"
-          step="0.01"
-          [disabled]="isChangingOutstanding"
-          placeholder="Enter outstanding amount"
-        />
+        <input type="number" class="manager-select" [(ngModel)]="newOutstanding" min="0" step="0.01" [disabled]="isChangingOutstanding" placeholder="Enter outstanding amount" />
 
         <div class="manager-validation-error" *ngIf="outstandingValidationError">
           <mat-icon>error_outline</mat-icon>
@@ -547,21 +495,9 @@
     </div>
 
     <div class="modal-footer">
-      <button
-        type="button"
-        class="modal-cancel-button"
-        (click)="closeChangeOutstandingModal()"
-        [disabled]="isChangingOutstanding"
-      >
-        Cancel
-      </button>
+      <button type="button" class="modal-cancel-button" (click)="closeChangeOutstandingModal()" [disabled]="isChangingOutstanding">Cancel</button>
 
-      <button
-        type="button"
-        class="modal-save-button"
-        (click)="updateOutstanding()"
-        [disabled]="isChangingOutstanding"
-      >
+      <button type="button" class="modal-save-button" (click)="updateOutstanding()" [disabled]="isChangingOutstanding">
         <mat-icon>
           {{ isChangingOutstanding ? 'hourglass_top' : 'save' }}
         </mat-icon>

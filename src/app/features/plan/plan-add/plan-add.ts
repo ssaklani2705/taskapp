@@ -10,7 +10,6 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 import { MatIconModule } from '@angular/material/icon';
 
-
 export interface Plan {
   planId: any;
   name: string;
@@ -27,20 +26,11 @@ export interface ApiResponse<T> {
 @Component({
   selector: 'app-plan-add',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatSelectModule, MatIconModule],
   templateUrl: './plan-add.html',
   styleUrl: './plan-add.scss',
 })
 export class PlanAdd implements OnInit {
-
   plan: Plan = {
     planId: null,
     name: '',
@@ -69,10 +59,9 @@ export class PlanAdd implements OnInit {
     private dataprovider: DataProviderService,
     @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-
     /* --------------------------------
        Get pagination/filter parameters
     --------------------------------- */
@@ -99,12 +88,10 @@ export class PlanAdd implements OnInit {
 
     const planId = this.route.snapshot.params['planId'];
 
-
     if (planId) {
       this.isEditMode = true;
 
       this.dataprovider.getPlanById(planId).subscribe({
-
         next: (res: ApiResponse<Plan>) => {
           if (res && res.data) {
             this.plan = {
@@ -124,7 +111,6 @@ export class PlanAdd implements OnInit {
           console.error('Failed to fetch state', err);
           Swal.fire('Error', 'Unable to load state', 'error');
         },
-
       });
     }
   }
@@ -133,14 +119,11 @@ export class PlanAdd implements OnInit {
      CAPITALIZE FIRST CHARACTER
   ========================================= */
 
-
-
   /* =========================================
      SUBMIT
   ========================================= */
 
   onSubmit(form: NgForm): void {
-
     if (form.invalid || this.nameError) {
       form.control.markAllAsTouched();
       return;
@@ -151,7 +134,6 @@ export class PlanAdd implements OnInit {
 
     /* Save */
     this.dataprovider.savePlan(this.plan).subscribe({
-
       next: (response: ApiResponse<Plan>) => {
         if (response.success) {
           Swal.fire('Success', response.message, 'success');
@@ -162,20 +144,16 @@ export class PlanAdd implements OnInit {
       },
 
       error: (err) => {
-
         console.error('Save state error:', err);
 
-        const message =
-          err?.error?.message ||
-          'Something went wrong';
+        const message = err?.error?.message || 'Something went wrong';
 
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: message
+          text: message,
         });
-      }
-
+      },
     });
   }
 
@@ -184,13 +162,9 @@ export class PlanAdd implements OnInit {
   ========================================= */
 
   onReset(): void {
-
     if (this.isEditMode) {
-
       this.plan = { ...this.originalPlan };
-
     } else {
-
       this.plan = {
         planId: null,
         name: '',
@@ -209,7 +183,6 @@ export class PlanAdd implements OnInit {
   ========================================= */
 
   backToIndexPage(): void {
-
     this.router.navigate(['/plan-index'], {
       queryParams: {
         currentPage: this.currentPage,
@@ -221,9 +194,7 @@ export class PlanAdd implements OnInit {
     });
   }
 
-
   allowOnlyNumbers(event: KeyboardEvent): void {
-    
     const key = event.key;
     // Allow digits
     if (/^[0-9]$/.test(key)) {

@@ -1,7 +1,5 @@
 <div class="page-container">
-
   <div class="main-card">
-
     <!-- ================= HEADER ================= -->
     <div class="page-header">
       <div class="page-title">
@@ -14,15 +12,12 @@
 
     <!-- ================= SEARCH ================= -->
     <div class="search-section">
-
       <div class="search-grid">
-
         <div class="search-field search-name">
           <label>Name / Email / Subject</label>
 
           <div class="search-input-wrapper">
-            <input type="text" [(ngModel)]="searchQuery" placeholder="Search By Name, Email, Subject"
-              (keyup.enter)="onSearch()" />
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search By Name, Email, Subject" (keyup.enter)="onSearch()" />
 
             <button type="button" class="search-button" (click)="onSearch()" title="Search">
               <mat-icon>search</mat-icon>
@@ -38,46 +33,35 @@
 
           &nbsp;
 
-          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
-            Clear
-          </button>
+          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
         </div>
-
       </div>
-
     </div>
 
     <mat-divider></mat-divider>
 
     <!-- ================= TABLE SECTION ================= -->
     <div class="table-section">
-
       <!-- TOP PAGINATION -->
       <div class="table-toolbar">
-
         <div class="record-summary">{{ recordSummary }}</div>
 
         <div class="pagination">
           <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
           <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button type="button" *ngFor="let p of pages()" (click)="goToPage(p)"
-            [class.active-pagination]="p === currentPage">
+          <button type="button" *ngFor="let p of pages()" (click)="goToPage(p)" [class.active-pagination]="p === currentPage">
             {{ p }}
           </button>
 
-          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next
-            ›</button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
           <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
-
       </div>
 
       <!-- TABLE -->
       <div class="table-wrapper">
-
         <table class="mail-table">
-
           <thead>
             <tr>
               <th>Sr. No.</th>
@@ -93,9 +77,7 @@
           </thead>
 
           <tbody>
-
             <tr *ngFor="let log of paginatedLogs; let i = index">
-
               <td class="serial-cell">
                 {{ (currentPage - 1) * recordsPerPage + i + 1 }}
               </td>
@@ -123,7 +105,6 @@
                   <mat-icon>mail_outline</mat-icon>
                 </button>
               </td>
-
             </tr>
 
             <!-- NO DATA -->
@@ -133,36 +114,26 @@
                 <span>No records found</span>
               </td>
             </tr>
-
           </tbody>
-
         </table>
-
       </div>
 
       <!-- BOTTOM PAGINATION -->
       <div class="table-toolbar bottom-toolbar">
-
         <div class="record-summary">{{ recordSummary }}</div>
 
         <div class="pagination">
           <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
           <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button type="button" *ngFor="let p of pages()" (click)="goToPage(p)"
-            [class.active-pagination]="p === currentPage">
+          <button type="button" *ngFor="let p of pages()" (click)="goToPage(p)" [class.active-pagination]="p === currentPage">
             {{ p }}
           </button>
 
-          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next
-            ›</button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
           <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </div>

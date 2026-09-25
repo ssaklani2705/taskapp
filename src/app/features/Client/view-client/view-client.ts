@@ -16,18 +16,7 @@ import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view-client',
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTableModule,
-    MatSortModule,
-    MatListModule,
-  ],
+  imports: [CommonModule, FormsModule, MatCardModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatIconModule, MatTableModule, MatSortModule, MatListModule],
   templateUrl: './view-client.html',
   styleUrl: './view-client.scss',
 })
@@ -87,14 +76,6 @@ export class ViewClient {
 
     this.clientId = +this.route.snapshot.paramMap.get('clientId')!;
 
-    // const queryParams = this.route.snapshot.queryParamMap;
-
-    // this.currentPage = Number(queryParams.get('currentPage')) || 1;
-    // this.searchText = queryParams.get('searchText') || '';
-    // this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
-    // this.page = Number(queryParams.get('page')) || this.currentPage - 1;
-    // this.size = Number(queryParams.get('size')) || 5;
-
     this.getClientDetails();
   }
 
@@ -105,9 +86,7 @@ export class ViewClient {
 
         this.client = response || {};
 
-        this.transactionHistory = Array.isArray(response?.transactionHistory)
-          ? response.transactionHistory
-          : [];
+        this.transactionHistory = Array.isArray(response?.transactionHistory) ? response.transactionHistory : [];
       },
 
       error: (error) => {
@@ -154,56 +133,54 @@ export class ViewClient {
 
     this.isChangingManager = true;
 
-    this.dataprovider
-      .changeClientManager(this.clientId, this.selectedManagerId, this.userId)
-      .subscribe({
-        next: (response: any) => {
-          console.log('Change manager response:', response);
+    this.dataprovider.changeClientManager(this.clientId, this.selectedManagerId, this.userId).subscribe({
+      next: (response: any) => {
+        console.log('Change manager response:', response);
 
-          this.isChangingManager = false;
+        this.isChangingManager = false;
 
-          if (response?.success === false) {
-            Swal.fire({
-              icon: 'error',
-              title: 'Change Failed',
-              text: response.message || 'Failed to change manager.',
-              confirmButtonText: 'OK',
-              confirmButtonColor: '#d33',
-            });
-
-            return;
-          }
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Manager changed successfully.',
-            confirmButtonText: 'OK',
-            confirmButtonColor: '#3085d6',
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.showChangeManagerModal = false;
-              this.selectedManagerId = null;
-
-              this.getClientDetails();
-            }
-          });
-        },
-
-        error: (error) => {
-          this.isChangingManager = false;
-
-          console.error('Change manager error:', error);
-
+        if (response?.success === false) {
           Swal.fire({
             icon: 'error',
             title: 'Change Failed',
-            text: error?.error?.message || 'Failed to change manager.',
+            text: response.message || 'Failed to change manager.',
             confirmButtonText: 'OK',
             confirmButtonColor: '#d33',
           });
-        },
-      });
+
+          return;
+        }
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Manager changed successfully.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#3085d6',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.showChangeManagerModal = false;
+            this.selectedManagerId = null;
+
+            this.getClientDetails();
+          }
+        });
+      },
+
+      error: (error) => {
+        this.isChangingManager = false;
+
+        console.error('Change manager error:', error);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Change Failed',
+          text: error?.error?.message || 'Failed to change manager.',
+          confirmButtonText: 'OK',
+          confirmButtonColor: '#d33',
+        });
+      },
+    });
   }
 
   openChangeManagerModal(): void {
@@ -230,10 +207,7 @@ export class ViewClient {
   }
 
   openChangeOutstandingModal(): void {
-    this.newOutstanding =
-      this.client?.outstanding !== null && this.client?.outstanding !== undefined
-        ? Number(this.client.outstanding)
-        : 0;
+    this.newOutstanding = this.client?.outstanding !== null && this.client?.outstanding !== undefined ? Number(this.client.outstanding) : 0;
 
     this.outstandingValidationError = false;
 
@@ -253,12 +227,7 @@ export class ViewClient {
   updateOutstanding(): void {
     this.outstandingValidationError = false;
 
-    if (
-      this.newOutstanding === null ||
-      this.newOutstanding === undefined ||
-      Number.isNaN(Number(this.newOutstanding)) ||
-      Number(this.newOutstanding) < 0
-    ) {
+    if (this.newOutstanding === null || this.newOutstanding === undefined || Number.isNaN(Number(this.newOutstanding)) || Number(this.newOutstanding) < 0) {
       this.outstandingValidationError = true;
       return;
     }
@@ -290,81 +259,59 @@ export class ViewClient {
       userId: userId,
     });
 
-    this.dataprovider
-      .updateClientOutstanding(this.client.clientId, outstanding, managerId, userId)
-      .subscribe({
-        next: (response: any) => {
-          console.log('Update Outstanding Response:', response);
+    this.dataprovider.updateClientOutstanding(this.client.clientId, outstanding, managerId, userId).subscribe({
+      next: (response: any) => {
+        console.log('Update Outstanding Response:', response);
 
-          this.isChangingOutstanding = false;
+        this.isChangingOutstanding = false;
 
-          if (response?.success === true) {
-            // Update the current value immediately
-            this.client.outstanding = outstanding;
-
-            Swal.fire({
-              icon: 'success',
-              title: 'Updated',
-              text: response.message || 'Outstanding updated successfully.',
-              timer: 1500,
-              showConfirmButton: false,
-            }).then(() => {
-              // Close modal
-              this.closeChangeOutstandingModal();
-
-              // Refresh client details + action history
-              this.getClientDetails();
-            });
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Unable to Update',
-              text: response?.message || 'Failed to update outstanding.',
-              confirmButtonText: 'OK',
-            });
-          }
-        },
-
-        error: (error) => {
-          console.error('Error updating outstanding:', error);
-
-          this.isChangingOutstanding = false;
+        if (response?.success === true) {
+          // Update the current value immediately
+          this.client.outstanding = outstanding;
 
           Swal.fire({
+            icon: 'success',
+            title: 'Updated',
+            text: response.message || 'Outstanding updated successfully.',
+            timer: 1500,
+            showConfirmButton: false,
+          }).then(() => {
+            // Close modal
+            this.closeChangeOutstandingModal();
+
+            // Refresh client details + action history
+            this.getClientDetails();
+          });
+        } else {
+          Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text:
-              error?.error?.message ||
-              error?.error ||
-              'Something went wrong while updating outstanding.',
+            title: 'Unable to Update',
+            text: response?.message || 'Failed to update outstanding.',
             confirmButtonText: 'OK',
           });
-        },
-      });
+        }
+      },
+
+      error: (error) => {
+        console.error('Error updating outstanding:', error);
+
+        this.isChangingOutstanding = false;
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: error?.error?.message || error?.error || 'Something went wrong while updating outstanding.',
+          confirmButtonText: 'OK',
+        });
+      },
+    });
   }
 
   get hasTransactionHistory(): boolean {
     return Array.isArray(this.transactionHistory) && this.transactionHistory.length > 0;
   }
 
-  // backToIndexPage(): void {
-  //   this.router.navigate(['/client-index'], {
-  //     queryParams: {
-  //       currentPage: this.currentPage,
-  //       statusIndex: this.statusIndex,
-  //       searchText: this.searchText,
-  //       page: this.page,
-  //       size: this.size || 5,
-  //       stateId: this.stateId,
-  //       managerId: this.managerId,
-  //       planId: this.planId,
-  //       gstFlag: this.gstFlag,
-  //       taxFlag: this.taxFlag,
-  //       fromDate: this.formatDate(this.fromDate),
-  //       toDate: this.formatDate(this.toDate),
-  //     },
-  //   });
-  // }
+
 
   backToIndexPage(): void {
     this.router.navigate(['/client-index']);

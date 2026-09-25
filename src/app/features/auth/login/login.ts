@@ -25,17 +25,7 @@ import { LoginService } from '../../../service/login.service';
   selector: 'app-login',
   standalone: true,
 
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatProgressSpinnerModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, MatIconModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatCheckboxModule, MatProgressSpinnerModule],
 
   templateUrl: './login.html',
 
@@ -260,8 +250,7 @@ export class Login {
 
         console.error('LOGIN ERROR:', error);
 
-        this.errorMessage =
-          error?.error?.message || 'Invalid username or password. Please try again.';
+        this.errorMessage = error?.error?.message || 'Invalid username or password. Please try again.';
 
         // Refresh CAPTCHA
         this.loadCaptcha();

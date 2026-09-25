@@ -23,13 +23,7 @@
         <div class="search-row">
           <div class="search-wrapper">
             <div class="search-box">
-              <input
-                type="text"
-                [(ngModel)]="searchQuery"
-                placeholder="Search Client Name / Code / Contact Name / Contact Email / City / Location"
-                (keyup.enter)="onSearch()"
-                class="search-input"
-              />
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search Client Name / Code / Contact Name / Contact Email / City / Location" (keyup.enter)="onSearch()" class="search-input" />
 
               <button type="button" class="search-btn" (click)="onSearch()" title="Search">
                 <i class="fa fa-search"></i>
@@ -103,16 +97,7 @@
           <!-- From Date -->
           <div class="status-wrapper date-filter-wrapper">
             <div class="date-filter-input">
-              <input
-                matInput
-                [matDatepicker]="fromPicker"
-                [(ngModel)]="fromDate"
-                name="fromDate"
-                placeholder="From Date"
-                class="date-input"
-                autocomplete="off"
-                readonly
-              />
+              <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" name="fromDate" placeholder="From Date" class="date-input" autocomplete="off" readonly />
 
               <mat-datepicker-toggle matSuffix [for]="fromPicker"> </mat-datepicker-toggle>
 
@@ -123,17 +108,7 @@
           <!-- To Date -->
           <div class="status-wrapper date-filter-wrapper">
             <div class="date-filter-input">
-              <input
-                matInput
-                [matDatepicker]="toPicker"
-                [(ngModel)]="toDate"
-                name="toDate"
-                placeholder="To Date"
-                class="date-input"
-                autocomplete="off"
-                readonly
-                [min]="fromDate"
-              />
+              <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" name="toDate" placeholder="To Date" class="date-input" autocomplete="off" readonly [min]="fromDate" />
 
               <mat-datepicker-toggle matSuffix [for]="toPicker"> </mat-datepicker-toggle>
 
@@ -165,10 +140,7 @@
             </button>
           }
 
-          <a
-            href="https://app.webelement.cc/taskapp/assets/template/Client.xlsx"
-            class="btn-download-template"
-            download="Client_Data_Template.xlsx"
+          <a href="https://app.webelement.cc/taskapp/assets/template/Client.xlsx" class="btn-download-template" download="Client_Data_Template.xlsx"
             >Download Template <i class="fa fa-cloud-download" aria-hidden="true"></i
           ></a>
         </div>
@@ -186,21 +158,13 @@
         <div class="pagination">
           <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-            >‹ Prev
-          </button>
+          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">>‹ Prev</button>
 
-          <button
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-            Next ›
-          </button>
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
 
           <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
@@ -212,22 +176,14 @@
             <tr>
               <th class="serial-column">#</th>
 
-              <th
-                *ngFor="let col of columns"
-                [class.sortable-column]="col.sortable"
-                (click)="col.sortable && sortData(col.key)"
-              >
+              <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
                 <div class="column-header">
                   <span>{{ col.label }}</span>
 
                   <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'">
-                      ▲
-                    </span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
 
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'">
-                      ▼
-                    </span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
                   </span>
                 </div>
               </th>
@@ -306,35 +262,20 @@
 
               <td class="action-cell">
                 @if (viewPer === 'Y') {
-                  <button
-                    type="button"
-                    class="action-button view-button"
-                    title="View"
-                    (click)="viewClient(client.clientId)"
-                  >
+                  <button type="button" class="action-button view-button" title="View" (click)="viewClient(client.clientId)">
                     <mat-icon> visibility </mat-icon>
                   </button>
                 }
 
                 <ng-container *ngIf="client.status === 1 || client.status === 2">
                   @if (editPer === 'Y') {
-                    <button
-                      type="button"
-                      class="action-button edit-button"
-                      title="Edit"
-                      (click)="editClient(client.clientId)"
-                    >
+                    <button type="button" class="action-button edit-button" title="Edit" (click)="editClient(client.clientId)">
                       <mat-icon> edit </mat-icon>
                     </button>
                   }
 
                   @if (deletePer === 'Y') {
-                    <button
-                      type="button"
-                      class="action-button delete-button"
-                      title="Delete"
-                      (click)="onDeleteUser(client.clientId)"
-                    >
+                    <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteUser(client.clientId)">
                       <mat-icon> delete </mat-icon>
                     </button>
                   }
@@ -361,21 +302,13 @@
         <div class="pagination">
           <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-            >‹ Prev
-          </button>
+          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">>‹ Prev</button>
 
-          <button
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-            Next ›
-          </button>
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
 
           <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
@@ -389,14 +322,7 @@
     <div class="upload-modal-header">
       <h3>Upload Client Excel</h3>
 
-      <button
-        type="button"
-        class="upload-close-btn"
-        (click)="closeUploadModal()"
-        [disabled]="isUploading"
-      >
-        ×
-      </button>
+      <button type="button" class="upload-close-btn" (click)="closeUploadModal()" [disabled]="isUploading">×</button>
     </div>
 
     <div class="upload-modal-body">
@@ -406,15 +332,7 @@
           <span class="required">*</span>
         </label>
 
-        <input
-          #excelFileInput
-          type="file"
-          id="excelFile"
-          class="excel-file-input"
-          accept=".xls,.xlsx"
-          (change)="onFileSelected($event)"
-          [disabled]="isUploading"
-        />
+        <input #excelFileInput type="file" id="excelFile" class="excel-file-input" accept=".xls,.xlsx" (change)="onFileSelected($event)" [disabled]="isUploading" />
 
         <div *ngIf="fileError" class="upload-error">
           {{ fileError }}
@@ -427,14 +345,7 @@
             {{ selectedFile.name }}
           </span>
 
-          <button
-            type="button"
-            class="remove-file-btn"
-            (click)="removeSelectedFile()"
-            [disabled]="isUploading"
-          >
-            ×
-          </button>
+          <button type="button" class="remove-file-btn" (click)="removeSelectedFile()" [disabled]="isUploading">×</button>
         </div>
       </div>
 
@@ -444,30 +355,15 @@
         <div>
           <strong>Excel Upload</strong>
 
-          <p>
-            Upload a client Excel file in the required format. Invalid or duplicate records will be
-            reported separately.
-          </p>
+          <p>Upload a client Excel file in the required format. Invalid or duplicate records will be reported separately.</p>
         </div>
       </div>
     </div>
 
     <div class="upload-modal-footer">
-      <button
-        type="button"
-        class="btn-upload-cancel"
-        (click)="closeUploadModal()"
-        [disabled]="isUploading"
-      >
-        Cancel
-      </button>
+      <button type="button" class="btn-upload-cancel" (click)="closeUploadModal()" [disabled]="isUploading">Cancel</button>
 
-      <button
-        type="button"
-        class="btn-upload-submit"
-        (click)="submitUpload()"
-        [disabled]="!selectedFile || !!fileError || isUploading"
-      >
+      <button type="button" class="btn-upload-submit" (click)="submitUpload()" [disabled]="!selectedFile || !!fileError || isUploading">
         <span *ngIf="!isUploading">
           <i class="fa fa-upload"></i>
           Upload

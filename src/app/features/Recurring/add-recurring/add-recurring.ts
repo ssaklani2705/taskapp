@@ -1,12 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
@@ -146,18 +140,16 @@ export class AddRecurring implements OnInit {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider
-      .getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType)
-      .subscribe({
-        next: (response: any) => {
-          this.taskCategories = response || [];
-        },
+    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType).subscribe({
+      next: (response: any) => {
+        this.taskCategories = response || [];
+      },
 
-        error: (error) => {
-          console.error('Error fetching task categories:', error);
-          this.taskCategories = [];
-        },
-      });
+      error: (error) => {
+        console.error('Error fetching task categories:', error);
+        this.taskCategories = [];
+      },
+    });
   }
 
   private getRecurringById(recurringId: number): void {
@@ -188,21 +180,11 @@ export class AddRecurring implements OnInit {
           description: recurring.description || '',
           type: Number(recurring.type),
           day: recurring.day !== null && recurring.day !== undefined ? Number(recurring.day) : null,
-          date:
-            recurring.date !== null && recurring.date !== undefined ? Number(recurring.date) : null,
-          month:
-            recurring.month !== null && recurring.month !== undefined
-              ? Number(recurring.month)
-              : null,
+          date: recurring.date !== null && recurring.date !== undefined ? Number(recurring.date) : null,
+          month: recurring.month !== null && recurring.month !== undefined ? Number(recurring.month) : null,
           taskCatId: recurring.taskCatId,
-          priority:
-            recurring.priority !== null && recurring.priority !== undefined
-              ? Number(recurring.priority)
-              : null,
-          status:
-            recurring.status !== null && recurring.status !== undefined
-              ? Number(recurring.status)
-              : 1,
+          priority: recurring.priority !== null && recurring.priority !== undefined ? Number(recurring.priority) : null,
+          status: recurring.status !== null && recurring.status !== undefined ? Number(recurring.status) : 1,
         });
 
         const client = this.clients.find((x) => x.clientId == recurring.clientId);
@@ -362,11 +344,7 @@ export class AddRecurring implements OnInit {
           Swal.fire({
             icon: 'success',
             title: 'Success',
-            text:
-              response.message ||
-              (this.isEditMode
-                ? 'Recurring updated successfully.'
-                : 'Recurring added successfully.'),
+            text: response.message || (this.isEditMode ? 'Recurring updated successfully.' : 'Recurring added successfully.'),
             timer: 1500,
             showConfirmButton: false,
           }).then(() => {
@@ -502,9 +480,7 @@ export class AddRecurring implements OnInit {
       return;
     }
 
-    this.filteredClients = this.clients.filter((client) =>
-      client.name.toLowerCase().includes(search),
-    );
+    this.filteredClients = this.clients.filter((client) => client.name.toLowerCase().includes(search));
 
     this.showClientDropdown = true;
   }

@@ -1,58 +1,29 @@
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import {
-  CommonModule
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
 
-import {
-  ActivatedRoute,
-  Router
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  MatCardModule
-} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 
-import {
-  MatButtonModule
-} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 
-import {
-  MatIconModule
-} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 
-import {
-  MatDividerModule
-} from '@angular/material/divider';
+import { MatDividerModule } from '@angular/material/divider';
 
-import {
-  DataProviderService
-} from '../../../service/data-provider.service';
+import { DataProviderService } from '../../../service/data-provider.service';
 import { Common } from '../../../classes/common';
-
-
 
 @Component({
   selector: 'app-view-team',
   standalone: true,
 
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDividerModule
-  ],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule],
   templateUrl: './view-team.html',
   styleUrl: './view-team.scss',
 })
 export class ViewTeam implements OnInit {
-
-
   // =====================================================
   // USER
   // =====================================================
@@ -60,7 +31,6 @@ export class ViewTeam implements OnInit {
   userId!: number;
 
   user: any = {};
-
 
   // =====================================================
   // PAGINATION / FILTER STATE
@@ -76,32 +46,20 @@ export class ViewTeam implements OnInit {
 
   size = 5;
 
-
   // =====================================================
   // PERMISSIONS
   // =====================================================
 
   permissions: {
-    [moduleName: string]: any
+    [moduleName: string]: any;
   } = {};
 
-
-  permissionActions: string[] = [
-    'addPer',
-    'editPer',
-    'deletePer',
-    'approvePer',
-    'adminApprovePer',
-    'viewPer',
-    'exportExcel'
-  ];
-
+  permissionActions: string[] = ['addPer', 'editPer', 'deletePer', 'approvePer', 'adminApprovePer', 'viewPer', 'exportExcel'];
 
   permissionGroups: {
     name: string;
     modules: string[];
   }[] = [];
-
 
   // =====================================================
   // TRANSACTION HISTORY
@@ -110,13 +68,11 @@ export class ViewTeam implements OnInit {
   transactionhistory: any[] = [];
   taskCategoryList: any[] = [];
 
-
   // =====================================================
   // COMMON
   // =====================================================
 
   common = new Common();
-
 
   // =====================================================
   // CONSTRUCTOR
@@ -127,33 +83,25 @@ export class ViewTeam implements OnInit {
 
     private dataprovider: DataProviderService,
 
-    private router: Router
-  ) { }
-
+    private router: Router,
+  ) {}
 
   // =====================================================
   // INIT
   // =====================================================
 
   ngOnInit(): void {
-
-    const id =
-      this.route.snapshot.paramMap.get('userId');
+    const id = this.route.snapshot.paramMap.get('userId');
 
     if (!id) {
-
-      console.error(
-        'User ID not found in route'
-      );
+      console.error('User ID not found in route');
 
       this.backToIndexPage();
 
       return;
     }
 
-
     this.userId = Number(id);
-
 
     // ---------------------------------------------------
     // GET ROUTER STATE
@@ -161,66 +109,39 @@ export class ViewTeam implements OnInit {
 
     let stateData: any = null;
 
+    const navigation = this.router.getCurrentNavigation();
 
-    const navigation =
-      this.router.getCurrentNavigation();
-
-
-    stateData =
-      navigation?.extras?.state;
-
+    stateData = navigation?.extras?.state;
 
     // ---------------------------------------------------
     // FALLBACK SESSION STORAGE
     // ---------------------------------------------------
 
     if (!stateData) {
-
-      const saved =
-        sessionStorage.getItem('userFilters');
-
+      const saved = sessionStorage.getItem('userFilters');
 
       if (saved) {
-
         try {
-
-          stateData =
-            JSON.parse(saved);
-
+          stateData = JSON.parse(saved);
         } catch (error) {
-
-          console.error(
-            'Invalid userFilters data',
-            error
-          );
-
+          console.error('Invalid userFilters data', error);
         }
-
       }
-
     }
-
 
     // ---------------------------------------------------
     // RESTORE FILTERS
     // ---------------------------------------------------
 
     if (stateData) {
+      this.currentPage = stateData.currentPage ?? 1;
 
-      this.currentPage =
-        stateData.currentPage ?? 1;
+      this.statusIndex = stateData.statusIndex ?? 0;
 
-      this.statusIndex =
-        stateData.statusIndex ?? 0;
+      this.searchText = stateData.searchText ?? '';
 
-      this.searchText =
-        stateData.searchText ?? '';
-
-      this.size =
-        stateData.size ?? 5;
-
+      this.size = stateData.size ?? 5;
     }
-
 
     // ---------------------------------------------------
     // GET USER
@@ -229,317 +150,180 @@ export class ViewTeam implements OnInit {
     this.getUserDetails();
   }
 
-
   // =====================================================
   // GET USER DETAILS
   // =====================================================
 
   getUserDetails(): void {
+    this.dataprovider.getUserManagementDetailsById(this.userId).subscribe({
+      next: (response: any) => {
+        console.log('USER DETAILS:', response);
 
-    this.dataprovider
-      .getUserManagementDetailsById(this.userId)
-      .subscribe({
+        // ------------------------------------------------
+        // USER INFORMATION
+        // ------------------------------------------------
 
-        next: (response: any) => {
+        this.user = {
+          name: response?.firstName || 'NA',
 
-          console.log(
-            'USER DETAILS:',
-            response
-          );
+          expiryDate: response?.expiryDate || null,
 
+          telephone: response?.telephone || 'NA',
 
-          // ------------------------------------------------
-          // USER INFORMATION
-          // ------------------------------------------------
+          email: response?.email || 'NA',
 
-          this.user = {
+          mobile: response?.mobileNo || 'NA',
 
-            name:
-              response?.firstName || 'NA',
+          status: response?.status,
 
-            expiryDate:
-              response?.expiryDate || null,
+          processPermission: response?.pcbName || 'NA',
 
-            telephone:
-              response?.telephone || 'NA',
+          isAdmin: response?.isAdmin === 'Y',
 
-            email:
-              response?.email || 'NA',
+          permission: response?.permission,
 
-            mobile:
-              response?.mobileNo || 'NA',
+          departmentName: response?.departmentName,
 
-            status:
-              response?.status,
+          designationName: response?.designationName,
+        };
 
-            processPermission:
-              response?.pcbName || 'NA',
+        // ------------------------------------------------
+        // TRANSACTION HISTORY
+        // ------------------------------------------------
 
-            isAdmin:
-              response?.isAdmin === 'Y',
+        this.transactionhistory = Array.isArray(response?.transactionhistory) ? [...response.transactionhistory] : [];
 
-            permission:
-              response?.permission,
+        this.taskCategoryList = response?.taskCategories || [];
 
-            departmentName:
-              response?.departmentName,
+        console.log('{}' + this.taskCategoryList);
 
-            designationName:
-              response?.designationName,
+        this.transactionhistory.sort((a: any, b: any) => {
+          const dateA = this.parseEntryDate(a?.entryDate);
 
+          const dateB = this.parseEntryDate(b?.entryDate);
+
+          return dateB.getTime() - dateA.getTime();
+        });
+
+        // ------------------------------------------------
+        // MODULES
+        // ------------------------------------------------
+
+        const modules = Array.isArray(response?.module) ? response.module : [];
+
+        // Only modules having view permission
+        // configured are displayed
+
+        const filteredModules = modules.filter((mod: any) => mod?.viewPer !== null && mod?.viewPer !== undefined);
+
+        // ------------------------------------------------
+        // MAP PERMISSIONS
+        // ------------------------------------------------
+
+        this.permissions = this.mapPermissions(filteredModules);
+
+        // ------------------------------------------------
+        // GROUP MODULES
+        // ------------------------------------------------
+
+        const groupMap: {
+          [type: number]: {
+            name: string;
+            modules: string[];
           };
+        } = {
+          1: {
+            name: 'Masters',
+            modules: [],
+          },
 
+          2: {
+            name: 'Activity',
+            modules: [],
+          },
 
-          // ------------------------------------------------
-          // TRANSACTION HISTORY
-          // ------------------------------------------------
+          3: {
+            name: 'Reports - 1',
+            modules: [],
+          },
+        };
 
-          this.transactionhistory =
-            Array.isArray(response?.transactionhistory)
-              ? [...response.transactionhistory]
-              : [];
+        filteredModules.forEach((mod: any) => {
+          const type = Number(mod?.type);
 
+          const name = String(mod?.name || '').trim();
 
+          if (groupMap[type] && name) {
+            groupMap[type].modules.push(name);
+          }
+        });
 
+        // ------------------------------------------------
+        // FINAL GROUP LIST
+        // ------------------------------------------------
 
-          this.taskCategoryList =
-            response?.taskCategories || [];
+        this.permissionGroups = Object.keys(groupMap)
 
-            console.log("{}" + this.taskCategoryList)
+          .sort((a, b) => Number(a) - Number(b))
 
+          .map((key) => groupMap[Number(key)])
 
+          .filter((group) => group.modules.length > 0);
+      },
 
-          this.transactionhistory.sort(
-            (a: any, b: any) => {
-
-              const dateA =
-                this.parseEntryDate(
-                  a?.entryDate
-                );
-
-              const dateB =
-                this.parseEntryDate(
-                  b?.entryDate
-                );
-
-
-              return (
-                dateB.getTime() -
-                dateA.getTime()
-              );
-
-            }
-          );
-
-
-          // ------------------------------------------------
-          // MODULES
-          // ------------------------------------------------
-
-          const modules =
-            Array.isArray(response?.module)
-              ? response.module
-              : [];
-
-
-          // Only modules having view permission
-          // configured are displayed
-
-          const filteredModules =
-            modules.filter(
-              (mod: any) =>
-                mod?.viewPer !== null &&
-                mod?.viewPer !== undefined
-            );
-
-
-          // ------------------------------------------------
-          // MAP PERMISSIONS
-          // ------------------------------------------------
-
-          this.permissions =
-            this.mapPermissions(
-              filteredModules
-            );
-
-
-          // ------------------------------------------------
-          // GROUP MODULES
-          // ------------------------------------------------
-
-          const groupMap: {
-            [type: number]: {
-              name: string;
-              modules: string[];
-            }
-          } = {
-
-            1: {
-              name: 'Masters',
-              modules: []
-            },
-
-            2: {
-              name: 'Activity',
-              modules: []
-            },
-
-            3: {
-              name: 'Reports - 1',
-              modules: []
-            }
-
-          };
-
-
-          filteredModules.forEach(
-            (mod: any) => {
-
-              const type =
-                Number(mod?.type);
-
-              const name =
-                String(mod?.name || '')
-                  .trim();
-
-
-              if (
-                groupMap[type] &&
-                name
-              ) {
-
-                groupMap[type]
-                  .modules
-                  .push(name);
-
-              }
-
-            }
-          );
-
-
-          // ------------------------------------------------
-          // FINAL GROUP LIST
-          // ------------------------------------------------
-
-          this.permissionGroups =
-            Object.keys(groupMap)
-
-              .sort(
-                (a, b) =>
-                  Number(a) -
-                  Number(b)
-              )
-
-              .map(
-                key =>
-                  groupMap[
-                  Number(key)
-                  ]
-              )
-
-              .filter(
-                group =>
-                  group.modules.length > 0
-              );
-
-        },
-
-
-        error: (error) => {
-
-          console.error(
-            'Failed to fetch user details:',
-            error
-          );
-
-        }
-
-      });
-
+      error: (error) => {
+        console.error('Failed to fetch user details:', error);
+      },
+    });
   }
-
 
   // =====================================================
   // MAP PERMISSIONS
   // =====================================================
 
-  mapPermissions(
-    modules: any[]
-  ): {
-    [moduleName: string]: any
+  mapPermissions(modules: any[]): {
+    [moduleName: string]: any;
   } {
-
     const perms: {
-      [moduleName: string]: any
+      [moduleName: string]: any;
     } = {};
 
-
     modules
-      .filter(
-        mod =>
-          mod?.viewPer !== null &&
-          mod?.viewPer !== undefined
-      )
+      .filter((mod) => mod?.viewPer !== null && mod?.viewPer !== undefined)
 
-      .forEach(
-        (mod: any) => {
+      .forEach((mod: any) => {
+        const moduleName = String(mod?.name || '').trim();
 
-          const moduleName =
-            String(
-              mod?.name || ''
-            ).trim();
-
-
-          if (!moduleName) {
-            return;
-          }
-
-
-          perms[moduleName] = {
-
-            addPer:
-              mod?.addPer === 'Y',
-
-            editPer:
-              mod?.editPer === 'Y',
-
-            deletePer:
-              mod?.deletePer === 'Y',
-
-            approvePer:
-              mod?.approvePer === 'Y',
-
-            adminApprovePer:
-              mod?.adminApprovePer === 'Y',
-
-            viewPer:
-              mod?.viewPer === 'Y',
-
-            exportExcel:
-              mod?.exportExcel === 'Y'
-
-          };
-
+        if (!moduleName) {
+          return;
         }
-      );
 
+        perms[moduleName] = {
+          addPer: mod?.addPer === 'Y',
+
+          editPer: mod?.editPer === 'Y',
+
+          deletePer: mod?.deletePer === 'Y',
+
+          approvePer: mod?.approvePer === 'Y',
+
+          adminApprovePer: mod?.adminApprovePer === 'Y',
+
+          viewPer: mod?.viewPer === 'Y',
+
+          exportExcel: mod?.exportExcel === 'Y',
+        };
+      });
 
     return perms;
-
   }
-
 
   // =====================================================
   // STATUS TEXT
   // =====================================================
 
-  getStatusText(
-    status: number | string
-  ): string {
-
+  getStatusText(status: number | string): string {
     switch (Number(status)) {
-
       case 1:
         return 'Active';
 
@@ -551,22 +335,15 @@ export class ViewTeam implements OnInit {
 
       default:
         return 'Unknown';
-
     }
-
   }
-
 
   // =====================================================
   // STATUS CLASS
   // =====================================================
 
-  getStatusClass(
-    status: number | string
-  ): string {
-
+  getStatusClass(status: number | string): string {
     switch (Number(status)) {
-
       case 1:
         return 'status-active';
 
@@ -578,11 +355,8 @@ export class ViewTeam implements OnInit {
 
       default:
         return '';
-
     }
-
   }
-
 
   // =====================================================
   // PARSE TRANSACTION DATE
@@ -591,200 +365,97 @@ export class ViewTeam implements OnInit {
   // 08-08-2025 05:53 PM
   // =====================================================
 
-  parseEntryDate(
-    dateStr: string
-  ): Date {
-
+  parseEntryDate(dateStr: string): Date {
     if (!dateStr) {
       return new Date(0);
     }
 
-
     try {
+      const parts = dateStr.trim().split(/\s+/);
 
-      const parts =
-        dateStr.trim().split(/\s+/);
+      const datePart = parts[0];
 
+      const timePart = parts[1];
 
-      const datePart =
-        parts[0];
+      const ampm = parts[2];
 
-      const timePart =
-        parts[1];
+      const [day, month, year] = datePart.split('-').map(Number);
 
-      const ampm =
-        parts[2];
+      const [hourString, minuteString] = timePart.split(':');
 
+      let hour = Number(hourString);
 
-      const [
-        day,
-        month,
-        year
-      ] =
-        datePart
-          .split('-')
-          .map(Number);
+      const minute = Number(minuteString);
 
-
-      const [
-        hourString,
-        minuteString
-      ] =
-        timePart
-          .split(':');
-
-
-      let hour =
-        Number(hourString);
-
-      const minute =
-        Number(minuteString);
-
-
-      if (
-        ampm === 'PM' &&
-        hour < 12
-      ) {
-
+      if (ampm === 'PM' && hour < 12) {
         hour += 12;
-
       }
 
-
-      if (
-        ampm === 'AM' &&
-        hour === 12
-      ) {
-
+      if (ampm === 'AM' && hour === 12) {
         hour = 0;
-
       }
 
-
-      return new Date(
-        year,
-        month - 1,
-        day,
-        hour,
-        minute
-      );
-
+      return new Date(year, month - 1, day, hour, minute);
     } catch (error) {
-
-      console.error(
-        'Unable to parse date:',
-        dateStr
-      );
+      console.error('Unable to parse date:', dateStr);
 
       return new Date(0);
-
     }
-
   }
-
 
   // =====================================================
   // HAS HISTORY
   // =====================================================
 
   get hasTransactionHistory(): boolean {
-
-    return (
-      Array.isArray(
-        this.transactionhistory
-      ) &&
-      this.transactionhistory.length > 0
-    );
-
+    return Array.isArray(this.transactionhistory) && this.transactionhistory.length > 0;
   }
-
 
   // =====================================================
   // BACK TO INDEX
   // =====================================================
 
   backToIndexPage(): void {
-
     const state = {
+      currentPage: this.currentPage,
 
-      currentPage:
-        this.currentPage,
+      statusIndex: this.statusIndex,
 
-      statusIndex:
-        this.statusIndex,
+      searchText: this.searchText,
 
-      searchText:
-        this.searchText,
-
-      size:
-        this.size
-
+      size: this.size,
     };
 
-
     // Save filters for refresh
-    sessionStorage.setItem(
-      'userFilters',
-      JSON.stringify(state)
-    );
+    sessionStorage.setItem('userFilters', JSON.stringify(state));
 
-
-    this.router.navigate(
-      ['/my-team'],
-      {
-        state
-      }
-    );
-
+    this.router.navigate(['/my-team'], {
+      state,
+    });
   }
-
 
   // =====================================================
   // RESET PASSWORD
   // =====================================================
 
-  confirmResetPassword(
-    email: string,
-    userId: number
-  ): void {
-
-    const confirmed =
-      window.confirm(
-        'This will reset the user password and an email will be sent to the user. Do you wish to reset?'
-      );
-
+  confirmResetPassword(email: string, userId: number): void {
+    const confirmed = window.confirm('This will reset the user password and an email will be sent to the user. Do you wish to reset?');
 
     if (confirmed) {
-
-      this.resetPassword(
-        email,
-        userId
-      );
-
+      this.resetPassword(email, userId);
     }
-
   }
-
 
   // =====================================================
   // RESET PASSWORD API
   // =====================================================
 
-  resetPassword(
-    email: string,
-    userId: number
-  ): void {
-
+  resetPassword(email: string, userId: number): void {
     // Add your reset password API here
 
-    console.log(
-      'Reset password:',
-      {
-        email,
-        userId
-      }
-    );
-
+    console.log('Reset password:', {
+      email,
+      userId,
+    });
   }
-
 }

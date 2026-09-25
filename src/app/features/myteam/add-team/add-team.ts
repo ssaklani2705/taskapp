@@ -1,77 +1,30 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  HostListener,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-  ViewChild,
-  ViewEncapsulation
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild, ViewEncapsulation } from '@angular/core';
 
-import {
-  CommonModule,
-  isPlatformBrowser
-} from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
-import {
-  ActivatedRoute,
-  Router
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  NgForm,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import {
-  MatCheckboxModule
-} from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
-import {
-  MatButtonModule
-} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 
-import {
-  MatIconModule
-} from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 
-import {
-  MatSelectModule
-} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 
-import {
-  MatInputModule
-} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 
-import {
-  MatFormFieldModule
-} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
-import {
-  MatDatepickerModule
-} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
-import {
-  MAT_DATE_LOCALE,
-  MatNativeDateModule
-} from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 
-import {
-  DateAdapter
-} from '@angular/material/core';
+import { DateAdapter } from '@angular/material/core';
 
-import {
-  DataProviderService,
-  DepartmentDTO,
-  DesignationDTO,
-  TaskCategoryDTO
-} from '../../../service/data-provider.service';
+import { DataProviderService, DepartmentDTO, DesignationDTO, TaskCategoryDTO } from '../../../service/data-provider.service';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
 declare var $: any;
@@ -92,7 +45,7 @@ declare var $: any;
     MatInputModule,
 
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
   ],
   templateUrl: './add-team.html',
   styleUrl: './add-team.scss',
@@ -101,16 +54,15 @@ declare var $: any;
   providers: [
     {
       provide: DateAdapter,
-      useClass: MyDateAdapter
+      useClass: MyDateAdapter,
     },
     {
       provide: MAT_DATE_LOCALE,
-      useValue: 'en-GB'
-    }
-  ]
+      useValue: 'en-GB',
+    },
+  ],
 })
 export class AddTeam implements OnInit, AfterViewInit {
-
   userForm!: FormGroup;
 
   /**
@@ -135,39 +87,31 @@ export class AddTeam implements OnInit, AfterViewInit {
   /**
    * Permission actions
    */
-  permissionActions: string[] = [
-    'Add',
-    'Edit',
-    'Delete',
-    'Approve',
-    'Admin Approval',
-    'View Only',
-    'Export Excel'
-  ];
+  permissionActions: string[] = ['Add', 'Edit', 'Delete', 'Approve', 'Admin Approval', 'View Only', 'Export Excel'];
 
   /**
    * API permission names
    */
   permissionApiMap: any = {
-    'Add': 'addPer',
-    'Edit': 'editPer',
-    'Delete': 'deletePer',
-    'Approve': 'approvePer',
+    Add: 'addPer',
+    Edit: 'editPer',
+    Delete: 'deletePer',
+    Approve: 'approvePer',
     'Admin Approval': 'adminApprovePer',
     'View Only': 'viewPer',
-    'Export Excel': 'exportExcel'
+    'Export Excel': 'exportExcel',
   };
 
   /**
    * Group names
    */
   typeGroupMap: {
-    [key: number]: string
+    [key: number]: string;
   } = {
-      1: 'Masters',
-      2: 'Activity',
-      3: 'Reports - 1'
-    };
+    1: 'Masters',
+    2: 'Activity',
+    3: 'Reports - 1',
+  };
 
   groupedModules: {
     type: number;
@@ -188,9 +132,8 @@ export class AddTeam implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private router: Router,
     @Inject(PLATFORM_ID)
-    private platformId: Object
+    private platformId: Object,
   ) {
-
     const today = new Date();
 
     today.setHours(0, 0, 0, 0);
@@ -205,65 +148,31 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private createForm(): void {
-
     this.userForm = this.fb.group({
+      name: ['', Validators.required],
 
-      name: [
-        '',
-        Validators.required
-      ],
+      email: ['', [Validators.required, Validators.email]],
 
-      email: [
-        '',
-        [
-          Validators.required,
-          Validators.email
-        ]
-      ],
+      expiryDate: [null, Validators.required],
 
-     expiryDate: [
-  null,
-  Validators.required
-],
+      password: [''],
 
-      password: [
-        ''
-      ],
+      mobile: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
 
-      mobile: [
-        '',
-        [
-          Validators.required,
-          Validators.pattern(/^[0-9]{10}$/)
-        ]
-      ],
+      telephone: [''],
 
-      telephone: [
-        ''
-      ],
+      status: [1, Validators.required],
 
-      status: [
-        1,
-        Validators.required
-      ],
-
-      isAdmin: [
-        false
-      ],
+      isAdmin: [false],
       departmentId: [null, Validators.required],
       desigmationId: [null, Validators.required],
-
     });
 
-    this.userForm
-      .get('isAdmin')
-      ?.valueChanges
-      .subscribe((isAdmin: boolean) => {
-
-        if (isAdmin) {
-          this.clearAllPermissions();
-        }
-      });
+    this.userForm.get('isAdmin')?.valueChanges.subscribe((isAdmin: boolean) => {
+      if (isAdmin) {
+        this.clearAllPermissions();
+      }
+    });
   }
 
   // ============================================================
@@ -302,74 +211,59 @@ export class AddTeam implements OnInit, AfterViewInit {
   // }
 
   ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.createdBy = sessionStorage.getItem('userId');
+    }
 
-  if (isPlatformBrowser(this.platformId)) {
-    this.createdBy = sessionStorage.getItem('userId');
+    this.readFilterState();
+
+    const id = this.route.snapshot.paramMap.get('userId');
+
+    if (id) {
+      this.isEditMode = true;
+      this.userId = Number(id);
+
+      // this.isEditMode = true;
+
+      // this.userForm.get('departmentId')?.disable();
+      // this.userForm.get('desigmationId')?.disable();
+
+      // First load dropdowns
+      this.loadDepartments();
+      this.loadDesignations();
+
+      // Then load user
+      this.loadUserDetails();
+    } else {
+      this.isEditMode = false;
+      this.userId = 0;
+
+      this.setupAddMode();
+
+      this.loadDepartments();
+      this.loadDesignations();
+    }
   }
-
-  this.readFilterState();
-
-  const id = this.route.snapshot.paramMap.get('userId');
-
-  if (id) {
-
-    this.isEditMode = true;
-    this.userId = Number(id);
-
-    // this.isEditMode = true;
-
-  // this.userForm.get('departmentId')?.disable();
-  // this.userForm.get('desigmationId')?.disable();
-
-    // First load dropdowns
-    this.loadDepartments();
-    this.loadDesignations();
-
-    // Then load user
-    this.loadUserDetails();
-
-  } else {
-
-    this.isEditMode = false;
-    this.userId = 0;
-
-    this.setupAddMode();
-
-    this.loadDepartments();
-    this.loadDesignations();
-  }
-}
 
   // ============================================================
   // AFTER VIEW INIT
   // ============================================================
 
   ngAfterViewInit(): void {
-
     setTimeout(() => {
-
       if ($('#fromDatePicker').length) {
-
         $('#fromDatePicker')
           .datepicker({
             format: 'dd-mm-yyyy',
             autoclose: true,
-            startDate: this.minDate
+            startDate: this.minDate,
           })
           .on('changeDate', (e: any) => {
+            this.userForm.get('expiryDate')?.setValue(e.format('dd-mm-yyyy'));
 
-            this.userForm
-              .get('expiryDate')
-              ?.setValue(
-                e.format('dd-mm-yyyy')
-              );
-
-            this.userForm
-              .get('expiryDate')
-              ?.markAsDirty();
+            this.userForm.get('expiryDate')?.markAsDirty();
           });
       }
-
     }, 100);
   }
 
@@ -378,186 +272,144 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   private setupAddMode(): void {
+    this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
 
-  this.userForm
-    .get('password')
-    ?.setValidators([
-      Validators.required,
-      Validators.minLength(6)
-    ]);
+    this.userForm.get('password')?.updateValueAndValidity();
 
-  this.userForm
-    .get('password')
-    ?.updateValueAndValidity();
+    const defaultDate = new Date(2050, 11, 31);
 
+    defaultDate.setHours(0, 0, 0, 0);
 
-  const defaultDate =
-    new Date(
-      2050,
-      11,
-      31
-    );
+    this.userForm.patchValue({
+      status: 1,
 
-  defaultDate.setHours(
-    0,
-    0,
-    0,
-    0
-  );
+      isAdmin: false,
 
+      expiryDate: defaultDate,
+    });
 
-  this.userForm.patchValue({
-
-    status: 1,
-
-    isAdmin: false,
-
-    expiryDate: defaultDate
-
-  });
-
-
-  this.loadPermissionModules(0);
-}
+    this.loadPermissionModules(0);
+  }
 
   // ============================================================
   // EDIT MODE
   // ============================================================
 
-//   private loadUserDetails(): void {
+  //   private loadUserDetails(): void {
 
-//     this.dataProvider
-//       .getUserManagementDetailsById(this.userId)
-//       .subscribe({
+  //     this.dataProvider
+  //       .getUserManagementDetailsById(this.userId)
+  //       .subscribe({
 
-//         next: (response: any) => {
-// // alert( response.designationId);
-//           if (!response) {
-//             alert('User details not found.');
-//             this.backToIndexPage();
-//             return;
-//           }
+  //         next: (response: any) => {
+  // // alert( response.designationId);
+  //           if (!response) {
+  //             alert('User details not found.');
+  //             this.backToIndexPage();
+  //             return;
+  //           }
 
-//           /**
-//            * Password is optional while editing
-//            */
-//           this.userForm
-//             .get('password')
-//             ?.clearValidators();
+  //           /**
+  //            * Password is optional while editing
+  //            */
+  //           this.userForm
+  //             .get('password')
+  //             ?.clearValidators();
 
-//           this.userForm
-//             .get('password')
-//             ?.updateValueAndValidity();
+  //           this.userForm
+  //             .get('password')
+  //             ?.updateValueAndValidity();
 
-//          this.userForm.patchValue({
+  //          this.userForm.patchValue({
 
-//   name:
-//     response.firstName || '',
+  //   name:
+  //     response.firstName || '',
 
-//   email:
-//     response.email || '',
+  //   email:
+  //     response.email || '',
 
-//   mobile:
-//     response.mobileNo || '',
+  //   mobile:
+  //     response.mobileNo || '',
 
-//   telephone:
-//     response.telephone &&
-//     response.telephone !== 'NA'
-//       ? response.telephone
-//       : '',
+  //   telephone:
+  //     response.telephone &&
+  //     response.telephone !== 'NA'
+  //       ? response.telephone
+  //       : '',
 
-//   expiryDate:
-//     this.parseExpiryDate(
-//       response.expiryDate
-//     ),
+  //   expiryDate:
+  //     this.parseExpiryDate(
+  //       response.expiryDate
+  //     ),
 
-//   status:
-//     Number(response.status) || 1,
+  //   status:
+  //     Number(response.status) || 1,
 
-//   isAdmin:
-//     response.permission === 'Y',
+  //   isAdmin:
+  //     response.permission === 'Y',
 
-//   departmentId:
-//     response.departmentId || null,
+  //   departmentId:
+  //     response.departmentId || null,
 
-//   desigmationId:
-//     response.designationId || null
+  //   desigmationId:
+  //     response.designationId || null
 
-// });
+  // });
 
-//           /**
-//            * Load permissions returned by API
-//            */
-//           if (response.module) {
-//             this.buildPermissionGroups(
-//               response.module
-//             );
-//           }
+  //           /**
+  //            * Load permissions returned by API
+  //            */
+  //           if (response.module) {
+  //             this.buildPermissionGroups(
+  //               response.module
+  //             );
+  //           }
 
-//         },
+  //         },
 
-//         error: (err) => {
+  //         error: (err) => {
 
-//           console.error(
-//             'Failed to fetch user details',
-//             err
-//           );
+  //           console.error(
+  //             'Failed to fetch user details',
+  //             err
+  //           );
 
-//           alert(
-//             'Failed to load user details.'
-//           );
+  //           alert(
+  //             'Failed to load user details.'
+  //           );
 
-//           this.backToIndexPage();
-//         }
-//       });
-//   }
+  //           this.backToIndexPage();
+  //         }
+  //       });
+  //   }
 
-private loadUserDetails(): void {
-
-  this.dataProvider
-    .getUserManagementDetailsById(this.userId)
-    .subscribe({
-
+  private loadUserDetails(): void {
+    this.dataProvider.getUserManagementDetailsById(this.userId).subscribe({
       next: (response: any) => {
+        console.log('========== EDIT USER RESPONSE ==========');
 
-        console.log(
-          '========== EDIT USER RESPONSE =========='
-        );
-
-        console.log(
-          'Full Response:',
-          response
-        );
-
+        console.log('Full Response:', response);
 
         // =====================================================
         // CHECK RESPONSE
         // =====================================================
 
         if (!response) {
-
           alert('User details not found.');
 
           this.backToIndexPage();
 
           return;
-
         }
-
 
         // =====================================================
         // PASSWORD
         // Password is optional during edit
         // =====================================================
 
-        this.userForm
-          .get('password')
-          ?.clearValidators();
+        this.userForm.get('password')?.clearValidators();
 
-        this.userForm
-          .get('password')
-          ?.updateValueAndValidity();
-
+        this.userForm.get('password')?.updateValueAndValidity();
 
         // =====================================================
         // CATEGORY IDS
@@ -570,147 +422,60 @@ private loadUserDetails(): void {
         // 3
         // =====================================================
 
-        const categoryIds =
-          response.taskcategoryIds;
+        const categoryIds = response.taskcategoryIds;
 
-        console.log(
-          'Raw taskcategoryIds:',
-          categoryIds
-        );
+        console.log('Raw taskcategoryIds:', categoryIds);
 
-        console.log(
-          'taskcategoryIds type:',
-          typeof categoryIds
-        );
+        console.log('taskcategoryIds type:', typeof categoryIds);
 
-        console.log(
-          'taskcategoryIds is array:',
-          Array.isArray(categoryIds)
-        );
-
+        console.log('taskcategoryIds is array:', Array.isArray(categoryIds));
 
         if (Array.isArray(categoryIds)) {
-
-          this.selectedCategoryIds =
-            categoryIds
-              .map(
-                (id: any) => Number(id)
-              )
-              .filter(
-                (id: number) => !isNaN(id)
-              );
-
-        }
-
-        else if (
-          typeof categoryIds === 'string' &&
-          categoryIds.trim() !== ''
-        ) {
-
-          this.selectedCategoryIds =
-            categoryIds
-              .split(',')
-              .map(
-                (id: string) =>
-                  Number(id.trim())
-              )
-              .filter(
-                (id: number) =>
-                  !isNaN(id)
-              );
-
-        }
-
-        else if (
-          typeof categoryIds === 'number'
-        ) {
-
-          this.selectedCategoryIds = [
-            Number(categoryIds)
-          ];
-
-        }
-
-        else {
-
+          this.selectedCategoryIds = categoryIds.map((id: any) => Number(id)).filter((id: number) => !isNaN(id));
+        } else if (typeof categoryIds === 'string' && categoryIds.trim() !== '') {
+          this.selectedCategoryIds = categoryIds
+            .split(',')
+            .map((id: string) => Number(id.trim()))
+            .filter((id: number) => !isNaN(id));
+        } else if (typeof categoryIds === 'number') {
+          this.selectedCategoryIds = [Number(categoryIds)];
+        } else {
           this.selectedCategoryIds = [];
-
         }
 
-
-        console.log(
-          'EDIT Selected Category IDs:',
-          this.selectedCategoryIds
-        );
-
+        console.log('EDIT Selected Category IDs:', this.selectedCategoryIds);
 
         // =====================================================
         // PATCH USER FORM
         // =====================================================
 
         this.userForm.patchValue({
+          name: response.firstName || '',
 
-          name:
-            response.firstName || '',
+          email: response.email || '',
 
+          mobile: response.mobileNo || '',
 
-          email:
-            response.email || '',
+          telephone: response.telephone && response.telephone !== 'NA' ? response.telephone : '',
 
+          expiryDate: this.parseExpiryDate(response.expiryDate),
 
-          mobile:
-            response.mobileNo || '',
+          status: Number(response.status) || 1,
 
+          isAdmin: response.permission === 'Y',
 
-          telephone:
-            response.telephone &&
-            response.telephone !== 'NA'
-              ? response.telephone
-              : '',
+          departmentId: response.departmentId || null,
 
-
-          expiryDate:
-            this.parseExpiryDate(
-              response.expiryDate
-            ),
-
-
-          status:
-            Number(response.status) || 1,
-
-
-          isAdmin:
-            response.permission === 'Y',
-
-
-          departmentId:
-            response.departmentId || null,
-
-
-          desigmationId:
-            response.designationId || null
-
+          desigmationId: response.designationId || null,
         });
-
 
         // =====================================================
         // DEBUG FORM VALUES
         // =====================================================
 
-        console.log(
-          'Patched Department ID:',
-          this.userForm.get(
-            'departmentId'
-          )?.value
-        );
+        console.log('Patched Department ID:', this.userForm.get('departmentId')?.value);
 
-        console.log(
-          'Patched Designation ID:',
-          this.userForm.get(
-            'desigmationId'
-          )?.value
-        );
-
+        console.log('Patched Designation ID:', this.userForm.get('desigmationId')?.value);
 
         // =====================================================
         // LOAD CATEGORIES
@@ -721,143 +486,80 @@ private loadUserDetails(): void {
         // =====================================================
 
         if (response.departmentId) {
-
-          console.log(
-            'Loading categories for department:',
-            response.departmentId
-          );
+          console.log('Loading categories for department:', response.departmentId);
 
           this.loadCategories(false);
-
-        }
-
-        else {
-
+        } else {
           this.categoryList = [];
-
         }
-
 
         // =====================================================
         // LOAD PERMISSIONS
         // =====================================================
 
         if (response.module) {
+          console.log('Loading module permissions:', response.module);
 
-          console.log(
-            'Loading module permissions:',
-            response.module
-          );
-
-          this.buildPermissionGroups(
-            response.module
-          );
-
+          this.buildPermissionGroups(response.module);
         }
-
 
         // =====================================================
         // FINAL DEBUG
         // =====================================================
 
-        console.log(
-          '========== EDIT DATA LOADED =========='
-        );
+        console.log('========== EDIT DATA LOADED ==========');
 
-        console.log(
-          'Selected Category IDs:',
-          this.selectedCategoryIds
-        );
+        console.log('Selected Category IDs:', this.selectedCategoryIds);
 
-        console.log(
-          'Category List:',
-          this.categoryList
-        );
+        console.log('Category List:', this.categoryList);
 
-        console.log(
-          'Form Values:',
-          this.userForm.getRawValue()
-        );
-
+        console.log('Form Values:', this.userForm.getRawValue());
       },
-
 
       // =======================================================
       // ERROR
       // =======================================================
 
       error: (err) => {
+        console.error('Failed to fetch user details', err);
 
-        console.error(
-          'Failed to fetch user details',
-          err
-        );
-
-        alert(
-          'Failed to load user details.'
-        );
+        alert('Failed to load user details.');
 
         this.backToIndexPage();
-
-      }
-
+      },
     });
-}
-
+  }
 
   // ============================================================
   // LOAD PERMISSION MODULES
   // ============================================================
 
-  private loadPermissionModules(
-    rightsAndPermissionId: number
-  ): void {
-
-    this.dataProvider
-      .getUserManagementDetailsById(
-        rightsAndPermissionId
-      )
-      .subscribe({
-
-        next: (response: any) => {
-
-          if (response?.module) {
-
-            this.buildPermissionGroups(
-              response.module
-            );
-          }
-        },
-
-        error: (err) => {
-
-          console.error(
-            'Failed to load permissions',
-            err
-          );
+  private loadPermissionModules(rightsAndPermissionId: number): void {
+    this.dataProvider.getUserManagementDetailsById(rightsAndPermissionId).subscribe({
+      next: (response: any) => {
+        if (response?.module) {
+          this.buildPermissionGroups(response.module);
         }
-      });
+      },
+
+      error: (err) => {
+        console.error('Failed to load permissions', err);
+      },
+    });
   }
 
   // ============================================================
   // BUILD GROUPS
   // ============================================================
 
-  private buildPermissionGroups(
-    modules: any[]
-  ): void {
-
-    const sortedModules = [...modules]
-      .sort(
-        (a, b) => a.type - b.type
-      );
+  private buildPermissionGroups(modules: any[]): void {
+    const sortedModules = [...modules].sort((a, b) => a.type - b.type);
 
     const grouped: {
-      [key: number]: any[]
+      [key: number]: any[];
     } = {};
 
-    sortedModules.forEach(module => {
-
+    sortedModules.forEach((module) => {
       if (!grouped[module.type]) {
         grouped[module.type] = [];
       }
@@ -865,72 +567,49 @@ private loadUserDetails(): void {
       grouped[module.type].push(module);
     });
 
-    this.groupedModules =
-      Object.keys(grouped)
-        .map(type => ({
-          type: Number(type),
-          modules: grouped[Number(type)]
-        }));
+    this.groupedModules = Object.keys(grouped).map((type) => ({
+      type: Number(type),
+      modules: grouped[Number(type)],
+    }));
 
     this.permissions = {};
 
     this.selectAllRows = {};
 
-    this.groupedModules.forEach(group => {
-
-      const groupName =
-        this.typeGroupMap[group.type];
+    this.groupedModules.forEach((group) => {
+      const groupName = this.typeGroupMap[group.type];
 
       this.selectAllRows[groupName] = {};
 
-      this.permissionActions.forEach(action => {
-
-        this.selectAllRows[groupName][action] =
-          false;
+      this.permissionActions.forEach((action) => {
+        this.selectAllRows[groupName][action] = false;
       });
 
-      group.modules.forEach(module => {
-
-        const moduleName =
-          module.name.trim();
+      group.modules.forEach((module) => {
+        const moduleName = module.name.trim();
 
         this.permissions[moduleName] = {};
 
-        this.permissionActions.forEach(
-          action => {
+        this.permissionActions.forEach((action) => {
+          const apiField = this.permissionApiMap[action];
 
-            const apiField =
-              this.permissionApiMap[action];
-
-            /**
-             * Edit:
-             * Read existing Y/N
-             *
-             * Add:
-             * Default false
-             */
-            this.permissions[moduleName][action] =
-              module[apiField] === 'Y';
-          }
-        );
+          /**
+           * Edit:
+           * Read existing Y/N
+           *
+           * Add:
+           * Default false
+           */
+          this.permissions[moduleName][action] = module[apiField] === 'Y';
+        });
       });
     });
 
     this.initializeSelectAllRows();
 
-    this.originalPermissions =
-      JSON.parse(
-        JSON.stringify(
-          this.permissions
-        )
-      );
+    this.originalPermissions = JSON.parse(JSON.stringify(this.permissions));
 
-    this.originalSelectAllRows =
-      JSON.parse(
-        JSON.stringify(
-          this.selectAllRows
-        )
-      );
+    this.originalSelectAllRows = JSON.parse(JSON.stringify(this.selectAllRows));
   }
 
   // ============================================================
@@ -938,29 +617,14 @@ private loadUserDetails(): void {
   // ============================================================
 
   private initializeSelectAllRows(): void {
+    this.groupedModules.forEach((group) => {
+      const groupName = this.typeGroupMap[group.type];
 
-    this.groupedModules.forEach(group => {
+      this.permissionActions.forEach((action) => {
+        const allChecked = group.modules.length > 0 && group.modules.every((module) => this.permissions[module.name.trim()]?.[action] === true);
 
-      const groupName =
-        this.typeGroupMap[group.type];
-
-      this.permissionActions.forEach(
-        action => {
-
-          const allChecked =
-            group.modules.length > 0 &&
-            group.modules.every(
-              module =>
-                this.permissions[
-                module.name.trim()
-                ]?.[action] === true
-            );
-
-          this.selectAllRows[
-            groupName
-          ][action] = allChecked;
-        }
-      );
+        this.selectAllRows[groupName][action] = allChecked;
+      });
     });
   }
 
@@ -968,85 +632,43 @@ private loadUserDetails(): void {
   // GROUP SELECT ALL
   // ============================================================
 
-  toggleGroupSelectAll(
-    groupName: string,
-    action: string
-  ): void {
-
-    const group =
-      this.groupedModules.find(
-        g =>
-          this.typeGroupMap[g.type] ===
-          groupName
-      );
+  toggleGroupSelectAll(groupName: string, action: string): void {
+    const group = this.groupedModules.find((g) => this.typeGroupMap[g.type] === groupName);
 
     if (!group) {
       return;
     }
 
-    const newValue =
-      this.selectAllRows[
-      groupName
-      ][action];
+    const newValue = this.selectAllRows[groupName][action];
 
-    const dependentActions = [
-      'Add',
-      'Edit',
-      'Delete',
-      'Approve',
-      'Admin Approval',
-      'Export Excel'
-    ];
+    const dependentActions = ['Add', 'Edit', 'Delete', 'Approve', 'Admin Approval', 'Export Excel'];
 
-    group.modules.forEach(module => {
-
-      const moduleName =
-        module.name.trim();
+    group.modules.forEach((module) => {
+      const moduleName = module.name.trim();
 
       if (!this.permissions[moduleName]) {
         return;
       }
 
-      this.permissions[
-        moduleName
-      ][action] = newValue;
+      this.permissions[moduleName][action] = newValue;
 
       /**
        * Any real permission automatically
        * enables View Only.
        */
-      if (
-        dependentActions.includes(action) &&
-        newValue
-      ) {
-
-        this.permissions[
-          moduleName
-        ]['View Only'] = true;
+      if (dependentActions.includes(action) && newValue) {
+        this.permissions[moduleName]['View Only'] = true;
       }
 
       /**
        * Remove View Only if no other
        * permission remains.
        */
-      if (
-        dependentActions.includes(action) &&
-        !newValue
-      ) {
-
-        const hasOtherPermission =
-          dependentActions.some(
-            a =>
-              this.permissions[
-              moduleName
-              ][a]
-          );
+      if (dependentActions.includes(action) && !newValue) {
+        const hasOtherPermission = dependentActions.some((a) => this.permissions[moduleName][a]);
 
         if (!hasOtherPermission) {
-
-          this.permissions[
-            moduleName
-          ]['View Only'] = false;
+          this.permissions[moduleName]['View Only'] = false;
         }
       }
     });
@@ -1058,40 +680,18 @@ private loadUserDetails(): void {
   // SINGLE PERMISSION
   // ============================================================
 
-  onPermissionChange(
-    moduleName: string,
-    action: string
-  ): void {
-
-    const dependentActions = [
-      'Add',
-      'Edit',
-      'Delete',
-      'Approve',
-      'Admin Approval',
-      'Export Excel'
-    ];
+  onPermissionChange(moduleName: string, action: string): void {
+    const dependentActions = ['Add', 'Edit', 'Delete', 'Approve', 'Admin Approval', 'Export Excel'];
 
     /**
      * View Only checked:
      * remove other permissions.
      */
     if (action === 'View Only') {
-
-      if (
-        this.permissions[
-        moduleName
-        ]['View Only']
-      ) {
-
-        dependentActions.forEach(
-          permission => {
-
-            this.permissions[
-              moduleName
-            ][permission] = false;
-          }
-        );
+      if (this.permissions[moduleName]['View Only']) {
+        dependentActions.forEach((permission) => {
+          this.permissions[moduleName][permission] = false;
+        });
       }
     }
 
@@ -1099,19 +699,9 @@ private loadUserDetails(): void {
      * Any actual permission:
      * View Only automatically checked.
      */
-    if (
-      dependentActions.includes(action)
-    ) {
-
-      if (
-        this.permissions[
-        moduleName
-        ][action]
-      ) {
-
-        this.permissions[
-          moduleName
-        ]['View Only'] = true;
+    if (dependentActions.includes(action)) {
+      if (this.permissions[moduleName][action]) {
+        this.permissions[moduleName]['View Only'] = true;
       }
     }
 
@@ -1123,507 +713,285 @@ private loadUserDetails(): void {
   // ============================================================
 
   private clearAllPermissions(): void {
-
-    Object.keys(
-      this.permissions
-    ).forEach(moduleName => {
-
-      this.permissionActions.forEach(
-        action => {
-
-          this.permissions[
-            moduleName
-          ][action] = false;
-        }
-      );
+    Object.keys(this.permissions).forEach((moduleName) => {
+      this.permissionActions.forEach((action) => {
+        this.permissions[moduleName][action] = false;
+      });
     });
 
-    Object.keys(
-      this.selectAllRows
-    ).forEach(groupName => {
-
-      this.permissionActions.forEach(
-        action => {
-
-          this.selectAllRows[
-            groupName
-          ][action] = false;
-        }
-      );
+    Object.keys(this.selectAllRows).forEach((groupName) => {
+      this.permissionActions.forEach((action) => {
+        this.selectAllRows[groupName][action] = false;
+      });
     });
   }
 
-/**
- * Submit User
- */
-showCategoryValidation = false;
+  /**
+   * Submit User
+   */
+  showCategoryValidation = false;
 
-onSubmit(): void {
+  onSubmit(): void {
+    // ============================================================
+    // PREVENT DOUBLE SUBMIT
+    // ============================================================
 
-  // ============================================================
-  // PREVENT DOUBLE SUBMIT
-  // ============================================================
+    if (this.isSubmitting) {
+      return;
+    }
 
-  if (this.isSubmitting) {
-    return;
-  }
+    // ============================================================
+    // MARK FORM AS TOUCHED
+    // ============================================================
 
+    this.userForm.markAllAsTouched();
 
-  // ============================================================
-  // MARK FORM AS TOUCHED
-  // ============================================================
+    // ============================================================
+    // CATEGORY VALIDATION
+    // ============================================================
 
-  this.userForm.markAllAsTouched();
+    this.showCategoryValidation = true;
 
+    if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
+      console.error('CATEGORY IS REQUIRED');
 
- // ============================================================
-  // CATEGORY VALIDATION
-  // ============================================================
+      return;
+    }
 
- this.showCategoryValidation = true;
+    // ============================================================
+    // FORM DEBUG
+    // ============================================================
 
-if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
+    console.log('========== FORM DEBUG ==========');
 
-  console.error('CATEGORY IS REQUIRED');
+    console.log('FORM VALID:', this.userForm.valid);
 
-  return;
-}
+    console.log('FORM VALUE:', this.userForm.value);
 
-  // ============================================================
-  // FORM DEBUG
-  // ============================================================
+    console.log('FORM RAW VALUE:', this.userForm.getRawValue());
 
-  console.log('========== FORM DEBUG ==========');
+    Object.keys(this.userForm.controls).forEach((key) => {
+      const control = this.userForm.get(key);
 
-  console.log(
-    'FORM VALID:',
-    this.userForm.valid
-  );
+      console.log(key, 'value:', control?.value, 'valid:', control?.valid, 'disabled:', control?.disabled, 'errors:', control?.errors);
+    });
 
-  console.log(
-    'FORM VALUE:',
-    this.userForm.value
-  );
+    // ============================================================
+    // FORM VALIDATION
+    // ============================================================
 
-  console.log(
-    'FORM RAW VALUE:',
-    this.userForm.getRawValue()
-  );
+    if (this.userForm.invalid) {
+      console.error('FORM IS INVALID - API WILL NOT BE CALLED');
 
+      return;
+    }
 
-  Object.keys(
-    this.userForm.controls
-  ).forEach(key => {
+    console.log('FORM IS VALID - CALLING API');
 
-    const control =
-      this.userForm.get(key);
+    // ============================================================
+    // EXPIRY DATE VALIDATION
+    // ============================================================
 
-    console.log(
-      key,
-      'value:',
-      control?.value,
-      'valid:',
-      control?.valid,
-      'disabled:',
-      control?.disabled,
-      'errors:',
-      control?.errors
-    );
+    if (!this.validateExpiryDate()) {
+      console.error('EXPIRY DATE VALIDATION FAILED');
 
-  });
+      return;
+    }
 
+    // ============================================================
+    // START SUBMITTING
+    // ============================================================
 
-  // ============================================================
-  // FORM VALIDATION
-  // ============================================================
+    this.isSubmitting = true;
 
-  if (this.userForm.invalid) {
+    // ============================================================
+    // GET FORM VALUES
+    //
+    // IMPORTANT:
+    //
+    // getRawValue() includes disabled controls.
+    //
+    // This is required because Department and Designation
+    // are disabled during EDIT mode.
+    // ============================================================
 
-    console.error(
-      'FORM IS INVALID - API WILL NOT BE CALLED'
-    );
+    // const formValues =
+    //   this.userForm.getRawValue();
 
-    return;
-  }
+    const formValues = this.userForm.value;
 
+    console.log('FORM RAW VALUES BEFORE PAYLOAD:', formValues);
 
-  console.log(
-    'FORM IS VALID - CALLING API'
-  );
-
-
-  // ============================================================
-  // EXPIRY DATE VALIDATION
-  // ============================================================
-
-  if (!this.validateExpiryDate()) {
-
-    console.error(
-      'EXPIRY DATE VALIDATION FAILED'
-    );
-
-    return;
-  }
-
-
-  // ============================================================
-  // START SUBMITTING
-  // ============================================================
-
-  this.isSubmitting = true;
-
-
-  // ============================================================
-  // GET FORM VALUES
-  //
-  // IMPORTANT:
-  //
-  // getRawValue() includes disabled controls.
-  //
-  // This is required because Department and Designation
-  // are disabled during EDIT mode.
-  // ============================================================
-
-  // const formValues =
-  //   this.userForm.getRawValue();
-  
-  const formValues = this.userForm.value;
-
-
-  console.log(
-    'FORM RAW VALUES BEFORE PAYLOAD:',
-    formValues
-  );
-
-
-  // ============================================================
-  // EXPIRY DATE
-  //
-  // Material Datepicker Date
-  // converted to yyyy-MM-dd
-  // ============================================================
-
-  const formattedExpiryDate =
-    this.formatDateForApi(
-      formValues.expiryDate
-    );
-
-
-  console.log(
-    'Expiry Date - Date Object:',
-    formValues.expiryDate
-  );
-
-  console.log(
-    'Expiry Date - API Format:',
-    formattedExpiryDate
-  );
-
-
-  // ============================================================
-  // DEPARTMENT / DESIGNATION DEBUG
-  // ============================================================
-
-  console.log(
-    'Department ID:',
-    formValues.departmentId
-  );
-
-  console.log(
-    'Designation ID:',
-    formValues.desigmationId
-  );
-
-
-  // ============================================================
-  // BUILD PAYLOAD
-  // ============================================================
-
-  const payload: any = {
-
-    userId:
-      this.isEditMode
-        ? this.userId
-        : 0,
-
-
-    firstName:
-      formValues.name
-        ? formValues.name.trim()
-        : '',
-
-
-    mobileNo:
-      formValues.mobile || '',
-
-
-    email:
-      formValues.email
-        ? formValues.email.trim().toLowerCase()
-        : '',
-
-
+    // ============================================================
+    // EXPIRY DATE
+    //
     // Material Datepicker Date
     // converted to yyyy-MM-dd
-    expiryDate:
-      formattedExpiryDate,
+    // ============================================================
 
+    const formattedExpiryDate = this.formatDateForApi(formValues.expiryDate);
 
-    permission:
-      formValues.isAdmin
-        ? 'Y'
-        : 'N',
+    console.log('Expiry Date - Date Object:', formValues.expiryDate);
 
-        // Multiple selected category IDs
-      categoryIds:
-      this.selectedCategoryIds,
+    console.log('Expiry Date - API Format:', formattedExpiryDate);
 
-    status:
-      Number(
-        formValues.status
-      ),
+    // ============================================================
+    // DEPARTMENT / DESIGNATION DEBUG
+    // ============================================================
 
+    console.log('Department ID:', formValues.departmentId);
 
-    // IMPORTANT:
-    // getRawValue() ensures these values are available
-    // even when controls are disabled.
-    departmentId:
-      Number(
-        formValues.departmentId
-      ),
+    console.log('Designation ID:', formValues.desigmationId);
 
+    // ============================================================
+    // BUILD PAYLOAD
+    // ============================================================
 
-    designationId:
-      Number(
-        formValues.desigmationId
-      ),
+    const payload: any = {
+      userId: this.isEditMode ? this.userId : 0,
 
+      firstName: formValues.name ? formValues.name.trim() : '',
 
-    qcFlag:
-      0,
+      mobileNo: formValues.mobile || '',
 
+      email: formValues.email ? formValues.email.trim().toLowerCase() : '',
 
-    telephone:
-      formValues.telephone || '',
+      // Material Datepicker Date
+      // converted to yyyy-MM-dd
+      expiryDate: formattedExpiryDate,
 
+      permission: formValues.isAdmin ? 'Y' : 'N',
 
-    createdBy:
-      this.createdBy,
+      // Multiple selected category IDs
+      categoryIds: this.selectedCategoryIds,
 
+      status: Number(formValues.status),
 
-    module:
-      // this.buildModulePermissions()
-      this.isRightsHidden
-    ? []
-    : this.buildModulePermissions()
+      // IMPORTANT:
+      // getRawValue() ensures these values are available
+      // even when controls are disabled.
+      departmentId: Number(formValues.departmentId),
 
-  };
+      designationId: Number(formValues.desigmationId),
 
+      qcFlag: 0,
 
-  // ============================================================
-  // PASSWORD
-  //
-  // ADD:
-  //   Password can be sent.
-  //
-  // EDIT:
-  //   Password is sent only when user enters a new password.
-  // ============================================================
+      telephone: formValues.telephone || '',
 
-  if (
-    formValues.password &&
-    formValues.password.trim()
-  ) {
+      createdBy: this.createdBy,
 
-    payload.password =
-      formValues.password.trim();
+      module:
+        // this.buildModulePermissions()
+        this.isRightsHidden ? [] : this.buildModulePermissions(),
+    };
 
-  }
+    // ============================================================
+    // PASSWORD
+    //
+    // ADD:
+    //   Password can be sent.
+    //
+    // EDIT:
+    //   Password is sent only when user enters a new password.
+    // ============================================================
 
+    if (formValues.password && formValues.password.trim()) {
+      payload.password = formValues.password.trim();
+    }
 
-  // ============================================================
-  // FINAL PAYLOAD DEBUG
-  // ============================================================
+    // ============================================================
+    // FINAL PAYLOAD DEBUG
+    // ============================================================
 
-  console.log(
-    '========== FINAL USER PAYLOAD =========='
-  );
+    console.log('========== FINAL USER PAYLOAD ==========');
 
-  console.log(
-    JSON.stringify(
-      payload,
-      null,
-      2
-    )
-  );
+    console.log(JSON.stringify(payload, null, 2));
 
+    // ============================================================
+    // API CALL
+    // ============================================================
 
-  // ============================================================
-  // API CALL
-  // ============================================================
-
-  this.dataProvider
-    .saveUserManagementDetailsDetail(
-      payload
-    )
-    .subscribe({
-
+    this.dataProvider.saveUserManagementDetailsDetail(payload).subscribe({
       // ========================================================
       // SUCCESS
       // ========================================================
 
       next: (response: any) => {
-
         this.isSubmitting = false;
 
-
-        console.log(
-          'SAVE USER RESPONSE:',
-          response
-        );
-
+        console.log('SAVE USER RESPONSE:', response);
 
         // ======================================================
         // API RETURNED FAILURE
         // ======================================================
 
-        if (
-          response?.success === false
-        ) {
-
-          alert(
-            response.message ||
-            'Operation failed.'
-          );
+        if (response?.success === false) {
+          alert(response.message || 'Operation failed.');
 
           return;
         }
-
 
         // ======================================================
         // SUCCESS MESSAGE
         // ======================================================
 
-        alert(
-          this.isEditMode
-            ? 'User updated successfully!'
-            : 'User saved successfully!'
-        );
-
+        alert(this.isEditMode ? 'User updated successfully!' : 'User saved successfully!');
 
         // ======================================================
         // BACK TO INDEX
         // ======================================================
 
         this.backToIndexPage();
-
       },
-
 
       // ========================================================
       // ERROR
       // ========================================================
 
       error: (err) => {
-
         this.isSubmitting = false;
 
+        console.error('Save user error:', err);
 
-        console.error(
-          'Save user error:',
-          err
-        );
+        console.error('HTTP STATUS:', err?.status);
 
+        console.error('ERROR BODY:', err?.error);
 
-        console.error(
-          'HTTP STATUS:',
-          err?.status
-        );
-
-
-        console.error(
-          'ERROR BODY:',
-          err?.error
-        );
-
-
-        alert(
-          err?.error?.message ||
-          (
-            this.isEditMode
-              ? 'Failed to update user.'
-              : 'Failed to save user.'
-          )
-        );
-
-      }
-
+        alert(err?.error?.message || (this.isEditMode ? 'Failed to update user.' : 'Failed to save user.'));
+      },
     });
-
-}
-
+  }
 
   // ============================================================
   // BUILD API PERMISSIONS
   // ============================================================
 
   private buildModulePermissions(): any[] {
-    return this.groupedModules
-      .flatMap(group =>
-        group.modules.map(module => {
+    return this.groupedModules.flatMap((group) =>
+      group.modules.map((module) => {
+        const moduleName = module.name.trim();
 
-          const moduleName =
-            module.name.trim();
+        const permission = this.permissions[moduleName] || {};
 
-          const permission =
-            this.permissions[
-            moduleName
-            ] || {};
+        return {
+          moduleId: module.moduleId?.toString(),
 
-          return {
+          addPer: permission['Add'] ? 'Y' : 'N',
 
-            moduleId:
-              module.moduleId?.toString(),
+          editPer: permission['Edit'] ? 'Y' : 'N',
 
-            addPer:
-              permission['Add']
-                ? 'Y'
-                : 'N',
+          deletePer: permission['Delete'] ? 'Y' : 'N',
 
-            editPer:
-              permission['Edit']
-                ? 'Y'
-                : 'N',
+          approvePer: permission['Approve'] ? 'Y' : 'N',
 
-            deletePer:
-              permission['Delete']
-                ? 'Y'
-                : 'N',
+          adminApprovePer: permission['Admin Approval'] ? 'Y' : 'N',
 
-            approvePer:
-              permission['Approve']
-                ? 'Y'
-                : 'N',
+          viewPer: permission['View Only'] ? 'Y' : 'N',
 
-            adminApprovePer:
-              permission[
-                'Admin Approval'
-              ]
-                ? 'Y'
-                : 'N',
-
-            viewPer:
-              permission['View Only']
-                ? 'Y'
-                : 'N',
-
-            exportExcel:
-              permission['Export Excel']
-                ? 'Y'
-                : 'N'
-          };
-        })
-      );
+          exportExcel: permission['Export Excel'] ? 'Y' : 'N',
+        };
+      }),
+    );
   }
 
   // ============================================================
@@ -1631,24 +999,18 @@ if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
   // ============================================================
 
   onReset(): void {
-
     if (this.isEditMode) {
-
       this.loadUserDetails();
 
       return;
     }
 
     this.userForm.reset({
-
       name: '',
 
       email: '',
 
-      expiryDate:
-        this.formatDate(
-          new Date('2050-12-31')
-        ),
+      expiryDate: this.formatDate(new Date('2050-12-31')),
 
       password: '',
 
@@ -1660,22 +1022,12 @@ if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
 
       isAdmin: false,
       departmentId: null,
-  desigmationId: null
+      desigmationId: null,
     });
 
-    this.permissions =
-      JSON.parse(
-        JSON.stringify(
-          this.originalPermissions
-        )
-      );
+    this.permissions = JSON.parse(JSON.stringify(this.originalPermissions));
 
-    this.selectAllRows =
-      JSON.parse(
-        JSON.stringify(
-          this.originalSelectAllRows
-        )
-      );
+    this.selectAllRows = JSON.parse(JSON.stringify(this.originalSelectAllRows));
   }
 
   // ============================================================
@@ -1683,26 +1035,17 @@ if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
   // ============================================================
 
   backToIndexPage(): void {
+    this.router.navigate(['/my-team'], {
+      state: {
+        currentPage: this.currentPage,
 
-    this.router.navigate(
-      ['/my-team'],
-      {
-        state: {
+        statusIndex: this.statusIndex,
 
-          currentPage:
-            this.currentPage,
+        searchText: this.searchText,
 
-          statusIndex:
-            this.statusIndex,
-
-          searchText:
-            this.searchText,
-
-          size:
-            this.size
-        }
-      }
-    );
+        size: this.size,
+      },
+    });
   }
 
   // ============================================================
@@ -1710,28 +1053,18 @@ if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
   // ============================================================
 
   private readFilterState(): void {
-
     let stateData: any = null;
 
-    const navigation =
-      this.router.getCurrentNavigation();
+    const navigation = this.router.getCurrentNavigation();
 
-    stateData =
-      navigation?.extras?.state;
+    stateData = navigation?.extras?.state;
 
-    if (!stateData &&
-      isPlatformBrowser(this.platformId)) {
-
-      const saved =
-        sessionStorage.getItem(
-          'userFilters'
-        );
+    if (!stateData && isPlatformBrowser(this.platformId)) {
+      const saved = sessionStorage.getItem('userFilters');
 
       if (saved) {
-
         try {
-          stateData =
-            JSON.parse(saved);
+          stateData = JSON.parse(saved);
         } catch {
           stateData = null;
         }
@@ -1739,18 +1072,13 @@ if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
     }
 
     if (stateData) {
+      this.currentPage = stateData.currentPage ?? 1;
 
-      this.currentPage =
-        stateData.currentPage ?? 1;
+      this.statusIndex = stateData.statusIndex ?? 0;
 
-      this.statusIndex =
-        stateData.statusIndex ?? 0;
+      this.searchText = stateData.searchText ?? '';
 
-      this.searchText =
-        stateData.searchText ?? '';
-
-      this.size =
-        stateData.size ?? 10;
+      this.size = stateData.size ?? 10;
     }
   }
 
@@ -1758,376 +1086,196 @@ if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
   // VALIDATION
   // ============================================================
 
-validateExpiryDate(): boolean {
+  validateExpiryDate(): boolean {
+    const control = this.userForm.get('expiryDate');
 
-  const control =
-    this.userForm.get('expiryDate');
+    const value = control?.value;
 
-  const value =
-    control?.value;
+    if (!value) {
+      console.error('Expiry Date is empty');
 
+      return false;
+    }
 
-  if (!value) {
+    if (!(value instanceof Date)) {
+      console.error('Expiry Date is not a Date object:', value);
 
-    console.error(
-      'Expiry Date is empty'
-    );
+      return false;
+    }
 
-    return false;
+    if (isNaN(value.getTime())) {
+      console.error('Expiry Date is invalid:', value);
+
+      return false;
+    }
+
+    const selectedDate = new Date(value);
+
+    selectedDate.setHours(0, 0, 0, 0);
+
+    const minimumDate = new Date(this.minDate);
+
+    minimumDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < minimumDate) {
+      control?.setErrors({
+        ...(control.errors || {}),
+        matDatepickerMin: true,
+      });
+
+      alert('Expiry Date cannot be a past date.');
+
+      return false;
+    }
+
+    return true;
   }
-
-
-  if (!(value instanceof Date)) {
-
-    console.error(
-      'Expiry Date is not a Date object:',
-      value
-    );
-
-    return false;
-  }
-
-
-  if (
-    isNaN(
-      value.getTime()
-    )
-  ) {
-
-    console.error(
-      'Expiry Date is invalid:',
-      value
-    );
-
-    return false;
-  }
-
-
-  const selectedDate =
-    new Date(value);
-
-  selectedDate.setHours(
-    0,
-    0,
-    0,
-    0
-  );
-
-
-  const minimumDate =
-    new Date(this.minDate);
-
-  minimumDate.setHours(
-    0,
-    0,
-    0,
-    0
-  );
-
-
-  if (
-    selectedDate <
-    minimumDate
-  ) {
-
-    control?.setErrors({
-      ...(control.errors || {}),
-      matDatepickerMin: true
-    });
-
-
-    alert(
-      'Expiry Date cannot be a past date.'
-    );
-
-
-    return false;
-  }
-
-
-  return true;
-}
 
   // ============================================================
   // DATE
   // ============================================================
 
   private formatDate(date: Date): string {
+    const day = ('0' + date.getDate()).slice(-2);
 
-    const day =
-      ('0' + date.getDate())
-        .slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
 
-    const month =
-      ('0' + (date.getMonth() + 1))
-        .slice(-2);
-
-    const year =
-      date.getFullYear();
+    const year = date.getFullYear();
 
     return `${day}-${month}-${year}`;
   }
 
   private parseExpiryDate(value: any): Date | null {
+    if (!value) {
+      return null;
+    }
 
-  if (!value) {
-    return null;
-  }
+    /* Already Date */
 
+    if (value instanceof Date) {
+      const date = new Date(value);
 
-  /* Already Date */
+      date.setHours(0, 0, 0, 0);
 
-  if (value instanceof Date) {
+      return date;
+    }
 
-    const date = new Date(value);
+    const dateString = String(value).trim();
 
-    date.setHours(
-      0,
-      0,
-      0,
-      0
-    );
-
-    return date;
-  }
-
-
-  const dateString =
-    String(value).trim();
-
-
-  /* =====================================================
+    /* =====================================================
      yyyy-MM-dd
      Example: 2050-12-31
      ===================================================== */
 
-  const yyyyMmDd =
-    /^(\d{4})-(\d{2})-(\d{2})$/;
+    const yyyyMmDd = /^(\d{4})-(\d{2})-(\d{2})$/;
 
-  const yyyyMatch =
-    dateString.match(yyyyMmDd);
+    const yyyyMatch = dateString.match(yyyyMmDd);
 
+    if (yyyyMatch) {
+      const year = Number(yyyyMatch[1]);
 
-  if (yyyyMatch) {
+      const month = Number(yyyyMatch[2]);
 
-    const year =
-      Number(yyyyMatch[1]);
+      const day = Number(yyyyMatch[3]);
 
-    const month =
-      Number(yyyyMatch[2]);
+      const date = new Date(year, month - 1, day);
 
-    const day =
-      Number(yyyyMatch[3]);
+      date.setHours(0, 0, 0, 0);
 
+      return date;
+    }
 
-    const date =
-      new Date(
-        year,
-        month - 1,
-        day
-      );
-
-
-    date.setHours(
-      0,
-      0,
-      0,
-      0
-    );
-
-
-    return date;
-  }
-
-
-  /* =====================================================
+    /* =====================================================
      dd-MM-yyyy
      Example: 31-12-2050
      ===================================================== */
 
-  const ddMmYyyy =
-    /^(\d{2})-(\d{2})-(\d{4})$/;
+    const ddMmYyyy = /^(\d{2})-(\d{2})-(\d{4})$/;
 
-  const ddMatch =
-    dateString.match(ddMmYyyy);
+    const ddMatch = dateString.match(ddMmYyyy);
 
+    if (ddMatch) {
+      const day = Number(ddMatch[1]);
 
-  if (ddMatch) {
+      const month = Number(ddMatch[2]);
 
-    const day =
-      Number(ddMatch[1]);
+      const year = Number(ddMatch[3]);
 
-    const month =
-      Number(ddMatch[2]);
+      const date = new Date(year, month - 1, day);
 
-    const year =
-      Number(ddMatch[3]);
+      date.setHours(0, 0, 0, 0);
 
+      return date;
+    }
 
-    const date =
-      new Date(
-        year,
-        month - 1,
-        day
-      );
-
-
-    date.setHours(
-      0,
-      0,
-      0,
-      0
-    );
-
-
-    return date;
-  }
-
-
-  /* =====================================================
+    /* =====================================================
      yyyy/MM/dd
      ===================================================== */
 
-  const yyyySlash =
-    /^(\d{4})\/(\d{2})\/(\d{2})$/;
+    const yyyySlash = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
-  const slashMatch =
-    dateString.match(yyyySlash);
+    const slashMatch = dateString.match(yyyySlash);
 
+    if (slashMatch) {
+      const year = Number(slashMatch[1]);
 
-  if (slashMatch) {
+      const month = Number(slashMatch[2]);
 
-    const year =
-      Number(slashMatch[1]);
+      const day = Number(slashMatch[3]);
 
-    const month =
-      Number(slashMatch[2]);
+      const date = new Date(year, month - 1, day);
 
-    const day =
-      Number(slashMatch[3]);
+      date.setHours(0, 0, 0, 0);
 
+      return date;
+    }
 
-    const date =
-      new Date(
-        year,
-        month - 1,
-        day
-      );
-
-
-    date.setHours(
-      0,
-      0,
-      0,
-      0
-    );
-
-
-    return date;
-  }
-
-
-  /* =====================================================
+    /* =====================================================
      Java date string
      
      Example:
      Wed Mar 13 00:00:00 IST 2024
      ===================================================== */
 
-  let normalized =
-    dateString.replace(
-      ' IST ',
-      ' GMT+0530 '
-    );
+    let normalized = dateString.replace(' IST ', ' GMT+0530 ');
 
+    const parsed = new Date(normalized);
 
-  const parsed =
-    new Date(normalized);
+    if (!isNaN(parsed.getTime())) {
+      parsed.setHours(0, 0, 0, 0);
 
+      return parsed;
+    }
 
-  if (
-    !isNaN(
-      parsed.getTime()
-    )
-  ) {
+    console.error('Unable to parse expiry date:', value);
 
-    parsed.setHours(
-      0,
-      0,
-      0,
-      0
-    );
-
-
-    return parsed;
+    return null;
   }
-
-
-  console.error(
-    'Unable to parse expiry date:',
-    value
-  );
-
-
-  return null;
-}
 
   // ============================================================
   // INPUT RESTRICTIONS
   // ============================================================
 
-  allowOnlyLetters(
-    event: KeyboardEvent
-  ): void {
+  allowOnlyLetters(event: KeyboardEvent): void {
+    const char = event.key;
 
-    const char =
-      event.key;
-
-    if (
-      !/^[a-zA-Z\s]$/.test(char)
-    ) {
-
+    if (!/^[a-zA-Z\s]$/.test(char)) {
       event.preventDefault();
     }
   }
 
-  allowOnlyNumbers(
-    event: KeyboardEvent
-  ): void {
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.which || event.keyCode;
 
-    const charCode =
-      event.which ||
-      event.keyCode;
-
-    if (
-      charCode < 48 ||
-      charCode > 57
-    ) {
-
+    if (charCode < 48 || charCode > 57) {
       event.preventDefault();
     }
   }
 
-  allowOnlyDateChars(
-    event: KeyboardEvent
-  ): void {
+  allowOnlyDateChars(event: KeyboardEvent): void {
+    const char = event.key;
 
-    const char =
-      event.key;
-
-    if (
-      !/[0-9\-\/]/.test(char) &&
-      char !== 'Backspace' &&
-      char !== 'Delete' &&
-      char !== 'Tab' &&
-      !event.ctrlKey &&
-      !event.metaKey &&
-      ![
-        'ArrowLeft',
-        'ArrowRight'
-      ].includes(char)
-    ) {
-
+    if (!/[0-9\-\/]/.test(char) && char !== 'Backspace' && char !== 'Delete' && char !== 'Tab' && !event.ctrlKey && !event.metaKey && !['ArrowLeft', 'ArrowRight'].includes(char)) {
       event.preventDefault();
     }
   }
@@ -2136,12 +1284,8 @@ validateExpiryDate(): boolean {
   // STATUS
   // ============================================================
 
-  getStatusLabel(
-    status: number
-  ): string {
-
+  getStatusLabel(status: number): string {
     switch (+status) {
-
       case 1:
         return 'Active';
 
@@ -2168,7 +1312,7 @@ validateExpiryDate(): boolean {
       },
       error: (error) => {
         console.error('Error loading departments', error);
-      }
+      },
     });
   }
 
@@ -2179,92 +1323,66 @@ validateExpiryDate(): boolean {
       },
       error: (error) => {
         console.error('Error loading departments', error);
-      }
+      },
     });
   }
 
+  private formatDateForApi(date: Date | null): string {
+    if (!date) {
+      return '';
+    }
 
+    if (!(date instanceof Date)) {
+      console.error('Invalid expiry date:', date);
 
-private formatDateForApi(
-  date: Date | null
-): string {
+      return '';
+    }
 
-  if (!date) {
-    return '';
+    if (isNaN(date.getTime())) {
+      console.error('Invalid expiry date:', date);
+
+      return '';
+    }
+
+    const year = date.getFullYear();
+
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
   }
 
-  if (!(date instanceof Date)) {
+  //Task category
 
-    console.error(
-      'Invalid expiry date:',
-      date
-    );
+  selectedCategoryIds: number[] = [];
+  showCategoryDropdown = false;
 
-    return '';
-  }
+  categoriesLoading = false;
 
-  if (isNaN(date.getTime())) {
+  loadCategories(clearSelection: boolean = true): void {
+    const departmentId = this.userForm.get('departmentId')?.value;
 
-    console.error(
-      'Invalid expiry date:',
-      date
-    );
+    if (!departmentId) {
+      this.categoryList = [];
+      this.selectedCategoryIds = [];
+      this.categoriesLoading = false;
+      return;
+    }
 
-    return '';
-  }
+    if (clearSelection) {
+      this.selectedCategoryIds = [];
+    }
 
-  const year =
-    date.getFullYear();
+    this.categoriesLoading = true;
 
-  const month =
-    String(
-      date.getMonth() + 1
-    ).padStart(2, '0');
-
-  const day =
-    String(
-      date.getDate()
-    ).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
-
-//Task category
-
-
-selectedCategoryIds: number[] = [];
-showCategoryDropdown = false;
-
-categoriesLoading = false;
-
-loadCategories(clearSelection: boolean = true): void {
-
-  const departmentId =
-    this.userForm.get('departmentId')?.value;
-
-  if (!departmentId) {
-    this.categoryList = [];
-    this.selectedCategoryIds = [];
-    this.categoriesLoading = false;
-    return;
-  }
-
-  if (clearSelection) {
-    this.selectedCategoryIds = [];
-  }
-
-  this.categoriesLoading = true;
-
-  this.dataProvider
-    .getCategoriesByDepartmentId(departmentId)
-    .subscribe({
+    this.dataProvider.getCategoriesByDepartmentId(departmentId).subscribe({
       next: (response: TaskCategoryDTO[]) => {
         this.categoryList = response;
         this.categoriesLoading = false;
 
         if (Number(departmentId) === 1 && clearSelection) {
-          this.selectedCategoryIds =
-            response.map(category => category.taskcategoryId);
+          this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
           this.showCategoryValidation = false;
         }
       },
@@ -2272,77 +1390,55 @@ loadCategories(clearSelection: boolean = true): void {
         console.error('Error loading categories:', error);
         this.categoryList = [];
         this.categoriesLoading = false;
-      }
+      },
     });
-}
-
-
-
-
-toggleCategory(categoryId: number, event: Event): void {
-
-  const checkbox = event.target as HTMLInputElement;
-
-  if (checkbox.checked) {
-
-    if (!this.selectedCategoryIds.includes(categoryId)) {
-      this.selectedCategoryIds.push(categoryId);
-    }
-
-  } else {
-
-    this.selectedCategoryIds =
-      this.selectedCategoryIds.filter(
-        id => id !== categoryId
-      );
-
   }
 
-  // Update validation message
-  this.showCategoryValidation =
-    this.selectedCategoryIds.length === 0;
-}
+  toggleCategory(categoryId: number, event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
 
+    if (checkbox.checked) {
+      if (!this.selectedCategoryIds.includes(categoryId)) {
+        this.selectedCategoryIds.push(categoryId);
+      }
+    } else {
+      this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => id !== categoryId);
+    }
 
-isCategoryChecked(taskcategoryId: number): boolean {
-  return this.selectedCategoryIds.includes(taskcategoryId);
-}
+    // Update validation message
+    this.showCategoryValidation = this.selectedCategoryIds.length === 0;
+  }
 
-//Dropdown auto close
- @ViewChild('categoryDropdown') categoryDropdown!: ElementRef;
+  isCategoryChecked(taskcategoryId: number): boolean {
+    return this.selectedCategoryIds.includes(taskcategoryId);
+  }
+
+  //Dropdown auto close
+  @ViewChild('categoryDropdown') categoryDropdown!: ElementRef;
 
   // showCategoryDropdown = false;
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
-    if (
-      this.showCategoryDropdown &&
-      this.categoryDropdown &&
-      !this.categoryDropdown.nativeElement.contains(event.target)
-    ) {
+    if (this.showCategoryDropdown && this.categoryDropdown && !this.categoryDropdown.nativeElement.contains(event.target)) {
       this.showCategoryDropdown = false;
     }
   }
 
-
   // selectedCategoryIds: number[] = [];
 
-getSelectedCategoryNames(): string {
-  if (!this.categoryList || !this.selectedCategoryIds?.length) {
-    return '';
+  getSelectedCategoryNames(): string {
+    if (!this.categoryList || !this.selectedCategoryIds?.length) {
+      return '';
+    }
+
+    return this.categoryList
+      .filter((category) => this.selectedCategoryIds.includes(category.taskcategoryId))
+      .map((category) => category.name)
+      .join(', ');
   }
 
-  return this.categoryList
-    .filter(category =>
-      this.selectedCategoryIds.includes(category.taskcategoryId)
-    )
-    .map(category => category.name)
-    .join(', ');
-}
-
-
-get isRightsHidden(): boolean {
-  return Number(this.userForm.get('departmentId')?.value) === 1;
-}
-
+  get isRightsHidden(): boolean {
+    return Number(this.userForm.get('departmentId')?.value) === 1;
+  }
 }

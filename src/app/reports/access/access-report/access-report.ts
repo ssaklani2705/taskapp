@@ -18,20 +18,12 @@ interface UserAccessLog {
 
 @Component({
   selector: 'app-access-report',
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    MatCardModule,
-    MatIconModule,
-    MatDividerModule,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIconModule, MatDividerModule],
   providers: [DatePipe],
   templateUrl: './access-report.html',
   styleUrl: './access-report.scss',
 })
 export class AccessReportComponent implements OnInit {
-
   // ================= DATA =================
   accessLogs: UserAccessLog[] = [];
   apiResponse: any = {};
@@ -59,7 +51,7 @@ export class AccessReportComponent implements OnInit {
 
   // ================= INIT =================
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       this.currentPage = +(params['currentPage'] || 1);
       this.page = +(params['page'] || this.currentPage - 1);
       this.size = +(params['size'] || environment.size);
@@ -77,17 +69,15 @@ export class AccessReportComponent implements OnInit {
 
   // ================= API =================
   getUserAccessDetails(): void {
-    this.dataprovider
-      .getUserAccessDetails(this.page, this.size, this.search)
-      .subscribe({
-        next: (response) => {
-          this.apiResponse = response;
-          this.accessLogs = response.data || [];
-        },
-        error: (error) => {
-          console.error('Error fetching access report:', error);
-        },
-      });
+    this.dataprovider.getUserAccessDetails(this.page, this.size, this.search).subscribe({
+      next: (response) => {
+        this.apiResponse = response;
+        this.accessLogs = response.data || [];
+      },
+      error: (error) => {
+        console.error('Error fetching access report:', error);
+      },
+    });
   }
 
   // ================= DATE FORMAT =================
@@ -183,8 +173,7 @@ export class AccessReportComponent implements OnInit {
   get recordSummary(): string {
     const total = this.totalRecords;
 
-    const startRecord =
-      total === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
+    const startRecord = total === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
 
     const endRecord = Math.min(this.currentPage * this.recordsPerPage, total);
 

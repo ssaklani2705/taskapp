@@ -41,10 +41,7 @@
         with confidence.
       </h1>
 
-      <p>
-        A centralized workspace to manage tasks, approvals, clients and team performance from one
-        powerful platform.
-      </p>
+      <p>A centralized workspace to manage tasks, approvals, clients and team performance from one powerful platform.</p>
 
       <!-- FEATURES -->
 
@@ -152,17 +149,9 @@
 
           <mat-icon matPrefix> person_outline </mat-icon>
 
-          <input
-            matInput
-            type="text"
-            formControlName="username"
-            autocomplete="username"
-            placeholder="Enter your username or email"
-          />
+          <input matInput type="text" formControlName="username" autocomplete="username" placeholder="Enter your username or email" />
 
-          <mat-error *ngIf="loginForm.controls.username.hasError('required')">
-            Email is required
-          </mat-error>
+          <mat-error *ngIf="loginForm.controls.username.hasError('required')"> Email is required </mat-error>
         </mat-form-field>
 
         <!-- PASSWORD -->
@@ -172,29 +161,15 @@
 
           <mat-icon matPrefix> lock_outline </mat-icon>
 
-          <input
-            matInput
-            [type]="hidePassword ? 'password' : 'text'"
-            formControlName="password"
-            autocomplete="current-password"
-            placeholder="Enter your password"
-          />
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" autocomplete="current-password" placeholder="Enter your password" />
 
-          <button
-            type="button"
-            mat-icon-button
-            matSuffix
-            class="password-toggle"
-            (click)="togglePassword()"
-          >
+          <button type="button" mat-icon-button matSuffix class="password-toggle" (click)="togglePassword()">
             <mat-icon>
               {{ hidePassword ? 'visibility_off' : 'visibility' }}
             </mat-icon>
           </button>
 
-          <mat-error *ngIf="loginForm.controls.password.hasError('required')">
-            Password is required
-          </mat-error>
+          <mat-error *ngIf="loginForm.controls.password.hasError('required')"> Password is required </mat-error>
         </mat-form-field>
 
         <!-- =================================================
@@ -214,13 +189,7 @@
             <div class="captcha-box">
               <span
                 *ngFor="let character of captchaText.split(''); let i = index"
-                [style.transform]="
-                  'rotate(' +
-                  ((i % 3) - 1) * 8 +
-                  'deg) translateY(' +
-                  (i % 2 ? '2px' : '-1px') +
-                  ')'
-                "
+                [style.transform]="'rotate(' + ((i % 3) - 1) * 8 + 'deg) translateY(' + (i % 2 ? '2px' : '-1px') + ')'"
                 [style.margin-right]="'3px'"
               >
                 {{ character }}
@@ -229,13 +198,7 @@
 
             <!-- REFRESH -->
 
-            <button
-              type="button"
-              mat-icon-button
-              class="captcha-refresh"
-              title="Refresh CAPTCHA"
-              (click)="loadCaptcha()"
-            >
+            <button type="button" mat-icon-button class="captcha-refresh" title="Refresh CAPTCHA" (click)="loadCaptcha()">
               <mat-icon> refresh </mat-icon>
             </button>
           </div>
@@ -247,21 +210,11 @@
 
             <mat-icon matPrefix> security </mat-icon>
 
-            <input
-              matInput
-              type="text"
-              maxlength="6"
-              autocomplete="off"
-              formControlName="captcha"
-              placeholder="Enter the code"
-              (input)="onCaptchaInput()"
-            />
+            <input matInput type="text" maxlength="6" autocomplete="off" formControlName="captcha" placeholder="Enter the code" (input)="onCaptchaInput()" />
 
             <mat-error *ngIf="captchaError"> Incorrect CAPTCHA. Please try again. </mat-error>
 
-            <mat-error *ngIf="loginForm.controls.captcha.hasError('required') && !captchaError">
-              CAPTCHA is required
-            </mat-error>
+            <mat-error *ngIf="loginForm.controls.captcha.hasError('required') && !captchaError"> CAPTCHA is required </mat-error>
           </mat-form-field>
         </div>
 
@@ -276,9 +229,7 @@
           </mat-checkbox> -->
           <span></span>
 
-          <button type="button" class="forgot-button" (click)="forgotPassword()">
-            Forgot password?
-          </button>
+          <button type="button" class="forgot-button" (click)="forgotPassword()">Forgot password?</button>
         </div>
 
         <!-- LOGIN BUTTON -->

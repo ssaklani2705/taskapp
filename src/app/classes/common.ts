@@ -1,7 +1,6 @@
 import * as CryptoJS from 'crypto-js';
 
 export class Common {
-
   getStatusLabel(status: number | string): string {
     switch (+status) {
       case 1:
@@ -31,7 +30,6 @@ export class Common {
         return 'Unknown';
     }
   }
-
 
   getStatusClass(status: number | string): string {
     switch (+status) {
@@ -63,43 +61,44 @@ export class Common {
     }
   }
 
-
   getTaskStatusClassNew(status: number | string): string {
-  switch (+status) {
-    case 1:
-      return 'status-badge status-1';
-    case 2:
-      return 'status-badge status-2';
-    case 3:
-      return 'status-badge status-3';
-    case 4:
-      return 'status-badge status-4';
-    case 5:
-      return 'status-badge status-5';
-    default:
-      return 'status-badge';
+    switch (+status) {
+      case 1:
+        return 'status-badge status-1';
+      case 2:
+        return 'status-badge status-2';
+      case 3:
+        return 'status-badge status-3';
+      case 4:
+        return 'status-badge status-4';
+      case 5:
+        return 'status-badge status-5';
+      default:
+        return 'status-badge';
+    }
   }
-}
-
-
 
   getFollowUpStatusLabel(status: number): string {
     switch (status) {
-      case 1: return 'Pending';
-      case 2: return 'Closed';
-      default: return 'Unknown';
+      case 1:
+        return 'Pending';
+      case 2:
+        return 'Closed';
+      default:
+        return 'Unknown';
     }
   }
 
   getFollowUpStatusClass(status: number): string {
     switch (status) {
-      case 1: return 'label-warning'; // yellow
-      case 2: return 'label-success'; // green
-      default: return 'label-default';
+      case 1:
+        return 'label-warning'; // yellow
+      case 2:
+        return 'label-success'; // green
+      default:
+        return 'label-default';
     }
   }
-
-
 
   getCustomerStatusLabel(status: number | string): string {
     switch (+status) {
@@ -123,7 +122,6 @@ export class Common {
     }
   }
 
-
   parseEntryDate(dateStr: string): Date {
     const [datePart, timePart, ampm] = dateStr.split(/[\s:]+/); // e.g., ["08-08-2025", "05", "53", "PM"]
     const [day, month, year] = datePart.split('-').map(Number);
@@ -135,7 +133,6 @@ export class Common {
 
     return new Date(year, month - 1, day, hour, minute);
   }
-
 
   validateNumberInput(event: any): void {
     const input = event.target;
@@ -171,8 +168,6 @@ export class Common {
     }
   }
 
-
-
   allowOnlyNumbers(event: KeyboardEvent): void {
     const input = event.target as HTMLInputElement;
 
@@ -201,10 +196,7 @@ export class Common {
     const value = input.value;
     const cursorPosition = input.selectionStart || 0;
 
-    const newValue =
-      value.slice(0, cursorPosition) +
-      key +
-      value.slice(cursorPosition);
+    const newValue = value.slice(0, cursorPosition) + key + value.slice(cursorPosition);
 
     const decimalPart = newValue.split('.')[1];
 
@@ -213,20 +205,20 @@ export class Common {
     }
   }
 
-   decryptDES(data: string): string {
+  decryptDES(data: string): string {
     console.log('decryptDES called with:', data);
     try {
       const key = CryptoJS.enc.Utf8.parse('PP@S@800');
 
       const decrypted = CryptoJS.DES.decrypt(
         {
-          ciphertext: CryptoJS.enc.Hex.parse(data)
+          ciphertext: CryptoJS.enc.Hex.parse(data),
         } as any,
         key,
         {
           mode: CryptoJS.mode.ECB,
-          padding: CryptoJS.pad.Pkcs7
-        }
+          padding: CryptoJS.pad.Pkcs7,
+        },
       );
 
       console.log('Raw:', decrypted.toString());
@@ -241,7 +233,6 @@ export class Common {
       return '';
     }
   }
-
 
   allowOnlyNumbersWithoutDecimal(event: KeyboardEvent): void {
     const charCode = event.which ? event.which : event.keyCode;
@@ -263,7 +254,6 @@ export class Common {
     }
   }
 
-
   formatWithDecimals(value: number, decimals: number): string | number {
     if (decimals === 0) {
       return Math.trunc(value); // removes decimal part
@@ -271,5 +261,4 @@ export class Common {
 
     return value.toFixed(decimals);
   }
-
 }

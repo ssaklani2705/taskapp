@@ -1,76 +1,47 @@
 <div class="layout">
-
   <!-- =====================================================
        FIXED HEADER
   ====================================================== -->
 
   <header class="layout-header">
-
-    <app-header
-      (menuToggle)="toggleSidebar()">
-    </app-header>
-
+    <app-header (menuToggle)="toggleSidebar()"> </app-header>
   </header>
-
 
   <!-- =====================================================
        BODY
   ====================================================== -->
 
   <div class="layout-body">
-
     <!-- ===================================================
          MOBILE OVERLAY
     ==================================================== -->
 
-    <div
-      class="sidebar-overlay"
-      *ngIf="sidebarOpened"
-      (click)="closeSidebar()">
-    </div>
-
+    <div class="sidebar-overlay" *ngIf="sidebarOpened" (click)="closeSidebar()"></div>
 
     <!-- ===================================================
          SIDEBAR
     ==================================================== -->
 
-    <aside
-      class="layout-sidebar"
-      [class.sidebar-closed]="!sidebarOpened">
-
-      <app-sidebar
-        [opened]="sidebarOpened"
-        (openedChange)="onSidebarOpenedChange($event)">
-      </app-sidebar>
-
+    <aside class="layout-sidebar" [class.sidebar-closed]="!sidebarOpened">
+      <app-sidebar [opened]="sidebarOpened" (openedChange)="onSidebarOpenedChange($event)"> </app-sidebar>
     </aside>
-
 
     <!-- ===================================================
          CONTENT
     ==================================================== -->
 
     <main class="layout-content">
-
       <div class="content-wrapper">
-
         <router-outlet></router-outlet>
-
       </div>
-
     </main>
-
   </div>
-
 
   <!-- =====================================================
        FIXED FOOTER
   ====================================================== -->
 
   <footer class="layout-footer">
-
     <app-footer></app-footer>
-
   </footer>
-
 </div>

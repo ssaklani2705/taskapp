@@ -1,26 +1,22 @@
 <div class="page-container">
-
   <div class="main-card">
-
     <!-- =========================================================
          PAGE HEADER
     ========================================================== -->
     <div class="page-header">
-
       <div class="page-title">
-         <mat-icon>event_note</mat-icon>
+        <mat-icon>event_note</mat-icon>
         <span>Plan Master</span>
       </div>
 
       <div class="header-action">
         @if (addPer === 'Y') {
-        <button type="button" class="add-button" (click)="addPlan()">
-          <mat-icon>add</mat-icon>
-          Add New
-        </button>
+          <button type="button" class="add-button" (click)="addPlan()">
+            <mat-icon>add</mat-icon>
+            Add New
+          </button>
         }
       </div>
-
     </div>
 
     <mat-divider></mat-divider>
@@ -29,9 +25,7 @@
          SEARCH SECTION
     ========================================================== -->
     <div class="search-section">
-
       <div class="search-grid">
-
         <!-- Search -->
         <div class="search-field search-name">
           <label>Plan Name</label>
@@ -40,60 +34,39 @@
             <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Plan Name / Description" (keyup.enter)="onSearch()" />
 
             <button type="button" class="search-button" (click)="onSearch()">
-
               <mat-icon>search</mat-icon>
-
             </button>
           </div>
         </div>
 
         <!-- Department -->
 
-
         <!-- Status -->
         <div class="search-field">
-
           <label>Status</label>
 
           <select [(ngModel)]="selectedStatus" (change)="onSearch()">
-
             <option value="">-- All Status --</option>
             <option value="1">Active</option>
             <option value="2">Inactive</option>
             <option value="3">Deleted</option>
-
           </select>
-
         </div>
 
         <!-- Go Button -->
         <div class="filter-action">
-
           <button type="button" class="go-button" (click)="onSearch()">
-
             <mat-icon>search</mat-icon>
             Go
-
           </button>
           &nbsp;
           <!-- Clear -->
-      <button
-        type="button"
-        class="btn-clear"
-        (click)="clearFilters()"
-        title="Clear Filters">
-
-        <!-- <mat-icon>clear</mat-icon> -->
-        Clear
-
-      </button>
-
-
+          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
+            <!-- <mat-icon>clear</mat-icon> -->
+            Clear
+          </button>
         </div>
-        
-
       </div>
-
     </div>
 
     <mat-divider></mat-divider>
@@ -103,325 +76,144 @@
     ========================================================== -->
 
     <div class="table-section">
-
       <!-- Top Toolbar -->
       <div class="table-toolbar">
-
         <div class="record-summary">
           {{ recordSummary }}
         </div>
 
         <div class="pagination">
+          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">
+          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-            « First
-
-          </button>
-
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-
-            ‹ Prev
-
-          </button>
-
-          <button *ngFor="let page of pages()" (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage">
-
+          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
-
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
 
-            Next ›
-
-          </button>
-
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">
-
-            Last »
-
-          </button>
-
+          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
-
       </div>
 
       <!-- Table -->
 
-     <div class="table-wrapper">
-
-  <table class="designation-table">
-
-    <thead>
-      <tr>
-
-        <th class="serial-column">
-          Sr. No.
-        </th>
-
-        <th
-          *ngFor="let col of columns"
-          [class.sortable]="col.sortable"
-          (click)="col.sortable && sortData(col.key)"
-        >
-
-          <div class="column-header">
-
-            <span>
-              {{ col.label }}
-            </span>
-
-            <span
-              *ngIf="col.sortable"
-              class="sort-icons"
-            >
-
-              <span
-                [class.active]="
-                  sortColumn === col.key &&
-                  sortDirection === 'asc'
-                "
-              >
-                ▲
-              </span>
-
-              <span
-                [class.active]="
-                  sortColumn === col.key &&
-                  sortDirection === 'desc'
-                "
-              >
-                ▼
-              </span>
-
-            </span>
-
-          </div>
-
-        </th>
-
-        <th class="action-column">
-          Action
-        </th>
-
-      </tr>
-    </thead>
-
-
-    <tbody>
-
-      <tr
-        *ngFor="
-          let rows of paginatedPlans;
-          let i = index
-        "
-      >
-
-        <!-- SERIAL -->
-        <td class="serial-cell">
-
-          {{
-            (currentPage - 1) *
-            recordsPerPage +
-            i +
-            1
-          }}
-
-        </td>
-
-
-        <!-- PLAN NAME -->
-        <td class="plan-name-cell">
-
-          <span class="cell-text">
-            {{ rows.name || '-' }}
-          </span>
-
-        </td>
-
-
-        <!-- DESCRIPTION -->
-        <td class="description-cell">
-
-          <span
-            class="description-text"
-            [title]="rows.description || ''"
-          >
-            {{ rows.description || '-' }}
-          </span>
-
-        </td>
-
-
-        <!-- RATE -->
-        <td class="rate-cell">
-
-          {{ rows.rate ?? '-' }}
-
-        </td>
-
-
-        <!-- STATUS -->
-        <td class="status-cell">
-
-          <span
-            class="status-badge"
-            [ngClass]="
-              common.getStatusClass(rows.status)
-            "
-          >
-
-            {{
-              common.getStatusLabel(rows.status)
-            }}
-
-          </span>
-
-        </td>
-
-
-        <!-- ACTION -->
-        <td class="action-cell">
-
-          @if (viewPer === 'Y') {
-
-            <button
-              type="button"
-              class="action-button view-button"
-              (click)="viewPlan(rows.planId)"
-              title="View"
-            >
-
-              <mat-icon>
-                visibility
-              </mat-icon>
-
-            </button>
-
-          }
-
-
-          <ng-container
-            *ngIf="
-              rows.status === 1 ||
-              rows.status === 2
-            "
-          >
-
-            @if (editPer === 'Y') {
-
-              <button
-                type="button"
-                class="action-button edit-button"
-                (click)="editPlan(rows.planId)"
-                title="Edit"
-              >
-
-                <mat-icon>
-                  edit
-                </mat-icon>
-
-              </button>
-
-            }
-
-
-            @if (deletePer === 'Y') {
-
-              <button
-                type="button"
-                class="action-button delete-button"
-                (click)="onDeletePlan(rows.planId)"
-                title="Delete"
-              >
-
-                <mat-icon>
-                  delete
-                </mat-icon>
-
-              </button>
-
-            }
-
-          </ng-container>
-
-        </td>
-
-      </tr>
-
-
-      <!-- NO RECORDS -->
-
-      <tr
-        *ngIf="
-          !paginatedPlans ||
-          paginatedPlans.length === 0
-        "
-      >
-
-        <td
-          colspan="6"
-          class="no-records"
-        >
-
-          <mat-icon>
-            info_outline
-          </mat-icon>
-
-          <span>
-            No records found
-          </span>
-
-        </td>
-
-      </tr>
-
-    </tbody>
-
-  </table>
-
-</div>
-
+      <div class="table-wrapper">
+        <table class="designation-table">
+          <thead>
+            <tr>
+              <th class="serial-column">Sr. No.</th>
+
+              <th *ngFor="let col of columns" [class.sortable]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                <div class="column-header">
+                  <span>
+                    {{ col.label }}
+                  </span>
+
+                  <span *ngIf="col.sortable" class="sort-icons">
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
+
+              <th class="action-column">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let rows of paginatedPlans; let i = index">
+              <!-- SERIAL -->
+              <td class="serial-cell">
+                {{ (currentPage - 1) * recordsPerPage + i + 1 }}
+              </td>
+
+              <!-- PLAN NAME -->
+              <td class="plan-name-cell">
+                <span class="cell-text">
+                  {{ rows.name || '-' }}
+                </span>
+              </td>
+
+              <!-- DESCRIPTION -->
+              <td class="description-cell">
+                <span class="description-text" [title]="rows.description || ''">
+                  {{ rows.description || '-' }}
+                </span>
+              </td>
+
+              <!-- RATE -->
+              <td class="rate-cell">
+                {{ rows.rate ?? '-' }}
+              </td>
+
+              <!-- STATUS -->
+              <td class="status-cell">
+                <span class="status-badge" [ngClass]="common.getStatusClass(rows.status)">
+                  {{ common.getStatusLabel(rows.status) }}
+                </span>
+              </td>
+
+              <!-- ACTION -->
+              <td class="action-cell">
+                @if (viewPer === 'Y') {
+                  <button type="button" class="action-button view-button" (click)="viewPlan(rows.planId)" title="View">
+                    <mat-icon> visibility </mat-icon>
+                  </button>
+                }
+
+                <ng-container *ngIf="rows.status === 1 || rows.status === 2">
+                  @if (editPer === 'Y') {
+                    <button type="button" class="action-button edit-button" (click)="editPlan(rows.planId)" title="Edit">
+                      <mat-icon> edit </mat-icon>
+                    </button>
+                  }
+
+                  @if (deletePer === 'Y') {
+                    <button type="button" class="action-button delete-button" (click)="onDeletePlan(rows.planId)" title="Delete">
+                      <mat-icon> delete </mat-icon>
+                    </button>
+                  }
+                </ng-container>
+              </td>
+            </tr>
+
+            <!-- NO RECORDS -->
+
+            <tr *ngIf="!paginatedPlans || paginatedPlans.length === 0">
+              <td colspan="6" class="no-records">
+                <mat-icon> info_outline </mat-icon>
+
+                <span> No records found </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- Bottom Toolbar -->
 
       <div class="table-toolbar bottom-toolbar">
-
         <div class="record-summary">
           {{ recordSummary }}
         </div>
 
         <div class="pagination">
+          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">
-            « First
-          </button>
+          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-            ‹ Prev
-          </button>
-
-          <button *ngFor="let page of pages()" (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage">
+          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-            Next ›
-          </button>
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
 
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">
-            Last »
-          </button>
-
+          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
-
       </div>
-
     </div>
-
   </div>
-
 </div>

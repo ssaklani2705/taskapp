@@ -1,9 +1,4 @@
-import {
-  Component,
-  HostListener,
-  OnInit,
-  signal
-} from '@angular/core';
+import { Component, HostListener, OnInit, signal } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -18,9 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
-
 interface ApiTask {
-
   taskId: number;
 
   clientId: number;
@@ -53,19 +46,15 @@ interface ApiTask {
 
   closeRemarks: string | null;
 
-
   clientName: string;
   assignedUser: string;
 
   dueDateTime: string;
 
   assignedByUser: string;
-
 }
 
-
 interface DashboardResponse {
-
   myTasksToday: number;
 
   dueThisWeek: number;
@@ -86,9 +75,7 @@ interface DashboardResponse {
     count: number;
     tasks: ApiTask[];
   };
-
 }
-
 
 interface Task {
   title: string;
@@ -98,81 +85,47 @@ interface Task {
   startDay: string;
   dueDate: string;
   assignedByUser: string;
-  type:
-  | 'high'
-  | 'medium'
-  | 'low'
-  | 'progress'
-  | 'done';
+  type: 'high' | 'medium' | 'low' | 'progress' | 'done';
   progress?: number;
-
 }
 
-
 interface TaskColumn {
-
   title: string;
 
   count: number;
 
   tasks: Task[];
-
 }
 
-
-
 @Component({
-
   selector: 'app-employee-dashboard',
 
   standalone: true,
 
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatCardModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    FormsModule
-  ],
+  imports: [CommonModule, MatButtonModule, MatCardModule, MatIconModule, MatTooltipModule, MatFormFieldModule, MatSelectModule, FormsModule],
 
   templateUrl: './employee-dashboard.html',
 
-  styleUrl: './employee-dashboard.scss'
-
+  styleUrl: './employee-dashboard.scss',
 })
 export class EmployeeDashboard implements OnInit {
-
   readonly todayTasks = signal(0);
 
-
-  readonly employeeName =
-    signal('Anil Kumar');
-
+  readonly employeeName = signal('Anil Kumar');
 
   // readonly employeeRole =
   //   signal('Employee');
 
+  readonly checkedInTime = signal('09:02');
 
-  readonly checkedInTime =
-    signal('09:02');
+  readonly stats = signal<any[]>([]);
 
-
-  readonly stats =
-    signal<any[]>([]);
-
-
-  readonly columns =
-    signal<TaskColumn[]>([]);
-
+  readonly columns = signal<TaskColumn[]>([]);
 
   constructor(
     private dataProviderService: DataProviderService,
     private router: Router,
-  ) { }
-
+  ) {}
 
   // ======================================================
   // INIT
@@ -186,158 +139,103 @@ export class EmployeeDashboard implements OnInit {
     this.username = sessionStorage.getItem('username') || 'Society 123';
     this.designationName = sessionStorage.getItem('designationName')?.trim() || '-';
 
-    this.isAdmin =
-      sessionStorage.getItem(
-        'isAdmin'
-      );
+    this.isAdmin = sessionStorage.getItem('isAdmin');
 
-    this.userId =
-      sessionStorage.getItem(
-        'userId'
-      );
+    this.userId = sessionStorage.getItem('userId');
 
-    this.loginType =
-      sessionStorage.getItem('loginType') || 'other';
+    this.loginType = sessionStorage.getItem('loginType') || 'other';
 
     this.getDashboardClients();
     this.loadDashboard();
-
   }
-
 
   // ======================================================
   // LOAD DASHBOARD
   // ======================================================
 
   loadDashboard(): void {
+    const userId = Number(sessionStorage.getItem('userId')) || 1;
 
-    const userId =
-      Number(sessionStorage.getItem('userId')) || 1;
-
-    this.dataProviderService
-      .getDashboard(userId, this.isAdmin, this.selectedClientId)
-      .subscribe({
-
-        next: (res: DashboardResponse) => {
-          console.log(
-            'Dashboard response:',
-            res
-          );
-          if (!res) {
-            return;
-          }
-          // Today's task count
-          this.todayTasks.set(res.myTasksToday);
-          // ----------------------------------------------
-          // STATISTICS
-          // ----------------------------------------------
-          this.stats.set([
-            {
-              label: 'My tasks today',
-              value: res.myTasksToday,
-              color: 'normal'
-            },
-
-            {
-              label: 'Due this week',
-              value: res.dueThisWeek,
-              color: 'normal'
-            },
-
-            {
-              label: 'Overdue',
-              value: res.overdue,
-              color: 'danger'
-            }
-
-          ]);
-
-
-          // ----------------------------------------------
-          // TASK COLUMNS
-          // ----------------------------------------------
-
-          this.columns.set([
-
-            {
-              title: 'To do',
-
-              count: res.todo?.count || 0,
-
-              tasks:
-                this.mapTasks(
-                  res.todo?.tasks || [],
-                  'todo'
-                )
-
-            },
-
-            {
-              title: 'In progress',
-
-              count:
-                res.inProgress?.count || 0,
-
-              tasks:
-                this.mapTasks(
-                  res.inProgress?.tasks || [],
-                  'progress'
-                )
-
-            },
-
-            {
-              title: 'Completed Tasks',
-
-              count:
-                res.done?.count || 0,
-
-              tasks:
-                this.mapTasks(
-                  res.done?.tasks || [],
-                  'done'
-                )
-
-            }
-
-          ]);
-
-        },
-
-
-        error: (error) => {
-
-          console.error(
-            'Error loading dashboard:',
-            error
-          );
-
+    this.dataProviderService.getDashboard(userId, this.isAdmin, this.selectedClientId).subscribe({
+      next: (res: DashboardResponse) => {
+        console.log('Dashboard response:', res);
+        if (!res) {
+          return;
         }
+        // Today's task count
+        this.todayTasks.set(res.myTasksToday);
+        // ----------------------------------------------
+        // STATISTICS
+        // ----------------------------------------------
+        this.stats.set([
+          {
+            label: 'My tasks today',
+            value: res.myTasksToday,
+            color: 'normal',
+          },
 
-      });
+          {
+            label: 'Due this week',
+            value: res.dueThisWeek,
+            color: 'normal',
+          },
 
+          {
+            label: 'Overdue',
+            value: res.overdue,
+            color: 'danger',
+          },
+        ]);
+
+        // ----------------------------------------------
+        // TASK COLUMNS
+        // ----------------------------------------------
+
+        this.columns.set([
+          {
+            title: 'To do',
+
+            count: res.todo?.count || 0,
+
+            tasks: this.mapTasks(res.todo?.tasks || [], 'todo'),
+          },
+
+          {
+            title: 'In progress',
+
+            count: res.inProgress?.count || 0,
+
+            tasks: this.mapTasks(res.inProgress?.tasks || [], 'progress'),
+          },
+
+          {
+            title: 'Completed Tasks',
+
+            count: res.done?.count || 0,
+
+            tasks: this.mapTasks(res.done?.tasks || [], 'done'),
+          },
+        ]);
+      },
+
+      error: (error) => {
+        console.error('Error loading dashboard:', error);
+      },
+    });
   }
-
 
   // ======================================================
   // MAP API TASKS
   // ======================================================
 
-  private mapTasks(
-    tasks: ApiTask[],
-    category: 'todo' | 'progress' | 'done'
-  ): Task[] {
-
-    return tasks.map(task => {
-
+  private mapTasks(tasks: ApiTask[], category: 'todo' | 'progress' | 'done'): Task[] {
+    return tasks.map((task) => {
       // -----------------------------------------------
       // DONE
       // -----------------------------------------------
 
       if (category === 'done') {
-
         return {
-
           title: task.title,
 
           subtitle: 'Completed',
@@ -351,27 +249,19 @@ export class EmployeeDashboard implements OnInit {
 
           dueDate: this.formatDate(task.dueDateTime),
           // type: 'done',
-          type:
-            this.getPriorityType(task.priority)
-
-
+          type: this.getPriorityType(task.priority),
         };
-
       }
-
 
       // -----------------------------------------------
       // IN PROGRESS
       // -----------------------------------------------
 
       if (category === 'progress') {
-
         return {
-
           title: task.title,
 
-          subtitle:
-            `${task.progress || 0}% complete`,
+          subtitle: `${task.progress || 0}% complete`,
 
           clientName: task.clientName || '',
 
@@ -383,27 +273,20 @@ export class EmployeeDashboard implements OnInit {
           dueDate: this.formatDate(task.dueDateTime),
 
           // type: 'progress',
-          type:
-            this.getPriorityType(task.priority),
+          type: this.getPriorityType(task.priority),
 
-          progress:
-            task.progress || 0
-
+          progress: task.progress || 0,
         };
-
       }
-
 
       // -----------------------------------------------
       // TODO
       // -----------------------------------------------
 
       return {
-
         title: task.title,
 
-        subtitle:
-          `Due ${this.formatDate(task.date)} · ${this.formatPriority(task.priority)}`,
+        subtitle: `Due ${this.formatDate(task.date)} · ${this.formatPriority(task.priority)}`,
 
         clientName: task.clientName || '',
 
@@ -414,32 +297,19 @@ export class EmployeeDashboard implements OnInit {
 
         dueDate: this.formatDate(task.dueDateTime),
 
-        type:
-          this.getPriorityType(task.priority)
-
+        type: this.getPriorityType(task.priority),
       };
-
     });
-
   }
-
 
   // ======================================================
   // PRIORITY TYPE
   // ======================================================
 
-  private getPriorityType(
-    priority: string
-  ): 'high' | 'medium' | 'low' {
-
-    const normalized =
-      (priority || '')
-        .toString()
-        .trim()
-        .toUpperCase();
+  private getPriorityType(priority: string): 'high' | 'medium' | 'low' {
+    const normalized = (priority || '').toString().trim().toUpperCase();
 
     switch (normalized) {
-
       case 'HIGH':
       case 'H':
       case '1':
@@ -457,39 +327,22 @@ export class EmployeeDashboard implements OnInit {
         return 'low';
 
       default:
-        console.warn(
-          'Unmapped task priority value, defaulting to low:',
-          priority
-        );
+        console.warn('Unmapped task priority value, defaulting to low:', priority);
         return 'low';
-
     }
-
   }
-
 
   // ======================================================
   // PRIORITY LABEL
   // ======================================================
 
-  private formatPriority(
-    priority: string
-  ): string {
-
+  private formatPriority(priority: string): string {
     if (!priority) {
       return '';
     }
 
-    return priority
-      .charAt(0)
-      .toUpperCase()
-      +
-      priority
-        .slice(1)
-        .toLowerCase();
-
+    return priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
   }
-
 
   // ======================================================
   // DATE FORMAT
@@ -512,112 +365,68 @@ export class EmployeeDashboard implements OnInit {
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: true
+      hour12: true,
     });
   }
-
 
   // ======================================================
   // CHECK IN
   // ======================================================
 
   checkIn(): void {
-
-    console.log(
-      `Checked in at ${this.checkedInTime()}`
-    );
-
+    console.log(`Checked in at ${this.checkedInTime()}`);
   }
-
 
   // ======================================================
   // HELPDESK
   // ======================================================
 
   raiseHelpdeskTicket(): void {
-
-    console.log(
-      'Helpdesk ticket requested'
-    );
-
+    console.log('Helpdesk ticket requested');
   }
-
 
   // ======================================================
   // LEAVE
   // ======================================================
 
   applyLeave(): void {
-
-    console.log(
-      'Leave application opened'
-    );
-
+    console.log('Leave application opened');
   }
-
 
   // =========================================================
   // GET INITIALS
   // =========================================================
 
-  getInitials(
-    name: string
-  ): string {
-
+  getInitials(name: string): string {
     if (!name) {
       return '';
     }
 
-
-    const parts =
-      name
-        .trim()
-        .split(/\s+/);
-
+    const parts = name.trim().split(/\s+/);
 
     if (parts.length === 1) {
-
-      return parts[0]
-        .substring(0, 2)
-        .toUpperCase();
+      return parts[0].substring(0, 2).toUpperCase();
     }
 
-
-    return (
-      parts[0].charAt(0) +
-      parts[parts.length - 1].charAt(0)
-    ).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
   }
-
 
   // =========================================================
   // GET SHORT NAME
   // =========================================================
 
-  getShortName(
-    name: string
-  ): string {
-
+  getShortName(name: string): string {
     if (!name) {
       return '';
     }
 
-
-    const parts =
-      name
-        .trim()
-        .split(/\s+/);
-
+    const parts = name.trim().split(/\s+/);
 
     if (parts.length === 1) {
-
       return parts[0];
     }
 
-
-    const lastName =
-      parts[parts.length - 1];
-
+    const lastName = parts[parts.length - 1];
 
     // ---------------------------------------------
     // Two words
@@ -626,10 +435,8 @@ export class EmployeeDashboard implements OnInit {
     // ---------------------------------------------
 
     if (parts.length === 2) {
-
       return `${parts[0].charAt(0).toUpperCase()}. ${lastName}`;
     }
-
 
     // ---------------------------------------------
     // Three or more words
@@ -637,17 +444,10 @@ export class EmployeeDashboard implements OnInit {
     // A.C. Thakur
     // ---------------------------------------------
 
-    const initials =
-      parts
-        .slice(0, -1)
-        .map(
-          part =>
-            part
-              .charAt(0)
-              .toUpperCase()
-        )
-        .join('.');
-
+    const initials = parts
+      .slice(0, -1)
+      .map((part) => part.charAt(0).toUpperCase())
+      .join('.');
 
     return `${initials}. ${lastName}`;
   }
@@ -656,54 +456,34 @@ export class EmployeeDashboard implements OnInit {
   clients: any[] = [];
   selectedClientId: any = 0;
   getDashboardClients(): void {
+    this.dataProviderService.getDashboardClients(this.userId, this.isAdmin, this.loginType, this.selectedClientId).subscribe({
+      next: (res: any[]) => {
+        this.clients = res;
+        if (this.selectedClientId > 0) {
+          const client = this.clients.find((x) => x.clientId == this.selectedClientId);
 
-    this.dataProviderService
-      .getDashboardClients(
-        this.userId,
-        this.isAdmin,
-        this.loginType,
-        this.selectedClientId
-      )
-      .subscribe({
-        next: (res: any[]) => {
-          this.clients = res;
-          if (this.selectedClientId > 0) {
-
-            const client =
-              this.clients.find(
-                x => x.clientId == this.selectedClientId
-              );
-
-            if (client) {
-              this.clientSearchText =
-                client.clientName;
-            }
+          if (client) {
+            this.clientSearchText = client.clientName;
           }
-        },
-        error: (error) => {
-          console.error('Error loading dashboard clients:', error);
-          this.clients = [];
         }
-      });
+      },
+      error: (error) => {
+        console.error('Error loading dashboard clients:', error);
+        this.clients = [];
+      },
+    });
   }
 
-
   onClientChange(clientId: number | null): void {
-
     this.selectedClientId = clientId;
 
-    console.log(
-      'Selected Client ID:',
-      clientId
-    );
+    console.log('Selected Client ID:', clientId);
 
     // Reload dashboard with selected client
     this.loadDashboard();
   }
 
-
   openTaskIndex(stat: any): void {
-
     let taskType = '';
 
     if (stat.label === 'My tasks today') {
@@ -714,14 +494,11 @@ export class EmployeeDashboard implements OnInit {
       taskType = 'overdue';
     }
 
-    this.router.navigate(
-      ['/task-index'],
-      {
-        queryParams: {
-          taskType: taskType
-        }
-      }
-    );
+    this.router.navigate(['/task-index'], {
+      queryParams: {
+        taskType: taskType,
+      },
+    });
   }
 
   clientSearchText = '';
@@ -729,44 +506,27 @@ export class EmployeeDashboard implements OnInit {
   filteredClients: any[] = [];
 
   filterClients(): void {
-
-    const search =
-      this.clientSearchText
-        ?.trim()
-        .toLowerCase();
+    const search = this.clientSearchText?.trim().toLowerCase();
 
     if (!search || search.length < 3) {
-
       this.filteredClients = [];
       this.showClientDropdown = false;
 
       return;
     }
 
-    this.filteredClients =
-      this.clients.filter(
-        (client: any) =>
-          client.clientName &&
-          client.clientName
-            .toLowerCase()
-            .includes(search)
-      );
+    this.filteredClients = this.clients.filter((client: any) => client.clientName && client.clientName.toLowerCase().includes(search));
 
     this.showClientDropdown = true;
   }
 
   selectClient(client: any): void {
-
     if (!client) {
-
       this.selectedClientId = 0;
       this.clientSearchText = '';
-
     } else {
-
       this.selectedClientId = client.clientId;
       this.clientSearchText = client.clientName;
-
     }
 
     this.showClientDropdown = false;
@@ -775,7 +535,6 @@ export class EmployeeDashboard implements OnInit {
   }
 
   clearClientFilter(): void {
-
     this.clientSearchText = '';
     this.selectedClientId = 0;
     this.filteredClients = [];
@@ -786,15 +545,9 @@ export class EmployeeDashboard implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
 
-    const target =
-      event.target as HTMLElement;
-
-    if (
-      !target.closest(
-        '.dashboard-client-container'
-      )
-    ) {
+    if (!target.closest('.dashboard-client-container')) {
       this.showClientDropdown = false;
     }
   }
