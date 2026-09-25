@@ -2007,6 +2007,7 @@ export class TaskIndex {
   //   this.onchangeloadUserDropdownData(task);
   // }
 
+  //old working
   // canDisableChangeManager(task: any): boolean {
   //   console.log(task);
   //    // Status 5 => closed, locked for everyone, no exceptions (including admin)
@@ -2041,29 +2042,72 @@ export class TaskIndex {
   //   );
   // }
 
+  // canDisableChangeManager(task: any): boolean {
+  //   // Status 5 => closed, locked for everyone, no exceptions
+  //   if (task.taskStatus == 5) {
+  //     return true;
+  //   }
+
+  //   // Admin can perform any action
+  //   if (this.isAdmin === 'Y') {
+  //     return false;
+  //   }
+
+  //   const selfAssigned = task.addedBy == task.assignedTo;
+
+  //   if (selfAssigned) {
+  //     return false;
+  //   }
+
+  //   const canAct =
+  //     (task.addedBy == this.userId && (task.taskStatus == 1 || task.taskStatus == 3)) ||
+  //     (task.assignedTo == this.userId && (task.taskStatus == 2 || task.taskStatus == 4));
+
+  //   // Anyone who isn't addedBy/assignedTo with a matching status
+  //   // is locked out by default.
+  //   return !canAct;
+  // }
+
+
   canDisableChangeManager(task: any): boolean {
-    // Status 5 => closed, locked for everyone, no exceptions
-    if (task.taskStatus == 5) {
-      return true;
-    }
 
-    // Admin can perform any action
-    if (this.isAdmin === 'Y') {
-      return false;
-    }
+  // Status 5 => closed, locked for everyone, no exceptions (including admin)
+  if (task.taskStatus == 5) {
+    return true;
+  }
 
-    const selfAssigned = task.addedBy == task.assignedTo;
+  // Admin can perform any action
+  if (this.isAdmin === 'Y') {
+    return false;
+  }
 
-    if (selfAssigned) {
-      return false;
-    }
+  const selfAssigned = task.addedBy == task.assignedTo;
+
+  if (selfAssigned) {
+    return false;
+  }
+
+  // ============================================================
+  // MANAGER
+  // ============================================================
+  if (this.loginType === 'manager') {
 
     const canAct = (task.addedBy == this.userId && (task.taskStatus == 1 || task.taskStatus == 3)) || (task.assignedTo == this.userId && (task.taskStatus == 2 || task.taskStatus == 4));
 
-    // Anyone who isn't addedBy/assignedTo with a matching status
-    // is locked out by default.
-    return !canAct;
+    return canAct;
   }
+
+  // ============================================================
+  // EMPLOYEE
+  // ============================================================
+  return (
+    (task.addedBy == this.userId &&
+      (task.taskStatus == 1 || task.taskStatus == 3)) ||
+
+    (task.assignedTo == this.userId &&
+      (task.taskStatus == 2 || task.taskStatus == 4))
+  );
+}
 
   isStatusRadioDisabled(task: any): boolean {
     const selfAssigned = task.addedBy == this.userId && task.assignedTo == this.userId;
