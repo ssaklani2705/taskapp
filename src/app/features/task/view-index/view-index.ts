@@ -18,14 +18,7 @@ import { environment } from '../../../../environments/environment';
 
   standalone: true,
 
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatDividerModule,
-    MatTableModule,
-  ],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, MatDividerModule, MatTableModule],
 
   templateUrl: './view-index.html',
   styleUrl: './view-index.scss',
@@ -118,52 +111,46 @@ export class ViewIndex implements OnInit {
   // =========================================================
 
   ngOnInit(): void {
-    // -------------------------------------------------------
-    // GET TASK ID FROM ROUTE
-    // Example:
-    // /task/view/5
-    // -------------------------------------------------------
-
     const id = this.route.snapshot.paramMap.get('taskId');
-
     if (id) {
       this.taskId = Number(id);
     }
 
     // -------------------------------------------------------
-    // GET QUERY PARAMETERS
+    // GET NAVIGATION STATE
     // -------------------------------------------------------
 
-    const queryParams = this.route.snapshot.queryParamMap;
+    const navigation = this.router.getCurrentNavigation();
 
-    this.currentPage = Number(queryParams.get('currentPage')) || 1;
+    const state = navigation?.extras?.state || (history.state && Object.keys(history.state).length ? history.state : null);
 
-    this.searchText = queryParams.get('searchText') || '';
+    if (state) {
+      this.currentPage = state.currentPage || 1;
 
-    this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
+      this.searchText = state.searchText || '';
 
-    this.page = Number(queryParams.get('page')) || this.currentPage - 1;
+      this.statusIndex = state.statusIndex || 0;
 
-    this.size = Number(queryParams.get('size')) || 5;
+      this.size = state.size || 5;
 
-    this.taskStatusIds = queryParams.get('taskStatusIds') || '';
+      this.clientId = state.clientId || '';
 
-    // -------- ADD THESE --------
-    this.clientId = queryParams.get('clientId') || '';
+      this.taskCategoryId = state.taskCategoryId || '';
 
-    this.taskCategoryId = queryParams.get('taskCategoryId') || '';
+      this.assignedTo = state.assignedTo || '';
 
-    this.assignedTo = queryParams.get('assignedTo') || '';
+      this.priority = state.priority || '';
 
-    this.priority = queryParams.get('priority') || '';
+      this.fromDate = state.fromDate || '';
 
-    this.fromDate = queryParams.get('fromDate') || '';
+      this.toDate = state.toDate || '';
 
-    this.toDate = queryParams.get('toDate') || '';
-    this.dashboardFilter = queryParams.get('taskType') || '';
-    // -------------------------------------------------------
-    // LOAD TASK
-    // -------------------------------------------------------
+      this.taskStatusIds = Array.isArray(state.taskStatusIds) ? state.taskStatusIds.join(',') : state.taskStatusIds || '';
+
+      this.dashboardFilter = state.taskType || '';
+
+      this.page = this.currentPage - 1;
+    }
 
     if (this.taskId) {
       this.getTaskDetails();
@@ -258,10 +245,7 @@ export class ViewIndex implements OnInit {
       return '-';
     }
 
-    const category = this.taskCategories.find(
-      (item: any) =>
-        Number(item.taskCategoryId ?? item.categoryId ?? item.id) === Number(categoryId),
-    );
+    const category = this.taskCategories.find((item: any) => Number(item.taskCategoryId ?? item.categoryId ?? item.id) === Number(categoryId));
 
     if (category) {
       return category.name || category.categoryName || category.taskCategoryName || '-';
@@ -271,11 +255,7 @@ export class ViewIndex implements OnInit {
     // IF API ALREADY RETURNS CATEGORY NAME
     // -------------------------------------------------------
 
-    if (
-      this.task &&
-      this.task.taskCategoryName &&
-      Number(this.task.taskCategoryId) === Number(categoryId)
-    ) {
+    if (this.task && this.task.taskCategoryName && Number(this.task.taskCategoryId) === Number(categoryId)) {
       return this.task.taskCategoryName;
     }
 
@@ -435,9 +415,7 @@ export class ViewIndex implements OnInit {
 
     const hourString = String(hours).padStart(2, '0');
 
-    return (
-      day + '-' + month + '-' + year + ' ' + hourString + ':' + minutes + ':' + seconds + ' ' + ampm
-    );
+    return day + '-' + month + '-' + year + ' ' + hourString + ':' + minutes + ':' + seconds + ' ' + ampm;
   }
 
   // =========================================================
@@ -664,28 +642,22 @@ export class ViewIndex implements OnInit {
 
   backToIndexPage(): void {
     this.router.navigate(['/task-index'], {
-      queryParams: {
+      state: {
         currentPage: this.currentPage,
-
         statusIndex: this.statusIndex,
-
         searchText: this.searchText,
-
         size: this.size || 5,
 
-        taskStatusIds: this.taskStatusIds || null,
-
         clientId: this.clientId || null,
-
         taskCategoryId: this.taskCategoryId || null,
-
         assignedTo: this.assignedTo || null,
-
         priority: this.priority || null,
 
         fromDate: this.fromDate || null,
-
         toDate: this.toDate || null,
+
+        taskStatusIds: this.taskStatusIds ? this.taskStatusIds.split(',') : [],
+
         taskType: this.dashboardFilter,
       },
     });
@@ -724,12 +696,7 @@ export class ViewIndex implements OnInit {
   }
 
   get hasAttachments(): boolean {
-    return !!(
-      this.task?.fileName1 ||
-      this.task?.fileName2 ||
-      this.task?.fileName3 ||
-      this.task?.fileName4
-    );
+    return !!(this.task?.fileName1 || this.task?.fileName2 || this.task?.fileName3 || this.task?.fileName4);
   }
 
   getTaskStatusClass(status: number | string): string {
