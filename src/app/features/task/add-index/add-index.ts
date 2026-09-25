@@ -1,14 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 
-import {
-  Component,
-  ElementRef,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 
@@ -31,11 +23,7 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 import { MatIconModule } from '@angular/material/icon';
-import {
-  OwlDateTimeModule,
-  OWL_DATE_TIME_FORMATS,
-  OWL_DATE_TIME_LOCALE,
-} from '@danielmoncada/angular-datetime-picker';
+import { OwlDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
 
 import { OwlMomentDateTimeModule } from '@danielmoncada/angular-datetime-picker-moment-adapter';
 import moment from 'moment';
@@ -203,42 +191,42 @@ export class AddIndexComponent implements OnInit {
   // ============================================================
   dashboardFilter: string = '';
   ngOnInit(): void {
+  
     // ----------------------------------------------------------
-    // QUERY PARAMETERS
+    // NAVIGATION STATE
     // ----------------------------------------------------------
 
-    const queryParams = this.route.snapshot.queryParamMap;
+    const navigation = this.router.getCurrentNavigation();
 
-    this.currentPage = Number(queryParams.get('currentPage')) || 1;
+    const state = navigation?.extras?.state || (history.state && Object.keys(history.state).length ? history.state : null);
 
-    this.searchText = queryParams.get('searchText') || '';
+    if (state) {
+      this.currentPage = state.currentPage || 1;
 
-    this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
+      this.searchText = state.searchText || '';
 
-    this.page = Number(queryParams.get('page')) || this.currentPage - 1;
+      this.statusIndex = state.statusIndex || 0;
 
-    this.size = Number(queryParams.get('size')) || 5;
+      this.size = state.size || 5;
 
-    this.taskStatusIds = queryParams.get('taskStatusIds') || '';
+      this.clientId = state.clientId || '';
 
-    // -------- ADD THESE --------
-    this.clientId = queryParams.get('clientId') || '';
+      this.taskCategoryId = state.taskCategoryId || '';
 
-    this.taskCategoryId = queryParams.get('taskCategoryId') || '';
+      this.assignedTo = state.assignedTo || '';
 
-    this.assignedTo = queryParams.get('assignedTo') || '';
+      this.priority = state.priority || '';
 
-    this.priority = queryParams.get('priority') || '';
+      this.fromDate = state.fromDate || '';
 
-    this.fromDate = queryParams.get('fromDate') || '';
+      this.toDate = state.toDate || '';
 
-    this.toDate = queryParams.get('toDate') || '';
+      this.taskStatusIds = Array.isArray(state.taskStatusIds) ? state.taskStatusIds.join(',') : state.taskStatusIds || '';
 
-    this.dashboardFilter = queryParams.get('taskType') || '';
+      this.dashboardFilter = state.taskType || '';
 
-    // ----------------------------------------------------------
-    // USER ID
-    // ----------------------------------------------------------
+      this.page = this.currentPage - 1;
+    }
 
     if (isPlatformBrowser(this.platformId)) {
       this.userId = sessionStorage.getItem('userId');
@@ -248,20 +236,9 @@ export class AddIndexComponent implements OnInit {
       this.loginType = sessionStorage.getItem('loginType') || 'other';
     }
 
-    // ----------------------------------------------------------
-    // LOAD DROPDOWNS
-    // ----------------------------------------------------------
     this.loadDropdownData();
 
-    // ----------------------------------------------------------
-    // GET TASK ID
-    // ----------------------------------------------------------
-
     const taskId = this.route.snapshot.params['taskId'];
-
-    // ----------------------------------------------------------
-    // EDIT
-    // ----------------------------------------------------------
 
     if (taskId) {
       this.isEditMode = true;
@@ -302,6 +279,7 @@ export class AddIndexComponent implements OnInit {
         taskStatusId: null,
       };
     }
+    
   }
 
   // ============================================================
@@ -326,9 +304,7 @@ export class AddIndexComponent implements OnInit {
           }
 
           if (this.clients?.length) {
-            const selectedClient = this.clients.find(
-              (x: any) => Number(x.clientId) === Number(this.task.clientId),
-            );
+            const selectedClient = this.clients.find((x: any) => Number(x.clientId) === Number(this.task.clientId));
 
             if (selectedClient) {
               this.clientSearchText = selectedClient.name;
@@ -893,28 +869,22 @@ export class AddIndexComponent implements OnInit {
 
   backToIndexPage(): void {
     this.router.navigate(['/task-index'], {
-      queryParams: {
+      state: {
         currentPage: this.currentPage,
-
         statusIndex: this.statusIndex,
-
         searchText: this.searchText,
-
         size: this.size || 5,
 
-        taskStatusIds: this.taskStatusIds || null,
-
         clientId: this.clientId || null,
-
         taskCategoryId: this.taskCategoryId || null,
-
         assignedTo: this.assignedTo || null,
-
         priority: this.priority || null,
 
         fromDate: this.fromDate || null,
-
         toDate: this.toDate || null,
+
+        taskStatusIds: this.taskStatusIds ? this.taskStatusIds.split(',') : [],
+
         taskType: this.dashboardFilter,
       },
     });
@@ -922,56 +892,41 @@ export class AddIndexComponent implements OnInit {
 
   onchangeloadDropdownData(): void {
     // alert(this.task.clientId);
-    this.dataprovider
-      .changesClientIdgetTaskFilterData(
-        this.isAdmin,
-        this.userId,
-        this.loginType,
-        this.task.clientId,
-      )
-      .subscribe({
-        next: (res: any) => {
-          const data = res?.data || res;
-          // this.clients = data?.clients || [];
-          this.taskCategories = data?.taskCategories || [];
-          // this.users = data?.assignedUsers || [];
-        },
+    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId).subscribe({
+      next: (res: any) => {
+        const data = res?.data || res;
+        // this.clients = data?.clients || [];
+        this.taskCategories = data?.taskCategories || [];
+        // this.users = data?.assignedUsers || [];
+      },
 
-        error: (error: any) => {
-          console.error('Error loading task dropdown data:', error);
+      error: (error: any) => {
+        console.error('Error loading task dropdown data:', error);
 
-          // this.clients = [];
-          this.taskCategories = [];
-          // this.users = [];
+        // this.clients = [];
+        this.taskCategories = [];
+        // this.users = [];
 
-          // Swal.fire(
-          //   'Error',
-          //   'Unable to load task dropdown data.',
-          //   'error'
-          // );
-        },
-      });
+        // Swal.fire(
+        //   'Error',
+        //   'Unable to load task dropdown data.',
+        //   'error'
+        // );
+      },
+    });
   }
 
   onchangeloadUserDropdownData(): void {
-    this.dataprovider
-      .changesCategoryIdgetUserFilterData(
-        this.isAdmin,
-        this.userId,
-        this.loginType,
-        this.task.clientId,
-        this.task.taskCategoryId,
-      )
-      .subscribe({
-        next: (res: any) => {
-          const data = res?.data || res;
-          this.users = data?.assignedUsers || [];
-        },
-        error: (error: any) => {
-          console.error('Error loading task dropdown data:', error);
-          this.users = [];
-        },
-      });
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId).subscribe({
+      next: (res: any) => {
+        const data = res?.data || res;
+        this.users = data?.assignedUsers || [];
+      },
+      error: (error: any) => {
+        console.error('Error loading task dropdown data:', error);
+        this.users = [];
+      },
+    });
   }
 
   loadDropdownData(): void {
@@ -982,9 +937,7 @@ export class AddIndexComponent implements OnInit {
         this.clients = data?.clients || [];
         this.filteredClients = [...this.clients];
         if (this.task.clientId) {
-          const selectedClient = this.clients.find(
-            (x: any) => Number(x.clientId) === Number(this.task.clientId),
-          );
+          const selectedClient = this.clients.find((x: any) => Number(x.clientId) === Number(this.task.clientId));
 
           if (selectedClient) {
             this.clientSearchText = selectedClient.name;
@@ -1048,9 +1001,7 @@ export class AddIndexComponent implements OnInit {
       return;
     }
 
-    this.filteredClients = this.clients.filter((client) =>
-      client.name.toLowerCase().includes(search),
-    );
+    this.filteredClients = this.clients.filter((client) => client.name.toLowerCase().includes(search));
 
     this.showClientDropdown = true;
   }
