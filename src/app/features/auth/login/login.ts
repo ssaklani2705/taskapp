@@ -1,10 +1,6 @@
 import { Component, inject } from '@angular/core';
 
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
@@ -25,7 +21,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../core/services/auth';
 import { LoginService } from '../../../service/login.service';
 
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -39,23 +34,19 @@ import { LoginService } from '../../../service/login.service';
     MatInputModule,
     MatButtonModule,
     MatCheckboxModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
 
   templateUrl: './login.html',
 
-  styleUrl: './login.scss'
+  styleUrl: './login.scss',
 })
 export class Login {
-
   private readonly fb = inject(FormBuilder);
 
-  private readonly authService =
-    inject(AuthService);
+  private readonly authService = inject(AuthService);
 
-  private readonly router =
-    inject(Router);
-
+  private readonly router = inject(Router);
 
   /* =====================================================
      LOGIN STATE
@@ -67,7 +58,6 @@ export class Login {
 
   hidePassword = true;
 
-
   /* =====================================================
      CAPTCHA
   ===================================================== */
@@ -76,41 +66,23 @@ export class Login {
 
   captchaError = false;
 
-
   /* =====================================================
      LOGIN FORM
   ===================================================== */
 
   loginForm = this.fb.nonNullable.group({
+    username: ['', Validators.required],
 
-    username: [
-      '',
-      Validators.required
-    ],
+    password: ['', Validators.required],
 
-    password: [
-      '',
-      Validators.required
-    ],
+    captcha: ['', Validators.required],
 
-    captcha: [
-      '',
-      Validators.required
-    ],
-
-    rememberMe: [
-      false
-    ]
-
+    rememberMe: [false],
   });
 
-
-  constructor( private loginService: LoginService) {
-
+  constructor(private loginService: LoginService) {
     this.loadCaptcha();
-
   }
-
 
   /* =====================================================
      CAPTCHA GENERATION
@@ -150,250 +122,166 @@ export class Login {
       next: (res: { success: boolean; message: string; data: string }) => {
         if (res.success) {
           this.captchaText = res.data;
-      
         }
       },
       error: (err: any) => {
         console.error('Error loading captcha:', err);
-      }
+      },
     });
   }
-
 
   /* =====================================================
      CAPTCHA VALIDATION
   ===================================================== */
 
   validateCaptcha(): boolean {
-
-    const enteredCaptcha =
-      this.loginForm.controls.captcha
-        .value
-        .trim()
-        .toUpperCase();
-
+    const enteredCaptcha = this.loginForm.controls.captcha.value.trim().toUpperCase();
 
     if (!enteredCaptcha) {
-
       this.captchaError = true;
 
       return false;
-
     }
-
 
     if (enteredCaptcha !== this.captchaText) {
-
       this.captchaError = true;
 
       return false;
-
     }
-
 
     this.captchaError = false;
 
     return true;
-
   }
-
 
   /* =====================================================
      CAPTCHA INPUT CHANGE
   ===================================================== */
 
   onCaptchaInput(): void {
-
     this.captchaError = false;
-
   }
-
 
   /* =====================================================
      LOGIN
   ===================================================== */
 
-  
-onLogin(): void {
-  this.errorMessage = '';
-  this.captchaError = false;
+  onLogin(): void {
+    this.errorMessage = '';
+    this.captchaError = false;
 
-  // Validate form
-  if (this.loginForm.invalid) {
-    this.loginForm.markAllAsTouched();
-    return;
-  }
+    // Validate form
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
 
-  // Validate CAPTCHA
-  if (!this.validateCaptcha()) {
-    this.loginForm.controls.captcha.setValue('');
-    return;
-  }
+    // Validate CAPTCHA
+    if (!this.validateCaptcha()) {
+      this.loginForm.controls.captcha.setValue('');
+      return;
+    }
 
-  this.loading = true;
- const loginType = 'other'; // manager / other
-  const loginPayload = {
-     logintype: loginType,
-    // logintype:'other',
-    username: this.loginForm.controls.username.value
-      ?.trim()
-      .toLowerCase(),
+    this.loading = true;
+    const loginType = 'other'; // manager / other
+    const loginPayload = {
+      logintype: loginType,
+      // logintype:'other',
+      username: this.loginForm.controls.username.value?.trim().toLowerCase(),
 
-    password: this.loginForm.controls.password.value
-      ?.trim(),
+      password: this.loginForm.controls.password.value?.trim(),
 
-    captcha: this.loginForm.controls.captcha.value
-      ?.trim()
-      .toUpperCase(),
+      captcha: this.loginForm.controls.captcha.value?.trim().toUpperCase(),
 
-    captchaAns: this.captchaText
-  };
+      captchaAns: this.captchaText,
+    };
 
-  this.authService.login(loginPayload).subscribe({
+    this.authService.login(loginPayload).subscribe({
+      next: (res: any) => {
+        this.loading = false;
 
-    next: (res: any) => {
+        console.log('LOGIN RESPONSE:', res);
 
-      this.loading = false;
+        if (res.success) {
+          // ==========================================
+          // SAVE SESSION - SAME AS OLD APPLICATION
+          // ==========================================
 
-      console.log('LOGIN RESPONSE:', res);
+          sessionStorage.setItem('authToken', res.data.token);
 
-      if (res.success) {
+          sessionStorage.setItem('username', res.data.username);
 
-        // ==========================================
-        // SAVE SESSION - SAME AS OLD APPLICATION
-        // ==========================================
+          sessionStorage.setItem('userId', res.data.userId);
 
-        sessionStorage.setItem(
-          'authToken',
-          res.data.token
-        );
+          sessionStorage.setItem('sessionId', res.data.sessionId);
 
-        sessionStorage.setItem(
-          'username',
-          res.data.username
-        );
+          sessionStorage.setItem('isAdmin', res.data.isAdmin);
 
-        sessionStorage.setItem(
-          'userId',
-          res.data.userId
-        );
+          sessionStorage.setItem('modules', JSON.stringify(res.data.modules));
 
-        sessionStorage.setItem(
-          'sessionId',
-          res.data.sessionId
-        );
+          sessionStorage.setItem('designationName', res.data.designationName);
 
-        sessionStorage.setItem(
-          'isAdmin',
-          res.data.isAdmin
-        );
+          // ==========================================
+          // SAVE LOGIN TYPE
+          // ==========================================
 
-        sessionStorage.setItem(
-          'modules',
-          JSON.stringify(res.data.modules)
-        );
+          sessionStorage.setItem('loginType', loginType);
 
-        sessionStorage.setItem(
-          'designationName',
-          res.data.designationName
-        );
+          // Clear previously selected module
+          sessionStorage.removeItem('selectedModuleDetail');
 
-        
+          // Generate new CAPTCHA
+          this.loadCaptcha();
 
-         // ==========================================
-        // SAVE LOGIN TYPE
-        // ==========================================
+          // ==========================================
+          // REDIRECT
+          // ==========================================
 
-        sessionStorage.setItem(
-          'loginType',
-          loginType
-        );
+          this.router
+            .navigate(['/employee-dashboard'])
+            .then((result) => {
+              console.log('Navigation result:', result);
 
-        // Clear previously selected module
-        sessionStorage.removeItem(
-          'selectedModuleDetail'
-        );
+              console.log('Current URL:', this.router.url);
+            })
+            .catch((error) => {
+              console.error('Navigation error:', error);
+            });
+        } else {
+          this.errorMessage = res.message || 'Invalid login credentials';
 
-        // Generate new CAPTCHA
-        this.loadCaptcha();
+          // Refresh CAPTCHA
+          this.loadCaptcha();
+        }
+      },
 
-        // ==========================================
-        // REDIRECT
-        // ==========================================
+      error: (error) => {
+        this.loading = false;
 
-        this.router
-          .navigate(['/employee-dashboard'])
-          .then(result => {
-
-            console.log(
-              'Navigation result:',
-              result
-            );
-
-            console.log(
-              'Current URL:',
-              this.router.url
-            );
-
-          })
-          .catch(error => {
-
-            console.error(
-              'Navigation error:',
-              error
-            );
-
-          });
-
-      } else {
+        console.error('LOGIN ERROR:', error);
 
         this.errorMessage =
-          res.message ||
-          'Invalid login credentials';
+          error?.error?.message || 'Invalid username or password. Please try again.';
 
         // Refresh CAPTCHA
         this.loadCaptcha();
-      }
-    },
-
-    error: (error) => {
-
-      this.loading = false;
-
-      console.error(
-        'LOGIN ERROR:',
-        error
-      );
-
-      this.errorMessage =
-        error?.error?.message ||
-        'Invalid username or password. Please try again.';
-
-      // Refresh CAPTCHA
-      this.loadCaptcha();
-    }
-
-  });
-}
+      },
+    });
+  }
 
   /* =====================================================
      PASSWORD
   ===================================================== */
 
   togglePassword(): void {
-
-    this.hidePassword =
-      !this.hidePassword;
-
+    this.hidePassword = !this.hidePassword;
   }
-
 
   /* =====================================================
      FORGOT PASSWORD
   ===================================================== */
-isProcessingForgotPassword: boolean = false;
+  isProcessingForgotPassword: boolean = false;
   onForgotPassword() {
-
     const email = this.loginForm.value.username?.trim();
 
     if (!email) {
@@ -403,7 +291,7 @@ isProcessingForgotPassword: boolean = false;
 
     this.isProcessingForgotPassword = true;
 
-    this.loginService.forgotPasswordMail(email,"otherlogin").subscribe({
+    this.loginService.forgotPasswordMail(email, 'otherlogin').subscribe({
       next: (res: any) => {
         alert(res.message || 'Password reset email sent.');
         this.isProcessingForgotPassword = false;
@@ -411,23 +299,17 @@ isProcessingForgotPassword: boolean = false;
       error: (err) => {
         alert(err.error?.message || 'Error occurred.');
         this.isProcessingForgotPassword = false;
-      }
+      },
     });
   }
-
 
   /* =====================================================
      SIGN UP
   ===================================================== */
 
   signUp(): void {
-
-    console.log(
-      'Create account clicked'
-    );
+    console.log('Create account clicked');
 
     // this.router.navigate(['/register']);
-
   }
-
 }

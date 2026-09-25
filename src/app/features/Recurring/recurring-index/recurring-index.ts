@@ -39,7 +39,6 @@ interface TaskCategory {
   styleUrl: './recurring-index.scss',
 })
 export class RecurringIndex {
-
   clientSearchText: string = '';
   selectedClient: string = '';
   showClientDropdown: boolean = false;
@@ -48,7 +47,6 @@ export class RecurringIndex {
   recurring: Recurring[] = [];
   userId!: number;
   isLoading = false;
-
 
   currentPage = 1;
   page = 0;
@@ -91,7 +89,7 @@ export class RecurringIndex {
     @Inject(PLATFORM_ID)
     private platformId: Object,
     private sessionService: SessionStorageService,
-  ) { }
+  ) {}
 
   loginType = '';
   isAdmin: any;
@@ -141,45 +139,48 @@ export class RecurringIndex {
       return;
     }
 
-    this.dataprovider.getRecurringClientsForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
-      next: (response: any) => {
-        console.log('Recurring Clients:', response);
+    this.dataprovider
+      .getRecurringClientsForIndex(this.userId, this.isAdmin, this.loginType)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Recurring Clients:', response);
 
-        this.clients = response || [];
-        if (this.selectedClientId > 0) {
+          this.clients = response || [];
+          if (this.selectedClientId > 0) {
+            const selectedClient = this.clients.find(
+              (x: any) => x.clientId == this.selectedClientId,
+            );
 
-          const selectedClient = this.clients.find(
-            (x: any) => x.clientId == this.selectedClientId
-          );
-
-          if (selectedClient) {
-            this.clientSearchText = selectedClient.name;
+            if (selectedClient) {
+              this.clientSearchText = selectedClient.name;
+            }
           }
-        }
-      },
+        },
 
-      error: (error) => {
-        console.error('Error fetching recurring clients:', error);
+        error: (error) => {
+          console.error('Error fetching recurring clients:', error);
 
-        this.clients = [];
-      },
-    });
+          this.clients = [];
+        },
+      });
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurringForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
-      next: (response: any) => {
-        console.log('Task Categories:', response);
+    this.dataprovider
+      .getActiveTaskCategoriesForRecurringForIndex(this.userId, this.isAdmin, this.loginType)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Task Categories:', response);
 
-        this.taskCategories = response || [];
-      },
+          this.taskCategories = response || [];
+        },
 
-      error: (error) => {
-        console.error('Error fetching task categories:', error);
+        error: (error) => {
+          console.error('Error fetching task categories:', error);
 
-        this.taskCategories = [];
-      },
-    });
+          this.taskCategories = [];
+        },
+      });
   }
 
   getRecurringDetails(): void {
@@ -199,7 +200,7 @@ export class RecurringIndex {
         this.sortDirection,
         this.userId,
         this.isAdmin,
-        this.loginType
+        this.loginType,
       )
       .subscribe({
         next: (response: any) => {
@@ -375,8 +376,8 @@ export class RecurringIndex {
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'No, keep it',
       customClass: {
-        popup: 'small-confirm-popup'
-      }
+        popup: 'small-confirm-popup',
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         this.dataprovider.deleteRecurring(recurringId, this.userId).subscribe({
@@ -564,12 +565,8 @@ export class RecurringIndex {
     }
   }
 
-  getPriorityClass(
-    priority: number
-  ): string {
-
+  getPriorityClass(priority: number): string {
     switch (priority) {
-
       case 1:
         return 'priority-high';
 
@@ -581,16 +578,11 @@ export class RecurringIndex {
 
       default:
         return '';
-
     }
   }
 
-  getPriorityLabel(
-    priority: number
-  ): string {
-
+  getPriorityLabel(priority: number): string {
     switch (priority) {
-
       case 1:
         return 'High';
 
@@ -759,8 +751,6 @@ export class RecurringIndex {
     });
   }
 
-
-
   showDescriptionModal = false;
   selectedDescriptionRecurring: any = null;
 
@@ -768,42 +758,29 @@ export class RecurringIndex {
     //  alert(1)
     this.selectedDescriptionRecurring = recurring;
     this.showDescriptionModal = true;
-    console.log(this.showDescriptionModal)
+    console.log(this.showDescriptionModal);
   }
 
   closeDescriptionModal(): void {
-
     this.showDescriptionModal = false;
 
     this.selectedDescriptionRecurring = null;
   }
 
-
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
-    if (
-      !target.closest('.description-modal') &&
-      !target.closest('.description-icon-button')
-    ) {
+    if (!target.closest('.description-modal') && !target.closest('.description-icon-button')) {
       this.closeDescriptionModal();
     }
   }
-
-
-
-
-
 
   // selectedClientId: number = 0;
 
   // filteredClients: any[] = [];
 
-
-
   filterClients(): void {
-
     const search = this.clientSearchText?.trim().toLowerCase();
 
     if (!search || search.length < 3) {
@@ -813,16 +790,13 @@ export class RecurringIndex {
     }
 
     this.filteredClients = this.clients.filter(
-      (client: any) =>
-        client.name &&
-        client.name.toLowerCase().includes(search)
+      (client: any) => client.name && client.name.toLowerCase().includes(search),
     );
 
     this.showClientDropdown = true;
   }
 
   selectClient(client: any): void {
-
     this.clientSearchText = client.name;
 
     // This is the value used by your filters/API
@@ -843,9 +817,7 @@ export class RecurringIndex {
     }
   }
 
-
   clearClientFilter(): void {
-
     this.clientSearchText = '';
     this.selectedClientId = 0;
 

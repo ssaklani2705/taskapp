@@ -24,11 +24,11 @@ import { environment } from '../../../../environments/environment';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
-    MatTableModule
+    MatTableModule,
   ],
 
   templateUrl: './view-index.html',
-  styleUrl: './view-index.scss'
+  styleUrl: './view-index.scss',
 })
 export class ViewIndex implements OnInit {
   dashboardFilter: string = '';
@@ -38,13 +38,11 @@ export class ViewIndex implements OnInit {
 
   taskId!: number;
 
-
   // =========================================================
   // TASK OBJECT
   // =========================================================
 
   task: any = null;
-
 
   // =========================================================
   // TRANSACTION HISTORY
@@ -52,13 +50,11 @@ export class ViewIndex implements OnInit {
 
   transactionHistory: any[] = [];
 
-
   // =========================================================
   // CLIENT LIST
   // =========================================================
 
   clients: any[] = [];
-
 
   // =========================================================
   // USER LIST
@@ -66,13 +62,11 @@ export class ViewIndex implements OnInit {
 
   users: any[] = [];
 
-
   // =========================================================
   // TASK CATEGORY LIST
   // =========================================================
 
   taskCategories: any[] = [];
-
 
   // =========================================================
   // COMMON
@@ -80,13 +74,11 @@ export class ViewIndex implements OnInit {
 
   common = new Common();
 
-
   // =========================================================
   // LOADING
   // =========================================================
 
   loading = false;
-
 
   // =========================================================
   // PAGINATION / FILTER STATE
@@ -111,7 +103,6 @@ export class ViewIndex implements OnInit {
   fromDate: string = '';
   toDate: string = '';
 
-
   // =========================================================
   // CONSTRUCTOR
   // =========================================================
@@ -119,296 +110,162 @@ export class ViewIndex implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private dataprovider: DataProviderService,
-    private router: Router
-  ) { }
-
+    private router: Router,
+  ) {}
 
   // =========================================================
   // ON INIT
   // =========================================================
 
   ngOnInit(): void {
-
     // -------------------------------------------------------
     // GET TASK ID FROM ROUTE
     // Example:
     // /task/view/5
     // -------------------------------------------------------
 
-    const id =
-      this.route.snapshot.paramMap.get('taskId');
+    const id = this.route.snapshot.paramMap.get('taskId');
 
     if (id) {
-
       this.taskId = Number(id);
-
     }
-
 
     // -------------------------------------------------------
     // GET QUERY PARAMETERS
     // -------------------------------------------------------
 
-    const queryParams =
-      this.route.snapshot.queryParamMap;
+    const queryParams = this.route.snapshot.queryParamMap;
 
-    this.currentPage =
-      Number(queryParams.get('currentPage')) || 1;
+    this.currentPage = Number(queryParams.get('currentPage')) || 1;
 
-    this.searchText =
-      queryParams.get('searchText') || '';
+    this.searchText = queryParams.get('searchText') || '';
 
-    this.statusIndex =
-      Number(queryParams.get('statusIndex')) || 0;
+    this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
 
-    this.page =
-      Number(queryParams.get('page')) || this.currentPage - 1;
+    this.page = Number(queryParams.get('page')) || this.currentPage - 1;
 
-    this.size =
-      Number(queryParams.get('size')) || 5;
+    this.size = Number(queryParams.get('size')) || 5;
 
-    this.taskStatusIds =
-      queryParams.get('taskStatusIds') || '';
+    this.taskStatusIds = queryParams.get('taskStatusIds') || '';
 
     // -------- ADD THESE --------
-    this.clientId =
-      queryParams.get('clientId') || '';
+    this.clientId = queryParams.get('clientId') || '';
 
-    this.taskCategoryId =
-      queryParams.get('taskCategoryId') || '';
+    this.taskCategoryId = queryParams.get('taskCategoryId') || '';
 
-    this.assignedTo =
-      queryParams.get('assignedTo') || '';
+    this.assignedTo = queryParams.get('assignedTo') || '';
 
-    this.priority =
-      queryParams.get('priority') || '';
+    this.priority = queryParams.get('priority') || '';
 
-    this.fromDate =
-      queryParams.get('fromDate') || '';
+    this.fromDate = queryParams.get('fromDate') || '';
 
-    this.toDate =
-      queryParams.get('toDate') || '';
+    this.toDate = queryParams.get('toDate') || '';
     this.dashboardFilter = queryParams.get('taskType') || '';
     // -------------------------------------------------------
     // LOAD TASK
     // -------------------------------------------------------
 
     if (this.taskId) {
-
       this.getTaskDetails();
-
     } else {
-
-      console.error(
-        'Task ID not found in route.'
-      );
-
+      console.error('Task ID not found in route.');
     }
-
   }
-
 
   // =========================================================
   // GET TASK DETAILS
   // =========================================================
 
   getTaskDetails(): void {
-
     this.loading = true;
 
+    this.dataprovider.getTaskById(this.taskId).subscribe({
+      next: (response: any) => {
+        console.log('Task details response:', response);
 
-    this.dataprovider
-      .getTaskById(this.taskId)
-      .subscribe({
+        if (response && response.success && response.data) {
+          this.task = response.data;
 
-        next: (response: any) => {
+          // ------------------------------------------------
+          // TRANSACTION HISTORY
+          // ------------------------------------------------
 
-          console.log(
-            'Task details response:',
-            response
-          );
+          this.transactionHistory = response.data.transactionHistory || [];
 
+          // ------------------------------------------------
+          // SORT HISTORY
+          // LATEST FIRST
+          // ------------------------------------------------
 
-          if (
-            response &&
-            response.success &&
-            response.data
-          ) {
+          this.transactionHistory = this.transactionHistory.sort((a: any, b: any) => {
+            const dateA = this.parseDate(a.entryDate);
 
-            this.task =
-              response.data;
+            const dateB = this.parseDate(b.entryDate);
 
-
-            // ------------------------------------------------
-            // TRANSACTION HISTORY
-            // ------------------------------------------------
-
-            this.transactionHistory =
-              response.data.transactionHistory || [];
-
-
-            // ------------------------------------------------
-            // SORT HISTORY
-            // LATEST FIRST
-            // ------------------------------------------------
-
-            this.transactionHistory =
-              this.transactionHistory.sort(
-                (a: any, b: any) => {
-
-                  const dateA =
-                    this.parseDate(
-                      a.entryDate
-                    );
-
-                  const dateB =
-                    this.parseDate(
-                      b.entryDate
-                    );
-
-                  return (
-                    dateB.getTime() -
-                    dateA.getTime()
-                  );
-
-                }
-              );
-
-          } else {
-
-            this.task = null;
-
-            console.error(
-              'Task details not found:',
-              response
-            );
-
-          }
-
-
-          this.loading = false;
-
-        },
-
-
-        error: (error: any) => {
-
-          console.error(
-            'Failed to fetch task details:',
-            error
-          );
-
-
+            return dateB.getTime() - dateA.getTime();
+          });
+        } else {
           this.task = null;
 
-          this.loading = false;
-
+          console.error('Task details not found:', response);
         }
 
-      });
+        this.loading = false;
+      },
 
+      error: (error: any) => {
+        console.error('Failed to fetch task details:', error);
+
+        this.task = null;
+
+        this.loading = false;
+      },
+    });
   }
-
 
   // =========================================================
   // GET CLIENT NAME
   // =========================================================
 
-  getClientName(
-    clientId: number | null | undefined
-  ): string {
-
-    if (
-      clientId === null ||
-      clientId === undefined
-    ) {
-
+  getClientName(clientId: number | null | undefined): string {
+    if (clientId === null || clientId === undefined) {
       return '-';
-
     }
 
-
-    const client =
-      this.clients.find(
-        (item: any) =>
-          Number(item.clientId) ===
-          Number(clientId)
-      );
-
+    const client = this.clients.find((item: any) => Number(item.clientId) === Number(clientId));
 
     if (client) {
-
-      return (
-        client.name ||
-        client.clientName ||
-        '-'
-      );
-
+      return client.name || client.clientName || '-';
     }
-
 
     // -------------------------------------------------------
     // IF API ALREADY RETURNS CLIENT NAME
     // -------------------------------------------------------
 
-    if (
-      this.task &&
-      this.task.clientName &&
-      Number(this.task.clientId) ===
-      Number(clientId)
-    ) {
-
+    if (this.task && this.task.clientName && Number(this.task.clientId) === Number(clientId)) {
       return this.task.clientName;
-
     }
 
-
     return String(clientId);
-
   }
-
 
   // =========================================================
   // GET TASK CATEGORY NAME
   // =========================================================
 
-  getTaskCategoryName(
-    categoryId: number | null | undefined
-  ): string {
-
-    if (
-      categoryId === null ||
-      categoryId === undefined
-    ) {
-
+  getTaskCategoryName(categoryId: number | null | undefined): string {
+    if (categoryId === null || categoryId === undefined) {
       return '-';
-
     }
 
-
-    const category =
-      this.taskCategories.find(
-        (item: any) =>
-          Number(
-            item.taskCategoryId ??
-            item.categoryId ??
-            item.id
-          ) ===
-          Number(categoryId)
-      );
-
+    const category = this.taskCategories.find(
+      (item: any) =>
+        Number(item.taskCategoryId ?? item.categoryId ?? item.id) === Number(categoryId),
+    );
 
     if (category) {
-
-      return (
-        category.name ||
-        category.categoryName ||
-        category.taskCategoryName ||
-        '-'
-      );
-
+      return category.name || category.categoryName || category.taskCategoryName || '-';
     }
-
 
     // -------------------------------------------------------
     // IF API ALREADY RETURNS CATEGORY NAME
@@ -417,121 +274,59 @@ export class ViewIndex implements OnInit {
     if (
       this.task &&
       this.task.taskCategoryName &&
-      Number(this.task.taskCategoryId) ===
-      Number(categoryId)
+      Number(this.task.taskCategoryId) === Number(categoryId)
     ) {
-
       return this.task.taskCategoryName;
-
     }
 
-
     return String(categoryId);
-
   }
-
 
   // =========================================================
   // GET USER NAME
   // =========================================================
 
-  getUserName(
-    userId: number | null | undefined
-  ): string {
-
-    if (
-      userId === null ||
-      userId === undefined
-    ) {
-
+  getUserName(userId: number | null | undefined): string {
+    if (userId === null || userId === undefined) {
       return '-';
-
     }
 
-
-    const user =
-      this.users.find(
-        (item: any) =>
-          Number(
-            item.userId ??
-            item.id
-          ) ===
-          Number(userId)
-      );
-
+    const user = this.users.find((item: any) => Number(item.userId ?? item.id) === Number(userId));
 
     if (user) {
-
       if (user.firstName && user.lastName) {
-
-        return (
-          user.firstName +
-          ' ' +
-          user.lastName
-        );
-
+        return user.firstName + ' ' + user.lastName;
       }
 
-
-      return (
-        user.firstName ||
-        user.name ||
-        user.userName ||
-        user.fullName ||
-        '-'
-      );
-
+      return user.firstName || user.name || user.userName || user.fullName || '-';
     }
-
 
     // -------------------------------------------------------
     // IF API ALREADY RETURNS ASSIGNED USER NAME
     // -------------------------------------------------------
 
-    if (
-      this.task &&
-      Number(this.task.assignedTo) ===
-      Number(userId)
-    ) {
-
+    if (this.task && Number(this.task.assignedTo) === Number(userId)) {
       if (this.task.assignedToName) {
-
         return this.task.assignedToName;
-
       }
 
       if (this.task.assignedUserName) {
-
         return this.task.assignedUserName;
-
       }
-
     }
-
 
     // -------------------------------------------------------
     // IF API ALREADY RETURNS ADDED BY NAME
     // -------------------------------------------------------
 
-    if (
-      this.task &&
-      Number(this.task.addedBy) ===
-      Number(userId)
-    ) {
-
+    if (this.task && Number(this.task.addedBy) === Number(userId)) {
       if (this.task.addedByName) {
-
         return this.task.addedByName;
-
       }
-
     }
 
-
     return String(userId);
-
   }
-
 
   // =========================================================
   // FORMAT TASK DATE
@@ -546,7 +341,6 @@ export class ViewIndex implements OnInit {
   //     return '-';
 
   //   }
-
 
   //   // -------------------------------------------------------
   //   // LOCAL DATE YYYY-MM-DD
@@ -570,10 +364,8 @@ export class ViewIndex implements OnInit {
 
   //   }
 
-
   //   const date =
   //     new Date(value);
-
 
   //   if (
   //     isNaN(
@@ -585,22 +377,18 @@ export class ViewIndex implements OnInit {
 
   //   }
 
-
   //   const day =
   //     String(
   //       date.getDate()
   //     ).padStart(2, '0');
-
 
   //   const month =
   //     String(
   //       date.getMonth() + 1
   //     ).padStart(2, '0');
 
-
   //   const year =
   //     date.getFullYear();
-
 
   //   return (
   //     day +
@@ -612,129 +400,56 @@ export class ViewIndex implements OnInit {
 
   // }
 
-
   // =========================================================
   // FORMAT DATE TIME
   // =========================================================
 
-  formatDateTime(
-    value: any
-  ): string {
-
+  formatDateTime(value: any): string {
     if (!value) {
-
       return '-';
-
     }
 
+    const date = new Date(value);
 
-    const date =
-      new Date(value);
-
-
-    if (
-      isNaN(
-        date.getTime()
-      )
-    ) {
-
+    if (isNaN(date.getTime())) {
       return String(value);
-
     }
 
+    const day = String(date.getDate()).padStart(2, '0');
 
-    const day =
-      String(
-        date.getDate()
-      ).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
 
+    const year = date.getFullYear();
 
-    const month =
-      String(
-        date.getMonth() + 1
-      ).padStart(2, '0');
+    let hours = date.getHours();
 
+    const minutes = String(date.getMinutes()).padStart(2, '0');
 
-    const year =
-      date.getFullYear();
+    const seconds = String(date.getSeconds()).padStart(2, '0');
 
+    const ampm = hours >= 12 ? 'PM' : 'AM';
 
-    let hours =
-      date.getHours();
+    hours = hours % 12;
 
+    hours = hours || 12;
 
-    const minutes =
-      String(
-        date.getMinutes()
-      ).padStart(2, '0');
-
-
-    const seconds =
-      String(
-        date.getSeconds()
-      ).padStart(2, '0');
-
-
-    const ampm =
-      hours >= 12
-        ? 'PM'
-        : 'AM';
-
-
-    hours =
-      hours % 12;
-
-
-    hours =
-      hours || 12;
-
-
-    const hourString =
-      String(hours)
-        .padStart(2, '0');
-
+    const hourString = String(hours).padStart(2, '0');
 
     return (
-      day +
-      '-' +
-      month +
-      '-' +
-      year +
-      ' ' +
-      hourString +
-      ':' +
-      minutes +
-      ':' +
-      seconds +
-      ' ' +
-      ampm
+      day + '-' + month + '-' + year + ' ' + hourString + ':' + minutes + ':' + seconds + ' ' + ampm
     );
-
   }
-
 
   // =========================================================
   // PRIORITY LABEL
   // =========================================================
 
-  getPriorityLabel(
-    priority: number | null | undefined
-  ): string {
-
-    if (
-      priority === null ||
-      priority === undefined
-    ) {
-
+  getPriorityLabel(priority: number | null | undefined): string {
+    if (priority === null || priority === undefined) {
       return '-';
-
     }
 
-
-    switch (
-    Number(priority)
-    ) {
-
+    switch (Number(priority)) {
       case 1:
         return 'Low';
 
@@ -749,34 +464,19 @@ export class ViewIndex implements OnInit {
 
       default:
         return String(priority);
-
     }
-
   }
-
 
   // =========================================================
   // PRIORITY CSS CLASS
   // =========================================================
 
-  getPriorityClass(
-    priority: number | null | undefined
-  ): string {
-
-    if (
-      priority === null ||
-      priority === undefined
-    ) {
-
+  getPriorityClass(priority: number | null | undefined): string {
+    if (priority === null || priority === undefined) {
       return '';
-
     }
 
-
-    switch (
-    Number(priority)
-    ) {
-
+    switch (Number(priority)) {
       case 1:
         return 'priority-low';
 
@@ -791,34 +491,19 @@ export class ViewIndex implements OnInit {
 
       default:
         return '';
-
     }
-
   }
-
 
   // =========================================================
   // STATUS LABEL
   // =========================================================
 
-  getStatusLabel(
-    status: number | null | undefined
-  ): string {
-
-    if (
-      status === null ||
-      status === undefined
-    ) {
-
+  getStatusLabel(status: number | null | undefined): string {
+    if (status === null || status === undefined) {
       return '-';
-
     }
 
-
-    switch (
-    Number(status)
-    ) {
-
+    switch (Number(status)) {
       case 0:
         return 'Inactive';
 
@@ -839,34 +524,19 @@ export class ViewIndex implements OnInit {
 
       default:
         return String(status);
-
     }
-
   }
-
 
   // =========================================================
   // STATUS CSS CLASS
   // =========================================================
 
-  getStatusClass(
-    status: number | null | undefined
-  ): string {
-
-    if (
-      status === null ||
-      status === undefined
-    ) {
-
+  getStatusClass(status: number | null | undefined): string {
+    if (status === null || status === undefined) {
       return '';
-
     }
 
-
-    switch (
-    Number(status)
-    ) {
-
+    switch (Number(status)) {
       case 0:
         return 'status-inactive';
 
@@ -887,67 +557,36 @@ export class ViewIndex implements OnInit {
 
       default:
         return '';
-
     }
-
   }
-
 
   // =========================================================
   // PARSE DATE FOR SORTING
   // =========================================================
 
-  private parseDate(
-    value: any
-  ): Date {
-
+  private parseDate(value: any): Date {
     if (!value) {
-
       return new Date(0);
-
     }
 
+    const date = new Date(value);
 
-    const date =
-      new Date(value);
-
-
-    if (
-      !isNaN(
-        date.getTime()
-      )
-    ) {
-
+    if (!isNaN(date.getTime())) {
       return date;
-
     }
-
 
     // -------------------------------------------------------
     // DD-MM-YYYY HH:mm:ss
     // -------------------------------------------------------
 
-    const match =
-      String(value).match(
-        /^(\d{2})-(\d{2})-(\d{4})/
-      );
-
+    const match = String(value).match(/^(\d{2})-(\d{2})-(\d{4})/);
 
     if (match) {
-
-      return new Date(
-        Number(match[3]),
-        Number(match[2]) - 1,
-        Number(match[1])
-      );
-
+      return new Date(Number(match[3]), Number(match[2]) - 1, Number(match[1]));
     }
 
-
     return new Date(0);
-
   }
-
 
   // =========================================================
   // DOWNLOAD FILE
@@ -963,12 +602,10 @@ export class ViewIndex implements OnInit {
 
   //     }
 
-
   //     console.log(
   //       'Download file:',
   //       fileName
   //     );
-
 
   //     // -------------------------------------------------------
   //     // IMPORTANT:
@@ -982,158 +619,108 @@ export class ViewIndex implements OnInit {
   //     `${environment.baseurluploaded}task/pdf/${encodeURIComponent(fileName)}`;
   // alert(fileUrl);
 
-
   //     window.open(
   //       fileUrl,
   //       '_blank'
   //     );
 
   //   }
-  downloadFile(
-    fileName: string | null | undefined,
-    fileType: 'pdf' | 'zip'
-  ): void {
+  // downloadFile(
+  //   fileName: string | null | undefined,
+  //   fileType: 'pdf' | 'zip'
+  // ): void {
 
-    if (!fileName) {
-      return;
-    }
+  //   if (!fileName) {
+  //     return;
+  //   }
 
-    let folder = '';
+  //   let folder = '';
 
-    if (fileType === 'pdf') {
-      folder = 'tasks/pdf/';
-    } else if (fileType === 'zip') {
-      folder = 'tasks/zip/';
-    }
+  //   if (fileType === 'pdf') {
+  //     folder = 'tasks/pdf/';
+  //   } else if (fileType === 'zip') {
+  //     folder = 'tasks/zip/';
+  //   }
 
-    const fileUrl =
-      `${environment.baseurluploaded}${folder}${encodeURIComponent(fileName)}`;
+  //   const fileUrl =
+  //     `${environment.baseurluploaded}${folder}${encodeURIComponent(fileName)}`;
 
-    console.log('Download/View URL:', fileUrl);
+  //   console.log('Download/View URL:', fileUrl);
 
-    window.open(fileUrl, '_blank');
-  }
+  //   window.open(fileUrl, '_blank');
+  // }
 
   // =========================================================
   // CHECK FILE EXISTS
   // =========================================================
 
-  hasFile(
-    fileName: string | null | undefined
-  ): boolean {
-
-    return !!(
-      fileName &&
-      String(fileName).trim()
-    );
-
+  hasFile(fileName: string | null | undefined): boolean {
+    return !!(fileName && String(fileName).trim());
   }
-
 
   // =========================================================
   // BACK TO INDEX PAGE
   // =========================================================
 
   backToIndexPage(): void {
+    this.router.navigate(['/task-index'], {
+      queryParams: {
+        currentPage: this.currentPage,
 
-    this.router.navigate(
-      ['/task-index'],
-      {
-        queryParams: {
+        statusIndex: this.statusIndex,
 
-          currentPage:
-            this.currentPage,
+        searchText: this.searchText,
 
-          statusIndex:
-            this.statusIndex,
+        size: this.size || 5,
 
-          searchText:
-            this.searchText,
+        taskStatusIds: this.taskStatusIds || null,
 
-          size:
-            this.size || 5,
+        clientId: this.clientId || null,
 
-          taskStatusIds:
-            this.taskStatusIds || null,
+        taskCategoryId: this.taskCategoryId || null,
 
-          clientId:
-            this.clientId || null,
+        assignedTo: this.assignedTo || null,
 
-          taskCategoryId:
-            this.taskCategoryId || null,
+        priority: this.priority || null,
 
-          assignedTo:
-            this.assignedTo || null,
+        fromDate: this.fromDate || null,
 
-          priority:
-            this.priority || null,
-
-          fromDate:
-            this.fromDate || null,
-
-          toDate:
-            this.toDate || null,
-          taskType: this.dashboardFilter,
-
-        }
-      }
-    );
+        toDate: this.toDate || null,
+        taskType: this.dashboardFilter,
+      },
+    });
   }
-
 
   // =========================================================
   // EDIT TASK
   // =========================================================
 
   editTask(): void {
-
     if (!this.taskId) {
-
       return;
-
     }
 
+    this.router.navigate(['/task/edit', this.taskId], {
+      queryParams: {
+        currentPage: this.currentPage,
 
-    this.router.navigate(
-      ['/task/edit', this.taskId],
-      {
-        queryParams: {
+        statusIndex: this.statusIndex,
 
-          currentPage:
-            this.currentPage,
+        searchText: this.searchText,
 
-          statusIndex:
-            this.statusIndex,
+        page: this.page,
 
-          searchText:
-            this.searchText,
-
-          page:
-            this.page,
-
-          size:
-            this.size
-
-        }
-      }
-    );
-
+        size: this.size,
+      },
+    });
   }
-
 
   // =========================================================
   // TRANSACTION HISTORY CHECK
   // =========================================================
 
   get hasTransactionHistory(): boolean {
-
-    return (
-      Array.isArray(
-        this.transactionHistory
-      ) &&
-      this.transactionHistory.length > 0
-    );
-
+    return Array.isArray(this.transactionHistory) && this.transactionHistory.length > 0;
   }
 
   get hasAttachments(): boolean {
@@ -1160,5 +747,142 @@ export class ViewIndex implements OnInit {
       default:
         return 'status-badge';
     }
+  }
+
+  calculateDueDate(): Date | null {
+    if (!this.task?.date || !this.task?.dueDateTime) {
+      return null;
+    }
+
+    const startDate = new Date(this.task.date);
+    const dueHours = Number(this.task.dueDateTime);
+
+    if (isNaN(startDate.getTime()) || isNaN(dueHours)) {
+      return null;
+    }
+
+    const dueDate = new Date(startDate);
+
+    dueDate.setHours(dueDate.getHours() + dueHours);
+
+    return dueDate;
+  }
+
+  //for files now changes
+  /**
+   * Extracts the lowercase extension (without dot) from a filename.
+   */
+  private getExtension(fileName: string): string {
+    if (!fileName || !fileName.includes('.')) {
+      return '';
+    }
+
+    return fileName.substring(fileName.lastIndexOf('.') + 1).toLowerCase();
+  }
+
+  /**
+   * Returns true if the file is a PDF (used to decide View vs Download).
+   */
+  isPdf(fileName: string | null | undefined): boolean {
+    if (!fileName) {
+      return false;
+    }
+
+    return this.getExtension(fileName) === 'pdf';
+  }
+
+  /**
+   * Returns the appropriate Material icon name based on file extension.
+   */
+  getFileIcon(fileName: string | null | undefined): string {
+    if (!fileName) {
+      return 'insert_drive_file';
+    }
+
+    const extension = this.getExtension(fileName);
+
+    switch (extension) {
+      case 'pdf':
+        return 'picture_as_pdf';
+
+      case 'zip':
+        return 'folder_zip';
+
+      case 'doc':
+      case 'docx':
+        return 'description';
+
+      case 'xls':
+      case 'xlsx':
+        return 'grid_on';
+
+      default:
+        return 'insert_drive_file';
+    }
+  }
+
+  /**
+   * Opens PDFs inline in a new tab; downloads all other file types
+   * (doc, docx, xls, xlsx, zip) since browsers can't render them natively.
+   */
+  downloadFile(fileName: string | null | undefined): void {
+    if (!fileName) {
+      return;
+    }
+
+    const extension = this.getExtension(fileName);
+
+    let folder = '';
+
+    switch (extension) {
+      case 'pdf':
+        folder = 'tasks/pdf/';
+        break;
+
+      case 'zip':
+        folder = 'tasks/zip/';
+        break;
+
+      case 'doc':
+      case 'docx':
+        folder = 'tasks/doc/';
+        break;
+
+      case 'xls':
+      case 'xlsx':
+        folder = 'tasks/xls/';
+        break;
+
+      default:
+        folder = 'tasks/other/';
+    }
+
+    const fileUrl = `${environment.baseurluploaded}${folder}${encodeURIComponent(fileName)}`;
+
+    console.log('Download/View URL:', fileUrl);
+
+    if (extension === 'pdf') {
+      // PDFs can render inline in the browser
+      window.open(fileUrl, '_blank');
+    } else {
+      // Everything else: force a download instead of trying to open inline
+      this.triggerDownload(fileUrl, fileName);
+    }
+  }
+
+  /**
+   * Forces a browser download via a temporary anchor element,
+   * rather than navigating/opening the file in a new tab.
+   */
+  private triggerDownload(fileUrl: string, fileName: string): void {
+    const link = document.createElement('a');
+
+    link.href = fileUrl;
+    link.download = fileName;
+    link.target = '_blank';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   }
 }

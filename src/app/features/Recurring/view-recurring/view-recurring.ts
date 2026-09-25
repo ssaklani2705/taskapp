@@ -225,35 +225,74 @@ export class ViewRecurring implements OnInit {
   }
 
   getSchedule(): string {
-    if (!this.recurring) {
-      return '-';
-    }
-
-    switch (Number(this.recurring.type)) {
-      case 1:
-        return 'Daily';
-
-      case 2:
-        return this.getDayLabel(this.recurring.day);
-
-      case 3:
-        return this.recurring.date
-          ? `On the ${this.recurring.date}${this.getOrdinalSuffix(this.recurring.date)} of each month`
-          : '-';
-
-      case 4:
-        if (this.recurring.date && this.recurring.month) {
-          return `Every ${this.recurring.date}${this.getOrdinalSuffix(
-            this.recurring.date,
-          )} ${this.getMonthLabel(this.recurring.month)}`;
-        }
-
-        return '-';
-
-      default:
-        return '-';
-    }
+  if (!this.recurring) {
+    return '-';
   }
+
+  switch (Number(this.recurring.type)) {
+    case 1:
+      return 'Daily';
+
+    case 2:
+      return this.getDayLabel(this.recurring.day);
+
+    case 3:
+      if (Number(this.recurring.date) === -2) {
+        return 'On the Last Day of each Month';
+      }
+
+      return this.recurring.date
+        ? `On the ${this.recurring.date}${this.getOrdinalSuffix(this.recurring.date)} of each month`
+        : '-';
+
+    case 4:
+      if (Number(this.recurring.date) === -2 && this.recurring.month) {
+        return `On the Last Day of ${this.getMonthLabel(this.recurring.month)}`;
+      }
+
+      if (this.recurring.date && this.recurring.month) {
+        return `Every ${this.recurring.date}${this.getOrdinalSuffix(
+          this.recurring.date
+        )} ${this.getMonthLabel(this.recurring.month)}`;
+      }
+
+      return '-';
+
+    default:
+      return '-';
+  }
+}
+
+  // getSchedule(): string {
+  //   if (!this.recurring) {
+  //     return '-';
+  //   }
+
+  //   switch (Number(this.recurring.type)) {
+  //     case 1:
+  //       return 'Daily';
+
+  //     case 2:
+  //       return this.getDayLabel(this.recurring.day);
+
+  //     case 3:
+  //       return this.recurring.date
+  //         ? `On the ${this.recurring.date}${this.getOrdinalSuffix(this.recurring.date)} of each month`
+  //         : '-';
+
+  //     case 4:
+  //       if (this.recurring.date && this.recurring.month) {
+  //         return `Every ${this.recurring.date}${this.getOrdinalSuffix(
+  //           this.recurring.date,
+  //         )} ${this.getMonthLabel(this.recurring.month)}`;
+  //       }
+
+  //       return '-';
+
+  //     default:
+  //       return '-';
+  //   }
+  // }
 
   private getOrdinalSuffix(date: number): string {
     if (date >= 11 && date <= 13) {

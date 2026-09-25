@@ -104,17 +104,19 @@
               <span class="info-label">Day:</span>
 
               <span class="info-value">
-                {{ getDayLabel(recurring.day) }}
+                {{ getDayLabel(recurring.day) }}Last Day of the Month
               </span>
             </div>
 
             <!-- DATE -->
             <div class="info-row" *ngIf="recurring.type === 3 || recurring.type === 4">
               <span class="info-label">Date:</span>
-
               <span class="info-value">
+  {{ recurring.date === -2 ? 'Last Day of the Month' : (recurring.date ? (recurring.date | date:'dd-MM-yyyy') : '-') }}
+</span>
+              <!-- <span class="info-value">
                 {{ recurring.date || '-' }}
-              </span>
+              </span> -->
             </div>
 
             <!-- MONTH -->

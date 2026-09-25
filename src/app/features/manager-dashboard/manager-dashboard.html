@@ -1,4 +1,10 @@
 <div class="dashboard">
+
+    <div class="client-assignment-banner" *ngIf="clientAssignmentMessage">
+    <mat-icon>warning</mat-icon>
+    <span>{{ clientAssignmentMessage }}</span>
+  </div>
+  
   <div class="welcome-row">
     <div class="welcome-content">
       <div class="welcome-icon">

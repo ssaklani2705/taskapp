@@ -454,7 +454,9 @@
           <!-- RIGHTS AND PERMISSIONS
           ================================================== -->
 
-          <div class="rights-section" *ngIf="!userForm.get('isAdmin')?.value">
+          <!-- <div class="rights-section" *ngIf="!userForm.get('isAdmin')?.value"> -->
+
+            <div class="rights-section" *ngIf="!userForm.get('isAdmin')?.value && !isRightsHidden">
 
             <!-- Section Heading -->
 

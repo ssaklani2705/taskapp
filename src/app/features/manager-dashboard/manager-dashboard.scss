@@ -935,3 +935,42 @@
     font-size: 23px;
   }
 }
+
+
+.client-assignment-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  background-color: #fdecea;
+  color: #d32f2f;
+  border: 1px solid #f5c6cb;
+  border-left: 4px solid #d32f2f;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  padding: 10px 16px;
+  border-radius: 6px;
+
+  margin-bottom: 16px;
+
+  animation: blink-warning 1.2s ease-in-out infinite;
+}
+
+.client-assignment-banner mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #d32f2f;
+  flex-shrink: 0;
+}
+
+@keyframes blink-warning {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}

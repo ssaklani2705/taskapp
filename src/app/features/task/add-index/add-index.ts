@@ -1,7 +1,4 @@
-import {
-  CommonModule,
-  isPlatformBrowser
-} from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import {
   Component,
@@ -10,47 +7,26 @@ import {
   OnInit,
   PLATFORM_ID,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 
-import {
-  FormsModule
-} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
-import {
-  MatButtonModule
-} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 
-import {
-  MatDatepickerModule
-} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
-import {
-  MatFormFieldModule
-} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
-import {
-  MatInputModule
-} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 
-import {
-  DateAdapter,
-  MAT_DATE_LOCALE,
-  MatNativeDateModule
-} from '@angular/material/core';
+import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 
-import {
-  MatSelectModule
-} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 
-import {
-  ActivatedRoute,
-  Router
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import {
-  DataProviderService
-} from '../../../service/data-provider.service';
+import { DataProviderService } from '../../../service/data-provider.service';
 
 import Swal from 'sweetalert2';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
@@ -58,12 +34,10 @@ import { MatIconModule } from '@angular/material/icon';
 import {
   OwlDateTimeModule,
   OWL_DATE_TIME_FORMATS,
-  OWL_DATE_TIME_LOCALE
+  OWL_DATE_TIME_LOCALE,
 } from '@danielmoncada/angular-datetime-picker';
 
-import {
-  OwlMomentDateTimeModule
-} from '@danielmoncada/angular-datetime-picker-moment-adapter';
+import { OwlMomentDateTimeModule } from '@danielmoncada/angular-datetime-picker-moment-adapter';
 import moment from 'moment';
 
 export const MY_DATE_TIME_FORMATS = {
@@ -79,7 +53,7 @@ export const MY_DATE_TIME_FORMATS = {
 
   dateA11yLabel: 'LL',
 
-  monthYearA11yLabel: 'MMMM YYYY'
+  monthYearA11yLabel: 'MMMM YYYY',
 };
 
 @Component({
@@ -98,7 +72,7 @@ export const MY_DATE_TIME_FORMATS = {
     MatSelectModule,
     MatIconModule,
     OwlDateTimeModule,
-    OwlMomentDateTimeModule
+    OwlMomentDateTimeModule,
   ],
 
   templateUrl: './add-index.html',
@@ -108,13 +82,13 @@ export const MY_DATE_TIME_FORMATS = {
   providers: [
     {
       provide: OWL_DATE_TIME_LOCALE,
-      useValue: 'en-GB'
+      useValue: 'en-GB',
     },
     {
       provide: OWL_DATE_TIME_FORMATS,
-      useValue: MY_DATE_TIME_FORMATS
-    }
-  ]
+      useValue: MY_DATE_TIME_FORMATS,
+    },
+  ],
   // providers: [
   //   {
   //     provide: DateAdapter,
@@ -126,10 +100,7 @@ export const MY_DATE_TIME_FORMATS = {
   //   },
   // ],
 })
-
-
 export class AddIndexComponent implements OnInit {
-
   @ViewChild('pdfInput')
   pdfInput!: ElementRef<HTMLInputElement>;
 
@@ -138,7 +109,7 @@ export class AddIndexComponent implements OnInit {
 
   today: Date = new Date();
 
-  readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+  // readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
   // ============================================================
   // TASK
@@ -147,7 +118,6 @@ export class AddIndexComponent implements OnInit {
   task: any = {};
 
   originalTask: any = {};
-
 
   // ============================================================
   // DROPDOWN DATA
@@ -158,7 +128,6 @@ export class AddIndexComponent implements OnInit {
   taskCategories: any[] = [];
 
   users: any[] = [];
-
 
   // ============================================================
   // FILES
@@ -176,7 +145,6 @@ export class AddIndexComponent implements OnInit {
 
   zipError: string = '';
 
-
   // ============================================================
   // USER
   // ============================================================
@@ -192,7 +160,6 @@ export class AddIndexComponent implements OnInit {
   // ============================================================
 
   isEditMode: boolean = false;
-
 
   // ============================================================
   // INDEX PARAMETERS
@@ -228,129 +195,87 @@ export class AddIndexComponent implements OnInit {
     @Inject(PLATFORM_ID)
     private platformId: Object,
 
-    private router: Router
-  ) { }
-
+    private router: Router,
+  ) {}
 
   // ============================================================
   // INIT
   // ============================================================
   dashboardFilter: string = '';
   ngOnInit(): void {
-
     // ----------------------------------------------------------
     // QUERY PARAMETERS
     // ----------------------------------------------------------
 
-    const queryParams =
-      this.route.snapshot.queryParamMap;
+    const queryParams = this.route.snapshot.queryParamMap;
 
-    this.currentPage =
-      Number(queryParams.get('currentPage')) || 1;
+    this.currentPage = Number(queryParams.get('currentPage')) || 1;
 
-    this.searchText =
-      queryParams.get('searchText') || '';
+    this.searchText = queryParams.get('searchText') || '';
 
-    this.statusIndex =
-      Number(queryParams.get('statusIndex')) || 0;
+    this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
 
-    this.page =
-      Number(queryParams.get('page')) || this.currentPage - 1;
+    this.page = Number(queryParams.get('page')) || this.currentPage - 1;
 
-    this.size =
-      Number(queryParams.get('size')) || 5;
+    this.size = Number(queryParams.get('size')) || 5;
 
-    this.taskStatusIds =
-      queryParams.get('taskStatusIds') || '';
+    this.taskStatusIds = queryParams.get('taskStatusIds') || '';
 
     // -------- ADD THESE --------
-    this.clientId =
-      queryParams.get('clientId') || '';
+    this.clientId = queryParams.get('clientId') || '';
 
-    this.taskCategoryId =
-      queryParams.get('taskCategoryId') || '';
+    this.taskCategoryId = queryParams.get('taskCategoryId') || '';
 
-    this.assignedTo =
-      queryParams.get('assignedTo') || '';
+    this.assignedTo = queryParams.get('assignedTo') || '';
 
-    this.priority =
-      queryParams.get('priority') || '';
+    this.priority = queryParams.get('priority') || '';
 
-    this.fromDate =
-      queryParams.get('fromDate') || '';
+    this.fromDate = queryParams.get('fromDate') || '';
 
-    this.toDate =
-      queryParams.get('toDate') || '';
+    this.toDate = queryParams.get('toDate') || '';
 
     this.dashboardFilter = queryParams.get('taskType') || '';
-
-
 
     // ----------------------------------------------------------
     // USER ID
     // ----------------------------------------------------------
 
-    if (
-      isPlatformBrowser(
-        this.platformId
-      )
-    ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.userId = sessionStorage.getItem('userId');
 
-      this.userId =
-        sessionStorage.getItem(
-          'userId'
-        );
+      this.isAdmin = sessionStorage.getItem('isAdmin');
 
-
-      this.isAdmin =
-        sessionStorage.getItem(
-          'isAdmin'
-        );
-
-      this.loginType =
-        sessionStorage.getItem('loginType') || 'other';
-
+      this.loginType = sessionStorage.getItem('loginType') || 'other';
     }
-
 
     // ----------------------------------------------------------
     // LOAD DROPDOWNS
     // ----------------------------------------------------------
-    this.loadDropdownData()
+    this.loadDropdownData();
 
     // ----------------------------------------------------------
     // GET TASK ID
     // ----------------------------------------------------------
 
-    const taskId =
-      this.route.snapshot.params['taskId'];
-
+    const taskId = this.route.snapshot.params['taskId'];
 
     // ----------------------------------------------------------
     // EDIT
     // ----------------------------------------------------------
 
     if (taskId) {
-
       this.isEditMode = true;
 
-      this.loadTask(
-        taskId
-      );
-
+      this.loadTask(taskId);
     }
-
 
     // ----------------------------------------------------------
     // ADD
     // ----------------------------------------------------------
-
     else {
-
       this.isEditMode = false;
 
       this.task = {
-
         taskId: null,
 
         title: '',
@@ -374,14 +299,10 @@ export class AddIndexComponent implements OnInit {
         fileName1: null,
 
         fileName2: null,
-        taskStatusId: null
-
+        taskStatusId: null,
       };
-
     }
-
   }
-
 
   // ============================================================
   // LOAD TASK
@@ -400,12 +321,13 @@ export class AddIndexComponent implements OnInit {
           if (this.task.clientId) {
             this.onchangeloadDropdownData();
           }
-          if (this.task.clientId && this.task.taskCategoryId) { this.onchangeloadUserDropdownData(); }
+          if (this.task.clientId && this.task.taskCategoryId) {
+            this.onchangeloadUserDropdownData();
+          }
 
           if (this.clients?.length) {
-
             const selectedClient = this.clients.find(
-              (x: any) => Number(x.clientId) === Number(this.task.clientId)
+              (x: any) => Number(x.clientId) === Number(this.task.clientId),
             );
 
             if (selectedClient) {
@@ -417,104 +339,72 @@ export class AddIndexComponent implements OnInit {
       error: (error: any) => {
         console.error('Error fetching task:', error);
         Swal.fire('Error', 'Unable to load task details.', 'error');
-      }
+      },
     });
-
   }
-
 
   // ============================================================
   // CLIENT LIST
   // ============================================================
 
   loadClients(): void {
-
     // this.dataprovider
     //   .getClientList()
     //   .subscribe({
-
     //     next: (res: any) => {
-
     //       this.clients =
     //         res?.data || [];
-
     //     },
-
     //     error: (error: any) => {
-
     //       console.error(
     //         'Error loading clients:',
     //         error
     //       );
-
     //     }
-
     //   });
-
   }
-
 
   // ============================================================
   // TASK CATEGORY LIST
   // ============================================================
 
   loadTaskCategories(): void {
-
     // this.dataprovider
     //   .getTaskCategoryList()
     //   .subscribe({
-
     //     next: (res: any) => {
-
     //       this.taskCategories =
     //         res?.data || [];
-
     //     },
-
     //     error: (error: any) => {
-
     //       console.error(
     //         'Error loading task categories:',
     //         error
     //       );
-
     //     }
-
     //   });
-
   }
-
 
   // ============================================================
   // USER LIST
   // ============================================================
 
   loadUsers(): void {
-
     // this.dataprovider
     //   .getUserList()
     //   .subscribe({
-
     //     next: (res: any) => {
-
     //       this.users =
     //         res?.data || [];
-
     //     },
-
     //     error: (error: any) => {
-
     //       console.error(
     //         'Error loading users:',
     //         error
     //       );
-
     //     }
-
     //   });
-
   }
-
 
   // ============================================================
   // PDF
@@ -530,10 +420,8 @@ export class AddIndexComponent implements OnInit {
 
   //   this.pdfFileName = '';
 
-
   //   const input =
   //     event.target as HTMLInputElement;
-
 
   //   if (
   //     !input.files ||
@@ -544,17 +432,14 @@ export class AddIndexComponent implements OnInit {
 
   //   }
 
-
   //   const file =
   //     input.files[0];
-
 
   //   const extension =
   //     file.name
   //       .split('.')
   //       .pop()
   //       ?.toLowerCase();
-
 
   //   if (
   //     extension !== 'pdf'
@@ -569,20 +454,26 @@ export class AddIndexComponent implements OnInit {
 
   //   }
 
-
   //   this.pdfFile = file;
 
   //   this.pdfFileName =
   //     file.name;
 
   // }
+
+  readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
+  readonly ALLOWED_EXTENSIONS_FILE_ONE = ['.pdf', '.xls', '.xlsx', '.doc', '.docx'];
+  readonly ALLOWED_EXTENSIONS_FILE_TWO = ['.pdf', '.xls', '.xlsx', '.doc', '.docx', '.zip'];
+
+  // ============================================================
+  // FILE - 1
+  // ============================================================
+
   onPdfSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
 
-    const input =
-      event.target as HTMLInputElement;
-
-    const file =
-      input.files?.[0];
+    const file = input.files?.[0];
 
     // Reset previous values
     this.pdfError = '';
@@ -594,14 +485,12 @@ export class AddIndexComponent implements OnInit {
     }
 
     // Validate file type
-    const isPdf =
-      file.type === 'application/pdf' ||
-      file.name.toLowerCase().endsWith('.pdf');
+    const fileName = file.name.toLowerCase();
 
-    if (!isPdf) {
+    const isAllowedType = this.ALLOWED_EXTENSIONS_FILE_ONE.some((ext) => fileName.endsWith(ext));
 
-      this.pdfError =
-        'Please select a valid PDF file.';
+    if (!isAllowedType) {
+      this.pdfError = 'Only .pdf, .xls, .xlsx, .doc, .docx files are allowed.';
 
       input.value = '';
 
@@ -609,13 +498,8 @@ export class AddIndexComponent implements OnInit {
     }
 
     // Validate file size
-    if (
-      file.size >
-      this.MAX_FILE_SIZE
-    ) {
-
-      this.pdfError =
-        'PDF file size must not exceed 5 MB.';
+    if (file.size > this.MAX_FILE_SIZE) {
+      this.pdfError = 'File size must not exceed 10 MB.';
 
       input.value = '';
 
@@ -623,83 +507,21 @@ export class AddIndexComponent implements OnInit {
     }
 
     // Valid file
-    this.pdfFile =
-      file;
+    this.pdfFile = file;
 
-    this.pdfFileName =
-      file.name;
+    this.pdfFileName = file.name;
 
     this.pdfError = '';
-
   }
 
   // ============================================================
-  // ZIP
+  // FILE - 2
   // ============================================================
 
-  // onZipSelected(
-  //   event: Event
-  // ): void {
-
-  //   this.zipError = '';
-
-  //   this.zipFile = null;
-
-  //   this.zipFileName = '';
-
-
-  //   const input =
-  //     event.target as HTMLInputElement;
-
-
-  //   if (
-  //     !input.files ||
-  //     input.files.length === 0
-  //   ) {
-
-  //     return;
-
-  //   }
-
-
-  //   const file =
-  //     input.files[0];
-
-
-  //   const extension =
-  //     file.name
-  //       .split('.')
-  //       .pop()
-  //       ?.toLowerCase();
-
-
-  //   if (
-  //     extension !== 'zip'
-  //   ) {
-
-  //     this.zipError =
-  //       'Only ZIP files are allowed.';
-
-  //     input.value = '';
-
-  //     return;
-
-  //   }
-
-
-  //   this.zipFile = file;
-
-  //   this.zipFileName =
-  //     file.name;
-
-  // }
   onZipSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
 
-    const input =
-      event.target as HTMLInputElement;
-
-    const file =
-      input.files?.[0];
+    const file = input.files?.[0];
 
     // Reset previous values
     this.zipError = '';
@@ -711,15 +533,12 @@ export class AddIndexComponent implements OnInit {
     }
 
     // Validate file type
-    const isZip =
-      file.type === 'application/zip' ||
-      file.type === 'application/x-zip-compressed' ||
-      file.name.toLowerCase().endsWith('.zip');
+    const fileName = file.name.toLowerCase();
 
-    if (!isZip) {
+    const isAllowedType = this.ALLOWED_EXTENSIONS_FILE_TWO.some((ext) => fileName.endsWith(ext));
 
-      this.zipError =
-        'Please select a valid ZIP file.';
+    if (!isAllowedType) {
+      this.zipError = 'Only .pdf, .xls, .xlsx, .doc, .docx, .zip files are allowed.';
 
       input.value = '';
 
@@ -727,13 +546,8 @@ export class AddIndexComponent implements OnInit {
     }
 
     // Validate file size
-    if (
-      file.size >
-      this.MAX_FILE_SIZE
-    ) {
-
-      this.zipError =
-        'ZIP file size must not exceed 5 MB.';
+    if (file.size > this.MAX_FILE_SIZE) {
+      this.zipError = 'File size must not exceed 10 MB.';
 
       input.value = '';
 
@@ -741,47 +555,151 @@ export class AddIndexComponent implements OnInit {
     }
 
     // Valid file
-    this.zipFile =
-      file;
+    this.zipFile = file;
 
-    this.zipFileName =
-      file.name;
+    this.zipFileName = file.name;
 
     this.zipError = '';
-
   }
+  // onPdfSelected(event: Event): void {
+
+  //   const input =
+  //     event.target as HTMLInputElement;
+
+  //   const file =
+  //     input.files?.[0];
+
+  //   // Reset previous values
+  //   this.pdfError = '';
+  //   this.pdfFile = null;
+  //   this.pdfFileName = '';
+
+  //   if (!file) {
+  //     return;
+  //   }
+
+  //   // Validate file type
+  //   const isPdf =
+  //     file.type === 'application/pdf' ||
+  //     file.name.toLowerCase().endsWith('.pdf');
+
+  //   if (!isPdf) {
+
+  //     this.pdfError =
+  //       'Please select a valid PDF file.';
+
+  //     input.value = '';
+
+  //     return;
+  //   }
+
+  //   // Validate file size
+  //   if (
+  //     file.size >
+  //     this.MAX_FILE_SIZE
+  //   ) {
+
+  //     this.pdfError =
+  //       'PDF file size must not exceed 5 MB.';
+
+  //     input.value = '';
+
+  //     return;
+  //   }
+
+  //   // Valid file
+  //   this.pdfFile =
+  //     file;
+
+  //   this.pdfFileName =
+  //     file.name;
+
+  //   this.pdfError = '';
+
+  // }
+
+  // // ============================================================
+  // // ZIP
+  // // ============================================================
+
+  // onZipSelected(event: Event): void {
+
+  //   const input =
+  //     event.target as HTMLInputElement;
+
+  //   const file =
+  //     input.files?.[0];
+
+  //   // Reset previous values
+  //   this.zipError = '';
+  //   this.zipFile = null;
+  //   this.zipFileName = '';
+
+  //   if (!file) {
+  //     return;
+  //   }
+
+  //   // Validate file type
+  //   const isZip =
+  //     file.type === 'application/zip' ||
+  //     file.type === 'application/x-zip-compressed' ||
+  //     file.name.toLowerCase().endsWith('.zip');
+
+  //   if (!isZip) {
+
+  //     this.zipError =
+  //       'Please select a valid ZIP file.';
+
+  //     input.value = '';
+
+  //     return;
+  //   }
+
+  //   // Validate file size
+  //   if (
+  //     file.size >
+  //     this.MAX_FILE_SIZE
+  //   ) {
+
+  //     this.zipError =
+  //       'ZIP file size must not exceed 5 MB.';
+
+  //     input.value = '';
+
+  //     return;
+  //   }
+
+  //   // Valid file
+  //   this.zipFile =
+  //     file;
+
+  //   this.zipFileName =
+  //     file.name;
+
+  //   this.zipError = '';
+
+  // }
 
   // ============================================================
   // SUBMIT
   // ============================================================
   onSubmit(form: any): void {
-
     // ----------------------------------------------------------
     // VALIDATION
     // ----------------------------------------------------------
 
-    if (
-      form.invalid ||
-      this.pdfError ||
-      this.zipError
-    ) {
+    if (form.invalid || this.pdfError || this.zipError) {
       form.control.markAllAsTouched();
       return;
     }
-
 
     // ----------------------------------------------------------
     // ADDED BY
     // ----------------------------------------------------------
 
-    this.task.addedBy = this.userId
-      ? Number(this.userId)
-      : null;
-
-
+    this.task.addedBy = this.userId ? Number(this.userId) : null;
 
     const formData = new FormData();
-
 
     // ----------------------------------------------------------
     // TASK PARAMETERS
@@ -789,72 +707,38 @@ export class AddIndexComponent implements OnInit {
     // These names MUST match @RequestParam names in backend
     // ----------------------------------------------------------
 
-    formData.append(
-      'clientId',
-      String(Number(this.task.clientId))
-    );
+    formData.append('clientId', String(Number(this.task.clientId)));
 
     formData.append(
       'date',
       // dateValue
 
-      this.formatDateTimeForApi(this.task.date) ?? ''
+      this.formatDateTimeForApi(this.task.date) ?? '',
     );
 
-    formData.append(
-      'taskCategoryId',
-      String(Number(this.task.taskCategoryId))
-    );
+    formData.append('taskCategoryId', String(Number(this.task.taskCategoryId)));
 
-    formData.append(
-      'description',
-      this.task.description || ''
-    );
+    formData.append('description', this.task.description || '');
 
-    formData.append(
-      'assignedTo',
-      String(Number(this.task.assignedTo))
-    );
+    formData.append('assignedTo', String(Number(this.task.assignedTo)));
 
-    formData.append(
-      'priority',
-      String(Number(this.task.priority))
-    );
+    formData.append('priority', String(Number(this.task.priority)));
 
-    formData.append(
-      'title',
-      this.task.title || ''
-    );
+    formData.append('title', this.task.title || '');
 
-    formData.append(
-      'addedBy',
-      String(Number(this.task.addedBy))
-    );
-
+    formData.append('addedBy', String(Number(this.task.addedBy)));
 
     // ----------------------------------------------------------
     // UPDATE ONLY
     // ----------------------------------------------------------
 
     if (this.isEditMode) {
+      formData.append('taskId', String(Number(this.task.taskId)));
 
-      formData.append(
-        'taskId',
-        String(Number(this.task.taskId))
-      );
-
-      if (
-        this.task.status !== null &&
-        this.task.status !== undefined
-      ) {
-
-        formData.append(
-          'status',
-          String(Number(this.task.status))
-        );
+      if (this.task.status !== null && this.task.status !== undefined) {
+        formData.append('status', String(Number(this.task.status)));
       }
     }
-
 
     // ----------------------------------------------------------
     // PDF
@@ -862,13 +746,8 @@ export class AddIndexComponent implements OnInit {
     // ----------------------------------------------------------
 
     if (this.pdfFile) {
-
-      formData.append(
-        'fileName1',
-        this.pdfFile
-      );
+      formData.append('fileName1', this.pdfFile);
     }
-
 
     // ----------------------------------------------------------
     // ZIP
@@ -876,53 +755,38 @@ export class AddIndexComponent implements OnInit {
     // ----------------------------------------------------------
 
     if (this.zipFile) {
-
-      formData.append(
-        'fileName2',
-        this.zipFile
-      );
+      formData.append('fileName2', this.zipFile);
     }
-
 
     // ----------------------------------------------------------
     // DEBUG - OPTIONAL
     // ----------------------------------------------------------
 
     formData.forEach((value, key) => {
-
-      console.log(
-        key,
-        value
-      );
-
+      console.log(key, value);
     });
-
 
     // ----------------------------------------------------------
     // API
     // ----------------------------------------------------------
 
-    this.dataprovider
-      .saveTask(formData)
-      .subscribe({
-        next: (response: any) => {
-          if (response && response.success) {
-            Swal.fire('Success', response.message, 'success');
-            this.backToIndexPage();
-          }
-          else {
-            Swal.fire('Error', response?.message || 'Unable to save task.', 'error');
-          }
-        },
-        error: (error: any) => {
-          console.error('Error saving task:', error);
-          Swal.fire('Error', error?.error?.message || 'Something went wrong.', 'error');
+    this.dataprovider.saveTask(formData).subscribe({
+      next: (response: any) => {
+        if (response && response.success) {
+          Swal.fire('Success', response.message, 'success');
+          this.backToIndexPage();
+        } else {
+          Swal.fire('Error', response?.message || 'Unable to save task.', 'error');
         }
-      });
+      },
+      error: (error: any) => {
+        console.error('Error saving task:', error);
+        Swal.fire('Error', error?.error?.message || 'Something went wrong.', 'error');
+      },
+    });
   }
 
   private formatDateTimeForApi(date: any): string | null {
-
     if (!date) {
       return null;
     }
@@ -937,9 +801,7 @@ export class AddIndexComponent implements OnInit {
     // JavaScript Date
     else if (date instanceof Date) {
       dateObj = date;
-    }
-
-    else {
+    } else {
       console.error('Unsupported dueDateTime value:', date);
       return null;
     }
@@ -950,21 +812,13 @@ export class AddIndexComponent implements OnInit {
 
     const year = dateObj.getFullYear();
 
-    const month = String(
-      dateObj.getMonth() + 1
-    ).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
 
-    const day = String(
-      dateObj.getDate()
-    ).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
 
-    const hours = String(
-      dateObj.getHours()
-    ).padStart(2, '0');
+    const hours = String(dateObj.getHours()).padStart(2, '0');
 
-    const minutes = String(
-      dateObj.getMinutes()
-    ).padStart(2, '0');
+    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
 
     return `${year}-${month}-${day} ${hours}:${minutes}:00`;
   }
@@ -974,26 +828,16 @@ export class AddIndexComponent implements OnInit {
   // ============================================================
 
   onReset(): void {
-
     if (this.isEditMode) {
-
       this.task = {
-        ...this.originalTask
+        ...this.originalTask,
       };
 
       if (this.task.date) {
-
-        this.task.date =
-          new Date(
-            this.task.date
-          );
-
+        this.task.date = new Date(this.task.date);
       }
-
     } else {
-
       this.task = {
-
         taskId: null,
 
         title: '',
@@ -1016,12 +860,9 @@ export class AddIndexComponent implements OnInit {
 
         fileName1: null,
 
-        fileName2: null
-
+        fileName2: null,
       };
-
     }
-
 
     // Clear Angular variables
     this.pdfFile = null;
@@ -1036,92 +877,68 @@ export class AddIndexComponent implements OnInit {
 
     this.zipError = '';
 
-
     // Clear actual file input
     if (this.pdfInput) {
-
       this.pdfInput.nativeElement.value = '';
-
     }
 
     if (this.zipInput) {
-
       this.zipInput.nativeElement.value = '';
-
     }
-
   }
-
 
   // ============================================================
   // BACK
   // ============================================================
 
   backToIndexPage(): void {
+    this.router.navigate(['/task-index'], {
+      queryParams: {
+        currentPage: this.currentPage,
 
-    this.router.navigate(
-      ['/task-index'],
-      {
-        queryParams: {
+        statusIndex: this.statusIndex,
 
-          currentPage:
-            this.currentPage,
+        searchText: this.searchText,
 
-          statusIndex:
-            this.statusIndex,
+        size: this.size || 5,
 
-          searchText:
-            this.searchText,
+        taskStatusIds: this.taskStatusIds || null,
 
-          size:
-            this.size || 5,
+        clientId: this.clientId || null,
 
-          taskStatusIds:
-            this.taskStatusIds || null,
+        taskCategoryId: this.taskCategoryId || null,
 
-          clientId:
-            this.clientId || null,
+        assignedTo: this.assignedTo || null,
 
-          taskCategoryId:
-            this.taskCategoryId || null,
+        priority: this.priority || null,
 
-          assignedTo:
-            this.assignedTo || null,
+        fromDate: this.fromDate || null,
 
-          priority:
-            this.priority || null,
-
-          fromDate:
-            this.fromDate || null,
-
-          toDate:
-            this.toDate || null,
-          taskType: this.dashboardFilter,
-
-        }
-      }
-    );
-
+        toDate: this.toDate || null,
+        taskType: this.dashboardFilter,
+      },
+    });
   }
 
   onchangeloadDropdownData(): void {
     // alert(this.task.clientId);
-    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin,
-      this.userId, this.loginType, this.task.clientId).subscribe({
+    this.dataprovider
+      .changesClientIdgetTaskFilterData(
+        this.isAdmin,
+        this.userId,
+        this.loginType,
+        this.task.clientId,
+      )
+      .subscribe({
         next: (res: any) => {
           const data = res?.data || res;
           // this.clients = data?.clients || [];
           this.taskCategories = data?.taskCategories || [];
           // this.users = data?.assignedUsers || [];
-
         },
 
         error: (error: any) => {
-
-          console.error(
-            'Error loading task dropdown data:',
-            error
-          );
+          console.error('Error loading task dropdown data:', error);
 
           // this.clients = [];
           this.taskCategories = [];
@@ -1132,94 +949,73 @@ export class AddIndexComponent implements OnInit {
           //   'Unable to load task dropdown data.',
           //   'error'
           // );
-        }
-
-
-
-
-
+        },
       });
   }
 
   onchangeloadUserDropdownData(): void {
-    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin,
-      this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId).subscribe({
+    this.dataprovider
+      .changesCategoryIdgetUserFilterData(
+        this.isAdmin,
+        this.userId,
+        this.loginType,
+        this.task.clientId,
+        this.task.taskCategoryId,
+      )
+      .subscribe({
         next: (res: any) => {
           const data = res?.data || res;
           this.users = data?.assignedUsers || [];
-
         },
         error: (error: any) => {
-
-          console.error(
-            'Error loading task dropdown data:',
-            error
-          );
+          console.error('Error loading task dropdown data:', error);
           this.users = [];
-        }
+        },
       });
   }
 
-
-
   loadDropdownData(): void {
     // alert(this.task.clientId);
-    this.dataprovider.getTaskFilterData(this.isAdmin,
-      this.userId, this.loginType).subscribe({
-        next: (res: any) => {
-          const data = res?.data || res;
-          this.clients = data?.clients || [];
-          this.filteredClients = [...this.clients];
-          if (this.task.clientId) {
+    this.dataprovider.getTaskFilterData(this.isAdmin, this.userId, this.loginType).subscribe({
+      next: (res: any) => {
+        const data = res?.data || res;
+        this.clients = data?.clients || [];
+        this.filteredClients = [...this.clients];
+        if (this.task.clientId) {
+          const selectedClient = this.clients.find(
+            (x: any) => Number(x.clientId) === Number(this.task.clientId),
+          );
 
-            const selectedClient = this.clients.find(
-              (x: any) => Number(x.clientId) === Number(this.task.clientId)
-            );
-
-            if (selectedClient) {
-              this.clientSearchText = selectedClient.name;
-            }
+          if (selectedClient) {
+            this.clientSearchText = selectedClient.name;
           }
-        },
-
-        error: (error: any) => {
-
-          console.error(
-            'Error loading task dropdown data:',
-            error
-          );
-
-          this.clients = [];
-          // this.taskCategories = [];
-          // this.users = [];
-
-          Swal.fire(
-            'Error',
-            'Unable to load task dropdown data.',
-            'error'
-          );
         }
+      },
 
+      error: (error: any) => {
+        console.error('Error loading task dropdown data:', error);
 
+        this.clients = [];
+        // this.taskCategories = [];
+        // this.users = [];
 
-
-
-      });
+        Swal.fire('Error', 'Unable to load task dropdown data.', 'error');
+      },
+    });
   }
 
   onClientChange(clientId: number | null): void {
     this.task.taskCategoryId = null;
-  this.task.assignedTo = null;
+    this.task.assignedTo = null;
 
-  this.taskCategories = [];
-  this.users = [];
-  
+    this.taskCategories = [];
+    this.users = [];
+
     if (!clientId) {
       this.task.assignedTo = null;
     }
   }
   removePdfFile(): void {
-
     this.pdfFile = null;
     this.pdfFileName = '';
     this.pdfError = '';
@@ -1227,11 +1023,9 @@ export class AddIndexComponent implements OnInit {
     if (this.pdfInput) {
       this.pdfInput.nativeElement.value = '';
     }
-
   }
 
   removeZipFile(): void {
-
     this.zipFile = null;
     this.zipFileName = '';
     this.zipError = '';
@@ -1239,16 +1033,13 @@ export class AddIndexComponent implements OnInit {
     if (this.zipInput) {
       this.zipInput.nativeElement.value = '';
     }
-
   }
-
 
   clientSearchText = '';
   filteredClients: any[] = [];
   showClientDropdown = false;
 
   filterClients(): void {
-
     const search = this.clientSearchText.trim().toLowerCase();
 
     if (search.length < 3) {
@@ -1257,15 +1048,14 @@ export class AddIndexComponent implements OnInit {
       return;
     }
 
-    this.filteredClients = this.clients.filter(client =>
-      client.name.toLowerCase().includes(search)
+    this.filteredClients = this.clients.filter((client) =>
+      client.name.toLowerCase().includes(search),
     );
 
     this.showClientDropdown = true;
   }
 
   selectClient(client: any): void {
-
     this.task.clientId = client.clientId; // value used in save API
 
     this.clientSearchText = client.name;
@@ -1277,7 +1067,6 @@ export class AddIndexComponent implements OnInit {
   }
 
   clearClientSelection(): void {
-
     this.task.clientId = null;
 
     this.clientSearchText = '';

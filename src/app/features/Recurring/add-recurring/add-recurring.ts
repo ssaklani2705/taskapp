@@ -59,7 +59,7 @@ export class AddRecurring implements OnInit {
     private route: ActivatedRoute,
     @Inject(PLATFORM_ID)
     private platformId: Object,
-  ) { }
+  ) {}
 
   loginType = '';
   isAdmin: any;
@@ -130,16 +130,12 @@ export class AddRecurring implements OnInit {
         const selectedClientId = this.recurringForm.get('clientId')?.value;
 
         if (selectedClientId) {
-
-          const client = this.clients.find(
-            x => x.clientId == selectedClientId
-          );
+          const client = this.clients.find((x) => x.clientId == selectedClientId);
 
           if (client) {
             this.clientSearchText = client.name;
           }
         }
-
       },
 
       error: (error) => {
@@ -150,10 +146,12 @@ export class AddRecurring implements OnInit {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType).subscribe({
-      next: (response: any) => {
-        this.taskCategories = response || [];
-      },
+    this.dataprovider
+      .getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType)
+      .subscribe({
+        next: (response: any) => {
+          this.taskCategories = response || [];
+        },
 
         error: (error) => {
           console.error('Error fetching task categories:', error);
@@ -207,9 +205,7 @@ export class AddRecurring implements OnInit {
               : 1,
         });
 
-        const client = this.clients.find(
-          x => x.clientId == recurring.clientId
-        );
+        const client = this.clients.find((x) => x.clientId == recurring.clientId);
 
         if (client) {
           this.clientSearchText = client.name;
@@ -450,8 +446,7 @@ export class AddRecurring implements OnInit {
   //   }
   // }
 
-
-   onYearlyMonthChange(): void {
+  onYearlyMonthChange(): void {
     const monthValue = this.recurringForm.get('month')?.value;
     const dateControl = this.recurringForm.get('date');
     // No month selected
@@ -480,7 +475,6 @@ export class AddRecurring implements OnInit {
     dateControl?.updateValueAndValidity();
   }
 
-
   backToIndexPage(): void {
     if (isPlatformBrowser(this.platformId)) {
       const stored = sessionStorage.getItem(this.filterKey);
@@ -500,7 +494,6 @@ export class AddRecurring implements OnInit {
   }
 
   filterClients(): void {
-
     const search = this.clientSearchText.trim().toLowerCase();
 
     if (search.length < 3) {
@@ -509,29 +502,27 @@ export class AddRecurring implements OnInit {
       return;
     }
 
-    this.filteredClients = this.clients.filter(client =>
-      client.name.toLowerCase().includes(search)
+    this.filteredClients = this.clients.filter((client) =>
+      client.name.toLowerCase().includes(search),
     );
 
     this.showClientDropdown = true;
   }
   selectClient(client: Client): void {
-
     this.clientSearchText = client.name;
 
     this.recurringForm.patchValue({
-      clientId: client.clientId
+      clientId: client.clientId,
     });
 
     this.showClientDropdown = false;
   }
 
   clearClientSelection(): void {
-
     this.clientSearchText = '';
 
     this.recurringForm.patchValue({
-      clientId: null
+      clientId: null,
     });
 
     this.filteredClients = [];
@@ -540,13 +531,10 @@ export class AddRecurring implements OnInit {
   }
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
-
     const target = event.target as HTMLElement;
 
     if (!target.closest('.client-dropdown-container')) {
       this.showClientDropdown = false;
     }
   }
-
-  
 }

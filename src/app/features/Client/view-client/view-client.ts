@@ -87,13 +87,13 @@ export class ViewClient {
 
     this.clientId = +this.route.snapshot.paramMap.get('clientId')!;
 
-    const queryParams = this.route.snapshot.queryParamMap;
+    // const queryParams = this.route.snapshot.queryParamMap;
 
-    this.currentPage = Number(queryParams.get('currentPage')) || 1;
-    this.searchText = queryParams.get('searchText') || '';
-    this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
-    this.page = Number(queryParams.get('page')) || this.currentPage - 1;
-    this.size = Number(queryParams.get('size')) || 5;
+    // this.currentPage = Number(queryParams.get('currentPage')) || 1;
+    // this.searchText = queryParams.get('searchText') || '';
+    // this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
+    // this.page = Number(queryParams.get('page')) || this.currentPage - 1;
+    // this.size = Number(queryParams.get('size')) || 5;
 
     this.getClientDetails();
   }
@@ -154,54 +154,56 @@ export class ViewClient {
 
     this.isChangingManager = true;
 
-    this.dataprovider.changeClientManager(this.clientId, this.selectedManagerId,this.userId).subscribe({
-      next: (response: any) => {
-        console.log('Change manager response:', response);
+    this.dataprovider
+      .changeClientManager(this.clientId, this.selectedManagerId, this.userId)
+      .subscribe({
+        next: (response: any) => {
+          console.log('Change manager response:', response);
 
-        this.isChangingManager = false;
+          this.isChangingManager = false;
 
-        if (response?.success === false) {
+          if (response?.success === false) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Change Failed',
+              text: response.message || 'Failed to change manager.',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#d33',
+            });
+
+            return;
+          }
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Manager changed successfully.',
+            confirmButtonText: 'OK',
+            confirmButtonColor: '#3085d6',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.showChangeManagerModal = false;
+              this.selectedManagerId = null;
+
+              this.getClientDetails();
+            }
+          });
+        },
+
+        error: (error) => {
+          this.isChangingManager = false;
+
+          console.error('Change manager error:', error);
+
           Swal.fire({
             icon: 'error',
             title: 'Change Failed',
-            text: response.message || 'Failed to change manager.',
+            text: error?.error?.message || 'Failed to change manager.',
             confirmButtonText: 'OK',
             confirmButtonColor: '#d33',
           });
-
-          return;
-        }
-
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'Manager changed successfully.',
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#3085d6',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.showChangeManagerModal = false;
-            this.selectedManagerId = null;
-
-            this.getClientDetails();
-          }
-        });
-      },
-
-      error: (error) => {
-        this.isChangingManager = false;
-
-        console.error('Change manager error:', error);
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Change Failed',
-          text: error?.error?.message || 'Failed to change manager.',
-          confirmButtonText: 'OK',
-          confirmButtonColor: '#d33',
-        });
-      },
-    });
+        },
+      });
   }
 
   openChangeManagerModal(): void {
@@ -285,11 +287,11 @@ export class ViewClient {
       clientId: this.client.clientId,
       outstanding: outstanding,
       managerId: managerId,
-      userId: userId
+      userId: userId,
     });
 
     this.dataprovider
-      .updateClientOutstanding(this.client.clientId, outstanding, managerId,userId)
+      .updateClientOutstanding(this.client.clientId, outstanding, managerId, userId)
       .subscribe({
         next: (response: any) => {
           console.log('Update Outstanding Response:', response);
@@ -345,23 +347,27 @@ export class ViewClient {
     return Array.isArray(this.transactionHistory) && this.transactionHistory.length > 0;
   }
 
+  // backToIndexPage(): void {
+  //   this.router.navigate(['/client-index'], {
+  //     queryParams: {
+  //       currentPage: this.currentPage,
+  //       statusIndex: this.statusIndex,
+  //       searchText: this.searchText,
+  //       page: this.page,
+  //       size: this.size || 5,
+  //       stateId: this.stateId,
+  //       managerId: this.managerId,
+  //       planId: this.planId,
+  //       gstFlag: this.gstFlag,
+  //       taxFlag: this.taxFlag,
+  //       fromDate: this.formatDate(this.fromDate),
+  //       toDate: this.formatDate(this.toDate),
+  //     },
+  //   });
+  // }
+
   backToIndexPage(): void {
-    this.router.navigate(['/client-index'], {
-      queryParams: {
-        currentPage: this.currentPage,
-        statusIndex: this.statusIndex,
-        searchText: this.searchText,
-        page: this.page,
-        size: this.size || 5,
-        stateId: this.stateId,
-        managerId: this.managerId,
-        planId: this.planId,
-        gstFlag: this.gstFlag,
-        taxFlag: this.taxFlag,
-        fromDate: this.formatDate(this.fromDate),
-        toDate: this.formatDate(this.toDate),
-      },
-    });
+    this.router.navigate(['/client-index']);
   }
 
   private formatDate(date: Date | null): string {
@@ -376,7 +382,6 @@ export class ViewClient {
     return `${day}-${month}-${year}`;
   }
 
-  
   getStatusClass(status: number | string): string {
     switch (+status) {
       case 1:

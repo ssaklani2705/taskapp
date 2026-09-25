@@ -21,7 +21,8 @@ import {
 import {
   DataProviderService,
   DepartmentDTO,
-  DesignationDTO
+  DesignationDTO,
+  TaskCategoryDTO
 } from '../../../service/data-provider.service';
 
 import {
@@ -256,6 +257,8 @@ export class MyTeam implements OnInit {
     this.restoreFilterState();
 
     this.loadDepartments();
+    this.loadCategories();
+
     this.loadDesignations();
     /*
      * Load users
@@ -352,7 +355,8 @@ export class MyTeam implements OnInit {
 
         this.selectedDepartmentId,
 
-        this.selectedDesignationId
+        this.selectedDesignationId,
+         this.selectedCategoryId
 
       )
       .subscribe({
@@ -555,22 +559,37 @@ export class MyTeam implements OnInit {
   // DEPARTMENT / DESIGNATION FILTER
   // =========================================================
 
-  onDepartmentChange(): void {
+onDepartmentChange(): void {
 
-    this.currentPage = 1;
+  this.currentPage = 1;
 
-    this.page = 0;
+  this.page = 0;
 
-    this.search =
-      this.searchQuery.trim();
+  this.search =
+    this.searchQuery.trim();
 
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : Number(this.selectedStatus);
-    this.saveFilterState();
-    this.getUserDetails();
-  }
+  this.statusIndex =
+    this.selectedStatus === ''
+      ? 0
+      : Number(this.selectedStatus);
+
+  // Reset category when department changes
+  this.selectedCategoryId = null;
+
+  // Clear old category list
+  this.categoryList = [];
+
+  // Load categories for selected department
+  // if (this.selectedDepartmentId) {
+  //   this.loadCategories();
+  // }
+
+   this.loadCategories();
+
+  this.saveFilterState();
+
+  this.getUserDetails();
+}
 
 
   onDesignationChange(): void {
@@ -1031,7 +1050,10 @@ export class MyTeam implements OnInit {
         this.selectedDepartmentId,
 
       designationId:
-        this.selectedDesignationId
+        this.selectedDesignationId,
+
+      categoryId:
+      this.selectedCategoryId
 
     };
 
@@ -1287,6 +1309,40 @@ export class MyTeam implements OnInit {
       }
 
 
+       // =====================================================
+    // CATEGORY
+    // =====================================================
+
+    if (
+      filterState.categoryId !== undefined &&
+      filterState.categoryId !== null &&
+      filterState.categoryId !== ''
+    ) {
+
+      const categoryId =
+        Number(filterState.categoryId);
+
+      if (
+        Number.isFinite(categoryId) &&
+        categoryId > 0
+      ) {
+
+        this.selectedCategoryId =
+          categoryId;
+
+      } else {
+
+        this.selectedCategoryId = null;
+
+      }
+
+    } else {
+
+      this.selectedCategoryId = null;
+
+    }
+
+
       // =====================================================
       // DEBUG
       // =====================================================
@@ -1301,7 +1357,8 @@ export class MyTeam implements OnInit {
           statusIndex: this.statusIndex,
           selectedStatus: this.selectedStatus,
           departmentId: this.selectedDepartmentId,
-          designationId: this.selectedDesignationId
+          designationId: this.selectedDesignationId,
+          categoryId: this.selectedCategoryId
         }
       );
 
@@ -1740,32 +1797,101 @@ export class MyTeam implements OnInit {
   // CLEAR FILTERS
   // =========================================================
 
-  clearFilters(): void {
+ clearFilters(): void {
 
-    // Clear search
-    this.searchQuery = '';
-    this.search = '';
+  // Clear search
+  this.searchQuery = '';
+  this.search = '';
 
-    // Clear department
-    this.selectedDepartmentId = null;
+  // Clear department
+  this.selectedDepartmentId = null;
 
-    // Clear designation
-    this.selectedDesignationId = null;
+  // Clear category
+  this.selectedCategoryId = null;
+  this.categoryList = [];
 
-    // Clear status
-    this.selectedStatus = '';
+  // Clear designation
+  this.selectedDesignationId = null;
 
-    // Reset status index if you are using it
-    this.statusIndex = 0;
+  // Clear status
+  this.selectedStatus = '';
 
-    // Reset pagination
-    this.currentPage = 1;
-    this.page = 0;
+  // Reset status index
+  this.statusIndex = 0;
 
-    // Reload the first page with cleared filters
-    this.onSearch();
+  // Reset pagination
+  this.currentPage = 1;
+  this.page = 0;
 
-  }
+  // Reload the first page with cleared filters
+  this.onSearch();
+
+}
+
+
+//Category
+// selectedDepartmentId: number | null = null;
+
+selectedCategoryId: number | null = null;
+
+categoryList: TaskCategoryDTO[] = [];
+
+categoriesLoading = false;
+
+
+loadCategories(): void {
+
+  this.categoriesLoading = true;
+
+  this.dataprovider
+    .getCategoriesByDepartmentId(
+      this.selectedDepartmentId || 0
+    )
+    .subscribe({
+
+      next: (response: TaskCategoryDTO[]) => {
+
+        this.categoryList =
+          response || [];
+
+        this.categoriesLoading = false;
+
+      },
+
+      error: (error) => {
+
+        console.error(
+          'Error loading categories:',
+          error
+        );
+
+        this.categoryList = [];
+
+        this.categoriesLoading = false;
+      }
+
+    });
+}
+
+
+onCategoryChange(): void {
+
+  this.currentPage = 1;
+
+  this.page = 0;
+
+  this.search =
+    this.searchQuery.trim();
+
+  this.statusIndex =
+    this.selectedStatus === ''
+      ? 0
+      : Number(this.selectedStatus);
+
+  this.saveFilterState();
+
+  this.getUserDetails();
+}
 
 
 }

@@ -90,6 +90,30 @@
 
   </div>
 
+  <!-- Category  -->
+<div class="department-wrapper">
+
+  <select
+    class="status-select"
+    [(ngModel)]="selectedCategoryId"
+    (change)="onCategoryChange()">
+
+    <option [ngValue]="null">
+      --All Task Categories--
+    </option>
+
+    <option
+      *ngFor="let category of categoryList"
+      [ngValue]="category.taskcategoryId">
+
+      {{ category.name }}
+
+    </option>
+
+  </select>
+
+</div>
+
 
   <!-- DESIGNATION -->
   <div class="designation-wrapper">

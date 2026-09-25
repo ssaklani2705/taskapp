@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { LoginService } from '../../service/login.service';
 import { Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { DataProviderService } from '../../service/data-provider.service';
 
 @Component({
   selector: 'app-header',
@@ -35,6 +36,8 @@ export class Header implements OnInit {
     @Inject(PLATFORM_ID)
     private platformId: Object,
 
+    private dataProvider: DataProviderService,
+
     // private elementRef: ElementRef
   ) {}
 
@@ -43,12 +46,49 @@ export class Header implements OnInit {
 
   username: string = '';
   showProfileMenu: boolean = false;
-
+  clientAssignmentMessage: string = '';
 
   ngOnInit(): void {
     this.username =
       sessionStorage.getItem('username') || '';
+
+      // this.checkClientAssignment();
   }
+
+
+  // ============================================================
+  // CLIENT ASSIGNMENT CHECK
+  // ============================================================
+
+ private checkClientAssignment(): void {
+
+    const managerId =
+      Number(sessionStorage.getItem('userId'));
+
+    if (!managerId) {
+      return;
+    }
+
+    this.dataProvider
+      .checkClientAssignment(managerId)
+      .subscribe({
+
+        next: (response: { assigned: boolean; message: string }) => {
+
+          this.clientAssignmentMessage =
+            response.assigned ? '' : response.message;
+        },
+
+        error: (err) => {
+
+          console.error(
+            'Failed to check client assignment',
+            err
+          );
+        }
+      });
+  }
+
 
   toggleMenu(): void {
     this.menuToggle.emit();

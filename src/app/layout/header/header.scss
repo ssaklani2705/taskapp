@@ -388,3 +388,61 @@
   background: #e6ebf1;
   margin: 4px 0;
 }
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px; // adjust to your existing value
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px; // space between warning badge and identity block
+  margin-left: auto; // pushes this whole group to the far right
+}
+
+.header-identity {
+  display: flex;
+  align-items: center;
+  gap: 20px; // space between "Society 123..." text and profile
+}
+
+.client-assignment-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  background-color: #d32f2f;
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+
+  padding: 6px 14px;
+  border-radius: 20px;
+
+  box-shadow: 0 0 6px rgba(211, 47, 47, 0.6);
+
+  animation: blink-warning 1.2s ease-in-out infinite;
+
+  flex-shrink: 0; // prevents the badge from getting squashed
+}
+
+.client-assignment-warning mat-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+@keyframes blink-warning {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

@@ -201,37 +201,36 @@
 
 
 /* =========================================================
-   SEARCH ROW
+   SEARCH ROW — FLEX BASED
 ========================================================= */
-
 
 .search-row {
   width: 100%;
-  display: grid;
-  grid-template-columns: minmax(350px, 1fr) 220px 220px 180px 65px;
+  display: flex;
+  flex-wrap: wrap;
   gap: 14px;
   align-items: center;
 }
 
-
-/* =========================================================
-   ADD USER WRAPPER
-========================================================= */
-
-.add-user-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-
-/* =========================================================
-   SEARCH WRAPPER
-========================================================= */
-
 .search-wrapper {
-  width: 100%;
-  min-width: 0;
+  flex: 1 1 320px;
+  min-width: 280px;
 }
+
+.filter-wrapper {
+  flex: 1 1 200px;
+  min-width: 170px;
+}
+
+.status-wrapper-small {
+  flex: 0 1 150px;
+  min-width: 130px;
+}
+
+
+/* =========================================================
+   SEARCH BOX
+========================================================= */
 
 .search-box {
   width: 100%;
@@ -270,7 +269,6 @@
 }
 
 
-
 /* =========================================================
    SEARCH BUTTON
 ========================================================= */
@@ -304,29 +302,10 @@
   font-size: 14px;
 }
 
-/* =========================================================
-   DEPARTMENT
-========================================================= */
-
-.department-wrapper {
-  width: 100%;
-}
-
 
 /* =========================================================
-   DESIGNATION
+   STATUS / FILTER SELECT
 ========================================================= */
-
-.designation-wrapper {
-  width: 100%;
-}
-/* =========================================================
-   STATUS
-========================================================= */
-
-.status-wrapper {
-  width: 100%;
-}
 
 .status-select {
   width: 100%;
@@ -351,17 +330,24 @@
   border-color: var(--primary-blue);
 }
 
+
 /* =========================================================
-   GO BUTTON
+   ACTION BUTTONS ROW (Go + Clear)
 ========================================================= */
-.go-wrapper {
-  width: 65px;
+
+.filter-actions-row {
+  width: 100%;
+  margin-top: 14px;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .btn-go {
-  width: 65px;
   height: 40px;
-  padding: 0;
+  min-width: 90px;
+  padding: 0 22px;
 
   border: 1px solid var(--primary-blue);
   border-radius: 4px;
@@ -374,11 +360,47 @@
   font-weight: 600;
 
   cursor: pointer;
+
+  box-sizing: border-box;
 }
 
 .btn-go:hover {
   background: var(--primary-blue-dark);
 }
+
+.btn-clear {
+  height: 40px;
+  min-width: 90px;
+  padding: 0 22px;
+
+  border: 1px solid #dc3545;
+  border-radius: 4px;
+
+  background: #fff;
+  color: #dc3545;
+
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+
+  box-sizing: border-box;
+}
+
+.btn-clear:hover {
+  background: #dc3545;
+  color: #fff;
+}
+
+.btn-clear:active {
+  transform: scale(0.98);
+}
+
 
 /* =========================================================
    TABLE TOP SECTION
@@ -690,18 +712,18 @@
 .status-badge {
   display: inline-flex;
 
-  min-width: 62px;
-  height: 27px;
+  min-width: 82px;
+  height: 32px;
 
-  padding: 0 9px;
+  padding: 0 13px;
 
   align-items: center;
   justify-content: center;
 
-  border-radius: 3px;
+  border-radius: 2px;
 
   font-family: Arial, sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
 
   box-sizing: border-box;
@@ -713,27 +735,33 @@
 ========================================================= */
 
 .status-active,
-.active-status {
+.active-status,
+.status-badge.active,
+.status-badge.status-active {
   color: var(--success) !important;
-  background: #e5f3ee;
+  background: #e6f4ee;
 
-  border: 1px solid #c7e5d9;
+  border: 1px solid #c8e7da;
 }
 
 .status-inactive,
-.inactive-status {
-  color: #986b14 !important;
-  background: #fff5dc;
+.inactive-status,
+.status-badge.inactive,
+.status-badge.status-inactive {
+  color: #a87308 !important;
+  background: #fff5df;
 
-  border: 1px solid #ecd9a7;
+  border: 1px solid #f0d99e;
 }
 
 .status-deleted,
-.deleted-status {
-  color: #b93636 !important;
-  background: #fff0f0;
+.deleted-status,
+.status-badge.deleted,
+.status-badge.status-deleted {
+  color: #b8403d !important;
+  background: #fbeaea;
 
-  border: 1px solid #f2cccc;
+  border: 1px solid #efcaca;
 }
 
 
@@ -756,8 +784,8 @@
 ========================================================= */
 
 .action-btn {
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 34px;
 
   padding: 0;
 
@@ -766,12 +794,18 @@
   justify-content: center;
 
   border: 1px solid #c5d2de;
-
-  border-radius: 3px;
+  border-radius: 1px;
 
   background: var(--white);
 
+  font-size: 14px;
+
   cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 
   box-sizing: border-box;
 }
@@ -961,203 +995,6 @@
 
 
 /* =========================================================
-   TABLET
-========================================================= */
-
-// @media (max-width: 1100px) {
-
-//   .page-content {
-//     padding: 16px 20px;
-//   }
-
-//   .search-row {
-//     grid-template-columns:
-//       100px
-//       minmax(250px, 1fr)
-//       190px
-//       60px;
-
-//     gap: 10px;
-//   }
-
-//   .page-header {
-//     padding: 0 20px;
-//   }
-
-//   .search-panel {
-//     padding: 18px 20px;
-//   }
-
-//   .table-container {
-//     padding: 0 20px;
-//   }
-
-//   .table-top-section {
-//     padding-left: 20px;
-//     padding-right: 20px;
-//   }
-
-//   .table-bottom-section {
-//     margin-left: 20px;
-//     margin-right: 20px;
-//   }
-// }
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-// @media (max-width: 768px) {
-
-//   .page-content {
-//     padding: 10px;
-//   }
-
-//   .page-header {
-//     min-height: 65px;
-
-//     padding: 0 15px;
-//   }
-
-//   .header-title-section h2 {
-//     font-size: 21px;
-//   }
-
-//   .header-title-section h2 i {
-//     font-size: 18px;
-//   }
-
-//   .search-panel {
-//     padding: 15px;
-//   }
-
-//   .search-row {
-//     grid-template-columns: 1fr;
-//     gap: 10px;
-//   }
-
-//   .add-user-wrapper {
-//     width: 100%;
-//   }
-
-//   .btn-add-user {
-//     width: auto;
-//   }
-
-//   .go-wrapper,
-//   .btn-go {
-//     width: 100%;
-//   }
-
-//   .table-top-section {
-//     padding: 12px 15px;
-
-//     flex-direction: column;
-
-//     align-items: flex-start;
-
-//     gap: 10px;
-//   }
-
-//   .pagination {
-//     width: 100%;
-
-//     overflow-x: auto;
-
-//     padding-bottom: 2px;
-//   }
-
-//   .table-container {
-//     padding: 0 15px;
-//   }
-
-//   .table-bottom-section {
-//     margin-left: 15px;
-//     margin-right: 15px;
-
-//     flex-direction: column;
-
-//     align-items: flex-start;
-
-//     gap: 10px;
-//   }
-
-//   .records-per-page {
-//     width: 100%;
-//     justify-content: flex-end;
-//   }
-// }
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 480px) {
-
-  .btn-clear{
-    width: 330px;
-  }
-  
-  .page-content {
-    padding: 7px;
-  }
-
-  .page-header {
-    min-height: 58px;
-    padding: 0 12px;
-  }
-
-  .header-title-section h2 {
-    font-size: 17px;
-  }
-
-  .search-panel {
-    padding: 12px;
-  }
-
-  .table-top-section {
-    padding: 10px 12px;
-  }
-
-  .table-container {
-    padding: 0 12px;
-  }
-
-  .table-bottom-section {
-    margin-left: 12px;
-    margin-right: 12px;
-  }
-
-  .pagination-btn {
-    min-width: 34px;
-    height: 30px;
-
-    padding: 0 6px;
-
-    font-size: 11px;
-  }
-
-  .pagination-btn.first-btn,
-  .pagination-btn.last-btn {
-    min-width: 52px;
-  }
-
-  .btn-add-user {
-    height: 36px;
-  }
-
-  .search-input,
-  .search-btn,
-  .status-select,
-  .btn-go {
-    height: 38px;
-  }
-}
-
-
-/* =========================================================
    MATERIAL / BOOTSTRAP OVERRIDE
 ========================================================= */
 
@@ -1192,112 +1029,52 @@
 }
 
 
+/* =========================================================
+   LARGE TABLET
+   901px - 1100px
+========================================================= */
 
-.btn-clear {
-  height: 38px;
-  width: 65px;
-  padding: 0 18px;
-  border: 1px solid #dc3545;
-  border-radius: 4px;
-  background: #fff;
-  color: #dc3545;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
+@media (min-width: 901px) and (max-width: 1100px) {
+
+  .page-content {
+    padding: 18px 20px;
+  }
+
+  .page-header {
+    padding: 0 20px;
+  }
+
+  .search-panel {
+    padding: 20px;
+  }
+
+  .search-row {
+    gap: 16px;
+  }
+
+  .table-container {
+    padding: 0 20px;
+  }
+
+  .table-top-section {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .table-bottom-section {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 }
-
-.btn-clear:hover {
-  background: #dc3545;
-  color: #fff;
-}
-
-.btn-clear:active {
-  transform: scale(0.98);
-}
-
-
-
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 82px;
-  height: 32px;
-  padding: 0 13px;
-  border-radius: 2px;
-  font-size: 13px;
-  font-weight: 600;
-  box-sizing: border-box;
-}
-
-.status-badge.active,
-.status-badge.status-active,
-.status-active {
-  background: #e6f4ee;
-  color: #287d5e;
-  border: 1px solid #c8e7da;
-}
-
-.status-badge.inactive,
-.status-badge.status-inactive,
-.status-inactive {
-  background: #fff5df;
-  color: #a87308;
-  border: 1px solid #f0d99e;
-}
-
-.status-badge.deleted,
-.status-badge.status-deleted {
-  background: #fbeaea;
-  color: #b8403d;
-  border: 1px solid #efcaca;
-}
-
-.action-buttons {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.action-btn {
-  width: 38px;
-  height: 34px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border-radius: 1px;
-  background: var(--white);
-  font-size: 14px;
-  cursor: pointer;
-
-  transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
-}
-
-// @media (max-width: 1024px) {
-// .search-box{
-//   // width: 712px;
-// }
-// }
-
 
 
 /* =========================================================
-   TABLET DESIGN
+   TABLET
    601px - 1100px
-   2 FIELDS PER ROW
+   FIELDS PAIR UP 2-PER-ROW
 ========================================================= */
 
 @media (min-width: 601px) and (max-width: 1100px) {
-
-  /* ---------------------------------------------------------
-     PAGE
-  --------------------------------------------------------- */
 
   .page-content-wrapper {
     width: 100%;
@@ -1309,20 +1086,10 @@
     box-sizing: border-box;
   }
 
-
-  /* ---------------------------------------------------------
-     MAIN CONTAINER
-  --------------------------------------------------------- */
-
   .user-management-container {
     width: 100%;
     overflow: hidden;
   }
-
-
-  /* ---------------------------------------------------------
-     HEADER
-  --------------------------------------------------------- */
 
   .page-header {
     min-height: 70px;
@@ -1348,120 +1115,34 @@
     flex-shrink: 0;
   }
 
-
-  /* ---------------------------------------------------------
-     SEARCH PANEL
-     EXACTLY 2 ITEMS PER ROW
-  --------------------------------------------------------- */
-
   .search-panel {
     width: 100%;
     padding: 18px;
     box-sizing: border-box;
   }
 
-
   .search-row {
-
-    width: 100%;
-
-    display: grid;
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      minmax(0, 1fr);
-
     column-gap: 18px;
     row-gap: 12px;
-
-    align-items: center;
-
-    box-sizing: border-box;
   }
-
-
-  /* ---------------------------------------------------------
-     SEARCH
-  --------------------------------------------------------- */
 
   .search-wrapper {
-    width: 100%;
-    min-width: 0;
+    flex: 1 1 100%;
   }
 
-  .search-box {
-    width: 100%;
-    height: 40px;
+  .filter-wrapper,
+  .status-wrapper-small {
+    flex: 1 1 calc(50% - 9px);
   }
 
-  .search-input {
-    width: 100%;
-    min-width: 0;
+  .filter-actions-row {
+    justify-content: flex-start;
   }
 
-
-  /* ---------------------------------------------------------
-     DEPARTMENT
-  --------------------------------------------------------- */
-
-  .department-wrapper {
-    width: 100%;
-    min-width: 0;
-  }
-
-
-  /* ---------------------------------------------------------
-     DESIGNATION
-  --------------------------------------------------------- */
-
-  .designation-wrapper {
-    width: 100%;
-    min-width: 0;
-  }
-
-
-  /* ---------------------------------------------------------
-     STATUS
-  --------------------------------------------------------- */
-
-  .status-wrapper {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .status-select {
-    width: 100%;
-    height: 40px;
-  }
-
-
-  /* ---------------------------------------------------------
-     GO
-  --------------------------------------------------------- */
-
-  .go-wrapper {
-    width: 100%;
-  }
-
-  .btn-go {
-    width: 100%;
-    height: 40px;
-  }
-
-
-  /* ---------------------------------------------------------
-     CLEAR
-  --------------------------------------------------------- */
-
+  .btn-go,
   .btn-clear {
-    width: 100%;
-    height: 40px;
+    flex: 0 0 auto;
   }
-
-
-  /* ---------------------------------------------------------
-     TABLE TOP
-  --------------------------------------------------------- */
 
   .table-top-section {
     width: 100%;
@@ -1477,15 +1158,9 @@
     box-sizing: border-box;
   }
 
-
   .record-summary {
     white-space: nowrap;
   }
-
-
-  /* ---------------------------------------------------------
-     PAGINATION
-  --------------------------------------------------------- */
 
   .pagination {
     display: flex;
@@ -1500,15 +1175,9 @@
     white-space: nowrap;
   }
 
-
   .pagination-btn {
     flex-shrink: 0;
   }
-
-
-  /* ---------------------------------------------------------
-     TABLE
-  --------------------------------------------------------- */
 
   .table-container {
     width: 100%;
@@ -1516,7 +1185,6 @@
 
     box-sizing: border-box;
   }
-
 
   .table-responsive {
     width: 100%;
@@ -1527,41 +1195,23 @@
     -webkit-overflow-scrolling: touch;
   }
 
-
   .user-table {
-
-    /*
-     * Keep table readable on tablet.
-     * Horizontal scrolling is intentional.
-     */
     min-width: 850px;
-
     width: 100%;
-
     table-layout: fixed;
   }
 
-
   .user-table thead th {
     padding: 7px 6px;
-
     font-size: 12px;
   }
-
 
   .user-table tbody td {
     padding: 7px 6px;
-
     font-size: 12px;
   }
 
-
-  /* ---------------------------------------------------------
-     TABLE BOTTOM
-  --------------------------------------------------------- */
-
   .table-bottom-section {
-
     margin-left: 18px;
     margin-right: 18px;
 
@@ -1574,11 +1224,6 @@
     gap: 15px;
   }
 
-
-  /* ---------------------------------------------------------
-     STATUS
-  --------------------------------------------------------- */
-
   .status-badge {
     min-width: 75px;
     height: 30px;
@@ -1588,11 +1233,6 @@
     font-size: 12px;
   }
 
-
-  /* ---------------------------------------------------------
-     ACTION BUTTONS
-  --------------------------------------------------------- */
-
   .action-buttons {
     gap: 4px;
   }
@@ -1601,48 +1241,6 @@
     width: 34px;
     height: 32px;
   }
-
-}
-
-
-/* =========================================================
-   LARGE TABLET
-   901px - 1100px
-========================================================= */
-
-@media (min-width: 901px) and (max-width: 1100px) {
-
-  .page-content {
-    padding: 18px 20px;
-  }
-
-  .page-header {
-    padding: 0 20px;
-  }
-
-  .search-panel {
-    padding: 20px;
-  }
-
-  .search-row {
-    column-gap: 20px;
-    row-gap: 14px;
-  }
-
-  .table-container {
-    padding: 0 20px;
-  }
-
-  .table-top-section {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .table-bottom-section {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-
 }
 
 
@@ -1657,50 +1255,37 @@
     padding: 12px;
   }
 
-
   .page-header {
     min-height: 65px;
     padding: 0 15px;
   }
 
-
   .header-title-section h2 {
     font-size: 21px;
   }
-
 
   .search-panel {
     padding: 15px;
   }
 
-
   .search-row {
-
-    grid-template-columns:
-      minmax(0, 1fr)
-      minmax(0, 1fr);
-
     column-gap: 12px;
     row-gap: 10px;
   }
 
-
   .table-container {
     padding: 0 15px;
   }
-
 
   .table-top-section {
     padding-left: 15px;
     padding-right: 15px;
   }
 
-
   .table-bottom-section {
     margin-left: 15px;
     margin-right: 15px;
   }
-
 }
 
 
@@ -1716,13 +1301,7 @@
     padding: 10px;
   }
 
-
-  /* ---------------------------------------------------------
-     HEADER
-  --------------------------------------------------------- */
-
   .page-header {
-
     min-height: 65px;
 
     padding: 10px 12px;
@@ -1738,9 +1317,7 @@
     gap: 10px;
   }
 
-
   .header-title-section {
-
     width: 100%;
 
     display: flex;
@@ -1750,72 +1327,45 @@
     justify-content: space-between;
   }
 
-
   .header-title-section h2 {
-
     font-size: 20px;
 
     white-space: nowrap;
   }
 
-
   .collapse-btn {
     flex-shrink: 0;
   }
 
-
   .btn-add-user {
-
     width: 100%;
 
     height: 38px;
   }
 
-
-  /* ---------------------------------------------------------
-     SEARCH
-  --------------------------------------------------------- */
-
   .search-panel {
-
     padding: 14px 12px;
   }
 
-
   .search-row {
-
     width: 100%;
-
-    display: grid;
-
-    grid-template-columns: 1fr;
-
     gap: 10px;
   }
 
-
   .search-wrapper,
-  .department-wrapper,
-  .designation-wrapper,
-  .status-wrapper,
-  .go-wrapper {
-
-    width: 100%;
-
+  .filter-wrapper,
+  .status-wrapper-small {
+    flex: 1 1 100%;
     min-width: 0;
   }
 
-
   .search-box {
-
     width: 100%;
 
     height: 40px;
   }
 
-
   .search-input {
-
     width: 100%;
 
     min-width: 0;
@@ -1823,37 +1373,25 @@
     font-size: 13px;
   }
 
-
   .status-select {
-
     width: 100%;
 
     height: 40px;
   }
 
-
-  .btn-go {
-
-    width: 100%;
-
-    height: 40px;
+  .filter-actions-row {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-
+  .btn-go,
   .btn-clear {
-
-    width: 100% !important;
+    width: 100%;
 
     height: 40px;
   }
-
-
-  /* ---------------------------------------------------------
-     TABLE TOP
-  --------------------------------------------------------- */
 
   .table-top-section {
-
     padding: 12px;
 
     display: flex;
@@ -1867,9 +1405,7 @@
     gap: 10px;
   }
 
-
   .record-summary {
-
     width: 100%;
 
     white-space: normal;
@@ -1877,13 +1413,7 @@
     font-size: 12px;
   }
 
-
-  /* ---------------------------------------------------------
-     PAGINATION
-  --------------------------------------------------------- */
-
   .pagination {
-
     width: 100%;
 
     max-width: 100%;
@@ -1897,27 +1427,17 @@
     white-space: nowrap;
   }
 
-
   .pagination-btn {
-
     flex-shrink: 0;
   }
 
-
-  /* ---------------------------------------------------------
-     TABLE
-  --------------------------------------------------------- */
-
   .table-container {
-
     width: 100%;
 
     padding: 0 12px;
   }
 
-
   .table-responsive {
-
     width: 100%;
 
     overflow-x: auto;
@@ -1925,19 +1445,11 @@
     -webkit-overflow-scrolling: touch;
   }
 
-
   .user-table {
-
     min-width: 850px;
   }
 
-
-  /* ---------------------------------------------------------
-     BOTTOM
-  --------------------------------------------------------- */
-
   .table-bottom-section {
-
     margin-left: 12px;
 
     margin-right: 12px;
@@ -1949,14 +1461,11 @@
     gap: 10px;
   }
 
-
   .records-per-page {
-
     width: 100%;
 
     justify-content: flex-end;
   }
-
 }
 
 
@@ -1971,42 +1480,33 @@
     padding: 7px;
   }
 
-
   .page-header {
     padding: 9px 10px;
   }
-
 
   .header-title-section h2 {
     font-size: 17px;
   }
 
-
   .search-panel {
     padding: 12px 10px;
   }
-
 
   .table-top-section {
     padding: 10px;
   }
 
-
   .table-container {
     padding: 0 10px;
   }
 
-
   .table-bottom-section {
-
     margin-left: 10px;
 
     margin-right: 10px;
   }
 
-
   .pagination-btn {
-
     min-width: 34px;
 
     height: 30px;
@@ -2016,31 +1516,31 @@
     font-size: 11px;
   }
 
-
   .pagination-btn.first-btn,
   .pagination-btn.last-btn {
-
     min-width: 52px;
   }
-
 
   .btn-add-user {
     height: 36px;
   }
-
 
   .search-input,
   .search-btn,
   .status-select,
   .btn-go,
   .btn-clear {
-
     height: 38px;
   }
-
 }
+
+
+/* =========================================================
+   MARGIN FIX FOR TABLET/MOBILE PAGE WRAPPER
+========================================================= */
+
 @media (max-width: 1024px) {
- .page-content-wrapper{
+  .page-content-wrapper {
     margin-top: 20px;
   }
 }
