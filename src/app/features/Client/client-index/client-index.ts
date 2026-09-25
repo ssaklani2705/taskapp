@@ -839,7 +839,7 @@ export class ClientIndex {
             PAN: client.pan || '',
             'GST Applicable': client.gstFlag === 1 ? 'Yes' : 'No',
             'GST Number': client.gstNo || '',
-            'Tax Payable': client.taxFlag === 1 ? 'Yes' : 'No',
+            'Tax Applicable': client.taxFlag === 1 ? 'Yes' : 'No',
             'Address Line 1': client.addressLine1 || '',
             'Address Line 2': client.addressLine2 || '',
             City: client.city || '',
@@ -1096,7 +1096,7 @@ export class ClientIndex {
     },
     {
       key: 'taxFlag',
-      label: 'Tax Payable',
+      label: 'Tax Applicable',
       sortable: true,
     },
     {

@@ -169,6 +169,7 @@ export class ManagerDashboard {
 
     this.loadFilterData();
     this.getTasks();
+    this.checkClientAssignment();
   }
 
   getTasks(): void {
@@ -678,5 +679,35 @@ export class ManagerDashboard {
         taskStatusIds: kpi.taskStatusIds.join(','),
       },
     });
+  }
+
+   clientAssignmentMessage: string = '';
+   private checkClientAssignment(): void {
+
+    const managerId =
+      Number(sessionStorage.getItem('userId'));
+
+    if (!managerId) {
+      return;
+    }
+
+    this.dataProvider
+      .checkClientAssignment(managerId)
+      .subscribe({
+
+        next: (response: { assigned: boolean; message: string }) => {
+
+          this.clientAssignmentMessage =
+            response.assigned ? '' : response.message;
+        },
+
+        error: (err) => {
+
+          console.error(
+            'Failed to check client assignment',
+            err
+          );
+        }
+      });
   }
 }

@@ -1412,7 +1412,10 @@ if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
 
 
     module:
-      this.buildModulePermissions()
+      // this.buildModulePermissions()
+      this.isRightsHidden
+    ? []
+    : this.buildModulePermissions()
 
   };
 
@@ -2255,22 +2258,16 @@ loadCategories(clearSelection: boolean = true): void {
   this.dataProvider
     .getCategoriesByDepartmentId(departmentId)
     .subscribe({
-
       next: (response: TaskCategoryDTO[]) => {
-
         this.categoryList = response;
         this.categoriesLoading = false;
 
-        // Auto-select all categories when Department ID = 1
         if (Number(departmentId) === 1 && clearSelection) {
-
           this.selectedCategoryIds =
             response.map(category => category.taskcategoryId);
-
           this.showCategoryValidation = false;
         }
       },
-
       error: (error) => {
         console.error('Error loading categories:', error);
         this.categoryList = [];
@@ -2279,40 +2276,8 @@ loadCategories(clearSelection: boolean = true): void {
     });
 }
 
-// loadCategories(clearSelection: boolean = true): void {
 
-//   const departmentId =
-//     this.userForm.get('departmentId')?.value;
 
-//   if (!departmentId) {
-//     this.categoryList = [];
-//     this.selectedCategoryIds = [];
-//     this.categoriesLoading = false;
-//     return;
-//   }
-
-//   if (clearSelection) {
-//     this.selectedCategoryIds = [];
-//   }
-
-//   this.categoriesLoading = true;
-
-//   this.dataProvider
-//     .getCategoriesByDepartmentId(departmentId)
-//     .subscribe({
-
-//       next: (response: TaskCategoryDTO[]) => {
-//         this.categoryList = response;
-//         this.categoriesLoading = false;
-//       },
-
-//       error: (error) => {
-//         console.error('Error loading categories:', error);
-//         this.categoryList = [];
-//         this.categoriesLoading = false;
-//       }
-//     });
-// }
 
 toggleCategory(categoryId: number, event: Event): void {
 
@@ -2376,6 +2341,8 @@ getSelectedCategoryNames(): string {
 }
 
 
-
+get isRightsHidden(): boolean {
+  return Number(this.userForm.get('departmentId')?.value) === 1;
+}
 
 }

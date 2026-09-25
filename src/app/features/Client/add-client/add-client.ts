@@ -42,7 +42,7 @@ import Swal from 'sweetalert2';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './add-client.html',
   styleUrl: './add-client.scss',
@@ -196,7 +196,7 @@ export class AddClient implements OnInit {
       addressLine2: ['', Validators.maxLength(500)],
       city: ['', [Validators.required, Validators.maxLength(100)]],
       pincode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]],
-      location: ['', Validators.maxLength(200)],
+      location: ['', [Validators.required, Validators.maxLength(200)]],
       contactName: ['', [Validators.required, Validators.maxLength(200)]],
       contactEmail: ['', [Validators.required, Validators.email, Validators.maxLength(200)]],
       emails: [''],

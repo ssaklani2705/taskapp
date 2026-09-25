@@ -10,9 +10,7 @@
 
       <div class="user-actions">
         <button type="button" class="back-index-btn" (click)="backToIndexPage()">
-          <mat-icon>
-            arrow_back
-          </mat-icon>
+          <mat-icon> arrow_back </mat-icon>
           Back to Index
         </button>
       </div>
@@ -34,47 +32,58 @@
             <!-- CLIENT -->
             <div class="user-form-col">
               <div class="user-form-group">
-
                 <label class="user-label">
                   Client Name
                   <span class="required">*</span>
                 </label>
 
                 <div class="client-dropdown-container">
-
                   <div class="client-search-wrapper">
+                    <input
+                      type="text"
+                      class="user-input"
+                      placeholder="Search Client..."
+                      [(ngModel)]="clientSearchText"
+                      [ngModelOptions]="{ standalone: true }"
+                      (input)="filterClients()"
+                    />
 
-                    <input type="text" class="user-input" placeholder="Search Client..." [(ngModel)]="clientSearchText"
-                      [ngModelOptions]="{standalone:true}" (input)="filterClients()" />
-
-                    <button *ngIf="clientSearchText" type="button" class="clear-client-btn"
-                      (click)="clearClientSelection()">
-
+                    <button
+                      *ngIf="clientSearchText"
+                      type="button"
+                      class="clear-client-btn"
+                      (click)="clearClientSelection()"
+                    >
                       ×
-
                     </button>
-
                   </div>
 
-                  <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
-
-                    <div class="client-dropdown-item" *ngFor="let client of filteredClients"
-                      (click)="selectClient(client)">
-
+                  <div
+                    class="client-dropdown-list"
+                    *ngIf="showClientDropdown && clientSearchText.trim().length >= 3"
+                  >
+                    <div
+                      class="client-dropdown-item"
+                      *ngFor="let client of filteredClients"
+                      (click)="selectClient(client)"
+                    >
                       {{ client.name }}
-
                     </div>
 
-                    <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">
-
+                    <div
+                      class="client-dropdown-item no-client-found"
+                      *ngIf="filteredClients.length === 0"
+                    >
                       No Client Found
-
                     </div>
-
                   </div>
-
                 </div>
-                <div class="user-error" *ngIf="recurringForm.get('clientId')?.touched && recurringForm.get('clientId')?.invalid">
+                <div
+                  class="user-error"
+                  *ngIf="
+                    recurringForm.get('clientId')?.touched && recurringForm.get('clientId')?.invalid
+                  "
+                >
                   Client Name is required
                 </div>
               </div>
@@ -90,8 +99,10 @@
 
                 <input type="text" class="user-input" formControlName="title" maxlength="500" />
 
-                <div class="user-error"
-                  *ngIf="recurringForm.get('title')?.touched && recurringForm.get('title')?.invalid">
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('title')?.touched && recurringForm.get('title')?.invalid"
+                >
                   Title is required
                 </div>
               </div>
@@ -105,27 +116,21 @@
                 </label>
 
                 <select class="user-input user-select" formControlName="priority">
-                  <option [ngValue]="null">
-                    Select Priority
-                  </option>
+                  <option [ngValue]="null">Select Priority</option>
 
-                  <option [ngValue]="1">
-                    High
-                  </option>
+                  <option [ngValue]="1">High</option>
 
-                  <option [ngValue]="2">
-                    Medium
-                  </option>
+                  <option [ngValue]="2">Medium</option>
 
-                  <option [ngValue]="3">
-                    Low
-                  </option>
+                  <option [ngValue]="3">Low</option>
                 </select>
 
-                <div class="user-error" *ngIf="
-        recurringForm.get('priority')?.touched &&
-        recurringForm.get('priority')?.invalid
-      ">
+                <div
+                  class="user-error"
+                  *ngIf="
+                    recurringForm.get('priority')?.touched && recurringForm.get('priority')?.invalid
+                  "
+                >
                   Priority is required
                 </div>
               </div>
@@ -147,9 +152,12 @@
                   <option [ngValue]="3">Deleted</option>
                 </select>
 
-                <div class="user-error" *ngIf="
+                <div
+                  class="user-error"
+                  *ngIf="
                     recurringForm.get('status')?.touched && recurringForm.get('status')?.invalid
-                  ">
+                  "
+                >
                   Status is required
                 </div>
               </div>
@@ -168,8 +176,12 @@
               <div class="user-form-group">
                 <label class="user-label"> Description </label>
 
-                <textarea class="user-input user-textarea" formControlName="description" rows="4"
-                  maxlength="5000"></textarea>
+                <textarea
+                  class="user-input user-textarea"
+                  formControlName="description"
+                  rows="4"
+                  maxlength="5000"
+                ></textarea>
               </div>
             </div>
           </div>
@@ -186,38 +198,59 @@
                 <div class="radio-group">
                   <!-- DAILY -->
                   <label class="radio-option">
-                    <input type="radio" formControlName="type" [value]="1" (change)="onTypeChange()" />
+                    <input
+                      type="radio"
+                      formControlName="type"
+                      [value]="1"
+                      (change)="onTypeChange()"
+                    />
                     <span>Daily</span>
                   </label>
 
                   <!-- WEEKLY -->
                   <label class="radio-option">
-                    <input type="radio" formControlName="type" [value]="2" (change)="onTypeChange()" />
+                    <input
+                      type="radio"
+                      formControlName="type"
+                      [value]="2"
+                      (change)="onTypeChange()"
+                    />
                     <span>Weekly</span>
                   </label>
 
                   <!-- MONTHLY -->
                   <label class="radio-option">
-                    <input type="radio" formControlName="type" [value]="3" (change)="onTypeChange()" />
+                    <input
+                      type="radio"
+                      formControlName="type"
+                      [value]="3"
+                      (change)="onTypeChange()"
+                    />
                     <span>Monthly</span>
                   </label>
 
                   <!-- YEARLY -->
                   <label class="radio-option">
-                    <input type="radio" formControlName="type" [value]="4" (change)="onTypeChange()" />
+                    <input
+                      type="radio"
+                      formControlName="type"
+                      [value]="4"
+                      (change)="onTypeChange()"
+                    />
                     <span>Yearly</span>
                   </label>
                 </div>
 
-                <div class="user-error"
-                  *ngIf="recurringForm.get('type')?.touched && recurringForm.get('type')?.invalid">
+                <div
+                  class="user-error"
+                  *ngIf="recurringForm.get('type')?.touched && recurringForm.get('type')?.invalid"
+                >
                   Type is required
                 </div>
               </div>
             </div>
           </div>
 
-         
           <!-- ================= WEEKLY ================= -->
           <div class="user-form-row" *ngIf="recurringForm.get('type')?.value === 2">
             <div class="user-form-col">
@@ -286,8 +319,7 @@
 
           <!-- ================= YEARLY ================= -->
           <div class="user-form-row" *ngIf="recurringForm.get('type')?.value === 4">
-
-              <!-- MONTH -->
+            <!-- MONTH -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -348,8 +380,6 @@
                 </div>
               </div>
             </div>
-
-          
 
             <div class="user-form-col empty-column"></div>
             <div class="user-form-col empty-column"></div>

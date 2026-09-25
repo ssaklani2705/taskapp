@@ -189,7 +189,7 @@
               <!-- Tax Applicable -->
               <div class="user-form-col">
                 <div class="user-form-group">
-                  <label class="user-label"> Tax Payable </label>
+                  <label class="user-label"> Tax Applicable </label>
 
                   <div class="admin-row">
                     <mat-checkbox formControlName="taxFlag"></mat-checkbox>
@@ -302,7 +302,7 @@
               <!-- Location -->
               <div class="user-form-col">
                 <div class="user-form-group">
-                  <label class="user-label"> Location </label>
+                  <label class="user-label"> Location <span class="required">*</span> </label>
 
                   <input
                     type="text"
@@ -310,6 +310,16 @@
                     formControlName="location"
                     maxlength="200"
                   />
+
+                  <div
+                    class="user-error"
+                    *ngIf="
+                      clientForm.get('location')?.touched &&
+                      clientForm.get('location')?.errors?.['required']
+                    "
+                  >
+                    Location is required.
+                  </div>
                 </div>
               </div>
 
@@ -535,7 +545,7 @@
             <!-- ROW 8 -->
             <div class="user-form-row">
               <!-- Emails -->
-              <div class="user-form-col">
+              <div class="user-form-col cc-email-col">
                 <div class="user-form-group">
                   <label class="user-label"> CC Email </label>
                   <input
@@ -548,8 +558,8 @@
                   <div class="user-help-text">Emails should be separated by commas (,)</div>
                 </div>
               </div>
-              <div class="user-form-col empty-column"></div>
-              <div class="user-form-col empty-column"></div>
+              <!-- <div class="user-form-col empty-column"></div>
+              <div class="user-form-col empty-column"></div> -->
               <div class="user-form-col empty-column"></div>
             </div>
           </div>

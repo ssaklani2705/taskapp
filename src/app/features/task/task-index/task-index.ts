@@ -7,48 +7,36 @@ import { MatListModule } from '@angular/material/list';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  Inject,
-  PLATFORM_ID,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
-import {
-  ActivatedRoute,
-  Router,
-  RouterModule
-} from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { environment } from '../../../../environments/environment';
 
 import { Common } from '../../../classes/common';
 
-import {
-  DataProviderService
-} from '../../../service/data-provider.service';
+import { DataProviderService } from '../../../service/data-provider.service';
 
 import Swal from 'sweetalert2';
 
-import {
-  SessionStorageService
-} from '../../../service/session-storage.service';
+import { SessionStorageService } from '../../../service/session-storage.service';
 
-import {
-  SESSION_KEYS
-} from '../../../service/session-storage.keys';
+import { SESSION_KEYS } from '../../../service/session-storage.keys';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
-import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule, MatOption, MatOptionModule } from '@angular/material/core';
+import {
+  DateAdapter,
+  MAT_DATE_LOCALE,
+  MatNativeDateModule,
+  MatOption,
+  MatOptionModule,
+} from '@angular/material/core';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 //import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import * as XLSX from 'xlsx';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
 
 interface Task {
   taskId: number;
@@ -95,8 +83,7 @@ interface AssignedUser {
     MatIconModule,
     MatDividerModule,
     MatOptionModule,
-    MatTooltipModule
-
+    MatTooltipModule,
   ],
 
   templateUrl: './task-index.html',
@@ -113,7 +100,6 @@ interface AssignedUser {
     },
   ],
 })
-
 export class TaskIndex {
   dashboardFilter: string = '';
   // =========================================================
@@ -124,7 +110,6 @@ export class TaskIndex {
   apiResponseTaskDetails: any = {};
 
   loginType = '';
-
 
   // =========================================================
   // FILTER MASTER DATA
@@ -137,7 +122,6 @@ export class TaskIndex {
 
   assignedUsers: AssignedUser[] = [];
 
-
   // =========================================================
   // SEARCH
   // =========================================================
@@ -145,7 +129,6 @@ export class TaskIndex {
   searchQuery: string = '';
 
   search: string = '';
-
 
   // =========================================================
   // FILTERS
@@ -164,7 +147,6 @@ export class TaskIndex {
 
   statusIndex: number = 0;
 
-
   // =========================================================
   // PAGINATION
   // =========================================================
@@ -174,12 +156,9 @@ export class TaskIndex {
 
   page: number = 0;
 
-  recordsPerPage: number =
-    environment.recordsPerPage;
+  recordsPerPage: number = environment.recordsPerPage;
 
-  size: number =
-    environment.size;
-
+  size: number = environment.size;
 
   // =========================================================
   // OTHER
@@ -196,7 +175,6 @@ export class TaskIndex {
   userId: any;
 
   isAdmin: any;
-
 
   // =========================================================
   // PERMISSIONS
@@ -220,21 +198,17 @@ export class TaskIndex {
 
   showHeaderBar: boolean = true;
 
-
   // =========================================================
   // SESSION FILTER
   // =========================================================
 
-  filterKey =
-    SESSION_KEYS.TASK_MASTER_FILTER;
-
+  filterKey = SESSION_KEYS.TASK_MASTER_FILTER;
 
   // =========================================================
   // PANEL
   // =========================================================
 
   isPanelVisible = true;
-
 
   // =========================================================
   // SORT
@@ -243,7 +217,6 @@ export class TaskIndex {
   sortColumn: string = '';
 
   sortDirection: 'asc' | 'desc' = 'asc';
-
 
   // =========================================================
   // TABLE COLUMNS
@@ -254,73 +227,69 @@ export class TaskIndex {
     label: string;
     sortable: boolean;
   }[] = [
+    {
+      key: 'title',
+      label: 'Title',
+      sortable: true,
+    },
 
-      {
-        key: 'title',
-        label: 'Title',
-        sortable: true
-      },
+    {
+      key: 'clientName',
+      label: 'Client',
+      sortable: true,
+    },
 
-      {
-        key: 'clientName',
-        label: 'Client',
-        sortable: true
-      },
+    {
+      key: 'date',
+      label: 'Start Date',
+      sortable: true,
+    },
 
-      {
-        key: 'date',
-        label: 'Start Date',
-        sortable: true
-      },
+    {
+      key: 'due_date',
+      label: 'Due Date',
+      sortable: true,
+    },
 
-      {
-        key: 'due_date',
-        label: 'Due Date',
-        sortable: true
-      },
+    {
+      key: 'taskCategoryName',
+      label: 'Task Category',
+      sortable: true,
+    },
+    {
+      key: 'assignedbyName',
+      label: 'Assigned By',
+      sortable: true,
+    },
 
-      {
-        key: 'taskCategoryName',
-        label: 'Task Category',
-        sortable: true
-      },
-      {
-        key: 'assignedbyName',
-        label: 'Assigned By',
-        sortable: true
-      },
+    {
+      key: 'assignedToName',
+      label: 'Assigned To',
+      sortable: true,
+    },
 
-      {
-        key: 'assignedToName',
-        label: 'Assigned To',
-        sortable: true
-      },
-
-      {
-        key: 'priority',
-        label: 'Priority',
-        sortable: true
-      },
-      {
-        key: 'taskStatus',
-        label: 'Task Status',
-        sortable: true
-      },
-      {
-        key: 'status',
-        label: 'Status',
-        sortable: true
-      }
-
-    ];
-
+    {
+      key: 'priority',
+      label: 'Priority',
+      sortable: true,
+    },
+    {
+      key: 'taskStatus',
+      label: 'Update Status',
+      sortable: true,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      sortable: true,
+    },
+  ];
 
   // =========================================================
   // CONSTRUCTOR
   // =========================================================
 
   constructor(
-
     private dataprovider: DataProviderService,
 
     @Inject(PLATFORM_ID)
@@ -331,9 +300,7 @@ export class TaskIndex {
     private route: ActivatedRoute,
 
     private sessionService: SessionStorageService,
-
-  ) { }
-
+  ) {}
 
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
@@ -375,8 +342,11 @@ export class TaskIndex {
       this.dashboardFilter = params['taskType'];
       // alert(this.dashboardFilter + " dd")
       if (params['taskStatusIds'] !== undefined) {
-
-        this.selectedTaskStatuses = params['taskStatusIds'] ? String(params['taskStatusIds']).split(',').filter((status: string) => status !== '') : [];
+        this.selectedTaskStatuses = params['taskStatusIds']
+          ? String(params['taskStatusIds'])
+              .split(',')
+              .filter((status: string) => status !== '')
+          : [];
         this.currentPage = 1;
         this.page = 0;
       }
@@ -406,7 +376,7 @@ export class TaskIndex {
           fromDate: qp.get('fromDate'),
           toDate: qp.get('toDate'),
           taskStatusId: qp.get('taskStatusIds') ? qp.get('taskStatusIds')!.split(',') : [],
-          dashboardFilter: qp.get('taskType')
+          dashboardFilter: qp.get('taskType'),
         };
       }
     }
@@ -462,8 +432,7 @@ export class TaskIndex {
     this.selectedTaskStatuses = Array.isArray(stateData.taskStatusId)
       ? stateData.taskStatusId.map((v: any) => String(v))
       : [];
-    this.dashboardFilter =
-      stateData.dashboardFilter || '';
+    this.dashboardFilter = stateData.dashboardFilter || '';
     //
     if (Array.isArray(stateData.taskStatusId)) {
       this.selectedTaskStatuses = stateData.taskStatusId.map((v: any) => String(v));
@@ -479,73 +448,39 @@ export class TaskIndex {
     this.toDate = stateData.toDate ? new Date(stateData.toDate + 'T00:00:00') : null;
   }
 
-
-
   // =========================================================
   // SAVE FILTER STATE
   // =========================================================
 
   private saveFilterState(): void {
-
     const filterState = {
+      currentPage: this.currentPage,
 
-      currentPage:
-        this.currentPage,
+      page: this.page,
 
-      page:
-        this.page,
+      size: this.size,
 
-      size:
-        this.size,
+      statusIndex: this.statusIndex,
 
-      statusIndex:
-        this.statusIndex,
+      searchText: this.search,
 
-      searchText:
-        this.search,
+      clientId: this.selectedClient ? Number(this.selectedClient) : null,
 
-      clientId:
-        this.selectedClient
-          ? Number(this.selectedClient)
-          : null,
+      taskCategoryId: this.selectedTaskCategory ? Number(this.selectedTaskCategory) : null,
 
-      taskCategoryId:
-        this.selectedTaskCategory
-          ? Number(this.selectedTaskCategory)
-          : null,
+      assignedTo: this.selectedAssignedTo ? Number(this.selectedAssignedTo) : null,
 
-      assignedTo:
-        this.selectedAssignedTo
-          ? Number(this.selectedAssignedTo)
-          : null,
+      priority: this.selectedPriority ? Number(this.selectedPriority) : null,
 
-      priority:
-        this.selectedPriority
-          ? Number(this.selectedPriority)
-          : null,
+      fromDate: this.formatDateForApi(this.fromDate),
 
-      fromDate:
-        this.formatDateForApi(this.fromDate),
-
-      toDate:
-        this.formatDateForApi(this.toDate),
-      taskStatusId:
-        this.selectedTaskStatuses,
-
+      toDate: this.formatDateForApi(this.toDate),
+      taskStatusId: this.selectedTaskStatuses,
     };
 
-
-    if (
-      isPlatformBrowser(this.platformId)
-    ) {
-
-      sessionStorage.setItem(
-        this.filterKey,
-        JSON.stringify(filterState)
-      );
-
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
     }
-
   }
 
   // =========================================================
@@ -553,23 +488,17 @@ export class TaskIndex {
   // =========================================================
 
   private loadFilterData(): void {
-
     this.dataprovider
-      .getTaskFilterDataForIndex(this.isAdmin,
-        this.userId, this.loginType)
+      .getTaskFilterDataForIndex(this.isAdmin, this.userId, this.loginType)
       .subscribe({
-
         next: (response: any) => {
-
           this.clients = response.clients || [];
           this.filteredClients = [...this.clients];
 
           // Restore selected client name after page return
           if (this.selectedClient) {
-
             const selectedClientObj = this.clients.find(
-              (c: any) =>
-                String(c.clientId) === String(this.selectedClient)
+              (c: any) => String(c.clientId) === String(this.selectedClient),
             );
 
             if (selectedClientObj) {
@@ -579,15 +508,9 @@ export class TaskIndex {
           this.filterAvailableClients();
           this.taskCategories = response.taskCategories || [];
           this.assignedUsers = response.assignedUsers || [];
-
         },
         error: (error) => {
-
-          console.error(
-            'Error loading task filter data:',
-            error
-          );
-
+          console.error('Error loading task filter data:', error);
 
           this.clients = [];
           this.filteredClients = [];
@@ -595,32 +518,22 @@ export class TaskIndex {
           this.taskCategories = [];
 
           this.assignedUsers = [];
-
-        }
-
+        },
       });
-
   }
 
   private filterAvailableClients(): void {
-
     // Get unique client names from task data
     const availableClientNames = new Set(
-      this.tasks
-        .map((task: any) => task.clientName)
-        .filter((name: string) => name)
+      this.tasks.map((task: any) => task.clientName).filter((name: string) => name),
     );
 
     // Keep only clients which are present in task data
-    this.filteredClients = this.clients.filter(
-      (client: any) =>
-        availableClientNames.has(client.name)
+    this.filteredClients = this.clients.filter((client: any) =>
+      availableClientNames.has(client.name),
     );
 
-    console.log(
-      'AVAILABLE CLIENTS:',
-      this.filteredClients
-    );
+    console.log('AVAILABLE CLIENTS:', this.filteredClients);
   }
 
   // =========================================================
@@ -628,53 +541,30 @@ export class TaskIndex {
   // =========================================================
 
   togglePanel(): void {
-
-    this.isPanelVisible =
-      !this.isPanelVisible;
-
+    this.isPanelVisible = !this.isPanelVisible;
   }
-
 
   // =========================================================
   // GET TASK DETAILS
   // =========================================================
 
   getTaskDetails(): void {
+    const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
 
-    const clientId =
-      this.selectedClient
-        ? Number(this.selectedClient)
-        : 0;
+    const taskCategoryId = this.selectedTaskCategory ? Number(this.selectedTaskCategory) : 0;
 
-    const taskCategoryId =
-      this.selectedTaskCategory
-        ? Number(this.selectedTaskCategory)
-        : 0;
+    const assignedTo = this.selectedAssignedTo ? Number(this.selectedAssignedTo) : -1;
 
-    const assignedTo =
-      this.selectedAssignedTo
-        ? Number(this.selectedAssignedTo)
-        : -1;
+    const priority = this.selectedPriority ? Number(this.selectedPriority) : 0;
 
-    const priority =
-      this.selectedPriority
-        ? Number(this.selectedPriority)
-        : 0;
+    const fromDate = this.formatDateForApi(this.fromDate);
 
-    const fromDate =
-      this.formatDateForApi(this.fromDate);
+    const toDate = this.formatDateForApi(this.toDate);
 
-    const toDate =
-      this.formatDateForApi(this.toDate);
-
-    const taskStatusId =
-      this.selectedTaskStatuses;
-
-
+    const taskStatusId = this.selectedTaskStatuses;
 
     this.dataprovider
       .getTaskDetails(
-
         this.page,
 
         this.size,
@@ -698,175 +588,110 @@ export class TaskIndex {
         this.userId,
         taskStatusId,
         this.loginType,
-        this.dashboardFilter
-
+        this.dashboardFilter,
       )
       .subscribe({
-
         next: (response: any) => {
+          console.log('TASK DETAILS RESPONSE:', response);
 
-          console.log(
-            'TASK DETAILS RESPONSE:',
-            response
-          );
+          this.apiResponseTaskDetails = response;
 
-          this.apiResponseTaskDetails =
-            response;
-
-          this.tasks =
-            response.data || [];
+          this.tasks = response.data || [];
 
           this.filterAvailableClients();
-
         },
 
         error: (error) => {
-
-          console.error(
-            'Error fetching task details:',
-            error
-          );
+          console.error('Error fetching task details:', error);
 
           this.apiResponseTaskDetails = {
-            totalElements: 0
+            totalElements: 0,
           };
 
           this.tasks = [];
-
-        }
-
+        },
       });
-
   }
-
 
   // =========================================================
   // PAGINATED TASKS
   // =========================================================
 
   get paginatedTasks(): Task[] {
-
     return this.tasks;
-
   }
-
 
   // =========================================================
   // GO TO PAGE
   // =========================================================
 
-  goToPage(
-    pageNumber: number
-  ): void {
-
-    if (
-      pageNumber < 1 ||
-      pageNumber > this.totalPages
-    ) {
-
+  goToPage(pageNumber: number): void {
+    if (pageNumber < 1 || pageNumber > this.totalPages) {
       return;
-
     }
 
+    this.currentPage = pageNumber;
 
-    this.currentPage =
-      pageNumber;
-
-
-    this.page =
-      pageNumber - 1;
-
+    this.page = pageNumber - 1;
 
     this.saveFilterState();
 
-
     this.router
       .navigate(
-
         ['/task-index'],
 
         {
-
           queryParams: {
+            currentPage: this.currentPage,
 
-            currentPage:
-              this.currentPage,
+            page: this.page,
 
-            page:
-              this.page,
+            size: this.size,
 
-            size:
-              this.size,
+            statusIndex: this.statusIndex,
 
-            statusIndex:
-              this.statusIndex,
+            searchText: this.search,
 
-            searchText:
-              this.search,
+            clientId: this.selectedClient || null,
 
-            clientId:
-              this.selectedClient || null,
+            taskCategoryId: this.selectedTaskCategory || null,
 
-            taskCategoryId:
-              this.selectedTaskCategory || null,
+            assignedTo: this.selectedAssignedTo || null,
 
-            assignedTo:
-              this.selectedAssignedTo || null,
+            priority: this.selectedPriority || null,
 
-            priority:
-              this.selectedPriority || null,
+            fromDate: this.formatDateForApi(this.fromDate) || null,
 
-            fromDate:
-              this.formatDateForApi(this.fromDate) || null,
-
-            toDate:
-              this.formatDateForApi(this.toDate) || null,
-            taskStatusIds:
-              this.selectedTaskStatuses.length
-                ? this.selectedTaskStatuses.join(',')
-                : null,
+            toDate: this.formatDateForApi(this.toDate) || null,
+            taskStatusIds: this.selectedTaskStatuses.length
+              ? this.selectedTaskStatuses.join(',')
+              : null,
             taskType: this.dashboardFilter,
-
-
           },
 
-          replaceUrl: true
-
-        }
-
+          replaceUrl: true,
+        },
       )
       .then(() => {
-
         this.getTaskDetails();
-
       });
-
   }
-
 
   // =========================================================
   // FIRST PAGE
   // =========================================================
 
   goToFirstPage(): void {
-
     this.goToPage(1);
-
   }
-
 
   // =========================================================
   // LAST PAGE
   // =========================================================
 
   goToLastPage(): void {
-
-    this.goToPage(
-      this.totalPages
-    );
-
+    this.goToPage(this.totalPages);
   }
-
 
   // =========================================================
   // SEARCH / FILTER
@@ -879,20 +704,16 @@ export class TaskIndex {
   //       ? this.searchQuery.trim()
   //       : '';
 
-
   //   this.statusIndex =
   //     this.selectedStatus === ''
   //       ? 0
   //       : Number(this.selectedStatus);
 
-
   //   this.currentPage = 1;
 
   //   this.page = 0;
 
-
   //   this.saveFilterState();
-
 
   //   this.router
   //     .navigate(
@@ -943,114 +764,69 @@ export class TaskIndex {
   // }
 
   onSearch(): void {
+    this.search = this.searchQuery ? this.searchQuery.trim() : '';
 
-    this.search =
-      this.searchQuery
-        ? this.searchQuery.trim()
-        : '';
-
-    this.statusIndex =
-      this.selectedStatus === ''
-        ? 0
-        : Number(this.selectedStatus);
-
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
 
     this.currentPage = 1;
     this.page = 0;
 
+    const fromDate = this.formatDateForApi(this.fromDate);
 
-    const fromDate =
-      this.formatDateForApi(this.fromDate);
-
-    const toDate =
-      this.formatDateForApi(this.toDate);
-
+    const toDate = this.formatDateForApi(this.toDate);
 
     this.saveFilterState();
 
-
     this.router
-      .navigate(
-        ['/task-index'],
-        {
-          queryParams: {
+      .navigate(['/task-index'], {
+        queryParams: {
+          currentPage: 1,
 
-            currentPage: 1,
+          page: 0,
 
-            page: 0,
+          size: this.size,
 
-            size: this.size,
+          statusIndex: this.statusIndex,
 
-            statusIndex:
-              this.statusIndex,
+          searchText: this.search,
 
-            searchText:
-              this.search,
+          clientId: this.selectedClient || null,
 
-            clientId:
-              this.selectedClient || null,
+          taskCategoryId: this.selectedTaskCategory || null,
 
-            taskCategoryId:
-              this.selectedTaskCategory || null,
+          assignedTo: this.selectedAssignedTo || null,
 
-            assignedTo:
-              this.selectedAssignedTo || null,
+          priority: this.selectedPriority || null,
 
-            priority:
-              this.selectedPriority || null,
+          fromDate: fromDate || null,
 
-            fromDate:
-              fromDate || null,
+          toDate: toDate || null,
 
-            toDate:
-              toDate || null,
+          taskStatusIds: this.selectedTaskStatuses.length
+            ? this.selectedTaskStatuses.join(',')
+            : null,
+          taskType: this.dashboardFilter,
+        },
 
-            taskStatusIds:
-              this.selectedTaskStatuses.length
-                ? this.selectedTaskStatuses.join(',')
-                : null,
-            taskType: this.dashboardFilter,
-
-
-
-
-          },
-
-          replaceUrl: true
-
-        }
-      )
+        replaceUrl: true,
+      })
       .then(() => {
-
         this.getTaskDetails();
-
       });
-
   }
 
-  private formatDateForApi(
-    date: Date | null
-  ): string {
-
+  private formatDateForApi(date: Date | null): string {
     if (!date) {
       return '';
     }
 
-    const year =
-      date.getFullYear();
+    const year = date.getFullYear();
 
-    const month =
-      String(
-        date.getMonth() + 1
-      ).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
 
-    const day =
-      String(
-        date.getDate()
-      ).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
-
   }
 
   // =========================================================
@@ -1058,19 +834,14 @@ export class TaskIndex {
   // =========================================================
 
   onChangeRecordsPerPage(): void {
-
     this.currentPage = 1;
 
     this.page = 0;
 
-
     this.saveFilterState();
 
-
     this.getTaskDetails();
-
   }
-
 
   // =========================================================
   // DELETE TASK
@@ -1093,7 +864,6 @@ export class TaskIndex {
   //   //       : null
 
   //   // };
-
 
   //   // Swal.fire({
 
@@ -1143,7 +913,6 @@ export class TaskIndex {
 
   //   //                 );
 
-
   //   //                 this.getTaskDetails();
 
   //   //               } else {
@@ -1162,7 +931,6 @@ export class TaskIndex {
 
   //   //             },
 
-
   //   //           error:
   //   //             (error) => {
 
@@ -1170,7 +938,6 @@ export class TaskIndex {
   //   //                 'Error deleting task:',
   //   //                 error
   //   //               );
-
 
   //   //               Swal.fire(
 
@@ -1194,91 +961,70 @@ export class TaskIndex {
 
   // }
 
-
   // =========================================================
   // VIEW TASK
   // =========================================================
 
   viewTask(taskId: number): void {
-
     this.saveFilterState();
 
-    this.router.navigate(
-      [
-        '/view-task',
-        taskId
-      ],
-      {
-        queryParams: {
+    this.router.navigate(['/view-task', taskId], {
+      queryParams: {
+        currentPage: this.currentPage,
 
-          currentPage: this.currentPage,
+        statusIndex: this.statusIndex,
 
-          statusIndex: this.statusIndex,
+        searchText: this.search,
 
-          searchText: this.search,
+        size: this.size,
 
-          size: this.size,
+        clientId: this.selectedClient || null,
 
-          clientId: this.selectedClient || null,
+        taskCategoryId: this.selectedTaskCategory || null,
 
-          taskCategoryId: this.selectedTaskCategory || null,
+        assignedTo: this.selectedAssignedTo || null,
 
-          assignedTo: this.selectedAssignedTo || null,
+        priority: this.selectedPriority || null,
 
-          priority: this.selectedPriority || null,
+        fromDate: this.formatDateForApi(this.fromDate) || null,
 
-          fromDate: this.formatDateForApi(this.fromDate) || null,
+        toDate: this.formatDateForApi(this.toDate) || null,
 
-          toDate: this.formatDateForApi(this.toDate) || null,
+        taskStatusIds: this.selectedTaskStatuses.length
+          ? this.selectedTaskStatuses.join(',')
+          : null,
+        taskType: this.dashboardFilter,
+      },
 
-          taskStatusIds: this.selectedTaskStatuses.length
-            ? this.selectedTaskStatuses.join(',')
-            : null,
-          taskType: this.dashboardFilter,
-        },
-
-        state: {
-          currentPage: this.currentPage,
-          statusIndex: this.statusIndex,
-          searchText: this.search,
-          size: this.size,
-          clientId: this.selectedClient,
-          taskCategoryId: this.selectedTaskCategory,
-          assignedTo: this.selectedAssignedTo,
-          priority: this.selectedPriority,
-          fromDate: this.formatDateForApi(this.fromDate),
-          toDate: this.formatDateForApi(this.toDate),
-          taskStatusIds: this.selectedTaskStatuses,
-          taskType: this.dashboardFilter
-        }
-      }
-
-    );
-
+      state: {
+        currentPage: this.currentPage,
+        statusIndex: this.statusIndex,
+        searchText: this.search,
+        size: this.size,
+        clientId: this.selectedClient,
+        taskCategoryId: this.selectedTaskCategory,
+        assignedTo: this.selectedAssignedTo,
+        priority: this.selectedPriority,
+        fromDate: this.formatDateForApi(this.fromDate),
+        toDate: this.formatDateForApi(this.toDate),
+        taskStatusIds: this.selectedTaskStatuses,
+        taskType: this.dashboardFilter,
+      },
+    });
   }
-
 
   // =========================================================
   // EDIT TASK
   // =========================================================
 
-  editTask(
-    taskId: number
-  ): void {
-
+  editTask(taskId: number): void {
     this.saveFilterState();
 
-
     this.router.navigate(
-
-      [
-        '/edit-task',
-        taskId
-      ],
+      ['/edit-task', taskId],
 
       {
         queryParams: {
-
           currentPage: this.currentPage,
 
           statusIndex: this.statusIndex,
@@ -1318,26 +1064,22 @@ export class TaskIndex {
           toDate: this.formatDateForApi(this.toDate),
           taskStatusIds: this.selectedTaskStatuses,
           taskType: this.dashboardFilter,
-        }
-      }
+        },
+      },
     );
   }
-
 
   // =========================================================
   // ADD TASK
   // =========================================================
   addTask(): void {
-
     this.saveFilterState();
 
     this.router.navigate(
-
       ['/add-task'],
 
       {
         queryParams: {
-
           currentPage: this.currentPage,
 
           statusIndex: this.statusIndex,
@@ -1362,7 +1104,6 @@ export class TaskIndex {
             ? this.selectedTaskStatuses.join(',')
             : null,
           taskType: this.dashboardFilter,
-
         },
 
         state: {
@@ -1378,253 +1119,121 @@ export class TaskIndex {
           toDate: this.formatDateForApi(this.toDate),
           taskStatusIds: this.selectedTaskStatuses,
           taskType: this.dashboardFilter,
-
-        }
-      }
-
+        },
+      },
     );
-
   }
-
 
   // =========================================================
   // PAGE NUMBERS
   // =========================================================
 
   pages(): number[] {
+    const total = this.totalPages;
 
-    const total =
-      this.totalPages;
-
-
-    const current =
-      this.currentPage;
-
+    const current = this.currentPage;
 
     const delta = 5;
 
+    const start = Math.max(1, current - delta);
 
-    const start =
-      Math.max(
-        1,
-        current - delta
-      );
-
-
-    const end =
-      Math.min(
-        total,
-        current + delta
-      );
-
+    const end = Math.min(total, current + delta);
 
     const arr: number[] = [];
 
-
-    for (
-      let i = start;
-      i <= end;
-      i++
-    ) {
-
+    for (let i = start; i <= end; i++) {
       arr.push(i);
-
     }
 
-
     return arr;
-
   }
-
 
   // =========================================================
   // RECORD SUMMARY
   // =========================================================
 
   get recordSummary(): string {
+    const totalRecords = this.apiResponseTaskDetails?.totalElements || 0;
 
-    const totalRecords =
-      this.apiResponseTaskDetails
-        ?.totalElements || 0;
+    const startRecord = totalRecords === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
 
+    const endRecord = Math.min(
+      this.currentPage * this.recordsPerPage,
 
-    const startRecord =
-      totalRecords === 0
-
-        ? 0
-
-        : (
-
-          (this.currentPage - 1) *
-          this.recordsPerPage
-
-        ) + 1;
-
-
-    const endRecord =
-      Math.min(
-
-        this.currentPage *
-        this.recordsPerPage,
-
-        totalRecords
-
-      );
-
+      totalRecords,
+    );
 
     return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${totalRecords > 1 ? 's' : ''})`;
-
   }
-
 
   // =========================================================
   // TOTAL PAGES
   // =========================================================
 
   get totalPages(): number {
-
-    const total =
-      this.apiResponseTaskDetails
-        ?.totalElements || 0;
-
+    const total = this.apiResponseTaskDetails?.totalElements || 0;
 
     return Math.max(
-
       1,
 
-      Math.ceil(
-
-        total /
-        this.recordsPerPage
-
-      )
-
+      Math.ceil(total / this.recordsPerPage),
     );
-
   }
-
 
   // =========================================================
   // SORT
   // =========================================================
 
-  sortData(
-    column: string
-  ): void {
-
+  sortData(column: string): void {
     if (!column) {
-
       return;
-
     }
 
-
-    if (
-      this.sortColumn === column
-    ) {
-
-      this.sortDirection =
-        this.sortDirection === 'asc'
-          ? 'desc'
-          : 'asc';
-
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
+      this.sortColumn = column;
 
-      this.sortColumn =
-        column;
-
-      this.sortDirection =
-        'asc';
-
+      this.sortDirection = 'asc';
     }
 
+    this.tasks.sort((a: any, b: any) => {
+      let valA = a[column];
 
-    this.tasks.sort(
-      (a: any, b: any) => {
+      let valB = b[column];
 
-        let valA =
-          a[column];
+      valA = valA ?? '';
 
-        let valB =
-          b[column];
+      valB = valB ?? '';
 
+      if (!isNaN(valA) && !isNaN(valB)) {
+        valA = Number(valA);
 
-        valA =
-          valA ?? '';
+        valB = Number(valB);
+      } else {
+        valA = valA.toString().toLowerCase();
 
-        valB =
-          valB ?? '';
-
-
-        if (
-          !isNaN(valA) &&
-          !isNaN(valB)
-        ) {
-
-          valA =
-            Number(valA);
-
-          valB =
-            Number(valB);
-
-        } else {
-
-          valA =
-            valA
-              .toString()
-              .toLowerCase();
-
-          valB =
-            valB
-              .toString()
-              .toLowerCase();
-
-        }
-
-
-        if (
-          valA < valB
-        ) {
-
-          return this.sortDirection ===
-            'asc'
-            ? -1
-            : 1;
-
-        }
-
-
-        if (
-          valA > valB
-        ) {
-
-          return this.sortDirection ===
-            'asc'
-            ? 1
-            : -1;
-
-        }
-
-
-        return 0;
-
+        valB = valB.toString().toLowerCase();
       }
 
-    );
+      if (valA < valB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
 
+      if (valA > valB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
   }
-
 
   // =========================================================
   // PRIORITY LABEL
   // =========================================================
 
-  getPriorityLabel(
-    priority: number
-  ): string {
-
+  getPriorityLabel(priority: number): string {
     switch (priority) {
-
       case 1:
         return 'High';
 
@@ -1636,22 +1245,15 @@ export class TaskIndex {
 
       default:
         return '-';
-
     }
-
   }
-
 
   // =========================================================
   // PRIORITY CSS
   // =========================================================
 
-  getPriorityClass(
-    priority: number
-  ): string {
-
+  getPriorityClass(priority: number): string {
     switch (priority) {
-
       case 1:
         return 'priority-high';
 
@@ -1663,9 +1265,7 @@ export class TaskIndex {
 
       default:
         return '';
-
     }
-
   }
 
   // =========================================================
@@ -1673,7 +1273,7 @@ export class TaskIndex {
   // =========================================================
 
   clearFilters(): void {
-    this.showStatusDropdown = false
+    this.showStatusDropdown = false;
     // Clear search
     this.searchQuery = '';
     this.search = '';
@@ -1706,12 +1306,9 @@ export class TaskIndex {
     // Save cleared filter state
     this.saveFilterState();
 
-
-    this.router.navigate(
-      ['/task-index'],
-      {
+    this.router
+      .navigate(['/task-index'], {
         queryParams: {
-
           currentPage: 1,
 
           page: 0,
@@ -1733,28 +1330,20 @@ export class TaskIndex {
           fromDate: null,
 
           toDate: null,
-          taskStatusId: null
-
+          taskStatusId: null,
         },
 
-        replaceUrl: true
-
-      }
-    ).then(() => {
-
-      this.getTaskDetails();
-
-    });
-
+        replaceUrl: true,
+      })
+      .then(() => {
+        this.getTaskDetails();
+      });
   }
 
   onDeleteTask(taskId: number): void {
-
     this.task = {
       taskId: Number(taskId),
-      createdBy: this.userId
-        ? Number(this.userId)
-        : null
+      createdBy: this.userId ? Number(this.userId) : null,
     };
 
     Swal.fire({
@@ -1767,62 +1356,30 @@ export class TaskIndex {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#6c757d',
       customClass: {
-        popup: 'small-confirm-popup'
-      }
+        popup: 'small-confirm-popup',
+      },
     }).then((result) => {
-
       if (result.isConfirmed) {
+        this.dataprovider.deleteTask(this.task).subscribe({
+          next: (response: any) => {
+            if (response.success) {
+              Swal.fire('Deleted!', response.message, 'success');
 
-        this.dataprovider
-          .deleteTask(this.task)
-          .subscribe({
-
-            next: (response: any) => {
-
-              if (response.success) {
-
-                Swal.fire(
-                  'Deleted!',
-                  response.message,
-                  'success'
-                );
-
-                this.getTaskDetails();
-
-              } else {
-
-                Swal.fire(
-                  'Error',
-                  response.message,
-                  'error'
-                );
-
-              }
-
-            },
-
-            error: (error) => {
-
-              console.error(
-                'Error deleting task:',
-                error
-              );
-
-              Swal.fire(
-                'Error',
-                'Something went wrong while deleting the task.',
-                'error'
-              );
-
+              this.getTaskDetails();
+            } else {
+              Swal.fire('Error', response.message, 'error');
             }
+          },
 
-          });
+          error: (error) => {
+            console.error('Error deleting task:', error);
 
+            Swal.fire('Error', 'Something went wrong while deleting the task.', 'error');
+          },
+        });
       }
-
     });
   }
-
 
   fromDate: Date | null = null;
 
@@ -1835,10 +1392,8 @@ export class TaskIndex {
   isTaskAssignedToUser(task: any): boolean {
     return (
       Number(task.status) !== 3 &&
-      (
-        Number(task.assignedTo) === Number(this.userId) ||
-        Number(task.addedBy) === Number(this.userId)
-      )
+      (Number(task.assignedTo) === Number(this.userId) ||
+        Number(task.addedBy) === Number(this.userId))
     );
   }
 
@@ -1855,9 +1410,7 @@ export class TaskIndex {
 
   isSavingTaskNote = false;
 
-
   openTaskNotes(task: any): void {
-
     this.selectedTask = task;
 
     // Initially DON'T show add form
@@ -1872,42 +1425,34 @@ export class TaskIndex {
   }
 
   loadTaskNotes(taskId: number): void {
-
     this.dataprovider.getTaskNotes(taskId).subscribe({
       next: (response: any[]) => {
-
         console.log('Task notes:', response);
 
         this.taskNotes = response || [];
       },
 
       error: (error) => {
-
         console.error('Error loading task notes:', error);
 
         this.taskNotes = [];
-      }
+      },
     });
-
   }
 
-
   startAddingNote(): void {
-
     this.isAddingNote = true;
 
     this.taskNote = '';
   }
 
   cancelAddingNote(): void {
-
     this.isAddingNote = false;
 
     this.taskNote = '';
   }
 
   closeTaskNotesModal(): void {
-
     if (this.isSavingTaskNote) {
       return;
     }
@@ -1919,9 +1464,7 @@ export class TaskIndex {
     this.taskNote = '';
   }
 
-
   saveTaskNote(): void {
-
     if (!this.taskNote?.trim()) {
       return;
     }
@@ -1941,14 +1484,12 @@ export class TaskIndex {
     };
 
     this.dataprovider.addTaskNote(request).subscribe({
-
       next: () => {
-
         this.taskNote = '';
 
         // Hide Add Note form after successful submit
         this.isAddingNote = false;
-        this.sendMail = false
+        this.sendMail = false;
 
         this.isSavingTaskNote = false;
 
@@ -1957,12 +1498,10 @@ export class TaskIndex {
       },
 
       error: (error) => {
-
         console.error('Error saving task note', error);
 
         this.isSavingTaskNote = false;
-      }
-
+      },
     });
   }
 
@@ -1975,7 +1514,6 @@ export class TaskIndex {
   }
 
   getCreatorColor(name: string): string {
-
     if (!name || !name.trim()) {
       return '#64748b';
     }
@@ -1990,7 +1528,7 @@ export class TaskIndex {
       '#0891b2', // Cyan
       '#4f46e5', // Indigo
       '#ca8a04', // Yellow
-      '#0f766e'  // Teal
+      '#0f766e', // Teal
     ];
 
     let hash = 0;
@@ -2003,9 +1541,6 @@ export class TaskIndex {
 
     return colors[index];
   }
-
-
-
 
   // =========================================================
   // CHANGE MANAGER / TASK FILES MODAL
@@ -2023,15 +1558,11 @@ export class TaskIndex {
   fileTwo: File | null = null;
   fileTwoName: string = '';
 
-
-
-
   openChangeManagerModal(taskObject: any): void {
     //  console.log("sssssssss" + taskObject);
     this.descriptionValidationError = false;
 
     this.selectedTaskStatusIdForCondition = taskObject.taskStatus;
-
 
     // this. selectedTaskStatusId= taskObject.taskStatus;
     this.task = {
@@ -2039,9 +1570,8 @@ export class TaskIndex {
       managerId: taskObject.managerId,
       addedBy: taskObject.addedBy,
       assignedTo: taskObject.assignedTo,
-      taskStatus: taskObject.taskStatus
+      taskStatus: taskObject.taskStatus,
     };
-
 
     //  console.log("{ == }" + JSON.stringify(this.task));
 
@@ -2054,12 +1584,9 @@ export class TaskIndex {
     this.fileTwoName = '';
 
     this.showChangeManagerModal = true;
-
   }
 
-
   closeChangeManagerModal(): void {
-
     if (this.isChangingManager) {
       return;
     }
@@ -2075,22 +1602,103 @@ export class TaskIndex {
     this.fileTwoName = '';
 
     this.descriptionValidationError = false;
-
   }
 
-  private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+  // private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+
+  // onFileOneSelected(event: Event): void {
+
+  //   const input = event.target as HTMLInputElement;
+
+  //   if (input.files && input.files.length > 0) {
+
+  //     const file = input.files[0];
+
+  //     // ZIP validation
+  //     if (!file.name.toLowerCase().endsWith('.zip')) {
+  //       Swal.fire('Error', 'Only ZIP files are allowed.', 'error');
+
+  //       input.value = '';
+  //       this.fileOne = null;
+  //       this.fileOneName = '';
+  //       return;
+  //     }
+
+  //     if (file.size > this.MAX_FILE_SIZE) {
+  //       Swal.fire('Error', 'ZIP file size must not exceed 5 MB.', 'error');
+
+  //       input.value = '';
+  //       this.fileOne = null;
+  //       this.fileOneName = '';
+  //       return;
+  //     }
+
+  //     this.fileOne = file;
+  //     this.fileOneName = file.name;
+
+  //   } else {
+  //     this.fileOne = null;
+  //     this.fileOneName = '';
+  //   }
+  // }
+
+  // onFileTwoSelected(event: Event): void {
+
+  //   const input = event.target as HTMLInputElement;
+
+  //   if (input.files && input.files.length > 0) {
+
+  //     const file = input.files[0];
+
+  //     // PDF validation
+  //     if (!file.name.toLowerCase().endsWith('.pdf')) {
+  //       Swal.fire('Error', 'Only PDF files are allowed.', 'error');
+
+  //       input.value = '';
+  //       this.fileTwo = null;
+  //       this.fileTwoName = '';
+  //       return;
+  //     }
+
+  //     if (file.size > this.MAX_FILE_SIZE) {
+  //       Swal.fire('Error', 'PDF file size must not exceed 5 MB.', 'error');
+
+  //       input.value = '';
+  //       this.fileTwo = null;
+  //       this.fileTwoName = '';
+  //       return;
+  //     }
+
+  //     this.fileTwo = file;
+  //     this.fileTwoName = file.name;
+
+  //   } else {
+  //     this.fileTwo = null;
+  //     this.fileTwoName = '';
+  //   }
+  // }
+  selectedTaskStatusId: number = 5;
+  selectedTaskStatusIdForCondition: number = 0;
+  //  selectedTaskStatusId: number = 0;
+
+  // Add near your other class constants (replace/update MAX_FILE_SIZE if it's currently set to 5 MB)
+  readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+
+  readonly ALLOWED_EXTENSIONS_FILE_ONE = ['.pdf', '.xls', '.xlsx', '.doc', '.docx', '.zip'];
+  readonly ALLOWED_EXTENSIONS_FILE_TWO = ['.pdf', '.xls', '.xlsx', '.doc', '.docx'];
 
   onFileOneSelected(event: Event): void {
-
     const input = event.target as HTMLInputElement;
 
     if (input.files && input.files.length > 0) {
-
       const file = input.files[0];
 
-      // ZIP validation
-      if (!file.name.toLowerCase().endsWith('.zip')) {
-        Swal.fire('Error', 'Only ZIP files are allowed.', 'error');
+      const fileName = file.name.toLowerCase();
+
+      const isAllowedType = this.ALLOWED_EXTENSIONS_FILE_ONE.some((ext) => fileName.endsWith(ext));
+
+      if (!isAllowedType) {
+        Swal.fire('Error', 'Only .pdf, .xls, .xlsx, .doc, .docx, .zip files are allowed.', 'error');
 
         input.value = '';
         this.fileOne = null;
@@ -2099,7 +1707,7 @@ export class TaskIndex {
       }
 
       if (file.size > this.MAX_FILE_SIZE) {
-        Swal.fire('Error', 'ZIP file size must not exceed 5 MB.', 'error');
+        Swal.fire('Error', 'File size must not exceed 10 MB.', 'error');
 
         input.value = '';
         this.fileOne = null;
@@ -2109,7 +1717,6 @@ export class TaskIndex {
 
       this.fileOne = file;
       this.fileOneName = file.name;
-
     } else {
       this.fileOne = null;
       this.fileOneName = '';
@@ -2117,16 +1724,17 @@ export class TaskIndex {
   }
 
   onFileTwoSelected(event: Event): void {
-
     const input = event.target as HTMLInputElement;
 
     if (input.files && input.files.length > 0) {
-
       const file = input.files[0];
 
-      // PDF validation
-      if (!file.name.toLowerCase().endsWith('.pdf')) {
-        Swal.fire('Error', 'Only PDF files are allowed.', 'error');
+      const fileName = file.name.toLowerCase();
+
+      const isAllowedType = this.ALLOWED_EXTENSIONS_FILE_TWO.some((ext) => fileName.endsWith(ext));
+
+      if (!isAllowedType) {
+        Swal.fire('Error', 'Only .pdf, .xls, .xlsx, .doc, .docx files are allowed.', 'error');
 
         input.value = '';
         this.fileTwo = null;
@@ -2135,7 +1743,7 @@ export class TaskIndex {
       }
 
       if (file.size > this.MAX_FILE_SIZE) {
-        Swal.fire('Error', 'PDF file size must not exceed 5 MB.', 'error');
+        Swal.fire('Error', 'File size must not exceed 10 MB.', 'error');
 
         input.value = '';
         this.fileTwo = null;
@@ -2145,18 +1753,13 @@ export class TaskIndex {
 
       this.fileTwo = file;
       this.fileTwoName = file.name;
-
     } else {
       this.fileTwo = null;
       this.fileTwoName = '';
     }
   }
-  selectedTaskStatusId: number = 5;
-  selectedTaskStatusIdForCondition: number = 0;
-  //  selectedTaskStatusId: number = 0;
 
   changeManager(): void {
-
     if (!this.taskDescription || !this.taskDescription.trim()) {
       this.descriptionValidationError = true;
       return;
@@ -2170,23 +1773,20 @@ export class TaskIndex {
       console.log(pair[0], pair[1]);
     }
 
-
     formData.append('selectedTaskStatusId', String(this.selectedTaskStatusId));
     formData.append('taskId', String(this.task.taskId));
     formData.append('description', this.taskDescription.trim());
     formData.append('userId', this.userId);
 
     if (this.fileTwo) {
-      formData.append('fileName3', this.fileTwo, this.fileTwo.name);   // normal file → fileName1 (pdf)
+      formData.append('fileName3', this.fileTwo, this.fileTwo.name); // normal file → fileName1 (pdf)
     }
 
     if (this.fileOne) {
       formData.append('fileName4', this.fileOne, this.fileOne.name);
     }
 
-
     this.dataprovider.updateTaskDetails(formData).subscribe({
-
       next: (response: any) => {
         this.isChangingManager = false;
         if (response.success) {
@@ -2199,19 +1799,18 @@ export class TaskIndex {
       },
       error: (error) => {
         this.isChangingManager = false;
-        console.error('Full error:', error);          // add this
-        console.error('Backend message:', error?.error?.message);  // and this
-        Swal.fire('Error', error?.error?.message || 'Something went wrong while updating the task.', 'error');
-      }
-
+        console.error('Full error:', error); // add this
+        console.error('Backend message:', error?.error?.message); // and this
+        Swal.fire(
+          'Error',
+          error?.error?.message || 'Something went wrong while updating the task.',
+          'error',
+        );
+      },
     });
-
   }
 
-
-
   exportToExcel(): void {
-
     // Make sure there is data
     if (!this.tasks || this.tasks.length === 0) {
       alert('No tasks available for export.');
@@ -2219,27 +1818,21 @@ export class TaskIndex {
     }
 
     const exportData = this.tasks.map((task: any, index: number) => {
-
       return {
-
         // 1. Sr. No.
         'Sr. No.': index + 1,
 
         // 2. Title
-        'Title': task.title || '-',
+        Title: task.title || '-',
 
         // 3. Client
-        'Client': task.clientName || '-',
+        Client: task.clientName || '-',
 
         // 4. Date
-        'Date': task.date
-          ? this.formatExcelDate(task.date)
-          : '-',
+        Date: task.date ? this.formatExcelDate(task.date) : '-',
 
         // 5. Due Date
-        'Due Date': task.dueDateTime
-          ? this.formatExcelDate(task.dueDateTime)
-          : '-',
+        'Due Date': task.dueDateTime ? this.formatExcelDate(task.dueDateTime) : '-',
 
         // 6. Task Category
         'Task Category': task.taskCategoryName || '-',
@@ -2249,61 +1842,44 @@ export class TaskIndex {
 
         // 8. Assigned To
         'Assigned To':
-          !task.assignedToName ||
-            task.assignedToName === '0'
+          !task.assignedToName || task.assignedToName === '0'
             ? 'Unassigned User'
             : task.assignedToName,
 
         // 9. Priority
-        'Priority': this.getPriorityLabel(task.priority),
+        Priority: this.getPriorityLabel(task.priority),
 
         // 10. Task Status
-        'Task Status': this.common.getTaskStatusLabel(
-          task.taskStatus
-        ),
+        'Task Status': this.common.getTaskStatusLabel(task.taskStatus),
 
         // 11. Status
-        'Status': this.common.getStatusLabel(
-          task.status
-        )
+        Status: this.common.getStatusLabel(task.status),
       };
     });
 
-
     // Create worksheet
-    const worksheet: XLSX.WorkSheet =
-      XLSX.utils.json_to_sheet(exportData);
-
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
 
     // Set column widths
     worksheet['!cols'] = [
-
-      { wch: 8 },    // Sr. No.
-      { wch: 35 },   // Title
-      { wch: 25 },   // Client
-      { wch: 20 },   // Date
-      { wch: 20 },   // Due Date
-      { wch: 25 },   // Task Category
-      { wch: 25 },   // Assigned By
-      { wch: 25 },   // Assigned To
-      { wch: 15 },   // Priority
-      { wch: 20 },   // Task Status
-      { wch: 15 }    // Status
+      { wch: 8 }, // Sr. No.
+      { wch: 35 }, // Title
+      { wch: 25 }, // Client
+      { wch: 20 }, // Date
+      { wch: 20 }, // Due Date
+      { wch: 25 }, // Task Category
+      { wch: 25 }, // Assigned By
+      { wch: 25 }, // Assigned To
+      { wch: 15 }, // Priority
+      { wch: 20 }, // Task Status
+      { wch: 15 }, // Status
     ];
 
-
     // Create workbook
-    const workbook: XLSX.WorkBook =
-      XLSX.utils.book_new();
-
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
 
     // Add worksheet
-    XLSX.utils.book_append_sheet(
-      workbook,
-      worksheet,
-      'Tasks'
-    );
-
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Tasks');
 
     // Generate file name
     const today = new Date();
@@ -2313,17 +1889,9 @@ export class TaskIndex {
       `${String(today.getMonth() + 1).padStart(2, '0')}-` +
       `${String(today.getDate()).padStart(2, '0')}`;
 
-
     // Download Excel
-    XLSX.writeFile(
-      workbook,
-      `Tasks_${dateString}.xlsx`
-    );
+    XLSX.writeFile(workbook, `Tasks_${dateString}.xlsx`);
   }
-
-
-
-
 
   // exportToExcel(): void {
 
@@ -2363,11 +1931,9 @@ export class TaskIndex {
 
   //   });
 
-
   //   // Create worksheet
   //   const worksheet: XLSX.WorkSheet =
   //     XLSX.utils.json_to_sheet(exportData);
-
 
   //   // Set column widths
   //   worksheet['!cols'] = [
@@ -2382,11 +1948,9 @@ export class TaskIndex {
   //     { wch: 15 }    // Status
   //   ];
 
-
   //   // Create workbook
   //   const workbook: XLSX.WorkBook =
   //     XLSX.utils.book_new();
-
 
   //   XLSX.utils.book_append_sheet(
   //     workbook,
@@ -2394,13 +1958,11 @@ export class TaskIndex {
   //     'Tasks'
   //   );
 
-
   //   // Generate file name
   //   const today = new Date();
 
   //   const dateString =
   //     `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
 
   //   // Download Excel
   //   XLSX.writeFile(
@@ -2410,7 +1972,6 @@ export class TaskIndex {
   // }
 
   private formatExcelDate(date: any): string {
-
     if (!date) {
       return '-';
     }
@@ -2421,23 +1982,16 @@ export class TaskIndex {
       return '-';
     }
 
-    const day = String(
-      parsedDate.getDate()
-    ).padStart(2, '0');
+    const day = String(parsedDate.getDate()).padStart(2, '0');
 
-    const month = String(
-      parsedDate.getMonth() + 1
-    ).padStart(2, '0');
+    const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
 
     const year = parsedDate.getFullYear();
 
     return `${day}-${month}-${year}`;
   }
 
-
   showStatusDropdown = false;
-
-
 
   onStatusChange(event: any): void {
     const value = event.target.value;
@@ -2445,13 +1999,11 @@ export class TaskIndex {
     if (event.target.checked) {
       this.selectedTaskStatuses.push(value);
     } else {
-      this.selectedTaskStatuses =
-        this.selectedTaskStatuses.filter(x => x !== value);
+      this.selectedTaskStatuses = this.selectedTaskStatuses.filter((x) => x !== value);
     }
 
     this.onSearch();
   }
-
 
   taskStatusOptions: { id: string; label: string }[] = [
     { id: '-1', label: 'Unassigned' },
@@ -2462,12 +2014,11 @@ export class TaskIndex {
     { id: '5', label: 'Assignor Closure' },
   ];
 
-
   toggleTaskStatus(id: string): void {
     const index = this.selectedTaskStatuses.indexOf(id);
 
     if (index > -1) {
-      this.selectedTaskStatuses = this.selectedTaskStatuses.filter(x => x !== id);
+      this.selectedTaskStatuses = this.selectedTaskStatuses.filter((x) => x !== id);
     } else {
       this.selectedTaskStatuses = [...this.selectedTaskStatuses, id];
     }
@@ -2477,8 +2028,6 @@ export class TaskIndex {
     this.onSearch();
   }
 
-
-
   isTaskStatusChecked(id: string): boolean {
     return this.selectedTaskStatuses.includes(id);
   }
@@ -2487,22 +2036,16 @@ export class TaskIndex {
   selectedDescriptionTask: any = null;
 
   openDescriptionModal(task: Task): void {
-
     this.selectedDescriptionTask = task;
 
     this.showDescriptionModal = true;
   }
 
   closeDescriptionModal(): void {
-
     this.showDescriptionModal = false;
 
     this.selectedDescriptionTask = null;
   }
-
-
-
-
 
   //Assign To Model
   showAssignUserModal = false;
@@ -2510,14 +2053,12 @@ export class TaskIndex {
   assignRemarks: string = '';
   users: any[] = [];
 
-
   openAssignUserModal(task: any): void {
-
     const currentAssignedUserId = Number(task.assignedTo || 0);
 
     this.selectedAssignTask = {
       ...task,
-      assignedTo: 0
+      assignedTo: 0,
     };
 
     this.assignRemarks = '';
@@ -2525,35 +2066,34 @@ export class TaskIndex {
     this.showAssignUserModal = true;
     this.users = [];
 
-    this.dataprovider.changesCategoryIdgetUserFilterData(
-      this.isAdmin,
-      this.userId,
-      this.loginType,
-      task.clientId,
-      task.taskCategoryId
-    ).subscribe({
-      next: (res: any) => {
+    this.dataprovider
+      .changesCategoryIdgetUserFilterData(
+        this.isAdmin,
+        this.userId,
+        this.loginType,
+        task.clientId,
+        task.taskCategoryId,
+      )
+      .subscribe({
+        next: (res: any) => {
+          const data = res?.data || res;
 
-        const data = res?.data || res;
+          const allUsers = data?.assignedUsers || [];
 
-        const allUsers = data?.assignedUsers || [];
+          this.users = allUsers.filter(
+            (user: any) => Number(user.userId) !== currentAssignedUserId,
+          );
 
-        this.users = allUsers.filter(
-          (user: any) =>
-            Number(user.userId) !== currentAssignedUserId
-        );
+          console.log('Current assigned user:', currentAssignedUserId);
+          console.log('Filtered users:', this.users);
+        },
 
-        console.log('Current assigned user:', currentAssignedUserId);
-        console.log('Filtered users:', this.users);
-      },
-
-      error: (error: any) => {
-        console.error('Error loading assigned users:', error);
-        this.users = [];
-      }
-    });
+        error: (error: any) => {
+          console.error('Error loading assigned users:', error);
+          this.users = [];
+        },
+      });
   }
-
 
   closeAssignUserModal(): void {
     this.showAssignUserModal = false;
@@ -2563,7 +2103,6 @@ export class TaskIndex {
   }
 
   assignUser(): void {
-
     if (
       !this.selectedAssignTask ||
       !this.selectedAssignTask.assignedTo ||
@@ -2573,10 +2112,7 @@ export class TaskIndex {
     }
 
     // Remarks required only when re-assigning an already-assigned task
-    if (
-      this.selectedAssignTask.taskStatus === 1 &&
-      !this.assignRemarks?.trim()
-    ) {
+    if (this.selectedAssignTask.taskStatus === 1 && !this.assignRemarks?.trim()) {
       return;
     }
 
@@ -2584,32 +2120,17 @@ export class TaskIndex {
     const assignedTo = this.selectedAssignTask.assignedTo;
     const remarks = this.assignRemarks?.trim() || '';
 
-    this.dataprovider.updateTaskAssignedUser(
-      taskId,
-      assignedTo,
-      this.userId,
-      remarks
-    ).subscribe({
+    this.dataprovider.updateTaskAssignedUser(taskId, assignedTo, this.userId, remarks).subscribe({
       next: (res: any) => {
-
         if (res?.success) {
-
           // Find selected user
-          const selectedUser = this.users.find(
-            (user: any) =>
-              user.userId == assignedTo
-          );
+          const selectedUser = this.users.find((user: any) => user.userId == assignedTo);
 
           // Update original table task only after API success
-          const taskIndex = this.paginatedTasks.findIndex(
-            (task: any) =>
-              task.taskId == taskId
-          );
+          const taskIndex = this.paginatedTasks.findIndex((task: any) => task.taskId == taskId);
 
           if (taskIndex !== -1) {
-
-            this.paginatedTasks[taskIndex].assignedTo =
-              assignedTo;
+            this.paginatedTasks[taskIndex].assignedTo = assignedTo;
 
             this.paginatedTasks[taskIndex].assignedToName =
               selectedUser?.firstName || 'Unassigned User';
@@ -2619,52 +2140,38 @@ export class TaskIndex {
 
           // Optional: refresh table from backend
           this.onSearch();
-
         } else {
-
-          console.error(
-            'Failed to assign user:',
-            res?.message
-          );
+          console.error('Failed to assign user:', res?.message);
         }
       },
 
       error: (error: any) => {
-
-        console.error(
-          'Error assigning user:',
-          error
-        );
-      }
+        console.error('Error assigning user:', error);
+      },
     });
   }
 
   onchangeloadUserDropdownData(task: any): void {
+    this.dataprovider
+      .changesCategoryIdgetUserFilterData(
+        this.isAdmin,
+        this.userId,
+        this.loginType,
+        task.clientId,
+        task.taskCategoryId,
+      )
+      .subscribe({
+        next: (res: any) => {
+          const data = res?.data || res;
 
-    this.dataprovider.changesCategoryIdgetUserFilterData(
-      this.isAdmin,
-      this.userId,
-      this.loginType,
-      task.clientId,
-      task.taskCategoryId
-    ).subscribe({
-      next: (res: any) => {
+          this.users = data?.assignedUsers || [];
+        },
+        error: (error: any) => {
+          console.error('Error loading task dropdown data:', error);
 
-        const data = res?.data || res;
-
-        this.users = data?.assignedUsers || [];
-
-      },
-      error: (error: any) => {
-
-        console.error(
-          'Error loading task dropdown data:',
-          error
-        );
-
-        this.users = [];
-      }
-    });
+          this.users = [];
+        },
+      });
   }
 
   // openAssignUserModal(task: any): void {
@@ -2674,57 +2181,82 @@ export class TaskIndex {
   //   this.onchangeloadUserDropdownData(task);
   // }
 
+  // canDisableChangeManager(task: any): boolean {
+  //   console.log(task);
+  //    // Status 5 => closed, locked for everyone, no exceptions (including admin)
+  // // if (task.taskStatus == 5) {
+  // //   return true;
+  // // }
 
+  //   // Admin can perform any action
+  //   if (this.isAdmin === 'Y') {
+  //     return false;
+  //   }
+
+  //   const isManager = Number(task.managerId) === Number(this.userId);
+
+  //   // Status 5 => closed, locked for everyone, no exceptions
+  //   if (task.taskStatus == 5) {
+  //     return true;
+  //   }
+  //   // const isAssignor = this.task.addedBy == this.userId;
+  //   const selfAssigned =
+  //     task.addedBy == task.assignedTo
+
+  //   if (selfAssigned) {
+  //     return false;
+  //   }
+  //   return (
+  //     (task.addedBy == this.userId &&
+  //       (task.taskStatus == 1 || task.taskStatus == 3)) ||
+
+  //     (task.assignedTo == this.userId &&
+  //       (task.taskStatus == 2 || task.taskStatus == 4))
+  //   );
+  // }
 
   canDisableChangeManager(task: any): boolean {
+    // Status 5 => closed, locked for everyone, no exceptions
+    if (task.taskStatus == 5) {
+      return true;
+    }
 
     // Admin can perform any action
     if (this.isAdmin === 'Y') {
       return false;
     }
 
-    const isManager = Number(task.managerId) === Number(this.userId);
-
-    // Status 5 => closed, locked for everyone, no exceptions
-    if (task.taskStatus == 5) {
-      return true;
-    }
-    // const isAssignor = this.task.addedBy == this.userId;
-    const selfAssigned =
-      task.addedBy == task.assignedTo
-
+    const selfAssigned = task.addedBy == task.assignedTo;
 
     if (selfAssigned) {
       return false;
     }
-    return (
-      (task.addedBy == this.userId &&
-        (task.taskStatus == 1 || task.taskStatus == 3)) ||
 
-      (task.assignedTo == this.userId &&
-        (task.taskStatus == 2 || task.taskStatus == 4))
-    );
+    const canAct =
+      (task.addedBy == this.userId && (task.taskStatus == 1 || task.taskStatus == 3)) ||
+      (task.assignedTo == this.userId && (task.taskStatus == 2 || task.taskStatus == 4));
+
+    // Anyone who isn't addedBy/assignedTo with a matching status
+    // is locked out by default.
+    return !canAct;
   }
-
-
 
   isStatusRadioDisabled(task: any): boolean {
-    const selfAssigned =
-      task.addedBy == this.userId &&
-      task.assignedTo == this.userId;
-    const isManager =
-      task.managerId == this.userId;
+    const selfAssigned = task.addedBy == this.userId && task.assignedTo == this.userId;
+    const isManager = task.managerId == this.userId;
     // console.log("{} is manager only " + isManager)
-    return (isManager);
+    return isManager;
   }
-
-
 
   canShowAssignorClosure(): boolean {
     // console.error("Inside method checking !!!!")
     // console.error("{this.userId }" + this.userId)
 
-    console.error("{this.managerId }" + this.task.addedBy, this.task.managerId, this.task.assignedTo)
+    console.error(
+      '{this.managerId }' + this.task.addedBy,
+      this.task.managerId,
+      this.task.assignedTo,
+    );
     const isManager = this.task.managerId == this.userId;
 
     const isAssignor = this.task.addedBy == this.userId;
@@ -2732,8 +2264,6 @@ export class TaskIndex {
 
     return isManager || (isAssignor && !isSelfAssigned);
   }
-
-
 
   getDueDateClass(dueDateTime: string): string {
     const due = new Date(dueDateTime);
@@ -2763,7 +2293,6 @@ export class TaskIndex {
     fileInput.value = '';
   }
 
-
   clientSearchText: string = '';
   showClientDropdown: boolean = false;
 
@@ -2771,13 +2300,8 @@ export class TaskIndex {
 
   // filteredClients: any[] = [];
 
-
-
   filterClients(): void {
-
-    const search = this.clientSearchText
-      .toLowerCase()
-      .trim();
+    const search = this.clientSearchText.toLowerCase().trim();
 
     if (search.length < 3) {
       this.showClientDropdown = false;
@@ -2786,16 +2310,13 @@ export class TaskIndex {
     }
 
     this.filteredClients = this.clients.filter(
-      (client: any) =>
-        client.name &&
-        client.name.toLowerCase().includes(search)
+      (client: any) => client.name && client.name.toLowerCase().includes(search),
     );
 
     this.showClientDropdown = true;
 
     // If search is cleared, reset client filter
     if (!search) {
-
       this.selectedClient = '';
 
       this.filteredClients = [...this.clients];
@@ -2803,7 +2324,6 @@ export class TaskIndex {
   }
 
   selectClient(client: any): void {
-
     this.clientSearchText = client.name;
 
     // This is the value used by your filters/API
@@ -2815,10 +2335,7 @@ export class TaskIndex {
     this.onSearch();
   }
 
-  
-
   clearClientSearch(): void {
-
     this.clientSearchText = '';
     this.selectedClientId = 0;
     this.selectedClient = '';
@@ -2831,10 +2348,8 @@ export class TaskIndex {
   sendMail: boolean = false;
   showTaskCategoryDropdown = false;
 
-
-   @HostListener('document:click', ['$event'])
+  @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
-
     const target = event.target as HTMLElement;
 
     // Status dropdown
@@ -2853,5 +2368,3 @@ export class TaskIndex {
     }
   }
 }
-
-

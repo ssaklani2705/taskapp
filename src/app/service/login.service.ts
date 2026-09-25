@@ -6,22 +6,18 @@ import { catchError, tap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-
 export interface RefreshResponse {
   success: boolean;
   message: string;
   data?: {
-    token: string;      // required if data exists
-    username?: string;  // optional
+    token: string; // required if data exists
+    username?: string; // optional
   } | null;
 }
 
-
 @Injectable({ providedIn: 'root' })
 export class LoginService {
-  constructor(private http: HttpClient) { }
-
-
+  constructor(private http: HttpClient) {}
 
   // Refresh token
   freshToken(): Observable<RefreshResponse> {
@@ -33,43 +29,42 @@ export class LoginService {
       return of({ success: false, message: 'No token', data: null } as RefreshResponse);
     }
 
-    return this.http.post<RefreshResponse>(
-      `${environment.apiBaseUrl}auth/refreshtoken`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        // withCredentials: true
-      }
-    ).pipe(
-      tap(res => {
-        // console.log('Refresh response:', res);
-        if (res?.data?.token) {
-          // console.log(' New token:', res.data.token);
-          sessionStorage.setItem('authToken', res.data.token);
-        }
-      }),
-      catchError(err => {
-        // console.error(' Error during freshToken():', err);
-        return of({ success: false, message: 'Refresh failed', data: null } as RefreshResponse);
-      })
-    );
+    return this.http
+      .post<RefreshResponse>(
+        `${environment.apiBaseUrl}auth/refreshtoken`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          // withCredentials: true
+        },
+      )
+      .pipe(
+        tap((res) => {
+          // console.log('Refresh response:', res);
+          if (res?.data?.token) {
+            // console.log(' New token:', res.data.token);
+            sessionStorage.setItem('authToken', res.data.token);
+          }
+        }),
+        catchError((err) => {
+          // console.error(' Error during freshToken():', err);
+          return of({ success: false, message: 'Refresh failed', data: null } as RefreshResponse);
+        }),
+      );
   }
-
 
   checkLogin(data: any) {
     return this.http.post<{ success: boolean; message: string; data: any }>(
       `${environment.apiBaseUrl}auth/login`,
       data,
-      { withCredentials: true }   // important for session handling
+      { withCredentials: true }, // important for session handling
     );
   }
-
 
   getCaptcha(): Observable<{ success: boolean; message: string; data: string }> {
     return this.http.get<{ success: boolean; message: string; data: string }>(
       `${environment.apiBaseUrl}auth/captcha`,
-      { withCredentials: true }   // MUST ADD THIS
-
+      { withCredentials: true }, // MUST ADD THIS
     );
   }
 
@@ -88,38 +83,43 @@ export class LoginService {
     return this.http.get<any>(`${environment.apiBaseUrl}api/getUserDetails`, { params });
   }
 
-
   getUserDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}api/getUserDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
+    return this.http.get(
+      `${environment.apiBaseUrl}api/getUserDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
+    );
   }
 
-  forgotPassword(emailId: string, userId: string, password: string,isManagerLogin:string) {
+  forgotPassword(emailId: string, userId: string, password: string, isManagerLogin: string) {
     return this.http.post<any>(
       `${environment.apiBaseUrl}auth/forgotpassword?emailId=${emailId}&userId=${userId}&password=${password}&isManagerLogin=${isManagerLogin}`,
-      {} // sending empty body because your backend takes only @RequestParam
+      {}, // sending empty body because your backend takes only @RequestParam
     );
   }
 
-  forgotPasswordMail(emailId: string,loginType: string) {
+  forgotPasswordMail(emailId: string, loginType: string) {
     return this.http.post<any>(
       `${environment.apiBaseUrl}auth/forgotpasswordMail?emailId=${encodeURIComponent(emailId)}&loginType=${encodeURIComponent(loginType)}`,
-      {} // empty body because backend uses @RequestParam only
+      {}, // empty body because backend uses @RequestParam only
     );
   }
-
 
   //knowledgeSharing
 
   getKnowledgeSharingDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}knowledgeSharing/getKnowledgeSharingDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
+    return this.http.get(
+      `${environment.apiBaseUrl}knowledgeSharing/getKnowledgeSharingDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
+    );
   }
 
   addKnowledgeSharing(formData: FormData) {
-    return this.http.post(`${environment.apiBaseUrl}knowledgeSharing/addKnowledgeSharing`, formData, {
-      responseType: 'text' as 'json' // Angular expects type narrowing here
-    });
+    return this.http.post(
+      `${environment.apiBaseUrl}knowledgeSharing/addKnowledgeSharing`,
+      formData,
+      {
+        responseType: 'text' as 'json', // Angular expects type narrowing here
+      },
+    );
   }
-
 
   logout() {
     const token = sessionStorage.getItem('authToken');
@@ -130,7 +130,7 @@ export class LoginService {
     const sessionId = sessionStorage.getItem('sessionId');
 
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
 
     const body = { sessionId };
@@ -142,5 +142,4 @@ export class LoginService {
   clearSession() {
     sessionStorage.removeItem('authToken');
   }
-
 }

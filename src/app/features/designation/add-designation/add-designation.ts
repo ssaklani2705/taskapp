@@ -1,51 +1,17 @@
-import {
-  CommonModule,
-  isPlatformBrowser,
-} from '@angular/common';
-
-import {
-  Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-} from '@angular/core';
-
-import {
-  FormsModule,
-} from '@angular/forms';
-
-import {
-  MatButtonModule,
-} from '@angular/material/button';
-
-import {
-  MatFormFieldModule,
-} from '@angular/material/form-field';
-
-import {
-  MatInputModule,
-} from '@angular/material/input';
-
-import {
-  MatSelectModule,
-} from '@angular/material/select';
-
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
-
-import {
-  DataProviderService,
-} from '../../../service/data-provider.service';
-
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 import { MatIconModule } from '@angular/material/icon';
 
-
 @Component({
   selector: 'app-add-designation',
-
   imports: [
     CommonModule,
     FormsModule,
@@ -53,462 +19,172 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-    MatIconModule
+    MatIconModule,
   ],
-
-  templateUrl:
-    './add-designation.html',
-
-  styleUrl:
-    './add-designation.scss',
+  templateUrl: './add-designation.html',
+  styleUrl: './add-designation.scss',
 })
-export class AddDesignation
-  implements OnInit {
-
-  // =====================================================
-  // DESIGNATION OBJECT
-  // =====================================================
-
+export class AddDesignation implements OnInit {
   designation: any = {};
-
   originalDesignation: any = {};
-
-  // =====================================================
-  // USER
-  // =====================================================
 
   userId: any;
 
-  // =====================================================
-  // MODE
-  // =====================================================
-
   isEditMode: boolean = false;
-
-  // =====================================================
-  // VALIDATION
-  // =====================================================
 
   nameError: string = '';
 
-  // =====================================================
-  // PAGINATION / FILTER
-  // =====================================================
-
   currentPage: number = 1;
-
   searchText: string = '';
-
   statusIndex: number = 0;
-
   page: number = 0;
-
   size: number = 5;
-
-  // =====================================================
-  // CONSTRUCTOR
-  // =====================================================
 
   constructor(
     private route: ActivatedRoute,
-
-    private dataprovider:
-      DataProviderService,
-
+    private dataprovider: DataProviderService,
     @Inject(PLATFORM_ID)
     private platformId: Object,
-
     private router: Router,
   ) {}
 
-  // =====================================================
-  // INIT
-  // =====================================================
-
   ngOnInit(): void {
+    // const queryParams = this.route.snapshot.queryParamMap;
 
-    // ---------------------------------------------------
-    // Query Parameters
-    // ---------------------------------------------------
+    // this.currentPage = Number(queryParams.get('currentPage')) || 1;
+    // this.searchText = queryParams.get('searchText') || '';
+    // this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
+    // this.page = Number(queryParams.get('page')) || this.currentPage - 1;
+    // this.size = Number(queryParams.get('size')) || 5;
 
-    const queryParams =
-      this.route.snapshot.queryParamMap;
-
-    this.currentPage =
-      Number(
-        queryParams.get(
-          'currentPage'
-        )
-      ) || 1;
-
-    this.searchText =
-      queryParams.get(
-        'searchText'
-      ) || '';
-
-    this.statusIndex =
-      Number(
-        queryParams.get(
-          'statusIndex'
-        )
-      ) || 0;
-
-    this.page =
-      Number(
-        queryParams.get(
-          'page'
-        )
-      ) ||
-      this.currentPage - 1;
-
-    this.size =
-      Number(
-        queryParams.get(
-          'size'
-        )
-      ) || 5;
-
-    // ---------------------------------------------------
-    // User ID
-    // ---------------------------------------------------
-
-    if (
-      isPlatformBrowser(
-        this.platformId
-      )
-    ) {
-
-      this.userId =
-        sessionStorage.getItem(
-          'userId'
-        );
-
+    if (isPlatformBrowser(this.platformId)) {
+      this.userId = sessionStorage.getItem('userId');
     }
 
-    // ---------------------------------------------------
-    // Get ID from route
-    // ---------------------------------------------------
-
-    const desigmationId =
-      this.route.snapshot.params[
-        'designationId'
-      ];
-
-    // ---------------------------------------------------
-    // EDIT MODE
-    // ---------------------------------------------------
+    const desigmationId = this.route.snapshot.params['designationId'];
 
     if (desigmationId) {
-
       this.isEditMode = true;
 
-      this.dataprovider
-        .getDesigmationById(
-          desigmationId
-        )
-        .subscribe({
+      this.dataprovider.getDesigmationById(desigmationId).subscribe({
+        next: (res) => {
+          if (res && res.data) {
+            this.designation = {
+              ...res.data,
+              sequence: Number(res.data.sequence),
+            };
 
-          next: (res) => {
+            this.originalDesignation = {
+              ...this.designation,
+            };
+          }
+        },
 
-            if (
-              res &&
-              res.data
-            ) {
+        error: (error) => {
+          console.error('Error fetching designation:', error);
 
-              this.designation =
-                {
-                  ...res.data,
-                  sequence:
-                    Number(
-                      res.data.sequence
-                    ),
-                };
-
-              this.originalDesignation =
-                {
-                  ...this.designation,
-                };
-
-            }
-
-          },
-
-          error: (error) => {
-
-            console.error(
-              'Error fetching designation:',
-              error
-            );
-
-            Swal.fire(
-              'Error',
-              'Unable to fetch designation details.',
-              'error'
-            );
-
-          },
-
-        });
-
-    }
-
-    // ---------------------------------------------------
-    // ADD MODE DEFAULTS
-    // ---------------------------------------------------
-
-    else {
-
+          Swal.fire('Error', 'Unable to fetch designation details.', 'error');
+        },
+      });
+    } else {
       this.designation = {
-
         name: '',
-
         sequence: null,
-
         status: 1,
-
       };
-
     }
-
   }
 
-  // =====================================================
-  // CAPITALIZE FIRST CHARACTER
-  // =====================================================
-
-  capitalizeFirstCharOnly(
-    value: string
-  ): string {
-
+  capitalizeFirstCharOnly(value: string): string {
     if (!value) {
-
       return '';
-
     }
 
-    return (
-      value.charAt(0).toUpperCase() +
-      value.slice(1)
-    );
-
+    return value.charAt(0).toUpperCase() + value.slice(1);
   }
-
-  // =====================================================
-  // SUBMIT
-  // =====================================================
 
   onSubmit(form: any): void {
-
-    // ---------------------------------------------------
-    // Form Validation
-    // ---------------------------------------------------
-
-    if (
-      form.invalid ||
-      this.nameError
-    ) {
-
+    if (form.invalid || this.nameError) {
       form.control.markAllAsTouched();
 
       return;
-
     }
 
-    // ---------------------------------------------------
-    // Trim Name
-    // ---------------------------------------------------
-
-    if (
-      this.designation.name
-    ) {
-
-      this.designation.name =
-        this.designation.name.trim();
-
+    if (this.designation.name) {
+      this.designation.name = this.designation.name.trim();
     }
 
-    // ---------------------------------------------------
-    // Sequence
-    // ---------------------------------------------------
-
-    this.designation.sequence =
-      Number(
-        this.designation.sequence
-      );
-
-    // ---------------------------------------------------
-    // User
-    // ---------------------------------------------------
-
-    this.designation.userId =
-      this.userId
-        ? Number(this.userId)
-        : null;
-
-    // ---------------------------------------------------
-    // Edit Status
-    // ---------------------------------------------------
+    this.designation.sequence = Number(this.designation.sequence);
+    this.designation.userId = this.userId ? Number(this.userId) : null;
 
     if (
       this.isEditMode &&
       this.designation.status !== null &&
       this.designation.status !== undefined
     ) {
-
-      this.designation.status =
-        Number(
-          this.designation.status
-        );
-
+      this.designation.status = Number(this.designation.status);
     }
-
-    // ---------------------------------------------------
-    // ADD STATUS
-    // ---------------------------------------------------
 
     if (!this.isEditMode) {
-
       this.designation.status = 1;
-
     }
 
-    console.log(
-      'Designation payload:',
-      this.designation
-    );
+    console.log('Designation payload:', this.designation);
 
-    // ---------------------------------------------------
-    // API
-    // ---------------------------------------------------
+    this.dataprovider.saveDesigmation(this.designation).subscribe({
+      next: (response) => {
+        if (response.success) {
+          Swal.fire('Success', response.message, 'success');
 
-    this.dataprovider
-      .saveDesigmation(
-        this.designation
-      )
-      .subscribe({
+          this.onReset();
+          this.backToIndexPage();
+        } else {
+          Swal.fire('Error', response.message, 'error');
+        }
+      },
 
-        next: (response) => {
+      error: (err) => {
+        console.error('Error saving designation:', err);
 
-          if (
-            response.success
-          ) {
-
-            Swal.fire(
-              'Success',
-              response.message,
-              'success'
-            );
-
-            this.onReset();
-
-            this.backToIndexPage();
-
-          } else {
-
-            Swal.fire(
-              'Error',
-              response.message,
-              'error'
-            );
-
-          }
-
-        },
-
-        error: (err) => {
-
-          console.error(
-            'Error saving designation:',
-            err
-          );
-
-          Swal.fire(
-            'Error',
-            'Something went wrong while saving designation.',
-            'error'
-          );
-
-        },
-
-      });
-
+        Swal.fire('Error', 'Something went wrong while saving designation.', 'error');
+      },
+    });
   }
 
-  // =====================================================
-  // RESET
-  // =====================================================
-
   onReset(): void {
-
-    // ---------------------------------------------------
-    // EDIT MODE
-    // ---------------------------------------------------
-
     if (this.isEditMode) {
-
-      this.designation =
-        {
-          ...this.originalDesignation,
-        };
-
-    }
-
-    // ---------------------------------------------------
-    // ADD MODE
-    // ---------------------------------------------------
-
-    else {
-
       this.designation = {
-
-        name: '',
-
-        sequence: null,
-
-        status: 1,
-
+        ...this.originalDesignation,
       };
-
+    } else {
+      this.designation = {
+        name: '',
+        sequence: null,
+        status: 1,
+      };
     }
 
     this.nameError = '';
-
   }
 
-  // =====================================================
-  // BACK TO INDEX
-  // =====================================================
+  // backToIndexPage(): void {
+  //   this.router.navigate(['/designation-master'], {
+  //     queryParams: {
+  //       currentPage: this.currentPage,
+  //       statusIndex: this.statusIndex,
+  //       searchText: this.searchText,
+  //       size: this.size || 5,
+  //     },
+  //   });
+  // }
 
   backToIndexPage(): void {
-
-    this.router.navigate(
-      ['/designation-master'],
-      {
-
-        queryParams: {
-
-          currentPage:
-            this.currentPage,
-
-          statusIndex:
-            this.statusIndex,
-
-          searchText:
-            this.searchText,
-
-          size:
-            this.size || 5,
-
-        },
-
-      }
-    );
-
+    this.router.navigate(['/designation-master']);
   }
- allowOnlyNumbers(event: KeyboardEvent): void {
-    
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
     const key = event.key;
-    // Allow digits
+
     if (/^[0-9]$/.test(key)) {
       return;
     }

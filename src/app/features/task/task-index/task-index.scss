@@ -3351,3 +3351,49 @@ textarea.manager-select::placeholder {
   background-color: #1976d2;
   color: #fff;
 }
+
+.file-limit {
+    font-size: 12px;
+
+    font-weight: 400;
+
+    opacity: 0.7;
+
+    margin-left: 4px;
+
+    color: #dc3545;
+}
+
+//for task status button
+.change-manager-button {
+  cursor: pointer;
+
+  transition:
+    opacity 0.15s ease,
+    filter 0.15s ease;
+}
+
+/* Blue underline only when clickable */
+.change-manager-button:not(:disabled) {
+  text-decoration: underline;
+  text-decoration-color: #2f6fa3;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.change-manager-button:not(:disabled):hover {
+  filter: brightness(0.95);
+}
+
+.change-manager-button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+/* Disabled state: no underline, muted, blocked cursor */
+.change-manager-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  text-decoration: none;
+  filter: grayscale(30%);
+}
+

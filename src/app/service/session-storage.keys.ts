@@ -1,36 +1,33 @@
 export const SESSION_KEYS = {
+  PRODUCT_MASTER_FILTER: 'productMasterFilter',
 
-    PRODUCT_MASTER_FILTER: 'productMasterFilter',
+  DISPATCH_MASTER_FILTER: 'dispatchMasterFilter',
 
-    DISPATCH_MASTER_FILTER: 'dispatchMasterFilter',
+  QUOTATION_MASTER_FILTER: 'quotationMasterFilter',
 
-    QUOTATION_MASTER_FILTER: 'quotationMasterFilter',
+  CLIENT_MASTER_FILTER: 'clientMasterFilter',
 
-    CLIENT_MASTER_FILTER: 'clientMasterFilter',
+  STATE_MASTER_FILTER: 'stateMasterFilter',
 
-    STATE_MASTER_FILTER: 'stateMasterFilter',
+  UNIT_MASTER_FILTER: 'unitMasterFilter',
 
-    UNIT_MASTER_FILTER: 'unitMasterFilter',
+  VENDOR_MASTER_FILTER: 'vendorMasterFilter',
 
-    VENDOR_MASTER_FILTER: 'vendorMasterFilter',
+  PURCHASE_MASTER_FILTER: 'purchaseMasterFilter',
 
-    PURCHASE_MASTER_FILTER: 'purchaseMasterFilter',
+  OPENING_BALANCE_MASTER_FILTER: 'openingBalanceMasterFilter',
 
-    OPENING_BALANCE_MASTER_FILTER: 'openingBalanceMasterFilter',
+  USER_MODULE_FILTER: 'userModuleDetail',
 
-    USER_MODULE_FILTER: 'userModuleDetail',
+  DEPARTMENT_MASTER_FILTER: 'departmentMasterFilter',
 
-    DEPARTMENT_MASTER_FILTER: 'departmentMasterFilter',
+  DESIGNATION_MASTER_FILTER: 'designationMasterFilter',
 
-    DESIGNATION_MASTER_FILTER: 'designationMasterFilter',
+  TASK_CATEGORY_MASTER_FILTER: 'taskcategoryMasterFilter',
 
-    TASK_CATEGORY_MASTER_FILTER: 'taskcategoryMasterFilter',
+  TASK_MASTER_FILTER: 'taskMasterFilter',
 
-    TASK_MASTER_FILTER: 'taskMasterFilter',
-    
-    STATE_FILTER:'stateFilter',
-    PLAN_FILTER:'planFilter',
-    RECURRING_FILTER:'recurringFilter'
-
-
+  STATE_FILTER: 'stateFilter',
+  PLAN_FILTER: 'planFilter',
+  RECURRING_FILTER: 'recurringFilter',
 };
