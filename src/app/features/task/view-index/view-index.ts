@@ -25,57 +25,22 @@ import { environment } from '../../../../environments/environment';
 })
 export class ViewIndex implements OnInit {
   dashboardFilter: string = '';
-  // =========================================================
-  // TASK ID
-  // =========================================================
-
+ 
   taskId!: number;
-
-  // =========================================================
-  // TASK OBJECT
-  // =========================================================
-
+ 
   task: any = null;
-
-  // =========================================================
-  // TRANSACTION HISTORY
-  // =========================================================
 
   transactionHistory: any[] = [];
 
-  // =========================================================
-  // CLIENT LIST
-  // =========================================================
-
   clients: any[] = [];
-
-  // =========================================================
-  // USER LIST
-  // =========================================================
 
   users: any[] = [];
 
-  // =========================================================
-  // TASK CATEGORY LIST
-  // =========================================================
-
   taskCategories: any[] = [];
-
-  // =========================================================
-  // COMMON
-  // =========================================================
 
   common = new Common();
 
-  // =========================================================
-  // LOADING
-  // =========================================================
-
   loading = false;
-
-  // =========================================================
-  // PAGINATION / FILTER STATE
-  // =========================================================
 
   currentPage = 1;
 
@@ -96,29 +61,20 @@ export class ViewIndex implements OnInit {
   fromDate: string = '';
   toDate: string = '';
 
-  // =========================================================
-  // CONSTRUCTOR
-  // =========================================================
-
+ 
   constructor(
     private route: ActivatedRoute,
     private dataprovider: DataProviderService,
     private router: Router,
   ) {}
 
-  // =========================================================
-  // ON INIT
-  // =========================================================
-
+  
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('taskId');
     if (id) {
       this.taskId = Number(id);
     }
 
-    // -------------------------------------------------------
-    // GET NAVIGATION STATE
-    // -------------------------------------------------------
 
     const navigation = this.router.getCurrentNavigation();
 
@@ -462,10 +418,7 @@ export class ViewIndex implements OnInit {
     }
   }
 
-  // =========================================================
-  // PARSE DATE FOR SORTING
-  // =========================================================
-
+  
   private parseDate(value: any): Date {
     if (!value) {
       return new Date(0);
@@ -477,10 +430,7 @@ export class ViewIndex implements OnInit {
       return date;
     }
 
-    // -------------------------------------------------------
-    // DD-MM-YYYY HH:mm:ss
-    // -------------------------------------------------------
-
+   
     const match = String(value).match(/^(\d{2})-(\d{2})-(\d{4})/);
 
     if (match) {
@@ -489,72 +439,6 @@ export class ViewIndex implements OnInit {
 
     return new Date(0);
   }
-
-  // =========================================================
-  // DOWNLOAD FILE
-  // =========================================================
-
-  //   downloadFile(
-  //     fileName: string | null | undefined
-  //   ): void {
-
-  //     if (!fileName) {
-
-  //       return;
-
-  //     }
-
-  //     console.log(
-  //       'Download file:',
-  //       fileName
-  //     );
-
-  //     // -------------------------------------------------------
-  //     // IMPORTANT:
-  //     // Change this URL according to your backend.
-  //     // -------------------------------------------------------
-
-  //     // const fileUrl =
-  //     //   `/api/task/download/${encodeURIComponent(fileName)}`;
-
-  //      const fileUrl =
-  //     `${environment.baseurluploaded}task/pdf/${encodeURIComponent(fileName)}`;
-  // alert(fileUrl);
-
-  //     window.open(
-  //       fileUrl,
-  //       '_blank'
-  //     );
-
-  //   }
-  // downloadFile(
-  //   fileName: string | null | undefined,
-  //   fileType: 'pdf' | 'zip'
-  // ): void {
-
-  //   if (!fileName) {
-  //     return;
-  //   }
-
-  //   let folder = '';
-
-  //   if (fileType === 'pdf') {
-  //     folder = 'tasks/pdf/';
-  //   } else if (fileType === 'zip') {
-  //     folder = 'tasks/zip/';
-  //   }
-
-  //   const fileUrl =
-  //     `${environment.baseurluploaded}${folder}${encodeURIComponent(fileName)}`;
-
-  //   console.log('Download/View URL:', fileUrl);
-
-  //   window.open(fileUrl, '_blank');
-  // }
-
-  // =========================================================
-  // CHECK FILE EXISTS
-  // =========================================================
 
   hasFile(fileName: string | null | undefined): boolean {
     return !!(fileName && String(fileName).trim());
