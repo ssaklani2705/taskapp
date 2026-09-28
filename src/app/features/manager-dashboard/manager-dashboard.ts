@@ -74,6 +74,7 @@ export class ManagerDashboard {
   loginType: any = '';
   userId: any;
   isAdmin: any;
+  isHod: any ='';
 
   totalTasks = 0;
   page: number = 0;
@@ -156,6 +157,7 @@ export class ManagerDashboard {
     this.username = sessionStorage.getItem('username') || 'Society 123';
 
     this.userId = sessionStorage.getItem('userId');
+    this.isHod = sessionStorage.getItem('isHod') || 'N';
 
     this.designationName = sessionStorage.getItem('designationName')?.trim() || '-';
 
@@ -506,6 +508,7 @@ export class ManagerDashboard {
         taskStatusIds,
         this.loginType,
         '',
+        'N'
       )
       .subscribe({
         next: (response: any) => {

@@ -93,6 +93,7 @@ export class TaskIndex {
   apiResponseTaskDetails: any = {};
 
   loginType = '';
+  isHod = '';
 
   // =========================================================
   // FILTER MASTER DATA
@@ -290,6 +291,7 @@ ngOnInit(): void {
       this.userId = sessionStorage.getItem('userId');
       this.isAdmin = sessionStorage.getItem('isAdmin');
       this.loginType = sessionStorage.getItem('loginType') || 'other';
+      this.isHod = sessionStorage.getItem('isHod') || 'N';
       const storedModuleDetail = sessionStorage.getItem('selectedModuleDetail');
       console.log('SELECTED MODULE DETAIL:', storedModuleDetail);
       let moduleDetail: any = null;
@@ -555,6 +557,7 @@ ngOnInit(): void {
         taskStatusId,
         this.loginType,
         this.dashboardFilter,
+        this.isHod
       )
       .subscribe({
         next: (response: any) => {
@@ -2267,15 +2270,62 @@ ngOnInit(): void {
   }
 
 
-  canDisableChangeManager(task: any): boolean {
+//   canDisableChangeManager(task: any): boolean {
 
-      // Inactive (2) or Deleted (3) task => locked for everyone, no exceptions (including admin)
+//       // Inactive (2) or Deleted (3) task => locked for everyone, no exceptions (including admin)
+//   if (Number(task.status) === 2 || Number(task.status) === 3) {
+//     return true;
+//   }
+
+//   // Status 5 => closed, locked for everyone, no exceptions (including admin)
+//   if (task.taskStatus == 5) {
+//     return true;
+//   }
+
+//   // Admin can perform any action
+//   if (this.isAdmin === 'Y') {
+//     return false;
+//   }
+
+//   const selfAssigned = task.addedBy == task.assignedTo;
+
+//   if (selfAssigned) {
+//     return false;
+//   }
+
+//   // ============================================================
+//   // MANAGER
+//   // ============================================================
+//   if (this.loginType === 'manager') {
+
+//     const canAct =
+//       (task.addedBy == this.userId &&
+//         (task.taskStatus == 1 || task.taskStatus == 3)) ||
+//       (task.assignedTo == this.userId &&
+//         (task.taskStatus == 2 || task.taskStatus == 4));
+
+//     return canAct;
+//   }
+
+//   // ============================================================
+//   // EMPLOYEE
+//   // ============================================================
+//   return (
+//     (task.addedBy == this.userId &&
+//       (task.taskStatus == 1 || task.taskStatus == 3)) ||
+
+//     (task.assignedTo == this.userId &&
+//       (task.taskStatus == 2 || task.taskStatus == 4))
+//   );
+// }
+canDisableChangeManager(task: any): boolean {
+  // Inactive (2) or Deleted (3) task => locked for everyone (including admin)
   if (Number(task.status) === 2 || Number(task.status) === 3) {
     return true;
   }
 
-  // Status 5 => closed, locked for everyone, no exceptions (including admin)
-  if (task.taskStatus == 5) {
+  // Task status 5 => closed, locked for everyone (including admin)
+  if (Number(task.taskStatus) === 5) {
     return true;
   }
 
@@ -2284,35 +2334,30 @@ ngOnInit(): void {
     return false;
   }
 
-  const selfAssigned = task.addedBy == task.assignedTo;
+  const userId = Number(this.userId);
+  const isAssignor = Number(task.addedBy) === userId;
+  const isAssignee = Number(task.assignedTo) === userId;
+  const isManager = Number(task.managerId) === userId;
 
-  if (selfAssigned) {
+  // Self-assigned task: only that user can act
+  if (isAssignor && isAssignee) {
     return false;
   }
 
-  // ============================================================
-  // MANAGER
-  // ============================================================
-  if (this.loginType === 'manager') {
+  const taskStatus = Number(task.taskStatus);
+  let canAct = false;
 
-    const canAct =
-      (task.addedBy == this.userId &&
-        (task.taskStatus == 1 || task.taskStatus == 3)) ||
-      (task.assignedTo == this.userId &&
-        (task.taskStatus == 2 || task.taskStatus == 4));
-
-    return canAct;
+  // Assigned (1) / Re-Open (3): assignee has to submit work
+  if (taskStatus === 1 || taskStatus === 3) {
+    canAct = isAssignee;
   }
 
-  // ============================================================
-  // EMPLOYEE
-  // ============================================================
-  return (
-    (task.addedBy == this.userId &&
-      (task.taskStatus == 1 || task.taskStatus == 3)) ||
+  // Assignee Closure (2) / Assignee Re-Closure (4): assignor (or client manager) reviews
+  else if (taskStatus === 2 || taskStatus === 4) {
+    canAct = isAssignor || isManager;
+  }
 
-    (task.assignedTo == this.userId &&
-      (task.taskStatus == 2 || task.taskStatus == 4))
-  );
+  // Button is disabled unless the user is allowed to act
+  return !canAct;
 }
 }

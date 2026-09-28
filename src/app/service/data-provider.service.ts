@@ -1243,6 +1243,7 @@ export class DataProviderService {
     taskStatusIds: string[],
     loginType: string,
     dashboardFilter: string,
+    isHod: any
   ): Observable<any> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -1258,7 +1259,8 @@ export class DataProviderService {
       .set('isAdmin', isAdmin || '')
       .set('userId', userId ? userId.toString() : '0')
       .set('loginType', loginType || '')
-      .set('dashboardFilter', dashboardFilter || '');
+      .set('dashboardFilter', dashboardFilter || '')
+      .set('isHod', isHod || '');
 
     if (taskStatusIds && taskStatusIds.length > 0) {
       params = params.set('taskStatusIds', taskStatusIds.join(','));

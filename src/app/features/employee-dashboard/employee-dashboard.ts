@@ -499,7 +499,8 @@ export class EmployeeDashboard implements OnInit {
     this.router.navigate(['/task-index'], {
       queryParams: {
         taskType: taskType,
-          clientId: this.selectedClientId || 0
+          clientId: this.selectedClientId || 0,
+          statusIndex :1
       },
     });
   }

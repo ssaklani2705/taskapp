@@ -217,6 +217,10 @@ export class Login {
 
           sessionStorage.setItem('loginType', loginType);
 
+          sessionStorage.setItem('isHod',  res.data.isHod);
+
+          
+
           // Clear previously selected module
           sessionStorage.removeItem('selectedModuleDetail');
 
