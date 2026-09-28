@@ -614,7 +614,7 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   backToIndexPage(): void {
-    this.router.navigate(['/my-team'], {
+    this.router.navigate(['/user-management-index'], {
       state: {
         currentPage: this.currentPage,
         statusIndex: this.statusIndex,

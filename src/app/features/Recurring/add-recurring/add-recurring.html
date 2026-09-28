@@ -31,7 +31,7 @@
           <div class="user-form-row">
             <!-- CLIENT -->
             <div class="user-form-col">
-              <div class="user-form-group">
+              <!-- <div class="user-form-group">
                 <label class="user-label">
                   Client Name
                   <span class="required">*</span>
@@ -53,7 +53,43 @@
                   </div>
                 </div>
                 <div class="user-error" *ngIf="recurringForm.get('clientId')?.touched && recurringForm.get('clientId')?.invalid">Client Name is required</div>
-              </div>
+              </div> -->
+            
+              <div class="user-form-group">
+  <label class="user-label">
+    Client Name
+    <span class="required">*</span>
+  </label>
+
+  @if (loginType === 'manager') {
+    <!-- Normal dropdown for manager -->
+    <select class="user-input user-select" formControlName="clientId">
+      <option [ngValue]="null">Select Client</option>
+      <option *ngFor="let client of clients" [ngValue]="client.clientId">
+        {{ client.name }}
+      </option>
+    </select>
+  } @else {
+    <!-- Autofill search for other login types -->
+    <div class="client-dropdown-container">
+      <div class="client-search-wrapper">
+        <input type="text" class="user-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" [ngModelOptions]="{ standalone: true }" (input)="filterClients()" />
+
+        <button *ngIf="clientSearchText" type="button" class="clear-client-btn" (click)="clearClientSelection()">×</button>
+      </div>
+
+      <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
+        <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
+          {{ client.name }}
+        </div>
+
+        <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
+      </div>
+    </div>
+  }
+
+  <div class="user-error" *ngIf="recurringForm.get('clientId')?.touched && recurringForm.get('clientId')?.invalid">Client Name is required</div>
+</div>
             </div>
 
             <!-- TITLE -->
