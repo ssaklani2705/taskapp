@@ -149,15 +149,15 @@ export class ViewHolidayComponent implements OnInit {
 
     this.router.navigate(
       ['/hodiday-index'],
-      {
-        queryParams: {
-          currentPage: this.currentPage,
-          statusIndex: this.statusIndex,
-          searchText: this.searchText,
-          page: this.page,
-          size: this.size || 5,
-        },
-      },
+      // {
+      //   queryParams: {
+      //     currentPage: this.currentPage,
+      //     statusIndex: this.statusIndex,
+      //     searchText: this.searchText,
+      //     page: this.page,
+      //     size: this.size || 5,
+      //   },
+      // },
     );
   }
 }
