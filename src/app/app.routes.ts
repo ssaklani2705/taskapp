@@ -65,10 +65,10 @@ export const routes: Routes = [
             .then(m => m.EmployeeDashboard)
       },
 
-      { path: 'my-team', loadComponent: () => import('./features/myteam/my-team/my-team').then(m => m.MyTeam) },
-      { path: 'view-team/:userId', loadComponent: () => import('./features/myteam/view-team/view-team').then(m => m.ViewTeam) },
-      { path: 'add-team', loadComponent: () => import('./features/myteam/add-team/add-team').then(m => m.AddTeam) },
-      { path: 'edit-team/:userId', loadComponent: () => import('./features/myteam/add-team/add-team').then(m => m.AddTeam) },
+      { path: 'user-management-index', loadComponent: () => import('./features/myteam/my-team/my-team').then(m => m.MyTeam) },
+      { path: 'view-user-management/:userId', loadComponent: () => import('./features/myteam/view-team/view-team').then(m => m.ViewTeam) },
+      { path: 'add-user-management', loadComponent: () => import('./features/myteam/add-team/add-team').then(m => m.AddTeam) },
+      { path: 'edit-user-management/:userId', loadComponent: () => import('./features/myteam/add-team/add-team').then(m => m.AddTeam) },
 
       //Department Master
       { path: 'department-master', loadComponent: () => import('./features/department/department-index/department-index').then(m => m.DepartmentIndexComponent) },

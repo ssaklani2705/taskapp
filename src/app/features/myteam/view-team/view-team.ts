@@ -429,7 +429,7 @@ export class ViewTeam implements OnInit {
     // Save filters for refresh
     sessionStorage.setItem('userFilters', JSON.stringify(state));
 
-    this.router.navigate(['/my-team'], {
+    this.router.navigate(['/user-management-index'], {
       state,
     });
   }

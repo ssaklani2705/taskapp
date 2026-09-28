@@ -1026,4 +1026,16 @@ export class AddIndexComponent implements OnInit {
 
     this.showClientDropdown = false;
   }
+
+  onManagerClientChange(clientId: number | null): void {
+  this.task.clientId = clientId;
+
+  // Reset dependent dropdowns
+  this.onClientChange(clientId);
+
+  // Load task categories for the selected client
+  if (clientId) {
+    this.onchangeloadDropdownData();
+  }
+}
 }

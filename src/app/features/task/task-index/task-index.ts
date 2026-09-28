@@ -1954,7 +1954,9 @@ ngOnInit(): void {
         const allUsers = data?.assignedUsers || [];
 
         this.users = allUsers.filter((user: any) => Number(user.userId) !== currentAssignedUserId);
-        console.log(this.users.length + "  ")
+
+        console.log('Current assigned user:', currentAssignedUserId);
+        console.log('Filtered users:', this.users);
       },
 
       error: (error: any) => {
@@ -2266,6 +2268,11 @@ ngOnInit(): void {
 
 
   canDisableChangeManager(task: any): boolean {
+
+      // Inactive (2) or Deleted (3) task => locked for everyone, no exceptions (including admin)
+  if (Number(task.status) === 2 || Number(task.status) === 3) {
+    return true;
+  }
 
   // Status 5 => closed, locked for everyone, no exceptions (including admin)
   if (task.taskStatus == 5) {

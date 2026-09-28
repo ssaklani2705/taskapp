@@ -371,7 +371,7 @@ export class Sidebar implements OnInit {
 
         icon: 'groups',
 
-        route: '/my-team',
+        route: '/user-management-index',
       },
 
       {
@@ -784,7 +784,7 @@ export class Sidebar implements OnInit {
       {
         label: 'User Management',
         moduleId: 1,
-        routes: ['/my-team', '/add-team', '/edit-team', '/view-team'],
+        routes: ['/user-management-index', '/add-user-management', '/edit-user-management', '/view-user-management'],
       },
       {
         label: 'Department Master',

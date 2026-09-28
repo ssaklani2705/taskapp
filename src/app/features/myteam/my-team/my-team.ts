@@ -876,7 +876,7 @@ export class MyTeam implements OnInit {
     /*
      * Navigate
      */
-    this.router.navigate(['/add-team'], {
+    this.router.navigate(['/add-user-management'], {
       state: filterState,
     });
   }
@@ -904,7 +904,7 @@ export class MyTeam implements OnInit {
      * Navigate
      */
     this.router.navigate(
-      ['/view-team', userId],
+      ['/view-user-management', userId],
 
       {
         state: filterState,
@@ -935,7 +935,7 @@ export class MyTeam implements OnInit {
      * Navigate
      */
     this.router.navigate(
-      ['/edit-team', userId],
+      ['/edit-user-management', userId],
 
       {
         state: filterState,
