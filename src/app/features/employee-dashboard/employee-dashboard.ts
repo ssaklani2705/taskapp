@@ -486,6 +486,8 @@ export class EmployeeDashboard implements OnInit {
   openTaskIndex(stat: any): void {
     let taskType = '';
 
+    console.log(JSON.stringify(stat) + " checking now ")
+
     if (stat.label === 'My tasks today') {
       taskType = 'today';
     } else if (stat.label === 'Due this week') {
@@ -497,6 +499,7 @@ export class EmployeeDashboard implements OnInit {
     this.router.navigate(['/task-index'], {
       queryParams: {
         taskType: taskType,
+          clientId: this.selectedClientId || 0
       },
     });
   }

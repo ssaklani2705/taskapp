@@ -1,9 +1,5 @@
 <main class="page-shell">
   <section class="workspace-card">
-    <!-- =====================================================
-         WORKSPACE HEADER
-    ====================================================== -->
-
     <header class="workspace-header">
       <div class="profile-section">
         <div class="avatar">
@@ -20,8 +16,6 @@
           </p>
         </div>
       </div>
-
-      <!-- CLIENT DROPDOWN -->
 
       <div class="dashboard-client-container">
         <div class="client-dropdown-container">
@@ -50,7 +44,7 @@
 
     <section class="stats-grid">
       @for (stat of stats(); track stat.label) {
-        <mat-card class="stat-card" [class.stat-danger]="stat.color === 'danger'" (click)="openTaskIndex(stat)">
+        <mat-card class="stat-card" [class.stat-danger]="stat.color === 'danger'" (click)="openTaskIndex(stat)" [class.stat-disabled]="stat.value === 0">
           <!-- STAT ICON -->
 
           <div class="stat-icon">
