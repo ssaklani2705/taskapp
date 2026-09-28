@@ -653,17 +653,24 @@ export class ManagerDashboard {
     this.getTasks();
   }
 
-  onKpiClick(kpi: any): void {
+onKpiClick(kpi: any): void {
     console.log('KPI CLICKED:', kpi);
-    if (!kpi.taskStatusIds) {
-      this.router.navigate(['/task-index']);
-      return;
+    console.log('selectedModuleDetail before KPI navigation:', sessionStorage.getItem('selectedModuleDetail'));
+    console.log(
+      'ALL SESSION STORAGE:',
+      Object.keys(sessionStorage).reduce((obj: any, key: string) => {
+        obj[key] = sessionStorage.getItem(key);
+        return obj;
+      }, {}),
+    );
+    const queryParams: any = {
+      taskStatusIds: kpi.taskStatusIds?.length ? kpi.taskStatusIds.join(',') : null,
+    };
+    if (this.selectedClient) {
+      queryParams.clientId = this.selectedClient;
     }
-
     this.router.navigate(['/task-index'], {
-      queryParams: {
-        taskStatusIds: kpi.taskStatusIds.join(','),
-      },
+      queryParams,
     });
   }
 

@@ -285,45 +285,79 @@ export class TaskIndex {
     private sessionService: SessionStorageService,
   ) {}
 
-  ngOnInit(): void {
-    this.sessionService.clearOtherSessions(this.filterKey);
-
+ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.userId = sessionStorage.getItem('userId');
       this.isAdmin = sessionStorage.getItem('isAdmin');
       this.loginType = sessionStorage.getItem('loginType') || 'other';
-    }
-
-    if (isPlatformBrowser(this.platformId)) {
-      const storedModules = sessionStorage.getItem('selectedModuleDetail');
-
-      if (storedModules) {
+      const storedModuleDetail = sessionStorage.getItem('selectedModuleDetail');
+      console.log('SELECTED MODULE DETAIL:', storedModuleDetail);
+      let moduleDetail: any = null;
+      if (storedModuleDetail && storedModuleDetail !== 'null' && storedModuleDetail !== 'undefined') {
         try {
-          const parsed = JSON.parse(storedModules);
-
-          if (parsed) {
-            this.moduleName = parsed.name ?? '';
-            this.addPer = parsed.addPer ?? 'N';
-            this.editPer = parsed.editPer ?? 'N';
-            this.deletePer = parsed.deletePer ?? 'N';
-            this.viewPer = parsed.viewPer ?? 'N';
-            this.approvePer = parsed.approvePer ?? 'N';
-            this.adminApprovePer = parsed.adminApprovePer ?? 'N';
-            this.adminApprovePer = parsed.adminApprovePer ?? 'N';
-            this.exportExcelPer = parsed.exportExcel ?? 'N';
-          }
+          moduleDetail = JSON.parse(storedModuleDetail);
         } catch (error) {
           console.error('Invalid selectedModuleDetail:', error);
         }
       }
+      if (!moduleDetail) {
+        const storedModules = sessionStorage.getItem('modules');
+        console.log('STORED MODULES:', storedModules);
+        if (storedModules) {
+          try {
+            const modules = JSON.parse(storedModules);
+            moduleDetail = modules.find((module: any) => Number(module.moduleId) === 10 || module.name === 'Task');
+            console.log('TASK MODULE FROM MODULES:', moduleDetail);
+          } catch (error) {
+            console.error('Invalid modules session data:', error);
+          }
+        }
+      }
+      if (moduleDetail) {
+        this.moduleName = moduleDetail.name ?? '';
+        this.addPer = moduleDetail.addPer ?? 'N';
+        this.editPer = moduleDetail.editPer ?? 'N';
+        this.deletePer = moduleDetail.deletePer ?? 'N';
+        this.viewPer = moduleDetail.viewPer ?? 'N';
+        this.approvePer = moduleDetail.approvePer ?? 'N';
+        this.adminApprovePer = moduleDetail.adminApprovePer ?? 'N';
+        this.exportExcelPer = moduleDetail.exportExcel ?? 'N';
+      }
+      console.log('TASK PERMISSIONS:', {
+        moduleName: this.moduleName,
+        addPer: this.addPer,
+        editPer: this.editPer,
+        deletePer: this.deletePer,
+        viewPer: this.viewPer,
+        approvePer: this.approvePer,
+        adminApprovePer: this.adminApprovePer,
+        exportExcelPer: this.exportExcelPer,
+      });
     }
-
+    this.sessionService.clearOtherSessions(this.filterKey);
     this.restoreFilterState();
-    this.loadFilterData();
-    this.getTaskDetails()
-
-    this.filteredClients = [...this.clients];
+    this.route.queryParams.subscribe((params) => {
+      this.dashboardFilter = params['taskType'] || '';
+      if (params['taskStatusIds'] !== undefined) {
+        this.selectedTaskStatuses = params['taskStatusIds']
+          ? String(params['taskStatusIds'])
+              .split(',')
+              .filter((status: string) => status !== '')
+          : [];
+        this.currentPage = 1;
+        this.page = 0;
+      }
+      if (params['clientId'] !== undefined) {
+        this.selectedClient = params['clientId'] ? String(params['clientId']) : '';
+        this.currentPage = 1;
+        this.page = 0;
+      }
+      this.loadFilterData();
+      this.getTaskDetails();
+    });
   }
+
+
 
   private restoreFilterState(): void {
     let stateData: any = null;
@@ -434,43 +468,53 @@ export class TaskIndex {
   // =========================================================
 
   private loadFilterData(): void {
-    this.dataprovider.getTaskFilterDataForIndex(this.isAdmin, this.userId, this.loginType).subscribe({
-      next: (response: any) => {
-        this.clients = response.clients || [];
-        this.filteredClients = [...this.clients];
-
-        // Restore selected client name after page return
-        if (this.selectedClient) {
-          const selectedClientObj = this.clients.find((c: any) => String(c.clientId) === String(this.selectedClient));
-
-          if (selectedClientObj) {
-            this.clientSearchText = selectedClientObj.name;
+    this.dataprovider
+      .getTaskFilterDataForIndex(this.isAdmin, this.userId, this.loginType)
+      .subscribe({
+        next: (response: any) => {
+          this.clients = response.clients || [];
+          this.filteredClients = [...this.clients];
+          if (this.selectedClient) {
+            const selectedClientObj = this.clients.find(
+              (c: any) => String(c.clientId) === String(this.selectedClient),
+            );
+            //   if (selectedClientObj) {
+            //     this.clientSearchText = selectedClientObj.name;
+            //   }
+            // }
+            if (selectedClientObj) {
+              this.clientSearchText = selectedClientObj.name;
+            } else {
+              this.clientSearchText = '';
+            }
+          } else {
+            this.clientSearchText = '';
           }
-        }
-        this.filterAvailableClients();
-        this.taskCategories = response.taskCategories || [];
-        this.assignedUsers = response.assignedUsers || [];
-      },
-      error: (error) => {
-        console.error('Error loading task filter data:', error);
-
-        this.clients = [];
-        this.filteredClients = [];
-
-        this.taskCategories = [];
-
-        this.assignedUsers = [];
-      },
-    });
+          this.filterAvailableClients();
+          this.taskCategories = response.taskCategories || [];
+          this.assignedUsers = response.assignedUsers || [];
+        },
+        error: (error) => {
+          console.error('Error loading task filter data:', error);
+          this.clients = [];
+          this.filteredClients = [];
+          this.taskCategories = [];
+          this.assignedUsers = [];
+        },
+      });
   }
 
-  private filterAvailableClients(): void {
-    // Get unique client names from task data
-    const availableClientNames = new Set(this.tasks.map((task: any) => task.clientName).filter((name: string) => name));
 
-    // Keep only clients which are present in task data
-    this.filteredClients = this.clients.filter((client: any) => availableClientNames.has(client.name));
-
+ private filterAvailableClients(): void {
+    const availableClientNames = new Set(
+      this.tasks.map((task: any) => task.clientName).filter((name: string) => name),
+    );
+    this.filteredClients = this.clients.filter((client: any) => {
+      if (this.selectedClient && String(client.clientId) === String(this.selectedClient)) {
+        return true;
+      }
+      return availableClientNames.has(client.name);
+    });
     console.log('AVAILABLE CLIENTS:', this.filteredClients);
   }
 
@@ -486,41 +530,25 @@ export class TaskIndex {
   // GET TASK DETAILS
   // =========================================================
 
-  getTaskDetails(): void {
+ getTaskDetails(): void {
     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
-
     const taskCategoryId = this.selectedTaskCategory ? Number(this.selectedTaskCategory) : 0;
-
     const assignedTo = this.selectedAssignedTo ? Number(this.selectedAssignedTo) : -1;
-
     const priority = this.selectedPriority ? Number(this.selectedPriority) : 0;
-
     const fromDate = this.formatDateForApi(this.fromDate);
-
     const toDate = this.formatDateForApi(this.toDate);
-
     const taskStatusId = this.selectedTaskStatuses;
-
     this.dataprovider
       .getTaskDetails(
         this.page,
-
         this.size,
-
         this.statusIndex,
-
         this.search,
-
         clientId,
-
         taskCategoryId,
-
         assignedTo,
-
         priority,
-
         fromDate,
-
         toDate,
         this.isAdmin,
         this.userId,
@@ -531,21 +559,25 @@ export class TaskIndex {
       .subscribe({
         next: (response: any) => {
           console.log('TASK DETAILS RESPONSE:', response);
-
           this.apiResponseTaskDetails = response;
-
           this.tasks = response.data || [];
-
           this.filterAvailableClients();
+          // Re-resolve the selected client name.
+          // This is important when the selected client has 0 tasks.
+          if (this.selectedClient && this.clients.length > 0) {
+            const selectedClientObj = this.clients.find(
+              (client: any) => String(client.clientId) === String(this.selectedClient),
+            );
+            if (selectedClientObj) {
+              this.clientSearchText = selectedClientObj.name;
+            }
+          }
         },
-
         error: (error) => {
           console.error('Error fetching task details:', error);
-
           this.apiResponseTaskDetails = {
             totalElements: 0,
           };
-
           this.tasks = [];
         },
       });

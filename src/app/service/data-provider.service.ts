@@ -37,7 +37,7 @@ interface ApiResponseQuotation<T> {
 }
 
 export interface DepartmentDTO {
-  departmentId?: number;
+  departmentId: number;
   name?: string;
   sequence?: number;
   status?: number;
@@ -475,6 +475,13 @@ export class DataProviderService {
       `${environment.apiBaseUrl}admin/taskcategory/department/${departmentId}`,
     );
   }
+
+  getCategoriesByDepartmentIds(departmentIds: number[]): Observable<TaskCategoryDTO[]> {
+  return this.http.get<TaskCategoryDTO[]>(
+    `${environment.apiBaseUrl}admin/taskcategory/departments`,
+    { params: { departmentIds: departmentIds.join(',') } },
+  );
+}
 
   //Task Category
   getTaskCategoryDetails(
