@@ -1,80 +1,52 @@
 import { AfterViewInit, Component, ElementRef, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild, ViewEncapsulation } from '@angular/core';
-
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { FormBuilder, FormGroup, FormsModule, NgForm, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
 import { MatButtonModule } from '@angular/material/button';
-
 import { MatIconModule } from '@angular/material/icon';
-
 import { MatSelectModule } from '@angular/material/select';
-
 import { MatInputModule } from '@angular/material/input';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
-
 import { MatDatepickerModule } from '@angular/material/datepicker';
-
-import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
-
-import { DateAdapter } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule, DateAdapter } from '@angular/material/core';
 
 import { DataProviderService, DepartmentDTO, DesignationDTO, TaskCategoryDTO } from '../../../service/data-provider.service';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
 declare var $: any;
+
 @Component({
   selector: 'app-add-team',
   standalone: true,
-
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-
     MatDatepickerModule,
     MatNativeDateModule,
   ],
   templateUrl: './add-team.html',
   styleUrl: './add-team.scss',
   encapsulation: ViewEncapsulation.Emulated,
-
   providers: [
-    {
-      provide: DateAdapter,
-      useClass: MyDateAdapter,
-    },
-    {
-      provide: MAT_DATE_LOCALE,
-      useValue: 'en-GB',
-    },
+    { provide: DateAdapter, useClass: MyDateAdapter },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
   ],
 })
 export class AddTeam implements OnInit, AfterViewInit {
   userForm!: FormGroup;
 
-  /**
-   * true  = edit
-   * false = add
-   */
+  /** true = edit, false = add */
   isEditMode = false;
-
   userId = 0;
-
   createdBy: any;
-
   isSubmitting = false;
 
   currentPage = 1;
@@ -84,14 +56,8 @@ export class AddTeam implements OnInit, AfterViewInit {
 
   minDate: Date = new Date();
 
-  /**
-   * Permission actions
-   */
   permissionActions: string[] = ['Add', 'Edit', 'Delete', 'Approve', 'Admin Approval', 'View Only', 'Export Excel'];
 
-  /**
-   * API permission names
-   */
   permissionApiMap: any = {
     Add: 'addPer',
     Edit: 'editPer',
@@ -102,42 +68,46 @@ export class AddTeam implements OnInit, AfterViewInit {
     'Export Excel': 'exportExcel',
   };
 
-  /**
-   * Group names
-   */
-  typeGroupMap: {
-    [key: number]: string;
-  } = {
+  typeGroupMap: { [key: number]: string } = {
     1: 'Masters',
     2: 'Activity',
     3: 'Reports - 1',
   };
 
-  groupedModules: {
-    type: number;
-    modules: any[];
-  }[] = [];
-
+  groupedModules: { type: number; modules: any[] }[] = [];
   permissions: any = {};
-
   selectAllRows: any = {};
-
   originalPermissions: any = {};
-
   originalSelectAllRows: any = {};
+
+  // ---------- Dropdown data ----------
+  departmentList: DepartmentDTO[] = [];
+  designationList: DesignationDTO[] = [];
+  categoryList: TaskCategoryDTO[] = [];
+
+  // ---------- Department multi-select ----------
+  selectedDepartmentIds: number[] = [];
+  showDepartmentDropdown = false;
+  showDepartmentValidation = false;
+
+  // ---------- Category multi-select ----------
+  selectedCategoryIds: number[] = [];
+  showCategoryDropdown = false;
+  showCategoryValidation = false;
+  categoriesLoading = false;
+
+  @ViewChild('departmentDropdown') departmentDropdown!: ElementRef;
+  @ViewChild('categoryDropdown') categoryDropdown!: ElementRef;
 
   constructor(
     private fb: FormBuilder,
     private dataProvider: DataProviderService,
     private route: ActivatedRoute,
     private router: Router,
-    @Inject(PLATFORM_ID)
-    private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
     const today = new Date();
-
     today.setHours(0, 0, 0, 0);
-
     this.minDate = today;
 
     this.createForm();
@@ -150,21 +120,14 @@ export class AddTeam implements OnInit, AfterViewInit {
   private createForm(): void {
     this.userForm = this.fb.group({
       name: ['', Validators.required],
-
       email: ['', [Validators.required, Validators.email]],
-
       expiryDate: [null, Validators.required],
-
       password: [''],
-
       mobile: ['', [Validators.required, Validators.pattern(/^[0-9]{10}$/)]],
-
       telephone: [''],
-
       status: [1, Validators.required],
-
       isAdmin: [false],
-      departmentId: [null, Validators.required],
+      isHod: [false],          // NEW
       desigmationId: [null, Validators.required],
     });
 
@@ -173,42 +136,20 @@ export class AddTeam implements OnInit, AfterViewInit {
         this.clearAllPermissions();
       }
     });
+
+        // NEW: HOD unchecked -> only one department allowed
+    this.userForm.get('isHod')?.valueChanges.subscribe((isHod: boolean) => {
+      if (!isHod && this.selectedDepartmentIds.length > 1) {
+        this.selectedDepartmentIds = [this.selectedDepartmentIds[0]];
+        this.showDepartmentDropdown = false;
+        this.loadCategories();
+      }
+    });
   }
 
   // ============================================================
   // INIT
   // ============================================================
-
-  // ngOnInit(): void {
-
-  //   if (isPlatformBrowser(this.platformId)) {
-  //     this.createdBy = sessionStorage.getItem('userId');
-  //   }
-
-  //   this.readFilterState();
-
-  //   const id = this.route.snapshot.paramMap.get('userId');
-
-  //   if (id) {
-
-  //     this.isEditMode = true;
-
-  //     this.userId = Number(id);
-
-  //     this.loadUserDetails();
-
-  //   } else {
-
-  //     this.isEditMode = false;
-
-  //     this.userId = 0;
-
-  //     this.setupAddMode();
-  //   }
-
-  //   this.loadDepartments();
-  //   this.loadDesignations();
-  // }
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -219,35 +160,19 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     const id = this.route.snapshot.paramMap.get('userId');
 
+    this.loadDepartments();
+    this.loadDesignations();
+
     if (id) {
       this.isEditMode = true;
       this.userId = Number(id);
-
-      // this.isEditMode = true;
-
-      // this.userForm.get('departmentId')?.disable();
-      // this.userForm.get('desigmationId')?.disable();
-
-      // First load dropdowns
-      this.loadDepartments();
-      this.loadDesignations();
-
-      // Then load user
       this.loadUserDetails();
     } else {
       this.isEditMode = false;
       this.userId = 0;
-
       this.setupAddMode();
-
-      this.loadDepartments();
-      this.loadDesignations();
     }
   }
-
-  // ============================================================
-  // AFTER VIEW INIT
-  // ============================================================
 
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -260,7 +185,6 @@ export class AddTeam implements OnInit, AfterViewInit {
           })
           .on('changeDate', (e: any) => {
             this.userForm.get('expiryDate')?.setValue(e.format('dd-mm-yyyy'));
-
             this.userForm.get('expiryDate')?.markAsDirty();
           });
       }
@@ -273,18 +197,14 @@ export class AddTeam implements OnInit, AfterViewInit {
 
   private setupAddMode(): void {
     this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
-
     this.userForm.get('password')?.updateValueAndValidity();
 
     const defaultDate = new Date(2050, 11, 31);
-
     defaultDate.setHours(0, 0, 0, 0);
 
     this.userForm.patchValue({
       status: 1,
-
       isAdmin: false,
-
       expiryDate: defaultDate,
     });
 
@@ -295,236 +215,79 @@ export class AddTeam implements OnInit, AfterViewInit {
   // EDIT MODE
   // ============================================================
 
-  //   private loadUserDetails(): void {
+  /**
+   * Accepts: [1, 2] | "1,2" | "3" | 3 | null
+   */
+  private parseIdList(value: any): number[] {
+    if (Array.isArray(value)) {
+      return value.map((id: any) => Number(id)).filter((id: number) => !isNaN(id));
+    }
 
-  //     this.dataProvider
-  //       .getUserManagementDetailsById(this.userId)
-  //       .subscribe({
+    if (typeof value === 'string' && value.trim() !== '') {
+      return value
+        .split(',')
+        .map((id: string) => Number(id.trim()))
+        .filter((id: number) => !isNaN(id));
+    }
 
-  //         next: (response: any) => {
-  // // alert( response.designationId);
-  //           if (!response) {
-  //             alert('User details not found.');
-  //             this.backToIndexPage();
-  //             return;
-  //           }
+    if (typeof value === 'number') {
+      return [value];
+    }
 
-  //           /**
-  //            * Password is optional while editing
-  //            */
-  //           this.userForm
-  //             .get('password')
-  //             ?.clearValidators();
-
-  //           this.userForm
-  //             .get('password')
-  //             ?.updateValueAndValidity();
-
-  //          this.userForm.patchValue({
-
-  //   name:
-  //     response.firstName || '',
-
-  //   email:
-  //     response.email || '',
-
-  //   mobile:
-  //     response.mobileNo || '',
-
-  //   telephone:
-  //     response.telephone &&
-  //     response.telephone !== 'NA'
-  //       ? response.telephone
-  //       : '',
-
-  //   expiryDate:
-  //     this.parseExpiryDate(
-  //       response.expiryDate
-  //     ),
-
-  //   status:
-  //     Number(response.status) || 1,
-
-  //   isAdmin:
-  //     response.permission === 'Y',
-
-  //   departmentId:
-  //     response.departmentId || null,
-
-  //   desigmationId:
-  //     response.designationId || null
-
-  // });
-
-  //           /**
-  //            * Load permissions returned by API
-  //            */
-  //           if (response.module) {
-  //             this.buildPermissionGroups(
-  //               response.module
-  //             );
-  //           }
-
-  //         },
-
-  //         error: (err) => {
-
-  //           console.error(
-  //             'Failed to fetch user details',
-  //             err
-  //           );
-
-  //           alert(
-  //             'Failed to load user details.'
-  //           );
-
-  //           this.backToIndexPage();
-  //         }
-  //       });
-  //   }
+    return [];
+  }
 
   private loadUserDetails(): void {
     this.dataProvider.getUserManagementDetailsById(this.userId).subscribe({
       next: (response: any) => {
-        console.log('========== EDIT USER RESPONSE ==========');
-
-        console.log('Full Response:', response);
-
-        // =====================================================
-        // CHECK RESPONSE
-        // =====================================================
-
         if (!response) {
           alert('User details not found.');
-
           this.backToIndexPage();
-
           return;
         }
 
-        // =====================================================
-        // PASSWORD
         // Password is optional during edit
-        // =====================================================
-
         this.userForm.get('password')?.clearValidators();
-
         this.userForm.get('password')?.updateValueAndValidity();
 
-        // =====================================================
-        // CATEGORY IDS
-        // Restore categories already assigned to user
-        //
-        // Supports:
-        // [1, 2]
-        // "1,2"
-        // "3"
-        // 3
-        // =====================================================
+        // Restore selected categories
+        this.selectedCategoryIds = this.parseIdList(response.taskcategoryIds);
 
-        const categoryIds = response.taskcategoryIds;
+        // Restore selected departments
+        // (falls back to old single departmentId if API doesn't return departmentIds yet)
+        this.selectedDepartmentIds = this.parseIdList(response.departmentIds ?? response.departmentId);
 
-        console.log('Raw taskcategoryIds:', categoryIds);
+        // NEW: HOD flag (also treat users with several departments as HOD)
+        const isHod = response.isHod === 'Y' || this.selectedDepartmentIds.length > 1;
 
-        console.log('taskcategoryIds type:', typeof categoryIds);
-
-        console.log('taskcategoryIds is array:', Array.isArray(categoryIds));
-
-        if (Array.isArray(categoryIds)) {
-          this.selectedCategoryIds = categoryIds.map((id: any) => Number(id)).filter((id: number) => !isNaN(id));
-        } else if (typeof categoryIds === 'string' && categoryIds.trim() !== '') {
-          this.selectedCategoryIds = categoryIds
-            .split(',')
-            .map((id: string) => Number(id.trim()))
-            .filter((id: number) => !isNaN(id));
-        } else if (typeof categoryIds === 'number') {
-          this.selectedCategoryIds = [Number(categoryIds)];
-        } else {
-          this.selectedCategoryIds = [];
-        }
-
-        console.log('EDIT Selected Category IDs:', this.selectedCategoryIds);
-
-        // =====================================================
-        // PATCH USER FORM
-        // =====================================================
 
         this.userForm.patchValue({
           name: response.firstName || '',
-
           email: response.email || '',
-
           mobile: response.mobileNo || '',
-
           telephone: response.telephone && response.telephone !== 'NA' ? response.telephone : '',
-
           expiryDate: this.parseExpiryDate(response.expiryDate),
-
           status: Number(response.status) || 1,
-
           isAdmin: response.permission === 'Y',
-
-          departmentId: response.departmentId || null,
-
+          isHod: isHod,                                   // NEW
           desigmationId: response.designationId || null,
         });
 
-        // =====================================================
-        // DEBUG FORM VALUES
-        // =====================================================
-
-        console.log('Patched Department ID:', this.userForm.get('departmentId')?.value);
-
-        console.log('Patched Designation ID:', this.userForm.get('desigmationId')?.value);
-
-        // =====================================================
-        // LOAD CATEGORIES
-        //
-        // IMPORTANT:
-        // false prevents loadCategories() from clearing
-        // selectedCategoryIds.
-        // =====================================================
-
-        if (response.departmentId) {
-          console.log('Loading categories for department:', response.departmentId);
-
+        // false = keep the categories already assigned to the user
+        if (this.selectedDepartmentIds.length > 0) {
           this.loadCategories(false);
         } else {
           this.categoryList = [];
         }
 
-        // =====================================================
-        // LOAD PERMISSIONS
-        // =====================================================
-
         if (response.module) {
-          console.log('Loading module permissions:', response.module);
-
           this.buildPermissionGroups(response.module);
         }
-
-        // =====================================================
-        // FINAL DEBUG
-        // =====================================================
-
-        console.log('========== EDIT DATA LOADED ==========');
-
-        console.log('Selected Category IDs:', this.selectedCategoryIds);
-
-        console.log('Category List:', this.categoryList);
-
-        console.log('Form Values:', this.userForm.getRawValue());
       },
-
-      // =======================================================
-      // ERROR
-      // =======================================================
 
       error: (err) => {
         console.error('Failed to fetch user details', err);
-
         alert('Failed to load user details.');
-
         this.backToIndexPage();
       },
     });
@@ -541,7 +304,6 @@ export class AddTeam implements OnInit, AfterViewInit {
           this.buildPermissionGroups(response.module);
         }
       },
-
       error: (err) => {
         console.error('Failed to load permissions', err);
       },
@@ -555,15 +317,12 @@ export class AddTeam implements OnInit, AfterViewInit {
   private buildPermissionGroups(modules: any[]): void {
     const sortedModules = [...modules].sort((a, b) => a.type - b.type);
 
-    const grouped: {
-      [key: number]: any[];
-    } = {};
+    const grouped: { [key: number]: any[] } = {};
 
     sortedModules.forEach((module) => {
       if (!grouped[module.type]) {
         grouped[module.type] = [];
       }
-
       grouped[module.type].push(module);
     });
 
@@ -573,7 +332,6 @@ export class AddTeam implements OnInit, AfterViewInit {
     }));
 
     this.permissions = {};
-
     this.selectAllRows = {};
 
     this.groupedModules.forEach((group) => {
@@ -592,14 +350,6 @@ export class AddTeam implements OnInit, AfterViewInit {
 
         this.permissionActions.forEach((action) => {
           const apiField = this.permissionApiMap[action];
-
-          /**
-           * Edit:
-           * Read existing Y/N
-           *
-           * Add:
-           * Default false
-           */
           this.permissions[moduleName][action] = module[apiField] === 'Y';
         });
       });
@@ -608,13 +358,8 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.initializeSelectAllRows();
 
     this.originalPermissions = JSON.parse(JSON.stringify(this.permissions));
-
     this.originalSelectAllRows = JSON.parse(JSON.stringify(this.selectAllRows));
   }
-
-  // ============================================================
-  // SELECT ALL INITIALIZATION
-  // ============================================================
 
   private initializeSelectAllRows(): void {
     this.groupedModules.forEach((group) => {
@@ -627,10 +372,6 @@ export class AddTeam implements OnInit, AfterViewInit {
       });
     });
   }
-
-  // ============================================================
-  // GROUP SELECT ALL
-  // ============================================================
 
   toggleGroupSelectAll(groupName: string, action: string): void {
     const group = this.groupedModules.find((g) => this.typeGroupMap[g.type] === groupName);
@@ -652,18 +393,12 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       this.permissions[moduleName][action] = newValue;
 
-      /**
-       * Any real permission automatically
-       * enables View Only.
-       */
+      // Any real permission automatically enables View Only
       if (dependentActions.includes(action) && newValue) {
         this.permissions[moduleName]['View Only'] = true;
       }
 
-      /**
-       * Remove View Only if no other
-       * permission remains.
-       */
+      // Remove View Only if no other permission remains
       if (dependentActions.includes(action) && !newValue) {
         const hasOtherPermission = dependentActions.some((a) => this.permissions[moduleName][a]);
 
@@ -676,17 +411,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.initializeSelectAllRows();
   }
 
-  // ============================================================
-  // SINGLE PERMISSION
-  // ============================================================
-
   onPermissionChange(moduleName: string, action: string): void {
     const dependentActions = ['Add', 'Edit', 'Delete', 'Approve', 'Admin Approval', 'Export Excel'];
 
-    /**
-     * View Only checked:
-     * remove other permissions.
-     */
+    // View Only checked: remove other permissions
     if (action === 'View Only') {
       if (this.permissions[moduleName]['View Only']) {
         dependentActions.forEach((permission) => {
@@ -695,10 +423,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       }
     }
 
-    /**
-     * Any actual permission:
-     * View Only automatically checked.
-     */
+    // Any actual permission: View Only automatically checked
     if (dependentActions.includes(action)) {
       if (this.permissions[moduleName][action]) {
         this.permissions[moduleName]['View Only'] = true;
@@ -707,10 +432,6 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     this.initializeSelectAllRows();
   }
-
-  // ============================================================
-  // CLEAR PERMISSIONS
-  // ============================================================
 
   private clearAllPermissions(): void {
     Object.keys(this.permissions).forEach((moduleName) => {
@@ -726,126 +447,47 @@ export class AddTeam implements OnInit, AfterViewInit {
     });
   }
 
-  /**
-   * Submit User
-   */
-  showCategoryValidation = false;
+  // ============================================================
+  // SUBMIT
+  // ============================================================
 
   onSubmit(): void {
-    // ============================================================
-    // PREVENT DOUBLE SUBMIT
-    // ============================================================
-
     if (this.isSubmitting) {
       return;
     }
 
-    // ============================================================
-    // MARK FORM AS TOUCHED
-    // ============================================================
-
     this.userForm.markAllAsTouched();
 
-    // ============================================================
-    // CATEGORY VALIDATION
-    // ============================================================
+    // Department validation
+    this.showDepartmentValidation = true;
 
+    // Category validation
     this.showCategoryValidation = true;
+
+    if (this.selectedDepartmentIds.length === 0) {
+      console.error('DEPARTMENT IS REQUIRED');
+      return;
+    }
 
     if (!this.selectedCategoryIds || this.selectedCategoryIds.length === 0) {
       console.error('CATEGORY IS REQUIRED');
-
       return;
     }
-
-    // ============================================================
-    // FORM DEBUG
-    // ============================================================
-
-    console.log('========== FORM DEBUG ==========');
-
-    console.log('FORM VALID:', this.userForm.valid);
-
-    console.log('FORM VALUE:', this.userForm.value);
-
-    console.log('FORM RAW VALUE:', this.userForm.getRawValue());
-
-    Object.keys(this.userForm.controls).forEach((key) => {
-      const control = this.userForm.get(key);
-
-      console.log(key, 'value:', control?.value, 'valid:', control?.valid, 'disabled:', control?.disabled, 'errors:', control?.errors);
-    });
-
-    // ============================================================
-    // FORM VALIDATION
-    // ============================================================
 
     if (this.userForm.invalid) {
       console.error('FORM IS INVALID - API WILL NOT BE CALLED');
-
       return;
     }
-
-    console.log('FORM IS VALID - CALLING API');
-
-    // ============================================================
-    // EXPIRY DATE VALIDATION
-    // ============================================================
 
     if (!this.validateExpiryDate()) {
-      console.error('EXPIRY DATE VALIDATION FAILED');
-
       return;
     }
-
-    // ============================================================
-    // START SUBMITTING
-    // ============================================================
 
     this.isSubmitting = true;
 
-    // ============================================================
-    // GET FORM VALUES
-    //
-    // IMPORTANT:
-    //
-    // getRawValue() includes disabled controls.
-    //
-    // This is required because Department and Designation
-    // are disabled during EDIT mode.
-    // ============================================================
-
-    // const formValues =
-    //   this.userForm.getRawValue();
-
     const formValues = this.userForm.value;
 
-    console.log('FORM RAW VALUES BEFORE PAYLOAD:', formValues);
-
-    // ============================================================
-    // EXPIRY DATE
-    //
-    // Material Datepicker Date
-    // converted to yyyy-MM-dd
-    // ============================================================
-
     const formattedExpiryDate = this.formatDateForApi(formValues.expiryDate);
-
-    console.log('Expiry Date - Date Object:', formValues.expiryDate);
-
-    console.log('Expiry Date - API Format:', formattedExpiryDate);
-
-    // ============================================================
-    // DEPARTMENT / DESIGNATION DEBUG
-    // ============================================================
-
-    console.log('Department ID:', formValues.departmentId);
-
-    console.log('Designation ID:', formValues.desigmationId);
-
-    // ============================================================
-    // BUILD PAYLOAD
-    // ============================================================
 
     const payload: any = {
       userId: this.isEditMode ? this.userId : 0,
@@ -856,21 +498,19 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       email: formValues.email ? formValues.email.trim().toLowerCase() : '',
 
-      // Material Datepicker Date
-      // converted to yyyy-MM-dd
       expiryDate: formattedExpiryDate,
 
       permission: formValues.isAdmin ? 'Y' : 'N',
 
-      // Multiple selected category IDs
+      isHod: formValues.isHod ? 'Y' : 'N',     // NEW
+
+      // Multiple selected departments
+      departmentIds: this.selectedDepartmentIds,
+
+      // Multiple selected categories
       categoryIds: this.selectedCategoryIds,
 
       status: Number(formValues.status),
-
-      // IMPORTANT:
-      // getRawValue() ensures these values are available
-      // even when controls are disabled.
-      departmentId: Number(formValues.departmentId),
 
       designationId: Number(formValues.desigmationId),
 
@@ -880,114 +520,54 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       createdBy: this.createdBy,
 
-      module:
-        // this.buildModulePermissions()
-        this.isRightsHidden ? [] : this.buildModulePermissions(),
+      module: this.isRightsHidden ? [] : this.buildModulePermissions(),
     };
 
-    // ============================================================
-    // PASSWORD
-    //
-    // ADD:
-    //   Password can be sent.
-    //
-    // EDIT:
-    //   Password is sent only when user enters a new password.
-    // ============================================================
-
+    // Password: required on ADD, optional on EDIT
     if (formValues.password && formValues.password.trim()) {
       payload.password = formValues.password.trim();
     }
 
-    // ============================================================
-    // FINAL PAYLOAD DEBUG
-    // ============================================================
-
-    console.log('========== FINAL USER PAYLOAD ==========');
-
-    console.log(JSON.stringify(payload, null, 2));
-
-    // ============================================================
-    // API CALL
-    // ============================================================
+    console.log('FINAL USER PAYLOAD:', JSON.stringify(payload, null, 2));
 
     this.dataProvider.saveUserManagementDetailsDetail(payload).subscribe({
-      // ========================================================
-      // SUCCESS
-      // ========================================================
-
       next: (response: any) => {
         this.isSubmitting = false;
 
-        console.log('SAVE USER RESPONSE:', response);
-
-        // ======================================================
-        // API RETURNED FAILURE
-        // ======================================================
-
         if (response?.success === false) {
           alert(response.message || 'Operation failed.');
-
           return;
         }
 
-        // ======================================================
-        // SUCCESS MESSAGE
-        // ======================================================
-
         alert(this.isEditMode ? 'User updated successfully!' : 'User saved successfully!');
-
-        // ======================================================
-        // BACK TO INDEX
-        // ======================================================
 
         this.backToIndexPage();
       },
-
-      // ========================================================
-      // ERROR
-      // ========================================================
 
       error: (err) => {
         this.isSubmitting = false;
 
         console.error('Save user error:', err);
 
-        console.error('HTTP STATUS:', err?.status);
-
-        console.error('ERROR BODY:', err?.error);
-
         alert(err?.error?.message || (this.isEditMode ? 'Failed to update user.' : 'Failed to save user.'));
       },
     });
   }
 
-  // ============================================================
-  // BUILD API PERMISSIONS
-  // ============================================================
-
   private buildModulePermissions(): any[] {
     return this.groupedModules.flatMap((group) =>
       group.modules.map((module) => {
         const moduleName = module.name.trim();
-
         const permission = this.permissions[moduleName] || {};
 
         return {
           moduleId: module.moduleId?.toString(),
-
           addPer: permission['Add'] ? 'Y' : 'N',
-
           editPer: permission['Edit'] ? 'Y' : 'N',
-
           deletePer: permission['Delete'] ? 'Y' : 'N',
-
           approvePer: permission['Approve'] ? 'Y' : 'N',
-
           adminApprovePer: permission['Admin Approval'] ? 'Y' : 'N',
-
           viewPer: permission['View Only'] ? 'Y' : 'N',
-
           exportExcel: permission['Export Excel'] ? 'Y' : 'N',
         };
       }),
@@ -1001,32 +581,31 @@ export class AddTeam implements OnInit, AfterViewInit {
   onReset(): void {
     if (this.isEditMode) {
       this.loadUserDetails();
-
       return;
     }
 
     this.userForm.reset({
       name: '',
-
       email: '',
-
-      expiryDate: this.formatDate(new Date('2050-12-31')),
-
+      expiryDate: new Date(2050, 11, 31),
       password: '',
-
       mobile: '',
-
       telephone: '',
-
       status: 1,
-
       isAdmin: false,
-      departmentId: null,
+      isHod: false,            // NEW
       desigmationId: null,
     });
 
-    this.permissions = JSON.parse(JSON.stringify(this.originalPermissions));
+    this.selectedDepartmentIds = [];
+    this.selectedCategoryIds = [];
+    this.categoryList = [];
+    this.showDepartmentDropdown = false;
+    this.showCategoryDropdown = false;
+    this.showDepartmentValidation = false;
+    this.showCategoryValidation = false;
 
+    this.permissions = JSON.parse(JSON.stringify(this.originalPermissions));
     this.selectAllRows = JSON.parse(JSON.stringify(this.originalSelectAllRows));
   }
 
@@ -1038,11 +617,8 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.router.navigate(['/my-team'], {
       state: {
         currentPage: this.currentPage,
-
         statusIndex: this.statusIndex,
-
         searchText: this.searchText,
-
         size: this.size,
       },
     });
@@ -1073,11 +649,8 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     if (stateData) {
       this.currentPage = stateData.currentPage ?? 1;
-
       this.statusIndex = stateData.statusIndex ?? 0;
-
       this.searchText = stateData.searchText ?? '';
-
       this.size = stateData.size ?? 10;
     }
   }
@@ -1088,33 +661,27 @@ export class AddTeam implements OnInit, AfterViewInit {
 
   validateExpiryDate(): boolean {
     const control = this.userForm.get('expiryDate');
-
     const value = control?.value;
 
     if (!value) {
       console.error('Expiry Date is empty');
-
       return false;
     }
 
     if (!(value instanceof Date)) {
       console.error('Expiry Date is not a Date object:', value);
-
       return false;
     }
 
     if (isNaN(value.getTime())) {
       console.error('Expiry Date is invalid:', value);
-
       return false;
     }
 
     const selectedDate = new Date(value);
-
     selectedDate.setHours(0, 0, 0, 0);
 
     const minimumDate = new Date(this.minDate);
-
     minimumDate.setHours(0, 0, 0, 0);
 
     if (selectedDate < minimumDate) {
@@ -1124,7 +691,6 @@ export class AddTeam implements OnInit, AfterViewInit {
       });
 
       alert('Expiry Date cannot be a past date.');
-
       return false;
     }
 
@@ -1135,14 +701,17 @@ export class AddTeam implements OnInit, AfterViewInit {
   // DATE
   // ============================================================
 
-  private formatDate(date: Date): string {
-    const day = ('0' + date.getDate()).slice(-2);
-
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+  private formatDateForApi(date: Date | null): string {
+    if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
+      console.error('Invalid expiry date:', date);
+      return '';
+    }
 
     const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
 
-    return `${day}-${month}-${year}`;
+    return `${year}-${month}-${day}`;
   }
 
   private parseExpiryDate(value: any): Date | null {
@@ -1150,105 +719,48 @@ export class AddTeam implements OnInit, AfterViewInit {
       return null;
     }
 
-    /* Already Date */
-
     if (value instanceof Date) {
       const date = new Date(value);
-
       date.setHours(0, 0, 0, 0);
-
       return date;
     }
 
     const dateString = String(value).trim();
 
-    /* =====================================================
-     yyyy-MM-dd
-     Example: 2050-12-31
-     ===================================================== */
-
-    const yyyyMmDd = /^(\d{4})-(\d{2})-(\d{2})$/;
-
-    const yyyyMatch = dateString.match(yyyyMmDd);
-
+    // yyyy-MM-dd
+    const yyyyMatch = dateString.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (yyyyMatch) {
-      const year = Number(yyyyMatch[1]);
-
-      const month = Number(yyyyMatch[2]);
-
-      const day = Number(yyyyMatch[3]);
-
-      const date = new Date(year, month - 1, day);
-
+      const date = new Date(Number(yyyyMatch[1]), Number(yyyyMatch[2]) - 1, Number(yyyyMatch[3]));
       date.setHours(0, 0, 0, 0);
-
       return date;
     }
 
-    /* =====================================================
-     dd-MM-yyyy
-     Example: 31-12-2050
-     ===================================================== */
-
-    const ddMmYyyy = /^(\d{2})-(\d{2})-(\d{4})$/;
-
-    const ddMatch = dateString.match(ddMmYyyy);
-
+    // dd-MM-yyyy
+    const ddMatch = dateString.match(/^(\d{2})-(\d{2})-(\d{4})$/);
     if (ddMatch) {
-      const day = Number(ddMatch[1]);
-
-      const month = Number(ddMatch[2]);
-
-      const year = Number(ddMatch[3]);
-
-      const date = new Date(year, month - 1, day);
-
+      const date = new Date(Number(ddMatch[3]), Number(ddMatch[2]) - 1, Number(ddMatch[1]));
       date.setHours(0, 0, 0, 0);
-
       return date;
     }
 
-    /* =====================================================
-     yyyy/MM/dd
-     ===================================================== */
-
-    const yyyySlash = /^(\d{4})\/(\d{2})\/(\d{2})$/;
-
-    const slashMatch = dateString.match(yyyySlash);
-
+    // yyyy/MM/dd
+    const slashMatch = dateString.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
     if (slashMatch) {
-      const year = Number(slashMatch[1]);
-
-      const month = Number(slashMatch[2]);
-
-      const day = Number(slashMatch[3]);
-
-      const date = new Date(year, month - 1, day);
-
+      const date = new Date(Number(slashMatch[1]), Number(slashMatch[2]) - 1, Number(slashMatch[3]));
       date.setHours(0, 0, 0, 0);
-
       return date;
     }
 
-    /* =====================================================
-     Java date string
-     
-     Example:
-     Wed Mar 13 00:00:00 IST 2024
-     ===================================================== */
-
-    let normalized = dateString.replace(' IST ', ' GMT+0530 ');
-
+    // Java date string e.g. Wed Mar 13 00:00:00 IST 2024
+    const normalized = dateString.replace(' IST ', ' GMT+0530 ');
     const parsed = new Date(normalized);
 
     if (!isNaN(parsed.getTime())) {
       parsed.setHours(0, 0, 0, 0);
-
       return parsed;
     }
 
     console.error('Unable to parse expiry date:', value);
-
     return null;
   }
 
@@ -1257,9 +769,7 @@ export class AddTeam implements OnInit, AfterViewInit {
   // ============================================================
 
   allowOnlyLetters(event: KeyboardEvent): void {
-    const char = event.key;
-
-    if (!/^[a-zA-Z\s]$/.test(char)) {
+    if (!/^[a-zA-Z\s]$/.test(event.key)) {
       event.preventDefault();
     }
   }
@@ -1280,30 +790,22 @@ export class AddTeam implements OnInit, AfterViewInit {
     }
   }
 
-  // ============================================================
-  // STATUS
-  // ============================================================
-
   getStatusLabel(status: number): string {
     switch (+status) {
       case 1:
         return 'Active';
-
       case 2:
         return 'Inactive';
-
       case 3:
         return 'Deleted';
-
       default:
         return 'Unknown';
     }
   }
-  departmentList: DepartmentDTO[] = [];
 
-  designationList: DesignationDTO[] = [];
-
-  categoryList: TaskCategoryDTO[] = [];
+  // ============================================================
+  // DROPDOWN DATA
+  // ============================================================
 
   loadDepartments(): void {
     this.dataProvider.getActiveDepartments().subscribe({
@@ -1322,70 +824,99 @@ export class AddTeam implements OnInit, AfterViewInit {
         this.designationList = response;
       },
       error: (error) => {
-        console.error('Error loading departments', error);
+        console.error('Error loading designations', error);
       },
     });
   }
 
-  private formatDateForApi(date: Date | null): string {
-    if (!date) {
-      return '';
+  // ============================================================
+  // DEPARTMENT MULTI-SELECT
+  // ============================================================
+
+  toggleDepartment(departmentId: number, event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+
+    if (checkbox.checked) {
+      if (!this.selectedDepartmentIds.includes(departmentId)) {
+        this.selectedDepartmentIds.push(departmentId);
+      }
+    } else {
+      this.selectedDepartmentIds = this.selectedDepartmentIds.filter((id) => id !== departmentId);
     }
 
-    if (!(date instanceof Date)) {
-      console.error('Invalid expiry date:', date);
+    this.showDepartmentValidation = this.selectedDepartmentIds.length === 0;
 
-      return '';
-    }
-
-    if (isNaN(date.getTime())) {
-      console.error('Invalid expiry date:', date);
-
-      return '';
-    }
-
-    const year = date.getFullYear();
-
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
+    // Reload categories for the new set of departments
+    this.loadCategories();
   }
 
-  //Task category
+    // NEW: single-select department (used when HOD is unchecked)
+  onSingleDepartmentChange(departmentId: number | null): void {
+    this.selectedDepartmentIds = departmentId ? [Number(departmentId)] : [];
 
-  selectedCategoryIds: number[] = [];
-  showCategoryDropdown = false;
+    this.showDepartmentValidation = this.selectedDepartmentIds.length === 0;
 
-  categoriesLoading = false;
+    this.loadCategories();
+  }
 
+  get isHod(): boolean {
+    return !!this.userForm.get('isHod')?.value;
+  }
+
+  isDepartmentChecked(departmentId: number): boolean {
+    return this.selectedDepartmentIds.includes(departmentId);
+  }
+
+  getSelectedDepartmentNames(): string {
+    if (!this.departmentList || !this.selectedDepartmentIds?.length) {
+      return '';
+    }
+
+    return this.departmentList
+      .filter((dept) => this.selectedDepartmentIds.includes(dept.departmentId))
+      .map((dept) => dept.name)
+      .join(', ');
+  }
+
+  // ============================================================
+  // CATEGORY MULTI-SELECT
+  // ============================================================
+
+  /**
+   * @param clearSelection
+   *   true  = user changed departments: keep only the selected categories
+   *           that still belong to the chosen departments
+   *           (department 1 auto-selects all categories)
+   *   false = edit-mode initial load: keep saved categories as they are
+   */
   loadCategories(clearSelection: boolean = true): void {
-    const departmentId = this.userForm.get('departmentId')?.value;
-
-    if (!departmentId) {
+    if (this.selectedDepartmentIds.length === 0) {
       this.categoryList = [];
       this.selectedCategoryIds = [];
       this.categoriesLoading = false;
       return;
     }
 
-    if (clearSelection) {
-      this.selectedCategoryIds = [];
-    }
-
     this.categoriesLoading = true;
 
-    this.dataProvider.getCategoriesByDepartmentId(departmentId).subscribe({
+    this.dataProvider.getCategoriesByDepartmentIds(this.selectedDepartmentIds).subscribe({
       next: (response: TaskCategoryDTO[]) => {
         this.categoryList = response;
         this.categoriesLoading = false;
 
-        if (Number(departmentId) === 1 && clearSelection) {
-          this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
-          this.showCategoryValidation = false;
+        if (clearSelection) {
+          if (this.selectedDepartmentIds.includes(1)) {
+            // Department 1 = all categories selected automatically
+            this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
+            this.showCategoryValidation = false;
+          } else {
+            // Drop categories that no longer belong to the selected departments
+            const validIds = response.map((category) => category.taskcategoryId);
+            this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => validIds.includes(id));
+          }
         }
       },
+
       error: (error) => {
         console.error('Error loading categories:', error);
         this.categoryList = [];
@@ -1405,27 +936,12 @@ export class AddTeam implements OnInit, AfterViewInit {
       this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => id !== categoryId);
     }
 
-    // Update validation message
     this.showCategoryValidation = this.selectedCategoryIds.length === 0;
   }
 
   isCategoryChecked(taskcategoryId: number): boolean {
     return this.selectedCategoryIds.includes(taskcategoryId);
   }
-
-  //Dropdown auto close
-  @ViewChild('categoryDropdown') categoryDropdown!: ElementRef;
-
-  // showCategoryDropdown = false;
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    if (this.showCategoryDropdown && this.categoryDropdown && !this.categoryDropdown.nativeElement.contains(event.target)) {
-      this.showCategoryDropdown = false;
-    }
-  }
-
-  // selectedCategoryIds: number[] = [];
 
   getSelectedCategoryNames(): string {
     if (!this.categoryList || !this.selectedCategoryIds?.length) {
@@ -1438,7 +954,33 @@ export class AddTeam implements OnInit, AfterViewInit {
       .join(', ');
   }
 
+  // ============================================================
+  // CLOSE DROPDOWNS ON OUTSIDE CLICK
+  // ============================================================
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as Node;
+
+    if (this.showDepartmentDropdown && this.departmentDropdown && !this.departmentDropdown.nativeElement.contains(target)) {
+      this.showDepartmentDropdown = false;
+    }
+
+    if (this.showCategoryDropdown && this.categoryDropdown && !this.categoryDropdown.nativeElement.contains(target)) {
+      this.showCategoryDropdown = false;
+    }
+  }
+
+  // ============================================================
+  // RIGHTS SECTION VISIBILITY
+  // ============================================================
+
+  /** Rights section hidden when Department 1 is one of the selected departments */
   get isRightsHidden(): boolean {
-    return Number(this.userForm.get('departmentId')?.value) === 1;
+    return this.selectedDepartmentIds.includes(1);
+  }
+
+   get singleDepartmentId(): number | null {
+    return this.selectedDepartmentIds.length ? this.selectedDepartmentIds[0] : null;
   }
 }

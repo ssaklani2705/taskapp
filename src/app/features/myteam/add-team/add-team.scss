@@ -1974,3 +1974,19 @@
   font-size: 12px;
   margin-top: 5px;
 }
+
+
+.admin-row mat-checkbox + mat-checkbox {
+  margin-left: 32px;
+}
+
+.hod-check {
+  height: 43px;
+  display: flex;
+  align-items: center;
+}
+
+.hod-check .mdc-label {
+  color: var(--text-navy) !important;
+  font-size: 14px !important;
+}

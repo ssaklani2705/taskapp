@@ -1134,6 +1134,7 @@ export class MyTeam implements OnInit {
 
     // Reload the first page with cleared filters
     this.onSearch();
+     this.loadCategories();
   }
 
   //Category
