@@ -308,82 +308,6 @@ export class ViewIndex implements OnInit {
     return String(userId);
   }
 
-  // =========================================================
-  // FORMAT TASK DATE
-  // =========================================================
-
-  // formatDate(
-  //   value: any
-  // ): string {
-
-  //   if (!value) {
-
-  //     return '-';
-
-  //   }
-
-  //   // -------------------------------------------------------
-  //   // LOCAL DATE YYYY-MM-DD
-  //   // -------------------------------------------------------
-
-  //   if (
-  //     typeof value === 'string' &&
-  //     /^\d{4}-\d{2}-\d{2}$/.test(value)
-  //   ) {
-
-  //     const parts =
-  //       value.split('-');
-
-  //     return (
-  //       parts[2] +
-  //       '-' +
-  //       parts[1] +
-  //       '-' +
-  //       parts[0]
-  //     );
-
-  //   }
-
-  //   const date =
-  //     new Date(value);
-
-  //   if (
-  //     isNaN(
-  //       date.getTime()
-  //     )
-  //   ) {
-
-  //     return String(value);
-
-  //   }
-
-  //   const day =
-  //     String(
-  //       date.getDate()
-  //     ).padStart(2, '0');
-
-  //   const month =
-  //     String(
-  //       date.getMonth() + 1
-  //     ).padStart(2, '0');
-
-  //   const year =
-  //     date.getFullYear();
-
-  //   return (
-  //     day +
-  //     '-' +
-  //     month +
-  //     '-' +
-  //     year
-  //   );
-
-  // }
-
-  // =========================================================
-  // FORMAT DATE TIME
-  // =========================================================
-
   formatDateTime(value: any): string {
     if (!value) {
       return '-';
@@ -792,50 +716,50 @@ export class ViewIndex implements OnInit {
    * Opens PDFs inline in a new tab; downloads all other file types
    * (doc, docx, xls, xlsx, zip) since browsers can't render them natively.
    */
-  downloadFile(fileName: string | null | undefined): void {
-    if (!fileName) {
-      return;
-    }
+  // downloadFile(fileName: string | null | undefined): void {
+  //   if (!fileName) {
+  //     return;
+  //   }
 
-    const extension = this.getExtension(fileName);
+  //   const extension = this.getExtension(fileName);
 
-    let folder = '';
+  //   let folder = '';
 
-    switch (extension) {
-      case 'pdf':
-        folder = 'tasks/pdf/';
-        break;
+  //   switch (extension) {
+  //     case 'pdf':
+  //       folder = 'tasks/pdf/';
+  //       break;
 
-      case 'zip':
-        folder = 'tasks/zip/';
-        break;
+  //     case 'zip':
+  //       folder = 'tasks/zip/';
+  //       break;
 
-      case 'doc':
-      case 'docx':
-        folder = 'tasks/doc/';
-        break;
+  //     case 'doc':
+  //     case 'docx':
+  //       folder = 'tasks/doc/';
+  //       break;
 
-      case 'xls':
-      case 'xlsx':
-        folder = 'tasks/xls/';
-        break;
+  //     case 'xls':
+  //     case 'xlsx':
+  //       folder = 'tasks/xls/';
+  //       break;
 
-      default:
-        folder = 'tasks/other/';
-    }
+  //     default:
+  //       folder = 'tasks/other/';
+  //   }
 
-    const fileUrl = `${environment.baseurluploaded}${folder}${encodeURIComponent(fileName)}`;
+  //   const fileUrl = `${environment.localUploadedFiles}${folder}${encodeURIComponent(fileName)}`;
 
-    console.log('Download/View URL:', fileUrl);
+  //   console.log('Download/View URL:', fileUrl);
 
-    if (extension === 'pdf') {
-      // PDFs can render inline in the browser
-      window.open(fileUrl, '_blank');
-    } else {
-      // Everything else: force a download instead of trying to open inline
-      this.triggerDownload(fileUrl, fileName);
-    }
-  }
+  //   if (extension === 'pdf') {
+  //     // PDFs can render inline in the browser
+  //     window.open(fileUrl, '_blank');
+  //   } else {
+  //     // Everything else: force a download instead of trying to open inline
+  //     this.triggerDownload(fileUrl, fileName);
+  //   }
+  // }
 
   /**
    * Forces a browser download via a temporary anchor element,
@@ -851,5 +775,53 @@ export class ViewIndex implements OnInit {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  }
+
+  downloadFile(fileName: string | null | undefined): void {
+    if (!fileName) return;
+
+    const extension = this.getExtension(fileName);
+    const folder = this.getFolder(extension);
+
+    this.dataprovider.downloadFile(folder, fileName).subscribe({
+      next: (blob: Blob) => {
+        const url = window.URL.createObjectURL(blob);
+
+        if (extension === 'pdf') {
+          window.open(url, '_blank');
+          // Revoke later so the new tab has time to load it
+          setTimeout(() => window.URL.revokeObjectURL(url), 60000);
+        } else {
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }
+      },
+      error: async (err) => {
+        const text = err.error instanceof Blob ? await err.error.text() : err.error;
+        console.error('Download failed', err.status, text);
+      },
+    });
+  }
+
+  private getFolder(extension: string): string {
+    switch (extension) {
+      case 'pdf':
+        return '/pdf';
+      case 'zip':
+        return '/zip';
+      case 'doc':
+      case 'docx':
+        return '/doc';
+      case 'xls':
+      case 'xlsx':
+        return '/xlsx';
+      default:
+        return 'tasks/other';
+    }
   }
 }

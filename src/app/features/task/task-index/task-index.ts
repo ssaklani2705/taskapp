@@ -1922,9 +1922,7 @@ export class TaskIndex {
         const allUsers = data?.assignedUsers || [];
 
         this.users = allUsers.filter((user: any) => Number(user.userId) !== currentAssignedUserId);
-
-        console.log('Current assigned user:', currentAssignedUserId);
-        console.log('Filtered users:', this.users);
+        console.log(this.users.length + "  ")
       },
 
       error: (error: any) => {

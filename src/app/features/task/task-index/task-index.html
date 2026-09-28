@@ -5,13 +5,7 @@
         <div class="header-title-section">
           <mat-icon>task_alt</mat-icon>
           <h2>Tasks</h2>
-          <button
-            type="button"
-            class="collapse-btn"
-            (click)="togglePanel()"
-            [attr.aria-expanded]="isPanelVisible"
-            title="Toggle Search Panel"
-          >
+          <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
             {{ isPanelVisible ? '▲' : '▼' }}
           </button>
         </div>
@@ -28,13 +22,7 @@
           <!-- SEARCH -->
           <div class="search-wrapper">
             <div class="search-box">
-              <input
-                type="text"
-                [(ngModel)]="searchQuery"
-                placeholder="Search by Title"
-                class="search-input"
-                (keyup.enter)="onSearch()"
-              />
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Title" class="search-input" (keyup.enter)="onSearch()" />
               <button type="button" class="search-btn" (click)="onSearch()" title="Search">
                 <i class="fa fa-search"></i>
               </button>
@@ -42,53 +30,22 @@
           </div>
           <!-- CLIENT -->
           <div class="client-dropdown-container">
-            <input
-              type="text"
-              class="client-search-input"
-              placeholder="Search Client..."
-              [(ngModel)]="clientSearchText"
-              (input)="filterClients()"
-              (focus)="showClientDropdown = true"
-            />
-            <button
-              *ngIf="clientSearchText"
-              type="button"
-              class="clear-search-btn"
-              (click)="clearClientSearch()"
-            >
-              ×
-            </button>
-            <div
-              class="client-dropdown-list"
-              *ngIf="showClientDropdown && clientSearchText.trim().length >= 3"
-            >
+            <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
+            <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
+            <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
               <!-- <div class="client-dropdown-item"
                 (click)="selectedClient=''; clientSearchText=''; showClientDropdown=false; onSearch()">
                 -- All Clients --
               </div> -->
-              <div
-                class="client-dropdown-item"
-                *ngFor="let client of filteredClients"
-                (click)="selectClient(client)"
-              >
+              <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
                 {{ client.name }}
               </div>
-              <div
-                class="client-dropdown-item no-client-found"
-                *ngIf="filteredClients.length === 0"
-              >
-                No Client Found
-              </div>
+              <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
             </div>
           </div>
           <!-- TASK CATEGORY -->
           <div class="status-wrapper">
-            <select
-              class="status-select"
-              [(ngModel)]="selectedTaskCategory"
-              (change)="onSearch()"
-              (click)="showTaskCategoryDropdown = true"
-            >
+            <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
               <option value="">--All Task Categories--</option>
               <option *ngFor="let category of taskCategories" [value]="category.taskcategoryId">
                 {{ category.name }}
@@ -123,25 +80,10 @@
             </select>
           </div>
           <div class="status-dropdown" #statusDropdown>
-            <button
-              type="button"
-              class="dropdown-btn"
-              (click)="showStatusDropdown = !showStatusDropdown"
-            >
-              --All Task Status--
-            </button>
-            <div
-              class="dropdown-menu"
-              *ngIf="showStatusDropdown"
-              (click)="$event.stopPropagation()"
-            >
+            <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">--All Task Status--</button>
+            <div class="dropdown-menu" *ngIf="showStatusDropdown" (click)="$event.stopPropagation()">
               <label *ngFor="let status of taskStatusOptions">
-                <input
-                  type="checkbox"
-                  [value]="status.id"
-                  [checked]="isTaskStatusChecked(status.id)"
-                  (click)="$event.preventDefault(); toggleTaskStatus(status.id)"
-                />
+                <input type="checkbox" [value]="status.id" [checked]="isTaskStatusChecked(status.id)" (click)="$event.preventDefault(); toggleTaskStatus(status.id)" />
                 {{ status.label }}
               </label>
             </div>
@@ -150,16 +92,7 @@
           <!-- FROM DATE -->
           <div class="status-wrapper date-filter-wrapper">
             <div class="date-filter-input">
-              <input
-                matInput
-                [matDatepicker]="fromPicker"
-                [(ngModel)]="fromDate"
-                name="fromDate"
-                placeholder="From Date"
-                class="date-input"
-                autocomplete="off"
-                readonly
-              />
+              <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" name="fromDate" placeholder="From Date" class="date-input" autocomplete="off" readonly />
               <mat-datepicker-toggle matSuffix [for]="fromPicker"> </mat-datepicker-toggle>
               <mat-datepicker #fromPicker> </mat-datepicker>
             </div>
@@ -167,17 +100,7 @@
           <!-- TO DATE -->
           <div class="status-wrapper date-filter-wrapper">
             <div class="date-filter-input">
-              <input
-                matInput
-                [matDatepicker]="toPicker"
-                [(ngModel)]="toDate"
-                name="toDate"
-                placeholder="To Date"
-                class="date-input"
-                autocomplete="off"
-                readonly
-                [min]="fromDate"
-              />
+              <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" name="toDate" placeholder="To Date" class="date-input" autocomplete="off" readonly [min]="fromDate" />
               <mat-datepicker-toggle matSuffix [for]="toPicker"> </mat-datepicker-toggle>
               <mat-datepicker #toPicker> </mat-datepicker>
             </div>
@@ -186,9 +109,7 @@
           <div class="go-wrapper">
             <button type="button" class="btn-go" (click)="onSearch()">Go</button>
             <!-- &nbsp; -->
-            <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
-              Clear
-            </button>
+            <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
             @if (exportExcelPer === 'Y') {
               <button type="button" class="btn-export-excel" (click)="exportToExcel()">
                 Export to Excel
@@ -203,47 +124,13 @@
           {{ recordSummary }}
         </div>
         <div class="pagination">
-          <button
-            type="button"
-            class="pagination-btn first-btn"
-            (click)="goToFirstPage()"
-            [disabled]="currentPage === 1"
-          >
-            « First
-          </button>
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPage(currentPage - 1)"
-            [disabled]="currentPage === 1"
-          >
-            ‹ Prev
-          </button>
-          <button
-            type="button"
-            class="pagination-btn"
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button type="button" class="pagination-btn" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPage(currentPage + 1)"
-            [disabled]="currentPage === totalPages"
-          >
-            Next ›
-          </button>
-          <button
-            type="button"
-            class="pagination-btn last-btn"
-            (click)="goToLastPage()"
-            [disabled]="currentPage === totalPages"
-          >
-            Last »
-          </button>
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
       <div class="table-container">
@@ -252,26 +139,16 @@
             <thead>
               <tr>
                 <th class="serial-column">Sr. No.</th>
-                <th
-                  *ngFor="let col of columns"
-                  [class.sortable-column]="col.sortable"
-                  (click)="col.sortable && sortData(col.key)"
-                >
+                <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
                   <div class="column-header">
                     <span>
                       {{ col.label }}
                     </span>
 
                     <span *ngIf="col.sortable" class="sort-icons">
-                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'">
-                        ▲
-                      </span>
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
 
-                      <span
-                        [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"
-                      >
-                        ▼
-                      </span>
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
                     </span>
                   </div>
                 </th>
@@ -293,13 +170,7 @@
                       {{ task.title || '-' }}
                     </span>
 
-                    <button
-                      type="button"
-                      class="description-icon-button"
-                      *ngIf="task.description"
-                      (click)="openDescriptionModal(task)"
-                      aria-label="View Description"
-                    >
+                    <button type="button" class="description-icon-button" *ngIf="task.description" (click)="openDescriptionModal(task)" aria-label="View Description">
                       <i class="fa fa-file-text"></i>
                     </button>
                   </div>
@@ -336,11 +207,7 @@
                 </td> -->
 
                 <td>
-                  <div
-                    class="due-date-cell"
-                    *ngIf="task.dueDateTime; else noDueDate"
-                    [ngClass]="getDueDateClass(task.dueDateTime)"
-                  >
+                  <div class="due-date-cell" *ngIf="task.dueDateTime; else noDueDate" [ngClass]="getDueDateClass(task.dueDateTime)">
                     <div class="due-date-row">
                       <i class="fa fa-calendar due-icon"></i>
                       <span>{{ task.dueDateTime | date: 'dd-MM-yyyy' }}</span>
@@ -376,67 +243,22 @@
                   </span>
                 </td>
 
-                <!-- <td>
-  <span
-    class="wrap-text"
-    [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-    (click)="
-      (!task.assignedToName || task.assignedToName === '0' || task.taskStatus === 1)
-        && openAssignUserModal(task)
-    "
-  >
-
-    <ng-container
-      *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock"
-    >
-      <mat-icon class="assign-icon">person_add</mat-icon>
-      Assign User
-    </ng-container>
-
-    <ng-template #assignedBlock>
-      {{ task.assignedToName }}
-
-      <span
-        class="reassign-text"
-        *ngIf="task.taskStatus === 1 && task.taskCategoryId !== 1"
-      >
-        Re-assign
-      </span>
-    </ng-template>
-
-  </span>
-</td> -->
 
                 <td>
                   <span
                     class="wrap-text"
                     [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-                    (click)="
-                      (!task.assignedToName ||
-                        task.assignedToName === '0' ||
-                        (task.taskStatus === 1 && task.taskCategoryId !== 1)) &&
-                        openAssignUserModal(task)
-                    "
+                    (click)=" (!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1)) && openAssignUserModal(task)"
                   >
-                    <ng-container
-                      *ngIf="
-                        !task.assignedToName || task.assignedToName === '0';
-                        else assignedBlock
-                      "
-                    >
+                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
                       <mat-icon class="assign-icon">person_add</mat-icon>
                       Assign User
                     </ng-container>
 
                     <ng-template #assignedBlock>
-                      {{ task.assignedToName }}
+                      {{ task.assignedToName}}
 
-                      <span
-                        class="reassign-text"
-                        *ngIf="task.taskStatus === 1 && task.taskCategoryId !== 1"
-                      >
-                        Re-assign
-                      </span>
+                      <span class="reassign-text" *ngIf="task.taskStatus === 1 && task.taskCategoryId !== 1"> Re-assign </span>
                     </ng-template>
                   </span>
                 </td>
@@ -451,9 +273,7 @@
                 <!-- TASK STATUS -->
                 <!-- TASK STATUS matTooltip="Change Task status"-->
                 <td>
-                  <ng-container
-                    *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus"
-                  >
+                  <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
                     <button
                       type="button"
                       class="change-manager-button"
@@ -469,7 +289,7 @@
                     <span class="wrap-text">-</span>
                   </ng-template>
                 </td>
-                
+
                 <!-- <td>
   <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
     <button type="button" class="change-manager-button"
@@ -517,16 +337,8 @@
                       <i class="fa fa-pencil"></i>
                     </a>
                     } -->
-                    @if (
-                      deletePer === 'Y' &&
-                      task.status !== 3 &&
-                      (isAdmin === 'Y' || isTaskOwner(task))
-                    ) {
-                      <a
-                        (click)="onDeleteTask(task.taskId)"
-                        class="action-btn delete-btn"
-                        title="Delete"
-                      >
+                    @if (deletePer === 'Y' && task.status !== 3 && (isAdmin === 'Y' || isTaskOwner(task))) {
+                      <a (click)="onDeleteTask(task.taskId)" class="action-btn delete-btn" title="Delete">
                         <i class="fa fa-trash"></i>
                       </a>
                     }
@@ -553,47 +365,13 @@
           {{ recordSummary }}
         </div>
         <div class="pagination">
-          <button
-            type="button"
-            class="pagination-btn first-btn"
-            (click)="goToFirstPage()"
-            [disabled]="currentPage === 1"
-          >
-            « First
-          </button>
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPage(currentPage - 1)"
-            [disabled]="currentPage === 1"
-          >
-            ‹ Prev
-          </button>
-          <button
-            type="button"
-            class="pagination-btn"
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button type="button" class="pagination-btn" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
-          <button
-            type="button"
-            class="pagination-btn"
-            (click)="goToPage(currentPage + 1)"
-            [disabled]="currentPage === totalPages"
-          >
-            Next ›
-          </button>
-          <button
-            type="button"
-            class="pagination-btn last-btn"
-            (click)="goToLastPage()"
-            [disabled]="currentPage === totalPages"
-          >
-            Last »
-          </button>
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
     </div>
@@ -613,12 +391,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeTaskNotesModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeTaskNotesModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -629,21 +402,12 @@
         <div class="previous-notes-title">Previous Notes</div>
         <div *ngIf="isAddingNote">
           <label class="send-mail-checkbox">
-            <input
-              type="checkbox"
-              [checked]="sendMail"
-              (change)="sendMail = $any($event.target).checked"
-            />
+            <input type="checkbox" [checked]="sendMail" (change)="sendMail = $any($event.target).checked" />
             Send Email Also
           </label>
         </div>
         <!-- ADD NOTE BUTTON -->
-        <button
-          type="button"
-          class="add-note-modal-button"
-          *ngIf="!isAddingNote"
-          (click)="startAddingNote()"
-        >
+        <button type="button" class="add-note-modal-button" *ngIf="!isAddingNote" (click)="startAddingNote()">
           <mat-icon>add</mat-icon>
           Add Note
         </button>
@@ -654,33 +418,15 @@
           <span class="required">*</span>
         </label>
 
-        <textarea
-          class="task-notes-textarea"
-          [(ngModel)]="taskNote"
-          placeholder="Enter your note..."
-          rows="5"
-          maxlength="2000"
-        ></textarea>
+        <textarea class="task-notes-textarea" [(ngModel)]="taskNote" placeholder="Enter your note..." rows="5" maxlength="2000"></textarea>
 
         <div class="notes-form-footer">
           <span class="notes-character-count"> {{ taskNote.length || 0 }} / 2000 </span>
 
           <div class="note-form-buttons">
-            <button
-              type="button"
-              class="modal-cancel-button"
-              (click)="cancelAddingNote()"
-              [disabled]="isSavingTaskNote"
-            >
-              Cancel
-            </button>
+            <button type="button" class="modal-cancel-button" (click)="cancelAddingNote()" [disabled]="isSavingTaskNote">Cancel</button>
 
-            <button
-              type="button"
-              class="modal-save-button"
-              (click)="saveTaskNote()"
-              [disabled]="isSavingTaskNote || !taskNote.trim()"
-            >
+            <button type="button" class="modal-save-button" (click)="saveTaskNote()" [disabled]="isSavingTaskNote || !taskNote.trim()">
               <mat-icon> send </mat-icon>
 
               {{ isSavingTaskNote ? 'Submitting...' : 'Submit' }}
@@ -728,14 +474,7 @@
 
     <!-- FOOTER -->
     <div class="modal-footer">
-      <button
-        type="button"
-        class="modal-cancel-button"
-        (click)="closeTaskNotesModal()"
-        [disabled]="isSavingTaskNote"
-      >
-        Close
-      </button>
+      <button type="button" class="modal-cancel-button" (click)="closeTaskNotesModal()" [disabled]="isSavingTaskNote">Close</button>
     </div>
   </div>
 </div>
@@ -754,12 +493,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeChangeManagerModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -778,24 +512,12 @@
 
         <div class="status-radio-group">
           <label class="radio-label">
-            <input
-              type="radio"
-              name="taskStatus"
-              [value]="5"
-              [(ngModel)]="selectedTaskStatusId"
-              [disabled]="isChangingManager"
-            />
+            <input type="radio" name="taskStatus" [value]="5" [(ngModel)]="selectedTaskStatusId" [disabled]="isChangingManager" />
             Assignor Closure
           </label>
 
           <label class="radio-label">
-            <input
-              type="radio"
-              name="taskStatus"
-              [value]="3"
-              [(ngModel)]="selectedTaskStatusId"
-              [disabled]="isChangingManager"
-            />
+            <input type="radio" name="taskStatus" [value]="3" [(ngModel)]="selectedTaskStatusId" [disabled]="isChangingManager" />
             Re-Open
           </label>
         </div>
@@ -808,13 +530,7 @@
           <span class="required">*</span>
         </label>
 
-        <textarea
-          class="manager-select"
-          rows="3"
-          [(ngModel)]="taskDescription"
-          [disabled]="isChangingManager"
-          placeholder="Enter description"
-        ></textarea>
+        <textarea class="manager-select" rows="3" [(ngModel)]="taskDescription" [disabled]="isChangingManager" placeholder="Enter description"></textarea>
 
         <div class="manager-validation-error" *ngIf="descriptionValidationError">
           <mat-icon>error_outline</mat-icon>
@@ -823,34 +539,16 @@
       </div>
 
       <!-- NORMAL FILE UPLOAD *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"-->
-      <div
-        class="manager-form-group"
-        *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3"
-      >
-        <label class="modal-field-label">
-          Upload File - 1:<span class="file-limit">
-            [.pdf, .xls, .xlsx, .doc, .docx allowed up to 10 MB]
-          </span>
-        </label>
+      <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+        <label class="modal-field-label"> Upload File - 1:<span class="file-limit"> [.pdf, .xls, .xlsx, .doc, .docx allowed up to 10 MB] </span> </label>
 
-        <input
-          type="file"
-          #normalFileInput
-          class="manager-select"
-          [disabled]="isChangingManager"
-          (change)="onFileTwoSelected($event)"
-        />
+        <input type="file" #normalFileInput class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
 
         <div class="file-info" *ngIf="fileTwoName">
           <span class="current-manager-name">
             {{ fileTwoName }}
           </span>
-          <button
-            type="button"
-            class="remove-file-btn"
-            (click)="removeNormalFile(normalFileInput)"
-            title="Remove File"
-          >
+          <button type="button" class="remove-file-btn" (click)="removeNormalFile(normalFileInput)" title="Remove File">
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -858,36 +556,17 @@
 
       <!-- ZIP FILE UPLOAD  *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"
        selectedTaskStatusIdForCondition != 2-->
-      <div
-        class="manager-form-group"
-        *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3"
-      >
-        <label class="modal-field-label">
-          Upload File - 2:<span class="file-limit">
-            [.pdf, .xls, .xlsx, .doc, .docx, .zip allowed up to 10 MB]
-          </span>
-        </label>
+      <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+        <label class="modal-field-label"> Upload File - 2:<span class="file-limit"> [.pdf, .xls, .xlsx, .doc, .docx, .zip allowed up to 10 MB] </span> </label>
 
-        <input
-          type="file"
-          class="manager-select"
-          #zipFileInput
-          accept=".zip"
-          [disabled]="isChangingManager"
-          (change)="onFileOneSelected($event)"
-        />
+        <input type="file" class="manager-select" #zipFileInput accept=".zip" [disabled]="isChangingManager" (change)="onFileOneSelected($event)" />
 
         <div class="file-info" *ngIf="fileOneName">
           <span class="current-manager-name">
             {{ fileOneName }}
           </span>
 
-          <button
-            type="button"
-            class="remove-file-btn"
-            (click)="removeZipFile(zipFileInput)"
-            title="Remove ZIP"
-          >
+          <button type="button" class="remove-file-btn" (click)="removeZipFile(zipFileInput)" title="Remove ZIP">
             <mat-icon>close</mat-icon>
           </button>
         </div>
@@ -895,21 +574,9 @@
     </div>
 
     <div class="modal-footer">
-      <button
-        type="button"
-        class="modal-cancel-button"
-        (click)="closeChangeManagerModal()"
-        [disabled]="isChangingManager"
-      >
-        Cancel
-      </button>
+      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()" [disabled]="isChangingManager">Cancel</button>
 
-      <button
-        type="button"
-        class="modal-save-button"
-        (click)="changeManager()"
-        [disabled]="isChangingManager"
-      >
+      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
         <mat-icon>
           {{ isChangingManager ? 'hourglass_top' : 'save' }}
         </mat-icon>
@@ -940,12 +607,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeDescriptionModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeDescriptionModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -996,12 +658,7 @@
         </div>
       </div>
 
-      <button
-        type="button"
-        class="modal-close-button"
-        (click)="closeAssignUserModal()"
-        aria-label="Close"
-      >
+      <button type="button" class="modal-close-button" (click)="closeAssignUserModal()" aria-label="Close">
         <mat-icon>close</mat-icon>
       </button>
     </div>
@@ -1013,17 +670,16 @@
       <div class="manager-form-group">
         <label class="modal-field-label"> Assigned To </label>
 
-        <select
-          class="user-input user-select"
-          [(ngModel)]="selectedAssignTask.assignedTo"
-          name="assignedToModal"
-        >
+        <select class="user-input user-select" [(ngModel)]="selectedAssignTask.assignedTo" name="assignedToModal" [disabled]="users.length === 0">
           <option [ngValue]="0">Select User</option>
 
           <option *ngFor="let user of users" [ngValue]="user.userId">
             {{ user.firstName }}
           </option>
         </select>
+         <div *ngIf="users.length === 0" class="text-danger mt-1" style="color:red;margin-top: 5px;">
+    No other user found for this category.
+  </div>
       </div>
 
       <!-- REMARKS -->
@@ -1033,15 +689,7 @@
           <span class="required" *ngIf="selectedAssignTask?.taskStatus === 1">*</span>
         </label>
 
-        <textarea
-          class="user-input user-textarea"
-          [(ngModel)]="assignRemarks"
-          name="assignRemarksModal"
-          rows="3"
-          maxlength="2000"
-          placeholder="Enter remarks"
-        >
-        </textarea>
+        <textarea class="user-input user-textarea" [(ngModel)]="assignRemarks" name="assignRemarksModal" rows="3" maxlength="2000" placeholder="Enter remarks"> </textarea>
       </div>
     </div>
 
@@ -1052,15 +700,7 @@
         <span>Close</span>
       </button>
 
-      <button
-        type="button"
-        class="modal-save-button"
-        [disabled]="
-          !selectedAssignTask?.assignedTo ||
-          (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim())
-        "
-        (click)="assignUser()"
-      >
+      <button type="button" class="modal-save-button" [disabled]="!selectedAssignTask?.assignedTo || (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim())" (click)="assignUser()">
         <mat-icon>save</mat-icon>
         <span>{{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign' : 'Assign' }}</span>
       </button>

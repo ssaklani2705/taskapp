@@ -64,21 +64,15 @@ export class DataProviderService {
 
   //Dashboard
   getTodaysFollowup(userId: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/dashboard/getTodaysFollowup?userId=${userId}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/dashboard/getTodaysFollowup?userId=${userId}`);
   }
 
   checkClientAssignment(managerId: number): Observable<{ assigned: boolean; message: string }> {
-    return this.http.get<{ assigned: boolean; message: string }>(
-      `${environment.apiBaseUrl}api/task/client/check-assignment/${managerId}`,
-    );
+    return this.http.get<{ assigned: boolean; message: string }>(`${environment.apiBaseUrl}api/task/client/check-assignment/${managerId}`);
   }
 
   getQuotationCount(startDate: any, endDate: any, userId: any, isAdmin: string): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/dashboard/stats?startDate=${startDate}&endDate=${endDate}&userId=${userId}&isAdmin=${isAdmin}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/dashboard/stats?startDate=${startDate}&endDate=${endDate}&userId=${userId}&isAdmin=${isAdmin}`);
   }
 
   //User Management
@@ -86,15 +80,7 @@ export class DataProviderService {
   //   return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   // }
 
-  getUserManagementDetails(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    departmentId: number | null,
-    designationId: number | null,
-    selectedCategoryId: any,
-  ): Observable<any> {
+  getUserManagementDetails(page: any, size: any, statusIndex: any, search: any, departmentId: number | null, designationId: number | null, selectedCategoryId: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}admin/getUserManagementDetails` +
         `?page=${page}` +
@@ -114,15 +100,11 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails/${id}`);
   }
   saveUserManagementDetailsDetail(userRequest: any) {
-    return this.http.post<ResponseApi>(
-      `${environment.apiBaseUrl}admin/saveUserDetail`,
-      userRequest,
-      {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-        }),
-      },
-    );
+    return this.http.post<ResponseApi>(`${environment.apiBaseUrl}admin/saveUserDetail`, userRequest, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+    });
   }
   deleteUserManagement(id: number, createdBy: string): Observable<any> {
     const params = { userId: id, createdBy: createdBy };
@@ -131,16 +113,11 @@ export class DataProviderService {
 
   //Company Master
   getCompanyDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/getCompanyDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/getCompanyDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   }
 
   saveCompany(company: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(
-      `${environment.apiBaseUrl}admin/saveCompanyDetails`,
-      company,
-    );
+    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/saveCompanyDetails`, company);
   }
   // Delete company
   deleteCompany(company: any): Observable<any> {
@@ -174,16 +151,8 @@ export class DataProviderService {
   }
 
   saveFeedback(feedback: Feedback): Observable<ApiResponse<Feedback>> {
-    let params = new HttpParams()
-      .set('clientId', feedback.clientId)
-      .set('remarks', feedback.remarks)
-      .set('userId', feedback.userId)
-      .set('date', feedback.date); // pass as string
-    return this.http.post<ApiResponse<Feedback>>(
-      `${environment.apiBaseUrl}admin/feedback/saveFeedback`,
-      null,
-      { params },
-    );
+    let params = new HttpParams().set('clientId', feedback.clientId).set('remarks', feedback.remarks).set('userId', feedback.userId).set('date', feedback.date); // pass as string
+    return this.http.post<ApiResponse<Feedback>>(`${environment.apiBaseUrl}admin/feedback/saveFeedback`, null, { params });
   }
 
   getActiveUsers(): Observable<UserActiveDTO[]> {
@@ -198,15 +167,7 @@ export class DataProviderService {
     return this.http.get<CountryDTO[]>(`${environment.apiBaseUrl}admin/state/getCountry`);
   }
 
-  getAllFeedback(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    user: any,
-    fromDate?: string,
-    toDate?: string,
-  ): Observable<any> {
+  getAllFeedback(page: any, size: any, statusIndex: any, search: any, user: any, fromDate?: string, toDate?: string): Observable<any> {
     let url = `${environment.apiBaseUrl}admin/feedback/getAllFeedback?page=${page}&size=${size}&statusIndex=${statusIndex}&user=${user}&search=${encodeURIComponent(search || '')}`;
 
     if (fromDate) {
@@ -220,18 +181,7 @@ export class DataProviderService {
     return this.http.get(url);
   }
 
-  getFollowupReport(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    fromDate?: string,
-    toDate?: string,
-    isAdmin?: string,
-    userId?: any,
-    user?: any,
-    customerId?: any,
-  ): Observable<any> {
+  getFollowupReport(page: any, size: any, statusIndex: any, search: any, fromDate?: string, toDate?: string, isAdmin?: string, userId?: any, user?: any, customerId?: any): Observable<any> {
     let url = `${environment.apiBaseUrl}admin/followup/getFollowupReport?page=${page}&size=${size}&statusIndex=${statusIndex}&userId=${userId}&isAdmin=${isAdmin}&user=${user}&search=${encodeURIComponent(search || '')}`;
 
     if (fromDate) {
@@ -249,16 +199,11 @@ export class DataProviderService {
   }
 
   closeFollowUp(followUpId: number, userId: number) {
-    return this.http.post<ApiResponse<any>>(
-      `${environment.apiBaseUrl}admin/followup/closeFollowUp/${followUpId}/${userId}`,
-      {},
-    );
+    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/followup/closeFollowUp/${followUpId}/${userId}`, {});
   }
 
   getSizeDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/sizeMaster/getSize?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/sizeMaster/getSize?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   }
 
   getCity(): Observable<any> {
@@ -269,65 +214,27 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}admin/getContactPerson`);
   }
 
-  getSelectedDia(
-    inputSrNo: any,
-    selectedCompany: any,
-    warehouseId: any,
-    gradeId: any,
-    shape: any,
-  ): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}quotation/getSelectedDia?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}`,
-    );
+  getSelectedDia(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}quotation/getSelectedDia?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}`);
   }
 
-  getSelectedHeatNo(
-    inputSrNo: any,
-    selectedCompany: any,
-    warehouseId: any,
-    gradeId: any,
-    shape: any,
-    inputDia: any,
-  ): Observable<any> {
+  getSelectedHeatNo(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any, inputDia: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}quotation/getSelectedHeatNo?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}&dia=${inputDia}`,
     );
   }
 
-  getSelectedHeatNoForFlat(
-    inputSrNo: any,
-    selectedCompany: any,
-    warehouseId: any,
-    gradeId: any,
-    shape: any,
-    selectedSize: any,
-    inputWidth: any,
-  ): Observable<any> {
+  getSelectedHeatNoForFlat(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any, selectedSize: any, inputWidth: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}quotation/getSelectedHeatNoForRound?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}&thickness=${selectedSize}&width=${inputWidth}`,
     );
   }
 
-  getThickness(
-    inputSrNo: any,
-    selectedCompany: any,
-    warehouseId: any,
-    gradeId: any,
-    shape: any,
-  ): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}quotation/getThickness?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}`,
-    );
+  getThickness(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}quotation/getThickness?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}`);
   }
 
-  getWidth(
-    inputSrNo: any,
-    selectedCompany: any,
-    warehouseId: any,
-    gradeId: any,
-    shape: any,
-    thickness: any,
-  ): Observable<any> {
+  getWidth(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any, thickness: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}quotation/getSelectedWidth?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}&thickness=${thickness}`,
     );
@@ -343,9 +250,7 @@ export class DataProviderService {
 
   //Reports mail
   getMailLogDetails(page: any, size: any, search: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}mailLog/getMailLogDetails?page=${page}&size=${size}&search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}mailLog/getMailLogDetails?page=${page}&size=${size}&search=${search}`);
   }
 
   // data-provider.service.ts
@@ -358,9 +263,7 @@ export class DataProviderService {
   // }
 
   getUserAccessDetails(page: any, size: any, search: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}useraccesslog/getUserAccessDetails?page=${page}&size=${size}&search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}useraccesslog/getUserAccessDetails?page=${page}&size=${size}&search=${search}`);
   }
 
   deleteUser(id: number, createdBy: string): Observable<any> {
@@ -394,30 +297,19 @@ export class DataProviderService {
   }
 
   getContactPersonNameForVendor(search: string): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/getContactPersonNameForVendor?search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/getContactPersonNameForVendor?search=${search}`);
   }
 
   getAllClient(search: string, userId: number, isAdmin: string): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/getAllClient?search=${search}&userId=${userId}&isAdmin=${isAdmin}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/getAllClient?search=${search}&userId=${userId}&isAdmin=${isAdmin}`);
   }
 
   // Unit Master
   getUnitDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/unit/getUnitDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/unit/getUnitDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   }
 
-  getDepartmentDetails(
-    page: number,
-    size: number,
-    statusIndex: number,
-    search: string,
-  ): Observable<any> {
+  getDepartmentDetails(page: number, size: number, statusIndex: number, search: string): Observable<any> {
     const params = {
       page: page.toString(),
       size: size.toString(),
@@ -443,9 +335,7 @@ export class DataProviderService {
   }
 
   getDesigmationDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/designation/getDesignationDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/designation/getDesignationDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   }
 
   getDesigmationById(designationId: any): Observable<any> {
@@ -453,17 +343,11 @@ export class DataProviderService {
   }
 
   saveDesigmation(desigmation: any): Observable<any> {
-    return this.http.post(
-      `${environment.apiBaseUrl}admin/designation/saveDesignation`,
-      desigmation,
-    );
+    return this.http.post(`${environment.apiBaseUrl}admin/designation/saveDesignation`, desigmation);
   }
 
   deleteDesigmation(desigmation: any): Observable<any> {
-    return this.http.post(
-      `${environment.apiBaseUrl}admin/designation/deleteDesignation`,
-      desigmation,
-    );
+    return this.http.post(`${environment.apiBaseUrl}admin/designation/deleteDesignation`, desigmation);
   }
 
   getActiveDesigmations(): Observable<any> {
@@ -471,19 +355,11 @@ export class DataProviderService {
   }
 
   getCategoriesByDepartmentId(departmentId: any): Observable<TaskCategoryDTO[]> {
-    return this.http.get<TaskCategoryDTO[]>(
-      `${environment.apiBaseUrl}admin/taskcategory/department/${departmentId}`,
-    );
+    return this.http.get<TaskCategoryDTO[]>(`${environment.apiBaseUrl}admin/taskcategory/department/${departmentId}`);
   }
 
   //Task Category
-  getTaskCategoryDetails(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    departmentId: any,
-  ): Observable<any> {
+  getTaskCategoryDetails(page: any, size: any, statusIndex: any, search: any, departmentId: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}admin/taskcategory/getTaskCategoryDetails` +
         `?page=${page}` +
@@ -498,16 +374,10 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}admin/taskcategory/${taskcategoryId}`);
   }
   saveTaskCategory(taskCategory: any): Observable<any> {
-    return this.http.post(
-      `${environment.apiBaseUrl}admin/taskcategory/saveTaskCategory`,
-      taskCategory,
-    );
+    return this.http.post(`${environment.apiBaseUrl}admin/taskcategory/saveTaskCategory`, taskCategory);
   }
   deleteTaskCategory(taskCategory: any): Observable<any> {
-    return this.http.post(
-      `${environment.apiBaseUrl}admin/taskcategory/deleteTaskCategory`,
-      taskCategory,
-    );
+    return this.http.post(`${environment.apiBaseUrl}admin/taskcategory/deleteTaskCategory`, taskCategory);
   }
   getActiveTaskCategories(): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/taskcategory/active`);
@@ -645,23 +515,12 @@ export class DataProviderService {
   }
 
   //Product Master
-  getProductDetails(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    unitIndex: any,
-  ): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/getProductDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}&unitIndex=${unitIndex}`,
-    );
+  getProductDetails(page: any, size: any, statusIndex: any, search: any, unitIndex: any): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}admin/getProductDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}&unitIndex=${unitIndex}`);
   }
 
   saveProduct(product: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(
-      `${environment.apiBaseUrl}admin/saveProductDetails`,
-      product,
-    );
+    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/saveProductDetails`, product);
   }
   // Delete Product
   deleteProduct(product: any): Observable<any> {
@@ -682,9 +541,7 @@ export class DataProviderService {
   }
 
   getInventoryDetails(page: any, size: any, search: any, selectedUnit: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}inventory/getInventory?page=${page}&size=${size}&search=${search}&selectedUnit=${selectedUnit}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}inventory/getInventory?page=${page}&size=${size}&search=${search}&selectedUnit=${selectedUnit}`);
   }
 
   getInventoryExport(search: string, selectedUnit: string): Observable<any> {
@@ -698,45 +555,25 @@ export class DataProviderService {
   }
 
   getInvTransaction(search: any, productId: any, fromDate: any, toDate: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}inventory/getInvTransaction?search=${search}&productId=${productId}&fromDate=${fromDate}&toDate=${toDate}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}inventory/getInvTransaction?search=${search}&productId=${productId}&fromDate=${fromDate}&toDate=${toDate}`);
   }
 
   getAllProduct(search: string): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}inventory/getAllProduct?search=${search}`);
   }
 
-  getInvTransactionExport(
-    search: any,
-    productId: any,
-    fromDate: any,
-    toDate: any,
-  ): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}inventory/getInvTransactionExport?search=${search}&productId=${productId}&fromDate=${fromDate}&toDate=${toDate}`,
-      {
-        responseType: 'blob',
-      },
-    );
+  getInvTransactionExport(search: any, productId: any, fromDate: any, toDate: any): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}inventory/getInvTransactionExport?search=${search}&productId=${productId}&fromDate=${fromDate}&toDate=${toDate}`, {
+      responseType: 'blob',
+    });
   }
 
-  addOrUpdateQuotationDetails(
-    quotationDetails: any,
-    userId: any,
-    quotationId: any,
-  ): Observable<any> {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}quotation/addOrUpdateQuotationDetails?userId=${userId}&quotationId=${quotationId}`,
-      quotationDetails,
-    );
+  addOrUpdateQuotationDetails(quotationDetails: any, userId: any, quotationId: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiBaseUrl}quotation/addOrUpdateQuotationDetails?userId=${userId}&quotationId=${quotationId}`, quotationDetails);
   }
 
   addProductDetails(quotationDetails: any, userId: any, quotationId: any): Observable<any> {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}quotation/addProductDetails?userId=${userId}&quotationId=${quotationId}`,
-      quotationDetails,
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}quotation/addProductDetails?userId=${userId}&quotationId=${quotationId}`, quotationDetails);
   }
 
   getProducts(): Observable<any> {
@@ -792,10 +629,7 @@ export class DataProviderService {
   }
 
   deleteQuotation(payload: any) {
-    return this.http.post<ApiResponseQuotation<any>>(
-      `${environment.apiBaseUrl}quotation/deleteQuotation`,
-      payload,
-    );
+    return this.http.post<ApiResponseQuotation<any>>(`${environment.apiBaseUrl}quotation/deleteQuotation`, payload);
   }
 
   getDispatchDetails(
@@ -841,9 +675,7 @@ export class DataProviderService {
   }
 
   getQuotationDetailsById(quotationId: number): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}quotation/getQuotationDetailsById/${quotationId}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}quotation/getQuotationDetailsById/${quotationId}`);
   }
 
   saveDispatch(formData: FormData) {
@@ -851,97 +683,52 @@ export class DataProviderService {
   }
 
   reverseDispatch(dispatchId: number) {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}dispatch/reverseDispatch/${dispatchId}`,
-      {},
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}dispatch/reverseDispatch/${dispatchId}`, {});
   }
 
   getDispatchByQuotationId(quotationId: number) {
-    return this.http.get(
-      `${environment.apiBaseUrl}dispatch/getDispatchByQuotationId/${quotationId}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}dispatch/getDispatchByQuotationId/${quotationId}`);
   }
 
   getQuotationById(quotationId: number): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}quotation/getQuotationById/${quotationId}`);
   }
   getProductByQuotationId(quotationId: number): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}quotation/getProductByQuotationId/${quotationId}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}quotation/getProductByQuotationId/${quotationId}`);
   }
 
   getCustomersDynamic(search: string, isAdmin: any, userId: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}quotation/getCustomersDynamic?search=${search}&isAdmin=${isAdmin}&userId=${userId}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}quotation/getCustomersDynamic?search=${search}&isAdmin=${isAdmin}&userId=${userId}`);
   }
 
   getCustomersDynamicForAll(search: string, isAdmin: any, userId: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}quotation/getCustomersDynamicForAll?search=${search}&isAdmin=${isAdmin}&userId=${userId}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}quotation/getCustomersDynamicForAll?search=${search}&isAdmin=${isAdmin}&userId=${userId}`);
   }
 
   getCustomers(): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}quotation/getCustomers`);
   }
   addOrUpdateQuotation(productDetailsData: any): Observable<any> {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}quotation/addOrUpdateQuotation`,
-      productDetailsData,
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}quotation/addOrUpdateQuotation`, productDetailsData);
   }
 
-  getPurchasereportDetails(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    fromDate: any,
-    toDate: any,
-    vendorId: any,
-    selectedUnit: any,
-  ): Observable<any> {
+  getPurchasereportDetails(page: any, size: any, statusIndex: any, search: any, fromDate: any, toDate: any, vendorId: any, selectedUnit: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}admin/purchasereport/getPurchasereportDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}&fromDate=${fromDate}&toDate=${toDate}&vendorId=${vendorId}&selectedUnit=${selectedUnit}`,
     );
   }
 
-  getGrnReportDetails(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    fromDate: any,
-    toDate: any,
-    selectedUnit: any,
-    selectedVendorId: any,
-  ): Observable<any> {
+  getGrnReportDetails(page: any, size: any, statusIndex: any, search: any, fromDate: any, toDate: any, selectedUnit: any, selectedVendorId: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}admin/grnReport/getGrnReportDetail?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}&fromDate=${fromDate}&toDate=${toDate}&selectedUnit=${selectedUnit}&selectedVendorId=${selectedVendorId}`,
     );
   }
 
   getAllClientForDispatch(search: string): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/dispatchReport/getAllClient?search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/dispatchReport/getAllClient?search=${search}`);
   }
 
-  getDispatchReportDetails(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    fromDate: any,
-    toDate: any,
-    clientId: any,
-    selectedUnit: any,
-    userId: any,
-    isAdmin: any,
-  ): Observable<any> {
+  getDispatchReportDetails(page: any, size: any, statusIndex: any, search: any, fromDate: any, toDate: any, clientId: any, selectedUnit: any, userId: any, isAdmin: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}admin/dispatchReport/getDispatchReportDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}&fromDate=${fromDate}&toDate=${toDate}&clientId=${clientId}&selectedUnit=${selectedUnit}&userId=${userId}&isAdmin=${isAdmin}`,
     );
@@ -952,9 +739,7 @@ export class DataProviderService {
   }
 
   getDispatchDetailsByDispatchId(dispatchId: number) {
-    return this.http.get(
-      `${environment.apiBaseUrl}dispatch/getDispatchDetailsByDispatchId/${dispatchId}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}dispatch/getDispatchDetailsByDispatchId/${dispatchId}`);
   }
 
   //SAVE PAYMENT
@@ -971,17 +756,7 @@ export class DataProviderService {
     return this.http.post(`${environment.apiBaseUrl}dispatch/reversePayment/${paymentId}`, {});
   }
 
-  getPurchaseDetails(
-    page: number,
-    size: number,
-    statusIndex: number,
-    grnIndex: number,
-    paymentIndex: number,
-    search: string,
-    fromDate?: string,
-    toDate?: string,
-    clientId?: number,
-  ): Observable<any> {
+  getPurchaseDetails(page: number, size: number, statusIndex: number, grnIndex: number, paymentIndex: number, search: string, fromDate?: string, toDate?: string, clientId?: number): Observable<any> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size)
@@ -1026,42 +801,23 @@ export class DataProviderService {
   }
 
   addOrUpdatePurchase(productDetailsData: any): Observable<any> {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}purchase/addOrUpdatePurchase`,
-      productDetailsData,
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}purchase/addOrUpdatePurchase`, productDetailsData);
   }
 
   addOrUpdateIssueOfRawMaterial(productDetailsData: any): Observable<any> {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}issuematerial/addOrUpdateIssueOfRawMaterial`,
-      productDetailsData,
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}issuematerial/addOrUpdateIssueOfRawMaterial`, productDetailsData);
   }
 
   getissueMaterialByIssueId(issueId: number) {
-    return this.http.get<any>(
-      `${environment.apiBaseUrl}issuematerial/getissueMaterialByIssueId/${issueId}`,
-    );
+    return this.http.get<any>(`${environment.apiBaseUrl}issuematerial/getissueMaterialByIssueId/${issueId}`);
   }
 
   addOrUpdatePurchaseDetails(quotationDetails: any, userId: any, poId: any): Observable<any> {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}purchase/addOrUpdatePurchaseDetails?userId=${userId}&poId=${poId}`,
-      quotationDetails,
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}purchase/addOrUpdatePurchaseDetails?userId=${userId}&poId=${poId}`, quotationDetails);
   }
 
-  addOrUpdateIssueDateils(
-    quotationDetails: any,
-    userId: any,
-    poId: any,
-    issueId: any,
-  ): Observable<any> {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}issuematerial/addOrUpdateIssueDateils?userId=${userId}&poId=${poId}&issueId=${issueId}`,
-      quotationDetails,
-    );
+  addOrUpdateIssueDateils(quotationDetails: any, userId: any, poId: any, issueId: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiBaseUrl}issuematerial/addOrUpdateIssueDateils?userId=${userId}&poId=${poId}&issueId=${issueId}`, quotationDetails);
   }
 
   getProductByPurchaseId(poId: number): Observable<any> {
@@ -1139,17 +895,11 @@ export class DataProviderService {
   }
 
   deletePurchase(payload: any) {
-    return this.http.post<ApiResponseQuotation<any>>(
-      `${environment.apiBaseUrl}purchase/deletePurchase`,
-      payload,
-    );
+    return this.http.post<ApiResponseQuotation<any>>(`${environment.apiBaseUrl}purchase/deletePurchase`, payload);
   }
 
   deleteIssue(payload: any) {
-    return this.http.post<ApiResponseQuotation<any>>(
-      `${environment.apiBaseUrl}issuematerial/deleteIssue`,
-      payload,
-    );
+    return this.http.post<ApiResponseQuotation<any>>(`${environment.apiBaseUrl}issuematerial/deleteIssue`, payload);
   }
 
   savePoPayment(payload: any) {
@@ -1169,9 +919,7 @@ export class DataProviderService {
   }
 
   getPurchaseDetailsByPoId(poId: number, grnId: number) {
-    return this.http.get(
-      `${environment.apiBaseUrl}purchase/getPurchaseDetailsByPoId/${poId}/${grnId}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}purchase/getPurchaseDetailsByPoId/${poId}/${grnId}`);
   }
 
   reversePurchase(grnId: number) {
@@ -1187,20 +935,10 @@ export class DataProviderService {
   }
 
   getProductsWithAvaQtyDynamic(search: string): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}issuematerial/getProductsDynamic?search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}issuematerial/getProductsDynamic?search=${search}`);
   }
 
-  issueMaterialList(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    fromDate: any,
-    toDate: any,
-    quotationId?: number,
-  ): Observable<any> {
+  issueMaterialList(page: any, size: any, statusIndex: any, search: any, fromDate: any, toDate: any, quotationId?: number): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}issue-material-report/getIssueMaterialList?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}&fromDate=${fromDate}&toDate=${toDate}&quotationId=${quotationId}`,
     );
@@ -1210,12 +948,7 @@ export class DataProviderService {
     return this.http.post(`${environment.apiBaseUrl}quotation/updateProductionStatus`, data);
   }
 
-  updateProductStatus(
-    productId: number,
-    prodStatus: number,
-    quotationId: number,
-    userId: number,
-  ): Observable<any> {
+  updateProductStatus(productId: number, prodStatus: number, quotationId: number, userId: number): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}dispatch/updateProductStatus`, {
       productId: productId,
       prodStatus: prodStatus,
@@ -1224,62 +957,31 @@ export class DataProviderService {
     });
   }
 
-  SalesOrderList(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    fromDate: any,
-    toDate: any,
-    clientId: any,
-    selectedUnit: any,
-    selectedQuotationId: any,
-    productionStatus: any,
-  ): Observable<any> {
+  SalesOrderList(page: any, size: any, statusIndex: any, search: any, fromDate: any, toDate: any, clientId: any, selectedUnit: any, selectedQuotationId: any, productionStatus: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}sales-order-report/list?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}&fromDate=${fromDate}&toDate=${toDate}&clientId=${clientId}&selectedUnit=${selectedUnit}&quotationId=${selectedQuotationId}&productionStatus=${productionStatus}`,
     );
   }
   regeneratePurchasePDF(poId: number) {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}purchase/regeneratePurchasePDF/${poId}`,
-      {},
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}purchase/regeneratePurchasePDF/${poId}`, {});
   }
   regenerateGRNPDF(grnId: number) {
     return this.http.post<any>(`${environment.apiBaseUrl}purchase/regenerateGRNPDF/${grnId}`, {});
   }
   regenrateQuotationPdf(qId: number) {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}quotation/regenrateQuotationPdf/${qId}`,
-      {},
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}quotation/regenrateQuotationPdf/${qId}`, {});
   }
   regenrateSalesOrderPdf(qId: number) {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}quotation/regenrateSalesOrderPdf/${qId}`,
-      {},
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}quotation/regenrateSalesOrderPdf/${qId}`, {});
   }
   regenrateDispatchPdf(disId: number) {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}dispatch/regenrateDispatchPdf/${disId}`,
-      {},
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}dispatch/regenrateDispatchPdf/${disId}`, {});
   }
   updateDispatchStatus(data: any): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}dispatch/updateDispatchStatus`, data);
   }
 
-  getOpeningBalanceDetails(
-    page: number,
-    size: number,
-    statusIndex: number,
-    search: string,
-    fromDate?: string,
-    toDate?: string,
-    selectedProductId?: any,
-  ): Observable<any> {
+  getOpeningBalanceDetails(page: number, size: number, statusIndex: number, search: string, fromDate?: string, toDate?: string, selectedProductId?: any): Observable<any> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size)
@@ -1306,23 +1008,15 @@ export class DataProviderService {
   }
 
   openingbalanceByopeningBalanceId(openingBalanceId: number) {
-    return this.http.get(
-      `${environment.apiBaseUrl}openingbalance/getOpeningBalanceById/${openingBalanceId}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}openingbalance/getOpeningBalanceById/${openingBalanceId}`);
   }
 
   deleteopeningbalance(payload: any) {
-    return this.http.post<ApiResponseQuotation<any>>(
-      `${environment.apiBaseUrl}openingbalance/deleteopeningbalance`,
-      payload,
-    );
+    return this.http.post<ApiResponseQuotation<any>>(`${environment.apiBaseUrl}openingbalance/deleteopeningbalance`, payload);
   }
 
   uploadOpeningBalanceExcel(formData: FormData) {
-    return this.http.post<any>(
-      `${environment.apiBaseUrl}openingbalance/uploadOpeningBalanceExcel`,
-      formData,
-    );
+    return this.http.post<any>(`${environment.apiBaseUrl}openingbalance/uploadOpeningBalanceExcel`, formData);
   }
 
   getCompanyRegDate() {
@@ -1412,9 +1106,7 @@ export class DataProviderService {
   }
 
   deleteClient(clientId: number, userId: number): Observable<any> {
-    const params = new HttpParams()
-      .set('clientId', clientId.toString())
-      .set('userId', userId.toString());
+    const params = new HttpParams().set('clientId', clientId.toString()).set('userId', userId.toString());
 
     return this.http.post(`${environment.apiBaseUrl}admin/deleteClient`, null, { params });
   }
@@ -1427,16 +1119,11 @@ export class DataProviderService {
   }
 
   saveState(state: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(
-      `${environment.apiBaseUrl}admin/state/addOrUpdate`,
-      state,
-    );
+    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/state/addOrUpdate`, state);
   }
 
   getStateList(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/state/getStateList?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/state/getStateList?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   }
 
   getStateById(stateId: number): Observable<any> {
@@ -1449,16 +1136,11 @@ export class DataProviderService {
   }
 
   savePlan(plan: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(
-      `${environment.apiBaseUrl}admin/plan/add_or_Update`,
-      plan,
-    );
+    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/plan/add_or_Update`, plan);
   }
 
   getPlanList(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/plan/plan_list?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`,
-    );
+    return this.http.get(`${environment.apiBaseUrl}admin/plan/plan_list?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   }
 
   getPlanById(planId: number): Observable<any> {
@@ -1492,12 +1174,7 @@ export class DataProviderService {
     });
   }
 
-  changesClientIdgetTaskFilterData(
-    isAdmin: string,
-    userId: number,
-    loginType: string,
-    clientId: number,
-  ): Observable<any> {
+  changesClientIdgetTaskFilterData(isAdmin: string, userId: number, loginType: string, clientId: number): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/getTaskFilterDataOnChange`, {
       params: {
         isAdmin: isAdmin.toString(),
@@ -1508,25 +1185,16 @@ export class DataProviderService {
     });
   }
 
-  changesCategoryIdgetUserFilterData(
-    isAdmin: string,
-    userId: number,
-    loginType: string,
-    clientId: number,
-    categoryId: number,
-  ): Observable<any> {
-    return this.http.get<any>(
-      `${environment.apiBaseUrl}admin/task/changesCategoryIdgetUserFilterData`,
-      {
-        params: {
-          isAdmin: isAdmin.toString(),
-          userId: userId.toString(),
-          loginType: loginType.toString(),
-          clientId: clientId ?? '',
-          categoryId: categoryId ?? '',
-        },
+  changesCategoryIdgetUserFilterData(isAdmin: string, userId: number, loginType: string, clientId: number, categoryId: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/task/changesCategoryIdgetUserFilterData`, {
+      params: {
+        isAdmin: isAdmin.toString(),
+        userId: userId.toString(),
+        loginType: loginType.toString(),
+        clientId: clientId ?? '',
+        categoryId: categoryId ?? '',
       },
-    );
+    });
   }
 
   // changesCategoryIdgetUserFilterData(
@@ -1731,16 +1399,13 @@ export class DataProviderService {
   }
 
   getActiveTaskCategoriesForRecurringForIndex(userId: any, isAdmin: any, loginType: any) {
-    return this.http.get<any>(
-      `${environment.apiBaseUrl}admin/taskcategory/recurringForindex/active`,
-      {
-        params: {
-          userId: userId,
-          isAdmin: isAdmin,
-          loginType: loginType,
-        },
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/recurringForindex/active`, {
+      params: {
+        userId: userId,
+        isAdmin: isAdmin,
+        loginType: loginType,
       },
-    );
+    });
   }
 
   getRecurringDetailsById(recurringId: number, userId: number) {
@@ -1751,12 +1416,7 @@ export class DataProviderService {
     });
   }
 
-  updateClientOutstanding(
-    clientId: number,
-    outstanding: number,
-    managerId: number,
-    userId: number,
-  ) {
+  updateClientOutstanding(clientId: number, outstanding: number, managerId: number, userId: number) {
     return this.http.post<any>(
       `${environment.apiBaseUrl}admin/updateClientOutstanding`,
       {
@@ -1773,9 +1433,7 @@ export class DataProviderService {
   }
   //Employee Dashboard
   getDashboard(userId: number, isAdmin: any, selectedClientId: any): Observable<any> {
-    return this.http.get<any>(
-      `${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}&isAdmin=${isAdmin}&selectedClientId=${selectedClientId}`,
-    );
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}&isAdmin=${isAdmin}&selectedClientId=${selectedClientId}`);
   }
 
   //New
@@ -1827,15 +1485,12 @@ export class DataProviderService {
   }
 
   countOfAssigneeClosureTask(clientId: any, userId: any): Observable<any> {
-    return this.http.get<any>(
-      `${environment.apiBaseUrl}admin/dashboard/countOfAssigneeClosureTask`,
-      {
-        params: {
-          clientId: clientId,
-          userId: userId,
-        },
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeClosureTask`, {
+      params: {
+        clientId: clientId,
+        userId: userId,
       },
-    );
+    });
   }
 
   countOfReOpenTask(clientId: any, userId: any): Observable<any> {
@@ -1848,15 +1503,12 @@ export class DataProviderService {
   }
 
   countOfAssigneeReClosureTask(clientId: any, userId: any): Observable<any> {
-    return this.http.get<any>(
-      `${environment.apiBaseUrl}admin/dashboard/countOfAssigneeReClosureTask`,
-      {
-        params: {
-          clientId: clientId,
-          userId: userId,
-        },
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfAssigneeReClosureTask`, {
+      params: {
+        clientId: clientId,
+        userId: userId,
       },
-    );
+    });
   }
 
   getTaskClient(userId: number): Observable<any> {
@@ -1868,23 +1520,11 @@ export class DataProviderService {
   }
 
   // Dashboard Clients
-  getDashboardClients(
-    userId: any,
-    isAdmin: string,
-    loginType: string,
-    selectedClientId: any,
-  ): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}api/task/dashboard-clients?userId=${userId}&isAdmin=${isAdmin}&loginType=${loginType}&selectedClientId=${selectedClientId}`,
-    );
+  getDashboardClients(userId: any, isAdmin: string, loginType: string, selectedClientId: any): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}api/task/dashboard-clients?userId=${userId}&isAdmin=${isAdmin}&loginType=${loginType}&selectedClientId=${selectedClientId}`);
   }
 
-  updateTaskAssignedUser(
-    taskId: any,
-    assignedTo: any,
-    userId: any,
-    remarks: string,
-  ): Observable<any> {
+  updateTaskAssignedUser(taskId: any, assignedTo: any, userId: any, remarks: string): Observable<any> {
     return this.http.put(`${environment.apiBaseUrl}admin/task/updateAssignedUser`, {
       taskId: taskId,
       assignedTo: assignedTo,
@@ -1893,42 +1533,43 @@ export class DataProviderService {
     });
   }
 
-
   // ============================================================
-// HOLIDAY
-// ============================================================
+  // HOLIDAY
+  // ============================================================
 
-getHolidayDetails(
-  page: number,
-  size: number,
-  statusIndex: number,
-  search: string,
-): Observable<any> {
-  const params = {
-    page: page.toString(),
-    size: size.toString(),
-    statusIndex: statusIndex.toString(),
-    search: search || '',
-  };
+  getHolidayDetails(page: number, size: number, statusIndex: number, search: string): Observable<any> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+      statusIndex: statusIndex.toString(),
+      search: search || '',
+    };
 
-  return this.http.get(`${environment.apiBaseUrl}admin/holiday/getHolidayDetails`, {
-    params,
-  });
-}
+    return this.http.get(`${environment.apiBaseUrl}admin/holiday/getHolidayDetails`, {
+      params,
+    });
+  }
 
-deleteHoliday(holiday: any): Observable<any> {
-  return this.http.post(`${environment.apiBaseUrl}admin/holiday/deleteHoliday`, holiday);
-}
+  deleteHoliday(holiday: any): Observable<any> {
+    return this.http.post(`${environment.apiBaseUrl}admin/holiday/deleteHoliday`, holiday);
+  }
 
-saveHoliday(holiday: any): Observable<any> {
-  return this.http.post(`${environment.apiBaseUrl}admin/holiday/saveHoliday`, holiday);
-}
+  saveHoliday(holiday: any): Observable<any> {
+    return this.http.post(`${environment.apiBaseUrl}admin/holiday/saveHoliday`, holiday);
+  }
 
-getHolidayById(holidayId: number): Observable<any> {
-  return this.http.get(`${environment.apiBaseUrl}admin/holiday/${holidayId}`);
-}
+  getHolidayById(holidayId: number): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}admin/holiday/${holidayId}`);
+  }
 
-getActiveHolidays(): Observable<any> {
-  return this.http.get(`${environment.apiBaseUrl}admin/holiday/active`);
-}
+  getActiveHolidays(): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}admin/holiday/active`);
+  }
+
+   downloadFile(type: string, fileName: string): Observable<Blob> {
+    return this.http.get(`${environment.apiBaseUrl}file/download`, {
+      params: { type, fileName },
+      responseType: 'blob', // binary-safe, prevents corrupted Word/Excel files
+    });
+  }
 }
