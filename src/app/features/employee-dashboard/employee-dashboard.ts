@@ -12,7 +12,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SESSION_KEYS } from '../../service/session-storage.keys';
 
 export interface DashboardMetricDTO {
   count: number;
@@ -544,15 +543,14 @@ export class EmployeeDashboard implements OnInit {
     } else if (stat.label === 'Overdue') {
       taskType = 'overdue';
     }
-    const filterData = {
-      taskStatusIds: stat.statusIds,
-      clientId: this.selectedClientId || 0,
-      statusIndex: 1,
-    };
 
-    sessionStorage.setItem(SESSION_KEYS.TASK_MASTER_FILTER, JSON.stringify(filterData));
-
-    this.router.navigate(['/task-index']);
+    this.router.navigate(['/task-index'], {
+      queryParams: {
+        taskType: taskType,
+        clientId: this.selectedClientId || 0,
+        taskStatusIds: stat.statusIds
+      },
+    });
   }
 
   clientSearchText = '';
