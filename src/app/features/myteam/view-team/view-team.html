@@ -105,6 +105,14 @@
               {{ getStatusText(user.status) }}
             </span>
           </div>
+
+          <div class="info-row">
+            <span class="info-label"> Weekly Off: </span>
+
+            <span class="info-value">
+              {{ getWeeklyOffLabel(user.weeklyOff) }}
+            </span>
+          </div>
         </div>
 
         <div class="info-row">
@@ -114,6 +122,9 @@
               {{ category }}
             </span>
           </div>
+          
+
+          
         </div>
       </div>
     </mat-card-content>

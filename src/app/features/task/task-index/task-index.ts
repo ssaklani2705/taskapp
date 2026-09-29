@@ -340,6 +340,13 @@ ngOnInit(): void {
     this.restoreFilterState();
     this.route.queryParams.subscribe((params) => {
       this.dashboardFilter = params['taskType'] || '';
+      // NEW: read statusIndex (1 = Active) from the URL
+  if (params['statusIndex'] !== undefined) {
+    this.statusIndex = Number(params['statusIndex']) || 0;
+    this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
+    this.currentPage = 1;
+    this.page = 0;
+  }
       if (params['taskStatusIds'] !== undefined) {
         this.selectedTaskStatuses = params['taskStatusIds']
           ? String(params['taskStatusIds'])

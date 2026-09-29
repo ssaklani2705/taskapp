@@ -185,6 +185,8 @@ export class ViewTeam implements OnInit {
           departmentName: response?.departmentName,
 
           designationName: response?.designationName,
+
+          weeklyOff: response?.weeklyOff
         };
 
         // ------------------------------------------------
@@ -458,4 +460,35 @@ export class ViewTeam implements OnInit {
       userId,
     });
   }
+
+  weeklyOffOptions = [
+  { id: 1, label: 'Sunday' },
+  { id: 2, label: 'Monday' },
+  { id: 3, label: 'Tuesday' },
+  { id: 4, label: 'Wednesday' },
+  { id: 5, label: 'Thursday' },
+  { id: 6, label: 'Friday' },
+  { id: 7, label: 'Saturday' },
+];
+
+getWeeklyOffLabel(value: any): string {
+  if (!value) {
+    return 'NA';
+  }
+
+  const ids = String(value)
+    .split(',')
+    .map((v) => Number(v.trim()));
+
+  const labels = this.weeklyOffOptions
+    .filter((d) => ids.includes(d.id))
+    .map((d) => d.label);
+
+  return labels.length ? labels.join(', ') : 'NA';
+}
+
+// getWeeklyOffLabel(value: any): string {
+//   const found = this.weeklyOffOptions.find((d) => d.id === Number(value));
+//   return found ? found.label : 'NA';
+// }
 }

@@ -668,6 +668,7 @@ onKpiClick(kpi: any): void {
     );
     const queryParams: any = {
       taskStatusIds: kpi.taskStatusIds?.length ? kpi.taskStatusIds.join(',') : null,
+       statusIndex: 1,
     };
     if (this.selectedClient) {
       queryParams.clientId = this.selectedClient;

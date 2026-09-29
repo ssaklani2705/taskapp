@@ -59,6 +59,17 @@
             </select>
           </div>
 
+          <!-- WEEKLY OFF -->
+<div class="designation-wrapper">
+  <select class="status-select" [(ngModel)]="selectedWeeklyOff" (change)="onWeeklyOffChange()">
+    <option [ngValue]="null">--All Weekly Off--</option>
+
+    <option *ngFor="let d of weeklyOffOptions" [ngValue]="d.id">
+      {{ d.label }}
+    </option>
+  </select>
+</div>
+
           <!-- DESIGNATION -->
           <div class="designation-wrapper">
             <select class="status-select" [(ngModel)]="selectedDesignationId" (change)="onDesignationChange()">

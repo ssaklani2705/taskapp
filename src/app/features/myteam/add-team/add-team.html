@@ -268,6 +268,31 @@
     </div>
   </div>
 
+
+ <!-- Weekly Off -->
+<!-- Weekly Off -->
+<div class="user-form-col">
+  <div class="user-form-group weekly-off-dropdown" #weeklyOffDropdown>
+    <label class="user-label">Weekly Off</label>
+
+    <button type="button" class="user-input user-select weekly-off-btn" (click)="showWeeklyOffDropdown = !showWeeklyOffDropdown">
+      {{ getSelectedWeeklyOffLabel() }}
+    </button>
+
+    <div class="weekly-off-menu" *ngIf="showWeeklyOffDropdown" (click)="$event.stopPropagation()">
+      <label *ngFor="let d of weeklyOffOptions">
+        <input
+          type="checkbox"
+          [id]="'weeklyoff-' + d.id"
+          [checked]="isWeeklyOffChecked(d.id)"
+          (change)="toggleWeeklyOff(d.id, $event)"
+        />
+        {{ d.label }}
+      </label>
+    </div>
+  </div>
+</div>
+
   <!-- Status (edit only) -->
   <div class="user-form-col" *ngIf="isEditMode">
     <div class="user-form-group">

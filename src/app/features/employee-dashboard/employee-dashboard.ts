@@ -144,12 +144,12 @@ export class EmployeeDashboard implements OnInit {
 
 // key = field in statusCounts, statusName = value passed to Task list page
 private readonly statusConfig = [
-  { key: 'unassigned',        label: 'Unassigned',         statusName: 'Unassigned',         icon: 'person_off' },
-  { key: 'assigned',          label: 'Assigned',           statusName: 'Assigned',           icon: 'assignment_ind' },
-  { key: 'assigneeClosure',   label: 'Assignee Closure',   statusName: 'Assignee Closure',   icon: 'task_alt' },
-  { key: 'reOpen',            label: 'Re-Open',            statusName: 'Re-Open',            icon: 'replay' },
-  { key: 'assigneeReClosure', label: 'Assignee Re-Closure',statusName: 'Assignee Re-Closure',icon: 'published_with_changes' },
-  { key: 'assignorClosure',   label: 'Assignor Closure',   statusName: 'Assignor Closure',   icon: 'verified' },
+  { key: 'unassigned',        label: 'Unassigned',          statusId: '-1', icon: 'person_off' },
+  { key: 'assigned',          label: 'Assigned',            statusId: '1',  icon: 'assignment_ind' },
+  { key: 'assigneeClosure',   label: 'Assignee Closure',    statusId: '2',  icon: 'task_alt' },
+  { key: 'reOpen',            label: 'Re-Open',             statusId: '3',  icon: 'replay' },
+  { key: 'assigneeReClosure', label: 'Assignee Re-Closure', statusId: '4',  icon: 'published_with_changes' },
+  { key: 'assignorClosure',   label: 'Assignor Closure',    statusId: '5',  icon: 'verified' },
 ];
 
   // ======================================================
@@ -218,7 +218,7 @@ private readonly statusConfig = [
 this.statusStats.set(
   this.statusConfig.map((s) => ({
     label: s.label,
-    statusName: s.statusName,
+    statusId: s.statusId,
     icon: s.icon,
     value: sc[s.key] || 0,
   })),
@@ -600,7 +600,7 @@ this.statusStats.set(
 
   this.router.navigate(['/task-index'], {
     queryParams: {
-      status: stat.statusName,
+      taskStatusIds: stat.statusId,
       clientId: this.selectedClientId || 0,
       statusIndex: 1,
     },

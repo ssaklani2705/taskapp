@@ -68,6 +68,16 @@ export class AddTeam implements OnInit, AfterViewInit {
     'Export Excel': 'exportExcel',
   };
 
+  weeklyOffOptions = [
+  { id: 1, label: 'Sunday' },
+  { id: 2, label: 'Monday' },
+  { id: 3, label: 'Tuesday' },
+  { id: 4, label: 'Wednesday' },
+  { id: 5, label: 'Thursday' },
+  { id: 6, label: 'Friday' },
+  { id: 7, label: 'Saturday' },
+];
+
   typeGroupMap: { [key: number]: string } = {
     1: 'Masters',
     2: 'Activity',
@@ -128,6 +138,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       status: [1, Validators.required],
       isAdmin: [false],
       isHod: [false],          // NEW
+      weeklyOff: [[]],  
       desigmationId: [null, Validators.required],
     });
 
@@ -269,7 +280,8 @@ export class AddTeam implements OnInit, AfterViewInit {
           expiryDate: this.parseExpiryDate(response.expiryDate),
           status: Number(response.status) || 1,
           isAdmin: response.permission === 'Y',
-          isHod: isHod,                                   // NEW
+          isHod: isHod,               
+           weeklyOff: this.parseIdList(response.weeklyOffIds ?? response.weeklyOff),               // NEW
           desigmationId: response.designationId || null,
         });
 
@@ -519,6 +531,9 @@ export class AddTeam implements OnInit, AfterViewInit {
       telephone: formValues.telephone || '',
 
       createdBy: this.createdBy,
+      weeklyOff: formValues.weeklyOff?.length ? formValues.weeklyOff.join(',') : null,   // "1,7" or null
+
+      
 
       module: this.isRightsHidden ? [] : this.buildModulePermissions(),
     };
@@ -969,6 +984,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     if (this.showCategoryDropdown && this.categoryDropdown && !this.categoryDropdown.nativeElement.contains(target)) {
       this.showCategoryDropdown = false;
     }
+
+    if (this.showWeeklyOffDropdown && this.weeklyOffDropdown && !this.weeklyOffDropdown.nativeElement.contains(target)) {
+  this.showWeeklyOffDropdown = false;
+}
   }
 
   // ============================================================
@@ -983,4 +1002,35 @@ export class AddTeam implements OnInit, AfterViewInit {
    get singleDepartmentId(): number | null {
     return this.selectedDepartmentIds.length ? this.selectedDepartmentIds[0] : null;
   }
+
+@ViewChild('weeklyOffDropdown') weeklyOffDropdown!: ElementRef;
+  showWeeklyOffDropdown = false;
+
+isWeeklyOffChecked(id: number): boolean {
+  const selected: number[] = this.userForm.get('weeklyOff')?.value || [];
+  return selected.includes(id);
+}
+
+toggleWeeklyOff(id: number, event: Event): void {
+  const checked = (event.target as HTMLInputElement).checked;
+  const current: number[] = this.userForm.get('weeklyOff')?.value || [];
+
+  const updated = checked
+    ? [...current.filter((x) => x !== id), id]
+    : current.filter((x) => x !== id);
+
+  this.userForm.get('weeklyOff')?.setValue(updated.sort((a, b) => a - b));
+  this.userForm.get('weeklyOff')?.markAsDirty();
+}
+
+getSelectedWeeklyOffLabel(): string {
+  const selected: number[] = this.userForm.get('weeklyOff')?.value || [];
+  if (selected.length === 0) {
+    return 'Select Weekly Off';
+  }
+  return this.weeklyOffOptions
+    .filter((d) => selected.includes(d.id))
+    .map((d) => d.label)
+    .join(', ');
+}
 }

@@ -80,7 +80,7 @@ export class DataProviderService {
   //   return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   // }
 
-  getUserManagementDetails(page: any, size: any, statusIndex: any, search: any, departmentId: number | null, designationId: number | null, selectedCategoryId: any): Observable<any> {
+  getUserManagementDetails(page: any, size: any, statusIndex: any, search: any, departmentId: number | null, designationId: number | null, selectedCategoryId: any, weeklyOff?: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}admin/getUserManagementDetails` +
         `?page=${page}` +
@@ -89,6 +89,7 @@ export class DataProviderService {
         `&search=${encodeURIComponent(search || '')}` +
         `&departmentId=${departmentId ?? '0'}` +
         `&designationId=${designationId ?? '0'}` +
+        `&weeklyOff=${weeklyOff ?? ''}` +
         `&selectedCategoryId=${selectedCategoryId ?? '0'}`,
     );
   }
