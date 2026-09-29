@@ -59,7 +59,7 @@ interface ApiTask {
   assignedByUser: string;
 
   taskStatus: any;
-  taskStatus: any;
+
 }
 
 interface DashboardResponse {
@@ -642,12 +642,5 @@ private getStatusFields(status: number | null | undefined): { taskStatusLabel: s
       return { taskStatusLabel: 'Unassigned', taskStatusClass: 'ts-unassigned' };
   }
 }
-    this.router.navigate(['/task-index'], {
-      queryParams: {
-        taskStatusIds: stat.statusId,
-        clientId: this.selectedClientId || 0,
-        statusIndex: 1,
-      },
-    });
-  }
+   
 }
