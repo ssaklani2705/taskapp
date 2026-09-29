@@ -1131,3 +1131,17 @@ mat-divider {
   font-size: 13px;
   white-space: nowrap;
 }
+
+
+/* Task Category: full-width row under both columns */
+.category-row {
+  grid-column: 1 / -1;
+  align-items: flex-start;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.category-row .info-label {
+  padding-top: 4px;      /* lines the label up with the chips */
+  margin-right: 12px;
+}

@@ -1160,13 +1160,13 @@ export class DataProviderService {
     return this.http.post(`${environment.apiBaseUrl}admin/plan/delete`, plan);
   }
   //sunil
-  getTaskFilterData(isAdmin: string, userId: number, loginType: string): Observable<any> {
+  getTaskFilterData(isAdmin: string, userId: number, loginType: string,isHod :any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/getTaskFilterData`, {
       params: {
         isAdmin: isAdmin.toString(),
         userId: userId.toString(),
         loginType: loginType.toString(),
-        // clientId: clientId ?? ''
+        isHod: isHod.toString()
       },
     });
   }
@@ -1183,13 +1183,14 @@ export class DataProviderService {
     });
   }
 
-  changesClientIdgetTaskFilterData(isAdmin: string, userId: number, loginType: string, clientId: number): Observable<any> {
+  changesClientIdgetTaskFilterData(isAdmin: string, userId: number, loginType: string, clientId: number,isHod: string): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/getTaskFilterDataOnChange`, {
       params: {
         isAdmin: isAdmin.toString(),
         userId: userId.toString(),
         loginType: loginType.toString(),
         clientId: clientId ?? '',
+        isHod: isHod.toString()
       },
     });
   }
@@ -1521,6 +1522,16 @@ export class DataProviderService {
       },
     });
   }
+
+  countOfUnAssigneeTask(clientId: any, userId: any): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/countOfUnAssigneeTask`, {
+      params: {
+        clientId: clientId,
+        userId: userId,
+      },
+    });
+  }
+
 
   getTaskClient(userId: number): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/getTaskClient`, {

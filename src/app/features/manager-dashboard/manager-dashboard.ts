@@ -20,6 +20,7 @@ interface Task {
   addedByName: string;
   date: string;
   priority: number;
+  clientId: number;
   clientName: string;
   duedatetime: string;
 }
@@ -74,6 +75,7 @@ export class ManagerDashboard {
   loginType: any = '';
   userId: any;
   isAdmin: any;
+
   isHod: any ='';
 
   totalTasks = 0;
@@ -144,6 +146,14 @@ export class ManagerDashboard {
       change: 'Awaiting re-closure',
       taskStatusIds: ['4'],
     },
+    {
+      title: 'Unassigned Tasks',
+      value: 0,
+      icon: 'person_off',
+      className: 'red',
+      change: 'Requires assignment',
+      taskStatusIds: ['0', null],
+    },
   ];
 
   constructor(
@@ -161,7 +171,7 @@ export class ManagerDashboard {
 
     this.designationName = sessionStorage.getItem('designationName')?.trim() || '-';
 
-    this.loadFilterData();
+    // this.loadFilterData();
     this.getTasks();
     this.checkClientAssignment();
   }
@@ -189,13 +199,28 @@ export class ManagerDashboard {
           addedByName: task.addedByName,
           date: task.date,
           priority: task.priority,
+          clientId: task.clientId,
           clientName: task.clientName,
           duedatetime: task.dueDateTime,
         }));
+
+        const clientMap = new Map<number, Client>();
+
+        taskList.forEach((task: any) => {
+          if (task.clientId && task.clientName) {
+            clientMap.set(task.clientId, {
+              clientId: task.clientId,
+              name: task.clientName,
+            });
+          }
+        });
+
+        this.clients = Array.from(clientMap.values());
       },
       error: (error) => {
         console.error('Error fetching tasks:', error);
         this.tasks = [];
+        this.clients = [];
         this.totalTasks = 0;
         this.totalOutstanding = 0;
       },
@@ -329,6 +354,21 @@ export class ManagerDashboard {
         console.error('Error fetching assignee re-closure task count:', error);
 
         this.kpis[6].value = 0;
+      },
+    });
+
+    // Un Assignee Tasks
+    this.dataProvider.countOfUnAssigneeTask(clientId, this.userId).subscribe({
+      next: (response: any) => {
+        console.log('Un Assignee Task Count:', response);
+
+        this.kpis[7].value = response?.count || 0;
+      },
+
+      error: (error) => {
+        console.error('Error fetching un assignee task count:', error);
+
+        this.kpis[7].value = 0;
       },
     });
   }
@@ -508,7 +548,7 @@ export class ManagerDashboard {
         taskStatusIds,
         this.loginType,
         '',
-        'N'
+        this.isHod
       )
       .subscribe({
         next: (response: any) => {
@@ -656,9 +696,11 @@ export class ManagerDashboard {
     this.getTasks();
   }
 
-onKpiClick(kpi: any): void {
+  onKpiClick(kpi: any): void {
     console.log('KPI CLICKED:', kpi);
+
     console.log('selectedModuleDetail before KPI navigation:', sessionStorage.getItem('selectedModuleDetail'));
+
     console.log(
       'ALL SESSION STORAGE:',
       Object.keys(sessionStorage).reduce((obj: any, key: string) => {
@@ -666,13 +708,16 @@ onKpiClick(kpi: any): void {
         return obj;
       }, {}),
     );
+
     const queryParams: any = {
       taskStatusIds: kpi.taskStatusIds?.length ? kpi.taskStatusIds.join(',') : null,
        statusIndex: 1,
     };
+
     if (this.selectedClient) {
       queryParams.clientId = this.selectedClient;
     }
+
     this.router.navigate(['/task-index'], {
       queryParams,
     });
