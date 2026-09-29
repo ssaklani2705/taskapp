@@ -30,6 +30,8 @@ interface User {
   designationName: string;
 
   taskCategoryNames: string;
+
+  weeklyOffNames: any;
 }
 
 @Component({
@@ -179,6 +181,12 @@ export class MyTeam implements OnInit {
     {
       key: 'taskCategoryNames',
       label: 'Task Category',
+      sortable: true,
+    },
+
+     {
+      key: 'weeklyOffNames',
+      label: 'Weekly Off',
       sortable: true,
     },
 

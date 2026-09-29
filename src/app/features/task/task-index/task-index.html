@@ -104,7 +104,10 @@
             </select>
           </div>
           <div class="status-dropdown" #statusDropdown>
-            <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">--All Task Status--</button>
+            <!-- <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">--All Task Status--</button> -->
+            <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">
+  {{ getSelectedTaskStatusLabel() }}
+</button>
             <div class="dropdown-menu" *ngIf="showStatusDropdown" (click)="$event.stopPropagation()">
               <label *ngFor="let status of taskStatusOptions">
                 <input type="checkbox" [value]="status.id" [checked]="isTaskStatusChecked(status.id)" (click)="$event.preventDefault(); toggleTaskStatus(status.id)" />

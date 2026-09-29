@@ -366,24 +366,29 @@ ngOnInit(): void {
     });
   }
 
-
-
   private restoreFilterState(): void {
     let stateData: any = null;
     const nav = this.router.getCurrentNavigation();
     stateData = nav?.extras?.state;
 
-    if (!stateData) {
-      const saved = sessionStorage.getItem(this.filterKey);
+     const returningFromDetail =
+    isPlatformBrowser(this.platformId) && sessionStorage.getItem('taskReturnFromDetail') === 'Y';
 
-      if (saved) {
-        try {
-          stateData = JSON.parse(saved);
-        } catch (error) {
-          console.error('Invalid task filter session:', error);
-        }
+  if (isPlatformBrowser(this.platformId)) {
+    sessionStorage.removeItem('taskReturnFromDetail');   // single-use flag
+  }
+
+   if (!stateData && returningFromDetail) {
+    const saved = sessionStorage.getItem(this.filterKey);
+
+    if (saved) {
+      try {
+        stateData = JSON.parse(saved);
+      } catch (error) {
+        console.error('Invalid task filter session:', error);
       }
     }
+  }
 
     if (!stateData) {
       this.currentPage = 1;
@@ -436,6 +441,75 @@ ngOnInit(): void {
     this.fromDate = stateData.fromDate ? new Date(stateData.fromDate + 'T00:00:00') : null;
     this.toDate = stateData.toDate ? new Date(stateData.toDate + 'T00:00:00') : null;
   }
+
+  // private restoreFilterState(): void {
+  //   let stateData: any = null;
+  //   const nav = this.router.getCurrentNavigation();
+  //   stateData = nav?.extras?.state;
+
+  //   if (!stateData) {
+  //     const saved = sessionStorage.getItem(this.filterKey);
+
+  //     if (saved) {
+  //       try {
+  //         stateData = JSON.parse(saved);
+  //       } catch (error) {
+  //         console.error('Invalid task filter session:', error);
+  //       }
+  //     }
+  //   }
+
+  //   if (!stateData) {
+  //     this.currentPage = 1;
+  //     this.page = 0;
+  //     this.size = environment.size;
+  //     this.recordsPerPage = this.size;
+  //     this.search = '';
+  //     this.searchQuery = '';
+  //     this.statusIndex = 0;
+  //     this.selectedStatus = '';
+  //     this.selectedClient = '';
+  //     this.selectedTaskCategory = '';
+  //     this.selectedAssignedTo = '';
+  //     this.selectedPriority = '';
+  //     this.selectedTaskStatuses = [];
+  //     this.fromDate = null;
+  //     this.toDate = null;
+
+  //     return;
+  //   }
+
+  //   this.currentPage = Number(stateData.currentPage) || 1;
+  //   this.page = this.currentPage - 1;
+  //   this.size = Number(stateData.size) || environment.size;
+  //   this.recordsPerPage = this.size;
+  //   this.search = stateData.searchText || '';
+  //   this.searchQuery = this.search;
+  //   this.statusIndex = Number(stateData.statusIndex) || 0;
+  //   this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
+  //   this.selectedClient = stateData.clientId != null ? String(stateData.clientId) : '';
+
+  //   this.selectedTaskCategory = stateData.taskCategoryId != null ? String(stateData.taskCategoryId) : '';
+
+  //   this.selectedAssignedTo = stateData.assignedTo != null ? String(stateData.assignedTo) : '';
+  //   this.selectedPriority = stateData.priority != null ? String(stateData.priority) : '';
+
+  //   this.selectedTaskStatuses = Array.isArray(stateData.taskStatusId) ? stateData.taskStatusId.map((v: any) => String(v)) : [];
+  //   this.dashboardFilter = stateData.dashboardFilter || '';
+  //   //
+  //   if (Array.isArray(stateData.taskStatusId)) {
+  //     this.selectedTaskStatuses = stateData.taskStatusId.map((v: any) => String(v));
+  //   } else if (stateData.taskStatusId != null && stateData.taskStatusId !== '') {
+  //     this.selectedTaskStatuses = String(stateData.taskStatusId)
+  //       .split(',')
+  //       .filter((v: string) => v !== '');
+  //   } else {
+  //     this.selectedTaskStatuses = [];
+  //   }
+
+  //   this.fromDate = stateData.fromDate ? new Date(stateData.fromDate + 'T00:00:00') : null;
+  //   this.toDate = stateData.toDate ? new Date(stateData.toDate + 'T00:00:00') : null;
+  // }
 
   // =========================================================
   // SAVE FILTER STATE
@@ -2366,5 +2440,23 @@ canDisableChangeManager(task: any): boolean {
 
   // Button is disabled unless the user is allowed to act
   return !canAct;
+}
+
+
+getSelectedTaskStatusLabel(): string {
+  if (this.selectedTaskStatuses.length === 0) {
+    return '--All Task Status--';
+  }
+
+  const labels = this.taskStatusOptions
+    .filter((s) => this.selectedTaskStatuses.includes(s.id))
+    .map((s) => s.label);
+
+  // Long lists get shortened so the button doesn't overflow
+  if (labels.length > 2) {
+    return `${labels.length} statuses selected`;
+  }
+
+  return labels.join(', ');
 }
 }
