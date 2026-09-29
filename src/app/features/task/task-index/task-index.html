@@ -41,31 +41,29 @@
             </div>
           </div> -->
           <!-- CLIENT -->
-@if (loginType === 'manager') {
-  <!-- Normal dropdown for manager -->
-  <div class="status-wrapper">
-    <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
-      <option value="">--All Clients--</option>
-      <option *ngFor="let client of clients" [value]="client.clientId">
-        {{ client.name }}
-      </option>
-    </select>
-  </div>
-} @else {
-  <!-- Autofill search for other login types -->
-  <div class="client-dropdown-container">
-    <input type="text" class="client-search-input" placeholder="Search Client..."
-           [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
-    <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
-    <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
-      <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
-        {{ client.name }}
-      </div>
-      <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
-    </div>
-  </div>
-}
-
+          @if (loginType === 'manager') {
+            <!-- Normal dropdown for manager -->
+            <div class="status-wrapper">
+              <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
+                <option value="">--All Clients--</option>
+                <option *ngFor="let client of clients" [value]="client.clientId">
+                  {{ client.name }}
+                </option>
+              </select>
+            </div>
+          } @else {
+            <!-- Autofill search for other login types -->
+            <div class="client-dropdown-container">
+              <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
+              <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
+              <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
+                <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
+                  {{ client.name }}
+                </div>
+                <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
+              </div>
+            </div>
+          }
 
           <!-- TASK CATEGORY -->
           <div class="status-wrapper">
@@ -267,12 +265,11 @@
                   </span>
                 </td>
 
-
                 <td>
                   <span
                     class="wrap-text"
                     [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-                    (click)=" (!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1)) && openAssignUserModal(task)"
+                    (click)="(!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1)) && openAssignUserModal(task)"
                   >
                     <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
                       <mat-icon class="assign-icon">person_add</mat-icon>
@@ -280,7 +277,7 @@
                     </ng-container>
 
                     <ng-template #assignedBlock>
-                      {{ task.assignedToName}}
+                      {{ task.assignedToName }}
 
                       <span class="reassign-text" *ngIf="task.taskStatus === 1 && task.taskCategoryId !== 1"> Re-assign </span>
                     </ng-template>
@@ -566,7 +563,7 @@
       <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
         <label class="modal-field-label"> Upload File - 1:<span class="file-limit"> [.pdf, .xls, .xlsx, .doc, .docx allowed up to 10 MB] </span> </label>
 
-        <input type="file" #normalFileInput class="manager-select" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+        <input type="file" #normalFileInput class="manager-select" accept=".pdf,.xls,.xlsx,.doc,.docx" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
 
         <div class="file-info" *ngIf="fileTwoName">
           <span class="current-manager-name">
@@ -583,7 +580,7 @@
       <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
         <label class="modal-field-label"> Upload File - 2:<span class="file-limit"> [.pdf, .xls, .xlsx, .doc, .docx, .zip allowed up to 10 MB] </span> </label>
 
-        <input type="file" class="manager-select" #zipFileInput accept=".zip" [disabled]="isChangingManager" (change)="onFileOneSelected($event)" />
+        <input type="file" class="manager-select" #zipFileInput accept=".pdf,.xls,.xlsx,.doc,.docx,.zip" [disabled]="isChangingManager" (change)="onFileOneSelected($event)" />
 
         <div class="file-info" *ngIf="fileOneName">
           <span class="current-manager-name">
@@ -701,9 +698,7 @@
             {{ user.firstName }}
           </option>
         </select>
-         <div *ngIf="users.length === 0" class="text-danger mt-1" style="color:red;margin-top: 5px;">
-    No other user found for this category.
-  </div>
+        <div *ngIf="users.length === 0" class="text-danger mt-1" style="color: red; margin-top: 5px">No other user found for this category.</div>
       </div>
 
       <!-- REMARKS -->
