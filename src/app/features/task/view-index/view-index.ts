@@ -25,9 +25,9 @@ import { environment } from '../../../../environments/environment';
 })
 export class ViewIndex implements OnInit {
   dashboardFilter: string = '';
- 
+
   taskId!: number;
- 
+
   task: any = null;
 
   transactionHistory: any[] = [];
@@ -61,20 +61,17 @@ export class ViewIndex implements OnInit {
   fromDate: string = '';
   toDate: string = '';
 
- 
   constructor(
     private route: ActivatedRoute,
     private dataprovider: DataProviderService,
     private router: Router,
   ) {}
 
-  
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('taskId');
     if (id) {
       this.taskId = Number(id);
     }
-
 
     const navigation = this.router.getCurrentNavigation();
 
@@ -418,7 +415,6 @@ export class ViewIndex implements OnInit {
     }
   }
 
-  
   private parseDate(value: any): Date {
     if (!value) {
       return new Date(0);
@@ -430,7 +426,6 @@ export class ViewIndex implements OnInit {
       return date;
     }
 
-   
     const match = String(value).match(/^(\d{2})-(\d{2})-(\d{4})/);
 
     if (match) {
@@ -699,9 +694,11 @@ export class ViewIndex implements OnInit {
       case 'zip':
         return '/zip';
       case 'doc':
-      case 'docx':
         return '/doc';
+      case 'docx':
+        return '/docx';
       case 'xls':
+        return '/xls';
       case 'xlsx':
         return '/xlsx';
       default:
