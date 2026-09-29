@@ -12,6 +12,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SESSION_KEYS } from '../../service/session-storage.keys';
+
+export interface DashboardMetricDTO {
+  count: number;
+  taskStatusIds: number[];
+}
 
 interface ApiTask {
   taskId: number;
@@ -52,14 +58,13 @@ interface ApiTask {
   dueDateTime: string;
 
   assignedByUser: string;
+  taskStatus: any;
 }
 
 interface DashboardResponse {
-  myTasksToday: number;
-
-  dueThisWeek: number;
-
-  overdue: number;
+  myTasksToday: DashboardMetricDTO;
+  dueThisWeek: DashboardMetricDTO;
+  overdue: DashboardMetricDTO;
 
   todo: {
     count: number;
@@ -75,7 +80,7 @@ interface DashboardResponse {
     count: number;
     tasks: ApiTask[];
   };
-
+  overdueStatusIds: string;
   statusCounts?: StatusCounts;
 }
 
@@ -107,8 +112,6 @@ interface StatusCounts {
   assigneeReClosure: number;
   assignorClosure: number;
 }
-
-
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -142,15 +145,15 @@ export class EmployeeDashboard implements OnInit {
 
   readonly statusStats = signal<any[]>([]);
 
-// key = field in statusCounts, statusName = value passed to Task list page
-private readonly statusConfig = [
-  { key: 'unassigned',        label: 'Unassigned',          statusId: '-1', icon: 'person_off' },
-  { key: 'assigned',          label: 'Assigned',            statusId: '1',  icon: 'assignment_ind' },
-  { key: 'assigneeClosure',   label: 'Assignee Closure',    statusId: '2',  icon: 'task_alt' },
-  { key: 'reOpen',            label: 'Re-Open',             statusId: '3',  icon: 'replay' },
-  { key: 'assigneeReClosure', label: 'Assignee Re-Closure', statusId: '4',  icon: 'published_with_changes' },
-  { key: 'assignorClosure',   label: 'Assignor Closure',    statusId: '5',  icon: 'verified' },
-];
+  // key = field in statusCounts, statusName = value passed to Task list page
+  private readonly statusConfig = [
+    { key: 'unassigned', label: 'Unassigned', statusId: '-1', icon: 'person_off' },
+    { key: 'assigned', label: 'Assigned', statusId: '1', icon: 'assignment_ind' },
+    { key: 'assigneeClosure', label: 'Assignee Closure', statusId: '2', icon: 'task_alt' },
+    { key: 'reOpen', label: 'Re-Open', statusId: '3', icon: 'replay' },
+    { key: 'assigneeReClosure', label: 'Assignee Re-Closure', statusId: '4', icon: 'published_with_changes' },
+    { key: 'assignorClosure', label: 'Assignor Closure', statusId: '5', icon: 'verified' },
+  ];
 
   // ======================================================
   // INIT
@@ -183,46 +186,49 @@ private readonly statusConfig = [
   loadDashboard(): void {
     const userId = Number(sessionStorage.getItem('userId')) || 1;
 
-    this.dataProviderService.getDashboard(userId, this.isAdmin, this.selectedClientId,this.isHod ).subscribe({
+    this.dataProviderService.getDashboard(userId, this.isAdmin, this.selectedClientId, this.isHod).subscribe({
       next: (res: DashboardResponse) => {
         console.log('Dashboard response:', res);
         if (!res) {
           return;
         }
         // Today's task count
-        this.todayTasks.set(res.myTasksToday);
+        this.todayTasks.set(res.myTasksToday.count || 0);
         // ----------------------------------------------
         // STATISTICS
         // ----------------------------------------------
         this.stats.set([
           {
             label: 'My tasks today',
-            value: res.myTasksToday,
+            value: res.myTasksToday.count,
             color: 'normal',
+            statusIds: (res.myTasksToday?.taskStatusIds || []).join(','),
           },
 
           {
             label: 'Due this week',
-            value: res.dueThisWeek,
+            value: res.dueThisWeek.count,
             color: 'normal',
+            statusIds: (res.dueThisWeek?.taskStatusIds || []).join(','),
           },
 
           {
             label: 'Overdue',
-            value: res.overdue,
+            value: res.overdue.count,
             color: 'danger',
+            statusIds: (res.overdue?.taskStatusIds || []).join(','),
           },
         ]);
 
         const sc: any = res.statusCounts || {};
-this.statusStats.set(
-  this.statusConfig.map((s) => ({
-    label: s.label,
-    statusId: s.statusId,
-    icon: s.icon,
-    value: sc[s.key] || 0,
-  })),
-);
+        this.statusStats.set(
+          this.statusConfig.map((s) => ({
+            label: s.label,
+            statusId: s.statusId,
+            icon: s.icon,
+            value: sc[s.key] || 0,
+          })),
+        );
 
         // ----------------------------------------------
         // TASK COLUMNS
@@ -287,6 +293,7 @@ this.statusStats.set(
           dueDate: this.formatDate(task.dueDateTime),
           // type: 'done',
           type: this.getPriorityType(task.priority),
+          taskStatus: task.taskStatus,
         };
       }
 
@@ -313,6 +320,7 @@ this.statusStats.set(
           type: this.getPriorityType(task.priority),
 
           progress: task.progress || 0,
+          taskStatus: task.taskStatus,
         };
       }
 
@@ -335,6 +343,7 @@ this.statusStats.set(
         dueDate: this.formatDate(task.dueDateTime),
 
         type: this.getPriorityType(task.priority),
+        taskStatus: task.taskStatus,
       };
     });
   }
@@ -521,9 +530,12 @@ this.statusStats.set(
   }
 
   openTaskIndex(stat: any): void {
+    // if (!stat || stat.value === 0) {
+    //   return;
+    // }
     let taskType = '';
 
-    console.log(JSON.stringify(stat) + " checking now ")
+    console.log(JSON.stringify(stat) + ' checking now ');
 
     if (stat.label === 'My tasks today') {
       taskType = 'today';
@@ -532,14 +544,15 @@ this.statusStats.set(
     } else if (stat.label === 'Overdue') {
       taskType = 'overdue';
     }
+    const filterData = {
+      taskStatusIds: stat.statusIds,
+      clientId: this.selectedClientId || 0,
+      statusIndex: 1,
+    };
 
-    this.router.navigate(['/task-index'], {
-      queryParams: {
-        taskType: taskType,
-          clientId: this.selectedClientId || 0,
-          statusIndex :1
-      },
-    });
+    sessionStorage.setItem(SESSION_KEYS.TASK_MASTER_FILTER, JSON.stringify(filterData));
+
+    this.router.navigate(['/task-index']);
   }
 
   clientSearchText = '';
@@ -594,16 +607,16 @@ this.statusStats.set(
   }
 
   openTaskIndexByStatus(stat: any): void {
-  if (!stat || stat.value === 0) {
-    return;
-  }
+    if (!stat || stat.value === 0) {
+      return;
+    }
 
-  this.router.navigate(['/task-index'], {
-    queryParams: {
-      taskStatusIds: stat.statusId,
-      clientId: this.selectedClientId || 0,
-      statusIndex: 1,
-    },
-  });
-}
+    this.router.navigate(['/task-index'], {
+      queryParams: {
+        taskStatusIds: stat.statusId,
+        clientId: this.selectedClientId || 0,
+        statusIndex: 1,
+      },
+    });
+  }
 }
