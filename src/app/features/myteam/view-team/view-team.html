@@ -60,6 +60,14 @@
             </span>
           </div>
 
+          <div class="info-row">
+            <span class="info-label"> Is HOD: </span>
+
+            <span class="info-value">
+              {{ user.isHod === 'Y' ? 'Yes' : 'No' }}
+            </span>
+          </div>
+
           <!-- ADMIN PERMISSION -->
 
           <div class="admin-permission">
@@ -113,19 +121,21 @@
               {{ getWeeklyOffLabel(user.weeklyOff) }}
             </span>
           </div>
-        </div>
-
-        <div class="info-row">
-          <span class="info-label">Task Category:</span>
-          <div class="category-chips">
-            <span class="chip" *ngFor="let category of taskCategoryList">
-              {{ category }}
-            </span>
-          </div>
-          
 
           
         </div>
+
+       <div class="info-row category-row">
+  <span class="info-label">Task Category:</span>
+
+  <div class="category-chips">
+    <span class="chip" *ngFor="let category of taskCategoryList">
+      {{ category }}
+    </span>
+
+    <span class="info-value" *ngIf="!taskCategoryList.length">NA</span>
+  </div>
+</div>
       </div>
     </mat-card-content>
   </mat-card>

@@ -186,7 +186,9 @@ export class ViewTeam implements OnInit {
 
           designationName: response?.designationName,
 
-          weeklyOff: response?.weeklyOff
+          weeklyOff: response?.weeklyOff,
+
+          isHod: response?.isHod,
         };
 
         // ------------------------------------------------

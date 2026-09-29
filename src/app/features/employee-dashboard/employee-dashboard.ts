@@ -52,6 +52,8 @@ interface ApiTask {
   dueDateTime: string;
 
   assignedByUser: string;
+
+  taskStatus: any;
 }
 
 interface DashboardResponse {
@@ -89,6 +91,8 @@ interface Task {
   assignedByUser: string;
   type: 'high' | 'medium' | 'low' | 'progress' | 'done';
   progress?: number;
+   taskStatusLabel: string;
+  taskStatusClass: string;
 }
 
 interface TaskColumn {
@@ -287,6 +291,7 @@ this.statusStats.set(
           dueDate: this.formatDate(task.dueDateTime),
           // type: 'done',
           type: this.getPriorityType(task.priority),
+          ...this.getStatusFields(task.taskStatus),
         };
       }
 
@@ -313,6 +318,7 @@ this.statusStats.set(
           type: this.getPriorityType(task.priority),
 
           progress: task.progress || 0,
+          ...this.getStatusFields(task.taskStatus),
         };
       }
 
@@ -335,6 +341,8 @@ this.statusStats.set(
         dueDate: this.formatDate(task.dueDateTime),
 
         type: this.getPriorityType(task.priority),
+
+        ...this.getStatusFields(task.taskStatus),
       };
     });
   }
@@ -605,5 +613,22 @@ this.statusStats.set(
       statusIndex: 1,
     },
   });
+}
+
+private getStatusFields(status: number | null | undefined): { taskStatusLabel: string; taskStatusClass: string } {
+  switch (Number(status ?? 0)) {
+    case 1:
+      return { taskStatusLabel: 'Assigned', taskStatusClass: 'ts-assigned' };
+    case 2:
+      return { taskStatusLabel: 'Assignee Closure', taskStatusClass: 'ts-assignee-closure' };
+    case 3:
+      return { taskStatusLabel: 'Re-Open', taskStatusClass: 'ts-reopen' };
+    case 4:
+      return { taskStatusLabel: 'Assignee Re-Closure', taskStatusClass: 'ts-reclosure' };
+    case 5:
+      return { taskStatusLabel: 'Assignor Closure', taskStatusClass: 'ts-assignor-closure' };
+    default:
+      return { taskStatusLabel: 'Unassigned', taskStatusClass: 'ts-unassigned' };
+  }
 }
 }

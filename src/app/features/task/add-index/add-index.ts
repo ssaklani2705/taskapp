@@ -169,6 +169,8 @@ export class AddIndexComponent implements OnInit {
   priority: string = '';
   fromDate: string = '';
   toDate: string = '';
+
+  isHod = '';
   // ----------------------------
 
   // ============================================================
@@ -234,6 +236,8 @@ export class AddIndexComponent implements OnInit {
       this.isAdmin = sessionStorage.getItem('isAdmin');
 
       this.loginType = sessionStorage.getItem('loginType') || 'other';
+
+      this.isHod = sessionStorage.getItem('isHod') || 'N';
     }
 
     this.loadDropdownData();
@@ -892,7 +896,7 @@ export class AddIndexComponent implements OnInit {
 
   onchangeloadDropdownData(): void {
     // alert(this.task.clientId);
-    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId).subscribe({
+    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId,this.isHod).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
         // this.clients = data?.clients || [];
@@ -931,7 +935,7 @@ export class AddIndexComponent implements OnInit {
 
   loadDropdownData(): void {
     // alert(this.task.clientId);
-    this.dataprovider.getTaskFilterData(this.isAdmin, this.userId, this.loginType).subscribe({
+    this.dataprovider.getTaskFilterData(this.isAdmin, this.userId, this.loginType,this.isHod).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
         this.clients = data?.clients || [];

@@ -1643,3 +1643,50 @@
     padding: 0 15px 16px;
   }
 }
+
+
+//Task Status
+// .priority-wrapper {
+//   display: flex;
+//   align-items: center;
+//   flex-wrap: wrap;
+//   gap: 6px;
+//   margin-bottom: 13px;
+// }
+
+.task-status-badge {
+  margin-left: auto;
+  height: 24px;
+  padding: 0 11px;
+
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+  border: 1px solid transparent;
+
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* "Assigned by ..." takes the free space and truncates instead of pushing the badge */
+.bottom-status-text {
+  flex: 1 1 auto;
+  min-width: 0;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ts-unassigned      { color: #5f7185; background: #eef2f6; border-color: #dbe3ec; }
+.ts-assigned        { color: #2879b6; background: #e4f2fb; border-color: #cfe5f5; }
+.ts-assignee-closure{ color: #7054c4; background: #eee9ff; border-color: #ddd4fb; }
+.ts-reopen          { color: #bd8108; background: #fff1d0; border-color: #f2e0a8; }
+.ts-reclosure       { color: #0f7f86; background: #e0f5f5; border-color: #c3e8e9; }
+.ts-assignor-closure{ color: #2b8b62; background: #e3f5ec; border-color: #c8ebd9; }

@@ -218,6 +218,8 @@
                             {{ task.subtitle }}
                           }
                         </span>
+
+                        
                       </div>
 
                       <!-- START DATE -->
@@ -281,7 +283,11 @@
                       }
                     </span>
 
-                    <mat-icon class="more-icon"> more_vert </mat-icon>
+                     <span class="task-status-badge" [ngClass]="task.taskStatusClass">
+    {{ task.taskStatusLabel }}
+  </span>
+
+                    <!-- <mat-icon class="more-icon"> more_vert </mat-icon> -->
                   </div>
 
                   <!-- PROGRESS -->
