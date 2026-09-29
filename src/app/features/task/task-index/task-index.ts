@@ -471,7 +471,7 @@ ngOnInit(): void {
 
   private loadFilterData(): void {
     this.dataprovider
-      .getTaskFilterDataForIndex(this.isAdmin, this.userId, this.loginType)
+      .getTaskFilterDataForIndex(this.isAdmin, this.userId, this.loginType,this.isHod)
       .subscribe({
         next: (response: any) => {
           this.clients = response.clients || [];

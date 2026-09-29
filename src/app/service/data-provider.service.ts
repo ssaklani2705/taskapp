@@ -1170,12 +1170,13 @@ export class DataProviderService {
     });
   }
 
-  getTaskFilterDataForIndex(isAdmin: string, userId: number, loginType: string): Observable<any> {
+  getTaskFilterDataForIndex(isAdmin: string, userId: number, loginType: string,isHod: any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/getTaskFilterDataForIndex`, {
       params: {
         isAdmin: isAdmin.toString(),
         userId: userId.toString(),
         loginType: loginType.toString(),
+        isHod: isHod.toString()
         // clientId: clientId ?? ''
       },
     });
@@ -1441,8 +1442,8 @@ export class DataProviderService {
     );
   }
   //Employee Dashboard
-  getDashboard(userId: number, isAdmin: any, selectedClientId: any): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}&isAdmin=${isAdmin}&selectedClientId=${selectedClientId}`);
+  getDashboard(userId: number, isAdmin: any, selectedClientId: any,isHod: any): Observable<any> {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}&isAdmin=${isAdmin}&selectedClientId=${selectedClientId}&isHod=${isHod}`);
   }
 
   //New
@@ -1546,18 +1547,15 @@ export class DataProviderService {
   // HOLIDAY
   // ============================================================
 
-  getHolidayDetails(page: number, size: number, statusIndex: number, search: string): Observable<any> {
-    const params = {
-      page: page.toString(),
-      size: size.toString(),
-      statusIndex: statusIndex.toString(),
-      search: search || '',
-    };
 
-    return this.http.get(`${environment.apiBaseUrl}admin/holiday/getHolidayDetails`, {
-      params,
-    });
+
+  uploadHolidayExcel(file: File, userId: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('userId', userId.toString());
+    return this.http.post<any>(`${environment.apiBaseUrl}admin/holiday/uploadHolidayExcel`, formData);
   }
+
 
   deleteHoliday(holiday: any): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}admin/holiday/deleteHoliday`, holiday);
@@ -1565,6 +1563,30 @@ export class DataProviderService {
 
   saveHoliday(holiday: any): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}admin/holiday/saveHoliday`, holiday);
+  }
+
+  private formatDateForApi(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  getHolidayDetails(page: number, size: number, statusIndex: number, search: string, fromDate?: Date | null, toDate?: Date | null): Observable<any> {
+    const params: { [key: string]: string } = {
+      page: page.toString(),
+      size: size.toString(),
+      statusIndex: statusIndex.toString(),
+      search: search || '',
+    };
+    if (fromDate) {
+      params['fromDate'] = this.formatDateForApi(fromDate);
+    }
+    if (toDate) {
+      params['toDate'] = this.formatDateForApi(toDate);
+    }
+    return this.http.get(`${environment.apiBaseUrl}admin/holiday/getHolidayDetails`, {
+      params,
+    });
   }
 
   getHolidayById(holidayId: number): Observable<any> {

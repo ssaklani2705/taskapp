@@ -75,6 +75,8 @@ interface DashboardResponse {
     count: number;
     tasks: ApiTask[];
   };
+
+  statusCounts?: StatusCounts;
 }
 
 interface Task {
@@ -96,6 +98,17 @@ interface TaskColumn {
 
   tasks: Task[];
 }
+
+interface StatusCounts {
+  unassigned: number;
+  assigned: number;
+  assigneeClosure: number;
+  reOpen: number;
+  assigneeReClosure: number;
+  assignorClosure: number;
+}
+
+
 
 @Component({
   selector: 'app-employee-dashboard',
@@ -127,6 +140,18 @@ export class EmployeeDashboard implements OnInit {
     private router: Router,
   ) {}
 
+  readonly statusStats = signal<any[]>([]);
+
+// key = field in statusCounts, statusName = value passed to Task list page
+private readonly statusConfig = [
+  { key: 'unassigned',        label: 'Unassigned',         statusName: 'Unassigned',         icon: 'person_off' },
+  { key: 'assigned',          label: 'Assigned',           statusName: 'Assigned',           icon: 'assignment_ind' },
+  { key: 'assigneeClosure',   label: 'Assignee Closure',   statusName: 'Assignee Closure',   icon: 'task_alt' },
+  { key: 'reOpen',            label: 'Re-Open',            statusName: 'Re-Open',            icon: 'replay' },
+  { key: 'assigneeReClosure', label: 'Assignee Re-Closure',statusName: 'Assignee Re-Closure',icon: 'published_with_changes' },
+  { key: 'assignorClosure',   label: 'Assignor Closure',   statusName: 'Assignor Closure',   icon: 'verified' },
+];
+
   // ======================================================
   // INIT
   // ======================================================
@@ -135,6 +160,7 @@ export class EmployeeDashboard implements OnInit {
   isAdmin: any;
   userId: any;
   designationName: any;
+  isHod = '';
   ngOnInit(): void {
     this.username = sessionStorage.getItem('username') || 'Society 123';
     this.designationName = sessionStorage.getItem('designationName')?.trim() || '-';
@@ -144,6 +170,7 @@ export class EmployeeDashboard implements OnInit {
     this.userId = sessionStorage.getItem('userId');
 
     this.loginType = sessionStorage.getItem('loginType') || 'other';
+    this.isHod = sessionStorage.getItem('isHod') || 'N';
 
     this.getDashboardClients();
     this.loadDashboard();
@@ -156,7 +183,7 @@ export class EmployeeDashboard implements OnInit {
   loadDashboard(): void {
     const userId = Number(sessionStorage.getItem('userId')) || 1;
 
-    this.dataProviderService.getDashboard(userId, this.isAdmin, this.selectedClientId).subscribe({
+    this.dataProviderService.getDashboard(userId, this.isAdmin, this.selectedClientId,this.isHod ).subscribe({
       next: (res: DashboardResponse) => {
         console.log('Dashboard response:', res);
         if (!res) {
@@ -186,6 +213,16 @@ export class EmployeeDashboard implements OnInit {
             color: 'danger',
           },
         ]);
+
+        const sc: any = res.statusCounts || {};
+this.statusStats.set(
+  this.statusConfig.map((s) => ({
+    label: s.label,
+    statusName: s.statusName,
+    icon: s.icon,
+    value: sc[s.key] || 0,
+  })),
+);
 
         // ----------------------------------------------
         // TASK COLUMNS
@@ -555,4 +592,18 @@ export class EmployeeDashboard implements OnInit {
       this.showClientDropdown = false;
     }
   }
+
+  openTaskIndexByStatus(stat: any): void {
+  if (!stat || stat.value === 0) {
+    return;
+  }
+
+  this.router.navigate(['/task-index'], {
+    queryParams: {
+      status: stat.statusName,
+      clientId: this.selectedClientId || 0,
+      statusIndex: 1,
+    },
+  });
+}
 }

@@ -80,6 +80,34 @@
       }
     </section>
 
+
+    <!-- =====================================================
+     STATUS STATISTICS (SECOND ROW)
+====================================================== -->
+
+<section class="stats-grid status-stats-grid">
+  @for (stat of statusStats(); track stat.label) {
+    <mat-card
+      class="stat-card status-stat-card"
+      [class.stat-disabled]="stat.value === 0"
+      (click)="openTaskIndexByStatus(stat)"
+    >
+      <div class="stat-icon">
+        <mat-icon>{{ stat.icon }}</mat-icon>
+      </div>
+
+      <div class="stat-content">
+        <div class="stat-label">{{ stat.label }}</div>
+        <div class="stat-value">{{ stat.value }}</div>
+      </div>
+
+      <div class="stat-arrow">
+        <mat-icon>chevron_right</mat-icon>
+      </div>
+    </mat-card>
+  }
+</section>
+
     <!-- =====================================================
          TASK BOARD
     ====================================================== -->
