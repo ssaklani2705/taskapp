@@ -1311,12 +1311,13 @@ export class DataProviderService {
     return this.http.post(`${environment.apiBaseUrl}admin/task/update_task_status`, formData);
   }
 
-  getRecurringClients(userId: number, isAdmin: string, loginType: string) {
+  getRecurringClients(userId: number, isAdmin: string, loginType: string,isHod: any) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/getRecurringClients`, {
       params: {
         userId: userId,
         isAdmin: isAdmin,
         loginType: loginType,
+        isHod: isHod
       },
     });
   }
@@ -1397,12 +1398,13 @@ export class DataProviderService {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/active`);
   }
 
-  getActiveTaskCategoriesForRecurring(userId: any, isAdmin: any, loginType: any) {
+  getActiveTaskCategoriesForRecurring(userId: any, isAdmin: any, loginType: any,isHod: any) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/recurring/active`, {
       params: {
         userId: userId,
         isAdmin: isAdmin,
         loginType: loginType,
+        isHod: isHod
       },
     });
   }
