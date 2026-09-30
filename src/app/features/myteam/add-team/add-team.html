@@ -115,201 +115,195 @@
           </div>
 
           <!-- ================================================= -->
-<!-- ROW 2
+          <!-- ROW 2
      Mobile | Telephone | Is HOD | Department
 ================================================== -->
 
-<div class="user-form-row">
-  <!-- Mobile -->
-  <div class="user-form-col">
-    <div class="user-form-group">
-      <label class="user-label">
-        Mobile Number
-        <span class="required">*</span>
-      </label>
+          <div class="user-form-row">
+            <!-- Mobile -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Mobile Number
+                  <span class="required">*</span>
+                </label>
 
-      <input type="text" class="user-input" formControlName="mobile" maxlength="10" (keypress)="allowOnlyNumbers($event)" />
+                <input type="text" class="user-input" formControlName="mobile" maxlength="10" (keypress)="allowOnlyNumbers($event)" />
 
-      <div class="user-error" *ngIf="userForm.get('mobile')?.touched && userForm.get('mobile')?.invalid">
-        <span *ngIf="userForm.get('mobile')?.errors?.['required']"> Mobile number is required </span>
-        <span *ngIf="userForm.get('mobile')?.errors?.['pattern']"> Enter valid 10 digit mobile number </span>
-      </div>
-    </div>
-  </div>
+                <div class="user-error" *ngIf="userForm.get('mobile')?.touched && userForm.get('mobile')?.invalid">
+                  <span *ngIf="userForm.get('mobile')?.errors?.['required']"> Mobile number is required </span>
+                  <span *ngIf="userForm.get('mobile')?.errors?.['pattern']"> Enter valid 10 digit mobile number </span>
+                </div>
+              </div>
+            </div>
 
-  <!-- Telephone -->
-  <div class="user-form-col">
-    <div class="user-form-group">
-      <label class="user-label"> Telephone Number </label>
+            <!-- Telephone -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Telephone Number </label>
 
-      <input type="text" class="user-input" formControlName="telephone" maxlength="15" />
-    </div>
-  </div>
+                <input type="text" class="user-input" formControlName="telephone" maxlength="15" />
+              </div>
+            </div>
 
-  <!-- Is HOD (before Department) -->
-  <div class="user-form-col">
-    <div class="user-form-group">
-      <label class="user-label"> Is HOD </label>
+            <!-- Is HOD (before Department) -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label"> Is HOD </label>
 
-      <div class="hod-check">
-        <mat-checkbox formControlName="isHod"> Yes </mat-checkbox>
-      </div>
-    </div>
-  </div>
+                <div class="hod-check">
+                  <mat-checkbox formControlName="isHod"> Yes </mat-checkbox>
+                </div>
+              </div>
+            </div>
 
-  <!-- Department: multi-select for HOD, single-select otherwise -->
-  <div class="user-form-col">
-    <div class="user-form-group">
-      <label class="user-label">
-        Department
-        <span class="required">*</span>
-      </label>
+            <!-- Department: multi-select for HOD, single-select otherwise -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Department
+                  <span class="required">*</span>
+                </label>
 
-      <!-- HOD: multiple -->
-      <div class="status-dropdown" #departmentDropdown *ngIf="isHod">
-        <button type="button" class="dropdown-btn" [disabled]="!departmentList || departmentList.length === 0" (click)="showDepartmentDropdown = !showDepartmentDropdown">
-          <span class="selected-category-text">
-            {{ getSelectedDepartmentNames() || '--Select Department--' }}
-          </span>
-        </button>
+                <!-- HOD: multiple -->
+                <div class="status-dropdown" #departmentDropdown *ngIf="isHod">
+                  <button type="button" class="dropdown-btn" [disabled]="!departmentList || departmentList.length === 0" (click)="showDepartmentDropdown = !showDepartmentDropdown">
+                    <span class="selected-category-text">
+                      {{ getSelectedDepartmentNames() || '--Select Department--' }}
+                    </span>
+                  </button>
 
-        <div class="dropdown-menu" *ngIf="showDepartmentDropdown && departmentList.length" (click)="$event.stopPropagation()">
-          <label *ngFor="let dept of departmentList">
-            <input
-              type="checkbox"
-              [id]="'department-' + dept.departmentId"
-              [checked]="isDepartmentChecked(dept.departmentId)"
-              (change)="toggleDepartment(dept.departmentId, $event)"
-            />
-            {{ dept.name }}
-          </label>
-        </div>
-      </div>
+                  <div class="dropdown-menu" *ngIf="showDepartmentDropdown && departmentList.length" (click)="$event.stopPropagation()">
+                    <label *ngFor="let dept of departmentList">
+                      <input type="checkbox" [id]="'department-' + dept.departmentId" [checked]="isDepartmentChecked(dept.departmentId)" (change)="toggleDepartment(dept.departmentId, $event)" />
+                      {{ dept.name }}
+                    </label>
+                  </div>
+                </div>
 
-      <!-- Not HOD: single -->
-      <select
-        *ngIf="!isHod"
-        class="user-input user-select"
-        [ngModel]="singleDepartmentId"
-        [ngModelOptions]="{ standalone: true }"
-        (ngModelChange)="onSingleDepartmentChange($event)"
-      >
-        <option [ngValue]="null">Select Department</option>
-        <option *ngFor="let dept of departmentList" [ngValue]="dept.departmentId">
-          {{ dept.name }}
-        </option>
-      </select>
+                <!-- Not HOD: single -->
+                <select *ngIf="!isHod" class="user-input user-select" [ngModel]="singleDepartmentId" [ngModelOptions]="{ standalone: true }" (ngModelChange)="onSingleDepartmentChange($event)">
+                  <option [ngValue]="null">Select Department</option>
+                  <option *ngFor="let dept of departmentList" [ngValue]="dept.departmentId">
+                    {{ dept.name }}
+                  </option>
+                </select>
 
-      <div class="user-error" *ngIf="showDepartmentValidation && selectedDepartmentIds.length === 0">Department is required</div>
-    </div>
-  </div>
-</div>
+                <div class="user-error" *ngIf="showDepartmentValidation && selectedDepartmentIds.length === 0">Department is required</div>
+              </div>
+            </div>
+          </div>
 
-<!-- ================================================= -->
-<!-- ROW 3
+          <!-- ================================================= -->
+          <!-- ROW 3
      Task Category | Designation | Status (edit only)
 ================================================== -->
 
-<div class="user-form-row">
-  <!-- Task Category -->
-  <div class="user-form-col">
-    <div class="user-form-group">
-      <label class="user-label">
-        Task Category
-        <span class="required">*</span>
-      </label>
+          <div class="user-form-row">
+            <!-- Task Category -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Task Category
+                  <span class="required">*</span>
+                </label>
 
-      <div class="status-dropdown" #categoryDropdown>
-        <button type="button" class="dropdown-btn" [disabled]="!categoryList || categoryList.length === 0" (click)="categoryList.length && (showCategoryDropdown = !showCategoryDropdown)">
-          <span class="selected-category-text">
-            {{ getSelectedCategoryNames() || '--Select Task Category--' }}
-          </span>
-        </button>
+                <div class="status-dropdown" #categoryDropdown>
+                  <button type="button" class="dropdown-btn" [disabled]="!categoryList || categoryList.length === 0" (click)="categoryList.length && (showCategoryDropdown = !showCategoryDropdown)">
+                    <span class="selected-category-text">
+                      {{ getSelectedCategoryNames() || '--Select Task Category--' }}
+                    </span>
+                  </button>
 
-        <div class="dropdown-menu" *ngIf="showCategoryDropdown && categoryList.length" (click)="$event.stopPropagation()">
-          <label *ngFor="let category of categoryList">
-            <input
-              type="checkbox"
-              [id]="'category-' + category.taskcategoryId"
-              [checked]="isCategoryChecked(category.taskcategoryId)"
-              (change)="toggleCategory(category.taskcategoryId, $event)"
-            />
-            {{ category.name }}
-          </label>
-        </div>
-      </div>
+                  <div class="dropdown-menu" *ngIf="showCategoryDropdown && categoryList.length" (click)="$event.stopPropagation()">
+                    <label *ngFor="let category of categoryList">
+                      <input
+                        type="checkbox"
+                        [id]="'category-' + category.taskcategoryId"
+                        [checked]="isCategoryChecked(category.taskcategoryId)"
+                        (change)="toggleCategory(category.taskcategoryId, $event)"
+                      />
+                      {{ category.name }}
+                    </label>
+                  </div>
+                </div>
 
-      <!-- No categories available -->
-      <div class="user-error" *ngIf="!categoriesLoading && selectedDepartmentIds.length > 0 && categoryList && categoryList.length === 0">
-        No task categories are available for the selected departments.
-      </div>
+                <!-- No categories available -->
+                <div class="user-error" *ngIf="!categoriesLoading && selectedDepartmentIds.length > 0 && categoryList && categoryList.length === 0">
+                  No task categories are available for the selected departments.
+                </div>
 
-      <!-- Category required -->
-      <div class="user-error" *ngIf="showCategoryValidation && categoryList.length && (!selectedCategoryIds || selectedCategoryIds.length === 0)">Task Category is required.</div>
-    </div>
-  </div>
+                <!-- Category required -->
+                <div class="user-error" *ngIf="showCategoryValidation && categoryList.length && (!selectedCategoryIds || selectedCategoryIds.length === 0)">Task Category is required.</div>
+              </div>
+            </div>
 
-  <!-- Designation -->
-  <div class="user-form-col">
-    <div class="user-form-group">
-      <label class="user-label">
-        Designation
-        <span class="required">*</span>
-      </label>
+            <!-- Designation -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Designation
+                  <span class="required">*</span>
+                </label>
 
-      <select class="user-input user-select" formControlName="desigmationId">
-        <option [ngValue]="null">Select Designation</option>
-        <option *ngFor="let design of designationList" [ngValue]="design.desigmationId">
-          {{ design.name }}
-        </option>
-      </select>
+                <select class="user-input user-select" formControlName="desigmationId">
+                  <option [ngValue]="null">Select Designation</option>
+                  <option *ngFor="let design of designationList" [ngValue]="design.desigmationId">
+                    {{ design.name }}
+                  </option>
+                </select>
 
-      <div class="user-error" *ngIf="userForm.get('desigmationId')?.touched && userForm.get('desigmationId')?.hasError('required')">Designation is required</div>
-    </div>
-  </div>
+                <div class="user-error" *ngIf="userForm.get('desigmationId')?.touched && userForm.get('desigmationId')?.hasError('required')">Designation is required</div>
+              </div>
+            </div>
 
+            <!-- Weekly Off -->
+            <!-- <div class="user-form-col">
+              <div class="user-form-group weekly-off-dropdown" #weeklyOffDropdown>
+                <label class="user-label">Weekly Off</label>
 
- <!-- Weekly Off -->
-<!-- Weekly Off -->
-<div class="user-form-col">
-  <div class="user-form-group weekly-off-dropdown" #weeklyOffDropdown>
-    <label class="user-label">Weekly Off</label>
+                <button type="button" class="user-input user-select weekly-off-btn" (click)="showWeeklyOffDropdown = !showWeeklyOffDropdown">
+                  {{ getSelectedWeeklyOffLabel() }}
+                </button>
 
-    <button type="button" class="user-input user-select weekly-off-btn" (click)="showWeeklyOffDropdown = !showWeeklyOffDropdown">
-      {{ getSelectedWeeklyOffLabel() }}
-    </button>
+                <div class="weekly-off-menu" *ngIf="showWeeklyOffDropdown" (click)="$event.stopPropagation()">
+                  <label *ngFor="let d of weeklyOffOptions">
+                    <input type="checkbox" [id]="'weeklyoff-' + d.id" [checked]="isWeeklyOffChecked(d.id)" (change)="toggleWeeklyOff(d.id, $event)" />
+                    {{ d.label }}
+                  </label>
+                </div>
+              </div>
+            </div> -->
 
-    <div class="weekly-off-menu" *ngIf="showWeeklyOffDropdown" (click)="$event.stopPropagation()">
-      <label *ngFor="let d of weeklyOffOptions">
-        <input
-          type="checkbox"
-          [id]="'weeklyoff-' + d.id"
-          [checked]="isWeeklyOffChecked(d.id)"
-          (change)="toggleWeeklyOff(d.id, $event)"
-        />
-        {{ d.label }}
-      </label>
-    </div>
-  </div>
-</div>
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">Weekly Off</label>
 
-  <!-- Status (edit only) -->
-  <div class="user-form-col" *ngIf="isEditMode">
-    <div class="user-form-group">
-      <label class="user-label">
-        Status
-        <span class="required">*</span>
-      </label>
+                <select class="user-input user-select" formControlName="weeklyOff">
+                  <option [ngValue]="null">Select Weekly Off</option>
 
-      <select class="user-input user-select" formControlName="status">
-        <option [value]="1">Active</option>
-        <option [value]="2">Inactive</option>
-      </select>
-    </div>
-  </div>
-</div>
+                  <option *ngFor="let d of weeklyOffOptions" [ngValue]="d.id">
+                    {{ d.label }}
+                  </option>
+                </select>
+              </div>
+            </div>
 
-          
+            <!-- Status (edit only) -->
+            <div class="user-form-col" *ngIf="isEditMode">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Status
+                  <span class="required">*</span>
+                </label>
+
+                <select class="user-input user-select" formControlName="status">
+                  <option [value]="1">Active</option>
+                  <option [value]="2">Inactive</option>
+                </select>
+              </div>
+            </div>
+          </div>
 
           <!-- ================================================= -->
           <!-- ADMIN
@@ -319,10 +313,8 @@
             <mat-checkbox formControlName="isAdmin"> Admin Permissions (All modules) </mat-checkbox>
 
             <!-- NEW -->
-  <!-- <mat-checkbox formControlName="isHod"> Is HOD (can select multiple departments) </mat-checkbox> -->
+            <!-- <mat-checkbox formControlName="isHod"> Is HOD (can select multiple departments) </mat-checkbox> -->
           </div>
-
-          
 
           <!-- ================================================= -->
           <!-- RIGHTS AND PERMISSIONS

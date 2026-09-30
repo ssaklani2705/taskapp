@@ -74,6 +74,10 @@
                 {{ getSchedule() }}
               </span>
             </div>
+
+           
+
+            
           </div>
 
           <!-- ================= RIGHT COLUMN ================= -->
@@ -112,6 +116,14 @@
               <!-- <span class="info-value">
                 {{ recurring.date || '-' }}
               </span> -->
+            </div>
+
+             <div class="info-row">
+              <span class="info-label">Time:</span>
+
+              <span class="info-value">
+                {{ recurring.time | slice:0:5 }}
+              </span>
             </div>
 
             <!-- MONTH -->

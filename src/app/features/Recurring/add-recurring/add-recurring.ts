@@ -80,6 +80,7 @@ export class AddRecurring implements OnInit {
       day: [null],
       date: [null],
       month: [null],
+      time: [null, Validators.required],   // <-- new
       taskCatId: [null, Validators.required],
       priority: [null, Validators.required],
       status: [1],
@@ -185,6 +186,8 @@ export class AddRecurring implements OnInit {
           taskCatId: recurring.taskCatId,
           priority: recurring.priority !== null && recurring.priority !== undefined ? Number(recurring.priority) : null,
           status: recurring.status !== null && recurring.status !== undefined ? Number(recurring.status) : 1,
+          // time: this.normalizeTime(recurring.time),
+          time: this.toTimeInput(recurring.time),
         });
 
         const client = this.clients.find((x) => x.clientId == recurring.clientId);
@@ -217,6 +220,50 @@ export class AddRecurring implements OnInit {
       },
     });
   }
+
+//   private normalizeTime(value: string | null | undefined): string | null {
+//   if (!value) {
+//     return null;
+//   }
+
+//   const parts = value.split(':');
+//   const hh = (parts[0] || '00').padStart(2, '0');
+//   const mm = (parts[1] || '00').padStart(2, '0');
+//   const ss = (parts[2] || '00').substring(0, 2).padStart(2, '0');
+
+//   return `${hh}:${mm}:${ss}`;
+// }
+
+private normalizeTime(value: string | null | undefined): string | null {
+  if (!value) {
+    return null;
+  }
+
+  const parts = value.split(':');
+  const hh = (parts[0] || '00').padStart(2, '0');
+  const mm = (parts[1] || '00').substring(0, 2).padStart(2, '0');
+
+  return `${hh}:${mm}:00`;
+}
+
+// For the input: always HH:mm (no seconds shown)
+private toTimeInput(value: string | null | undefined): string | null {
+  if (!value) {
+    return null;
+  }
+
+  const parts = value.split(':');
+  const hh = (parts[0] || '00').padStart(2, '0');
+  const mm = (parts[1] || '00').substring(0, 2).padStart(2, '0');
+
+  return `${hh}:${mm}`;
+}
+
+// For the API: always HH:mm:00
+private toApiTime(value: string | null | undefined): string | null {
+  const t = this.toTimeInput(value);
+  return t ? `${t}:00` : null;
+}
 
   onTypeChange(): void {
     const type = Number(this.recurringForm.get('type')?.value);
@@ -328,6 +375,8 @@ export class AddRecurring implements OnInit {
       taskCatId: Number(formValue.taskCatId),
       priority: Number(formValue.priority),
       status: this.isEditMode ? Number(formValue.status) : 1,
+      // time: this.normalizeTime(formValue.time),
+      time: this.toApiTime(formValue.time),
     };
 
     console.log('Recurring Request:', requestData);
@@ -394,6 +443,7 @@ export class AddRecurring implements OnInit {
       taskCatId: null,
       priority: null,
       status: 1,
+      time: null,
     });
 
     this.updateTypeValidators(1);

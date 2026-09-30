@@ -556,7 +556,8 @@ export class EmployeeDashboard implements OnInit {
       queryParams: {
         taskType: taskType,
         clientId: this.selectedClientId || 0,
-        taskStatusIds: stat.statusIds
+        taskStatusIds: stat.statusIds,
+         statusIndex: 1,
       },
     });
   }

@@ -23,6 +23,7 @@ interface Recurring {
   regDate?: string | null;
   modDate?: string | null;
   priority: any;
+  time: any;
 
   transactionHistory?: any[];
 }
