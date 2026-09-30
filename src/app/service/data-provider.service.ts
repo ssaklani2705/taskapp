@@ -1614,9 +1614,12 @@ export class DataProviderService {
     });
   }
 
-  getAssigneeWorkload(categoryId: number): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/task/assignee_workload${categoryId}`);
+  getAssigneeWorkload(taskCatId: number, date: string): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}admin/task/assignee_workload`, {
+      params: {
+        taskCatId: taskCatId.toString(),
+        date: date,
+      },
+    });
   }
-
-  
 }
