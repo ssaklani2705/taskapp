@@ -77,90 +77,32 @@ export const MY_DATE_TIME_FORMATS = {
       useValue: MY_DATE_TIME_FORMATS,
     },
   ],
-  // providers: [
-  //   {
-  //     provide: DateAdapter,
-  //     useClass: MyDateAdapter,
-  //   },
-  //   {
-  //     provide: MAT_DATE_LOCALE,
-  //     useValue: 'en-GB',
-  //   },
-  // ],
 })
 export class AddIndexComponent implements OnInit {
   @ViewChild('pdfInput')
   pdfInput!: ElementRef<HTMLInputElement>;
-
   @ViewChild('zipInput')
   zipInput!: ElementRef<HTMLInputElement>;
-
   today: Date = new Date();
-
-  // readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-
-  // ============================================================
-  // TASK
-  // ============================================================
-
   task: any = {};
-
   originalTask: any = {};
-
-  // ============================================================
-  // DROPDOWN DATA
-  // ============================================================
-
   clients: any[] = [];
-
   taskCategories: any[] = [];
-
   users: any[] = [];
-
-  // ============================================================
-  // FILES
-  // ============================================================
-
   pdfFile: File | null = null;
-
   zipFile: File | null = null;
-
   pdfFileName: string = '';
-
   zipFileName: string = '';
-
   pdfError: string = '';
-
   zipError: string = '';
-
-  // ============================================================
-  // USER
-  // ============================================================
-
   userId: any;
-
   isAdmin: any;
-
   loginType: any = '';
-
-  // ============================================================
-  // MODE
-  // ============================================================
-
   isEditMode: boolean = false;
-
-  // ============================================================
-  // INDEX PARAMETERS
-  // ============================================================
-
   currentPage: number = 1;
-
   searchText: string = '';
-
   statusIndex: number = 0;
-
   page: number = 0;
-
   size: number = 5;
   taskStatusIds: string = '';
   clientId: string = '';
@@ -169,35 +111,17 @@ export class AddIndexComponent implements OnInit {
   priority: string = '';
   fromDate: string = '';
   toDate: string = '';
-
   isHod = '';
-  // ----------------------------
-
-  // ============================================================
-  // CONSTRUCTOR
-  // ============================================================
-
   constructor(
     private route: ActivatedRoute,
-
     private dataprovider: DataProviderService,
-
     @Inject(PLATFORM_ID)
     private platformId: Object,
 
     private router: Router,
   ) {}
-
-  // ============================================================
-  // INIT
-  // ============================================================
   dashboardFilter: string = '';
   ngOnInit(): void {
-  
-    // ----------------------------------------------------------
-    // NAVIGATION STATE
-    // ----------------------------------------------------------
-
     const navigation = this.router.getCurrentNavigation();
 
     const state = navigation?.extras?.state || (history.state && Object.keys(history.state).length ? history.state : null);
@@ -248,12 +172,7 @@ export class AddIndexComponent implements OnInit {
       this.isEditMode = true;
 
       this.loadTask(taskId);
-    }
-
-    // ----------------------------------------------------------
-    // ADD
-    // ----------------------------------------------------------
-    else {
+    } else {
       this.isEditMode = false;
 
       this.task = {
@@ -283,7 +202,6 @@ export class AddIndexComponent implements OnInit {
         taskStatusId: null,
       };
     }
-    
   }
 
   // ============================================================
@@ -327,128 +245,10 @@ export class AddIndexComponent implements OnInit {
   // CLIENT LIST
   // ============================================================
 
-  loadClients(): void {
-    // this.dataprovider
-    //   .getClientList()
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       this.clients =
-    //         res?.data || [];
-    //     },
-    //     error: (error: any) => {
-    //       console.error(
-    //         'Error loading clients:',
-    //         error
-    //       );
-    //     }
-    //   });
-  }
-
-  // ============================================================
-  // TASK CATEGORY LIST
-  // ============================================================
-
-  loadTaskCategories(): void {
-    // this.dataprovider
-    //   .getTaskCategoryList()
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       this.taskCategories =
-    //         res?.data || [];
-    //     },
-    //     error: (error: any) => {
-    //       console.error(
-    //         'Error loading task categories:',
-    //         error
-    //       );
-    //     }
-    //   });
-  }
-
-  // ============================================================
-  // USER LIST
-  // ============================================================
-
-  loadUsers(): void {
-    // this.dataprovider
-    //   .getUserList()
-    //   .subscribe({
-    //     next: (res: any) => {
-    //       this.users =
-    //         res?.data || [];
-    //     },
-    //     error: (error: any) => {
-    //       console.error(
-    //         'Error loading users:',
-    //         error
-    //       );
-    //     }
-    //   });
-  }
-
-  // ============================================================
-  // PDF
-  // ============================================================
-
-  // onPdfSelected(
-  //   event: Event
-  // ): void {
-
-  //   this.pdfError = '';
-
-  //   this.pdfFile = null;
-
-  //   this.pdfFileName = '';
-
-  //   const input =
-  //     event.target as HTMLInputElement;
-
-  //   if (
-  //     !input.files ||
-  //     input.files.length === 0
-  //   ) {
-
-  //     return;
-
-  //   }
-
-  //   const file =
-  //     input.files[0];
-
-  //   const extension =
-  //     file.name
-  //       .split('.')
-  //       .pop()
-  //       ?.toLowerCase();
-
-  //   if (
-  //     extension !== 'pdf'
-  //   ) {
-
-  //     this.pdfError =
-  //       'Only PDF files are allowed.';
-
-  //     input.value = '';
-
-  //     return;
-
-  //   }
-
-  //   this.pdfFile = file;
-
-  //   this.pdfFileName =
-  //     file.name;
-
-  // }
-
   readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
   readonly ALLOWED_EXTENSIONS_FILE_ONE = ['.pdf', '.xls', '.xlsx', '.doc', '.docx'];
   readonly ALLOWED_EXTENSIONS_FILE_TWO = ['.pdf', '.xls', '.xlsx', '.doc', '.docx', '.zip'];
-
-  // ============================================================
-  // FILE - 1
-  // ============================================================
 
   onPdfSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -494,10 +294,6 @@ export class AddIndexComponent implements OnInit {
     this.pdfError = '';
   }
 
-  // ============================================================
-  // FILE - 2
-  // ============================================================
-
   onZipSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
 
@@ -541,159 +337,31 @@ export class AddIndexComponent implements OnInit {
 
     this.zipError = '';
   }
-  // onPdfSelected(event: Event): void {
 
-  //   const input =
-  //     event.target as HTMLInputElement;
-
-  //   const file =
-  //     input.files?.[0];
-
-  //   // Reset previous values
-  //   this.pdfError = '';
-  //   this.pdfFile = null;
-  //   this.pdfFileName = '';
-
-  //   if (!file) {
-  //     return;
-  //   }
-
-  //   // Validate file type
-  //   const isPdf =
-  //     file.type === 'application/pdf' ||
-  //     file.name.toLowerCase().endsWith('.pdf');
-
-  //   if (!isPdf) {
-
-  //     this.pdfError =
-  //       'Please select a valid PDF file.';
-
-  //     input.value = '';
-
-  //     return;
-  //   }
-
-  //   // Validate file size
-  //   if (
-  //     file.size >
-  //     this.MAX_FILE_SIZE
-  //   ) {
-
-  //     this.pdfError =
-  //       'PDF file size must not exceed 5 MB.';
-
-  //     input.value = '';
-
-  //     return;
-  //   }
-
-  //   // Valid file
-  //   this.pdfFile =
-  //     file;
-
-  //   this.pdfFileName =
-  //     file.name;
-
-  //   this.pdfError = '';
-
-  // }
-
-  // // ============================================================
-  // // ZIP
-  // // ============================================================
-
-  // onZipSelected(event: Event): void {
-
-  //   const input =
-  //     event.target as HTMLInputElement;
-
-  //   const file =
-  //     input.files?.[0];
-
-  //   // Reset previous values
-  //   this.zipError = '';
-  //   this.zipFile = null;
-  //   this.zipFileName = '';
-
-  //   if (!file) {
-  //     return;
-  //   }
-
-  //   // Validate file type
-  //   const isZip =
-  //     file.type === 'application/zip' ||
-  //     file.type === 'application/x-zip-compressed' ||
-  //     file.name.toLowerCase().endsWith('.zip');
-
-  //   if (!isZip) {
-
-  //     this.zipError =
-  //       'Please select a valid ZIP file.';
-
-  //     input.value = '';
-
-  //     return;
-  //   }
-
-  //   // Validate file size
-  //   if (
-  //     file.size >
-  //     this.MAX_FILE_SIZE
-  //   ) {
-
-  //     this.zipError =
-  //       'ZIP file size must not exceed 5 MB.';
-
-  //     input.value = '';
-
-  //     return;
-  //   }
-
-  //   // Valid file
-  //   this.zipFile =
-  //     file;
-
-  //   this.zipFileName =
-  //     file.name;
-
-  //   this.zipError = '';
-
-  // }
-
-  // ============================================================
-  // SUBMIT
-  // ============================================================
   onSubmit(form: any): void {
-    // ----------------------------------------------------------
-    // VALIDATION
-    // ----------------------------------------------------------
-
     if (form.invalid || this.pdfError || this.zipError) {
       form.control.markAllAsTouched();
       return;
     }
 
-    // ----------------------------------------------------------
-    // ADDED BY
-    // ----------------------------------------------------------
-
     this.task.addedBy = this.userId ? Number(this.userId) : null;
 
     const formData = new FormData();
 
-    // ----------------------------------------------------------
-    // TASK PARAMETERS
-    // IMPORTANT:
-    // These names MUST match @RequestParam names in backend
-    // ----------------------------------------------------------
-
     formData.append('clientId', String(Number(this.task.clientId)));
 
     formData.append(
-      'date',
+      'startDate',
       // dateValue
 
-      this.formatDateTimeForApi(this.task.date) ?? '',
+      this.formatDateTimeForApi(this.task.startDate) ?? '',
+    );
+
+    formData.append(
+      'endDate',
+      // dateValue
+
+      this.formatDateTimeForApi(this.task.endDate) ?? '',
     );
 
     formData.append('taskCategoryId', String(Number(this.task.taskCategoryId)));
@@ -708,10 +376,6 @@ export class AddIndexComponent implements OnInit {
 
     formData.append('addedBy', String(Number(this.task.addedBy)));
 
-    // ----------------------------------------------------------
-    // UPDATE ONLY
-    // ----------------------------------------------------------
-
     if (this.isEditMode) {
       formData.append('taskId', String(Number(this.task.taskId)));
 
@@ -720,35 +384,17 @@ export class AddIndexComponent implements OnInit {
       }
     }
 
-    // ----------------------------------------------------------
-    // PDF
-    // Backend expects: fileName1
-    // ----------------------------------------------------------
-
     if (this.pdfFile) {
       formData.append('fileName1', this.pdfFile);
     }
-
-    // ----------------------------------------------------------
-    // ZIP
-    // Backend expects: fileName2
-    // ----------------------------------------------------------
 
     if (this.zipFile) {
       formData.append('fileName2', this.zipFile);
     }
 
-    // ----------------------------------------------------------
-    // DEBUG - OPTIONAL
-    // ----------------------------------------------------------
-
     formData.forEach((value, key) => {
       console.log(key, value);
     });
-
-    // ----------------------------------------------------------
-    // API
-    // ----------------------------------------------------------
 
     this.dataprovider.saveTask(formData).subscribe({
       next: (response: any) => {
@@ -867,10 +513,6 @@ export class AddIndexComponent implements OnInit {
     }
   }
 
-  // ============================================================
-  // BACK
-  // ============================================================
-
   backToIndexPage(): void {
     this.router.navigate(['/task-index'], {
       state: {
@@ -896,11 +538,14 @@ export class AddIndexComponent implements OnInit {
 
   onchangeloadDropdownData(): void {
     // alert(this.task.clientId);
-    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId,this.isHod).subscribe({
+    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
+        // alert(JSON.stringify(data));
         // this.clients = data?.clients || [];
         this.taskCategories = data?.taskCategories || [];
+
+        console.log('Takkkkk   ' + this.taskCategories);
         // this.users = data?.assignedUsers || [];
       },
 
@@ -920,11 +565,12 @@ export class AddIndexComponent implements OnInit {
     });
   }
 
-  onchangeloadUserDropdownData(): void {
+  onchangeloadUserDropdownData(onLoaded?: () => void): void {
     this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
         this.users = data?.assignedUsers || [];
+        if (onLoaded) onLoaded();
       },
       error: (error: any) => {
         console.error('Error loading task dropdown data:', error);
@@ -935,7 +581,7 @@ export class AddIndexComponent implements OnInit {
 
   loadDropdownData(): void {
     // alert(this.task.clientId);
-    this.dataprovider.getTaskFilterData(this.isAdmin, this.userId, this.loginType,this.isHod).subscribe({
+    this.dataprovider.getTaskFilterData(this.isAdmin, this.userId, this.loginType, this.isHod).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
         this.clients = data?.clients || [];
@@ -1032,14 +678,108 @@ export class AddIndexComponent implements OnInit {
   }
 
   onManagerClientChange(clientId: number | null): void {
-  this.task.clientId = clientId;
+    this.task.clientId = clientId;
 
-  // Reset dependent dropdowns
-  this.onClientChange(clientId);
+    // Reset dependent dropdowns
+    this.onClientChange(clientId);
 
-  // Load task categories for the selected client
-  if (clientId) {
-    this.onchangeloadDropdownData();
+    // Load task categories for the selected client
+    if (clientId) {
+      this.onchangeloadDropdownData();
+    }
   }
+
+  onEndDateChange(value: any): void {
+    this.task.endDate = value;
+    this.validateDates();
+  }
+
+  onTaskCategoryChange(): void {
+    this.calculateEndDate();
+    this.loadAssigneeWorkload(this.task.taskCategoryId);
+  }
+
+  onStartDateChange(value: any): void {
+    this.task.startDate = value;
+    this.calculateEndDate();
+    this.validateDates();
+  }
+
+  private calculateEndDate(): void {
+    if (!this.task.taskCategoryId) {
+      return;
+    }
+
+    const selectedCategory = this.taskCategories.find((x: any) => Number(x.taskcategoryId) === Number(this.task.taskCategoryId));
+
+    if (!selectedCategory) {
+      return;
+    }
+
+    const dueHours = Number(selectedCategory.dueTime || selectedCategory.ts_duetime || selectedCategory.duedatetime || 0);
+
+    // Use the start date picked by the user; default to now only if empty
+    let startDate: Date;
+    const picked = this.task.startDate;
+
+    if (picked) {
+      startDate = moment.isMoment(picked) ? picked.toDate() : new Date(picked);
+    } else {
+      startDate = new Date();
+    }
+
+    if (isNaN(startDate.getTime())) {
+      startDate = new Date();
+    }
+    const endDate = new Date(startDate.getTime());
+    endDate.setHours(endDate.getHours() + dueHours);
+    this.task.startDate = startDate;
+    this.task.endDate = endDate;
+  }
+
+  endDateError = '';
+
+  // Earliest date the end picker allows
+  get endMinDate(): Date {
+    return this.toDate_(this.task.startDate) || this.today;
+  }
+
+  private toDate_(value: any): Date | null {
+    if (!value) return null;
+    const d = moment.isMoment(value) ? value.toDate() : new Date(value);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  private validateDates(): void {
+    this.endDateError = '';
+
+    const start = this.toDate_(this.task.startDate);
+    const end = this.toDate_(this.task.endDate);
+
+    if (start && end && end.getTime() <= start.getTime()) {
+      this.endDateError = 'End date & time cannot be earlier than start date & time.';
+      this.task.endDate = null; // clear the invalid value
+    }
+  }
+
+
+  workloadList: { assignedTo: number; hours: number }[] = [];
+
+  private loadAssigneeWorkload(categoryId: any): void {
+  if (!categoryId) {
+    this.workloadList = [];
+    return;
+  }
+
+  this.dataprovider.getAssigneeWorkload(Number(categoryId)).subscribe({
+    next: (res: any) => {
+      this.workloadList = res?.success && Array.isArray(res.data) ? res.data : [];
+      console.log('Workload:', this.workloadList);
+      // do your calculation with this.workloadList here
+    },
+    error: (err: any) => {
+      console.error('Error loading assignee workload:', err);
+      this.workloadList = [];
+    },
+  });
 }
 }

@@ -89,7 +89,7 @@
             <span class="info-label"> Start Date: </span>
 
             <span class="info-value">
-              {{ task.date | date: 'dd-MM-yyyy HH:mm a' }}
+              {{ task.date | date: 'dd-MM-yyyy hh:mm a' }}
             </span>
           </div>
 
@@ -98,7 +98,7 @@
             <span class="info-label"> Due Date: </span>
 
             <span class="info-value">
-              {{ calculateDueDate() | date: 'dd-MM-yyyy hh:mm a' }}
+              {{ task.dueDateTime | date: 'dd-MM-yyyy hh:mm a' }}
             </span>
           </div>
 

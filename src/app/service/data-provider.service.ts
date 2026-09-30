@@ -360,11 +360,8 @@ export class DataProviderService {
   }
 
   getCategoriesByDepartmentIds(departmentIds: number[]): Observable<TaskCategoryDTO[]> {
-  return this.http.get<TaskCategoryDTO[]>(
-    `${environment.apiBaseUrl}admin/taskcategory/departments`,
-    { params: { departmentIds: departmentIds.join(',') } },
-  );
-}
+    return this.http.get<TaskCategoryDTO[]>(`${environment.apiBaseUrl}admin/taskcategory/departments`, { params: { departmentIds: departmentIds.join(',') } });
+  }
 
   //Task Category
   getTaskCategoryDetails(page: any, size: any, statusIndex: any, search: any, departmentId: any): Observable<any> {
@@ -1160,37 +1157,37 @@ export class DataProviderService {
     return this.http.post(`${environment.apiBaseUrl}admin/plan/delete`, plan);
   }
   //sunil
-  getTaskFilterData(isAdmin: string, userId: number, loginType: string,isHod :any): Observable<any> {
+  getTaskFilterData(isAdmin: string, userId: number, loginType: string, isHod: any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/getTaskFilterData`, {
       params: {
         isAdmin: isAdmin.toString(),
         userId: userId.toString(),
         loginType: loginType.toString(),
-        isHod: isHod.toString()
+        isHod: isHod.toString(),
       },
     });
   }
 
-  getTaskFilterDataForIndex(isAdmin: string, userId: number, loginType: string,isHod: any): Observable<any> {
+  getTaskFilterDataForIndex(isAdmin: string, userId: number, loginType: string, isHod: any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/getTaskFilterDataForIndex`, {
       params: {
         isAdmin: isAdmin.toString(),
         userId: userId.toString(),
         loginType: loginType.toString(),
-        isHod: isHod.toString()
+        isHod: isHod.toString(),
         // clientId: clientId ?? ''
       },
     });
   }
 
-  changesClientIdgetTaskFilterData(isAdmin: string, userId: number, loginType: string, clientId: number,isHod: string): Observable<any> {
+  changesClientIdgetTaskFilterData(isAdmin: string, userId: number, loginType: string, clientId: number, isHod: string): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/getTaskFilterDataOnChange`, {
       params: {
         isAdmin: isAdmin.toString(),
         userId: userId.toString(),
         loginType: loginType.toString(),
         clientId: clientId ?? '',
-        isHod: isHod.toString()
+        isHod: isHod.toString(),
       },
     });
   }
@@ -1246,7 +1243,7 @@ export class DataProviderService {
     taskStatusIds: string[],
     loginType: string,
     dashboardFilter: string,
-    isHod: any
+    isHod: any,
   ): Observable<any> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -1444,7 +1441,7 @@ export class DataProviderService {
     );
   }
   //Employee Dashboard
-  getDashboard(userId: number, isAdmin: any, selectedClientId: any,isHod: any): Observable<any> {
+  getDashboard(userId: number, isAdmin: any, selectedClientId: any, isHod: any): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/dashboard?userId=${userId}&isAdmin=${isAdmin}&selectedClientId=${selectedClientId}&isHod=${isHod}`);
   }
 
@@ -1532,7 +1529,6 @@ export class DataProviderService {
     });
   }
 
-
   getTaskClient(userId: number): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/dashboard/getTaskClient`, {
       params: {
@@ -1559,15 +1555,12 @@ export class DataProviderService {
   // HOLIDAY
   // ============================================================
 
-
-
   uploadHolidayExcel(file: File, userId: number): Observable<any> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('userId', userId.toString());
     return this.http.post<any>(`${environment.apiBaseUrl}admin/holiday/uploadHolidayExcel`, formData);
   }
-
 
   deleteHoliday(holiday: any): Observable<any> {
     return this.http.post(`${environment.apiBaseUrl}admin/holiday/deleteHoliday`, holiday);
@@ -1609,10 +1602,16 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}admin/holiday/active`);
   }
 
-   downloadFile(type: string, fileName: string): Observable<Blob> {
+  downloadFile(type: string, fileName: string): Observable<Blob> {
     return this.http.get(`${environment.apiBaseUrl}file/download`, {
       params: { type, fileName },
       responseType: 'blob', // binary-safe, prevents corrupted Word/Excel files
     });
   }
+
+  getAssigneeWorkload(categoryId: number): Observable<any> {
+    return this.http.get(`${environment.apiBaseUrl}admin/task/assignee_workload${categoryId}`);
+  }
+
+  
 }

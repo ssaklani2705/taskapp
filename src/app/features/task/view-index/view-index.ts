@@ -519,24 +519,7 @@ export class ViewIndex implements OnInit {
     }
   }
 
-  calculateDueDate(): Date | null {
-    if (!this.task?.date || !this.task?.dueDateTime) {
-      return null;
-    }
-
-    const startDate = new Date(this.task.date);
-    const dueHours = Number(this.task.dueDateTime);
-
-    if (isNaN(startDate.getTime()) || isNaN(dueHours)) {
-      return null;
-    }
-
-    const dueDate = new Date(startDate);
-
-    dueDate.setHours(dueDate.getHours() + dueHours);
-
-    return dueDate;
-  }
+ 
 
   //for files now changes
   /**
