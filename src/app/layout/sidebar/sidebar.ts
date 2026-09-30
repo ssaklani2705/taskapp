@@ -446,7 +446,7 @@ export class Sidebar implements OnInit {
         {
           moduleId: 12,
 
-          label: 'Holiday',
+          label: 'Holiday Master',
 
           icon: 'task_alt',
 
