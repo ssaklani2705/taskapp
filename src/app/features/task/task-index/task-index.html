@@ -33,7 +33,7 @@
             <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
             <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
             <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
-             
+
               <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
                 {{ client.name }}
               </div>
@@ -97,7 +97,7 @@
             <select class="status-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
               <option value="">--All Status--</option>
               <option value="1">Active</option>
-              <!-- <option value="2">Inactive</option> -->
+              <option value="2">Inactive</option>
               <option value="3">Deleted</option>
             </select>
           </div>
@@ -401,6 +401,7 @@
     </div>
   </div>
 </div>
+
 <div class="modal-overlay" *ngIf="showTaskNotesModal" (click)="closeTaskNotesModal()">
   <div class="task-notes-modal" (click)="$event.stopPropagation()">
     <!-- HEADER -->
@@ -661,9 +662,8 @@
 </div>
 
 <!-- ASSIGN USER MODAL -->
-<!-- ASSIGN USER MODAL -->
 <div class="modal-overlay" *ngIf="showAssignUserModal" (click)="closeAssignUserModal()">
-  <div class="change-manager-modal description-modal" (click)="$event.stopPropagation()">
+  <div class="change-manager-modal assign-user-modal" (click)="$event.stopPropagation()">
     <!-- HEADER -->
     <div class="modal-header">
       <div class="modal-title">
@@ -671,7 +671,7 @@
           <mat-icon>person_add</mat-icon>
         </div>
 
-        <div>
+        <div class="modal-title-content">
           <div class="modal-title-text">
             {{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign User' : 'Assign User' }}
           </div>
@@ -687,44 +687,117 @@
       </button>
     </div>
 
-    <mat-divider></mat-divider>
-
     <!-- BODY -->
-    <div class="modal-body">
-      <div class="manager-form-group">
-        <label class="modal-field-label"> Assigned To </label>
+    <div class="modal-body assign-user-modal-body">
+      <!-- ASSIGNED TO -->
+      <div class="assign-form-group assign-full-width">
+        <label class="assign-field-label">
+          Assigned To
+          <span class="required">*</span>
+        </label>
 
-        <select class="user-input user-select" [(ngModel)]="selectedAssignTask.assignedTo" name="assignedToModal" [disabled]="users.length === 0">
+        <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" name="assignedToModal" [disabled]="users.length === 0">
           <option [ngValue]="0">Select User</option>
 
           <option *ngFor="let user of users" [ngValue]="user.userId">
             {{ user.firstName }}
           </option>
         </select>
-        <div *ngIf="users.length === 0" class="text-danger mt-1" style="color: red; margin-top: 5px">No other user found for this category.</div>
+
+        <div *ngIf="users.length === 0" class="assign-error">No other user found for this category.</div>
+      </div>
+
+      <!-- DATE ROW -->
+      <div class="assign-date-row">
+        <!-- START DATE -->
+        <div class="assign-form-group">
+          <label class="assign-field-label">
+            Start Date &amp; Time
+            <span class="required">*</span>
+          </label>
+
+          <div class="assign-date-group">
+            <span class="assign-date-icon" [owlDateTimeTrigger]="startDatePicker">
+              <i class="fa fa-calendar"></i>
+            </span>
+
+            <input
+              class="assign-input assign-date-input"
+              [owlDateTime]="startDatePicker"
+              [(ngModel)]="selectedAssignTask.date"
+              (ngModelChange)="onAssignStartDateChange($event)"
+              name="startDate"
+              required
+              placeholder="DD-MM-YYYY HH:mm"
+              autocomplete="off"
+              [min]="today"
+            />
+
+            <owl-date-time #startDatePicker pickerType="both"> </owl-date-time>
+          </div>
+
+          <div class="assign-error" *ngIf="!selectedAssignTask?.date">Start Date &amp; Time is required.</div>
+        </div>
+
+        <!-- END DATE -->
+        <div class="assign-form-group">
+          <label class="assign-field-label">
+            End Date &amp; Time
+            <span class="required">*</span>
+          </label>
+
+          <div class="assign-date-group">
+            <span class="assign-date-icon" [owlDateTimeTrigger]="endDatePicker">
+              <i class="fa fa-calendar"></i>
+            </span>
+
+            <input
+              class="assign-input assign-date-input"
+              [owlDateTime]="endDatePicker"
+              [(ngModel)]="selectedAssignTask.endDate"
+              name="endDate"
+              required
+              placeholder="DD-MM-YYYY HH:mm"
+              autocomplete="off"
+              [min]="selectedAssignTask?.date || today"
+            />
+
+            <owl-date-time #endDatePicker pickerType="both"> </owl-date-time>
+          </div>
+
+          <div class="assign-error" *ngIf="!selectedAssignTask?.endDate">End Date &amp; Time is required.</div>
+        </div>
       </div>
 
       <!-- REMARKS -->
-      <div class="manager-form-group">
-        <label class="modal-field-label">
+      <div class="assign-form-group assign-full-width">
+        <label class="assign-field-label">
           Remarks
-          <span class="required" *ngIf="selectedAssignTask?.taskStatus === 1">*</span>
+          <span class="required" *ngIf="selectedAssignTask?.taskStatus === 1"> * </span>
         </label>
 
-        <textarea class="user-input user-textarea" [(ngModel)]="assignRemarks" name="assignRemarksModal" rows="3" maxlength="2000" placeholder="Enter remarks"> </textarea>
+        <textarea class="assign-input assign-textarea" [(ngModel)]="assignRemarks" name="assignRemarksModal" rows="4" maxlength="2000" placeholder="Enter remarks"> </textarea>
       </div>
     </div>
 
     <!-- FOOTER -->
-    <div class="modal-footer">
+    <div class="modal-footer assign-modal-footer">
       <button type="button" class="modal-cancel-button" (click)="closeAssignUserModal()">
         <mat-icon>close</mat-icon>
         <span>Close</span>
       </button>
 
-      <button type="button" class="modal-save-button" [disabled]="!selectedAssignTask?.assignedTo || (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim())" (click)="assignUser()">
+      <button
+        type="button"
+        class="modal-save-button"
+        [disabled]="!selectedAssignTask?.assignedTo || !selectedAssignTask?.date || !selectedAssignTask?.endDate || (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim())"
+        (click)="assignUser()"
+      >
         <mat-icon>save</mat-icon>
-        <span>{{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign' : 'Assign' }}</span>
+
+        <span>
+          {{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign' : 'Assign' }}
+        </span>
       </button>
     </div>
   </div>

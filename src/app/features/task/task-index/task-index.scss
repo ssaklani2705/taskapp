@@ -1,56 +1,34 @@
-/* =========================================================
-  TASK MANAGEMENT PAGE - RESPONSIVE (FIXED) SCSS
-  ========================================================= */
-
 :host {
   display: block;
   width: 100%;
-
-  /* =========================
-    COLORS
-    ========================= */
-
   --navy: #19345a;
   --navy-dark: #152f54;
   --navy-hover: #244c7b;
-
   --primary-blue: #3378a9;
   --primary-blue-dark: #28658f;
   --primary-blue-light: #eef5fa;
-
   --text: #193b63;
   --text-dark: #263f5b;
   --text-blue: #416789;
   --text-muted: #718096;
-
   --white: #ffffff;
   --page-bg: #f7f9fb;
-
   --border: #d7e1ea;
   --border-dark: #bdccd9;
   --border-light: #e5ebf0;
-
   --table-header: #edf4f8;
   --table-hover: #f8fbfd;
-
   --success: #287d5e;
   --success-bg: #e6f4ee;
   --success-border: #c8e7da;
-
   --warning: #a87308;
   --warning-bg: #fff5df;
   --warning-border: #f0d99e;
-
   --danger: #d9534f;
   --danger-dark: #bd3e3a;
   --danger-bg: #fbeaea;
   --danger-border: #efcaca;
 }
-
-
-/* =========================================================
-  PAGE
-  ========================================================= */
 
 .page-content-wrapper {
   width: 100%;
@@ -64,22 +42,12 @@
   box-sizing: border-box;
 }
 
-
-/* =========================================================
-  MAIN CONTAINER
-  ========================================================= */
-
 .user-management-container {
   width: 100%;
   background: var(--white);
   border: 1px solid var(--border);
   box-sizing: border-box;
 }
-
-
-/* =========================================================
-  PAGE HEADER
-  ========================================================= */
 
 .page-header {
   min-height: 76px;
@@ -104,17 +72,12 @@
 .header-title-section h2 {
   margin: 0;
   color: var(--navy);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 25px;
   line-height: 1.2;
   font-weight: 700;
   overflow-wrap: anywhere;
 }
-
-
-/* =========================================================
-  COLLAPSE BUTTON
-  ========================================================= */
 
 .collapse-btn {
   padding: 5px 7px;
@@ -125,11 +88,6 @@
   cursor: pointer;
   flex-shrink: 0;
 }
-
-
-/* =========================================================
-  SEARCH / FILTER PANEL
-  ========================================================= */
 
 .search-panel {
   width: 100%;
@@ -148,11 +106,6 @@
   gap: 12px 14px;
   box-sizing: border-box;
 }
-
-
-/* =========================================================
-  SEARCH
-  ========================================================= */
 
 .search-wrapper {
   flex: 1 1 220px;
@@ -212,11 +165,6 @@
   font-size: 14px;
 }
 
-
-/* =========================================================
-  SELECT FILTERS
-  ========================================================= */
-
 .status-wrapper {
   flex: 1 1 145px;
   min-width: 135px;
@@ -242,11 +190,6 @@
 .status-select:focus {
   border-color: var(--primary-blue);
 }
-
-
-/* =========================================================
-  DATE FILTER
-  ========================================================= */
 
 .date-filter-wrapper {
   flex: 1 1 155px;
@@ -292,11 +235,6 @@
   opacity: 1;
 }
 
-
-/* =========================================================
-  MATERIAL DATEPICKER TOGGLE
-  ========================================================= */
-
 .date-filter-input .mat-datepicker-toggle {
   position: absolute;
   right: 0;
@@ -336,12 +274,6 @@
   color: var(--primary-blue);
 }
 
-
-/* =========================================================
-  STATUS MULTI SELECT DROPDOWN
-  (made fluid instead of fixed 275px)
-  ========================================================= */
-
 .status-dropdown {
   position: relative;
   flex: 1 1 200px;
@@ -373,7 +305,7 @@
 }
 
 .dropdown-btn::after {
-  content: "▼";
+  content: '▼';
   font-size: 9px;
   color: #718096;
   margin-left: 8px;
@@ -416,7 +348,7 @@
   background: #f5f8fc;
 }
 
-.dropdown-menu input[type="checkbox"] {
+.dropdown-menu input[type='checkbox'] {
   width: 17px;
   height: 17px;
   margin: 0;
@@ -432,11 +364,6 @@
   background: #c7d0db;
   border-radius: 3px;
 }
-
-
-/* =========================================================
-  GO / CLEAR / EXPORT
-  ========================================================= */
 
 .go-wrapper {
   flex: 1 1 auto;
@@ -490,11 +417,6 @@
   color: var(--white);
 }
 
-
-/* =========================================================
-  EXPORT EXCEL
-  ========================================================= */
-
 .btn-export-excel {
   height: 40px;
   min-width: 135px;
@@ -528,11 +450,6 @@
   font-size: 15px;
 }
 
-
-/* =========================================================
-  TABLE TOP / BOTTOM
-  ========================================================= */
-
 .table-top-section,
 .table-bottom-section {
   min-height: 68px;
@@ -556,11 +473,6 @@
   margin-top: 18px;
   border-top: 1px solid var(--border);
 }
-
-
-/* =========================================================
-  PAGINATION
-  ========================================================= */
 
 .pagination {
   display: flex;
@@ -607,11 +519,6 @@
   min-width: 62px;
 }
 
-
-/* =========================================================
-  TABLE CONTAINER
-  ========================================================= */
-
 .table-container {
   width: 100%;
   padding: 0 24px;
@@ -644,31 +551,6 @@
   background: #94a8b8;
 }
 
-
-/* =========================================================
-  TASK TABLE
-
-  12 columns (Sr.No, Title, Client, Start, Due, Category,
-  Assigned By, Assigned To, Priority, Task Status, Status,
-  Action). Previously the CSS only mapped 11 columns, which
-  silently merged "Assigned By" and "Assigned To" and shifted
-  every width one column to the left from Priority onward.
-
-  Sr No         65
-  Title        190
-  Client       150
-  Start        140
-  Due          140
-  Category     150
-  Assigned By  150
-  Assigned To  150
-  Priority     100
-  Task Status  150
-  Status       100
-  Action       140
-  TOTAL      1625px
-  ========================================================= */
-
 .user-table {
   width: 1625px;
   min-width: 1625px;
@@ -681,11 +563,6 @@
   font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
 }
-
-
-/* =========================================================
-  TABLE HEADER
-  ========================================================= */
 
 .user-table thead th {
   height: 58px;
@@ -706,11 +583,6 @@
 .user-table thead th:first-child {
   border-left-color: var(--border);
 }
-
-
-/* =========================================================
-  TABLE BODY
-  ========================================================= */
 
 .user-table tbody tr {
   height: 58px;
@@ -734,87 +606,65 @@
   background: var(--table-hover);
 }
 
-
-/* =========================================================
-  EXACT COLUMN WIDTHS (12 columns)
-  ========================================================= */
-
-/* 1 - Sr No */
 .user-table th:nth-child(1),
 .user-table td:nth-child(1) {
   width: 65px;
 }
 
-/* 2 - Title */
 .user-table th:nth-child(2),
 .user-table td:nth-child(2) {
   width: 190px;
 }
 
-/* 3 - Client */
 .user-table th:nth-child(3),
 .user-table td:nth-child(3) {
   width: 150px;
 }
 
-/* 4 - Start Date */
 .user-table th:nth-child(4),
 .user-table td:nth-child(4) {
   width: 140px;
 }
 
-/* 5 - Due Date */
 .user-table th:nth-child(5),
 .user-table td:nth-child(5) {
   width: 140px;
 }
 
-/* 6 - Task Category */
 .user-table th:nth-child(6),
 .user-table td:nth-child(6) {
   width: 150px;
 }
 
-/* 7 - Assigned By */
 .user-table th:nth-child(7),
 .user-table td:nth-child(7) {
   width: 150px;
 }
 
-/* 8 - Assigned To */
 .user-table th:nth-child(8),
 .user-table td:nth-child(8) {
   width: 150px;
 }
 
-/* 9 - Priority */
 .user-table th:nth-child(9),
 .user-table td:nth-child(9) {
   width: 100px;
 }
 
-/* 10 - Task Status */
 .user-table th:nth-child(10),
 .user-table td:nth-child(10) {
   width: 150px;
 }
 
-/* 11 - Status */
 .user-table th:nth-child(11),
 .user-table td:nth-child(11) {
   width: 100px;
 }
 
-/* 12 - Action (sticky, see below) */
 .user-table th:nth-child(12),
 .user-table td:nth-child(12) {
   width: 140px;
 }
-
-
-/* =========================================================
-  SERIAL NUMBER
-  ========================================================= */
 
 .user-table td.serial-number {
   color: #60778e;
@@ -826,11 +676,6 @@
 .user-table tbody td:nth-child(11) {
   white-space: nowrap;
 }
-
-
-/* =========================================================
-  TEXT COLUMNS (Title, Client, Category, Assigned By/To)
-  ========================================================= */
 
 .user-table tbody td:nth-child(2),
 .user-table tbody td:nth-child(3),
@@ -851,11 +696,6 @@
   word-break: normal;
 }
 
-
-/* =========================================================
-  DATE COLUMNS
-  ========================================================= */
-
 .user-table tbody td:nth-child(4),
 .user-table tbody td:nth-child(5) {
   white-space: nowrap;
@@ -863,22 +703,12 @@
   overflow: hidden;
 }
 
-
-/* =========================================================
-  PRIORITY
-  ========================================================= */
-
 .user-table tbody td:nth-child(9) {
   white-space: nowrap;
   text-align: center;
   overflow: hidden;
   padding: 8px 5px;
 }
-
-
-/* =========================================================
-  PRIORITY BADGE
-  ========================================================= */
 
 .priority-badge {
   display: inline-flex;
@@ -910,11 +740,6 @@
   color: #b8403d;
   border: 1px solid #efcaca;
 }
-
-
-/* =========================================================
-  TASK STATUS COLUMN
-  ========================================================= */
 
 .user-table tbody td:nth-child(10) {
   padding: 8px 6px;
@@ -958,11 +783,6 @@
   cursor: not-allowed;
 }
 
-
-/* =========================================================
-  TASK STATUS COLORS
-  ========================================================= */
-
 .task-status-pending {
   background: #ffc107;
   color: #1d1d1d;
@@ -980,22 +800,12 @@
   opacity: 1;
 }
 
-
-/* =========================================================
-  STATUS COLUMN
-  ========================================================= */
-
 .user-table tbody td:nth-child(11) {
   padding: 8px 5px;
   white-space: nowrap;
   text-align: center;
   overflow: hidden;
 }
-
-
-/* =========================================================
-  STATUS BADGE
-  ========================================================= */
 
 .status-badge {
   display: inline-flex;
@@ -1040,12 +850,6 @@
   border: 1px solid var(--danger-border);
 }
 
-
-//For  Task Status
-/* =========================================================
-  STATUS BADGE
-  ========================================================= */
-
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -1066,48 +870,35 @@
   box-sizing: border-box;
 }
 
-/* Status 1 - Active (Green) */
 .status-badge.status-1 {
   background: var(--success-bg);
   color: var(--success) !important;
   border: 1px solid var(--success-border);
 }
 
-/* Status 2 - Inactive (Amber/Orange) */
 .status-badge.status-2 {
   background: var(--warning-bg);
   color: var(--warning) !important;
   border: 1px solid var(--warning-border);
 }
 
-/* Status 3 - Deleted (Red) */
 .status-badge.status-3 {
   background: var(--danger-bg);
   color: #b8403d !important;
   border: 1px solid var(--danger-border);
 }
 
-/* Status 4 - Blue */
 .status-badge.status-4 {
   background: #e3f2fd;
   color: #1565c0 !important;
   border: 1px solid #90caf9;
 }
 
-/* Status 5 - Purple */
 .status-badge.status-5 {
   background: #f3e5f5;
   color: #7b1fa2 !important;
   border: 1px solid #ce93d8;
 }
-
-
-/* =========================================================
-  ACTION COLUMN — sticky to the right of the scroll area so
-  actions stay reachable without scrolling all the way over,
-  applied consistently to both the header AND body cells via
-  nth-child (no dependency on a class only being on the <th>).
-  ========================================================= */
 
 .user-table th:nth-child(12),
 .user-table td:nth-child(12) {
@@ -1147,11 +938,6 @@
   flex-wrap: nowrap;
   box-sizing: border-box;
 }
-
-
-/* =========================================================
-  ACTION BUTTON
-  ========================================================= */
 
 .action-btn {
   width: 38px;
@@ -1220,11 +1006,6 @@
   border-color: #bda5eb;
 }
 
-
-/* =========================================================
-  DESCRIPTION ICON
-  ========================================================= */
-
 .title-with-description {
   display: flex;
   align-items: center;
@@ -1262,11 +1043,6 @@
   background-color: #eff6ff;
 }
 
-
-/* =========================================================
-  NO RECORDS
-  ========================================================= */
-
 .no-records {
   height: 80px !important;
   color: var(--text-muted) !important;
@@ -1274,11 +1050,6 @@
   background: var(--white) !important;
   font-size: 13px;
 }
-
-
-/* =========================================================
-  ADD NEW USER / TASK BUTTON
-  ========================================================= */
 
 button.btn-add-user {
   height: 42px !important;
@@ -1317,11 +1088,6 @@ button.btn-add-user .plus-icon {
   line-height: 1 !important;
 }
 
-
-/* =========================================================
-  FORM PAGE
-  ========================================================= */
-
 .user-page-wrapper {
   width: 100%;
   padding: 24px 34px;
@@ -1358,18 +1124,13 @@ button.btn-add-user .plus-icon {
 .user-page-title {
   margin: 0;
   color: var(--navy) !important;
-  font-family: Georgia, "Times New Roman", serif !important;
+  font-family: Georgia, 'Times New Roman', serif !important;
   font-size: 23px !important;
   font-weight: 700 !important;
   line-height: 1.2;
   text-transform: uppercase;
   overflow-wrap: anywhere;
 }
-
-
-/* =========================================================
-  BACK BUTTON
-  ========================================================= */
 
 .user-actions {
   display: flex;
@@ -1397,11 +1158,6 @@ button.btn-add-user .plus-icon {
   background: var(--navy-hover) !important;
 }
 
-
-/* =========================================================
-  FORM BODY
-  ========================================================= */
-
 .user-portlet-body {
   width: 100%;
   background: var(--white);
@@ -1425,11 +1181,6 @@ button.btn-add-user .plus-icon {
   font-weight: 700;
 }
 
-
-/* =========================================================
-  FORM GRID
-  ========================================================= */
-
 .user-form-row {
   width: 100%;
   display: grid;
@@ -1450,11 +1201,6 @@ button.btn-add-user .plus-icon {
   margin: 0;
 }
 
-
-/* =========================================================
-  FORM LABEL
-  ========================================================= */
-
 .user-label {
   display: block;
   margin-bottom: 7px;
@@ -1464,11 +1210,6 @@ button.btn-add-user .plus-icon {
   font-weight: 700;
   line-height: 20px;
 }
-
-
-/* =========================================================
-  INPUT
-  ========================================================= */
 
 .user-input {
   display: block;
@@ -1503,21 +1244,11 @@ button.btn-add-user .plus-icon {
   opacity: 1;
 }
 
-
-/* =========================================================
-  SELECT
-  ========================================================= */
-
 .user-select {
   cursor: pointer;
   background-color: var(--white) !important;
   color: var(--text-blue) !important;
 }
-
-
-/* =========================================================
-  TEXTAREA
-  ========================================================= */
 
 .user-textarea {
   min-height: 100px !important;
@@ -1526,11 +1257,6 @@ button.btn-add-user .plus-icon {
   line-height: 21px;
   padding-top: 9px !important;
 }
-
-
-/* =========================================================
-  USER DATE GROUP
-  ========================================================= */
 
 .user-date-group {
   width: 100%;
@@ -1565,11 +1291,6 @@ button.btn-add-user .plus-icon {
   border-left: 0 !important;
   border-radius: 0 3px 3px 0 !important;
 }
-
-
-/* =========================================================
-  MATERIAL DATE FIELD
-  ========================================================= */
 
 .task-date-field {
   display: block;
@@ -1614,11 +1335,6 @@ button.btn-add-user .plus-icon {
   color: #52616e !important;
 }
 
-
-/* =========================================================
-  FILE INPUT
-  ========================================================= */
-
 .file-input {
   height: 42px !important;
   padding: 6px 9px !important;
@@ -1655,22 +1371,12 @@ button.btn-add-user .plus-icon {
   color: var(--primary-blue);
 }
 
-
-/* =========================================================
-  ERROR
-  ========================================================= */
-
 .user-error {
   margin-top: 5px;
   color: var(--danger) !important;
   font-size: 12px !important;
   line-height: 16px;
 }
-
-
-/* =========================================================
-  FILE LIMIT
-  ========================================================= */
 
 .file-limit {
   margin-left: 4px;
@@ -1679,11 +1385,6 @@ button.btn-add-user .plus-icon {
   font-weight: 400;
   opacity: 0.8;
 }
-
-
-/* =========================================================
-  FORM BUTTONS
-  ========================================================= */
 
 .user-buttons {
   width: 100%;
@@ -1736,11 +1437,6 @@ button.btn-add-user .plus-icon {
   cursor: not-allowed;
 }
 
-
-/* =========================================================
-  COMMON MODAL OVERLAY
-  ========================================================= */
-
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -1759,11 +1455,6 @@ button.btn-add-user .plus-icon {
   animation: modalOverlayIn 0.15s ease-out;
 }
 
-
-/* =========================================================
-  CHANGE MANAGER MODAL
-  ========================================================= */
-
 .change-manager-modal {
   width: 100%;
   max-width: 500px;
@@ -1778,11 +1469,6 @@ button.btn-add-user .plus-icon {
   box-sizing: border-box;
   animation: modalIn 0.18s ease-out;
 }
-
-
-/* =========================================================
-  CHANGE MANAGER HEADER
-  ========================================================= */
 
 .change-manager-modal .modal-header {
   min-height: 76px;
@@ -1822,7 +1508,7 @@ button.btn-add-user .plus-icon {
 
 .change-manager-modal .modal-title-text {
   color: var(--navy);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 20px;
   font-weight: 700;
   line-height: 1.2;
@@ -1854,11 +1540,6 @@ button.btn-add-user .plus-icon {
   background: #f1f5f9;
   color: var(--text-dark);
 }
-
-
-/* =========================================================
-  CHANGE MANAGER BODY
-  ========================================================= */
 
 .change-manager-modal .modal-body {
   padding: 20px 22px 22px;
@@ -1918,11 +1599,6 @@ button.btn-add-user .plus-icon {
   overflow-wrap: anywhere;
 }
 
-
-/* =========================================================
-  MANAGER INFORMATION
-  ========================================================= */
-
 .manager-information {
   margin-bottom: 20px;
   padding: 13px 14px;
@@ -1957,7 +1633,7 @@ button.btn-add-user .plus-icon {
   width: 100%;
 }
 
-.modal-body .manager-form-group+.manager-form-group {
+.modal-body .manager-form-group + .manager-form-group {
   margin-top: 17px;
 }
 
@@ -1993,7 +1669,7 @@ button.btn-add-user .plus-icon {
 
 .manager-select:focus {
   border-color: var(--primary-blue);
-  box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.10);
+  box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.1);
 }
 
 .manager-select:disabled {
@@ -2030,11 +1706,6 @@ textarea.manager-select::placeholder {
   font-size: 16px;
 }
 
-
-/* =========================================================
-  CHANGE MANAGER FOOTER
-  ========================================================= */
-
 .change-manager-modal .modal-footer {
   min-height: 64px;
   padding: 12px 18px;
@@ -2047,11 +1718,6 @@ textarea.manager-select::placeholder {
   border-top: 1px solid var(--border);
   box-sizing: border-box;
 }
-
-
-/* =========================================================
-  MODAL BUTTONS
-  ========================================================= */
 
 .modal-cancel-button,
 .modal-save-button {
@@ -2104,11 +1770,6 @@ textarea.manager-select::placeholder {
   font-size: 17px;
 }
 
-
-/* =========================================================
-  TASK NOTES MODAL
-  ========================================================= */
-
 .task-notes-modal {
   width: 730px;
   max-width: calc(100vw - 40px);
@@ -2124,11 +1785,6 @@ textarea.manager-select::placeholder {
   box-sizing: border-box;
   animation: modalIn 0.18s ease-out;
 }
-
-
-/* =========================================================
-  NOTES HEADER
-  ========================================================= */
 
 .task-notes-modal .modal-header {
   flex: 0 0 78px;
@@ -2169,7 +1825,7 @@ textarea.manager-select::placeholder {
 
 .task-notes-modal .modal-title-text {
   color: var(--navy);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 20px;
   font-weight: 700;
 }
@@ -2203,11 +1859,6 @@ textarea.manager-select::placeholder {
   color: #334155;
 }
 
-
-/* =========================================================
-  NOTES BODY
-  ========================================================= */
-
 .task-notes-modal .modal-body {
   flex: 1 1 auto;
   min-height: 0 !important;
@@ -2232,11 +1883,6 @@ textarea.manager-select::placeholder {
   border-radius: 10px;
 }
 
-
-/* =========================================================
-  NOTES HEADER
-  ========================================================= */
-
 .previous-notes-header {
   width: 100%;
   margin-bottom: 13px;
@@ -2252,11 +1898,6 @@ textarea.manager-select::placeholder {
   font-size: 13px;
   font-weight: 700;
 }
-
-
-/* =========================================================
-  ADD NOTE
-  ========================================================= */
 
 .add-note-modal-button {
   height: 35px;
@@ -2283,11 +1924,6 @@ textarea.manager-select::placeholder {
   height: 16px;
   font-size: 16px;
 }
-
-
-/* =========================================================
-  ADD NOTE FORM
-  ========================================================= */
 
 .add-note-form {
   width: 100%;
@@ -2319,7 +1955,7 @@ textarea.manager-select::placeholder {
 
 .task-notes-textarea:focus {
   border-color: var(--primary-blue);
-  box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.10);
+  box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.1);
 }
 
 .task-notes-textarea::placeholder {
@@ -2346,11 +1982,6 @@ textarea.manager-select::placeholder {
   gap: 7px;
   flex-wrap: wrap;
 }
-
-
-/* =========================================================
-  NOTES LIST
-  ========================================================= */
 
 .notes-list {
   width: 100%;
@@ -2435,11 +2066,6 @@ textarea.manager-select::placeholder {
   font-size: 12px;
 }
 
-
-/* =========================================================
-  NOTES FOOTER
-  ========================================================= */
-
 .task-notes-modal .modal-footer {
   flex: 0 0 64px;
   height: 64px;
@@ -2455,11 +2081,6 @@ textarea.manager-select::placeholder {
   box-sizing: border-box;
 }
 
-
-/* =========================================================
-  DESCRIPTION MODAL CONTENT
-  ========================================================= */
-
 .description-content {
   padding: 12px 14px;
   background: #f7fafc;
@@ -2474,11 +2095,6 @@ textarea.manager-select::placeholder {
   max-height: 45vh;
   overflow-y: auto;
 }
-
-
-/* =========================================================
-  MODAL ANIMATIONS
-  ========================================================= */
 
 @keyframes modalOverlayIn {
   from {
@@ -2502,37 +2118,20 @@ textarea.manager-select::placeholder {
   }
 }
 
-
-/* =========================================================
-  OVERFLOW FIX
-  ========================================================= */
-
 .filter-section,
 .search-panel,
 .card-body {
   overflow: visible !important;
 }
 
-
-/* =========================================================
-  DESKTOP / LARGE
-  ========================================================= */
-
 @media (max-width: 1400px) {
-
   .page-content,
   .user-page-wrapper {
     padding: 20px 24px;
   }
 }
 
-
-/* =========================================================
-  TABLET / SMALL LAPTOP
-  ========================================================= */
-
 @media (max-width: 1200px) {
-
   .page-content,
   .user-page-wrapper {
     padding: 18px;
@@ -2577,21 +2176,11 @@ textarea.manager-select::placeholder {
   }
 }
 
-
-/* =========================================================
-  TABLET / 2-COLUMN FILTERS
-  ========================================================= */
-
 @media (max-width: 992px) {
   .search-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-
-
-/* =========================================================
-  TABLET / iPAD
-  ========================================================= */
 
 @media (max-width: 900px) {
   .user-table {
@@ -2616,19 +2205,11 @@ textarea.manager-select::placeholder {
   }
 }
 
-
-/* =========================================================
-  MOBILE
-  ========================================================= */
-
 @media (max-width: 767px) {
-
   .page-content,
   .user-page-wrapper {
     padding: 10px;
   }
-
-  /* HEADER */
 
   .page-header,
   .user-portlet-title {
@@ -2657,8 +2238,6 @@ textarea.manager-select::placeholder {
     width: 100%;
   }
 
-  /* BACK */
-
   .user-actions {
     width: 100%;
   }
@@ -2667,8 +2246,6 @@ textarea.manager-select::placeholder {
     width: 100%;
     min-width: 0;
   }
-
-  /* FILTER */
 
   .search-panel {
     padding: 14px 11px;
@@ -2703,9 +2280,6 @@ textarea.manager-select::placeholder {
     height: 42px;
   }
 
-  /* GO / CLEAR / EXPORT — each control gets its own full-width row
-     instead of squeezing a 3rd item into a 2-column grid */
-
   .go-wrapper {
     width: 100%;
     display: flex;
@@ -2732,8 +2306,6 @@ textarea.manager-select::placeholder {
     min-width: 0;
     height: 42px;
   }
-
-  /* TABLE */
 
   .table-top-section,
   .table-bottom-section {
@@ -2774,14 +2346,10 @@ textarea.manager-select::placeholder {
     min-width: 1625px;
   }
 
-  /* FORM */
-
   .user-form-row {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-
-  /* MODALS */
 
   .modal-overlay {
     padding: 12px;
@@ -2836,13 +2404,7 @@ textarea.manager-select::placeholder {
   }
 }
 
-
-/* =========================================================
-  SMALL MOBILE
-  ========================================================= */
-
 @media (max-width: 480px) {
-
   .page-content,
   .user-page-wrapper {
     padding: 7px;
@@ -2918,13 +2480,7 @@ textarea.manager-select::placeholder {
   }
 }
 
-
-/* =========================================================
-  VERY SMALL MOBILE
-  ========================================================= */
-
 @media (max-width: 375px) {
-
   .page-content,
   .user-page-wrapper {
     padding: 5px;
@@ -2964,7 +2520,6 @@ textarea.manager-select::placeholder {
   }
 }
 
-
 .title-wrapper {
   display: flex;
   flex-direction: column;
@@ -2990,7 +2545,6 @@ textarea.manager-select::placeholder {
   color: #2f6fa3;
 }
 
-
 .unassigned-user {
   color: #1976d2;
   cursor: pointer;
@@ -3012,12 +2566,11 @@ textarea.manager-select::placeholder {
   }
 }
 
-
 .title-cell {
   display: flex;
   align-items: center;
   gap: 6px;
-  min-width: 0; // allows text-overflow to work inside flex
+  min-width: 0;
 }
 
 .title-text {
@@ -3040,8 +2593,10 @@ textarea.manager-select::placeholder {
   background: transparent;
   border-radius: 4px;
   cursor: pointer;
-  color: #6b7280; // neutral gray icon
-  transition: background 0.15s ease, color 0.15s ease;
+  color: #6b7280;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 
   i {
     font-size: 14px;
@@ -3049,7 +2604,7 @@ textarea.manager-select::placeholder {
 
   &:hover {
     background: rgba(25, 118, 210, 0.1);
-    color: #1976d2; // highlight on hover
+    color: #1976d2;
   }
 
   &:active {
@@ -3057,7 +2612,6 @@ textarea.manager-select::placeholder {
   }
 }
 
-// Date design 
 .due-date-cell {
   display: inline-flex;
   flex-direction: column;
@@ -3092,7 +2646,6 @@ textarea.manager-select::placeholder {
   text-align: center;
 }
 
-/* OVERDUE — red */
 .due-overdue {
   background: #fde8e8;
   border: 1px solid #f5b5b5;
@@ -3107,7 +2660,6 @@ textarea.manager-select::placeholder {
   }
 }
 
-/* DUE TODAY — orange/amber */
 .due-today {
   background: #fff4e0;
   border: 1px solid #ffd699;
@@ -3122,7 +2674,6 @@ textarea.manager-select::placeholder {
   }
 }
 
-/* UPCOMING — blue */
 .due-upcoming {
   background: #e8f4fd;
   border: 1px solid #a9d6f5;
@@ -3137,7 +2688,6 @@ textarea.manager-select::placeholder {
   }
 }
 
-//FOr start date
 .date-cell {
   display: inline-flex;
   flex-direction: column;
@@ -3176,10 +2726,9 @@ textarea.manager-select::placeholder {
   color: #9ca3af;
 }
 
-//Title
 .title-cell {
   display: flex;
-  align-items: flex-start; // aligns icon to top if title wraps to multiple lines
+  align-items: flex-start;
   gap: 8px;
   min-width: 0;
   padding-left: 8px;
@@ -3189,9 +2738,9 @@ textarea.manager-select::placeholder {
 .title-text {
   flex: 1;
   min-width: 0;
-  white-space: normal; // allow wrapping instead of truncating
-  word-break: break-word; // wrap long words if needed
-  overflow: visible; // show full text, no clipping
+  white-space: normal;
+  word-break: break-word;
+  overflow: visible;
   font-size: 13px;
   font-weight: 600;
   color: #1f2937;
@@ -3213,14 +2762,16 @@ textarea.manager-select::placeholder {
   cursor: pointer;
   color: #fff;
   box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-  margin-top: 2px; // slight nudge so it aligns nicely with first line of wrapped text
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+  margin-top: 2px;
 
   i {
     font-size: 12px;
   }
 }
-
 
 .file-info {
   display: flex;
@@ -3237,7 +2788,6 @@ textarea.manager-select::placeholder {
   display: flex;
   align-items: center;
 }
-
 
 .description-icon-button:hover,
 .description-icon-button:focus,
@@ -3308,9 +2858,7 @@ textarea.manager-select::placeholder {
 
 .no-client-found {
   color: #6c757d;
-  // text-align: center;
   cursor: default;
-  // font-style: italic;
   padding: 12px;
 }
 
@@ -3318,9 +2866,8 @@ textarea.manager-select::placeholder {
   background: transparent;
 }
 
-
 .clear-search-btn {
-    position: absolute;
+  position: absolute;
   right: 10px;
   top: 50%;
   transform: translateY(-50%);
@@ -3353,27 +2900,20 @@ textarea.manager-select::placeholder {
 }
 
 .file-limit {
-    font-size: 12px;
-
-    font-weight: 400;
-
-    opacity: 0.7;
-
-    margin-left: 4px;
-
-    color: #dc3545;
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.7;
+  margin-left: 4px;
+  color: #dc3545;
 }
 
-//for task status button
 .change-manager-button {
   cursor: pointer;
-
   transition:
     opacity 0.15s ease,
     filter 0.15s ease;
 }
 
-/* Blue underline only when clickable */
 .change-manager-button:not(:disabled) {
   text-decoration: underline;
   text-decoration-color: #2f6fa3;
@@ -3389,7 +2929,6 @@ textarea.manager-select::placeholder {
   transform: scale(0.98);
 }
 
-/* Disabled state: no underline, muted, blocked cursor */
 .change-manager-button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
@@ -3397,3 +2936,434 @@ textarea.manager-select::placeholder {
   filter: grayscale(30%);
 }
 
+/* =========================================================
+   ASSIGN / RE-ASSIGN USER MODAL
+   ========================================================= */
+
+.assign-user-modal {
+  width: 100%;
+  max-width: 620px;
+  max-height: calc(100vh - 40px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.assign-user-modal .modal-header {
+  flex: 0 0 auto;
+  min-height: 76px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border-light);
+  box-sizing: border-box;
+}
+
+.assign-user-modal .modal-title {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.assign-user-modal .modal-title-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  flex: 0 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #cbdde9;
+  border-radius: 5px;
+  background: var(--primary-blue-light);
+}
+
+.assign-user-modal .modal-title-icon mat-icon {
+  width: 21px;
+  height: 21px;
+  font-size: 21px;
+  line-height: 21px;
+  color: var(--primary-blue);
+}
+
+.assign-user-modal .modal-title-content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.assign-user-modal .modal-title-text {
+  color: var(--navy);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.assign-user-modal .modal-subtitle {
+  max-width: 430px;
+  color: var(--text-muted);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.assign-user-modal .modal-close-button {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  flex: 0 0 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-muted);
+
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.assign-user-modal .modal-close-button:hover {
+  background: #f1f5f9;
+  color: var(--text-dark);
+}
+
+.assign-user-modal .modal-close-button mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.assign-user-modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  padding: 22px 22px 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--white);
+  box-sizing: border-box;
+}
+
+.assign-form-group {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.assign-full-width {
+  width: 100%;
+}
+
+.assign-user-modal-body > .assign-form-group + .assign-date-row {
+  margin-top: 20px;
+}
+
+.assign-user-modal-body > .assign-date-row + .assign-form-group {
+  margin-top: 20px;
+}
+
+.assign-field-label {
+  display: block;
+  width: 100%;
+  margin: 0 0 7px;
+  color: var(--text-dark);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 19px;
+  box-sizing: border-box;
+}
+
+.assign-field-label .required {
+  margin-left: 2px;
+  color: var(--danger) !important;
+}
+
+.assign-input {
+  display: block;
+  width: 100%;
+  height: 42px;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-dark);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--text-blue);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  outline: none;
+  box-shadow: none;
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.assign-input:hover {
+  border-color: #9fb2c4;
+}
+
+.assign-input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 2px rgba(51, 120, 169, 0.08);
+}
+
+.assign-input::placeholder {
+  color: #8794a2;
+  opacity: 1;
+}
+
+.assign-select {
+  appearance: auto;
+  cursor: pointer;
+  padding-right: 10px;
+}
+
+.assign-select:disabled {
+  background: #f4f6f8;
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.assign-date-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 18px;
+  box-sizing: border-box;
+}
+
+.assign-date-group {
+  width: 100%;
+  height: 42px;
+  display: flex;
+  align-items: stretch;
+  box-sizing: border-box;
+}
+
+.assign-date-icon {
+  width: 46px;
+  min-width: 46px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e8edf2;
+  color: #66727d;
+  border: 1px solid #d4dce4;
+  border-right: 0;
+  border-radius: 4px 0 0 4px;
+  box-sizing: border-box;
+
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.assign-date-icon:hover {
+  background: #e1e8ee;
+  color: var(--primary-blue);
+}
+
+.assign-date-icon i {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.assign-date-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 42px;
+  border-left: 0 !important;
+  border-radius: 0 4px 4px 0 !important;
+  padding: 8px 10px !important;
+}
+
+.assign-textarea {
+  width: 100%;
+  min-height: 96px;
+  height: 96px;
+  padding: 10px 12px;
+  resize: vertical;
+  line-height: 20px;
+}
+
+.assign-error {
+  min-height: 16px;
+  margin-top: 5px;
+  color: var(--danger) !important;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+  box-sizing: border-box;
+}
+
+.assign-modal-footer {
+  flex: 0 0 auto;
+  min-height: 64px;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 9px;
+  background: #fafcfd;
+  border-top: 1px solid var(--border);
+  box-sizing: border-box;
+}
+
+.assign-user-modal .modal-cancel-button,
+.assign-user-modal .modal-save-button {
+  height: 38px;
+  min-height: 38px;
+  padding: 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 4px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.assign-user-modal .modal-cancel-button {
+  min-width: 82px;
+  border: 1px solid var(--border-dark);
+  background: var(--white);
+  color: var(--text-dark);
+}
+
+.assign-user-modal .modal-cancel-button:hover {
+  background: #f4f7f9;
+}
+
+.assign-user-modal .modal-save-button {
+  min-width: 120px;
+  border: 1px solid var(--navy);
+  background: var(--navy);
+  color: var(--white);
+}
+
+.assign-user-modal .modal-save-button:hover:not(:disabled) {
+  background: var(--navy-dark);
+  border-color: var(--navy-dark);
+}
+
+.assign-user-modal .modal-save-button:disabled,
+.assign-user-modal .modal-cancel-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.assign-user-modal .modal-cancel-button mat-icon,
+.assign-user-modal .modal-save-button mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+  line-height: 17px;
+}
+
+.assign-user-modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.assign-user-modal-body::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+.assign-user-modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.assign-user-modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+@media (max-width: 650px) {
+  .assign-user-modal {
+    max-width: calc(100vw - 30px);
+  }
+
+  .assign-user-modal .modal-header {
+    padding: 13px 15px;
+  }
+
+  .assign-user-modal-body {
+    padding: 18px 16px 20px;
+  }
+
+  .assign-date-row {
+    grid-template-columns: 1fr;
+    row-gap: 18px;
+  }
+
+  .assign-modal-footer {
+    padding: 11px 15px;
+  }
+}
+
+@media (max-width: 430px) {
+  .assign-user-modal {
+    max-width: calc(100vw - 20px);
+    max-height: calc(100vh - 20px);
+  }
+
+  .assign-user-modal .modal-title-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .assign-user-modal .modal-title-icon mat-icon {
+    font-size: 19px;
+  }
+
+  .assign-user-modal .modal-title-text {
+    font-size: 18px;
+  }
+
+  .assign-user-modal .modal-subtitle {
+    max-width: 220px;
+  }
+
+  .assign-user-modal-body {
+    padding: 16px 14px 18px;
+  }
+
+  .assign-modal-footer {
+    justify-content: stretch;
+  }
+
+  .assign-user-modal .modal-cancel-button,
+  .assign-user-modal .modal-save-button {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}

@@ -121,40 +121,36 @@ export class HolidayIndexComponent {
 
   ngOnInit() {
     this.sessionService.clearOtherSessions(this.filterKey);
-
     if (isPlatformBrowser(this.platformId)) {
       this.userId = sessionStorage.getItem('userId');
     }
-
     if (isPlatformBrowser(this.platformId)) {
       const storedModules = sessionStorage.getItem('selectedModuleDetail');
       if (storedModules) {
-        const parsed = JSON.parse(storedModules);
-
-        this.moduleName = parsed.name ?? '';
-        this.addPer = parsed.addPer ?? 'N';
-        this.editPer = parsed.editPer ?? 'N';
-        this.deletePer = parsed.deletePer ?? 'N';
-        this.viewPer = parsed.viewPer ?? 'N';
-        this.approvePer = parsed.approvePer ?? 'N';
-        this.adminApprovePer = parsed.adminApprovePer ?? 'N';
+        try {
+          const parsed = JSON.parse(storedModules);
+          this.moduleName = parsed.name ?? '';
+          this.addPer = parsed.addPer ?? 'N';
+          this.editPer = parsed.editPer ?? 'N';
+          this.deletePer = parsed.deletePer ?? 'N';
+          this.viewPer = parsed.viewPer ?? 'N';
+          this.approvePer = parsed.approvePer ?? 'N';
+          this.adminApprovePer = parsed.adminApprovePer ?? 'N';
+          this.exportExcelPer = parsed.exportExcelPer ?? 'N';
+        } catch (error) {
+          console.error('Invalid selectedModuleDetail:', error);
+        }
       }
     }
-
     let stateData: any = null;
-
     const nav = this.router.getCurrentNavigation();
-
     stateData = nav?.extras?.state;
-
     if (!stateData) {
       const saved = sessionStorage.getItem(this.filterKey);
-
       if (saved) {
         stateData = JSON.parse(saved);
       }
     }
-
     if (stateData) {
       this.currentPage = stateData.currentPage || 1;
       this.page = this.currentPage - 1;
@@ -165,9 +161,9 @@ export class HolidayIndexComponent {
       this.searchQuery = this.search;
       this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
     }
-
     this.getHolidayDetails();
   }
+
 
   togglePanel() {
     this.isPanelVisible = !this.isPanelVisible;

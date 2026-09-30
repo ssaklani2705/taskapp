@@ -1,41 +1,39 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule, MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatListModule } from '@angular/material/list';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
-
 import { Component, ElementRef, HostListener, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-
 import { environment } from '../../../../environments/environment';
-
 import { Common } from '../../../classes/common';
-
 import { DataProviderService } from '../../../service/data-provider.service';
-
 import Swal from 'sweetalert2';
-
 import { SessionStorageService } from '../../../service/session-storage.service';
-
 import { SESSION_KEYS } from '../../../service/session-storage.keys';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, MAT_DATE_LOCALE, MatNativeDateModule, MatOption, MatOptionModule } from '@angular/material/core';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
-//import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import * as XLSX from 'xlsx';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { OwlMomentDateTimeModule } from '@danielmoncada/angular-datetime-picker-moment-adapter';
+import { OwlDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
+
+export const MY_DATE_TIME_FORMATS = {
+  parseInput: 'DD-MM-YYYY HH:mm',
+  fullPickerInput: 'DD-MM-YYYY HH:mm',
+  datePickerInput: 'DD-MM-YYYY',
+  timePickerInput: 'HH:mm',
+  monthYearLabel: 'MMM YYYY',
+  dateA11yLabel: 'LL',
+  monthYearA11yLabel: 'MMMM YYYY',
+};
 
 interface Task {
   taskId: number;
   clientName: string;
   date: string;
+  endDate: string;
   dueDateTime: string;
   taskCategoryName: string;
   assignedToName: string;
@@ -67,10 +65,21 @@ interface AssignedUser {
 
 @Component({
   selector: 'app-task-index',
-  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatDatepickerModule, MatNativeDateModule, MatIconModule, MatDividerModule, MatOptionModule, MatTooltipModule],
-
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+    MatDividerModule,
+    MatOptionModule,
+    MatTooltipModule,
+    OwlDateTimeModule,
+    OwlMomentDateTimeModule,
+  ],
   templateUrl: './task-index.html',
-
   styleUrl: './task-index.scss',
   providers: [
     {
@@ -81,130 +90,70 @@ interface AssignedUser {
       provide: MAT_DATE_LOCALE,
       useValue: 'en-GB',
     },
+    {
+      provide: OWL_DATE_TIME_LOCALE,
+      useValue: 'en-GB',
+    },
+    {
+      provide: OWL_DATE_TIME_FORMATS,
+      useValue: MY_DATE_TIME_FORMATS,
+    },
   ],
 })
 export class TaskIndex {
   dashboardFilter: string = '';
-  // =========================================================
-  // DATA
-  // =========================================================
   tasks: Task[] = [];
-
   apiResponseTaskDetails: any = {};
 
   loginType = '';
   isHod = '';
 
-  // =========================================================
-  // FILTER MASTER DATA
-  // =========================================================
-
   clients: Client[] = [];
   filteredClients: any[] = [];
-
   taskCategories: TaskCategory[] = [];
-
   assignedUsers: AssignedUser[] = [];
 
-  // =========================================================
-  // SEARCH
-  // =========================================================
-
   searchQuery: string = '';
-
   search: string = '';
-
-  // =========================================================
-  // FILTERS
-  // =========================================================
-
   selectedClient: string = '';
   selectedTaskStatuses: string[] = [];
-
   selectedTaskCategory: string = '';
-
   selectedAssignedTo: string = '';
-
   selectedPriority: string = '';
-
   selectedStatus: string = '';
-
   statusIndex: number = 0;
-
-  // =========================================================
-  // PAGINATION
-  // =========================================================
 
   currentPage: number = 1;
   selectedTaskStatus: any;
-
   page: number = 0;
-
   recordsPerPage: number = environment.recordsPerPage;
-
   size: number = environment.size;
 
-  // =========================================================
-  // OTHER
-  // =========================================================
-
   selectedmodules: any[] = [];
-
   createdBy: any;
 
   common = new Common();
-
+  today: Date = new Date();
   task: any = {};
 
   userId: any;
-
   isAdmin: any;
 
-  // =========================================================
-  // PERMISSIONS
-  // =========================================================
-
   addPer: string = 'N';
-
   editPer: string = 'N';
-
   deletePer: string = 'N';
-
   viewPer: string = 'N';
-
   approvePer: string = 'N';
-
   adminApprovePer: string = 'N';
-
   exportExcelPer = 'Y';
-
   moduleName: string = '';
-
   showHeaderBar: boolean = true;
-
-  // =========================================================
-  // SESSION FILTER
-  // =========================================================
 
   filterKey = SESSION_KEYS.TASK_MASTER_FILTER;
 
-  // =========================================================
-  // PANEL
-  // =========================================================
-
   isPanelVisible = true;
-
-  // =========================================================
-  // SORT
-  // =========================================================
-
   sortColumn: string = '';
-
   sortDirection: 'asc' | 'desc' = 'asc';
-
-  // =========================================================
-  // TABLE COLUMNS
-  // =========================================================
 
   columns: {
     key: string;
@@ -216,25 +165,21 @@ export class TaskIndex {
       label: 'Title',
       sortable: true,
     },
-
     {
       key: 'clientName',
       label: 'Client',
       sortable: true,
     },
-
     {
       key: 'date',
       label: 'Start Date',
       sortable: true,
     },
-
     {
       key: 'due_date',
       label: 'Due Date',
       sortable: true,
     },
-
     {
       key: 'taskCategoryName',
       label: 'Task Category',
@@ -245,13 +190,11 @@ export class TaskIndex {
       label: 'Assigned By',
       sortable: true,
     },
-
     {
       key: 'assignedToName',
       label: 'Assigned To',
       sortable: true,
     },
-
     {
       key: 'priority',
       label: 'Priority',
@@ -269,24 +212,16 @@ export class TaskIndex {
     },
   ];
 
-  // =========================================================
-  // CONSTRUCTOR
-  // =========================================================
-
   constructor(
     private dataprovider: DataProviderService,
-
     @Inject(PLATFORM_ID)
     private platformId: Object,
-
     private router: Router,
-
     private route: ActivatedRoute,
-
     private sessionService: SessionStorageService,
   ) {}
 
-ngOnInit(): void {
+  ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.userId = sessionStorage.getItem('userId');
       this.isAdmin = sessionStorage.getItem('isAdmin');
@@ -295,6 +230,7 @@ ngOnInit(): void {
       const storedModuleDetail = sessionStorage.getItem('selectedModuleDetail');
       console.log('SELECTED MODULE DETAIL:', storedModuleDetail);
       let moduleDetail: any = null;
+
       if (storedModuleDetail && storedModuleDetail !== 'null' && storedModuleDetail !== 'undefined') {
         try {
           moduleDetail = JSON.parse(storedModuleDetail);
@@ -302,6 +238,7 @@ ngOnInit(): void {
           console.error('Invalid selectedModuleDetail:', error);
         }
       }
+
       if (!moduleDetail) {
         const storedModules = sessionStorage.getItem('modules');
         console.log('STORED MODULES:', storedModules);
@@ -315,6 +252,7 @@ ngOnInit(): void {
           }
         }
       }
+
       if (moduleDetail) {
         this.moduleName = moduleDetail.name ?? '';
         this.addPer = moduleDetail.addPer ?? 'N';
@@ -325,6 +263,7 @@ ngOnInit(): void {
         this.adminApprovePer = moduleDetail.adminApprovePer ?? 'N';
         this.exportExcelPer = moduleDetail.exportExcel ?? 'N';
       }
+
       console.log('TASK PERMISSIONS:', {
         moduleName: this.moduleName,
         addPer: this.addPer,
@@ -336,17 +275,19 @@ ngOnInit(): void {
         exportExcelPer: this.exportExcelPer,
       });
     }
+
     this.sessionService.clearOtherSessions(this.filterKey);
     this.restoreFilterState();
     this.route.queryParams.subscribe((params) => {
       this.dashboardFilter = params['taskType'] || '';
-      // NEW: read statusIndex (1 = Active) from the URL
-  if (params['statusIndex'] !== undefined) {
-    this.statusIndex = Number(params['statusIndex']) || 0;
-    this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
-    this.currentPage = 1;
-    this.page = 0;
-  }
+
+      if (params['statusIndex'] !== undefined) {
+        this.statusIndex = Number(params['statusIndex']) || 0;
+        this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
+        this.currentPage = 1;
+        this.page = 0;
+      }
+
       if (params['taskStatusIds'] !== undefined) {
         this.selectedTaskStatuses = params['taskStatusIds']
           ? String(params['taskStatusIds'])
@@ -356,11 +297,13 @@ ngOnInit(): void {
         this.currentPage = 1;
         this.page = 0;
       }
+
       if (params['clientId'] !== undefined) {
         this.selectedClient = params['clientId'] ? String(params['clientId']) : '';
         this.currentPage = 1;
         this.page = 0;
       }
+
       this.loadFilterData();
       this.getTaskDetails();
     });
@@ -371,24 +314,23 @@ ngOnInit(): void {
     const nav = this.router.getCurrentNavigation();
     stateData = nav?.extras?.state;
 
-     const returningFromDetail =
-    isPlatformBrowser(this.platformId) && sessionStorage.getItem('taskReturnFromDetail') === 'Y';
+    const returningFromDetail = isPlatformBrowser(this.platformId) && sessionStorage.getItem('taskReturnFromDetail') === 'Y';
 
-  if (isPlatformBrowser(this.platformId)) {
-    sessionStorage.removeItem('taskReturnFromDetail');   // single-use flag
-  }
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem('taskReturnFromDetail');
+    }
 
-   if (!stateData && returningFromDetail) {
-    const saved = sessionStorage.getItem(this.filterKey);
+    if (!stateData && returningFromDetail) {
+      const saved = sessionStorage.getItem(this.filterKey);
 
-    if (saved) {
-      try {
-        stateData = JSON.parse(saved);
-      } catch (error) {
-        console.error('Invalid task filter session:', error);
+      if (saved) {
+        try {
+          stateData = JSON.parse(saved);
+        } catch (error) {
+          console.error('Invalid task filter session:', error);
+        }
       }
     }
-  }
 
     if (!stateData) {
       this.currentPage = 1;
@@ -419,15 +361,12 @@ ngOnInit(): void {
     this.statusIndex = Number(stateData.statusIndex) || 0;
     this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
     this.selectedClient = stateData.clientId != null ? String(stateData.clientId) : '';
-
     this.selectedTaskCategory = stateData.taskCategoryId != null ? String(stateData.taskCategoryId) : '';
-
     this.selectedAssignedTo = stateData.assignedTo != null ? String(stateData.assignedTo) : '';
     this.selectedPriority = stateData.priority != null ? String(stateData.priority) : '';
-
     this.selectedTaskStatuses = Array.isArray(stateData.taskStatusId) ? stateData.taskStatusId.map((v: any) => String(v)) : [];
     this.dashboardFilter = stateData.dashboardFilter || '';
-    //
+
     if (Array.isArray(stateData.taskStatusId)) {
       this.selectedTaskStatuses = stateData.taskStatusId.map((v: any) => String(v));
     } else if (stateData.taskStatusId != null && stateData.taskStatusId !== '') {
@@ -442,101 +381,18 @@ ngOnInit(): void {
     this.toDate = stateData.toDate ? new Date(stateData.toDate + 'T00:00:00') : null;
   }
 
-  // private restoreFilterState(): void {
-  //   let stateData: any = null;
-  //   const nav = this.router.getCurrentNavigation();
-  //   stateData = nav?.extras?.state;
-
-  //   if (!stateData) {
-  //     const saved = sessionStorage.getItem(this.filterKey);
-
-  //     if (saved) {
-  //       try {
-  //         stateData = JSON.parse(saved);
-  //       } catch (error) {
-  //         console.error('Invalid task filter session:', error);
-  //       }
-  //     }
-  //   }
-
-  //   if (!stateData) {
-  //     this.currentPage = 1;
-  //     this.page = 0;
-  //     this.size = environment.size;
-  //     this.recordsPerPage = this.size;
-  //     this.search = '';
-  //     this.searchQuery = '';
-  //     this.statusIndex = 0;
-  //     this.selectedStatus = '';
-  //     this.selectedClient = '';
-  //     this.selectedTaskCategory = '';
-  //     this.selectedAssignedTo = '';
-  //     this.selectedPriority = '';
-  //     this.selectedTaskStatuses = [];
-  //     this.fromDate = null;
-  //     this.toDate = null;
-
-  //     return;
-  //   }
-
-  //   this.currentPage = Number(stateData.currentPage) || 1;
-  //   this.page = this.currentPage - 1;
-  //   this.size = Number(stateData.size) || environment.size;
-  //   this.recordsPerPage = this.size;
-  //   this.search = stateData.searchText || '';
-  //   this.searchQuery = this.search;
-  //   this.statusIndex = Number(stateData.statusIndex) || 0;
-  //   this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
-  //   this.selectedClient = stateData.clientId != null ? String(stateData.clientId) : '';
-
-  //   this.selectedTaskCategory = stateData.taskCategoryId != null ? String(stateData.taskCategoryId) : '';
-
-  //   this.selectedAssignedTo = stateData.assignedTo != null ? String(stateData.assignedTo) : '';
-  //   this.selectedPriority = stateData.priority != null ? String(stateData.priority) : '';
-
-  //   this.selectedTaskStatuses = Array.isArray(stateData.taskStatusId) ? stateData.taskStatusId.map((v: any) => String(v)) : [];
-  //   this.dashboardFilter = stateData.dashboardFilter || '';
-  //   //
-  //   if (Array.isArray(stateData.taskStatusId)) {
-  //     this.selectedTaskStatuses = stateData.taskStatusId.map((v: any) => String(v));
-  //   } else if (stateData.taskStatusId != null && stateData.taskStatusId !== '') {
-  //     this.selectedTaskStatuses = String(stateData.taskStatusId)
-  //       .split(',')
-  //       .filter((v: string) => v !== '');
-  //   } else {
-  //     this.selectedTaskStatuses = [];
-  //   }
-
-  //   this.fromDate = stateData.fromDate ? new Date(stateData.fromDate + 'T00:00:00') : null;
-  //   this.toDate = stateData.toDate ? new Date(stateData.toDate + 'T00:00:00') : null;
-  // }
-
-  // =========================================================
-  // SAVE FILTER STATE
-  // =========================================================
-
   private saveFilterState(): void {
     const filterState = {
       currentPage: this.currentPage,
-
       page: this.page,
-
       size: this.size,
-
       statusIndex: this.statusIndex,
-
       searchText: this.search,
-
       clientId: this.selectedClient ? Number(this.selectedClient) : null,
-
       taskCategoryId: this.selectedTaskCategory ? Number(this.selectedTaskCategory) : null,
-
       assignedTo: this.selectedAssignedTo ? Number(this.selectedAssignedTo) : null,
-
       priority: this.selectedPriority ? Number(this.selectedPriority) : null,
-
       fromDate: this.formatDateForApi(this.fromDate),
-
       toDate: this.formatDateForApi(this.toDate),
       taskStatusId: this.selectedTaskStatuses,
     };
@@ -546,52 +402,38 @@ ngOnInit(): void {
     }
   }
 
-  // =========================================================
-  // LOAD FILTER DATA
-  // =========================================================
-
   private loadFilterData(): void {
-    this.dataprovider
-      .getTaskFilterDataForIndex(this.isAdmin, this.userId, this.loginType,this.isHod)
-      .subscribe({
-        next: (response: any) => {
-          this.clients = response.clients || [];
-          this.filteredClients = [...this.clients];
-          if (this.selectedClient) {
-            const selectedClientObj = this.clients.find(
-              (c: any) => String(c.clientId) === String(this.selectedClient),
-            );
-            //   if (selectedClientObj) {
-            //     this.clientSearchText = selectedClientObj.name;
-            //   }
-            // }
-            if (selectedClientObj) {
-              this.clientSearchText = selectedClientObj.name;
-            } else {
-              this.clientSearchText = '';
-            }
+    this.dataprovider.getTaskFilterDataForIndex(this.isAdmin, this.userId, this.loginType, this.isHod).subscribe({
+      next: (response: any) => {
+        this.clients = response.clients || [];
+        this.filteredClients = [...this.clients];
+        if (this.selectedClient) {
+          const selectedClientObj = this.clients.find((c: any) => String(c.clientId) === String(this.selectedClient));
+
+          if (selectedClientObj) {
+            this.clientSearchText = selectedClientObj.name;
           } else {
             this.clientSearchText = '';
           }
-          this.filterAvailableClients();
-          this.taskCategories = response.taskCategories || [];
-          this.assignedUsers = response.assignedUsers || [];
-        },
-        error: (error) => {
-          console.error('Error loading task filter data:', error);
-          this.clients = [];
-          this.filteredClients = [];
-          this.taskCategories = [];
-          this.assignedUsers = [];
-        },
-      });
+        } else {
+          this.clientSearchText = '';
+        }
+        this.filterAvailableClients();
+        this.taskCategories = response.taskCategories || [];
+        this.assignedUsers = response.assignedUsers || [];
+      },
+      error: (error) => {
+        console.error('Error loading task filter data:', error);
+        this.clients = [];
+        this.filteredClients = [];
+        this.taskCategories = [];
+        this.assignedUsers = [];
+      },
+    });
   }
 
-
- private filterAvailableClients(): void {
-    const availableClientNames = new Set(
-      this.tasks.map((task: any) => task.clientName).filter((name: string) => name),
-    );
+  private filterAvailableClients(): void {
+    const availableClientNames = new Set(this.tasks.map((task: any) => task.clientName).filter((name: string) => name));
     this.filteredClients = this.clients.filter((client: any) => {
       if (this.selectedClient && String(client.clientId) === String(this.selectedClient)) {
         return true;
@@ -601,19 +443,11 @@ ngOnInit(): void {
     console.log('AVAILABLE CLIENTS:', this.filteredClients);
   }
 
-  // =========================================================
-  // TOGGLE PANEL
-  // =========================================================
-
   togglePanel(): void {
     this.isPanelVisible = !this.isPanelVisible;
   }
 
-  // =========================================================
-  // GET TASK DETAILS
-  // =========================================================
-
- getTaskDetails(): void {
+  getTaskDetails(): void {
     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
     const taskCategoryId = this.selectedTaskCategory ? Number(this.selectedTaskCategory) : 0;
     const assignedTo = this.selectedAssignedTo ? Number(this.selectedAssignedTo) : -1;
@@ -621,6 +455,7 @@ ngOnInit(): void {
     const fromDate = this.formatDateForApi(this.fromDate);
     const toDate = this.formatDateForApi(this.toDate);
     const taskStatusId = this.selectedTaskStatuses;
+
     this.dataprovider
       .getTaskDetails(
         this.page,
@@ -638,20 +473,18 @@ ngOnInit(): void {
         taskStatusId,
         this.loginType,
         this.dashboardFilter,
-        this.isHod
+        this.isHod,
       )
       .subscribe({
         next: (response: any) => {
           console.log('TASK DETAILS RESPONSE:', response);
           this.apiResponseTaskDetails = response;
           this.tasks = response.data || [];
+
           this.filterAvailableClients();
-          // Re-resolve the selected client name.
-          // This is important when the selected client has 0 tasks.
+
           if (this.selectedClient && this.clients.length > 0) {
-            const selectedClientObj = this.clients.find(
-              (client: any) => String(client.clientId) === String(this.selectedClient),
-            );
+            const selectedClientObj = this.clients.find((client: any) => String(client.clientId) === String(this.selectedClient));
             if (selectedClientObj) {
               this.clientSearchText = selectedClientObj.name;
             }
@@ -667,17 +500,9 @@ ngOnInit(): void {
       });
   }
 
-  // =========================================================
-  // PAGINATED TASKS
-  // =========================================================
-
   get paginatedTasks(): Task[] {
     return this.tasks;
   }
-
-  // =========================================================
-  // GO TO PAGE
-  // =========================================================
 
   goToPage(pageNumber: number): void {
     if (pageNumber < 1 || pageNumber > this.totalPages) {
@@ -685,138 +510,48 @@ ngOnInit(): void {
     }
 
     this.currentPage = pageNumber;
-
     this.page = pageNumber - 1;
 
     this.saveFilterState();
 
     this.router
-      .navigate(
-        ['/task-index'],
-
-        {
-          replaceUrl: true,
-          state: {
-            currentPage: this.currentPage,
-            statusIndex: this.statusIndex,
-            searchText: this.search,
-            size: this.size,
-
-            clientId: this.selectedClient || null,
-            taskCategoryId: this.selectedTaskCategory || null,
-            assignedTo: this.selectedAssignedTo || null,
-            priority: this.selectedPriority || null,
-
-            fromDate: this.formatDateForApi(this.fromDate) || null,
-            toDate: this.formatDateForApi(this.toDate) || null,
-
-            taskStatusIds: this.selectedTaskStatuses.length > 0 ? this.selectedTaskStatuses : [],
-
-            taskType: this.dashboardFilter || '',
-          },
+      .navigate(['/task-index'], {
+        replaceUrl: true,
+        state: {
+          currentPage: this.currentPage,
+          statusIndex: this.statusIndex,
+          searchText: this.search,
+          size: this.size,
+          clientId: this.selectedClient || null,
+          taskCategoryId: this.selectedTaskCategory || null,
+          assignedTo: this.selectedAssignedTo || null,
+          priority: this.selectedPriority || null,
+          fromDate: this.formatDateForApi(this.fromDate) || null,
+          toDate: this.formatDateForApi(this.toDate) || null,
+          taskStatusIds: this.selectedTaskStatuses.length > 0 ? this.selectedTaskStatuses : [],
+          taskType: this.dashboardFilter || '',
         },
-      )
+      })
       .then(() => {
         this.getTaskDetails();
       });
   }
 
-  // =========================================================
-  // FIRST PAGE
-  // =========================================================
-
   goToFirstPage(): void {
     this.goToPage(1);
   }
-
-  // =========================================================
-  // LAST PAGE
-  // =========================================================
 
   goToLastPage(): void {
     this.goToPage(this.totalPages);
   }
 
-  // =========================================================
-  // SEARCH / FILTER
-  // =========================================================
-
-  // onSearch(): void {
-
-  //   this.search =
-  //     this.searchQuery
-  //       ? this.searchQuery.trim()
-  //       : '';
-
-  //   this.statusIndex =
-  //     this.selectedStatus === ''
-  //       ? 0
-  //       : Number(this.selectedStatus);
-
-  //   this.currentPage = 1;
-
-  //   this.page = 0;
-
-  //   this.saveFilterState();
-
-  //   this.router
-  //     .navigate(
-
-  //       ['/task-index'],
-
-  //       {
-
-  //         queryParams: {
-
-  //           currentPage: 1,
-
-  //           page: 0,
-
-  //           size: this.size,
-
-  //           statusIndex:
-  //             this.statusIndex,
-
-  //           searchText:
-  //             this.search,
-
-  //           clientId:
-  //             this.selectedClient || null,
-
-  //           taskCategoryId:
-  //             this.selectedTaskCategory || null,
-
-  //           assignedTo:
-  //             this.selectedAssignedTo || null,
-
-  //           priority:
-  //             this.selectedPriority || null
-
-  //         },
-
-  //         replaceUrl: true
-
-  //       }
-
-  //     )
-  //     .then(() => {
-
-  //       this.getTaskDetails();
-
-  //     });
-
-  // }
-
   onSearch(): void {
     this.search = this.searchQuery ? this.searchQuery.trim() : '';
-
     this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
-
     this.currentPage = 1;
     this.page = 0;
 
     const fromDate = this.formatDateForApi(this.fromDate);
-
     const toDate = this.formatDateForApi(this.toDate);
 
     this.saveFilterState();
@@ -825,27 +560,16 @@ ngOnInit(): void {
       .navigate(['/task-index'], {
         state: {
           currentPage: 1,
-
           page: 0,
-
           size: this.size,
-
           statusIndex: this.statusIndex,
-
           searchText: this.search,
-
           clientId: this.selectedClient || null,
-
           taskCategoryId: this.selectedTaskCategory || null,
-
           assignedTo: this.selectedAssignedTo || null,
-
           priority: this.selectedPriority || null,
-
           fromDate: fromDate || null,
-
           toDate: toDate || null,
-
           taskStatusIds: this.selectedTaskStatuses.length ? this.selectedTaskStatuses.join(',') : null,
           taskType: this.dashboardFilter,
         },
@@ -863,149 +587,19 @@ ngOnInit(): void {
     }
 
     const year = date.getFullYear();
-
     const month = String(date.getMonth() + 1).padStart(2, '0');
-
     const day = String(date.getDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
   }
 
-  // =========================================================
-  // CHANGE RECORDS PER PAGE
-  // =========================================================
-
   onChangeRecordsPerPage(): void {
     this.currentPage = 1;
-
     this.page = 0;
 
     this.saveFilterState();
-
     this.getTaskDetails();
   }
-
-  // =========================================================
-  // DELETE TASK
-  // =========================================================
-
-  // onDeleteTask(
-  //   taskId: number
-  // ): void {
-
-  //   // this.task = {
-
-  //   //   taskId:
-
-  //   //     Number(taskId),
-
-  //   //   userId:
-
-  //   //     this.userId
-  //   //       ? Number(this.userId)
-  //   //       : null
-
-  //   // };
-
-  //   // Swal.fire({
-
-  //   //   title:
-  //   //     'Are you sure?',
-
-  //   //   text:
-  //   //     'Do you really want to delete this task?',
-
-  //   //   icon:
-  //   //     'warning',
-
-  //   //   showCancelButton:
-  //   //     true,
-
-  //   //   confirmButtonText:
-  //   //     'Yes, delete it!',
-
-  //   //   cancelButtonText:
-  //   //     'No, keep it',
-
-  //   // }).then(
-  //   //   (result) => {
-
-  //   //     if (
-  //   //       result.isConfirmed
-  //   //     ) {
-
-  //   //       this.dataprovider
-  //   //         .deleteTask(this.task)
-  //   //         .subscribe({
-
-  //   //           next:
-  //   //             (response: any) => {
-
-  //   //               if (
-  //   //                 response.success
-  //   //               ) {
-
-  //   //                 Swal.fire(
-
-  //   //                   'Deleted!',
-
-  //   //                   response.message,
-
-  //   //                   'success'
-
-  //   //                 );
-
-  //   //                 this.getTaskDetails();
-
-  //   //               } else {
-
-  //   //                 Swal.fire(
-
-  //   //                   'Error',
-
-  //   //                   response.message,
-
-  //   //                   'error'
-
-  //   //                 );
-
-  //   //               }
-
-  //   //             },
-
-  //   //           error:
-  //   //             (error) => {
-
-  //   //               console.error(
-  //   //                 'Error deleting task:',
-  //   //                 error
-  //   //               );
-
-  //   //               Swal.fire(
-
-  //   //                 'Error',
-
-  //   //                 'Something went wrong while deleting the task.',
-
-  //   //                 'error'
-
-  //   //               );
-
-  //   //             }
-
-  //   //         });
-
-  //   //     }
-
-  //   //   }
-
-  //   // );
-
-  // }
-
-  // =========================================================
-  // VIEW TASK
-  // =========================================================
 
   viewTask(taskId: number): void {
     this.saveFilterState();
@@ -1016,108 +610,66 @@ ngOnInit(): void {
         statusIndex: this.statusIndex,
         searchText: this.search,
         size: this.size,
-
         clientId: this.selectedClient || null,
         taskCategoryId: this.selectedTaskCategory || null,
         assignedTo: this.selectedAssignedTo || null,
         priority: this.selectedPriority || null,
-
         fromDate: this.formatDateForApi(this.fromDate) || null,
         toDate: this.formatDateForApi(this.toDate) || null,
-
         taskStatusIds: this.selectedTaskStatuses.length > 0 ? this.selectedTaskStatuses : [],
-
         taskType: this.dashboardFilter || '',
       },
     });
   }
 
-  // =========================================================
-  // EDIT TASK
-  // =========================================================
-
   editTask(taskId: number): void {
     this.saveFilterState();
 
-    this.router.navigate(
-      ['/edit-task', taskId],
-
-      {
-        state: {
-          currentPage: this.currentPage,
-
-          statusIndex: this.statusIndex,
-
-          searchText: this.search,
-
-          size: this.size,
-
-          clientId: this.selectedClient || null,
-
-          taskCategoryId: this.selectedTaskCategory || null,
-
-          assignedTo: this.selectedAssignedTo || null,
-
-          priority: this.selectedPriority || null,
-
-          fromDate: this.formatDateForApi(this.fromDate) || null,
-
-          toDate: this.formatDateForApi(this.toDate) || null,
-
-          taskStatusIds: this.selectedTaskStatuses.length ? this.selectedTaskStatuses.join(',') : null,
-          taskType: this.dashboardFilter,
-        },
+    this.router.navigate(['/edit-task', taskId], {
+      state: {
+        currentPage: this.currentPage,
+        statusIndex: this.statusIndex,
+        searchText: this.search,
+        size: this.size,
+        clientId: this.selectedClient || null,
+        taskCategoryId: this.selectedTaskCategory || null,
+        assignedTo: this.selectedAssignedTo || null,
+        priority: this.selectedPriority || null,
+        fromDate: this.formatDateForApi(this.fromDate) || null,
+        toDate: this.formatDateForApi(this.toDate) || null,
+        taskStatusIds: this.selectedTaskStatuses.length ? this.selectedTaskStatuses.join(',') : null,
+        taskType: this.dashboardFilter,
       },
-    );
+    });
   }
 
-  // =========================================================
-  // ADD TASK
-  // =========================================================
   addTask(): void {
     this.saveFilterState();
 
-    this.router.navigate(
-      ['/add-task'],
-
-      {
-        state: {
-          currentPage: this.currentPage,
-          statusIndex: this.statusIndex,
-          searchText: this.search,
-          size: this.size,
-
-          clientId: this.selectedClient || null,
-          taskCategoryId: this.selectedTaskCategory || null,
-          assignedTo: this.selectedAssignedTo || null,
-          priority: this.selectedPriority || null,
-
-          fromDate: this.formatDateForApi(this.fromDate) || null,
-          toDate: this.formatDateForApi(this.toDate) || null,
-
-          taskStatusIds: this.selectedTaskStatuses.length > 0 ? this.selectedTaskStatuses : [],
-
-          taskType: this.dashboardFilter || '',
-        },
+    this.router.navigate(['/add-task'], {
+      state: {
+        currentPage: this.currentPage,
+        statusIndex: this.statusIndex,
+        searchText: this.search,
+        size: this.size,
+        clientId: this.selectedClient || null,
+        taskCategoryId: this.selectedTaskCategory || null,
+        assignedTo: this.selectedAssignedTo || null,
+        priority: this.selectedPriority || null,
+        fromDate: this.formatDateForApi(this.fromDate) || null,
+        toDate: this.formatDateForApi(this.toDate) || null,
+        taskStatusIds: this.selectedTaskStatuses.length > 0 ? this.selectedTaskStatuses : [],
+        taskType: this.dashboardFilter || '',
       },
-    );
+    });
   }
-
-  // =========================================================
-  // PAGE NUMBERS
-  // =========================================================
 
   pages(): number[] {
     const total = this.totalPages;
-
     const current = this.currentPage;
-
     const delta = 5;
-
     const start = Math.max(1, current - delta);
-
     const end = Math.min(total, current + delta);
-
     const arr: number[] = [];
 
     for (let i = start; i <= end; i++) {
@@ -1127,41 +679,20 @@ ngOnInit(): void {
     return arr;
   }
 
-  // =========================================================
-  // RECORD SUMMARY
-  // =========================================================
-
   get recordSummary(): string {
     const totalRecords = this.apiResponseTaskDetails?.totalElements || 0;
-
     const startRecord = totalRecords === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
 
-    const endRecord = Math.min(
-      this.currentPage * this.recordsPerPage,
-
-      totalRecords,
-    );
+    const endRecord = Math.min(this.currentPage * this.recordsPerPage, totalRecords);
 
     return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${totalRecords > 1 ? 's' : ''})`;
   }
 
-  // =========================================================
-  // TOTAL PAGES
-  // =========================================================
-
   get totalPages(): number {
     const total = this.apiResponseTaskDetails?.totalElements || 0;
 
-    return Math.max(
-      1,
-
-      Math.ceil(total / this.recordsPerPage),
-    );
+    return Math.max(1, Math.ceil(total / this.recordsPerPage));
   }
-
-  // =========================================================
-  // SORT
-  // =========================================================
 
   sortData(column: string): void {
     if (!column) {
@@ -1172,26 +703,21 @@ ngOnInit(): void {
       this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortColumn = column;
-
       this.sortDirection = 'asc';
     }
 
     this.tasks.sort((a: any, b: any) => {
       let valA = a[column];
-
       let valB = b[column];
 
       valA = valA ?? '';
-
       valB = valB ?? '';
 
       if (!isNaN(valA) && !isNaN(valB)) {
         valA = Number(valA);
-
         valB = Number(valB);
       } else {
         valA = valA.toString().toLowerCase();
-
         valB = valB.toString().toLowerCase();
       }
 
@@ -1206,10 +732,6 @@ ngOnInit(): void {
       return 0;
     });
   }
-
-  // =========================================================
-  // PRIORITY LABEL
-  // =========================================================
 
   getPriorityLabel(priority: number): string {
     switch (priority) {
@@ -1227,10 +749,6 @@ ngOnInit(): void {
     }
   }
 
-  // =========================================================
-  // PRIORITY CSS
-  // =========================================================
-
   getPriorityClass(priority: number): string {
     switch (priority) {
       case 1:
@@ -1247,17 +765,10 @@ ngOnInit(): void {
     }
   }
 
-  // =========================================================
-  // CLEAR FILTERS
-  // =========================================================
-
   clearFilters(): void {
     this.showStatusDropdown = false;
-    // Clear search
     this.searchQuery = '';
     this.search = '';
-
-    // Clear dropdown filters
     this.selectedClient = '';
     this.clientSearchText = '';
     this.filteredClients = [...this.clients];
@@ -1266,48 +777,29 @@ ngOnInit(): void {
     this.selectedPriority = '';
     this.selectedStatus = '';
     this.selectedTaskStatuses = [];
-
-    // Clear dates
     this.fromDate = null;
     this.toDate = null;
-
-    // Reset status
     this.statusIndex = 0;
-
-    // Reset pagination
     this.currentPage = 1;
     this.page = 0;
-
-    // Reset sorting
     this.sortColumn = '';
     this.sortDirection = 'asc';
 
-    // Save cleared filter state
     this.saveFilterState();
 
     this.router
       .navigate(['/task-index'], {
         state: {
           currentPage: 1,
-
           page: 0,
-
           size: this.size,
-
           statusIndex: 0,
-
           searchText: '',
-
           clientId: null,
-
           taskCategoryId: null,
-
           assignedTo: null,
-
           priority: null,
-
           fromDate: null,
-
           toDate: null,
           taskStatusId: null,
         },
@@ -1361,7 +853,6 @@ ngOnInit(): void {
   }
 
   fromDate: Date | null = null;
-
   toDate: Date | null = null;
 
   isTaskOwner(task: any): boolean {
@@ -1372,30 +863,19 @@ ngOnInit(): void {
     return Number(task.status) !== 3 && (Number(task.assignedTo) === Number(this.userId) || Number(task.addedBy) === Number(this.userId));
   }
 
-  //for model note
   showTaskNotesModal = false;
-
   isAddingNote = false;
-
   selectedTask: any = null;
-
   taskNote = '';
-
   taskNotes: any[] = [];
-
   isSavingTaskNote = false;
 
   openTaskNotes(task: any): void {
     this.selectedTask = task;
-
-    // Initially DON'T show add form
     this.isAddingNote = false;
-
     this.taskNote = '';
-
     this.showTaskNotesModal = true;
 
-    // Load previous notes
     this.loadTaskNotes(task.taskId);
   }
 
@@ -1417,13 +897,11 @@ ngOnInit(): void {
 
   startAddingNote(): void {
     this.isAddingNote = true;
-
     this.taskNote = '';
   }
 
   cancelAddingNote(): void {
     this.isAddingNote = false;
-
     this.taskNote = '';
   }
 
@@ -1433,9 +911,7 @@ ngOnInit(): void {
     }
 
     this.showTaskNotesModal = false;
-
     this.selectedTask = null;
-
     this.taskNote = '';
   }
 
@@ -1461,14 +937,10 @@ ngOnInit(): void {
     this.dataprovider.addTaskNote(request).subscribe({
       next: () => {
         this.taskNote = '';
-
-        // Hide Add Note form after successful submit
         this.isAddingNote = false;
         this.sendMail = false;
-
         this.isSavingTaskNote = false;
 
-        // Reload previous notes
         this.loadTaskNotes(this.selectedTask.taskId);
       },
 
@@ -1517,29 +989,20 @@ ngOnInit(): void {
     return colors[index];
   }
 
-  // =========================================================
-  // CHANGE MANAGER / TASK FILES MODAL
-  // =========================================================
-
   showChangeManagerModal = false;
   isChangingManager = false;
-
   taskDescription: string = '';
   descriptionValidationError = false;
-
   fileOne: File | null = null;
   fileOneName: string = '';
-
   fileTwo: File | null = null;
   fileTwoName: string = '';
 
   openChangeManagerModal(taskObject: any): void {
-    //  console.log("sssssssss" + taskObject);
     this.descriptionValidationError = false;
 
     this.selectedTaskStatusIdForCondition = taskObject.taskStatus;
 
-    // this. selectedTaskStatusId= taskObject.taskStatus;
     this.task = {
       taskId: taskObject.taskId,
       managerId: taskObject.managerId,
@@ -1548,16 +1011,11 @@ ngOnInit(): void {
       taskStatus: taskObject.taskStatus,
     };
 
-    //  console.log("{ == }" + JSON.stringify(this.task));
-
     this.taskDescription = '';
-
     this.fileOne = null;
     this.fileOneName = '';
-
     this.fileTwo = null;
     this.fileTwoName = '';
-
     this.showChangeManagerModal = true;
   }
 
@@ -1567,97 +1025,18 @@ ngOnInit(): void {
     }
 
     this.showChangeManagerModal = false;
-
     this.taskDescription = '';
-
     this.fileOne = null;
     this.fileOneName = '';
-
     this.fileTwo = null;
     this.fileTwoName = '';
-
     this.descriptionValidationError = false;
   }
 
-  // private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
-
-  // onFileOneSelected(event: Event): void {
-
-  //   const input = event.target as HTMLInputElement;
-
-  //   if (input.files && input.files.length > 0) {
-
-  //     const file = input.files[0];
-
-  //     // ZIP validation
-  //     if (!file.name.toLowerCase().endsWith('.zip')) {
-  //       Swal.fire('Error', 'Only ZIP files are allowed.', 'error');
-
-  //       input.value = '';
-  //       this.fileOne = null;
-  //       this.fileOneName = '';
-  //       return;
-  //     }
-
-  //     if (file.size > this.MAX_FILE_SIZE) {
-  //       Swal.fire('Error', 'ZIP file size must not exceed 5 MB.', 'error');
-
-  //       input.value = '';
-  //       this.fileOne = null;
-  //       this.fileOneName = '';
-  //       return;
-  //     }
-
-  //     this.fileOne = file;
-  //     this.fileOneName = file.name;
-
-  //   } else {
-  //     this.fileOne = null;
-  //     this.fileOneName = '';
-  //   }
-  // }
-
-  // onFileTwoSelected(event: Event): void {
-
-  //   const input = event.target as HTMLInputElement;
-
-  //   if (input.files && input.files.length > 0) {
-
-  //     const file = input.files[0];
-
-  //     // PDF validation
-  //     if (!file.name.toLowerCase().endsWith('.pdf')) {
-  //       Swal.fire('Error', 'Only PDF files are allowed.', 'error');
-
-  //       input.value = '';
-  //       this.fileTwo = null;
-  //       this.fileTwoName = '';
-  //       return;
-  //     }
-
-  //     if (file.size > this.MAX_FILE_SIZE) {
-  //       Swal.fire('Error', 'PDF file size must not exceed 5 MB.', 'error');
-
-  //       input.value = '';
-  //       this.fileTwo = null;
-  //       this.fileTwoName = '';
-  //       return;
-  //     }
-
-  //     this.fileTwo = file;
-  //     this.fileTwoName = file.name;
-
-  //   } else {
-  //     this.fileTwo = null;
-  //     this.fileTwoName = '';
-  //   }
-  // }
   selectedTaskStatusId: number = 5;
   selectedTaskStatusIdForCondition: number = 0;
-  //  selectedTaskStatusId: number = 0;
 
-  // Add near your other class constants (replace/update MAX_FILE_SIZE if it's currently set to 5 MB)
-  readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+  readonly MAX_FILE_SIZE = 10 * 1024 * 1024;
 
   readonly ALLOWED_EXTENSIONS_FILE_ONE = ['.pdf', '.xls', '.xlsx', '.doc', '.docx', '.zip'];
   readonly ALLOWED_EXTENSIONS_FILE_TWO = ['.pdf', '.xls', '.xlsx', '.doc', '.docx'];
@@ -1774,15 +1153,14 @@ ngOnInit(): void {
       },
       error: (error) => {
         this.isChangingManager = false;
-        console.error('Full error:', error); // add this
-        console.error('Backend message:', error?.error?.message); // and this
+        console.error('Full error:', error);
+        console.error('Backend message:', error?.error?.message);
         Swal.fire('Error', error?.error?.message || 'Something went wrong while updating the task.', 'error');
       },
     });
   }
 
   exportToExcel(): void {
-    // Make sure there is data
     if (!this.tasks || this.tasks.length === 0) {
       alert('No tasks available for export.');
       return;
@@ -1790,45 +1168,22 @@ ngOnInit(): void {
 
     const exportData = this.tasks.map((task: any, index: number) => {
       return {
-        // 1. Sr. No.
         'Sr. No.': index + 1,
-
-        // 2. Title
         Title: task.title || '-',
-
-        // 3. Client
         Client: task.clientName || '-',
-
-        // 4. Date
         Date: task.date ? this.formatExcelDate(task.date) : '-',
-
-        // 5. Due Date
         'Due Date': task.dueDateTime ? this.formatExcelDate(task.dueDateTime) : '-',
-
-        // 6. Task Category
         'Task Category': task.taskCategoryName || '-',
-
-        // 7. Assigned By
         'Assigned By': task.assignedbyName || '-',
-
-        // 8. Assigned To
         'Assigned To': !task.assignedToName || task.assignedToName === '0' ? 'Unassigned User' : task.assignedToName,
-
-        // 9. Priority
         Priority: this.getPriorityLabel(task.priority),
-
-        // 10. Task Status
         'Task Status': this.common.getTaskStatusLabel(task.taskStatus),
-
-        // 11. Status
         Status: this.common.getStatusLabel(task.status),
       };
     });
 
-    // Create worksheet
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
 
-    // Set column widths
     worksheet['!cols'] = [
       { wch: 8 }, // Sr. No.
       { wch: 35 }, // Title
@@ -1843,98 +1198,16 @@ ngOnInit(): void {
       { wch: 15 }, // Status
     ];
 
-    // Create workbook
     const workbook: XLSX.WorkBook = XLSX.utils.book_new();
 
-    // Add worksheet
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Tasks');
 
-    // Generate file name
     const today = new Date();
 
     const dateString = `${today.getFullYear()}-` + `${String(today.getMonth() + 1).padStart(2, '0')}-` + `${String(today.getDate()).padStart(2, '0')}`;
 
-    // Download Excel
     XLSX.writeFile(workbook, `Tasks_${dateString}.xlsx`);
   }
-
-  // exportToExcel(): void {
-
-  //   // Make sure there is data
-  //   if (!this.tasks || this.tasks.length === 0) {
-  //     console.warn('No tasks available for export.');
-  //     return;
-  //   }
-
-  //   const exportData = this.tasks.map((task: any, index: number) => {
-
-  //     return {
-  //       'Sr. No.': index + 1,
-
-  //       'Title': task.title || '-',
-
-  //       'Client': task.clientName || '-',
-
-  //       'Date': task.date
-  //         ? this.formatExcelDate(task.date)
-  //         : '-',
-
-  //       'Task Category': task.taskCategoryName || '-',
-
-  //       'Assigned To': task.assignedToName || '-',
-
-  //       'Priority': this.getPriorityLabel(task.priority),
-
-  //       'Task Status': this.common.getTaskStatusLabel(
-  //         task.taskStatus
-  //       ),
-
-  //       'Status': this.common.getStatusLabel(
-  //         task.status
-  //       )
-  //     };
-
-  //   });
-
-  //   // Create worksheet
-  //   const worksheet: XLSX.WorkSheet =
-  //     XLSX.utils.json_to_sheet(exportData);
-
-  //   // Set column widths
-  //   worksheet['!cols'] = [
-  //     { wch: 6 },    // #
-  //     { wch: 35 },   // Title
-  //     { wch: 25 },   // Client
-  //     { wch: 15 },   // Date
-  //     { wch: 25 },   // Task Category
-  //     { wch: 25 },   // Assigned To
-  //     { wch: 15 },   // Priority
-  //     { wch: 20 },   // Task Status
-  //     { wch: 15 }    // Status
-  //   ];
-
-  //   // Create workbook
-  //   const workbook: XLSX.WorkBook =
-  //     XLSX.utils.book_new();
-
-  //   XLSX.utils.book_append_sheet(
-  //     workbook,
-  //     worksheet,
-  //     'Tasks'
-  //   );
-
-  //   // Generate file name
-  //   const today = new Date();
-
-  //   const dateString =
-  //     `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-  //   // Download Excel
-  //   XLSX.writeFile(
-  //     workbook,
-  //     `Tasks_${dateString}.xlsx`
-  //   );
-  // }
 
   private formatExcelDate(date: any): string {
     if (!date) {
@@ -1948,9 +1221,7 @@ ngOnInit(): void {
     }
 
     const day = String(parsedDate.getDate()).padStart(2, '0');
-
     const month = String(parsedDate.getMonth() + 1).padStart(2, '0');
-
     const year = parsedDate.getFullYear();
 
     return `${day}-${month}-${year}`;
@@ -2012,7 +1283,6 @@ ngOnInit(): void {
     this.selectedDescriptionTask = null;
   }
 
-  //Assign To Model
   showAssignUserModal = false;
   selectedAssignTask: any = null;
   assignRemarks: string = '';
@@ -2024,11 +1294,17 @@ ngOnInit(): void {
     this.selectedAssignTask = {
       ...task,
       assignedTo: 0,
+      date: task.date ? new Date(task.date) : null,
+      endDate: task.endDate ? new Date(task.endDate) : null,
     };
 
-    this.assignRemarks = '';
+    if (!this.selectedAssignTask.endDate) {
+      this.setDefaultAssignEndDate();
+    }
 
+    this.assignRemarks = '';
     this.showAssignUserModal = true;
+
     this.users = [];
 
     this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId).subscribe({
@@ -2039,6 +1315,13 @@ ngOnInit(): void {
 
         this.users = allUsers.filter((user: any) => Number(user.userId) !== currentAssignedUserId);
 
+        this.selectedAssignTask.maxHours = Number(data?.maxHours || 0);
+
+        // Calculate default end date if there isn't already one
+        if (!this.selectedAssignTask.endDate) {
+          this.setDefaultAssignEndDate();
+        }
+
         console.log('Current assigned user:', currentAssignedUserId);
         console.log('Filtered users:', this.users);
       },
@@ -2048,6 +1331,33 @@ ngOnInit(): void {
         this.users = [];
       },
     });
+  }
+
+  private isValidTaskDateRange(): boolean {
+    if (!this.selectedAssignTask?.date) {
+      Swal.fire('Error', 'Start Date & Time is required.', 'error');
+      return false;
+    }
+
+    if (!this.selectedAssignTask?.endDate) {
+      Swal.fire('Error', 'End Date & Time is required.', 'error');
+      return false;
+    }
+
+    const startDate = new Date(this.selectedAssignTask.date);
+    const endDate = new Date(this.selectedAssignTask.endDate);
+
+    if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+      Swal.fire('Error', 'Please select valid Start and End Date & Time.', 'error');
+      return false;
+    }
+
+    if (endDate < startDate) {
+      Swal.fire('Error', 'End Date & Time cannot be before Start Date & Time.', 'error');
+      return false;
+    }
+
+    return true;
   }
 
   closeAssignUserModal(): void {
@@ -2062,33 +1372,34 @@ ngOnInit(): void {
       return;
     }
 
-    // Remarks required only when re-assigning an already-assigned task
     if (this.selectedAssignTask.taskStatus === 1 && !this.assignRemarks?.trim()) {
+      return;
+    }
+
+    if (!this.isValidTaskDateRange()) {
       return;
     }
 
     const taskId = this.selectedAssignTask.taskId;
     const assignedTo = this.selectedAssignTask.assignedTo;
     const remarks = this.assignRemarks?.trim() || '';
+    const startDate = this.formatDateTimeForApi(this.selectedAssignTask.date);
+    const endDate = this.formatDateTimeForApi(this.selectedAssignTask.endDate);
 
-    this.dataprovider.updateTaskAssignedUser(taskId, assignedTo, this.userId, remarks).subscribe({
+    this.dataprovider.updateTaskAssignedUser(taskId, assignedTo, this.userId, remarks, startDate, endDate).subscribe({
       next: (res: any) => {
         if (res?.success) {
-          // Find selected user
           const selectedUser = this.users.find((user: any) => user.userId == assignedTo);
-
-          // Update original table task only after API success
           const taskIndex = this.paginatedTasks.findIndex((task: any) => task.taskId == taskId);
 
           if (taskIndex !== -1) {
             this.paginatedTasks[taskIndex].assignedTo = assignedTo;
-
             this.paginatedTasks[taskIndex].assignedToName = selectedUser?.firstName || 'Unassigned User';
+            this.paginatedTasks[taskIndex].date = this.selectedAssignTask.date;
+            this.paginatedTasks[taskIndex].endDate = this.selectedAssignTask.endDate;
           }
 
           this.closeAssignUserModal();
-
-          // Optional: refresh table from backend
           this.onSearch();
         } else {
           console.error('Failed to assign user:', res?.message);
@@ -2101,11 +1412,63 @@ ngOnInit(): void {
     });
   }
 
+  private setDefaultAssignEndDate(): void {
+    if (!this.selectedAssignTask?.date) {
+      return;
+    }
+
+    const maxHours = Number(this.selectedAssignTask?.maxHours);
+
+    if (isNaN(maxHours) || maxHours <= 0) {
+      return;
+    }
+
+    const startDate = new Date(this.selectedAssignTask.date);
+
+    if (isNaN(startDate.getTime())) {
+      return;
+    }
+
+    const endDate = new Date(startDate);
+    endDate.setHours(endDate.getHours() + maxHours);
+
+    this.selectedAssignTask.endDate = endDate;
+  }
+
+  onAssignStartDateChange(startDate: any): void {
+    if (!startDate) {
+      return;
+    }
+
+    this.selectedAssignTask.date = new Date(startDate);
+
+    this.setDefaultAssignEndDate();
+  }
+
+  private formatDateTimeForApi(date: any): string | null {
+    if (!date) {
+      return null;
+    }
+
+    const dateObj = date instanceof Date ? date : new Date(date);
+
+    if (isNaN(dateObj.getTime())) {
+      return null;
+    }
+
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const hours = String(dateObj.getHours()).padStart(2, '0');
+    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:00`;
+  }
+
   onchangeloadUserDropdownData(task: any): void {
     this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
-
         this.users = data?.assignedUsers || [];
       },
       error: (error: any) => {
@@ -2116,130 +1479,14 @@ ngOnInit(): void {
     });
   }
 
-  // openAssignUserModal(task: any): void {
-  //   this.selectedAssignTask = task;
-  //   this.showAssignUserModal = true;
-
-  //   this.onchangeloadUserDropdownData(task);
-  // }
-
-  //old working
-  // canDisableChangeManager(task: any): boolean {
-  //   console.log(task);
-  //    // Status 5 => closed, locked for everyone, no exceptions (including admin)
-  // // if (task.taskStatus == 5) {
-  // //   return true;
-  // // }
-
-  //   // Admin can perform any action
-  //   if (this.isAdmin === 'Y') {
-  //     return false;
-  //   }
-
-  //   const isManager = Number(task.managerId) === Number(this.userId);
-
-  //   // Status 5 => closed, locked for everyone, no exceptions
-  //   if (task.taskStatus == 5) {
-  //     return true;
-  //   }
-  //   // const isAssignor = this.task.addedBy == this.userId;
-  //   const selfAssigned =
-  //     task.addedBy == task.assignedTo
-
-  //   if (selfAssigned) {
-  //     return false;
-  //   }
-  //   return (
-  //     (task.addedBy == this.userId &&
-  //       (task.taskStatus == 1 || task.taskStatus == 3)) ||
-
-  //     (task.assignedTo == this.userId &&
-  //       (task.taskStatus == 2 || task.taskStatus == 4))
-  //   );
-  // }
-
-  // canDisableChangeManager(task: any): boolean {
-  //   // Status 5 => closed, locked for everyone, no exceptions
-  //   if (task.taskStatus == 5) {
-  //     return true;
-  //   }
-
-  //   // Admin can perform any action
-  //   if (this.isAdmin === 'Y') {
-  //     return false;
-  //   }
-
-  //   const selfAssigned = task.addedBy == task.assignedTo;
-
-  //   if (selfAssigned) {
-  //     return false;
-  //   }
-
-  //   const canAct =
-  //     (task.addedBy == this.userId && (task.taskStatus == 1 || task.taskStatus == 3)) ||
-  //     (task.assignedTo == this.userId && (task.taskStatus == 2 || task.taskStatus == 4));
-
-  //   // Anyone who isn't addedBy/assignedTo with a matching status
-  //   // is locked out by default.
-  //   return !canAct;
-  // }
-
-
-//   canDisableChangeManager(task: any): boolean {
-
-//   // Status 5 => closed, locked for everyone, no exceptions (including admin)
-//   if (task.taskStatus == 5) {
-//     return true;
-//   }
-
-//   // Admin can perform any action
-//   if (this.isAdmin === 'Y') {
-//     return false;
-//   }
-
-//   const selfAssigned = task.addedBy == task.assignedTo;
-
-//   if (selfAssigned) {
-//     return false;
-//   }
-
-//   // ============================================================
-//   // MANAGER
-//   // ============================================================
-//   if (this.loginType === 'manager') {
-
-//     const canAct =
-//       (task.addedBy == this.userId &&
-//         (task.taskStatus == 1 || task.taskStatus == 3)) ||
-//       (task.assignedTo == this.userId &&
-//         (task.taskStatus == 2 || task.taskStatus == 4));
-
-//     return canAct;
-//   }
-
-//   // ============================================================
-//   // EMPLOYEE
-//   // ============================================================
-//   return (
-//     (task.addedBy == this.userId &&
-//       (task.taskStatus == 1 || task.taskStatus == 3)) ||
-
-//     (task.assignedTo == this.userId &&
-//       (task.taskStatus == 2 || task.taskStatus == 4))
-//   );
-// }
-
   isStatusRadioDisabled(task: any): boolean {
     const selfAssigned = task.addedBy == this.userId && task.assignedTo == this.userId;
     const isManager = task.managerId == this.userId;
-    // console.log("{} is manager only " + isManager)
+
     return isManager;
   }
 
   canShowAssignorClosure(): boolean {
-    // console.error("Inside method checking !!!!")
-    // console.error("{this.userId }" + this.userId)
-
     console.error('{this.managerId }' + this.task.addedBy, this.task.managerId, this.task.assignedTo);
     const isManager = this.task.managerId == this.userId;
 
@@ -2279,10 +1526,7 @@ ngOnInit(): void {
 
   clientSearchText: string = '';
   showClientDropdown: boolean = false;
-
   selectedClientId: number = 0;
-
-  // filteredClients: any[] = [];
 
   filterClients(): void {
     const search = this.clientSearchText.toLowerCase().trim();
@@ -2297,23 +1541,17 @@ ngOnInit(): void {
 
     this.showClientDropdown = true;
 
-    // If search is cleared, reset client filter
     if (!search) {
       this.selectedClient = '';
-
       this.filteredClients = [...this.clients];
     }
   }
 
   selectClient(client: any): void {
     this.clientSearchText = client.name;
-
-    // This is the value used by your filters/API
     this.selectedClient = String(client.clientId);
-
     this.showClientDropdown = false;
 
-    // Load data immediately
     this.onSearch();
   }
 
@@ -2325,7 +1563,7 @@ ngOnInit(): void {
     this.filteredClients = [];
     this.showClientDropdown = false;
 
-    this.onSearch(); // Reload all records
+    this.onSearch();
   }
   sendMail: boolean = false;
   showTaskCategoryDropdown = false;
@@ -2334,129 +1572,64 @@ ngOnInit(): void {
   onDocumentClick(event: Event): void {
     const target = event.target as HTMLElement;
 
-    // Status dropdown
     if (!target.closest('.status-dropdown')) {
       this.showStatusDropdown = false;
     }
 
-    // Client dropdown
     if (!target.closest('.client-dropdown-container')) {
       this.showClientDropdown = false;
     }
 
-    // Task Category dropdown
     if (!target.closest('.task-category-dropdown')) {
       this.showTaskCategoryDropdown = false;
     }
   }
 
+  canDisableChangeManager(task: any): boolean {
+    if (Number(task.status) === 2 || Number(task.status) === 3) {
+      return true;
+    }
 
-//   canDisableChangeManager(task: any): boolean {
+    if (Number(task.taskStatus) === 5) {
+      return true;
+    }
 
-//       // Inactive (2) or Deleted (3) task => locked for everyone, no exceptions (including admin)
-//   if (Number(task.status) === 2 || Number(task.status) === 3) {
-//     return true;
-//   }
+    if (this.isAdmin === 'Y') {
+      return false;
+    }
 
-//   // Status 5 => closed, locked for everyone, no exceptions (including admin)
-//   if (task.taskStatus == 5) {
-//     return true;
-//   }
+    const userId = Number(this.userId);
+    const isAssignor = Number(task.addedBy) === userId;
+    const isAssignee = Number(task.assignedTo) === userId;
+    const isManager = Number(task.managerId) === userId;
 
-//   // Admin can perform any action
-//   if (this.isAdmin === 'Y') {
-//     return false;
-//   }
+    if (isAssignor && isAssignee) {
+      return false;
+    }
 
-//   const selfAssigned = task.addedBy == task.assignedTo;
+    const taskStatus = Number(task.taskStatus);
+    let canAct = false;
 
-//   if (selfAssigned) {
-//     return false;
-//   }
+    if (taskStatus === 1 || taskStatus === 3) {
+      canAct = isAssignee;
+    } else if (taskStatus === 2 || taskStatus === 4) {
+      canAct = isAssignor || isManager;
+    }
 
-//   // ============================================================
-//   // MANAGER
-//   // ============================================================
-//   if (this.loginType === 'manager') {
-
-//     const canAct =
-//       (task.addedBy == this.userId &&
-//         (task.taskStatus == 1 || task.taskStatus == 3)) ||
-//       (task.assignedTo == this.userId &&
-//         (task.taskStatus == 2 || task.taskStatus == 4));
-
-//     return canAct;
-//   }
-
-//   // ============================================================
-//   // EMPLOYEE
-//   // ============================================================
-//   return (
-//     (task.addedBy == this.userId &&
-//       (task.taskStatus == 1 || task.taskStatus == 3)) ||
-
-//     (task.assignedTo == this.userId &&
-//       (task.taskStatus == 2 || task.taskStatus == 4))
-//   );
-// }
-canDisableChangeManager(task: any): boolean {
-  // Inactive (2) or Deleted (3) task => locked for everyone (including admin)
-  if (Number(task.status) === 2 || Number(task.status) === 3) {
-    return true;
+    return !canAct;
   }
 
-  // Task status 5 => closed, locked for everyone (including admin)
-  if (Number(task.taskStatus) === 5) {
-    return true;
+  getSelectedTaskStatusLabel(): string {
+    if (this.selectedTaskStatuses.length === 0) {
+      return '--All Task Status--';
+    }
+
+    const labels = this.taskStatusOptions.filter((s) => this.selectedTaskStatuses.includes(s.id)).map((s) => s.label);
+
+    if (labels.length > 2) {
+      return `${labels.length} statuses selected`;
+    }
+
+    return labels.join(', ');
   }
-
-  // Admin can perform any action
-  if (this.isAdmin === 'Y') {
-    return false;
-  }
-
-  const userId = Number(this.userId);
-  const isAssignor = Number(task.addedBy) === userId;
-  const isAssignee = Number(task.assignedTo) === userId;
-  const isManager = Number(task.managerId) === userId;
-
-  // Self-assigned task: only that user can act
-  if (isAssignor && isAssignee) {
-    return false;
-  }
-
-  const taskStatus = Number(task.taskStatus);
-  let canAct = false;
-
-  // Assigned (1) / Re-Open (3): assignee has to submit work
-  if (taskStatus === 1 || taskStatus === 3) {
-    canAct = isAssignee;
-  }
-
-  // Assignee Closure (2) / Assignee Re-Closure (4): assignor (or client manager) reviews
-  else if (taskStatus === 2 || taskStatus === 4) {
-    canAct = isAssignor || isManager;
-  }
-
-  // Button is disabled unless the user is allowed to act
-  return !canAct;
-}
-
-
-getSelectedTaskStatusLabel(): string {
-  if (this.selectedTaskStatuses.length === 0) {
-    return '--All Task Status--';
-  }
-
-  const labels = this.taskStatusOptions
-    .filter((s) => this.selectedTaskStatuses.includes(s.id))
-    .map((s) => s.label);
-
-  // Long lists get shortened so the button doesn't overflow
-  if (labels.length > 2) {
-    return `${labels.length} statuses selected`;
-  }
-
-  return labels.join(', ');
-}
 }

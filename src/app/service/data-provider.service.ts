@@ -1544,14 +1544,17 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}api/task/dashboard-clients?userId=${userId}&isAdmin=${isAdmin}&loginType=${loginType}&selectedClientId=${selectedClientId}`);
   }
 
-  updateTaskAssignedUser(taskId: any, assignedTo: any, userId: any, remarks: string): Observable<any> {
+  updateTaskAssignedUser(taskId: any, assignedTo: any, userId: any, remarks: string, date: string | null, endDate: string | null): Observable<any> {
     return this.http.put(`${environment.apiBaseUrl}admin/task/updateAssignedUser`, {
       taskId: taskId,
       assignedTo: assignedTo,
       userId: userId,
       remarks: remarks,
+      date: date,
+      endDate: endDate,
     });
   }
+
 
   // ============================================================
   // HOLIDAY
