@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 
 import { Component, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild, ViewEncapsulation } from '@angular/core';
 
@@ -68,6 +68,7 @@ export const MY_DATE_TIME_FORMATS = {
   styleUrl: './add-index.scss',
   encapsulation: ViewEncapsulation.Emulated,
   providers: [
+    DatePipe,
     {
       provide: OWL_DATE_TIME_LOCALE,
       useValue: 'en-GB',
@@ -119,6 +120,7 @@ export class AddIndexComponent implements OnInit {
     private platformId: Object,
 
     private router: Router,
+    private datePipe: DatePipe,
   ) {}
   dashboardFilter: string = '';
   ngOnInit(): void {
@@ -696,13 +698,14 @@ export class AddIndexComponent implements OnInit {
 
   onTaskCategoryChange(): void {
     this.calculateEndDate();
-    this.loadAssigneeWorkload(this.task.taskCategoryId);
+    //  this.loadAssigneeWorkload(this.task.taskCategoryId,this.task.startDate);
   }
 
   onStartDateChange(value: any): void {
     this.task.startDate = value;
     this.calculateEndDate();
     this.validateDates();
+    this.loadAssigneeWorkload();
   }
 
   private calculateEndDate(): void {
@@ -761,25 +764,24 @@ export class AddIndexComponent implements OnInit {
     }
   }
 
-
   workloadList: { assignedTo: number; hours: number }[] = [];
 
-  private loadAssigneeWorkload(categoryId: any): void {
-  if (!categoryId) {
-    this.workloadList = [];
-    return;
+  private loadAssigneeWorkload(): void {
+    if (!this.task.taskCategoryId || !this.task.startDate) {
+      return;
+    }
+    const date = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
+    if (!date) {
+      return;
+    }
+    this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, date).subscribe({
+      next: (response) => {
+        console.log('Assignee Workload:', response);
+        this.workloadList = response.data;
+      },
+      error: (error) => {
+        console.error('Error fetching assignee workload', error);
+      },
+    });
   }
-
-  this.dataprovider.getAssigneeWorkload(Number(categoryId)).subscribe({
-    next: (res: any) => {
-      this.workloadList = res?.success && Array.isArray(res.data) ? res.data : [];
-      console.log('Workload:', this.workloadList);
-      // do your calculation with this.workloadList here
-    },
-    error: (err: any) => {
-      console.error('Error loading assignee workload:', err);
-      this.workloadList = [];
-    },
-  });
-}
 }
