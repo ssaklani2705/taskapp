@@ -316,30 +316,45 @@
           </div>
 
           <!-- ================= TASK CATEGORY ================= -->
-          <div class="user-form-row">
-            <div class="user-form-col">
-              <div class="user-form-group">
-                <label class="user-label">
-                  Task Category
-                  <span class="required">*</span>
-                </label>
+          <!-- ================= TASK CATEGORY + TIME ================= -->
+<div class="user-form-row">
+  <div class="user-form-col">
+    <div class="user-form-group">
+      <label class="user-label">
+        Task Category
+        <span class="required">*</span>
+      </label>
 
-                <select class="user-input user-select" formControlName="taskCatId">
-                  <option [ngValue]="null">Select Task Category</option>
+      <select class="user-input user-select" formControlName="taskCatId">
+        <option [ngValue]="null">Select Task Category</option>
+        <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
+          {{ category.name }}
+        </option>
+      </select>
 
-                  <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
-                    {{ category.name }}
-                  </option>
-                </select>
+      <div class="user-error" *ngIf="recurringForm.get('taskCatId')?.touched && recurringForm.get('taskCatId')?.invalid">Task Category is required</div>
+    </div>
+  </div>
 
-                <div class="user-error" *ngIf="recurringForm.get('taskCatId')?.touched && recurringForm.get('taskCatId')?.invalid">Task Category is required</div>
-              </div>
-            </div>
+  <!-- TIME (HH:mm:ss) -->
+  <div class="user-form-col">
+    <div class="user-form-group">
+      <label class="user-label">
+        Time
+        <span class="required">*</span>
+      </label>
 
-            <div class="user-form-col empty-column"></div>
-            <div class="user-form-col empty-column"></div>
-            <div class="user-form-col empty-column"></div>
-          </div>
+      <!-- <input type="time" step="1" class="user-input" formControlName="time" /> -->
+
+      <input type="time" class="user-input" formControlName="time" />
+
+      <div class="user-error" *ngIf="recurringForm.get('time')?.touched && recurringForm.get('time')?.invalid">Time is required</div>
+    </div>
+  </div>
+
+  <div class="user-form-col empty-column"></div>
+  <div class="user-form-col empty-column"></div>
+</div>
 
           <!-- ================= BUTTONS ================= -->
           <div class="user-buttons">

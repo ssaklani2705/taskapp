@@ -44,6 +44,7 @@ export class ManagerDashboard {
   tasks: Task[] = [];
   task: any = {};
   clients: Client[] = [];
+  private clientsLoaded = false;
 
   private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
 
@@ -99,7 +100,7 @@ export class ManagerDashboard {
       taskStatusIds: [],
     },
     {
-      title: 'Completed Tasks',
+      title: 'Completed',
       value: 0,
       icon: 'check_circle',
       className: 'green',
@@ -107,7 +108,7 @@ export class ManagerDashboard {
       taskStatusIds: ['5'],
     },
     {
-      title: 'All Pending Tasks',
+      title: 'All Pending',
       value: 0,
       icon: 'pending_actions',
       className: 'orange',
@@ -115,7 +116,7 @@ export class ManagerDashboard {
       taskStatusIds: ['1', '2', '3', '4'],
     },
     {
-      title: 'Assigned Tasks',
+      title: 'Assigned',
       value: 0,
       icon: 'assignment',
       className: 'blue',
@@ -123,7 +124,7 @@ export class ManagerDashboard {
       taskStatusIds: ['1'],
     },
     {
-      title: 'Assignee Closure Tasks',
+      title: 'Assignee Closure',
       value: 0,
       icon: 'task_alt',
       className: 'orange',
@@ -131,7 +132,7 @@ export class ManagerDashboard {
       taskStatusIds: ['2'],
     },
     {
-      title: 'Re-Open Tasks',
+      title: 'Re-Open',
       value: 0,
       icon: 'restart_alt',
       className: 'red',
@@ -139,7 +140,7 @@ export class ManagerDashboard {
       taskStatusIds: ['3'],
     },
     {
-      title: 'Assignee Re-Closure Tasks',
+      title: 'Assignee Re-Closure',
       value: 0,
       icon: 'published_with_changes',
       className: 'purple',
@@ -147,7 +148,7 @@ export class ManagerDashboard {
       taskStatusIds: ['4'],
     },
     {
-      title: 'Unassigned Tasks',
+      title: 'Unassigned',
       value: 0,
       icon: 'person_off',
       className: 'red',
@@ -204,18 +205,32 @@ export class ManagerDashboard {
           duedatetime: task.dueDateTime,
         }));
 
-        const clientMap = new Map<number, Client>();
+        // const clientMap = new Map<number, Client>();
 
-        taskList.forEach((task: any) => {
-          if (task.clientId && task.clientName) {
-            clientMap.set(task.clientId, {
-              clientId: task.clientId,
-              name: task.clientName,
-            });
-          }
-        });
+        // taskList.forEach((task: any) => {
+        //   if (task.clientId && task.clientName) {
+        //     clientMap.set(task.clientId, {
+        //       clientId: task.clientId,
+        //       name: task.clientName,
+        //     });
+        //   }
+        // });
 
-        this.clients = Array.from(clientMap.values());
+        // this.clients = Array.from(clientMap.values());
+
+        if (!this.clientsLoaded && !this.selectedClient) {
+          const clientMap = new Map<number, Client>();
+          taskList.forEach((task: any) => {
+            if (task.clientId && task.clientName) {
+              clientMap.set(task.clientId, {
+                clientId: task.clientId,
+                name: task.clientName,
+              });
+            }
+          });
+          this.clients = Array.from(clientMap.values());
+          this.clientsLoaded = true;
+        }
       },
       error: (error) => {
         console.error('Error fetching tasks:', error);

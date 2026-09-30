@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DATE_LOCALE, MatNativeDateModule, DateAdapter } from '@angular/material/core';
+
 import { DataProviderService, DepartmentDTO, DesignationDTO, TaskCategoryDTO } from '../../../service/data-provider.service';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 
@@ -68,14 +69,14 @@ export class AddTeam implements OnInit, AfterViewInit {
   };
 
   weeklyOffOptions = [
-    { id: 1, label: 'Sunday' },
-    { id: 2, label: 'Monday' },
-    { id: 3, label: 'Tuesday' },
-    { id: 4, label: 'Wednesday' },
-    { id: 5, label: 'Thursday' },
-    { id: 6, label: 'Friday' },
-    { id: 7, label: 'Saturday' },
-  ];
+  { id: 1, label: 'Sunday' },
+  { id: 2, label: 'Monday' },
+  { id: 3, label: 'Tuesday' },
+  { id: 4, label: 'Wednesday' },
+  { id: 5, label: 'Thursday' },
+  { id: 6, label: 'Friday' },
+  { id: 7, label: 'Saturday' },
+];
 
   typeGroupMap: { [key: number]: string } = {
     1: 'Masters',
@@ -122,6 +123,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.createForm();
   }
 
+  // ============================================================
+  // FORM
+  // ============================================================
+
   private createForm(): void {
     this.userForm = this.fb.group({
       name: ['', Validators.required],
@@ -132,8 +137,8 @@ export class AddTeam implements OnInit, AfterViewInit {
       telephone: [''],
       status: [1, Validators.required],
       isAdmin: [false],
-      isHod: [false], // NEW
-      weeklyOff: [null],
+      isHod: [false],          // NEW
+      weeklyOff: [[]],  
       desigmationId: [null, Validators.required],
     });
 
@@ -143,15 +148,19 @@ export class AddTeam implements OnInit, AfterViewInit {
       }
     });
 
+        // NEW: HOD unchecked -> only one department allowed
     this.userForm.get('isHod')?.valueChanges.subscribe((isHod: boolean) => {
       if (!isHod && this.selectedDepartmentIds.length > 1) {
         this.selectedDepartmentIds = [this.selectedDepartmentIds[0]];
         this.showDepartmentDropdown = false;
-
         this.loadCategories();
       }
     });
   }
+
+  // ============================================================
+  // INIT
+  // ============================================================
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -193,6 +202,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     }, 100);
   }
 
+  // ============================================================
+  // ADD MODE
+  // ============================================================
+
   private setupAddMode(): void {
     this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
     this.userForm.get('password')?.updateValueAndValidity();
@@ -209,6 +222,13 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.loadPermissionModules(0);
   }
 
+  // ============================================================
+  // EDIT MODE
+  // ============================================================
+
+  /**
+   * Accepts: [1, 2] | "1,2" | "3" | 3 | null
+   */
   private parseIdList(value: any): number[] {
     if (Array.isArray(value)) {
       return value.map((id: any) => Number(id)).filter((id: number) => !isNaN(id));
@@ -228,27 +248,6 @@ export class AddTeam implements OnInit, AfterViewInit {
     return [];
   }
 
-  private parseWeeklyOff(value: any): number | null {
-    if (value === null || value === undefined || value === '') {
-      return null;
-    }
-
-    if (Array.isArray(value)) {
-      return value.length ? Number(value[0]) : null;
-    }
-
-    if (typeof value === 'string') {
-      const firstValue = value.split(',')[0].trim();
-      const id = Number(firstValue);
-
-      return isNaN(id) ? null : id;
-    }
-
-    const id = Number(value);
-
-    return isNaN(id) ? null : id;
-  }
-
   private loadUserDetails(): void {
     this.dataProvider.getUserManagementDetailsById(this.userId).subscribe({
       next: (response: any) => {
@@ -258,13 +257,20 @@ export class AddTeam implements OnInit, AfterViewInit {
           return;
         }
 
+        // Password is optional during edit
         this.userForm.get('password')?.clearValidators();
         this.userForm.get('password')?.updateValueAndValidity();
 
+        // Restore selected categories
         this.selectedCategoryIds = this.parseIdList(response.taskcategoryIds);
+
+        // Restore selected departments
+        // (falls back to old single departmentId if API doesn't return departmentIds yet)
         this.selectedDepartmentIds = this.parseIdList(response.departmentIds ?? response.departmentId);
 
+        // NEW: HOD flag (also treat users with several departments as HOD)
         const isHod = response.isHod === 'Y' || this.selectedDepartmentIds.length > 1;
+
 
         this.userForm.patchValue({
           name: response.firstName || '',
@@ -274,12 +280,12 @@ export class AddTeam implements OnInit, AfterViewInit {
           expiryDate: this.parseExpiryDate(response.expiryDate),
           status: Number(response.status) || 1,
           isAdmin: response.permission === 'Y',
-          isHod: isHod,
-          // weeklyOff: this.parseIdList(response.weeklyOffIds ?? response.weeklyOff),
-          weeklyOff: this.parseWeeklyOff(response.weeklyOffIds ?? response.weeklyOff),
+          isHod: isHod,               
+           weeklyOff: this.parseIdList(response.weeklyOffIds ?? response.weeklyOff),               // NEW
           desigmationId: response.designationId || null,
         });
 
+        // false = keep the categories already assigned to the user
         if (this.selectedDepartmentIds.length > 0) {
           this.loadCategories(false);
         } else {
@@ -299,6 +305,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     });
   }
 
+  // ============================================================
+  // LOAD PERMISSION MODULES
+  // ============================================================
+
   private loadPermissionModules(rightsAndPermissionId: number): void {
     this.dataProvider.getUserManagementDetailsById(rightsAndPermissionId).subscribe({
       next: (response: any) => {
@@ -311,6 +321,10 @@ export class AddTeam implements OnInit, AfterViewInit {
       },
     });
   }
+
+  // ============================================================
+  // BUILD GROUPS
+  // ============================================================
 
   private buildPermissionGroups(modules: any[]): void {
     const sortedModules = [...modules].sort((a, b) => a.type - b.type);
@@ -391,10 +405,12 @@ export class AddTeam implements OnInit, AfterViewInit {
 
       this.permissions[moduleName][action] = newValue;
 
+      // Any real permission automatically enables View Only
       if (dependentActions.includes(action) && newValue) {
         this.permissions[moduleName]['View Only'] = true;
       }
 
+      // Remove View Only if no other permission remains
       if (dependentActions.includes(action) && !newValue) {
         const hasOtherPermission = dependentActions.some((a) => this.permissions[moduleName][a]);
 
@@ -410,6 +426,7 @@ export class AddTeam implements OnInit, AfterViewInit {
   onPermissionChange(moduleName: string, action: string): void {
     const dependentActions = ['Add', 'Edit', 'Delete', 'Approve', 'Admin Approval', 'Export Excel'];
 
+    // View Only checked: remove other permissions
     if (action === 'View Only') {
       if (this.permissions[moduleName]['View Only']) {
         dependentActions.forEach((permission) => {
@@ -418,6 +435,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       }
     }
 
+    // Any actual permission: View Only automatically checked
     if (dependentActions.includes(action)) {
       if (this.permissions[moduleName][action]) {
         this.permissions[moduleName]['View Only'] = true;
@@ -441,6 +459,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     });
   }
 
+  // ============================================================
+  // SUBMIT
+  // ============================================================
+
   onSubmit(): void {
     if (this.isSubmitting) {
       return;
@@ -448,7 +470,10 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     this.userForm.markAllAsTouched();
 
+    // Department validation
     this.showDepartmentValidation = true;
+
+    // Category validation
     this.showCategoryValidation = true;
 
     if (this.selectedDepartmentIds.length === 0) {
@@ -473,28 +498,47 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.isSubmitting = true;
 
     const formValues = this.userForm.value;
+
     const formattedExpiryDate = this.formatDateForApi(formValues.expiryDate);
 
     const payload: any = {
       userId: this.isEditMode ? this.userId : 0,
+
       firstName: formValues.name ? formValues.name.trim() : '',
+
       mobileNo: formValues.mobile || '',
+
       email: formValues.email ? formValues.email.trim().toLowerCase() : '',
+
       expiryDate: formattedExpiryDate,
+
       permission: formValues.isAdmin ? 'Y' : 'N',
-      isHod: formValues.isHod ? 'Y' : 'N',
+
+      isHod: formValues.isHod ? 'Y' : 'N',     // NEW
+
+      // Multiple selected departments
       departmentIds: this.selectedDepartmentIds,
+
+      // Multiple selected categories
       categoryIds: this.selectedCategoryIds,
+
       status: Number(formValues.status),
+
       designationId: Number(formValues.desigmationId),
+
       qcFlag: 0,
+
       telephone: formValues.telephone || '',
+
       createdBy: this.createdBy,
-      // weeklyOff: formValues.weeklyOff?.length ? formValues.weeklyOff.join(',') : null,
-      weeklyOff: formValues.weeklyOff ? Number(formValues.weeklyOff) : null,
+      weeklyOff: formValues.weeklyOff?.length ? formValues.weeklyOff.join(',') : null,   // "1,7" or null
+
+      
+
       module: this.isRightsHidden ? [] : this.buildModulePermissions(),
     };
 
+    // Password: required on ADD, optional on EDIT
     if (formValues.password && formValues.password.trim()) {
       payload.password = formValues.password.trim();
     }
@@ -545,6 +589,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     );
   }
 
+  // ============================================================
+  // RESET
+  // ============================================================
+
   onReset(): void {
     if (this.isEditMode) {
       this.loadUserDetails();
@@ -560,8 +608,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       telephone: '',
       status: 1,
       isAdmin: false,
-      isHod: false,
-      weeklyOff: null,
+      isHod: false,            // NEW
       desigmationId: null,
     });
 
@@ -577,6 +624,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.selectAllRows = JSON.parse(JSON.stringify(this.originalSelectAllRows));
   }
 
+  // ============================================================
+  // BACK
+  // ============================================================
+
   backToIndexPage(): void {
     this.router.navigate(['/user-management-index'], {
       state: {
@@ -587,6 +638,10 @@ export class AddTeam implements OnInit, AfterViewInit {
       },
     });
   }
+
+  // ============================================================
+  // FILTER STATE
+  // ============================================================
 
   private readFilterState(): void {
     let stateData: any = null;
@@ -614,6 +669,10 @@ export class AddTeam implements OnInit, AfterViewInit {
       this.size = stateData.size ?? 10;
     }
   }
+
+  // ============================================================
+  // VALIDATION
+  // ============================================================
 
   validateExpiryDate(): boolean {
     const control = this.userForm.get('expiryDate');
@@ -653,6 +712,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     return true;
   }
 
+  // ============================================================
+  // DATE
+  // ============================================================
+
   private formatDateForApi(date: Date | null): string {
     if (!date || !(date instanceof Date) || isNaN(date.getTime())) {
       console.error('Invalid expiry date:', date);
@@ -679,6 +742,7 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     const dateString = String(value).trim();
 
+    // yyyy-MM-dd
     const yyyyMatch = dateString.match(/^(\d{4})-(\d{2})-(\d{2})$/);
     if (yyyyMatch) {
       const date = new Date(Number(yyyyMatch[1]), Number(yyyyMatch[2]) - 1, Number(yyyyMatch[3]));
@@ -686,6 +750,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       return date;
     }
 
+    // dd-MM-yyyy
     const ddMatch = dateString.match(/^(\d{2})-(\d{2})-(\d{4})$/);
     if (ddMatch) {
       const date = new Date(Number(ddMatch[3]), Number(ddMatch[2]) - 1, Number(ddMatch[1]));
@@ -693,6 +758,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       return date;
     }
 
+    // yyyy/MM/dd
     const slashMatch = dateString.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
     if (slashMatch) {
       const date = new Date(Number(slashMatch[1]), Number(slashMatch[2]) - 1, Number(slashMatch[3]));
@@ -700,6 +766,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       return date;
     }
 
+    // Java date string e.g. Wed Mar 13 00:00:00 IST 2024
     const normalized = dateString.replace(' IST ', ' GMT+0530 ');
     const parsed = new Date(normalized);
 
@@ -711,6 +778,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     console.error('Unable to parse expiry date:', value);
     return null;
   }
+
+  // ============================================================
+  // INPUT RESTRICTIONS
+  // ============================================================
 
   allowOnlyLetters(event: KeyboardEvent): void {
     if (!/^[a-zA-Z\s]$/.test(event.key)) {
@@ -747,6 +818,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     }
   }
 
+  // ============================================================
+  // DROPDOWN DATA
+  // ============================================================
+
   loadDepartments(): void {
     this.dataProvider.getActiveDepartments().subscribe({
       next: (response: DepartmentDTO[]) => {
@@ -769,6 +844,10 @@ export class AddTeam implements OnInit, AfterViewInit {
     });
   }
 
+  // ============================================================
+  // DEPARTMENT MULTI-SELECT
+  // ============================================================
+
   toggleDepartment(departmentId: number, event: Event): void {
     const checkbox = event.target as HTMLInputElement;
 
@@ -782,11 +861,14 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     this.showDepartmentValidation = this.selectedDepartmentIds.length === 0;
 
+    // Reload categories for the new set of departments
     this.loadCategories();
   }
 
+    // NEW: single-select department (used when HOD is unchecked)
   onSingleDepartmentChange(departmentId: number | null): void {
     this.selectedDepartmentIds = departmentId ? [Number(departmentId)] : [];
+
     this.showDepartmentValidation = this.selectedDepartmentIds.length === 0;
 
     this.loadCategories();
@@ -811,6 +893,17 @@ export class AddTeam implements OnInit, AfterViewInit {
       .join(', ');
   }
 
+  // ============================================================
+  // CATEGORY MULTI-SELECT
+  // ============================================================
+
+  /**
+   * @param clearSelection
+   *   true  = user changed departments: keep only the selected categories
+   *           that still belong to the chosen departments
+   *           (department 1 auto-selects all categories)
+   *   false = edit-mode initial load: keep saved categories as they are
+   */
   loadCategories(clearSelection: boolean = true): void {
     if (this.selectedDepartmentIds.length === 0) {
       this.categoryList = [];
@@ -828,9 +921,11 @@ export class AddTeam implements OnInit, AfterViewInit {
 
         if (clearSelection) {
           if (this.selectedDepartmentIds.includes(1)) {
+            // Department 1 = all categories selected automatically
             this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
             this.showCategoryValidation = false;
           } else {
+            // Drop categories that no longer belong to the selected departments
             const validIds = response.map((category) => category.taskcategoryId);
             this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => validIds.includes(id));
           }
@@ -874,6 +969,10 @@ export class AddTeam implements OnInit, AfterViewInit {
       .join(', ');
   }
 
+  // ============================================================
+  // CLOSE DROPDOWNS ON OUTSIDE CLICK
+  // ============================================================
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as Node;
@@ -886,47 +985,52 @@ export class AddTeam implements OnInit, AfterViewInit {
       this.showCategoryDropdown = false;
     }
 
-    // if (this.showWeeklyOffDropdown && this.weeklyOffDropdown && !this.weeklyOffDropdown.nativeElement.contains(target)) {
-    //   this.showWeeklyOffDropdown = false;
-    // }
+    if (this.showWeeklyOffDropdown && this.weeklyOffDropdown && !this.weeklyOffDropdown.nativeElement.contains(target)) {
+  this.showWeeklyOffDropdown = false;
+}
   }
 
+  // ============================================================
+  // RIGHTS SECTION VISIBILITY
+  // ============================================================
+
+  /** Rights section hidden when Department 1 is one of the selected departments */
   get isRightsHidden(): boolean {
     return this.selectedDepartmentIds.includes(1);
   }
 
-  get singleDepartmentId(): number | null {
+   get singleDepartmentId(): number | null {
     return this.selectedDepartmentIds.length ? this.selectedDepartmentIds[0] : null;
   }
 
-  // @ViewChild('weeklyOffDropdown') weeklyOffDropdown!: ElementRef;
-  // showWeeklyOffDropdown = false;
+@ViewChild('weeklyOffDropdown') weeklyOffDropdown!: ElementRef;
+  showWeeklyOffDropdown = false;
 
-  // isWeeklyOffChecked(id: number): boolean {
-  //   const selected: number[] = this.userForm.get('weeklyOff')?.value || [];
-  //   return selected.includes(id);
-  // }
+isWeeklyOffChecked(id: number): boolean {
+  const selected: number[] = this.userForm.get('weeklyOff')?.value || [];
+  return selected.includes(id);
+}
 
-  // toggleWeeklyOff(id: number, event: Event): void {
-  //   const checked = (event.target as HTMLInputElement).checked;
-  //   const current: number[] = this.userForm.get('weeklyOff')?.value || [];
+toggleWeeklyOff(id: number, event: Event): void {
+  const checked = (event.target as HTMLInputElement).checked;
+  const current: number[] = this.userForm.get('weeklyOff')?.value || [];
 
-  //   const updated = checked ? [...current.filter((x) => x !== id), id] : current.filter((x) => x !== id);
+  const updated = checked
+    ? [...current.filter((x) => x !== id), id]
+    : current.filter((x) => x !== id);
 
-  //   this.userForm.get('weeklyOff')?.setValue(updated.sort((a, b) => a - b));
-  //   this.userForm.get('weeklyOff')?.markAsDirty();
-  // }
+  this.userForm.get('weeklyOff')?.setValue(updated.sort((a, b) => a - b));
+  this.userForm.get('weeklyOff')?.markAsDirty();
+}
 
-  // getSelectedWeeklyOffLabel(): string {
-  //   const selected: number[] = this.userForm.get('weeklyOff')?.value || [];
-
-  //   if (selected.length === 0) {
-  //     return 'Select Weekly Off';
-  //   }
-
-  //   return this.weeklyOffOptions
-  //     .filter((d) => selected.includes(d.id))
-  //     .map((d) => d.label)
-  //     .join(', ');
-  // }
+getSelectedWeeklyOffLabel(): string {
+  const selected: number[] = this.userForm.get('weeklyOff')?.value || [];
+  if (selected.length === 0) {
+    return 'Select Weekly Off';
+  }
+  return this.weeklyOffOptions
+    .filter((d) => selected.includes(d.id))
+    .map((d) => d.label)
+    .join(', ');
+}
 }

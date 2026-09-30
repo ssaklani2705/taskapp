@@ -48,7 +48,7 @@
   </div>
 
   <section class="kpi-grid">
-    <mat-card class="kpi-card" *ngFor="let kpi of kpis" [class]="kpi.className" (click)="onKpiClick(kpi)">
+    <mat-card class="kpi-card" *ngFor="let kpi of kpis" [class]="kpi.className" [class.disabled]="kpi.value === 0" (click)="kpi.value > 0 && onKpiClick(kpi)">
       <div class="kpi-icon-box">
         <mat-icon>{{ kpi.icon }}</mat-icon>
       </div>
