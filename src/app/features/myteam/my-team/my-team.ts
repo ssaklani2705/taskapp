@@ -168,13 +168,13 @@ export class MyTeam implements OnInit {
 
     {
       key: 'departmentName',
-      label: 'Department Name',
+      label: 'Department',
       sortable: true,
     },
 
     {
       key: 'designationName',
-      label: 'Designation Name',
+      label: 'Designation',
       sortable: true,
     },
 

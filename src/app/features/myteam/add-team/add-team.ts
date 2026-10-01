@@ -143,11 +143,22 @@ export class AddTeam implements OnInit, AfterViewInit {
       }
     });
 
-    this.userForm.get('isHod')?.valueChanges.subscribe((isHod: boolean) => {
-      if (!isHod && this.selectedDepartmentIds.length > 1) {
-        this.selectedDepartmentIds = [this.selectedDepartmentIds[0]];
-        this.showDepartmentDropdown = false;
+    // this.userForm.get('isHod')?.valueChanges.subscribe((isHod: boolean) => {
+    //   if (!isHod && this.selectedDepartmentIds.length > 1) {
+    //     this.selectedDepartmentIds = [this.selectedDepartmentIds[0]];
+    //     this.showDepartmentDropdown = false;
 
+    //     this.loadCategories();
+    //   }
+    // });
+    this.userForm.get('isHod')?.valueChanges.subscribe((isHod: boolean) => {
+      if (isHod) {
+        this.loadCategories(false);
+      } else {
+        if (this.selectedDepartmentIds.length > 1) {
+          this.selectedDepartmentIds = [this.selectedDepartmentIds[0]];
+        }
+        this.showDepartmentDropdown = false;
         this.loadCategories();
       }
     });
@@ -826,8 +837,20 @@ export class AddTeam implements OnInit, AfterViewInit {
         this.categoryList = response;
         this.categoriesLoading = false;
 
+        // if (clearSelection) {
+        //   if (this.selectedDepartmentIds.includes(1)) {
+        //     this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
+        //     this.showCategoryValidation = false;
+        //   } else {
+        //     const validIds = response.map((category) => category.taskcategoryId);
+        //     this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => validIds.includes(id));
+        //   }
+        // }
         if (clearSelection) {
-          if (this.selectedDepartmentIds.includes(1)) {
+          if (this.isHod) {
+            this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
+            this.showCategoryValidation = false;
+          } else if (this.selectedDepartmentIds.includes(1)) {
             this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
             this.showCategoryValidation = false;
           } else {
@@ -899,34 +922,29 @@ export class AddTeam implements OnInit, AfterViewInit {
     return this.selectedDepartmentIds.length ? this.selectedDepartmentIds[0] : null;
   }
 
-  // @ViewChild('weeklyOffDropdown') weeklyOffDropdown!: ElementRef;
-  // showWeeklyOffDropdown = false;
-
-  // isWeeklyOffChecked(id: number): boolean {
-  //   const selected: number[] = this.userForm.get('weeklyOff')?.value || [];
-  //   return selected.includes(id);
-  // }
-
-  // toggleWeeklyOff(id: number, event: Event): void {
-  //   const checked = (event.target as HTMLInputElement).checked;
-  //   const current: number[] = this.userForm.get('weeklyOff')?.value || [];
-
-  //   const updated = checked ? [...current.filter((x) => x !== id), id] : current.filter((x) => x !== id);
-
-  //   this.userForm.get('weeklyOff')?.setValue(updated.sort((a, b) => a - b));
-  //   this.userForm.get('weeklyOff')?.markAsDirty();
-  // }
-
-  // getSelectedWeeklyOffLabel(): string {
-  //   const selected: number[] = this.userForm.get('weeklyOff')?.value || [];
-
-  //   if (selected.length === 0) {
-  //     return 'Select Weekly Off';
-  //   }
-
-  //   return this.weeklyOffOptions
-  //     .filter((d) => selected.includes(d.id))
-  //     .map((d) => d.label)
-  //     .join(', ');
-  // }
+  areAllCategoriesSelected(): boolean {
+    if (!this.categoryList || this.categoryList.length === 0) {
+      return false;
+    }
+    return this.categoryList.every((category) => this.selectedCategoryIds.includes(category.taskcategoryId));
+  }
+  isSomeCategoriesSelected(): boolean {
+    if (!this.categoryList || this.categoryList.length === 0) {
+      return false;
+    }
+    const selectedCount = this.categoryList.filter((category) => this.selectedCategoryIds.includes(category.taskcategoryId)).length;
+    return selectedCount > 0 && selectedCount < this.categoryList.length;
+  }
+  toggleAllCategories(event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      // Select every category
+      this.selectedCategoryIds = this.categoryList.map((category) => category.taskcategoryId);
+      this.showCategoryValidation = false;
+    } else {
+      // Unselect every category
+      this.selectedCategoryIds = [];
+      this.showCategoryValidation = true;
+    }
+  }
 }
