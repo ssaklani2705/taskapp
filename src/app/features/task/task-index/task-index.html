@@ -28,19 +28,7 @@
               </button>
             </div>
           </div>
-          <!-- CLIENT -->
-          <!-- <div class="client-dropdown-container">
-            <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
-            <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
-            <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
-
-              <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
-                {{ client.name }}
-              </div>
-              <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
-            </div>
-          </div> -->
-          <!-- CLIENT -->
+        
           @if (loginType === 'manager') {
             <!-- Normal dropdown for manager -->
             <div class="status-wrapper">
