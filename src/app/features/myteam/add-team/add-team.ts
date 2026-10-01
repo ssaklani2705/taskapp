@@ -151,17 +151,24 @@ export class AddTeam implements OnInit, AfterViewInit {
     //     this.loadCategories();
     //   }
     // });
-    this.userForm.get('isHod')?.valueChanges.subscribe((isHod: boolean) => {
+   
+     this.userForm.get('isHod')?.valueChanges.subscribe((isHod: boolean) => {
       if (isHod) {
-        this.loadCategories(false);
-      } else {
-        if (this.selectedDepartmentIds.length > 1) {
-          this.selectedDepartmentIds = [this.selectedDepartmentIds[0]];
-        }
         this.showDepartmentDropdown = false;
-        this.loadCategories();
+        if (this.selectedDepartmentIds.length > 0) {
+          this.loadCategories(false);
+        }
+      } else {
+        this.selectedDepartmentIds = [];
+        this.selectedCategoryIds = [];
+        this.categoryList = [];
+        this.showDepartmentDropdown = false;
+        this.showCategoryDropdown = false;
+        this.showDepartmentValidation = false;
+        this.showCategoryValidation = false;
       }
     });
+
   }
 
   ngOnInit(): void {
@@ -822,51 +829,77 @@ export class AddTeam implements OnInit, AfterViewInit {
       .join(', ');
   }
 
-  loadCategories(clearSelection: boolean = true): void {
-    if (this.selectedDepartmentIds.length === 0) {
-      this.categoryList = [];
-      this.selectedCategoryIds = [];
-      this.categoriesLoading = false;
-      return;
-    }
-
-    this.categoriesLoading = true;
-
-    this.dataProvider.getCategoriesByDepartmentIds(this.selectedDepartmentIds).subscribe({
-      next: (response: TaskCategoryDTO[]) => {
-        this.categoryList = response;
-        this.categoriesLoading = false;
-
-        // if (clearSelection) {
-        //   if (this.selectedDepartmentIds.includes(1)) {
-        //     this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
-        //     this.showCategoryValidation = false;
-        //   } else {
-        //     const validIds = response.map((category) => category.taskcategoryId);
-        //     this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => validIds.includes(id));
-        //   }
-        // }
-        if (clearSelection) {
-          if (this.isHod) {
-            this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
-            this.showCategoryValidation = false;
-          } else if (this.selectedDepartmentIds.includes(1)) {
-            this.selectedCategoryIds = response.map((category) => category.taskcategoryId);
-            this.showCategoryValidation = false;
-          } else {
-            const validIds = response.map((category) => category.taskcategoryId);
-            this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => validIds.includes(id));
-          }
-        }
-      },
-
-      error: (error) => {
-        console.error('Error loading categories:', error);
-        this.categoryList = [];
-        this.categoriesLoading = false;
-      },
-    });
+ loadCategories(clearSelection: boolean = true): void {
+  if (this.selectedDepartmentIds.length === 0) {
+    this.categoryList = [];
+    this.selectedCategoryIds = [];
+    this.categoriesLoading = false;
+    return;
   }
+
+  this.categoriesLoading = true;
+
+  this.dataProvider.getCategoriesByDepartmentIds(this.selectedDepartmentIds).subscribe({
+    next: (response: TaskCategoryDTO[]) => {
+      this.categoryList = response;
+      this.categoriesLoading = false;
+
+      /*
+       * HOD:
+       * Do NOT automatically select all categories.
+       * Keep only categories that are still available
+       * for the currently selected departments.
+       */
+      if (this.isHod) {
+        const validIds = response.map(
+          (category) => category.taskcategoryId
+        );
+
+        this.selectedCategoryIds = this.selectedCategoryIds.filter(
+          (id) => validIds.includes(id)
+        );
+
+        this.showCategoryValidation =
+          this.selectedCategoryIds.length === 0;
+
+        return;
+      }
+
+      /*
+       * Non-HOD:
+       * Keep existing behavior.
+       */
+      if (clearSelection) {
+        if (this.selectedDepartmentIds.includes(1)) {
+          this.selectedCategoryIds = response.map(
+            (category) => category.taskcategoryId
+          );
+
+          this.showCategoryValidation = false;
+        } else {
+          const validIds = response.map(
+            (category) => category.taskcategoryId
+          );
+
+          this.selectedCategoryIds = this.selectedCategoryIds.filter(
+            (id) => validIds.includes(id)
+          );
+
+          this.showCategoryValidation =
+            this.selectedCategoryIds.length === 0;
+        }
+      }
+    },
+
+    error: (error) => {
+      console.error('Error loading categories:', error);
+
+      this.categoryList = [];
+      this.categoriesLoading = false;
+    },
+  });
+}
+
 
   toggleCategory(categoryId: number, event: Event): void {
     const checkbox = event.target as HTMLInputElement;
