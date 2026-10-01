@@ -8,4 +8,4 @@ export const environment = {
   
   recordsPerPage: 5,
   size: 5,
-};
+}; 

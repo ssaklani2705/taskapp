@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -67,7 +67,7 @@ export class HolidayIndexComponent {
   viewPer: string = 'N';
   approvePer: string = 'N';
   adminApprovePer: string = 'N';
-  exportExcelPer = 'Y';
+  exportExcel = 'Y';
   moduleName: string = '';
   showHeaderBar: boolean = true;
 
@@ -82,6 +82,11 @@ export class HolidayIndexComponent {
 
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
+
+  @ViewChild('excelFileInput')
+excelFileInput!: ElementRef<HTMLInputElement>;
+
+
 
   columns: {
     key: string;
@@ -136,7 +141,7 @@ export class HolidayIndexComponent {
           this.viewPer = parsed.viewPer ?? 'N';
           this.approvePer = parsed.approvePer ?? 'N';
           this.adminApprovePer = parsed.adminApprovePer ?? 'N';
-          this.exportExcelPer = parsed.exportExcelPer ?? 'N';
+          this.exportExcel = parsed.exportExcel ?? 'N';
         } catch (error) {
           console.error('Invalid selectedModuleDetail:', error);
         }
@@ -428,7 +433,7 @@ export class HolidayIndexComponent {
   }
 
   exportToExcel(): void {
-    if (this.exportExcelPer !== 'Y') {
+    if (this.exportExcel !== 'Y') {
       return;
     }
 
@@ -590,7 +595,11 @@ export class HolidayIndexComponent {
   removeSelectedFile(): void {
     this.selectedFile = null;
     this.fileError = '';
+    if (this.excelFileInput) {
+      this.excelFileInput.nativeElement.value = '';
+    }
   }
+
 
   submitUpload(): void {
     if (!this.selectedFile) {
