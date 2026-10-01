@@ -556,13 +556,6 @@ export class AddIndexComponent implements OnInit {
 
         // this.clients = [];
         this.taskCategories = [];
-        // this.users = [];
-
-        // Swal.fire(
-        //   'Error',
-        //   'Unable to load task dropdown data.',
-        //   'error'
-        // );
       },
     });
   }
@@ -572,6 +565,13 @@ export class AddIndexComponent implements OnInit {
       next: (res: any) => {
         const data = res?.data || res;
         this.users = data?.assignedUsers || [];
+        console.log(JSON.stringify(this.users) + '  checking this users ');
+
+        const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
+
+        this.users.forEach((user: any) => {
+          user.hasWorkload = assignedUserIds.has(Number(user.userId));
+        });
         if (onLoaded) onLoaded();
       },
       error: (error: any) => {
@@ -698,7 +698,7 @@ export class AddIndexComponent implements OnInit {
 
   onTaskCategoryChange(): void {
     this.calculateEndDate();
-    //  this.loadAssigneeWorkload(this.task.taskCategoryId,this.task.startDate);
+    this.loadAssigneeWorkload();
   }
 
   onStartDateChange(value: any): void {
@@ -777,7 +777,12 @@ export class AddIndexComponent implements OnInit {
     this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, date).subscribe({
       next: (response) => {
         console.log('Assignee Workload:', response);
-        this.workloadList = response.data;
+        this.workloadList = response.data || [];
+
+        const assignedUserIds = new Set(this.workloadList.map((x: any) => Number(x.assignedTo)));
+        this.users.forEach((user: any) => {
+          user.hasWorkload = assignedUserIds.has(Number(user.userId));
+        });
       },
       error: (error) => {
         console.error('Error fetching assignee workload', error);
