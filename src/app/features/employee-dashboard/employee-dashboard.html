@@ -89,6 +89,7 @@
   @for (stat of statusStats(); track stat.label) {
     <mat-card
       class="stat-card status-stat-card"
+      [class.stat-wide]="stat.label  == 'Assigned'"
       [class.stat-disabled]="stat.value === 0"
       (click)="openTaskIndexByStatus(stat)"
     >

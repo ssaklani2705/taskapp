@@ -1690,3 +1690,24 @@
 .ts-reopen          { color: #bd8108; background: #fff1d0; border-color: #f2e0a8; }
 .ts-reclosure       { color: #0f7f86; background: #e0f5f5; border-color: #c3e8e9; }
 .ts-assignor-closure{ color: #2b8b62; background: #e3f5ec; border-color: #c8ebd9; }
+
+
+.status-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;               /* use the same gap as your top .stats-grid */
+}
+
+.status-stat-card.stat-wide {
+  grid-column: span 2;     /* same width as "My tasks today" */
+}
+
+/* optional: stack nicely on small screens */
+@media (max-width: 900px) {
+  .status-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .status-stat-card.stat-wide {
+    grid-column: span 2;
+  }
+}

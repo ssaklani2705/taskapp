@@ -1242,7 +1242,6 @@ export class TaskIndex {
   }
 
   taskStatusOptions: { id: string; label: string }[] = [
-    { id: '-1', label: 'Unassigned' },
     { id: '1', label: 'Assigned' },
     { id: '2', label: 'Assignee Closure' },
     { id: '3', label: 'Re-Open' },
