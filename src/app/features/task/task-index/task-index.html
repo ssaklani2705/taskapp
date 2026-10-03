@@ -204,7 +204,7 @@
                     </div>
                     <div class="time-row">
                       <i class="fa fa-clock-o date-icon"></i>
-                      <span>{{ task.date | date: 'hh:mm a' }}</span>
+                      <span>{{ task.date | date: 'HH:mm' }}</span>
                     </div>
                   </div>
 
@@ -227,7 +227,7 @@
                     </div>
                     <div class="due-time-row">
                       <i class="fa fa-clock-o due-icon"></i>
-                      <span>{{ task.dueDateTime | date: 'hh:mm a' }}</span>
+                      <span>{{ task.dueDateTime | date: 'HH:mm ' }}</span>
                     </div>
                   </div>
 
@@ -697,7 +697,7 @@
 
       <!-- DATE ROW -->
       <div class="assign-date-row">
-        <!-- START DATE -->
+        <!-- START DATE  (ngModelChange)="onAssignStartDateChange($event)"-->
         <div class="assign-form-group">
           <label class="assign-field-label">
             Start Date &amp; Time
@@ -713,7 +713,7 @@
               class="assign-input assign-date-input"
               [owlDateTime]="startDatePicker"
               [(ngModel)]="selectedAssignTask.date"
-              (ngModelChange)="onAssignStartDateChange($event)"
+             
               name="startDate"
               required
               placeholder="DD-MM-YYYY HH:mm"

@@ -1294,12 +1294,12 @@ export class TaskIndex {
       ...task,
       assignedTo: 0,
       date: task.date ? new Date(task.date) : null,
-      endDate: task.endDate ? new Date(task.endDate) : null,
+      endDate: task.dueDateTime ? new Date(task.dueDateTime) : null,
     };
 
-    if (!this.selectedAssignTask.endDate) {
-      this.setDefaultAssignEndDate();
-    }
+    // if (!this.selectedAssignTask.endDate) {
+    //   this.setDefaultAssignEndDate();
+    // }
 
     this.assignRemarks = '';
     this.showAssignUserModal = true;
@@ -1317,9 +1317,9 @@ export class TaskIndex {
         this.selectedAssignTask.maxHours = Number(data?.maxHours || 0);
 
         // Calculate default end date if there isn't already one
-        if (!this.selectedAssignTask.endDate) {
-          this.setDefaultAssignEndDate();
-        }
+        // if (!this.selectedAssignTask.endDate) {
+        //   this.setDefaultAssignEndDate();
+        // }
 
         console.log('Current assigned user:', currentAssignedUserId);
         console.log('Filtered users:', this.users);
@@ -1411,28 +1411,28 @@ export class TaskIndex {
     });
   }
 
-  private setDefaultAssignEndDate(): void {
-    if (!this.selectedAssignTask?.date) {
-      return;
-    }
+  // private setDefaultAssignEndDate(): void {
+  //   if (!this.selectedAssignTask?.date) {
+  //     return;
+  //   }
 
-    const maxHours = Number(this.selectedAssignTask?.maxHours);
+  //   const maxHours = Number(this.selectedAssignTask?.maxHours);
 
-    if (isNaN(maxHours) || maxHours <= 0) {
-      return;
-    }
+  //   if (isNaN(maxHours) || maxHours <= 0) {
+  //     return;
+  //   }
 
-    const startDate = new Date(this.selectedAssignTask.date);
+  //   const startDate = new Date(this.selectedAssignTask.date);
 
-    if (isNaN(startDate.getTime())) {
-      return;
-    }
+  //   if (isNaN(startDate.getTime())) {
+  //     return;
+  //   }
 
-    const endDate = new Date(startDate);
-    endDate.setHours(endDate.getHours() + maxHours);
+  //   const endDate = new Date(startDate);
+  //   endDate.setHours(endDate.getHours() + maxHours);
 
-    this.selectedAssignTask.endDate = endDate;
-  }
+  //   this.selectedAssignTask.endDate = endDate;
+  // }
 
   onAssignStartDateChange(startDate: any): void {
     if (!startDate) {
@@ -1441,7 +1441,7 @@ export class TaskIndex {
 
     this.selectedAssignTask.date = new Date(startDate);
 
-    this.setDefaultAssignEndDate();
+    // this.setDefaultAssignEndDate();
   }
 
   private formatDateTimeForApi(date: any): string | null {
