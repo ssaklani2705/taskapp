@@ -552,13 +552,27 @@ export class EmployeeDashboard implements OnInit {
       taskType = 'overdue';
     }
 
+    const dashboardFilter = {
+    taskType: taskType,
+    clientId: this.selectedClientId || 0,
+    taskStatusIds: stat.statusIds
+      ? stat.statusIds.split(',').map((x: string) => x.trim())
+      : [],
+    statusIndex: 1,
+  };
+
+  sessionStorage.setItem(
+    'TASK_DASHBOARD_FILTER',
+    JSON.stringify(dashboardFilter)
+  );
+
     this.router.navigate(['/task-index'], {
-      queryParams: {
-        taskType: taskType,
-        clientId: this.selectedClientId || 0,
-        taskStatusIds: stat.statusIds,
-         statusIndex: 1,
-      },
+      // queryParams: {
+      //   taskType: taskType,
+      //   clientId: this.selectedClientId || 0,
+      //   taskStatusIds: stat.statusIds,
+      //    statusIndex: 1,
+      // },
     });
   }
 

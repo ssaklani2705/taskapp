@@ -27,6 +27,7 @@ import { OwlDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from '
 
 import { OwlMomentDateTimeModule } from '@danielmoncada/angular-datetime-picker-moment-adapter';
 import moment from 'moment';
+import { SESSION_KEYS } from '../../../service/session-storage.keys';
 
 export const MY_DATE_TIME_FORMATS = {
   parseInput: 'DD-MM-YYYY HH:mm',
@@ -124,11 +125,14 @@ export class AddIndexComponent implements OnInit {
   ) {}
   dashboardFilter: string = '';
   ngOnInit(): void {
-    const navigation = this.router.getCurrentNavigation();
+   const savedFilter = sessionStorage.getItem(
+  SESSION_KEYS.TASK_MASTER_FILTER
+);
 
-    const state = navigation?.extras?.state || (history.state && Object.keys(history.state).length ? history.state : null);
+    if (savedFilter) {
+       const state = JSON.parse(savedFilter);
 
-    if (state) {
+       console.log(" Check this now  { } = " +JSON.stringify(state)  + "{  ===> }")
       this.currentPage = state.currentPage || 1;
 
       this.searchText = state.searchText || '';
@@ -516,26 +520,8 @@ export class AddIndexComponent implements OnInit {
   }
 
   backToIndexPage(): void {
-    this.router.navigate(['/task-index'], {
-      state: {
-        currentPage: this.currentPage,
-        statusIndex: this.statusIndex,
-        searchText: this.searchText,
-        size: this.size || 5,
-
-        clientId: this.clientId || null,
-        taskCategoryId: this.taskCategoryId || null,
-        assignedTo: this.assignedTo || null,
-        priority: this.priority || null,
-
-        fromDate: this.fromDate || null,
-        toDate: this.toDate || null,
-
-        taskStatusIds: this.taskStatusIds ? this.taskStatusIds.split(',') : [],
-
-        taskType: this.dashboardFilter,
-      },
-    });
+    this.router.navigate(['/task-index']
+    );
   }
 
   onchangeloadDropdownData(): void {
