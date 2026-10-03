@@ -765,27 +765,46 @@ export class AddIndexComponent implements OnInit {
   }
 
   workloadList: { assignedTo: number; hours: number }[] = [];
-
+  holidayError: string = '';
   private loadAssigneeWorkload(): void {
+    this.holidayError = '';
+
     if (!this.task.taskCategoryId || !this.task.startDate) {
       return;
     }
+
     const date = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
+
     if (!date) {
       return;
     }
+
     this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, date).subscribe({
       next: (response) => {
         console.log('Assignee Workload:', response);
+
+        if (!response.success) {
+          this.holidayError = response.message || 'Unable to fetch workload';
+
+          this.workloadList = [];
+          return;
+        }
+
+        this.holidayError = '';
         this.workloadList = response.data || [];
 
         const assignedUserIds = new Set(this.workloadList.map((x: any) => Number(x.assignedTo)));
+
         this.users.forEach((user: any) => {
           user.hasWorkload = assignedUserIds.has(Number(user.userId));
         });
       },
       error: (error) => {
         console.error('Error fetching assignee workload', error);
+
+        this.holidayError = error?.error?.message || 'Error fetching assignee workload';
+
+        this.workloadList = [];
       },
     });
   }

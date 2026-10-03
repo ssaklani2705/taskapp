@@ -130,6 +130,9 @@
                 </div>
 
                 <div class="user-error" *ngIf="taskForm?.submitted && !task.date">Date &amp; Time is required</div>
+                <div class="user-error" *ngIf="holidayError">
+                  {{ holidayError }}
+                </div>
               </div>
             </div>
 
@@ -250,9 +253,7 @@
                 </label>
                 <select class="user-input user-select" [(ngModel)]="task.assignedTo" name="assignedTo" [disabled]="!task.clientId || !task.taskCategoryId" #assignedCtrl="ngModel" required>
                   <option [ngValue]="null">Select User</option>
-                  <option *ngFor="let user of users" [ngValue]="user.userId" >
-                    {{ user.firstName }}    {{ user.hasWorkload ? '🟢 ' : '' }}
-                  </option>
+                  <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '🟢 ' : '' }}</option>
                 </select>
                 <div class="user-error" *ngIf="assignedCtrl.invalid && assignedCtrl.touched">Assigned To is required</div>
               </div>
@@ -290,7 +291,7 @@
           </div>
           <div class="user-buttons">
             <button type="button" class="user-reset-btn" (click)="onReset()">Reset</button>
-            <button type="submit" class="user-submit-btn" [disabled]="taskForm.invalid || pdfError || zipError">
+            <button type="submit" class="user-submit-btn" [disabled]="taskForm.invalid || pdfError || zipError || holidayError">
               {{ isEditMode ? 'Update' : 'Submit' }}
             </button>
           </div>
