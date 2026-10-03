@@ -783,6 +783,8 @@ export class AddIndexComponent implements OnInit {
         this.users.forEach((user: any) => {
           user.hasWorkload = assignedUserIds.has(Number(user.userId));
         });
+
+        console.log(this.users)
       },
       error: (error) => {
         console.error('Error fetching assignee workload', error);
