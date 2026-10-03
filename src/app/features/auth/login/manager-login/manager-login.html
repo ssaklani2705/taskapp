@@ -1,7 +1,4 @@
 <div class="login-page">
-  <!-- =====================================================
-       LEFT BRAND PANEL
-  ===================================================== -->
 
   <section class="login-brand-panel">
     <div class="brand-background-shape shape-one"></div>
@@ -95,10 +92,6 @@
     </div>
   </section>
 
-  <!-- =====================================================
-       LOGIN PANEL
-  ===================================================== -->
-
   <section class="login-form-panel">
     <div class="login-container">
       <!-- MOBILE BRAND -->
@@ -172,10 +165,6 @@
           <mat-error *ngIf="loginForm.controls.password.hasError('required')"> Password is required </mat-error>
         </mat-form-field>
 
-        <!-- =================================================
-             CAPTCHA
-        ================================================== -->
-
         <div class="captcha-section">
           <div class="captcha-label-row">
             <label> Security verification </label>
@@ -221,12 +210,7 @@
         <!-- OPTIONS -->
 
         <div class="login-options">
-          <!-- <mat-checkbox
-            formControlName="rememberMe">
-
-            Remember me
-
-          </mat-checkbox> -->
+          
           <span></span>
 
           <button type="button" class="forgot-button" (click)="forgotPassword()">Forgot password?</button>
@@ -244,42 +228,6 @@
           </span>
         </button>
 
-        <!-- DIVIDER -->
-
-        <!-- <div class="divider">
-
-          <span></span>
-
-          <label>
-            OR
-          </label>
-
-          <span></span>
-
-        </div> -->
-
-        <!-- SIGNUP -->
-
-        <!-- <div class="signup-section">
-
-          <span>
-            Don't have an account?
-          </span>
-
-
-          <button
-            type="button"
-            (click)="signUp()">
-
-            Create account
-
-            <mat-icon>
-              arrow_forward
-            </mat-icon>
-
-          </button>
-
-        </div> -->
       </form>
 
       <!-- SECURITY -->

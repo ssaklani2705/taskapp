@@ -1,9 +1,6 @@
 <div class="page-content-wrapper">
   <div class="page-content">
     <div class="user-management-container">
-      <!-- =====================================================
-           HEADER
-      ====================================================== -->
 
       <div class="page-header">
         <div class="header-title-section">
@@ -30,10 +27,6 @@
           </button>
         }
       </div>
-
-      <!-- =====================================================
-           SEARCH PANEL
-      ====================================================== -->
 
       <div class="search-panel" *ngIf="isPanelVisible">
         <div class="search-row">
@@ -80,10 +73,6 @@
           </div>
         </div>
       </div>
-
-      <!-- =====================================================
-           TOP PAGINATION
-      ====================================================== -->
 
       <div class="table-top-section">
         <div class="record-summary" role="status" aria-live="polite">
@@ -138,10 +127,6 @@
           </button>
         </div>
       </div>
-
-      <!-- =====================================================
-           TABLE
-      ====================================================== -->
 
       <div class="table-container">
         <div class="table-responsive">
@@ -247,15 +232,10 @@
         </div>
       </div>
 
-      <!-- =====================================================
-           BOTTOM PAGINATION
-      ====================================================== -->
-
       <div class="table-bottom-section">
         <div class="record-summary" role="status" aria-live="polite">
           {{ recordSummary }}
         </div>
-
         <div class="pagination">
           <button
             type="button"
@@ -265,7 +245,6 @@
           >
             « First
           </button>
-
           <button
             type="button"
             class="pagination-btn"
@@ -274,7 +253,6 @@
           >
             ‹ Prev
           </button>
-
           <button
             type="button"
             class="pagination-btn"
@@ -284,7 +262,6 @@
           >
             {{ page }}
           </button>
-
           <button
             type="button"
             class="pagination-btn"

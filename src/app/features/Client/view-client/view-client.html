@@ -18,9 +18,6 @@
     <mat-divider></mat-divider>
 
     <div class="user-information">
-      <!-- ========================================================= -->
-      <!-- ROW 1 - MANAGER -->
-      <!-- ========================================================= -->
       <div class="manager-section">
         <div class="info-row manager-row">
           <span class="field-label">Society Manager:</span>
@@ -38,9 +35,6 @@
         </div>
       </div>
 
-      <!-- ========================================================= -->
-      <!-- CLIENT DETAILS -->
-      <!-- ========================================================= -->
       <div class="details-section">
         <div class="section-heading">
           <span>Client Details</span>
@@ -96,9 +90,6 @@
         </div>
       </div>
 
-      <!-- ========================================================= -->
-      <!-- ADDRESS DETAILS -->
-      <!-- ========================================================= -->
       <div class="details-section">
         <div class="section-heading">
           <span>Address Details</span>
@@ -154,9 +145,6 @@
         </div>
       </div>
 
-      <!-- ========================================================= -->
-      <!-- CONTACT DETAILS -->
-      <!-- ========================================================= -->
       <div class="details-section">
         <div class="section-heading">
           <span>Contact Details</span>
@@ -230,9 +218,6 @@
         </div>
       </div>
 
-      <!-- ========================================================= -->
-      <!-- OTHER DETAILS -->
-      <!-- ========================================================= -->
       <div class="details-section">
         <div class="section-heading">
           <span>Other Details</span>
@@ -280,10 +265,6 @@
       </div>
     </div>
   </div>
-
-  <!-- ============================================================= -->
-  <!-- ACTION HISTORY - KEPT AS IT IS -->
-  <!-- ============================================================= -->
   <div class="section-card">
     <div class="section-header">
       <div class="section-title">
@@ -339,10 +320,6 @@
     </div>
   </div>
 </div>
-
-<!-- ================================================================ -->
-<!-- CHANGE MANAGER MODAL - KEEP YOUR EXISTING MODAL BELOW THIS LINE -->
-<!-- ================================================================ -->
 
 <div class="modal-overlay" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
   <div class="change-manager-modal" (click)="$event.stopPropagation()">
@@ -427,10 +404,6 @@
     </div>
   </div>
 </div>
-
-<!-- ================================================================ -->
-<!-- CHANGE OUTSTANDING MODAL -->
-<!-- ================================================================ -->
 
 <div class="modal-overlay" *ngIf="showChangeOutstandingModal" (click)="closeChangeOutstandingModal()">
   <div class="change-manager-modal" (click)="$event.stopPropagation()">
