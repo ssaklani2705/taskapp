@@ -1293,7 +1293,7 @@ export class TaskIndex {
     this.showAssignUserModal = true;
 
     this.users = [];
-
+    this.loadAssigneeWorkload(task.taskCategoryId,task.date);
     this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId,Number(task.systemFlag ?? 0)).subscribe({
 
       next: (res: any) => {
@@ -1620,7 +1620,7 @@ export class TaskIndex {
 
   workloadList: { assignedTo: number; hours: number }[] = [];
   holidayError: string = '';
-  private loadAssigneeWorkload(taskCategoryId: any, startDate: any): void {
+  public  loadAssigneeWorkload(taskCategoryId: any, startDate: any): void {
     this.holidayError = '';
     console.log('{taskCategoryId : }' + taskCategoryId);
 
