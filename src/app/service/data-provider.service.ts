@@ -1192,7 +1192,7 @@ export class DataProviderService {
     });
   }
 
-  changesCategoryIdgetUserFilterData(isAdmin: string, userId: number, loginType: string, clientId: number, categoryId: number): Observable<any> {
+  changesCategoryIdgetUserFilterData(isAdmin: string, userId: number, loginType: string, clientId: number, categoryId: number,systemFlag: number): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/changesCategoryIdgetUserFilterData`, {
       params: {
         isAdmin: isAdmin.toString(),
@@ -1200,6 +1200,7 @@ export class DataProviderService {
         loginType: loginType.toString(),
         clientId: clientId ?? '',
         categoryId: categoryId ?? '',
+        systemFlag: (systemFlag ?? 0).toString(),
       },
     });
   }

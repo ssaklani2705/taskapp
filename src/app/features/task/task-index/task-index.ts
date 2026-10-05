@@ -1306,7 +1306,7 @@ export class TaskIndex {
 
     this.users = [];
 
-    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId).subscribe({
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId,Number(task.systemFlag ?? 0)).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
 
@@ -1465,7 +1465,7 @@ export class TaskIndex {
   }
 
   onchangeloadUserDropdownData(task: any): void {
-    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId).subscribe({
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId, Number(task.systemFlag ?? 0)).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
         this.users = data?.assignedUsers || [];

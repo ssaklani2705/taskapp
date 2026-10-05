@@ -561,7 +561,7 @@ export class AddIndexComponent implements OnInit {
   }
 
   onchangeloadUserDropdownData(onLoaded?: () => void): void {
-    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId).subscribe({
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId,0).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
         this.users = data?.assignedUsers || [];
@@ -609,10 +609,11 @@ export class AddIndexComponent implements OnInit {
     });
   }
 
+  noEmployeeError = '';
   onClientChange(clientId: number | null): void {
     this.task.taskCategoryId = null;
     this.task.assignedTo = null;
-
+    this.noEmployeeError = '';          // add this
     this.taskCategories = [];
     this.users = [];
 
@@ -768,6 +769,7 @@ export class AddIndexComponent implements OnInit {
   holidayError: string = '';
   private loadAssigneeWorkload(): void {
     this.holidayError = '';
+    this.noEmployeeError = '';          // add this (before the early return)
 
     if (!this.task.taskCategoryId || !this.task.startDate) {
       return;
@@ -792,6 +794,11 @@ export class AddIndexComponent implements OnInit {
 
         this.holidayError = '';
         this.workloadList = response.data || [];
+
+        // add this
+      if (this.workloadList.length === 0) {
+        this.noEmployeeError = 'No employee available for the selected category.';
+      }
 
         const assignedUserIds = new Set(this.workloadList.map((x: any) => Number(x.assignedTo)));
 
