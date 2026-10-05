@@ -686,7 +686,8 @@
           </label>
 
           <div class="assign-date-group">
-            <span class="assign-date-icon" [owlDateTimeTrigger]="startDatePicker">
+            <!-- <span class="assign-date-icon" [owlDateTimeTrigger]="startDatePicker"> -->
+               <span class="assign-date-icon assign-date-icon-disabled">
               <i class="fa fa-calendar"></i>
             </span>
 
@@ -696,6 +697,7 @@
               [(ngModel)]="selectedAssignTask.date"
               name="startDate"
               required
+              readonly
               placeholder="DD-MM-YYYY HH:mm"
               autocomplete="off"
               [min]="today"

@@ -167,8 +167,13 @@
                   <div class="user-error" *ngIf="endDateError">{{ endDateError }}</div>
                 </div>
 
+                <div class="user-warning" *ngIf="durationExceedsLimit">
+  As this task exceeds 8 hours, kindly adjust the Start Date and End Date manually.
+</div>
+
                 <div class="user-error" *ngIf="taskForm?.submitted && !task.startDate">End Date &amp; Time is required</div>
               </div>
+              
             </div>
 
             <div class="user-form-col">
