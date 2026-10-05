@@ -28,7 +28,7 @@
               </button>
             </div>
           </div>
-        
+
           @if (loginType === 'manager') {
             <!-- Normal dropdown for manager -->
             <div class="status-wrapper">
@@ -62,7 +62,7 @@
               </option>
             </select>
           </div>
-          <!-- ASSIGNED TO -->
+
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedAssignedTo" (change)="onSearch()">
               <option value="">--All Assigned To--</option>
@@ -677,25 +677,6 @@
 
     <!-- BODY -->
     <div class="modal-body assign-user-modal-body">
-      <!-- ASSIGNED TO -->
-      <div class="assign-form-group assign-full-width">
-        <label class="assign-field-label">
-          Assigned To
-          <span class="required">*</span>
-        </label>
-
-        <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" name="assignedToModal" [disabled]="users.length === 0">
-          <option [ngValue]="0">Select User</option>
-
-          <option *ngFor="let user of users" [ngValue]="user.userId">
-            {{ user.firstName }}
-          </option>
-        </select>
-
-        <div *ngIf="users.length === 0" class="assign-error">No other user found for this category.</div>
-      </div>
-
-      <!-- DATE ROW -->
       <div class="assign-date-row">
         <!-- START DATE  (ngModelChange)="onAssignStartDateChange($event)"-->
         <div class="assign-form-group">
@@ -713,7 +694,6 @@
               class="assign-input assign-date-input"
               [owlDateTime]="startDatePicker"
               [(ngModel)]="selectedAssignTask.date"
-             
               name="startDate"
               required
               placeholder="DD-MM-YYYY HH:mm"
@@ -756,8 +736,22 @@
           <div class="assign-error" *ngIf="!selectedAssignTask?.endDate">End Date &amp; Time is required.</div>
         </div>
       </div>
+      <!-- ASSIGNED TO -->
+      <div class="assign-form-group assign-full-width">
+        <label class="assign-field-label">
+          Assigned To
+          <span class="required">*</span>
+        </label>
 
-      <!-- REMARKS -->
+        <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" name="assignedToModal" [disabled]="users.length === 0">
+          <option [ngValue]="0">Select User</option>
+
+          <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '🟢 ' : '' }}</option>
+        </select>
+
+        <div *ngIf="users.length === 0" class="assign-error">No other user found for this category.</div>
+      </div>
+
       <div class="assign-form-group assign-full-width">
         <label class="assign-field-label">
           Remarks

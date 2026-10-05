@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { Component, ElementRef, HostListener, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -82,6 +82,7 @@ interface AssignedUser {
   templateUrl: './task-index.html',
   styleUrl: './task-index.scss',
   providers: [
+    DatePipe,
     {
       provide: DateAdapter,
       useClass: MyDateAdapter,
@@ -219,6 +220,7 @@ export class TaskIndex {
     private router: Router,
     private route: ActivatedRoute,
     private sessionService: SessionStorageService,
+    private datePipe: DatePipe,
   ) {}
 
   ngOnInit(): void {
@@ -228,7 +230,7 @@ export class TaskIndex {
       this.loginType = sessionStorage.getItem('loginType') || 'other';
       this.isHod = sessionStorage.getItem('isHod') || 'N';
       const storedModuleDetail = sessionStorage.getItem('selectedModuleDetail');
-      console.log('SELECTED MODULE DETAIL:', storedModuleDetail);
+
       let moduleDetail: any = null;
 
       if (storedModuleDetail && storedModuleDetail !== 'null' && storedModuleDetail !== 'undefined') {
@@ -241,12 +243,11 @@ export class TaskIndex {
 
       if (!moduleDetail) {
         const storedModules = sessionStorage.getItem('modules');
-        console.log('STORED MODULES:', storedModules);
+
         if (storedModules) {
           try {
             const modules = JSON.parse(storedModules);
             moduleDetail = modules.find((module: any) => Number(module.moduleId) === 10 || module.name === 'Task');
-            console.log('TASK MODULE FROM MODULES:', moduleDetail);
           } catch (error) {
             console.error('Invalid modules session data:', error);
           }
@@ -263,43 +264,32 @@ export class TaskIndex {
         this.adminApprovePer = moduleDetail.adminApprovePer ?? 'N';
         this.exportExcelPer = moduleDetail.exportExcel ?? 'N';
       }
-
-      console.log('TASK PERMISSIONS:', {
-        moduleName: this.moduleName,
-        addPer: this.addPer,
-        editPer: this.editPer,
-        deletePer: this.deletePer,
-        viewPer: this.viewPer,
-        approvePer: this.approvePer,
-        adminApprovePer: this.adminApprovePer,
-        exportExcelPer: this.exportExcelPer,
-      });
     }
 
     this.sessionService.clearOtherSessions(this.filterKey);
     this.restoreFilterState();
     this.route.queryParams.subscribe((params) => {
       this.dashboardFilter = params['taskType'] || '';
+      const saved = sessionStorage.getItem(this.filterKey);
+      if (!saved) {
+        if (params['statusIndex'] !== undefined) {
+          this.statusIndex = Number(params['statusIndex']) || 0;
+          this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
+        }
 
-      if (params['statusIndex'] !== undefined) {
-        this.statusIndex = Number(params['statusIndex']) || 0;
-        this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
-        this.currentPage = 1;
-        this.page = 0;
-      }
+        if (params['taskStatusIds'] !== undefined) {
+          this.selectedTaskStatuses = params['taskStatusIds']
+            ? String(params['taskStatusIds'])
+                .split(',')
+                .map((x: string) => x.trim())
+                .filter((x: string) => x)
+            : [];
+        }
 
-      if (params['taskStatusIds'] !== undefined) {
-        this.selectedTaskStatuses = params['taskStatusIds']
-          ? String(params['taskStatusIds'])
-              .split(',')
-              .filter((status: string) => status !== '')
-          : [];
-        this.currentPage = 1;
-        this.page = 0;
-      }
+        if (params['clientId'] !== undefined) {
+          this.selectedClient = params['clientId'] ? String(params['clientId']) : '';
+        }
 
-      if (params['clientId'] !== undefined) {
-        this.selectedClient = params['clientId'] ? String(params['clientId']) : '';
         this.currentPage = 1;
         this.page = 0;
       }
@@ -311,16 +301,8 @@ export class TaskIndex {
 
   private restoreFilterState(): void {
     let stateData: any = null;
-    const nav = this.router.getCurrentNavigation();
-    stateData = nav?.extras?.state;
-
-    const returningFromDetail = isPlatformBrowser(this.platformId) && sessionStorage.getItem('taskReturnFromDetail') === 'Y';
 
     if (isPlatformBrowser(this.platformId)) {
-      sessionStorage.removeItem('taskReturnFromDetail');
-    }
-
-    if (!stateData && returningFromDetail) {
       const saved = sessionStorage.getItem(this.filterKey);
 
       if (saved) {
@@ -337,47 +319,62 @@ export class TaskIndex {
       this.page = 0;
       this.size = environment.size;
       this.recordsPerPage = this.size;
+
       this.search = '';
       this.searchQuery = '';
+
       this.statusIndex = 0;
       this.selectedStatus = '';
+
       this.selectedClient = '';
       this.selectedTaskCategory = '';
       this.selectedAssignedTo = '';
       this.selectedPriority = '';
+
       this.selectedTaskStatuses = [];
+
       this.fromDate = null;
       this.toDate = null;
+
+      this.dashboardFilter = '';
 
       return;
     }
 
     this.currentPage = Number(stateData.currentPage) || 1;
-    this.page = this.currentPage - 1;
+    this.page = Number(stateData.page ?? this.currentPage - 1);
+
     this.size = Number(stateData.size) || environment.size;
     this.recordsPerPage = this.size;
+
     this.search = stateData.searchText || '';
     this.searchQuery = this.search;
+
     this.statusIndex = Number(stateData.statusIndex) || 0;
     this.selectedStatus = this.statusIndex ? String(this.statusIndex) : '';
-    this.selectedClient = stateData.clientId != null ? String(stateData.clientId) : '';
-    this.selectedTaskCategory = stateData.taskCategoryId != null ? String(stateData.taskCategoryId) : '';
-    this.selectedAssignedTo = stateData.assignedTo != null ? String(stateData.assignedTo) : '';
-    this.selectedPriority = stateData.priority != null ? String(stateData.priority) : '';
-    this.selectedTaskStatuses = Array.isArray(stateData.taskStatusId) ? stateData.taskStatusId.map((v: any) => String(v)) : [];
-    this.dashboardFilter = stateData.dashboardFilter || '';
 
-    if (Array.isArray(stateData.taskStatusId)) {
-      this.selectedTaskStatuses = stateData.taskStatusId.map((v: any) => String(v));
-    } else if (stateData.taskStatusId != null && stateData.taskStatusId !== '') {
-      this.selectedTaskStatuses = String(stateData.taskStatusId)
+    this.selectedClient = stateData.clientId != null ? String(stateData.clientId) : '';
+
+    this.selectedTaskCategory = stateData.taskCategoryId != null ? String(stateData.taskCategoryId) : '';
+
+    this.selectedAssignedTo = stateData.assignedTo != null ? String(stateData.assignedTo) : '';
+
+    this.selectedPriority = stateData.priority != null ? String(stateData.priority) : '';
+
+    if (Array.isArray(stateData.taskStatusIds)) {
+      this.selectedTaskStatuses = stateData.taskStatusIds.map((x: any) => String(x));
+    } else if (stateData.taskStatusIds != null && stateData.taskStatusIds !== '') {
+      this.selectedTaskStatuses = String(stateData.taskStatusIds)
         .split(',')
-        .filter((v: string) => v !== '');
+        .filter((x: string) => x !== '');
     } else {
       this.selectedTaskStatuses = [];
     }
 
+    this.dashboardFilter = stateData.dashboardFilter || '';
+
     this.fromDate = stateData.fromDate ? new Date(stateData.fromDate + 'T00:00:00') : null;
+
     this.toDate = stateData.toDate ? new Date(stateData.toDate + 'T00:00:00') : null;
   }
 
@@ -394,12 +391,12 @@ export class TaskIndex {
       priority: this.selectedPriority ? Number(this.selectedPriority) : null,
       fromDate: this.formatDateForApi(this.fromDate),
       toDate: this.formatDateForApi(this.toDate),
-      taskStatusId: this.selectedTaskStatuses,
+
+      taskStatusIds: this.selectedTaskStatuses,
+      dashboardFilter: this.dashboardFilter,
     };
 
-    if (isPlatformBrowser(this.platformId)) {
-      sessionStorage.setItem(this.filterKey, JSON.stringify(filterState));
-    }
+    sessionStorage.setItem(SESSION_KEYS.TASK_MASTER_FILTER, JSON.stringify(filterState));
   }
 
   private loadFilterData(): void {
@@ -440,7 +437,6 @@ export class TaskIndex {
       }
       return availableClientNames.has(client.name);
     });
-    console.log('AVAILABLE CLIENTS:', this.filteredClients);
   }
 
   togglePanel(): void {
@@ -477,7 +473,6 @@ export class TaskIndex {
       )
       .subscribe({
         next: (response: any) => {
-          console.log('TASK DETAILS RESPONSE:', response);
           this.apiResponseTaskDetails = response;
           this.tasks = response.data || [];
 
@@ -882,8 +877,6 @@ export class TaskIndex {
   loadTaskNotes(taskId: number): void {
     this.dataprovider.getTaskNotes(taskId).subscribe({
       next: (response: any[]) => {
-        console.log('Task notes:', response);
-
         this.taskNotes = response || [];
       },
 
@@ -1123,9 +1116,6 @@ export class TaskIndex {
     this.isChangingManager = true;
 
     const formData = new FormData();
-    for (const pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
 
     formData.append('selectedTaskStatusId', String(this.selectedTaskStatusId));
     formData.append('taskId', String(this.task.taskId));
@@ -1258,8 +1248,6 @@ export class TaskIndex {
       this.selectedTaskStatuses = [...this.selectedTaskStatuses, id];
     }
 
-    console.log('selectedTaskStatuses:', this.selectedTaskStatuses);
-
     this.onSearch();
   }
 
@@ -1307,6 +1295,7 @@ export class TaskIndex {
     this.users = [];
 
     this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId,Number(task.systemFlag ?? 0)).subscribe({
+
       next: (res: any) => {
         const data = res?.data || res;
 
@@ -1320,9 +1309,6 @@ export class TaskIndex {
         // if (!this.selectedAssignTask.endDate) {
         //   this.setDefaultAssignEndDate();
         // }
-
-        console.log('Current assigned user:', currentAssignedUserId);
-        console.log('Filtered users:', this.users);
       },
 
       error: (error: any) => {
@@ -1630,5 +1616,52 @@ export class TaskIndex {
     }
 
     return labels.join(', ');
+  }
+
+  workloadList: { assignedTo: number; hours: number }[] = [];
+  holidayError: string = '';
+  private loadAssigneeWorkload(taskCategoryId: any, startDate: any): void {
+    this.holidayError = '';
+    console.log('{taskCategoryId : }' + taskCategoryId);
+
+    const date = this.datePipe.transform(startDate, 'yyyy-MM-dd HH:mm:ss');
+
+    console.log('{ date : }' + date);
+    if (!taskCategoryId || !startDate) {
+      console.log('something went wrong    === ');
+      return;
+    }
+
+    if (!date) {
+      return;
+    }
+
+    this.dataprovider.getAssigneeWorkload(taskCategoryId, date).subscribe({
+      next: (response) => {
+        console.log('Assignee Workload:', response);
+
+        if (!response.success) {
+          this.holidayError = response.message || 'Unable to fetch workload';
+
+          this.workloadList = [];
+          return;
+        }
+
+        this.holidayError = '';
+        this.workloadList = response.data || [];
+
+        const assignedUserIds = new Set(this.workloadList.map((x: any) => Number(x.assignedTo)));
+        this.users.forEach((user: any) => {
+          user.hasWorkload = assignedUserIds.has(Number(user.userId));
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching assignee workload', error);
+
+        this.holidayError = error?.error?.message || 'Error fetching assignee workload';
+
+        this.workloadList = [];
+      },
+    });
   }
 }
