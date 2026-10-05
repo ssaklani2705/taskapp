@@ -3367,3 +3367,23 @@ textarea.manager-select::placeholder {
     min-width: 0;
   }
 }
+
+
+.assign-date-icon-disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+
+.assign-date-input[readonly] {
+  background-color: #e9ecef;
+  color: #6c757d;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+.assign-date-icon-disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.6;
+}

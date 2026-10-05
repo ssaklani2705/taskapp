@@ -803,4 +803,19 @@ export class AddIndexComponent implements OnInit {
       },
     });
   }
+
+  readonly MAX_TASK_HOURS = 8;
+  get durationExceedsLimit(): boolean {
+    // alert("in");
+  const start = this.toDate_(this.task.startDate);
+  const end = this.toDate_(this.task.endDate);
+
+  if (!start || !end) {
+    return false;
+  }
+
+  const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+  return hours > this.MAX_TASK_HOURS;
+}
+
 }
