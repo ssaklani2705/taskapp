@@ -98,12 +98,25 @@ export class ViewClient {
     });
   }
 
+  // loadManagers(): void {
+  //   this.dataprovider.getManagers().subscribe({
+  //     next: (response: any) => {
+  //       this.managers = response?.data || response || [];
+  //     },
+
+  //     error: (error) => {
+  //       console.error('Error loading managers:', error);
+  //       this.managers = [];
+  //     },
+  //   });
+  // }
   loadManagers(): void {
     this.dataprovider.getManagers().subscribe({
       next: (response: any) => {
-        this.managers = response?.data || response || [];
+        const managers = response?.data || response || [];
+        const currentManagerId = Number(this.client?.managerId);
+        this.managers = managers.filter((manager: any) => Number(manager.userId) !== currentManagerId);
       },
-
       error: (error) => {
         console.error('Error loading managers:', error);
         this.managers = [];
