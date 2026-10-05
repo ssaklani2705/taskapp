@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SESSION_KEYS } from '../../service/session-storage.keys';
 
 export interface DashboardMetricDTO {
   count: number;
@@ -59,7 +60,6 @@ interface ApiTask {
   assignedByUser: string;
 
   taskStatus: any;
-
 }
 
 interface DashboardResponse {
@@ -95,7 +95,7 @@ interface Task {
   assignedByUser: string;
   type: 'high' | 'medium' | 'low' | 'progress' | 'done';
   progress?: number;
-   taskStatusLabel: string;
+  taskStatusLabel: string;
   taskStatusClass: string;
 }
 
@@ -114,6 +114,27 @@ interface StatusCounts {
   reOpen: number;
   assigneeReClosure: number;
   assignorClosure: number;
+}
+
+export interface TaskFilterState {
+  currentPage: number;
+  page: number;
+  size: number;
+
+  statusIndex: number;
+  searchText: string;
+
+  clientId: number;
+  taskCategoryId: number;
+  assignedTo: number;
+  priority: number;
+
+  fromDate: string | null;
+  toDate: string | null;
+
+  taskStatusIds: string[];
+
+  dashboardFilter: string;
 }
 
 @Component({
@@ -150,7 +171,6 @@ export class EmployeeDashboard implements OnInit {
 
   // key = field in statusCounts, statusName = value passed to Task list page
   private readonly statusConfig = [
-  
     { key: 'assigned', label: 'Assigned', statusId: '1', icon: 'assignment_ind' },
     { key: 'assigneeClosure', label: 'Assignee Closure', statusId: '2', icon: 'task_alt' },
     { key: 'reOpen', label: 'Re-Open', statusId: '3', icon: 'replay' },
@@ -552,28 +572,9 @@ export class EmployeeDashboard implements OnInit {
       taskType = 'overdue';
     }
 
-    const dashboardFilter = {
-    taskType: taskType,
-    clientId: this.selectedClientId || 0,
-    taskStatusIds: stat.statusIds
-      ? stat.statusIds.split(',').map((x: string) => x.trim())
-      : [],
-    statusIndex: 1,
-  };
+    const taskStatusIds = stat.statusIds ? stat.statusIds.split(',').map((x: string) => x.trim()) : [];
 
-  sessionStorage.setItem(
-    'TASK_DASHBOARD_FILTER',
-    JSON.stringify(dashboardFilter)
-  );
-
-    this.router.navigate(['/task-index'], {
-      // queryParams: {
-      //   taskType: taskType,
-      //   clientId: this.selectedClientId || 0,
-      //   taskStatusIds: stat.statusIds,
-      //    statusIndex: 1,
-      // },
-    });
+    this.saveTaskFilterAndNavigate(taskStatusIds, taskType);
   }
 
   clientSearchText = '';
@@ -632,30 +633,57 @@ export class EmployeeDashboard implements OnInit {
       return;
     }
 
-  this.router.navigate(['/task-index'], {
-    queryParams: {
-      taskStatusIds: stat.statusId,
-      clientId: this.selectedClientId || 0,
-      statusIndex: 1,
-    },
-  });
-}
+    // this.router.navigate(['/task-index'], {
+    //   queryParams: {
+    //     taskStatusIds: stat.statusId,
+    //     clientId: this.selectedClientId || 0,
+    //     statusIndex: 1,
+    //   },
+    // });
 
-private getStatusFields(status: number | null | undefined): { taskStatusLabel: string; taskStatusClass: string } {
-  switch (Number(status ?? 0)) {
-    case 1:
-      return { taskStatusLabel: 'Assigned', taskStatusClass: 'ts-assigned' };
-    case 2:
-      return { taskStatusLabel: 'Assignee Closure', taskStatusClass: 'ts-assignee-closure' };
-    case 3:
-      return { taskStatusLabel: 'Re-Open', taskStatusClass: 'ts-reopen' };
-    case 4:
-      return { taskStatusLabel: 'Assignee Re-Closure', taskStatusClass: 'ts-reclosure' };
-    case 5:
-      return { taskStatusLabel: 'Assignor Closure', taskStatusClass: 'ts-assignor-closure' };
-    default:
-      return { taskStatusLabel: 'Unassigned', taskStatusClass: 'ts-unassigned' };
+    this.saveTaskFilterAndNavigate([String(stat.statusId)]);
   }
-}
-   
+
+  private getStatusFields(status: number | null | undefined): { taskStatusLabel: string; taskStatusClass: string } {
+    switch (Number(status ?? 0)) {
+      case 1:
+        return { taskStatusLabel: 'Assigned', taskStatusClass: 'ts-assigned' };
+      case 2:
+        return { taskStatusLabel: 'Assignee Closure', taskStatusClass: 'ts-assignee-closure' };
+      case 3:
+        return { taskStatusLabel: 'Re-Open', taskStatusClass: 'ts-reopen' };
+      case 4:
+        return { taskStatusLabel: 'Assignee Re-Closure', taskStatusClass: 'ts-reclosure' };
+      case 5:
+        return { taskStatusLabel: 'Assignor Closure', taskStatusClass: 'ts-assignor-closure' };
+      default:
+        return { taskStatusLabel: 'Unassigned', taskStatusClass: 'ts-unassigned' };
+    }
+  }
+
+  private saveTaskFilterAndNavigate(taskStatusIds: string[], dashboardFilter: string = ''): void {
+    const filterState: TaskFilterState = {
+      currentPage: 1,
+      page: 0,
+      size: 10,
+
+      statusIndex: 1,
+      searchText: '',
+
+      clientId: this.selectedClientId || 0,
+      taskCategoryId: 0,
+      assignedTo: 0,
+      priority: 0,
+
+      fromDate: null,
+      toDate: null,
+
+      taskStatusIds,
+      dashboardFilter,
+    };
+
+    sessionStorage.setItem(SESSION_KEYS.TASK_MASTER_FILTER, JSON.stringify(filterState));
+
+    this.router.navigate(['/task-index']);
+  }
 }
