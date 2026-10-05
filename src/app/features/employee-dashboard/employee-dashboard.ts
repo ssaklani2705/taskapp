@@ -122,15 +122,15 @@ export interface TaskFilterState {
   size: number;
 
   statusIndex: number;
-  searchText: string;
+  // searchText: string;
 
   clientId: number;
-  taskCategoryId: number;
-  assignedTo: number;
-  priority: number;
+  // taskCategoryId: number;
+  // assignedTo: number;
+  // priority: number;
 
-  fromDate: string | null;
-  toDate: string | null;
+  // fromDate: string | null;
+  // toDate: string | null;
 
   taskStatusIds: string[];
 
@@ -668,19 +668,22 @@ export class EmployeeDashboard implements OnInit {
       size: 10,
 
       statusIndex: 1,
-      searchText: '',
+      // searchText: '',
 
       clientId: this.selectedClientId || 0,
-      taskCategoryId: 0,
-      assignedTo: 0,
-      priority: 0,
+      // taskCategoryId: 0,
+      // assignedTo: 0,
+      // priority: 0,
 
-      fromDate: null,
-      toDate: null,
+      // fromDate: null,
+      // toDate: null,
 
       taskStatusIds,
       dashboardFilter,
     };
+
+
+    console.log( JSON.stringify(filterState)  + " sss");
 
     sessionStorage.setItem(SESSION_KEYS.TASK_MASTER_FILTER, JSON.stringify(filterState));
 

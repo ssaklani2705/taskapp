@@ -224,11 +224,13 @@ export class TaskIndex {
   ) {}
 
   ngOnInit(): void {
+    console.log('dashboardFilter     ' + sessionStorage.getItem('dashboardFilter'));
     if (isPlatformBrowser(this.platformId)) {
       this.userId = sessionStorage.getItem('userId');
       this.isAdmin = sessionStorage.getItem('isAdmin');
       this.loginType = sessionStorage.getItem('loginType') || 'other';
       this.isHod = sessionStorage.getItem('isHod') || 'N';
+
       const storedModuleDetail = sessionStorage.getItem('selectedModuleDetail');
 
       let moduleDetail: any = null;
@@ -269,7 +271,6 @@ export class TaskIndex {
     this.sessionService.clearOtherSessions(this.filterKey);
     this.restoreFilterState();
     this.route.queryParams.subscribe((params) => {
-      this.dashboardFilter = params['taskType'] || '';
       const saved = sessionStorage.getItem(this.filterKey);
       if (!saved) {
         if (params['statusIndex'] !== undefined) {
@@ -304,7 +305,10 @@ export class TaskIndex {
 
     if (isPlatformBrowser(this.platformId)) {
       const saved = sessionStorage.getItem(this.filterKey);
+      const parsed = saved ? JSON.parse(saved) : null;
+      console.log('dashboardFilter from session =>', parsed?.dashboardFilter);
 
+      this.dashboardFilter = parsed?.dashboardFilter || '';
       if (saved) {
         try {
           stateData = JSON.parse(saved);
@@ -370,8 +374,6 @@ export class TaskIndex {
     } else {
       this.selectedTaskStatuses = [];
     }
-
-    this.dashboardFilter = stateData.dashboardFilter || '';
 
     this.fromDate = stateData.fromDate ? new Date(stateData.fromDate + 'T00:00:00') : null;
 
@@ -1293,9 +1295,8 @@ export class TaskIndex {
     this.showAssignUserModal = true;
 
     this.users = [];
-    this.loadAssigneeWorkload(task.taskCategoryId,task.date);
-    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId,Number(task.systemFlag ?? 0)).subscribe({
-
+    this.loadAssigneeWorkload(task.taskCategoryId, task.date);
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId, Number(task.systemFlag ?? 0)).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
 
@@ -1620,7 +1621,7 @@ export class TaskIndex {
 
   workloadList: { assignedTo: number; hours: number }[] = [];
   holidayError: string = '';
-  public  loadAssigneeWorkload(taskCategoryId: any, startDate: any): void {
+  public loadAssigneeWorkload(taskCategoryId: any, startDate: any): void {
     this.holidayError = '';
     console.log('{taskCategoryId : }' + taskCategoryId);
 
