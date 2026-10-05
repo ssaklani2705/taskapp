@@ -1295,8 +1295,11 @@ export class TaskIndex {
     this.showAssignUserModal = true;
 
     this.users = [];
-    this.loadAssigneeWorkload(task.taskCategoryId, task.date);
-    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId, Number(task.systemFlag ?? 0)).subscribe({
+    this.loadAssigneeWorkload(task.taskCategoryId, task.date,task.dueDateTime);
+    const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd');
+
+    const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd');
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId, Number(task.systemFlag ?? 0), startDate, endDate).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
 
@@ -1452,7 +1455,10 @@ export class TaskIndex {
   }
 
   onchangeloadUserDropdownData(task: any): void {
-    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId, Number(task.systemFlag ?? 0)).subscribe({
+    const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd');
+
+    const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd');
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId, Number(task.systemFlag ?? 0), startDate, endDate).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
         this.users = data?.assignedUsers || [];
@@ -1621,23 +1627,24 @@ export class TaskIndex {
 
   workloadList: { assignedTo: number; hours: number }[] = [];
   holidayError: string = '';
-  public loadAssigneeWorkload(taskCategoryId: any, startDate: any): void {
+  public loadAssigneeWorkload(taskCategoryId: any, startDate: any,endDate:any): void {
     this.holidayError = '';
     console.log('{taskCategoryId : }' + taskCategoryId);
 
-    const date = this.datePipe.transform(startDate, 'yyyy-MM-dd HH:mm:ss');
+    const paramStartDate = this.datePipe.transform(startDate, 'yyyy-MM-dd HH:mm:ss');
+    const paramEndDate = this.datePipe.transform(endDate, 'yyyy-MM-dd HH:mm:ss');
 
-    console.log('{ date : }' + date);
+ 
     if (!taskCategoryId || !startDate) {
       console.log('something went wrong    === ');
       return;
     }
 
-    if (!date) {
+    if (!paramStartDate  && paramEndDate) {
       return;
     }
 
-    this.dataprovider.getAssigneeWorkload(taskCategoryId, date).subscribe({
+    this.dataprovider.getAssigneeWorkload(taskCategoryId, paramStartDate,paramEndDate).subscribe({
       next: (response) => {
         console.log('Assignee Workload:', response);
 
@@ -1664,5 +1671,48 @@ export class TaskIndex {
         this.workloadList = [];
       },
     });
+  }
+
+  onAssignEndDateChange(value: any): void {
+    this.selectedAssignTask.endDate = value;
+
+
+
+
+    const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd') || '';
+    const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd') || '';
+   
+
+
+    this.loadAssigneeWorkload(this.selectedAssignTask.taskCategoryId,this.selectedAssignTask.date,this.selectedAssignTask.endDate)
+
+    const currentAssignedUserId = Number(this.selectedAssignTask.assignedTo || 0);
+
+    this.dataprovider
+      .changesCategoryIdgetUserFilterData(
+        this.isAdmin,
+        this.userId,
+        this.loginType,
+        this.selectedAssignTask.clientId,
+        this.selectedAssignTask.taskCategoryId,
+        Number(this.selectedAssignTask.systemFlag ?? 0),
+        startDate,
+        endDate,
+      )
+      .subscribe({
+        next: (res: any) => {
+          const data = res?.data || res;
+
+          const allUsers = data?.assignedUsers || [];
+
+          this.users = allUsers.filter((user: any) => Number(user.userId) !== currentAssignedUserId);
+
+          this.selectedAssignTask.maxHours = Number(data?.maxHours || 0);
+        },
+        error: (error: any) => {
+          console.error('Error loading assigned users:', error);
+          this.users = [];
+        },
+      });
   }
 }

@@ -707,6 +707,7 @@
           </div>
 
           <div class="assign-error" *ngIf="!selectedAssignTask?.date">Start Date &amp; Time is required.</div>
+        
         </div>
 
         <!-- END DATE -->
@@ -725,6 +726,7 @@
               class="assign-input assign-date-input"
               [owlDateTime]="endDatePicker"
               [(ngModel)]="selectedAssignTask.endDate"
+                  (ngModelChange)="onAssignEndDateChange($event)"
               name="endDate"
               required
               placeholder="DD-MM-YYYY HH:mm"
@@ -736,6 +738,9 @@
           </div>
 
           <div class="assign-error" *ngIf="!selectedAssignTask?.endDate">End Date &amp; Time is required.</div>
+             <div class="user-error" *ngIf="holidayError">
+                  {{ holidayError }}
+                </div>
         </div>
       </div>
       <!-- ASSIGNED TO -->
@@ -774,7 +779,7 @@
       <button
         type="button"
         class="modal-save-button"
-        [disabled]="!selectedAssignTask?.assignedTo || !selectedAssignTask?.date || !selectedAssignTask?.endDate || (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim())"
+        [disabled]="!selectedAssignTask?.assignedTo || !selectedAssignTask?.date || !selectedAssignTask?.endDate || (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim()) || holidayError"
         (click)="assignUser()"
       >
         <mat-icon>save</mat-icon>

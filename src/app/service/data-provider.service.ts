@@ -1192,7 +1192,16 @@ export class DataProviderService {
     });
   }
 
-  changesCategoryIdgetUserFilterData(isAdmin: string, userId: number, loginType: string, clientId: number, categoryId: number,systemFlag: number): Observable<any> {
+  changesCategoryIdgetUserFilterData(
+    isAdmin: string,
+    userId: number,
+    loginType: string,
+    clientId: number,
+    categoryId: number,
+    systemFlag: number,
+    startDate: string | null,
+    endDate: string | null,
+  ): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/changesCategoryIdgetUserFilterData`, {
       params: {
         isAdmin: isAdmin.toString(),
@@ -1201,32 +1210,11 @@ export class DataProviderService {
         clientId: clientId ?? '',
         categoryId: categoryId ?? '',
         systemFlag: (systemFlag ?? 0).toString(),
+        startDate: startDate?.toString() || '',
+        endDate: endDate?.toString() || '',
       },
     });
   }
-
-  // changesCategoryIdgetUserFilterData(
-  // isAdmin: string,
-  // userId: number,
-  // loginType: string,
-  // clientId: number,
-  // categoryIds: string
-  // ): Observable<any> {
-
-  // return this.http.get<any>(
-  // `${environment.apiBaseUrl}admin/task/changesCategoryIdgetUserFilterData`,
-  // {
-  // params: {
-  // isAdmin: isAdmin.toString(),
-  // userId: userId.toString(),
-  // loginType: loginType.toString(),
-  // clientId: clientId?.toString() ?? '',
-  // categoryIds: categoryIds ?? ''
-  // }
-  // }
-  // );
-
-  // }
 
   getTaskDetails(
     page: number,
@@ -1312,13 +1300,13 @@ export class DataProviderService {
     return this.http.post(`${environment.apiBaseUrl}admin/task/update_task_status`, formData);
   }
 
-  getRecurringClients(userId: number, isAdmin: string, loginType: string,isHod: any) {
+  getRecurringClients(userId: number, isAdmin: string, loginType: string, isHod: any) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/getRecurringClients`, {
       params: {
         userId: userId,
         isAdmin: isAdmin,
         loginType: loginType,
-        isHod: isHod
+        isHod: isHod,
       },
     });
   }
@@ -1399,13 +1387,13 @@ export class DataProviderService {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/active`);
   }
 
-  getActiveTaskCategoriesForRecurring(userId: any, isAdmin: any, loginType: any,isHod: any) {
+  getActiveTaskCategoriesForRecurring(userId: any, isAdmin: any, loginType: any, isHod: any) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/recurring/active`, {
       params: {
         userId: userId,
         isAdmin: isAdmin,
         loginType: loginType,
-        isHod: isHod
+        isHod: isHod,
       },
     });
   }
@@ -1556,7 +1544,6 @@ export class DataProviderService {
     });
   }
 
-
   // ============================================================
   // HOLIDAY
   // ============================================================
@@ -1615,11 +1602,12 @@ export class DataProviderService {
     });
   }
 
-  getAssigneeWorkload(taskCatId: number, date: string): Observable<any> {
+  getAssigneeWorkload(taskCatId: number, startDate: string | null, endDate: string | null): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/task/assignee_workload`, {
       params: {
         taskCatId: taskCatId.toString(),
-        date: date,
+        startDate: startDate || '',
+        endDate: endDate || '',
       },
     });
   }

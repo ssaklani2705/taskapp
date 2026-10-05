@@ -125,14 +125,12 @@ export class AddIndexComponent implements OnInit {
   ) {}
   dashboardFilter: string = '';
   ngOnInit(): void {
-   const savedFilter = sessionStorage.getItem(
-  SESSION_KEYS.TASK_MASTER_FILTER
-);
+    const savedFilter = sessionStorage.getItem(SESSION_KEYS.TASK_MASTER_FILTER);
 
     if (savedFilter) {
-       const state = JSON.parse(savedFilter);
+      const state = JSON.parse(savedFilter);
 
-       console.log(" Check this now  { } = " +JSON.stringify(state)  + "{  ===> }")
+      console.log(' Check this now  { } = ' + JSON.stringify(state) + '{  ===> }');
       this.currentPage = state.currentPage || 1;
 
       this.searchText = state.searchText || '';
@@ -520,34 +518,29 @@ export class AddIndexComponent implements OnInit {
   }
 
   backToIndexPage(): void {
-    this.router.navigate(['/task-index']
-    );
+    this.router.navigate(['/task-index']);
   }
 
   onchangeloadDropdownData(): void {
-    // alert(this.task.clientId);
     this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
-        // alert(JSON.stringify(data));
-        // this.clients = data?.clients || [];
         this.taskCategories = data?.taskCategories || [];
-
-        console.log('Takkkkk   ' + this.taskCategories);
-        // this.users = data?.assignedUsers || [];
       },
-
       error: (error: any) => {
         console.error('Error loading task dropdown data:', error);
-
-        // this.clients = [];
         this.taskCategories = [];
       },
     });
   }
 
   onchangeloadUserDropdownData(onLoaded?: () => void): void {
-    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId,0).subscribe({
+    const startDate = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd');
+
+    const endDate = this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd');
+
+
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId, 0,startDate,endDate).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
         this.users = data?.assignedUsers || [];
@@ -599,7 +592,7 @@ export class AddIndexComponent implements OnInit {
   onClientChange(clientId: number | null): void {
     this.task.taskCategoryId = null;
     this.task.assignedTo = null;
-    this.noEmployeeError = '';          // add this
+    this.noEmployeeError = ''; // add this
     this.taskCategories = [];
     this.users = [];
 
@@ -725,6 +718,11 @@ export class AddIndexComponent implements OnInit {
     endDate.setHours(endDate.getHours() + dueHours);
     this.task.startDate = startDate;
     this.task.endDate = endDate;
+
+    console.log('Selected Category:', selectedCategory);
+    console.log('Due Hours:', dueHours);
+    console.log('Calculated Start:', this.task.startDate);
+    console.log('Calculated End:', this.task.endDate);
   }
 
   endDateError = '';
@@ -755,19 +753,23 @@ export class AddIndexComponent implements OnInit {
   holidayError: string = '';
   private loadAssigneeWorkload(): void {
     this.holidayError = '';
-    this.noEmployeeError = '';          // add this (before the early return)
+    this.noEmployeeError = ''; // add this (before the early return)
 
-    if (!this.task.taskCategoryId || !this.task.startDate) {
+    if (!this.task.taskCategoryId || !this.task.startDate || !this.task.endDate) {
       return;
     }
 
-    const date = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
+    const startDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
 
-    if (!date) {
+    const endDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
+
+    
+
+    if (!startDateParam && !endDateParam) {
       return;
     }
 
-    this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, date).subscribe({
+    this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, startDateParam,endDateParam).subscribe({
       next: (response) => {
         console.log('Assignee Workload:', response);
 
@@ -782,9 +784,9 @@ export class AddIndexComponent implements OnInit {
         this.workloadList = response.data || [];
 
         // add this
-      if (this.workloadList.length === 0) {
-        this.noEmployeeError = 'No employee available for the selected category.';
-      }
+        if (this.workloadList.length === 0) {
+          this.noEmployeeError = 'No employee available for the selected category.';
+        }
 
         const assignedUserIds = new Set(this.workloadList.map((x: any) => Number(x.assignedTo)));
 
@@ -792,7 +794,7 @@ export class AddIndexComponent implements OnInit {
           user.hasWorkload = assignedUserIds.has(Number(user.userId));
         });
 
-        console.log(this.users)
+        console.log(this.users);
       },
       error: (error) => {
         console.error('Error fetching assignee workload', error);
@@ -807,15 +809,14 @@ export class AddIndexComponent implements OnInit {
   readonly MAX_TASK_HOURS = 8;
   get durationExceedsLimit(): boolean {
     // alert("in");
-  const start = this.toDate_(this.task.startDate);
-  const end = this.toDate_(this.task.endDate);
+    const start = this.toDate_(this.task.startDate);
+    const end = this.toDate_(this.task.endDate);
 
-  if (!start || !end) {
-    return false;
+    if (!start || !end) {
+      return false;
+    }
+
+    const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
+    return hours > this.MAX_TASK_HOURS;
   }
-
-  const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-  return hours > this.MAX_TASK_HOURS;
-}
-
 }
