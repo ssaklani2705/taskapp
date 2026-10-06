@@ -224,8 +224,9 @@ export class TaskIndex {
   ) {}
 
   ngOnInit(): void {
-    console.log('dashboardFilter     ' + sessionStorage.getItem('dashboardFilter'));
+   
     if (isPlatformBrowser(this.platformId)) {
+      //  sessionStorage.removeItem(this.filterKey); 
       this.userId = sessionStorage.getItem('userId');
       this.isAdmin = sessionStorage.getItem('isAdmin');
       this.loginType = sessionStorage.getItem('loginType') || 'other';
@@ -271,9 +272,7 @@ export class TaskIndex {
     this.sessionService.clearOtherSessions(this.filterKey);
     this.restoreFilterState();
 
-    if (isPlatformBrowser(this.platformId)) {
-      sessionStorage.removeItem(this.filterKey); // consumed, in-memory fields now hold the state
-    }
+  
     this.route.queryParams.subscribe((params) => {
       const saved = sessionStorage.getItem(this.filterKey);
       if (!saved) {
