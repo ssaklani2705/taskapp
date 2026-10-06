@@ -1619,4 +1619,12 @@ export class DataProviderService {
       },
     });
   }
+
+  isEmployeeAvailableForTaskCategoryForTask(taskCategoryId: number) {
+    return this.http.get<boolean>(`${environment.apiBaseUrl}admin/taskcategory/task/category/employee-available`, {
+      params: {
+        taskCategoryId: taskCategoryId.toString(),
+      },
+    });
+  }
 }
