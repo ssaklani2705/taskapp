@@ -109,7 +109,7 @@ export class ManagerLogin {
           sessionStorage.setItem('loginType', loginType);
           sessionStorage.setItem('isHod', res.data.isHod);
           sessionStorage.removeItem('selectedModuleDetail');
-          this.loadCaptcha();
+          // this.loadCaptcha();
           this.router
             .navigate(['/dashboard'])
             .then((result) => {

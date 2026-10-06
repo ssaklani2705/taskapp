@@ -109,7 +109,7 @@ export class Login {
           sessionStorage.setItem('isHod',  res.data.isHod);
           sessionStorage.removeItem('selectedModuleDetail');
           // Generate new CAPTCHA
-          this.loadCaptcha();
+          // this.loadCaptcha();
           this.router
             .navigate(['/employee-dashboard'])
             .then((result) => {

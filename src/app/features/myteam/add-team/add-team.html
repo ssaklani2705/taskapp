@@ -314,7 +314,7 @@
           <!-- ADMIN
           ================================================== -->
 
-          <div class="admin-row" *ngIf="!isRightsHidden">
+          <div class="admin-row" *ngIf="!isRightsHidden && !userForm.get('isHod')?.value">
             <mat-checkbox formControlName="isAdmin"> Admin Permissions (All modules) </mat-checkbox>
 
             <!-- NEW -->
@@ -327,7 +327,7 @@
 
           <!-- <div class="rights-section" *ngIf="!userForm.get('isAdmin')?.value"> -->
 
-          <div class="rights-section" *ngIf="!userForm.get('isAdmin')?.value && !isRightsHidden">
+          <div class="rights-section" *ngIf="!userForm.get('isAdmin')?.value && !isRightsHidden && !userForm.get('isHod')?.value">
             <!-- Section Heading -->
 
             <div class="rights-title">RIGHTS AND PERMISSIONS</div>
