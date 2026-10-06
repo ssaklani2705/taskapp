@@ -124,7 +124,7 @@ export interface TaskFilterState {
   statusIndex: number;
   // searchText: string;
 
-  clientId: number;
+  clientId?: number |null;
   // taskCategoryId: number;
   // assignedTo: number;
   // priority: number;
@@ -681,12 +681,7 @@ export class EmployeeDashboard implements OnInit {
       taskStatusIds,
       dashboardFilter,
     };
-
-
-    console.log( JSON.stringify(filterState)  + " sss");
-
     sessionStorage.setItem(SESSION_KEYS.TASK_MASTER_FILTER, JSON.stringify(filterState));
-
     this.router.navigate(['/task-index']);
   }
 }

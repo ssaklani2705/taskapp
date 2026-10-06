@@ -40,7 +40,7 @@
               </select>
             </div>
           } @else {
-            <!-- Autofill search for other login types -->
+           
             <div class="client-dropdown-container">
               <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
               <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>

@@ -10,6 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Common } from '../../classes/common';
+import { TaskFilterState } from '../employee-dashboard/employee-dashboard';
+import { SESSION_KEYS } from '../../service/session-storage.keys';
 
 interface Task {
   taskId: number;
@@ -62,7 +64,7 @@ export class ManagerDashboard {
 
   common = new Common();
 
-  selectedClient: string = '';
+ selectedClient: string = '';
   selectedTaskStatus: string[] = [];
   selectedTaskCategory: string = '';
   selectedAssignedTo: string = '';
@@ -77,7 +79,7 @@ export class ManagerDashboard {
   userId: any;
   isAdmin: any;
 
-  isHod: any ='';
+  isHod: any = '';
 
   totalTasks = 0;
   page: number = 0;
@@ -563,7 +565,7 @@ export class ManagerDashboard {
         taskStatusIds,
         this.loginType,
         '',
-        this.isHod
+        this.isHod,
       )
       .subscribe({
         next: (response: any) => {
@@ -711,31 +713,39 @@ export class ManagerDashboard {
     this.getTasks();
   }
 
+  // onKpiClick(kpi: any): void {
+  //   console.log('KPI CLICKED:', kpi);
+
+  //   console.log('selectedModuleDetail before KPI navigation:', sessionStorage.getItem('selectedModuleDetail'));
+
+  //   console.log(
+  //     'ALL SESSION STORAGE:',
+  //     Object.keys(sessionStorage).reduce((obj: any, key: string) => {
+  //       obj[key] = sessionStorage.getItem(key);
+  //       return obj;
+  //     }, {}),
+  //   );
+
+  //   const queryParams: any = {
+  //     taskStatusIds: kpi.taskStatusIds?.length ? kpi.taskStatusIds.join(',') : null,
+  //     statusIndex: 1,
+  //   };
+
+  //   if (this.selectedClient) {
+  //     queryParams.clientId = this.selectedClient;
+  //   }
+
+  //   this.router.navigate(['/task-index'], {
+  //     queryParams,
+  //   });
+  // }
+
   onKpiClick(kpi: any): void {
-    console.log('KPI CLICKED:', kpi);
-
-    console.log('selectedModuleDetail before KPI navigation:', sessionStorage.getItem('selectedModuleDetail'));
-
-    console.log(
-      'ALL SESSION STORAGE:',
-      Object.keys(sessionStorage).reduce((obj: any, key: string) => {
-        obj[key] = sessionStorage.getItem(key);
-        return obj;
-      }, {}),
-    );
-
-    const queryParams: any = {
-      taskStatusIds: kpi.taskStatusIds?.length ? kpi.taskStatusIds.join(',') : null,
-       statusIndex: 1,
-    };
-
-    if (this.selectedClient) {
-      queryParams.clientId = this.selectedClient;
+    if (!kpi || Number(kpi.value) === 0) {
+      return;
     }
-
-    this.router.navigate(['/task-index'], {
-      queryParams,
-    });
+    const taskStatusIds: string[] = Array.isArray(kpi.taskStatusIds) ? kpi.taskStatusIds.map((x: any) => String(x)) : [];
+    this.saveTaskFilterAndNavigate(taskStatusIds);
   }
 
   clientAssignmentMessage: string = '';
@@ -755,5 +765,22 @@ export class ManagerDashboard {
         console.error('Failed to check client assignment', err);
       },
     });
+  }
+
+  private saveTaskFilterAndNavigate(taskStatusIds: string[], dashboardFilter: string = ''): void {
+      const clientId = this.selectedClient && String(this.selectedClient) !== '0'
+    ? Number(this.selectedClient)
+    : null;
+    const filterState: TaskFilterState = {
+      currentPage: 1,
+      page: 0,
+      size: 10,
+      statusIndex: 1,
+      clientId:clientId,
+      taskStatusIds,
+      dashboardFilter,
+    };
+    sessionStorage.setItem(SESSION_KEYS.TASK_MASTER_FILTER, JSON.stringify(filterState));
+    this.router.navigate(['/task-index']);
   }
 }
