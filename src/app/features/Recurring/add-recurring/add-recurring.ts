@@ -353,6 +353,15 @@ private toApiTime(value: string | null | undefined): string | null {
       return;
     }
 
+    // Do not submit while employee availability is being checked
+    if (this.checkingTaskCategoryEmployee) {
+      return;
+    }
+    // Do not submit if selected task category has no employee
+    if (this.taskCategoryEmployeeError) {
+      return;
+    }
+
     const type = Number(this.recurringForm.get('type')?.value);
 
     this.updateTypeValidators(type);
@@ -564,5 +573,29 @@ private toApiTime(value: string | null | undefined): string | null {
     if (!target.closest('.client-dropdown-container')) {
       this.showClientDropdown = false;
     }
+  }
+  taskCategoryEmployeeError = false;
+  checkingTaskCategoryEmployee = false;
+   onTaskCategoryChange(): void {
+    const taskCategoryId = this.recurringForm.get('taskCatId')?.value;
+    // Reset error whenever category changes
+    this.taskCategoryEmployeeError = false;
+    if (!taskCategoryId) {
+      this.checkingTaskCategoryEmployee = false;
+      return;
+    }
+    this.checkingTaskCategoryEmployee = true;
+    this.dataprovider.isEmployeeAvailableForTaskCategory(Number(taskCategoryId)).subscribe({
+      next: (available: boolean) => {
+        console.log('Employee available:', available);
+        this.checkingTaskCategoryEmployee = false;
+        this.taskCategoryEmployeeError = !available;
+      },
+      error: (error) => {
+        console.error('Error checking employee availability:', error);
+        this.checkingTaskCategoryEmployee = false;
+        this.taskCategoryEmployeeError = false;
+      },
+    });
   }
 }
