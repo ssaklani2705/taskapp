@@ -12,6 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Common } from '../../classes/common';
 import { TaskFilterState } from '../employee-dashboard/employee-dashboard';
 import { SESSION_KEYS } from '../../service/session-storage.keys';
+import { SessionStorageService } from '../../service/session-storage.service';
 
 interface Task {
   taskId: number;
@@ -158,14 +159,16 @@ export class ManagerDashboard {
     //   taskStatusIds: ['0', null],
     // },
   ];
-
+  filterKey = SESSION_KEYS.TASK_MASTER_FILTER;
   constructor(
     private dataProvider: DataProviderService,
     private route: ActivatedRoute,
     private router: Router,
+     private sessionService: SessionStorageService,
   ) {}
 
   ngOnInit(): void {
+     this.sessionService.clearOtherSessions(this.filterKey);
     this.loginType = sessionStorage.getItem('loginType') || 'other';
     this.username = sessionStorage.getItem('username') || 'Society 123';
 

@@ -270,6 +270,10 @@ export class TaskIndex {
 
     this.sessionService.clearOtherSessions(this.filterKey);
     this.restoreFilterState();
+
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem(this.filterKey); // consumed, in-memory fields now hold the state
+    }
     this.route.queryParams.subscribe((params) => {
       const saved = sessionStorage.getItem(this.filterKey);
       if (!saved) {
@@ -1691,7 +1695,6 @@ export class TaskIndex {
   }
 
   private loadAssignUsers(startDate: string | null, endDate: string | null, currentAssignedUserId: number): void {
-    
     this.dataprovider
       .changesCategoryIdgetUserFilterData(
         this.isAdmin,
@@ -1720,12 +1723,9 @@ export class TaskIndex {
       });
   }
 
-
-
-
   private normalizeClientId(value: any): string {
-  if (value === null || value === undefined) return '';
-  const v = String(value).trim();
-  return v === '' || v === '0' || v === 'null' || v === 'undefined' ? '' : v;
-}
+    if (value === null || value === undefined) return '';
+    const v = String(value).trim();
+    return v === '' || v === '0' || v === 'null' || v === 'undefined' ? '' : v;
+  }
 }
