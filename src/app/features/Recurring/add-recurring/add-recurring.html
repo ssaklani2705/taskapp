@@ -325,14 +325,15 @@
         <span class="required">*</span>
       </label>
 
-      <select class="user-input user-select" formControlName="taskCatId">
+      <select class="user-input user-select" formControlName="taskCatId" (change)="onTaskCategoryChange()">
         <option [ngValue]="null">Select Task Category</option>
-        <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
+        <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId" >
           {{ category.name }}
         </option>
       </select>
 
-      <div class="user-error" *ngIf="recurringForm.get('taskCatId')?.touched && recurringForm.get('taskCatId')?.invalid">Task Category is required</div>
+     <div class="user-error" *ngIf="recurringForm.get('taskCatId')?.touched && recurringForm.get('taskCatId')?.invalid && !taskCategoryEmployeeError">Task Category is required</div>
+                <div class="user-error" *ngIf="taskCategoryEmployeeError">No employee available for the selected category.</div>
     </div>
   </div>
 
