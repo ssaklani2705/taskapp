@@ -99,6 +99,7 @@
 
                 <div class="user-error" *ngIf="categoryCtrl.invalid && categoryCtrl.touched">Task Category is required</div>
                 <div class="user-error" *ngIf="noEmployeeError">{{ noEmployeeError }}</div>
+                <div class="user-error" *ngIf="taskCategoryEmployeeError">No employee available for the selected category.</div>
               </div>
             </div>
 

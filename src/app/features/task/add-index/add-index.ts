@@ -348,6 +348,15 @@ export class AddIndexComponent implements OnInit {
       return;
     }
 
+     // Do not submit while employee availability is being checked
+    if (this.checkingTaskCategoryEmployee) {
+      return;
+    }
+    // Do not submit if selected task category has no employee
+    if (this.taskCategoryEmployeeError) {
+      return;
+    }
+
     this.task.addedBy = this.userId ? Number(this.userId) : null;
 
     const formData = new FormData();
@@ -676,10 +685,10 @@ export class AddIndexComponent implements OnInit {
     this.validateDates();
   }
 
-  onTaskCategoryChange(): void {
-    this.calculateEndDate();
-    this.loadAssigneeWorkload();
-  }
+  // onTaskCategoryChange(): void {
+  //   this.calculateEndDate();
+  //   this.loadAssigneeWorkload();
+  // }
 
   onStartDateChange(value: any): void {
     this.task.startDate = value;
@@ -818,5 +827,33 @@ export class AddIndexComponent implements OnInit {
 
     const hours = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
     return hours > this.MAX_TASK_HOURS;
+  }
+
+   taskCategoryEmployeeError = false;
+  checkingTaskCategoryEmployee = false;
+  onTaskCategoryChange(): void {
+    this.calculateEndDate();
+    this.loadAssigneeWorkload();
+    // const taskCategoryId = this.taskForm.get('taskCatId')?.value;
+    const taskCategoryId = this.task.taskCategoryId;
+    this.taskCategoryEmployeeError = false;
+    if (!taskCategoryId) {
+      this.checkingTaskCategoryEmployee = false;
+      return;
+    }
+    this.checkingTaskCategoryEmployee = true;
+    this.dataprovider.isEmployeeAvailableForTaskCategoryForTask(Number(taskCategoryId)).subscribe({
+      next: (available: boolean) => {
+        console.log('Task Category:', taskCategoryId);
+        console.log('Usable employee available:', available);
+        this.checkingTaskCategoryEmployee = false;
+        this.taskCategoryEmployeeError = !available;
+      },
+      error: (error) => {
+        console.error('Error checking employee availability:', error);
+        this.checkingTaskCategoryEmployee = false;
+        this.taskCategoryEmployeeError = false;
+      },
+    });
   }
 }

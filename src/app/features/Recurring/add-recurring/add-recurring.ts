@@ -576,9 +576,9 @@ private toApiTime(value: string | null | undefined): string | null {
   }
   taskCategoryEmployeeError = false;
   checkingTaskCategoryEmployee = false;
+  
    onTaskCategoryChange(): void {
     const taskCategoryId = this.recurringForm.get('taskCatId')?.value;
-    // Reset error whenever category changes
     this.taskCategoryEmployeeError = false;
     if (!taskCategoryId) {
       this.checkingTaskCategoryEmployee = false;
@@ -587,7 +587,8 @@ private toApiTime(value: string | null | undefined): string | null {
     this.checkingTaskCategoryEmployee = true;
     this.dataprovider.isEmployeeAvailableForTaskCategory(Number(taskCategoryId)).subscribe({
       next: (available: boolean) => {
-        console.log('Employee available:', available);
+        console.log('Task Category:', taskCategoryId);
+        console.log('Usable employee available:', available);
         this.checkingTaskCategoryEmployee = false;
         this.taskCategoryEmployeeError = !available;
       },
@@ -598,4 +599,5 @@ private toApiTime(value: string | null | undefined): string | null {
       },
     });
   }
+
 }
