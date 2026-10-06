@@ -1152,54 +1152,159 @@ export class TaskIndex {
     });
   }
 
-  exportToExcel(): void {
-    if (!this.tasks || this.tasks.length === 0) {
-      alert('No tasks available for export.');
-      return;
-    }
+ exportToExcel(): void {
+  const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
+  const taskCategoryId = this.selectedTaskCategory
+    ? Number(this.selectedTaskCategory)
+    : 0;
+  const assignedTo = this.selectedAssignedTo
+    ? Number(this.selectedAssignedTo)
+    : -1;
+  const priority = this.selectedPriority
+    ? Number(this.selectedPriority)
+    : 0;
 
-    const exportData = this.tasks.map((task: any, index: number) => {
-      return {
-        'Sr. No.': index + 1,
-        Title: task.title || '-',
-        Client: task.clientName || '-',
-        Date: task.date ? this.formatExcelDate(task.date) : '-',
-        'Due Date': task.dueDateTime ? this.formatExcelDate(task.dueDateTime) : '-',
-        'Task Category': task.taskCategoryName || '-',
-        'Assigned By': task.assignedbyName || '-',
-        'Assigned To': !task.assignedToName || task.assignedToName === '0' ? 'Unassigned User' : task.assignedToName,
-        Priority: this.getPriorityLabel(task.priority),
-        'Task Status': this.common.getTaskStatusLabel(task.taskStatus),
-        Status: this.common.getStatusLabel(task.status),
-      };
+  const fromDate = this.formatDateForApi(this.fromDate);
+  const toDate = this.formatDateForApi(this.toDate);
+
+  const taskStatusId = this.selectedTaskStatuses;
+
+  // Use a large size so all filtered records are returned.
+  // Better solution: ask backend for an export endpoint.
+  const exportPage = 0;
+  const exportSize = 100000;
+
+  Swal.fire({
+    title: 'Preparing Excel...',
+    text: 'Please wait while all tasks are being loaded.',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
+
+  this.dataprovider
+    .getTaskDetails(
+      exportPage,
+      exportSize,
+      this.statusIndex,
+      this.search,
+      clientId,
+      taskCategoryId,
+      assignedTo,
+      priority,
+      fromDate,
+      toDate,
+      this.isAdmin,
+      this.userId,
+      taskStatusId,
+      this.loginType,
+      this.dashboardFilter,
+      this.isHod
+    )
+    .subscribe({
+      next: (response: any) => {
+        Swal.close();
+
+        const allTasks: Task[] = response?.data || [];
+
+        if (allTasks.length === 0) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'No Data',
+            text: 'No tasks found for the selected filters.',
+          });
+          return;
+        }
+
+        const exportData = allTasks.map((task: any, index: number) => ({
+          'Sr. No.': index + 1,
+          Title: task.title || '-',
+          Client: task.clientName || '-',
+          'Start Date': task.date
+            ? this.formatExcelDate(task.date)
+            : '-',
+          'Due Date': task.dueDateTime
+            ? this.formatExcelDate(task.dueDateTime)
+            : '-',
+          'Task Category': task.taskCategoryName || '-',
+          'Assigned By': task.assignedbyName || '-',
+          'Assigned To':
+            !task.assignedToName || task.assignedToName === '0'
+              ? 'Unassigned User'
+              : task.assignedToName,
+          Priority: this.getPriorityLabel(Number(task.priority)),
+          'Task Status': this.common.getTaskStatusLabel(
+            Number(task.taskStatus)
+          ),
+          Status: this.common.getStatusLabel(
+            Number(task.status)
+          ),
+        }));
+
+        const worksheet: XLSX.WorkSheet =
+          XLSX.utils.json_to_sheet(exportData);
+
+        worksheet['!cols'] = [
+          { wch: 8 },
+          { wch: 35 },
+          { wch: 25 },
+          { wch: 20 },
+          { wch: 20 },
+          { wch: 25 },
+          { wch: 25 },
+          { wch: 25 },
+          { wch: 15 },
+          { wch: 20 },
+          { wch: 15 },
+        ];
+
+        const workbook: XLSX.WorkBook =
+          XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(
+          workbook,
+          worksheet,
+          'Tasks'
+        );
+
+        const today = new Date();
+
+        const dateString =
+          `${today.getFullYear()}-` +
+          `${String(today.getMonth() + 1).padStart(2, '0')}-` +
+          `${String(today.getDate()).padStart(2, '0')}`;
+
+        XLSX.writeFile(
+          workbook,
+          `Tasks_${dateString}.xlsx`
+        );
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Export Complete',
+          text: `${allTasks.length} tasks exported successfully.`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      },
+
+      error: (error: any) => {
+        Swal.close();
+
+        console.error('Error exporting tasks:', error);
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Export Failed',
+          text:
+            error?.error?.message ||
+            'Unable to export tasks to Excel.',
+        });
+      },
     });
+}
 
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-
-    worksheet['!cols'] = [
-      { wch: 8 }, // Sr. No.
-      { wch: 35 }, // Title
-      { wch: 25 }, // Client
-      { wch: 20 }, // Date
-      { wch: 20 }, // Due Date
-      { wch: 25 }, // Task Category
-      { wch: 25 }, // Assigned By
-      { wch: 25 }, // Assigned To
-      { wch: 15 }, // Priority
-      { wch: 20 }, // Task Status
-      { wch: 15 }, // Status
-    ];
-
-    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Tasks');
-
-    const today = new Date();
-
-    const dateString = `${today.getFullYear()}-` + `${String(today.getMonth() + 1).padStart(2, '0')}-` + `${String(today.getDate()).padStart(2, '0')}`;
-
-    XLSX.writeFile(workbook, `Tasks_${dateString}.xlsx`);
-  }
 
   private formatExcelDate(date: any): string {
     if (!date) {
