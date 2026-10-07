@@ -62,23 +62,9 @@ export interface TaskCategoryDTO {
 export class DataProviderService {
   constructor(private http: HttpClient) {}
 
-  //Dashboard
-  getTodaysFollowup(userId: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/dashboard/getTodaysFollowup?userId=${userId}`);
-  }
-
   checkClientAssignment(managerId: number): Observable<{ assigned: boolean; message: string }> {
     return this.http.get<{ assigned: boolean; message: string }>(`${environment.apiBaseUrl}api/task/client/check-assignment/${managerId}`);
   }
-
-  getQuotationCount(startDate: any, endDate: any, userId: any, isAdmin: string): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/dashboard/stats?startDate=${startDate}&endDate=${endDate}&userId=${userId}&isAdmin=${isAdmin}`);
-  }
-
-  //User Management
-  // getUserManagementDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-  //   return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
-  // }
 
   getUserManagementDetails(page: any, size: any, statusIndex: any, search: any, departmentId: number | null, designationId: number | null, selectedCategoryId: any, weeklyOff?: any): Observable<any> {
     return this.http.get(
@@ -94,12 +80,10 @@ export class DataProviderService {
     );
   }
 
-  // getUserManagementDetailsById(id: any): Observable<any> {
-  //   return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails/${id}`);
-  // }
   getUserManagementDetailsById(id: any): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails/${id}`);
   }
+
   saveUserManagementDetailsDetail(userRequest: any) {
     return this.http.post<ResponseApi>(`${environment.apiBaseUrl}admin/saveUserDetail`, userRequest, {
       headers: new HttpHeaders({
@@ -107,54 +91,12 @@ export class DataProviderService {
       }),
     });
   }
+
   deleteUserManagement(id: number, createdBy: string): Observable<any> {
     const params = { userId: id, createdBy: createdBy };
     return this.http.post(`${environment.apiBaseUrl}admin/deleteUser`, null, { params });
   }
 
-  //Company Master
-  getCompanyDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/getCompanyDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
-  }
-
-  saveCompany(company: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/saveCompanyDetails`, company);
-  }
-  // Delete company
-  deleteCompany(company: any): Observable<any> {
-    return this.http.post(`${environment.apiBaseUrl}admin/deleteCompany`, company);
-  }
-  // Get company by ID
-  getCompanyById(companyId: number): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/company/${companyId}`);
-  }
-
-  saveFollowUp(followUp: any): Observable<any> {
-    return this.http.post<any>(`${environment.apiBaseUrl}admin/followup/saveFollowUp`, followUp);
-  }
-  // New method to get follow-ups by clientId and userId
-  getFollowUpsByClientAndUser(clientId: number, userId: number): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/followup/getByClientAndUser`, {
-      params: {
-        clientId: clientId.toString(),
-        userId: userId.toString(),
-      },
-    });
-  }
-
-  getFeedbacksByClientAndUser(clientId: number, userId: number): Observable<any> {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/feedback/getByClientAndUser`, {
-      params: {
-        clientId: clientId.toString(),
-        userId: userId.toString(),
-      },
-    });
-  }
-
-  saveFeedback(feedback: Feedback): Observable<ApiResponse<Feedback>> {
-    let params = new HttpParams().set('clientId', feedback.clientId).set('remarks', feedback.remarks).set('userId', feedback.userId).set('date', feedback.date); // pass as string
-    return this.http.post<ApiResponse<Feedback>>(`${environment.apiBaseUrl}admin/feedback/saveFeedback`, null, { params });
-  }
 
   getActiveUsers(): Observable<UserActiveDTO[]> {
     return this.http.get<UserActiveDTO[]>(`${environment.apiBaseUrl}admin/active`);
@@ -164,85 +106,8 @@ export class DataProviderService {
     return this.http.get<StateDTO[]>(`${environment.apiBaseUrl}admin/state/active`);
   }
 
-  getCountry(): Observable<CountryDTO[]> {
-    return this.http.get<CountryDTO[]>(`${environment.apiBaseUrl}admin/state/getCountry`);
-  }
-
-  getAllFeedback(page: any, size: any, statusIndex: any, search: any, user: any, fromDate?: string, toDate?: string): Observable<any> {
-    let url = `${environment.apiBaseUrl}admin/feedback/getAllFeedback?page=${page}&size=${size}&statusIndex=${statusIndex}&user=${user}&search=${encodeURIComponent(search || '')}`;
-
-    if (fromDate) {
-      url += `&fromDate=${encodeURIComponent(fromDate)}`;
-    }
-
-    if (toDate) {
-      url += `&toDate=${encodeURIComponent(toDate)}`;
-    }
-
-    return this.http.get(url);
-  }
-
-  getFollowupReport(page: any, size: any, statusIndex: any, search: any, fromDate?: string, toDate?: string, isAdmin?: string, userId?: any, user?: any, customerId?: any): Observable<any> {
-    let url = `${environment.apiBaseUrl}admin/followup/getFollowupReport?page=${page}&size=${size}&statusIndex=${statusIndex}&userId=${userId}&isAdmin=${isAdmin}&user=${user}&search=${encodeURIComponent(search || '')}`;
-
-    if (fromDate) {
-      url += `&fromDate=${encodeURIComponent(fromDate)}`;
-    }
-
-    if (toDate) {
-      url += `&toDate=${encodeURIComponent(toDate)}`;
-    }
-
-    if (customerId) {
-      url += `&customerId=${customerId}`;
-    }
-    return this.http.get(url);
-  }
-
-  closeFollowUp(followUpId: number, userId: number) {
-    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/followup/closeFollowUp/${followUpId}/${userId}`, {});
-  }
-
-  getSizeDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/sizeMaster/getSize?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
-  }
-
   getCity(): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/getCity`);
-  }
-
-  getContactPerson(): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/getContactPerson`);
-  }
-
-  getSelectedDia(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}quotation/getSelectedDia?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}`);
-  }
-
-  getSelectedHeatNo(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any, inputDia: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}quotation/getSelectedHeatNo?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}&dia=${inputDia}`,
-    );
-  }
-
-  getSelectedHeatNoForFlat(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any, selectedSize: any, inputWidth: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}quotation/getSelectedHeatNoForRound?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}&thickness=${selectedSize}&width=${inputWidth}`,
-    );
-  }
-
-  getThickness(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}quotation/getThickness?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}`);
-  }
-
-  getWidth(inputSrNo: any, selectedCompany: any, warehouseId: any, gradeId: any, shape: any, thickness: any): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}quotation/getSelectedWidth?srNo=${inputSrNo}&companyId=${selectedCompany}&gradeId=${gradeId}&warehouseId=${warehouseId}&shape=${shape}&thickness=${thickness}`,
-    );
-  }
-
-  getSizeName(): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}quotation/getSizeName`);
   }
 
   getActiveClient(): Observable<any> {
@@ -259,10 +124,6 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}mailLog/getMailLogHtml?mailLogId=${mailLogId}`);
   }
 
-  // getUserAccessDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-  //   return this.http.get(`${environment.apiBaseUrl}useraccesslog/getUserAccessDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
-  // }
-
   getUserAccessDetails(page: any, size: any, search: any): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}useraccesslog/getUserAccessDetails?page=${page}&size=${size}&search=${search}`);
   }
@@ -271,6 +132,7 @@ export class DataProviderService {
     const params = { userId: id, createdBy: createdBy };
     return this.http.post(`${environment.apiBaseUrl}api/deleteUser`, null, { params });
   }
+
   saveUserDetail(userRequest: any) {
     return this.http.post<ResponseApi>(`${environment.apiBaseUrl}api/saveUserDetail`, userRequest, {
       headers: new HttpHeaders({
@@ -293,21 +155,9 @@ export class DataProviderService {
     return this.http.get(url);
   }
 
-  searchContactPersonName(search: string): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/getContactPersonName?search=${search}`);
-  }
-
-  getContactPersonNameForVendor(search: string): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/getContactPersonNameForVendor?search=${search}`);
-  }
 
   getAllClient(search: string, userId: number, isAdmin: string): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/getAllClient?search=${search}&userId=${userId}&isAdmin=${isAdmin}`);
-  }
-
-  // Unit Master
-  getUnitDetails(page: any, size: any, statusIndex: any, search: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/unit/getUnitDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}`);
   }
 
   getDepartmentDetails(page: number, size: number, statusIndex: number, search: string): Observable<any> {
@@ -390,95 +240,6 @@ export class DataProviderService {
 
   getActiveDepartments(): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/department/active`);
-  }
-
-  saveUnit(unit: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/unit/saveUnit`, unit);
-  }
-
-  deleteUnit(unit: any): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(`${environment.apiBaseUrl}admin/unit/deleteUnit`, unit);
-  }
-
-  getUnitById(uomId: number): Observable<any> {
-    return this.http.get<ApiResponse<any>>(`${environment.apiBaseUrl}admin/unit/${uomId}`);
-  }
-
-  //Vendor Master
-  // Get Vendor List (Main API)
-  getVendorDetails(
-    page: any,
-    size: any,
-    statusIndex: any,
-    search: any,
-    isAdmin: any,
-    userId: any,
-    selectedAssignedTo: any,
-    selectedCityName: any,
-    contactPersonAndCompanyName: any,
-    sortColumn: string,
-    sortDirection: string,
-  ): Observable<any> {
-    return this.http.get(
-      `${environment.apiBaseUrl}admin/getVendorDetails?page=${page}&size=${size}&statusIndex=${statusIndex}&search=${search}&isAdmin=${isAdmin}&userId=${userId}&selectedAssignedTo=${selectedAssignedTo}&sortColumn=${sortColumn}&sortDirection=${sortDirection}&city=${selectedCityName || ''}&contactPersonAndCompanyName=${contactPersonAndCompanyName || ''}`,
-    );
-  }
-
-  // Second Vendor API (with vendorId filter)
-  getVendorList(
-    page: number,
-    size: number,
-    statusIndex: number,
-    search: string,
-    isAdmin: string,
-    userId: number,
-    selectedAssignedTo: number,
-    selectedCityName?: string,
-    contactPersonAndCompanyName?: string,
-    sortColumn: string = 'status',
-    sortDirection: string = 'asc',
-    selectedContactPersonCustomerId?: any,
-  ): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/getVendorDetails`, {
-      params: {
-        page: page.toString(),
-        size: size.toString(),
-        statusIndex: statusIndex.toString(),
-        search: search || '',
-        isAdmin: isAdmin,
-        userId: userId.toString(),
-        selectedAssignedTo: selectedAssignedTo.toString(),
-        city: selectedCityName || '',
-        contactPersonAndCompanyName: contactPersonAndCompanyName || '',
-        sortColumn: sortColumn,
-        sortDirection: sortDirection,
-        contactPersonCustomerId: selectedContactPersonCustomerId || 0,
-      },
-    });
-  }
-
-  // Save / Update Vendor
-  saveVendor(vendor: any): Observable<any> {
-    return this.http.post(`${environment.apiBaseUrl}admin/saveVendorDetails`, vendor);
-  }
-
-  // Get Vendor by ID (Entity)
-  getVendorById(vendorId: number): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/getVendor/${vendorId}`);
-  }
-
-  // Get Vendor Details (DTO + Transaction History)
-  getVendorDetailsById(vendorId: number): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/vendorDetails/${vendorId}`);
-  }
-
-  // Delete Vendor
-  deleteVendor(vendorId: number, userId: number): Observable<any> {
-    const params = new HttpParams().set('vendorId', vendorId).set('userId', userId);
-
-    return this.http.post(`${environment.apiBaseUrl}admin/deleteVendor`, null, {
-      params,
-    });
   }
 
   // Dropdown APIs
