@@ -18,7 +18,7 @@ import * as XLSX from 'xlsx';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { OwlMomentDateTimeModule } from '@danielmoncada/angular-datetime-picker-moment-adapter';
 import { OwlDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
-
+import { forkJoin } from 'rxjs';
 export const MY_DATE_TIME_FORMATS = {
   parseInput: 'DD-MM-YYYY HH:mm',
   fullPickerInput: 'DD-MM-YYYY HH:mm',
@@ -1021,7 +1021,7 @@ export class TaskIndex {
     }
     this.selectedTaskStatusId = 5;
     this.showChangeManagerModal = false;
-    this.taskDescription = ''; 
+    this.taskDescription = '';
     this.fileOne = null;
     this.fileOneName = '';
     this.fileTwo = null;
@@ -1691,33 +1691,80 @@ export class TaskIndex {
     this.loadAssignUsers(startDate, endDate, currentAssignedUserId);
   }
 
+  // private loadAssignUsers(startDate: string | null, endDate: string | null, currentAssignedUserId: number): void {
+  //   this.dataprovider
+  //     .changesCategoryIdgetUserFilterData(
+  //       this.isAdmin,
+  //       this.userId,
+  //       this.loginType,
+  //       this.selectedAssignTask.clientId,
+  //       this.selectedAssignTask.taskCategoryId,
+  //       Number(this.selectedAssignTask.systemFlag ?? 0),
+  //       startDate,
+  //       endDate,
+  //     )
+  //     .subscribe({
+  //       next: (res: any) => {
+  //         const data = res?.data || res;
+
+  //         const allUsers = data?.assignedUsers || [];
+
+  //         this.users = allUsers.filter((user: any) => Number(user.userId) !== currentAssignedUserId);
+
+  //         this.selectedAssignTask.maxHours = Number(data?.maxHours || 0);
+  //       },
+  //       error: (error: any) => {
+  //         console.error('Error loading assigned users:', error);
+  //         this.users = [];
+  //       },
+  //     });
+  // }
+
   private loadAssignUsers(startDate: string | null, endDate: string | null, currentAssignedUserId: number): void {
-    this.dataprovider
-      .changesCategoryIdgetUserFilterData(
-        this.isAdmin,
-        this.userId,
-        this.loginType,
-        this.selectedAssignTask.clientId,
-        this.selectedAssignTask.taskCategoryId,
-        Number(this.selectedAssignTask.systemFlag ?? 0),
-        startDate,
-        endDate,
-      )
-      .subscribe({
-        next: (res: any) => {
-          const data = res?.data || res;
+    const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
+      this.isAdmin,
+      this.userId,
+      this.loginType,
+      this.selectedAssignTask.clientId,
+      this.selectedAssignTask.taskCategoryId,
+      Number(this.selectedAssignTask.systemFlag ?? 0),
+      startDate,
+      endDate,
+    );
 
-          const allUsers = data?.assignedUsers || [];
+    const workloadRequest = this.dataprovider.getAssigneeWorkload(this.selectedAssignTask.taskCategoryId, startDate, endDate);
 
-          this.users = allUsers.filter((user: any) => Number(user.userId) !== currentAssignedUserId);
+    forkJoin({
+      users: usersRequest,
+      workload: workloadRequest,
+    }).subscribe({
+      next: ({ users, workload }: any) => {
+        const userData = users?.data || users;
+        const workloadData = workload?.data || workload;
 
-          this.selectedAssignTask.maxHours = Number(data?.maxHours || 0);
-        },
-        error: (error: any) => {
-          console.error('Error loading assigned users:', error);
-          this.users = [];
-        },
-      });
+        const allUsers = userData?.assignedUsers || [];
+        const workloadUsers = workloadData || [];
+
+        // Create a Set of users who have workload
+        const workloadUserIds = new Set(workloadUsers.map((item: any) => Number(item.assignedTo)));
+
+        this.users = allUsers
+          .filter((user: any) => Number(user.userId) !== Number(currentAssignedUserId))
+          .map((user: any) => ({
+            ...user,
+            hasWorkload: workloadUserIds.has(Number(user.userId)),
+          }));
+
+        this.selectedAssignTask.maxHours = Number(userData?.maxHours || 0);
+
+        console.log('Users with workload:', this.users);
+      },
+
+      error: (error: any) => {
+        console.error('Error loading assigned users:', error);
+        this.users = [];
+      },
+    });
   }
 
   private normalizeClientId(value: any): string {
