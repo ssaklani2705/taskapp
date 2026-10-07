@@ -222,7 +222,7 @@ export class EmployeeDashboard implements OnInit {
         // ----------------------------------------------
         this.stats.set([
           {
-            label: 'My tasks today',
+            label: "Today's all tasks",
             value: res.myTasksToday.count,
             color: 'normal',
             statusIds: (res.myTasksToday?.taskStatusIds || []).join(','),

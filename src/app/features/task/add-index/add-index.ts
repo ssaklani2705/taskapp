@@ -682,7 +682,9 @@ export class AddIndexComponent implements OnInit {
 
   onEndDateChange(value: any): void {
     this.task.endDate = value;
+    this.loadAssigneeWorkload();
     this.validateDates();
+    this.onchangeloadUserDropdownData()
   }
 
   // onTaskCategoryChange(): void {
@@ -695,6 +697,9 @@ export class AddIndexComponent implements OnInit {
     this.calculateEndDate();
     this.validateDates();
     this.loadAssigneeWorkload();
+    this.onchangeloadUserDropdownData()
+
+    
   }
 
   private calculateEndDate(): void {
