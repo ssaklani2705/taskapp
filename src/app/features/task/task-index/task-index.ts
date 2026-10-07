@@ -224,9 +224,8 @@ export class TaskIndex {
   ) {}
 
   ngOnInit(): void {
-   
     if (isPlatformBrowser(this.platformId)) {
-      //  sessionStorage.removeItem(this.filterKey); 
+      //  sessionStorage.removeItem(this.filterKey);
       this.userId = sessionStorage.getItem('userId');
       this.isAdmin = sessionStorage.getItem('isAdmin');
       this.loginType = sessionStorage.getItem('loginType') || 'other';
@@ -272,7 +271,6 @@ export class TaskIndex {
     this.sessionService.clearOtherSessions(this.filterKey);
     this.restoreFilterState();
 
-  
     this.route.queryParams.subscribe((params) => {
       const saved = sessionStorage.getItem(this.filterKey);
       if (!saved) {
@@ -1021,9 +1019,9 @@ export class TaskIndex {
     if (this.isChangingManager) {
       return;
     }
-
+    this.selectedTaskStatusId = 5;
     this.showChangeManagerModal = false;
-    this.taskDescription = '';
+    this.taskDescription = ''; 
     this.fileOne = null;
     this.fileOneName = '';
     this.fileTwo = null;

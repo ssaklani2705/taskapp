@@ -50,10 +50,8 @@
           <div class="stat-icon">
             @if (stat.label === 'My tasks today') {
               <mat-icon> assignment </mat-icon>
-
             } @else if (stat.label === 'Due this week') {
               <mat-icon> calendar_month </mat-icon>
-
             } @else if (stat.label === 'Overdue') {
               <mat-icon> warning </mat-icon>
             }
@@ -80,34 +78,28 @@
       }
     </section>
 
-
     <!-- =====================================================
      STATUS STATISTICS (SECOND ROW)
 ====================================================== -->
 
-<section class="stats-grid status-stats-grid">
-  @for (stat of statusStats(); track stat.label) {
-    <mat-card
-      class="stat-card status-stat-card"
-      [class.stat-wide]="stat.label  == 'Assigned'"
-      [class.stat-disabled]="stat.value === 0"
-      (click)="openTaskIndexByStatus(stat)"
-    >
-      <div class="stat-icon">
-        <mat-icon>{{ stat.icon }}</mat-icon>
-      </div>
+    <section class="stats-grid status-stats-grid">
+      @for (stat of statusStats(); track stat.label) {
+        <mat-card class="stat-card status-stat-card" [class.stat-wide]="stat.label == 'Assigned'" [class.stat-disabled]="stat.value === 0" (click)="openTaskIndexByStatus(stat)">
+          <div class="stat-icon">
+            <mat-icon>{{ stat.icon }}</mat-icon>
+          </div>
 
-      <div class="stat-content">
-        <div class="stat-label">{{ stat.label }}</div>
-        <div class="stat-value">{{ stat.value }}</div>
-      </div>
+          <div class="stat-content">
+            <div class="stat-label">{{ stat.label }}</div>
+            <div class="stat-value">{{ stat.value }}</div>
+          </div>
 
-      <div class="stat-arrow">
-        <mat-icon>chevron_right</mat-icon>
-      </div>
-    </mat-card>
-  }
-</section>
+          <div class="stat-arrow">
+            <mat-icon>chevron_right</mat-icon>
+          </div>
+        </mat-card>
+      }
+    </section>
 
     <!-- =====================================================
          TASK BOARD
@@ -202,25 +194,18 @@
                         >
                           @if (task.type === 'high') {
                             High
-
                           } @else if (task.type === 'medium') {
                             Medium
-
                           } @else if (task.type === 'low') {
                             Low
-
                           } @else if (task.type === 'progress') {
                             In Progress
-
                           } @else if (task.type === 'done') {
                             Done
-
                           } @else {
                             {{ task.subtitle }}
                           }
                         </span>
-
-                        
                       </div>
 
                       <!-- START DATE -->
@@ -265,7 +250,6 @@
                     <div class="bottom-status-icon">
                       @if (task.type === 'done') {
                         <mat-icon> check </mat-icon>
-
                       } @else {
                         <mat-icon> description </mat-icon>
                       }
@@ -274,7 +258,6 @@
                     <span>
                       @if (task.type === 'done') {
                         Completed
-
                       } @else {
                         Assigned by
 
@@ -284,9 +267,9 @@
                       }
                     </span>
 
-                     <span class="task-status-badge" [ngClass]="task.taskStatusClass">
-    {{ task.taskStatusLabel }}
-  </span>
+                    <span class="task-status-badge" [ngClass]="task.taskStatusClass">
+                      {{ task.taskStatusLabel }}
+                    </span>
 
                     <!-- <mat-icon class="more-icon"> more_vert </mat-icon> -->
                   </div>
@@ -303,7 +286,6 @@
                 </article>
               }
             </div>
-
           } @else {
             <div class="column-empty">No tasks</div>
           }

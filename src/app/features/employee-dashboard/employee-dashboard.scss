@@ -1711,3 +1711,11 @@
     grid-column: span 2;
   }
 }
+
+.stat-card {
+  cursor: pointer;
+
+  &.stat-disabled {
+    cursor: default;
+  }
+}
