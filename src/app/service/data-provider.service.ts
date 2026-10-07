@@ -68,7 +68,7 @@ export class DataProviderService {
   }
 
   checkClientAssignment(managerId: number): Observable<{ assigned: boolean; message: string }> {
-    return this.http.get<{ assigned: boolean; message: string }>(`${environment.apiBaseUrl}api/task/client/check-assignment/${managerId}`);
+    return this.http.get<{ assigned: boolean; message: string }>(`${environment.apiBaseUrl}admin/dashboard/client/check-assignment/${managerId}`);
   }
 
   getQuotationCount(startDate: any, endDate: any, userId: any, isAdmin: string): Observable<any> {
@@ -1530,7 +1530,7 @@ export class DataProviderService {
 
   // Dashboard Clients
   getDashboardClients(userId: any, isAdmin: string, loginType: string, selectedClientId: any): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}api/task/dashboard-clients?userId=${userId}&isAdmin=${isAdmin}&loginType=${loginType}&selectedClientId=${selectedClientId}`);
+    return this.http.get(`${environment.apiBaseUrl}admin/dashboard/dashboard-clients?userId=${userId}&isAdmin=${isAdmin}&loginType=${loginType}&selectedClientId=${selectedClientId}`);
   }
 
   updateTaskAssignedUser(taskId: any, assignedTo: any, userId: any, remarks: string, date: string | null, endDate: string | null): Observable<any> {
