@@ -534,7 +534,27 @@ export class AddIndexComponent implements OnInit {
     this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
-        this.taskCategories = data?.taskCategories || [];
+         this.taskCategories = (data?.taskCategories || []).sort(
+          (a: any, b: any) => {
+            const aName = String(a.name || a.categoryName || a).trim();
+            const bName = String(b.name || b.categoryName || b).trim();
+
+            // Admin task should always be first
+            if (aName.toLowerCase() === 'admin task') return -1;
+            if (bName.toLowerCase() === 'admin task') return 1;
+
+            // General Task should always be last
+            if (aName.toLowerCase() === 'general task') return 1;
+            if (bName.toLowerCase() === 'general task') return -1;
+
+            // Natural/alphanumeric sorting
+            // Category 2 comes before Category 10
+            return aName.localeCompare(bName, undefined, {
+              numeric: true,
+              sensitivity: 'base'
+            });
+          }
+        );
       },
       error: (error: any) => {
         console.error('Error loading task dropdown data:', error);
