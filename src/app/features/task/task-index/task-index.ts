@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Component, ElementRef, HostListener, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -19,6 +19,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { OwlMomentDateTimeModule } from '@danielmoncada/angular-datetime-picker-moment-adapter';
 import { OwlDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
 import { forkJoin } from 'rxjs';
+import { StompSubscription } from '@stomp/stompjs';
+import { Subscription } from 'rxjs';
+import { TaskWebSocketService } from '../../../service/TaskWebSocketService';
+import { NgZone } from '@angular/core';
 export const MY_DATE_TIME_FORMATS = {
   parseInput: 'DD-MM-YYYY HH:mm',
   fullPickerInput: 'DD-MM-YYYY HH:mm',
@@ -101,7 +105,7 @@ interface AssignedUser {
     },
   ],
 })
-export class TaskIndex {
+export class TaskIndex implements OnInit, OnDestroy {
   dashboardFilter: string = '';
   tasks: Task[] = [];
   apiResponseTaskDetails: any = {};
@@ -221,10 +225,17 @@ export class TaskIndex {
     private route: ActivatedRoute,
     private sessionService: SessionStorageService,
     private datePipe: DatePipe,
+    private taskWs: TaskWebSocketService,
+    private ngZone: NgZone,
   ) {}
-
+  private noteWsSub?: Subscription;
+  ngOnDestroy(): void {
+    this.noteWsSub?.unsubscribe();
+    this.taskWs.disconnect();
+  }
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
+      this.taskWs.connect();
       //  sessionStorage.removeItem(this.filterKey);
       this.userId = sessionStorage.getItem('userId');
       this.isAdmin = sessionStorage.getItem('isAdmin');
@@ -875,6 +886,11 @@ export class TaskIndex {
     this.showTaskNotesModal = true;
 
     this.loadTaskNotes(task.taskId);
+    this.noteWsSub?.unsubscribe();
+    this.noteWsSub = this.taskWs.watchTaskNotes(task.taskId).subscribe((note) => {
+      this.ngZone.run(() => this.loadTaskNotes(task.taskId));
+      this.onNoteReceived(note);
+    });
   }
 
   loadTaskNotes(taskId: number): void {
@@ -905,7 +921,8 @@ export class TaskIndex {
     if (this.isSavingTaskNote) {
       return;
     }
-
+    this.noteWsSub?.unsubscribe();
+    this.noteWsSub = undefined;
     this.showTaskNotesModal = false;
     this.selectedTask = null;
     this.taskNote = '';
@@ -937,7 +954,7 @@ export class TaskIndex {
         this.sendMail = false;
         this.isSavingTaskNote = false;
 
-        this.loadTaskNotes(this.selectedTask.taskId);
+        //  this.loadTaskNotes(this.selectedTask.taskId);
       },
 
       error: (error) => {
@@ -1771,5 +1788,16 @@ export class TaskIndex {
     if (value === null || value === undefined) return '';
     const v = String(value).trim();
     return v === '' || v === '0' || v === 'null' || v === 'undefined' ? '' : v;
+  }
+
+  private onNoteReceived(note: any): void {
+    // avoid duplicates (e.g. if you also reload after saving)
+    const exists = this.taskNotes.some((n) => n.noteId && n.noteId === note.noteId);
+    if (exists) {
+      return;
+    }
+
+    // newest first; use push() if your list is oldest first
+    this.taskNotes = [note, ...this.taskNotes];
   }
 }
