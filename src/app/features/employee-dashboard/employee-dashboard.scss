@@ -1537,11 +1537,7 @@
    STATUS STATS: 6 CARDS IN ONE ROW
 ========================================================= */
 
-.status-stats-grid {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 10px;
-  padding-top: 0;
-}
+
 
 /* Colors: cycle blue / purple / red across the 6 cards */
 .status-stats-grid > mat-card:nth-child(3n + 1) {
@@ -1613,6 +1609,39 @@
 /* Hide arrow in narrow cards (whole card is still clickable) */
 .status-stats-grid .stat-arrow {
   display: none !important;
+}
+
+.status-stats-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  padding-top: 0;
+}
+
+/* Laptop: 3 per row */
+@media (max-width: 1400px) {
+  .status-stats-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .status-stats-grid .stat-arrow {
+    display: flex !important;
+  }
+}
+
+/* Small tablet: 2 per row */
+@media (max-width: 850px) {
+  .status-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 0 18px 18px;
+  }
+}
+
+/* Mobile: 1 per row */
+@media (max-width: 600px) {
+  .status-stats-grid {
+    grid-template-columns: 1fr;
+    padding: 0 15px 16px;
+  }
 }
 
 /* ---------- Responsive ---------- */
@@ -1692,25 +1721,9 @@
 .ts-assignor-closure{ color: #2b8b62; background: #e3f5ec; border-color: #c8ebd9; }
 
 
-.status-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 16px;               /* use the same gap as your top .stats-grid */
-}
 
-.status-stat-card.stat-wide {
-  grid-column: span 2;     /* same width as "My tasks today" */
-}
 
-/* optional: stack nicely on small screens */
-@media (max-width: 900px) {
-  .status-stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .status-stat-card.stat-wide {
-    grid-column: span 2;
-  }
-}
+
 
 .stat-card {
   cursor: pointer;

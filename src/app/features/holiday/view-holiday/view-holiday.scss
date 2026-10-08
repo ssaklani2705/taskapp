@@ -5,6 +5,7 @@
   --primary-blue-dark: #285f8d;
   --primary-blue-light: #eaf2f8;
   --table-header: #edf4f8;
+  --table-group: #f4f6f8;
   --page-bg: #f8fafc;
   --white: #ffffff;
   --border: #d5dee7;
@@ -87,6 +88,7 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
+  cursor: pointer;
 }
 
 .back-button:hover {
@@ -110,9 +112,8 @@ mat-divider {
 
 .user-info-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   column-gap: 50px;
-  row-gap: 25px;
   align-items: center;
   width: 100%;
 }
@@ -151,11 +152,11 @@ mat-divider {
   min-width: 82px;
   height: 32px;
   padding: 0 13px;
-  box-sizing: border-box;
   border-radius: 2px;
   font-family: Arial, sans-serif;
   font-size: 13px;
   font-weight: 600;
+  box-sizing: border-box;
 }
 
 .status-badge.active,
@@ -187,24 +188,30 @@ mat-divider {
 
 .section-header {
   min-height: 65px;
-  padding: 0 !important;
+  padding: 0 18px !important;
   display: flex;
   align-items: center;
   box-sizing: border-box;
 }
 
 .section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   color: #163f70;
   font-size: 26px;
   font-weight: 700;
   font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.2;
 }
 
 .section-title mat-icon {
+  flex-shrink: 0;
   color: var(--primary-blue);
   width: 25px;
   height: 25px;
   font-size: 25px;
+  line-height: 25px;
 }
 
 .table-container {
@@ -269,14 +276,8 @@ mat-divider {
   white-space: nowrap;
 }
 
-.no-records-cell {
-  padding: 0 !important;
-  border: 1px solid var(--border);
-}
-
 .no-records-box {
   min-height: 60px;
-  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -285,7 +286,6 @@ mat-divider {
   background: var(--white);
   font-family: Arial, sans-serif;
   font-size: 13px;
-  box-sizing: border-box;
 }
 
 .no-records-box mat-icon {
@@ -386,6 +386,7 @@ mat-divider {
 
   .section-title {
     font-size: 20px;
+    gap: 10px;
   }
 }
 
@@ -424,6 +425,7 @@ mat-divider {
 
   .section-title {
     font-size: 17px;
+    gap: 8px;
   }
 }
 
