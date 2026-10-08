@@ -22,9 +22,7 @@
           "builder": "@angular/build:application",
           "options": {
             "browser": "src/main.ts",
-             "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
@@ -34,11 +32,10 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.scss",
-                "node_modules/@angular/cdk/overlay-prebuilt.css",
-               "node_modules/@danielmoncada/angular-datetime-picker/assets/style/picker.min.css"
-            ]
+            "styles": ["src/styles.scss", "node_modules/@angular/cdk/overlay-prebuilt.css", "node_modules/@danielmoncada/angular-datetime-picker/assets/style/picker.min.css"],
+            "define": {
+              "global": "globalThis"
+            }
           },
           "configurations": {
             "production": {
