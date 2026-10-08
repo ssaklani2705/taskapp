@@ -530,7 +530,19 @@ export class AddIndexComponent implements OnInit {
     this.router.navigate(['/task-index']);
   }
 
-  onchangeloadDropdownData(): void {
+  // onchangeloadDropdownData(): void {
+  //   this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
+  //     next: (res: any) => {
+  //       const data = res?.data || res;
+  //       this.taskCategories = data?.taskCategories || [];
+  //     },
+  //     error: (error: any) => {
+  //       console.error('Error loading task dropdown data:', error);
+  //       this.taskCategories = [];
+  //     },
+  //   });
+  // }
+   onchangeloadDropdownData(): void {
     this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
@@ -559,6 +571,7 @@ export class AddIndexComponent implements OnInit {
       error: (error: any) => {
         console.error('Error loading task dropdown data:', error);
         this.taskCategories = [];
+        this.selectedTaskCategoryName = '';
       },
     });
   }
@@ -617,10 +630,25 @@ export class AddIndexComponent implements OnInit {
   }
 
   noEmployeeError = '';
+  // onClientChange(clientId: number | null): void {
+  //   this.task.taskCategoryId = null;
+  //   this.task.assignedTo = null;
+  //   this.noEmployeeError = ''; // add this
+  //   this.taskCategories = [];
+  //   this.users = [];
+
+  //   if (!clientId) {
+  //     this.task.assignedTo = null;
+  //   }
+  // }
+
   onClientChange(clientId: number | null): void {
     this.task.taskCategoryId = null;
+    this.selectedTaskCategoryName = '';
+    this.showCategoryDropdown = false;
+
     this.task.assignedTo = null;
-    this.noEmployeeError = ''; // add this
+    this.noEmployeeError = '';
     this.taskCategories = [];
     this.users = [];
 
@@ -780,58 +808,66 @@ export class AddIndexComponent implements OnInit {
     }
   }
 
-  // private loadAssigneeWorkload(): void {
-  //   this.holidayError = '';
-  //   this.noEmployeeError = ''; // add this (before the early return)
+  private loadAssigneeWorkload(): void {
+    this.holidayError = '';
+    this.noEmployeeError = ''; // add this (before the early return)
 
-  //   if (!this.task.taskCategoryId || !this.task.startDate || !this.task.endDate) {
-  //     return;
-  //   }
+    if (!this.task.taskCategoryId || !this.task.startDate || !this.task.endDate) {
+      return;
+    }
 
-  //   const startDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
+    const startDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
 
-  //   const endDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
+    const endDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
 
-  //   if (!startDateParam && !endDateParam) {
-  //     return;
-  //   }
+    if (!startDateParam && !endDateParam) {
+      return;
+    }
 
-  //   this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, startDateParam, endDateParam).subscribe({
-  //     next: (response) => {
-  //       console.log('Assignee Workload:', response);
+    this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, startDateParam, endDateParam).subscribe({
+      next: (response) => {
+        console.log('Assignee Workload:', response);
 
-  //       if (!response.success) {
-  //         this.holidayError = response.message || 'Unable to fetch workload';
+        if (!response.success) {
+          this.holidayError = response.message || 'Unable to fetch workload';
 
-  //         this.workloadList = [];
-  //         return;
-  //       }
+          this.workloadList = [];
+          return;
+        }
 
-  //       this.holidayError = '';
-  //       this.workloadList = response.data || [];
+        this.holidayError = '';
+        this.workloadList = response.data || [];
 
-  //       // add this
-  //       if (this.workloadList.length === 0) {
-  //         this.noEmployeeError = 'No employee available for the selected category.';
-  //       }
+        // add this
+        if (this.workloadList.length === 0) {
+          this.noEmployeeError = 'No employee available for the selected category.';
+        }
 
-  //       const assignedUserIds = new Set(this.workloadList.map((x: any) => Number(x.assignedTo)));
+        const assignedUserIds = new Set(
+          this.workloadList.map(
+            (x: any) => Number(x.assignedTo)
+          )
+        );
 
-  //       this.users.forEach((user: any) => {
-  //         user.hasWorkload = assignedUserIds.has(Number(user.userId));
-  //       });
+        // Highlight matching users
+        this.users = this.users.map((user: any) => ({
+          ...user,
+          hasWorkload: assignedUserIds.has(
+            Number(user.userId)
+          )
+        }));
 
-  //       console.log(this.users);
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching assignee workload', error);
+          console.log('Users after workload comparison:', this.users);
+      },
+      error: (error) => {
+        console.error('Error fetching assignee workload', error);
 
-  //       this.holidayError = error?.error?.message || 'Error fetching assignee workload';
+        this.holidayError = error?.error?.message || 'Error fetching assignee workload';
 
-  //       this.workloadList = [];
-  //     },
-  //   });
-  // }
+        this.workloadList = [];
+      },
+    });
+  }
 
   readonly MAX_TASK_HOURS = 8;
   get durationExceedsLimit(): boolean {
@@ -876,81 +912,94 @@ export class AddIndexComponent implements OnInit {
   }
   workloadList: { assignedTo: number; hours: number }[] = [];
   holidayError: string = '';
-  private loadAssigneeWorkload(): void {
-    this.holidayError = '';
-    this.noEmployeeError = '';
+  // private loadAssigneeWorkload(): void {
+  //   this.holidayError = '';
+  //   this.noEmployeeError = '';
 
-    if (!this.task.taskCategoryId || !this.task.startDate || !this.task.endDate) {
-      return;
-    }
+  //   if (!this.task.taskCategoryId || !this.task.startDate || !this.task.endDate) {
+  //     return;
+  //   }
 
-    const startDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
+  //   const startDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
 
-    const endDateParam = this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd HH:mm:ss');
+  //   const endDateParam = this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd HH:mm:ss');
 
-    if (!startDateParam || !endDateParam) {
-      return;
-    }
+  //   if (!startDateParam || !endDateParam) {
+  //     return;
+  //   }
 
-    const currentAssignedUserId = Number(this.task.assignedTo || 0);
+  //   const currentAssignedUserId = Number(this.task.assignedTo || 0);
 
-    // API 1: Get users
-    const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
-      this.isAdmin,
-      this.userId,
-      this.loginType,
-      this.task.clientId,
-      this.task.taskCategoryId,
-      Number(this.task.systemFlag ?? 0),
-      this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd'),
-      this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd'),
-    );
-    const workloadRequest = this.dataprovider.getAssigneeWorkload(Number(this.task.taskCategoryId), startDateParam, endDateParam);
+  //   // API 1: Get users
+  //   const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
+  //     this.isAdmin,
+  //     this.userId,
+  //     this.loginType,
+  //     this.task.clientId,
+  //     this.task.taskCategoryId,
+  //     Number(this.task.systemFlag ?? 0),
+  //     this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd'),
+  //     this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd'),
+  //   );
+  //   const workloadRequest = this.dataprovider.getAssigneeWorkload(Number(this.task.taskCategoryId), startDateParam, endDateParam);
 
-    forkJoin({
-      usersResponse: usersRequest,
-      workloadResponse: workloadRequest,
-    }).subscribe({
-      next: ({ usersResponse, workloadResponse }: any) => {
-        console.log('Users API:', usersResponse);
-        console.log('Workload API:', workloadResponse);
+  //   forkJoin({
+  //     usersResponse: usersRequest,
+  //     workloadResponse: workloadRequest,
+  //   }).subscribe({
+  //     next: ({ usersResponse, workloadResponse }: any) => {
+  //       console.log('Users API:', usersResponse);
+  //       console.log('Workload API:', workloadResponse);
 
-        const userData = usersResponse?.data || usersResponse;
+  //       const userData = usersResponse?.data || usersResponse;
 
-        const allUsers = userData?.assignedUsers || [];
+  //       const allUsers = userData?.assignedUsers || [];
 
-        //    this.selectedAssignTask.maxHours = Number(userData?.maxHours || 0);
+  //       //    this.selectedAssignTask.maxHours = Number(userData?.maxHours || 0);
 
-        if (!workloadResponse?.success) {
-          this.holidayError = workloadResponse?.message || 'Unable to fetch workload';
-          this.workloadList = [];
-          return;
-        }
-        this.holidayError = '';
-        this.workloadList = workloadResponse?.data || [];
-        if (this.workloadList.length === 0) {
-          this.noEmployeeError = 'No employee available for the selected category.';
-        }
-        const assignedUserIds = new Set(this.workloadList.map((item: any) => Number(item.assignedTo)));
+  //       if (!workloadResponse?.success) {
+  //         this.holidayError = workloadResponse?.message || 'Unable to fetch workload';
+  //         this.workloadList = [];
+  //         return;
+  //       }
+  //       this.holidayError = '';
+  //       this.workloadList = workloadResponse?.data || [];
+  //       if (this.workloadList.length === 0) {
+  //         this.noEmployeeError = 'No employee available for the selected category.';
+  //       }
+  //       const assignedUserIds = new Set(this.workloadList.map((item: any) => Number(item.assignedTo)));
 
-        this.users = allUsers
-          .filter((user: any) => Number(user.userId) !== currentAssignedUserId)
-          .map((user: any) => ({
-            ...user,
-            hasWorkload: assignedUserIds.has(Number(user.userId)),
-          }));
+  //       this.users = allUsers
+  //         .filter((user: any) => Number(user.userId) !== currentAssignedUserId)
+  //         .map((user: any) => ({
+  //           ...user,
+  //           hasWorkload: assignedUserIds.has(Number(user.userId)),
+  //         }));
 
-        console.log('Final users:', this.users);
-      },
+  //       console.log('Final users:', this.users);
+  //     },
 
-      error: (error: any) => {
-        console.error('Error loading users/workload:', error);
+  //     error: (error: any) => {
+  //       console.error('Error loading users/workload:', error);
 
-        this.holidayError = error?.error?.message || 'Error fetching assignee workload';
+  //       this.holidayError = error?.error?.message || 'Error fetching assignee workload';
 
-        this.workloadList = [];
-        this.users = [];
-      },
-    });
+  //       this.workloadList = [];
+  //       this.users = [];
+  //     },
+  //   });
+  // }
+
+
+  showCategoryDropdown = false;
+  selectedTaskCategoryName = '';
+
+  selectTaskCategory(category: any): void {
+    this.task.taskCategoryId = category.taskcategoryId;
+    this.selectedTaskCategoryName = category.name;
+    this.showCategoryDropdown = false;
+
+    this.onTaskCategoryChange();
+    this.onchangeloadUserDropdownData();
   }
 }
