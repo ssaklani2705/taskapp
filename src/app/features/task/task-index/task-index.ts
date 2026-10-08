@@ -857,9 +857,22 @@ export class TaskIndex {
     return Number(task.addedBy) === Number(this.userId);
   }
 
+  // isTaskAssignedToUser(task: any): boolean {
+  //   return Number(task.status) !== 3 && (Number(task.assignedTo) === Number(this.userId) || Number(task.addedBy) === Number(this.userId));
+  // }
+
   isTaskAssignedToUser(task: any): boolean {
-    return Number(task.status) !== 3 && (Number(task.assignedTo) === Number(this.userId) || Number(task.addedBy) === Number(this.userId));
+  if (Number(task.status) === 3) {
+    return false;
   }
+
+  const isAdmin = this.isAdmin === 'Y';
+  const isAssignedOrOwner =
+    Number(task.assignedTo) === Number(this.userId) ||
+    Number(task.addedBy) === Number(this.userId);
+
+  return isAdmin || isAssignedOrOwner;
+}
 
   showTaskNotesModal = false;
   isAddingNote = false;

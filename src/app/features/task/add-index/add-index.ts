@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 
-import { Component, ElementRef, Inject, OnInit, PLATFORM_ID, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 
@@ -1001,5 +1001,13 @@ export class AddIndexComponent implements OnInit {
 
     this.onTaskCategoryChange();
     this.onchangeloadUserDropdownData();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.category-dropdown-container')) {
+      this.showCategoryDropdown = false;
+    }
   }
 }
