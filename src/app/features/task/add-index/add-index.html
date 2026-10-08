@@ -76,29 +76,42 @@
                 }
               </div>
             </div>
+            
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
                   Task Category
                   <span class="required">*</span>
                 </label>
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="task.taskCategoryId"
-                  name="taskCategoryId"
-                  required
-                 (ngModelChange)="onTaskCategoryChange(); onchangeloadUserDropdownData()"
-                  [disabled]="!task.clientId"
-                  #categoryCtrl="ngModel"
-                >
-                  <option [ngValue]="null">Select Task Category</option>
-                  <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
-                    {{ category.name }}
-                  </option>
-                </select>
 
-                <div class="user-error" *ngIf="categoryCtrl.invalid && categoryCtrl.touched">Task Category is required</div>
-                <!-- <div class="user-error" *ngIf="noEmployeeError">{{ noEmployeeError }}</div> -->
+                <div class="category-dropdown-container">
+                  <!-- Selected value -->
+                  <div class="user-input user-select category-dropdown-selected" [class.disabled]="!task.clientId" (click)="task.clientId && (showCategoryDropdown = !showCategoryDropdown)">
+                    <span>
+                      {{ selectedTaskCategoryName || 'Select Task Category' }}
+                    </span>
+
+                    <span class="category-dropdown-arrow">▼</span>
+                  </div>
+
+                  <!-- Dropdown list -->
+                  <div class="category-dropdown-list" *ngIf="showCategoryDropdown && task.clientId">
+                    <div class="category-dropdown-item" *ngFor="let category of taskCategories" (click)="selectTaskCategory(category)">
+                      {{ category.name }}
+                    </div>
+
+                    <div class="category-no-data" *ngIf="taskCategories.length === 0">No Task Category available</div>
+                  </div>
+
+                  <input type="hidden" [(ngModel)]="task.taskCategoryId" name="taskCategoryId" required #categoryCtrl="ngModel" />
+                </div>
+
+                <div class="user-error" *ngIf="categoryCtrl.invalid && categoryCtrl.touched && !taskCategoryEmployeeError">Task Category is required</div>
+
+                <div class="user-error" *ngIf="noEmployeeError">
+                  {{ noEmployeeError }}
+                </div>
+
                 <div class="user-error" *ngIf="taskCategoryEmployeeError">No employee available for the selected category.</div>
               </div>
             </div>

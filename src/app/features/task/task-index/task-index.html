@@ -256,7 +256,7 @@
                   </span>
                 </td>
 
-                <td>
+                <!-- <td>
                   <span
                     class="wrap-text"
                     [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
@@ -273,7 +273,29 @@
                       <span class="reassign-text" *ngIf="task.taskStatus === 1 && task.taskCategoryId !== 1"> Re-assign </span>
                     </ng-template>
                   </span>
-                </td>
+                </td> -->
+                
+                <td>
+  <span
+    class="wrap-text"
+    [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+    (click)="(!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1)) && openAssignUserModal(task)"
+  >
+    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+      <i class="fas fa-user-tie assign-icon"></i>
+      Assign User
+    </ng-container>
+
+    <ng-template #assignedBlock>
+      {{ task.assignedToName }}
+
+      <span class="reassign-text" *ngIf="task.taskStatus === 1 && task.taskCategoryId !== 1">
+        <i class="fas fa-user-tie reassign-icon"></i>
+        Re-assign
+      </span>
+    </ng-template>
+  </span>
+</td>
 
                 <!-- PRIORITY -->
                 <td>

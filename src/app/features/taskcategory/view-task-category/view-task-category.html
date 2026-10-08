@@ -1,149 +1,93 @@
 <div class="page-container">
-
-  <!-- ===================================== -->
-  <!-- VIEW TASK CATEGORY -->
-  <!-- ===================================== -->
-
-  <mat-card class="view-card">
-
-    <div class="card-header">
-
+  <mat-card class="main-card">
+    <div class="page-header">
       <div class="page-title">
-       <mat-icon>task_alt</mat-icon>
+        <mat-icon>task_alt</mat-icon>
         <span>View Task Category Master</span>
       </div>
-
-      <button
-        mat-flat-button
-        class="back-button"
-        (click)="backToIndexPage()">
-
-        <mat-icon>arrow_back</mat-icon>
-        Back to Index
-
-      </button>
-
+      <div class="header-action">
+        <button mat-flat-button class="back-button" (click)="backToIndexPage()">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Index
+        </button>
+      </div>
     </div>
 
     <mat-divider></mat-divider>
 
-    <div class="details-section">
-
-      <div class="details-row">
-
-        <div class="detail-item">
-          <span class="label">Task Category:</span>
-          <span class="value">{{ taskCategory.name }}</span>
+    <div class="user-information">
+      <div class="user-info-grid">
+        <div class="info-row">
+          <span class="info-label">Task Category:</span>
+          <span class="info-value">{{ taskCategory.name }}</span>
         </div>
 
-        <div class="detail-item">
-          <span class="label">Department:</span>
-          <span class="value">
+        <div class="info-row">
+          <span class="info-label">Department:</span>
+          <span class="info-value">
             {{ taskCategory.departmentName || 'NA' }}
           </span>
         </div>
 
-        <div class="detail-item">
-          <span class="label">Max Hours:</span>
-          <span class="value">
-            {{ taskCategory.dueDateTime}}
+        <div class="info-row">
+          <span class="info-label">Max Hours:</span>
+          <span class="info-value">
+            {{ taskCategory.dueDateTime }}
           </span>
         </div>
 
-        <div class="detail-item">
-          <span class="label">Status:</span>
-
-          <span
-            class="status-text"
-            [ngClass]="common.getStatusClass(taskCategory.status)">
-
+        <div class="info-row status-row">
+          <span class="info-label">Status:</span>
+          <span class="status-badge" [ngClass]="common.getStatusClass(taskCategory.status)">
             {{ common.getStatusLabel(taskCategory.status) }}
-
           </span>
-
         </div>
-
       </div>
-
     </div>
-
   </mat-card>
 
-
-  <!-- ===================================== -->
-  <!-- ACTION HISTORY -->
-  <!-- ===================================== -->
-
-  <mat-card class="history-card">
-
+  <div class="section-card">
     <div class="section-header">
-
       <div class="section-title">
         <mat-icon>history</mat-icon>
         <span>Action History</span>
       </div>
-
     </div>
 
     <mat-divider></mat-divider>
 
-    <div class="table-wrapper">
+    <div class="table-container">
+      <div class="history-table-wrapper">
+        <table class="history-table" *ngIf="transactionHistory.length">
+          <thead>
+            <tr>
+              <th width="5%">Sr. No.</th>
+              <th width="20%">Action By</th>
+              <th width="20%">Updated On</th>
+              <th width="55%">Action</th>
+            </tr>
+          </thead>
 
-      <table
-        class="history-table"
-        *ngIf="transactionHistory.length">
-
-        <thead>
-
-          <tr>
-            <th width="5%">Sr. No.</th>
-            <th width="20%">Action By</th>
-            <th width="20%">Updated On</th>
-            <th width="55%">Action</th>
-          </tr>
-
-        </thead>
-
-        <tbody>
-
-          <tr
-            *ngFor="
-              let history of transactionHistory;
-              let i = index
-            ">
-
-            <td>{{ i + 1 }}</td>
-
-            <td>{{ history.name }}</td>
-
-            <td>{{ history.entryDate }}</td>
-
-            <td>
-
-              <span class="action-badge">
-
-                {{ history.action }}
-
-              </span>
-
-            </td>
-
-          </tr>
-
-        </tbody>
-
-      </table>
-
-      <div
-        *ngIf="!transactionHistory.length"
-        class="no-record">
-
-        No action history found
-
+          <tbody>
+            <tr *ngFor="let history of transactionHistory; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ history.name }}</td>
+              <td>{{ history.entryDate }}</td>
+              <td>
+                <span class="action-badge">
+                  {{ history.action }}
+                </span>
+              </td>
+            </tr>
+            <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
+              <td colspan="4" class="no-records-box">
+                <mat-icon> info </mat-icon>
+                <span> No action history available </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
     </div>
-
-  </mat-card>
-
+  </div>
 </div>
