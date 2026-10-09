@@ -85,6 +85,7 @@
             <select class="status-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
               <option value="">--All Status--</option>
               <option value="1">Active</option>
+              <option value="2">Inactive</option>
               <option value="3">Deleted</option>
             </select>
           </div>
@@ -708,7 +709,7 @@
 
           <div class="assign-date-group">
             <!-- <span class="assign-date-icon" [owlDateTimeTrigger]="startDatePicker"> -->
-               <span class="assign-date-icon assign-date-icon-disabled" [owlDateTimeTrigger]="startDatePicker">
+               <span class="assign-date-icon assign-date-icon-disabled">
               <i class="fa fa-calendar"></i>
             </span>
 
@@ -716,7 +717,6 @@
               class="assign-input assign-date-input"
               [owlDateTime]="startDatePicker"
               [(ngModel)]="selectedAssignTask.date"
-              
               name="startDate"
               required
               readonly
@@ -775,10 +775,10 @@
         <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" name="assignedToModal" [disabled]="users.length === 0">
           <option [ngValue]="0">Select User</option>
 
-          <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '🟢 ' : '' }}</option>
+          <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤 ' : '' }}</option>
         </select>
 
-        <div *ngIf="users.length === 0" class="assign-error">No other user found for this category.</div>
+        <div *ngIf="!isLoadingAssignUsers &&  users.length === 0" class="assign-error">No other user found for this category.</div>
       </div>
 
       <div class="assign-form-group assign-full-width">

@@ -273,7 +273,7 @@
                 </label>
                 <select class="user-input user-select" [(ngModel)]="task.assignedTo" name="assignedTo" [disabled]="!task.clientId || !task.taskCategoryId" #assignedCtrl="ngModel" required>
                   <option [ngValue]="null">Select User</option>
-                  <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '🟢 ' : '' }}</option>
+                  <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤 ' : '' }}</option>
                 </select>
                 <div class="user-error" *ngIf="assignedCtrl.invalid && assignedCtrl.touched">Assigned To is required</div>
               </div>
