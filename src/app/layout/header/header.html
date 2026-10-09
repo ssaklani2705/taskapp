@@ -8,29 +8,11 @@
   </div>
 
   <div class="header-right">
-    <!-- <div class="client-assignment-warning" *ngIf="clientAssignmentMessage">
-    <mat-icon>warning</mat-icon>
-    <span>{{ clientAssignmentMessage }}</span>
-  </div> -->
-
     <div class="header-identity">
       <div class="organization">Society 123 · Business Process Automation</div>
 
       <div class="header-actions">
-        <!-- <div class="search-box">
-
-          <mat-icon>
-            search
-          </mat-icon>
-
-          <input
-            type="text"
-            placeholder="Search..."
-          />
-
-        </div> -->
-
-        <div class="profile-wrapper" (clickOutside)="closeProfileMenu()">
+        <div class="profile-wrapper">
           <div class="profile" (click)="toggleProfileMenu()">
             <div class="profile-avatar">
               {{ getInitials(username) }}
@@ -61,3 +43,80 @@
     </div>
   </div>
 </header>
+
+<!-- Profile Modal -->
+<div class="profile-modal-backdrop" *ngIf="showProfileModal">
+  <div class="profile-modal" (click)="$event.stopPropagation()">
+    <!-- Modal Header -->
+    <div class="profile-modal-header">
+      <div class="profile-modal-title">
+        <mat-icon>person</mat-icon>
+        <span>Profile</span>
+      </div>
+
+      <button type="button" class="profile-modal-close" (click)="closeProfileModal()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="profile-modal-body">
+      <!-- Avatar -->
+      <div class="profile-modal-avatar">
+        {{ getInitials(username) }}
+      </div>
+
+      <!-- User Information -->
+      <div class="profile-information">
+        <div class="profile-info-row">
+          <div class="profile-info-label">
+            <mat-icon>person</mat-icon>
+            <span>Username</span>
+          </div>
+
+          <div class="profile-info-value">
+            {{ username || '-' }}
+          </div>
+        </div>
+
+        <div class="profile-info-row">
+          <div class="profile-info-label">
+            <mat-icon>badge</mat-icon>
+            <span>Designation</span>
+          </div>
+
+          <div class="profile-info-value">
+            {{ designationName || '-' }}
+          </div>
+        </div>
+
+        <div class="profile-info-row">
+          <div class="profile-info-label">
+            <mat-icon>admin_panel_settings</mat-icon>
+            <span>Admin</span>
+          </div>
+
+          <div class="profile-status" [class.yes]="isAdmin === 'Y'" [class.no]="isAdmin !== 'Y'">
+            {{ isAdmin === 'Y' ? 'Yes' : 'No' }}
+          </div>
+        </div>
+
+        <div class="profile-info-row">
+          <div class="profile-info-label">
+            <mat-icon>supervisor_account</mat-icon>
+            <span>HOD</span>
+          </div>
+
+          <div class="profile-status" [class.yes]="isHod === 'Y'" [class.no]="isHod !== 'Y'">
+            {{ isHod === 'Y' ? 'Yes' : 'No' }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="profile-modal-footer">
+      <button type="button" class="profile-modal-close-button" (click)="closeProfileModal()">Close</button>
+    </div>
+  </div>
+</div>

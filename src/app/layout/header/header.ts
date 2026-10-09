@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit, Output, PLATFORM_ID } from '@angular/core';
-
+import { Component, EventEmitter, HostListener, Inject, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LoginService } from '../../service/login.service';
@@ -15,35 +14,40 @@ import { DataProviderService } from '../../service/data-provider.service';
   styleUrl: './header.scss',
 })
 export class Header implements OnInit {
+  username: string = '';
+  designationName: string = '';
+  isAdmin: string = 'N';
+  isHod: string = 'N';
+
+  showProfileMenu: boolean = false;
+  showProfileModal: boolean = false;
+
+  clientAssignmentMessage: string = '';
+
   constructor(
     private router: Router,
-
     private loginService: LoginService,
-
     @Inject(PLATFORM_ID)
     private platformId: Object,
-
     private dataProvider: DataProviderService,
-
-    // private elementRef: ElementRef
   ) {}
 
   @Output()
   menuToggle = new EventEmitter<void>();
 
-  username: string = '';
-  showProfileMenu: boolean = false;
-  clientAssignmentMessage: string = '';
+  // username: string = '';
+  // showProfileMenu: boolean = false;
+
+  // ngOnInit(): void {
+  //   this.username = sessionStorage.getItem('username') || '';
+  // }
 
   ngOnInit(): void {
     this.username = sessionStorage.getItem('username') || '';
-
-    // this.checkClientAssignment();
+    this.designationName = sessionStorage.getItem('designationName') || '';
+    this.isAdmin = sessionStorage.getItem('isAdmin') || 'N';
+    this.isHod = sessionStorage.getItem('isHod') || 'N';
   }
-
-  // ============================================================
-  // CLIENT ASSIGNMENT CHECK
-  // ============================================================
 
   private checkClientAssignment(): void {
     const managerId = Number(sessionStorage.getItem('userId'));
@@ -56,7 +60,6 @@ export class Header implements OnInit {
       next: (response: { assigned: boolean; message: string }) => {
         this.clientAssignmentMessage = response.assigned ? '' : response.message;
       },
-
       error: (err) => {
         console.error('Failed to check client assignment', err);
       },
@@ -90,27 +93,11 @@ export class Header implements OnInit {
       return;
     }
 
-    // ---------------------------------------------
-    // Get login type BEFORE clearing session
-    // ---------------------------------------------
-
     const loginType = sessionStorage.getItem('loginType') || 'other';
-
-    // ---------------------------------------------
-    // Redirect URL
-    // ---------------------------------------------
 
     const redirectUrl = loginType === 'manager' ? '/manager-login' : '/login';
 
-    // ---------------------------------------------
-    // Logout API
-    // ---------------------------------------------
-
     const logoutRequest = this.loginService.logout();
-
-    // ---------------------------------------------
-    // No logout request
-    // ---------------------------------------------
 
     if (!logoutRequest) {
       this.loginService.clearSession();
@@ -120,17 +107,12 @@ export class Header implements OnInit {
       return;
     }
 
-    // ---------------------------------------------
-    // Logout request
-    // ---------------------------------------------
-
     logoutRequest.subscribe({
       next: () => {
         this.loginService.clearSession();
 
         this.router.navigate([redirectUrl]);
       },
-
       error: () => {
         this.loginService.clearSession();
 
@@ -139,10 +121,25 @@ export class Header implements OnInit {
     });
   }
 
+  // onProfileClick(): void {
+  //   this.closeProfileMenu();
+  // }
   onProfileClick(): void {
     this.closeProfileMenu();
-    // Navigate to a profile page if you have one, e.g.:
-    // this.router.navigate(['/profile']);
+    this.showProfileModal = true;
+  }
+
+  closeProfileModal(): void {
+    this.showProfileModal = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.profile-wrapper')) {
+      this.closeProfileMenu();
+    }
   }
 
   closeProfileMenu(): void {
