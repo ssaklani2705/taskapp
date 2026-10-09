@@ -85,7 +85,6 @@
             <select class="status-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
               <option value="">--All Status--</option>
               <option value="1">Active</option>
-              <option value="2">Inactive</option>
               <option value="3">Deleted</option>
             </select>
           </div>
@@ -709,7 +708,7 @@
 
           <div class="assign-date-group">
             <!-- <span class="assign-date-icon" [owlDateTimeTrigger]="startDatePicker"> -->
-               <span class="assign-date-icon assign-date-icon-disabled">
+               <span class="assign-date-icon assign-date-icon-disabled" [owlDateTimeTrigger]="startDatePicker">
               <i class="fa fa-calendar"></i>
             </span>
 
@@ -717,6 +716,7 @@
               class="assign-input assign-date-input"
               [owlDateTime]="startDatePicker"
               [(ngModel)]="selectedAssignTask.date"
+              
               name="startDate"
               required
               readonly
