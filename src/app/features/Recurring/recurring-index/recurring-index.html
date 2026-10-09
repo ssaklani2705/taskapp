@@ -177,18 +177,26 @@
               </td>
 
               <td class="title-cell">
-                <div class="title-cell-inner">
-                  <span class="title-accent-bar"></span>
+  <div class="title-cell-inner">
+    <span class="title-accent-bar"></span>
 
-                  <span class="title-text">
-                    {{ item.clientName || '-' }}
-                  </span>
+    <span class="title-text">
+      {{ item.clientName || '-' }}
+    </span>
 
-                  <button type="button" class="description-icon-button" *ngIf="item.description" (click)="openDescriptionModal(item)" aria-label="View Description">
-                    <i class="fa fa-file-text"></i>
-                  </button>
-                </div>
-              </td>
+    <span class="description-icon-wrapper">
+      <button
+        type="button"
+        class="description-icon-button"
+        *ngIf="item.description"
+        (click)="openDescriptionModal(item)"
+        aria-label="View Description">
+        <i class="fa fa-file-text"></i>
+      </button>
+    </span>
+  </div>
+</td>
+
 
               <td class="plan-name-cell">
                 {{ item.title || '-' }}
