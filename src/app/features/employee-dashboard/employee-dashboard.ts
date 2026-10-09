@@ -564,7 +564,7 @@ export class EmployeeDashboard implements OnInit {
 
     console.log(JSON.stringify(stat) + ' checking now ');
 
-    if (stat.label === 'My tasks today') {
+    if (stat.label === "Today's all tasks") {
       taskType = 'today';
     } else if (stat.label === 'Due this week') {
       taskType = 'week';
