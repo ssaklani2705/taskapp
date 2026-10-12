@@ -184,7 +184,7 @@ export class MyTeam implements OnInit {
       sortable: true,
     },
 
-     {
+    {
       key: 'weeklyOffNames',
       label: 'Weekly Off',
       sortable: true,
@@ -269,7 +269,6 @@ export class MyTeam implements OnInit {
       search: this.search,
       departmentId: this.selectedDepartmentId,
       designationId: this.selectedDesignationId,
-      
     });
 
     this.dataprovider
@@ -286,7 +285,7 @@ export class MyTeam implements OnInit {
 
         this.selectedDesignationId,
         this.selectedCategoryId,
-        this.selectedWeeklyOff,        // NEW
+        this.selectedWeeklyOff, // NEW
       )
       .subscribe({
         next: (response: any) => {
@@ -678,7 +677,7 @@ export class MyTeam implements OnInit {
       designationId: this.selectedDesignationId,
 
       categoryId: this.selectedCategoryId,
-      weeklyOff: this.selectedWeeklyOff,     // NEW
+      weeklyOff: this.selectedWeeklyOff, // NEW
     };
   }
 
@@ -838,14 +837,13 @@ export class MyTeam implements OnInit {
         this.selectedCategoryId = null;
       }
 
-
       // WEEKLY OFF
-if (filterState.weeklyOff !== undefined && filterState.weeklyOff !== null && filterState.weeklyOff !== '') {
-  const w = Number(filterState.weeklyOff);
-  this.selectedWeeklyOff = Number.isFinite(w) && w >= 1 && w <= 7 ? w : null;
-} else {
-  this.selectedWeeklyOff = null;
-}
+      if (filterState.weeklyOff !== undefined && filterState.weeklyOff !== null && filterState.weeklyOff !== '') {
+        const w = Number(filterState.weeklyOff);
+        this.selectedWeeklyOff = Number.isFinite(w) && w >= 1 && w <= 7 ? w : null;
+      } else {
+        this.selectedWeeklyOff = null;
+      }
 
       // =====================================================
       // DEBUG
@@ -1134,38 +1132,27 @@ if (filterState.weeklyOff !== undefined && filterState.weeklyOff !== null && fil
 
     // Clear department
     this.selectedDepartmentId = null;
-
     // Clear category
     this.selectedCategoryId = null;
     this.categoryList = [];
-
     // Clear designation
     this.selectedDesignationId = null;
-
     // Clear status
     this.selectedStatus = '';
-
     // Reset status index
     this.statusIndex = 0;
-
     // Reset pagination
     this.currentPage = 1;
     this.page = 0;
-
     this.selectedWeeklyOff = null;
-
     // Reload the first page with cleared filters
     this.onSearch();
-     this.loadCategories();
+    this.loadCategories();
   }
-
   //Category
   // selectedDepartmentId: number | null = null;
-
   selectedCategoryId: number | null = null;
-
   categoryList: TaskCategoryDTO[] = [];
-
   categoriesLoading = false;
 
   loadCategories(): void {
@@ -1204,25 +1191,23 @@ if (filterState.weeklyOff !== undefined && filterState.weeklyOff !== null && fil
 
   selectedWeeklyOff: number | null = null;
 
-weeklyOffOptions = [
-  { id: 1, label: 'Sunday' },
-  { id: 2, label: 'Monday' },
-  { id: 3, label: 'Tuesday' },
-  { id: 4, label: 'Wednesday' },
-  { id: 5, label: 'Thursday' },
-  { id: 6, label: 'Friday' },
-  { id: 7, label: 'Saturday' },
-];
+  weeklyOffOptions = [
+    { id: 1, label: 'Sunday' },
+    { id: 2, label: 'Monday' },
+    { id: 3, label: 'Tuesday' },
+    { id: 4, label: 'Wednesday' },
+    { id: 5, label: 'Thursday' },
+    { id: 6, label: 'Friday' },
+    { id: 7, label: 'Saturday' },
+  ];
 
+  onWeeklyOffChange(): void {
+    this.currentPage = 1;
+    this.page = 0;
+    this.search = this.searchQuery.trim();
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
 
-onWeeklyOffChange(): void {
-  this.currentPage = 1;
-  this.page = 0;
-  this.search = this.searchQuery.trim();
-  this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
-
-  this.saveFilterState();
-  this.getUserDetails();
-}
-
+    this.saveFilterState();
+    this.getUserDetails();
+  }
 }

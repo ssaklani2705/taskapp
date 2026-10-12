@@ -143,8 +143,6 @@
 
                   <div class="user-error" *ngIf="taskForm?.submitted && !task.startDate">Start Date &amp; Time is required</div>
                 </div>
-
-                <div class="user-error" *ngIf="taskForm?.submitted && !task.date">Date &amp; Time is required</div>
                 <div class="user-error" *ngIf="holidayError">
                   {{ holidayError }}
                 </div>
