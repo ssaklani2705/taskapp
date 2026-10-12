@@ -216,13 +216,13 @@
 
                 <select class="user-input user-select" formControlName="day">
                   <option [ngValue]="null">Select Day</option>
-                  <option [ngValue]="1">Monday</option>
-                  <option [ngValue]="2">Tuesday</option>
-                  <option [ngValue]="3">Wednesday</option>
-                  <option [ngValue]="4">Thursday</option>
-                  <option [ngValue]="5">Friday</option>
-                  <option [ngValue]="6">Saturday</option>
-                  <option [ngValue]="7">Sunday</option>
+                  <option [ngValue]="2">Monday</option>
+                  <option [ngValue]="3">Tuesday</option>
+                  <option [ngValue]="4">Wednesday</option>
+                  <option [ngValue]="5">Thursday</option>
+                  <option [ngValue]="6">Friday</option>
+                  <option [ngValue]="7">Saturday</option>
+                  <option [ngValue]="1">Sunday</option>
                 </select>
 
                 <div class="user-error" *ngIf="recurringForm.get('day')?.touched && recurringForm.get('day')?.invalid">Day is required</div>

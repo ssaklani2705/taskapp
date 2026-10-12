@@ -1269,6 +1269,7 @@ isLoadingAssignUsers = false;
   }
 
   taskStatusOptions: { id: string; label: string }[] = [
+    { id: '-1', label: 'Un-Assigned' },
     { id: '1', label: 'Assigned' },
     { id: '2', label: 'Assignee Closure' },
     { id: '3', label: 'Re-Open' },

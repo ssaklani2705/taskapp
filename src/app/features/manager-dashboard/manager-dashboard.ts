@@ -150,14 +150,14 @@ export class ManagerDashboard {
       change: 'Awaiting re-closure',
       taskStatusIds: ['4'],
     },
-    // {
-    //   title: 'Unassigned',
-    //   value: 0,
-    //   icon: 'person_off',
-    //   className: 'red',
-    //   change: 'Requires assignment',
-    //   taskStatusIds: ['0', null],
-    // },
+    {
+      title: 'Unassigned',
+      value: 0,
+      icon: 'person_off',
+      className: 'red',
+      change: 'Requires assignment',
+      taskStatusIds: ['0', null],
+    },
   ];
   filterKey = SESSION_KEYS.TASK_MASTER_FILTER;
   constructor(
