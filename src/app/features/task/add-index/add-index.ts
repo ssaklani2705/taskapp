@@ -204,6 +204,8 @@ export class AddIndexComponent implements OnInit {
 
         fileName2: null,
         taskStatusId: null,
+        startDate: null,
+        endDate: null,
       };
     }
   }
@@ -219,8 +221,15 @@ export class AddIndexComponent implements OnInit {
           this.task = { ...res.data };
           this.originalTask = { ...res.data };
           // Convert API date to Date
-          if (this.task.date) {
-            this.task.date = new Date(this.task.date);
+          // if (this.task.date) {
+          //   this.task.date = new Date(this.task.date);
+          // }
+
+          if (this.task.startDate) {
+            this.task.startDate = new Date(this.task.startDate);
+          }
+          if (this.task.endDate) {
+            this.task.endDate = new Date(this.task.endDate);
           }
           if (this.task.clientId) {
             this.onchangeloadDropdownData();
@@ -405,15 +414,11 @@ export class AddIndexComponent implements OnInit {
       formData.append('fileName2', this.zipFile);
     }
 
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
-
     this.dataprovider.saveTask(formData).subscribe({
       next: (response: any) => {
         if (response && response.success) {
           Swal.fire('Success', response.message, 'success');
-          this.backToIndexPage();
+          // this.backToIndexPage();
         } else {
           Swal.fire('Error', response?.message || 'Unable to save task.', 'error');
         }
@@ -472,8 +477,11 @@ export class AddIndexComponent implements OnInit {
         ...this.originalTask,
       };
 
-      if (this.task.date) {
-        this.task.date = new Date(this.task.date);
+      if (this.task.startDate) {
+        this.task.startDate = new Date(this.task.startDate);
+      }
+      if (this.task.endDate) {
+        this.task.endDate = new Date(this.task.endDate);
       }
     } else {
       this.task = {
@@ -483,8 +491,8 @@ export class AddIndexComponent implements OnInit {
 
         clientId: null,
 
-        date: null,
-
+        startDate: null,
+        endDate: null,
         taskCategoryId: null,
 
         description: '',
@@ -542,31 +550,29 @@ export class AddIndexComponent implements OnInit {
   //     },
   //   });
   // }
-   onchangeloadDropdownData(): void {
+  onchangeloadDropdownData(): void {
     this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
-         this.taskCategories = (data?.taskCategories || []).sort(
-          (a: any, b: any) => {
-            const aName = String(a.name || a.categoryName || a).trim();
-            const bName = String(b.name || b.categoryName || b).trim();
+        this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
+          const aName = String(a.name || a.categoryName || a).trim();
+          const bName = String(b.name || b.categoryName || b).trim();
 
-            // Admin task should always be first
-            if (aName.toLowerCase() === 'admin task') return -1;
-            if (bName.toLowerCase() === 'admin task') return 1;
+          // Admin task should always be first
+          if (aName.toLowerCase() === 'admin task') return -1;
+          if (bName.toLowerCase() === 'admin task') return 1;
 
-            // General Task should always be last
-            if (aName.toLowerCase() === 'general task') return 1;
-            if (bName.toLowerCase() === 'general task') return -1;
+          // General Task should always be last
+          if (aName.toLowerCase() === 'general task') return 1;
+          if (bName.toLowerCase() === 'general task') return -1;
 
-            // Natural/alphanumeric sorting
-            // Category 2 comes before Category 10
-            return aName.localeCompare(bName, undefined, {
-              numeric: true,
-              sensitivity: 'base'
-            });
-          }
-        );
+          // Natural/alphanumeric sorting
+          // Category 2 comes before Category 10
+          return aName.localeCompare(bName, undefined, {
+            numeric: true,
+            sensitivity: 'base',
+          });
+        });
       },
       error: (error: any) => {
         console.error('Error loading task dropdown data:', error);
@@ -843,21 +849,15 @@ export class AddIndexComponent implements OnInit {
           this.noEmployeeError = 'No employee available for the selected category.';
         }
 
-        const assignedUserIds = new Set(
-          this.workloadList.map(
-            (x: any) => Number(x.assignedTo)
-          )
-        );
+        const assignedUserIds = new Set(this.workloadList.map((x: any) => Number(x.assignedTo)));
 
         // Highlight matching users
         this.users = this.users.map((user: any) => ({
           ...user,
-          hasWorkload: assignedUserIds.has(
-            Number(user.userId)
-          )
+          hasWorkload: assignedUserIds.has(Number(user.userId)),
         }));
 
-          console.log('Users after workload comparison:', this.users);
+        console.log('Users after workload comparison:', this.users);
       },
       error: (error) => {
         console.error('Error fetching assignee workload', error);
@@ -989,7 +989,6 @@ export class AddIndexComponent implements OnInit {
   //     },
   //   });
   // }
-
 
   showCategoryDropdown = false;
   selectedTaskCategoryName = '';
