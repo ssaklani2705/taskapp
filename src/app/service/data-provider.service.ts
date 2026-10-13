@@ -998,7 +998,7 @@ export class DataProviderService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
-      .set('statusIndex', statusIndex.toString())
+      .set('statusIndex', statusIndex.toString() )
       .set('search', search || '')
       .set('clientId', (clientId || 0).toString())
       .set('taskCategoryId', (taskCategoryId || 0).toString())

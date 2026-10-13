@@ -500,9 +500,7 @@ export class TaskIndex implements OnInit, OnDestroy {
 
           if (this.selectedClient && this.clients.length > 0) {
             const selectedClientObj = this.clients.find((client: any) => String(client.clientId) === String(this.selectedClient));
-            if (selectedClientObj) {
-              this.clientSearchText = selectedClientObj.name;
-            }
+            if (selectedClientObj) { this.clientSearchText = selectedClientObj.name; }
           }
         },
         error: (error) => {
@@ -1269,7 +1267,7 @@ export class TaskIndex implements OnInit, OnDestroy {
   }
 
   taskStatusOptions: { id: string; label: string }[] = [
-    { id: '-1', label: 'Un-Assigned' },
+    { id: '0', label: 'Unassigned' },
     { id: '1', label: 'Assigned' },
     { id: '2', label: 'Assignee Closure' },
     { id: '3', label: 'Re-Open' },

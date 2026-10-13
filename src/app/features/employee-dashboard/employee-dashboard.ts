@@ -124,13 +124,13 @@ export interface TaskFilterState {
   statusIndex: number;
   // searchText: string;
 
-  clientId?: number |null;
+  clientId?: number | null;
   // taskCategoryId: number;
   // assignedTo: number;
   // priority: number;
 
-  // fromDate: string | null;
-  // toDate: string | null;
+  fromDate: string | null;
+  toDate: string | null;
 
   taskStatusIds: string[];
 
@@ -484,10 +484,6 @@ export class EmployeeDashboard implements OnInit {
     return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
   }
 
-  // =========================================================
-  // GET SHORT NAME
-  // =========================================================
-
   getShortName(name: string): string {
     if (!name) {
       return '';
@@ -556,26 +552,26 @@ export class EmployeeDashboard implements OnInit {
     this.loadDashboard();
   }
 
-  openTaskIndex(stat: any): void {
-    // if (!stat || stat.value === 0) {
-    //   return;
-    // }
-    let taskType = '';
+  // openTaskIndex(stat: any): void {
+  //   // if (!stat || stat.value === 0) {
+  //   //   return;
+  //   // }
+  //   let taskType = '';
 
-    console.log(JSON.stringify(stat) + ' checking now ');
+  //   console.log(JSON.stringify(stat) + ' checking now ');
 
-    if (stat.label === "Today's all tasks") {
-      taskType = 'today';
-    } else if (stat.label === 'Due this week') {
-      taskType = 'week';
-    } else if (stat.label === 'Overdue') {
-      taskType = 'overdue';
-    }
+  //   if (stat.label === "Today's all tasks") {
+  //     taskType = 'today';
+  //   } else if (stat.label === 'Due this week') {
+  //     taskType = 'week';
+  //   } else if (stat.label === 'Overdue') {
+  //     taskType = 'overdue';
+  //   }
 
-    const taskStatusIds = stat.statusIds ? stat.statusIds.split(',').map((x: string) => x.trim()) : [];
+  //   const taskStatusIds = stat.statusIds ? stat.statusIds.split(',').map((x: string) => x.trim()) : [];
 
-    this.saveTaskFilterAndNavigate(taskStatusIds, taskType);
-  }
+  //   this.saveTaskFilterAndNavigate(taskStatusIds, taskType);
+  // }
 
   clientSearchText = '';
   showClientDropdown = false;
@@ -661,27 +657,62 @@ export class EmployeeDashboard implements OnInit {
     }
   }
 
-  private saveTaskFilterAndNavigate(taskStatusIds: string[], dashboardFilter: string = ''): void {
+  private saveTaskFilterAndNavigate(taskStatusIds: string[], dashboardFilter: string = '', fromDate: string | null = null, toDate: string | null = null): void {
     const filterState: TaskFilterState = {
       currentPage: 1,
       page: 0,
       size: 10,
-
       statusIndex: 1,
-      // searchText: '',
-
       clientId: this.selectedClientId || 0,
-      // taskCategoryId: 0,
-      // assignedTo: 0,
-      // priority: 0,
-
-      // fromDate: null,
-      // toDate: null,
-
+      fromDate: fromDate,
+      toDate: toDate,
       taskStatusIds,
       dashboardFilter,
     };
     sessionStorage.setItem(SESSION_KEYS.TASK_MASTER_FILTER, JSON.stringify(filterState));
     this.router.navigate(['/task-index']);
+  }
+
+  openTaskIndex(stat: any): void {
+    let taskType = '';
+    let fromDate: string | null = null;
+    let toDate: string | null = null;
+    const today = new Date();
+    const formatDate = (date: Date): string => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+    if (stat.label === "Today's all tasks") {
+      taskType = 'today';
+      fromDate = formatDate(today);
+      toDate = formatDate(today);
+    } else if (stat.label === 'Due this week') {
+      taskType = 'week';
+
+      // Sunday = first day of the week
+      const currentDay = today.getDay();
+
+      const sunday = new Date(today);
+      sunday.setDate(today.getDate() - currentDay);
+
+      // Saturday = last day of the week
+      const saturday = new Date(sunday);
+      saturday.setDate(sunday.getDate() + 6);
+
+      fromDate = formatDate(sunday);
+      toDate = formatDate(saturday);
+    } else if (stat.label === 'Overdue') {
+      taskType = 'overdue';
+    }
+    const taskStatusIds = Array.isArray(stat.statusIds)
+      ? stat.statusIds.map((x: any) => String(x).trim())
+      : stat.statusIds
+        ? String(stat.statusIds)
+            .split(',')
+            .map((x: string) => x.trim())
+        : [];
+    this.saveTaskFilterAndNavigate(taskStatusIds, taskType, fromDate, toDate);
   }
 }

@@ -24,7 +24,6 @@ interface Department {
   styleUrl: './department-index.scss',
 })
 export class DepartmentIndexComponent {
-  
   departments: Department[] = [];
   apiResponseDepartmentDetails: any = {};
   searchQuery: string = '';
@@ -127,17 +126,15 @@ export class DepartmentIndexComponent {
     this.isPanelVisible = !this.isPanelVisible;
   }
   getDepartmentDetails() {
-    this.dataprovider
-      .getDepartmentDetails(this.page, this.size, this.statusIndex, this.search)
-      .subscribe(
-        (response) => {
-          this.apiResponseDepartmentDetails = response;
-          this.departments = response.data;
-        },
-        (error) => {
-          console.error('Error fetching department details:', error);
-        },
-      );
+    this.dataprovider.getDepartmentDetails(this.page, this.size, this.statusIndex, this.search).subscribe(
+      (response) => {
+        this.apiResponseDepartmentDetails = response;
+        this.departments = response.data;
+      },
+      (error) => {
+        console.error('Error fetching department details:', error);
+      },
+    );
   }
 
   get paginatedDepartments(): Department[] {
@@ -151,19 +148,16 @@ export class DepartmentIndexComponent {
     this.currentPage = pageNumber;
     this.page = pageNumber - 1;
     this.router
-      .navigate(
-        ['/department-master'],
-        {
-          replaceUrl: true,
-          state: {
-            currentPage: this.currentPage,
-            statusIndex: this.statusIndex || 0,
-            searchText: this.search || '',
-            page: this.page,
-            size: this.size || 5,
-          },
+      .navigate(['/department-master'], {
+        replaceUrl: true,
+        state: {
+          currentPage: this.currentPage,
+          statusIndex: this.statusIndex || 0,
+          searchText: this.search || '',
+          page: this.page,
+          size: this.size || 5,
         },
-      )
+      })
       .then(() => {
         this.getDepartmentDetails();
       });
@@ -303,9 +297,7 @@ export class DepartmentIndexComponent {
     const totalRecords = this.apiResponseDepartmentDetails.totalElements || 0;
     const startRecord = totalRecords === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
     const endRecord = Math.min(this.currentPage * this.recordsPerPage, totalRecords);
-    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${
-      totalRecords
-    } record${totalRecords > 1 ? 's' : ''})`;
+    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${totalRecords > 1 ? 's' : ''})`;
   }
 
   get totalPages(): number {
@@ -348,7 +340,7 @@ export class DepartmentIndexComponent {
       return 0;
     });
   }
-
+ 
   clearFilters(): void {
     this.searchQuery = '';
     this.selectedStatus = '';

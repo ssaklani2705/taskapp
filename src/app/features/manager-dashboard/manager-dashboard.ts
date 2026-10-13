@@ -65,7 +65,7 @@ export class ManagerDashboard {
 
   common = new Common();
 
- selectedClient: string = '';
+  selectedClient: string = '';
   selectedTaskStatus: string[] = [];
   selectedTaskCategory: string = '';
   selectedAssignedTo: string = '';
@@ -156,7 +156,7 @@ export class ManagerDashboard {
       icon: 'person_off',
       className: 'red',
       change: 'Requires assignment',
-      taskStatusIds: ['0', null],
+      taskStatusIds: ['0'],
     },
   ];
   filterKey = SESSION_KEYS.TASK_MASTER_FILTER;
@@ -164,11 +164,11 @@ export class ManagerDashboard {
     private dataProvider: DataProviderService,
     private route: ActivatedRoute,
     private router: Router,
-     private sessionService: SessionStorageService,
+    private sessionService: SessionStorageService,
   ) {}
 
   ngOnInit(): void {
-     this.sessionService.clearOtherSessions(this.filterKey);
+    this.sessionService.clearOtherSessions(this.filterKey);
     this.loginType = sessionStorage.getItem('loginType') || 'other';
     this.username = sessionStorage.getItem('username') || 'Society 123';
 
@@ -770,16 +770,16 @@ export class ManagerDashboard {
     });
   }
 
-  private saveTaskFilterAndNavigate(taskStatusIds: string[], dashboardFilter: string = ''): void {
-      const clientId = this.selectedClient && String(this.selectedClient) !== '0'
-    ? Number(this.selectedClient)
-    : null;
+  private saveTaskFilterAndNavigate(taskStatusIds: string[], dashboardFilter: string = '', fromDate: string | null = null, toDate: string | null = null): void {
+    const clientId = this.selectedClient && String(this.selectedClient) !== '0' ? Number(this.selectedClient) : null;
     const filterState: TaskFilterState = {
       currentPage: 1,
       page: 0,
       size: 10,
       statusIndex: 1,
-      clientId:clientId,
+      clientId: clientId,
+      fromDate: fromDate,
+      toDate: toDate,
       taskStatusIds,
       dashboardFilter,
     };
