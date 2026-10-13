@@ -171,6 +171,7 @@ export class EmployeeDashboard implements OnInit {
 
   // key = field in statusCounts, statusName = value passed to Task list page
   private readonly statusConfig = [
+    { key: 'unassigned', label: 'Unassigned', statusId: '-1', icon: 'person_off' },
     { key: 'assigned', label: 'Assigned', statusId: '1', icon: 'assignment_ind' },
     { key: 'assigneeClosure', label: 'Assignee Closure', statusId: '2', icon: 'task_alt' },
     { key: 'reOpen', label: 'Re-Open', statusId: '3', icon: 'replay' },
@@ -657,7 +658,7 @@ export class EmployeeDashboard implements OnInit {
       case 5:
         return { taskStatusLabel: 'Assignor Closure', taskStatusClass: 'ts-assignor-closure' };
       default:
-        return { taskStatusLabel: 'Unassigned', taskStatusClass: 'ts-unassigned' };
+        return { taskStatusLabel: 'unassigned', taskStatusClass: 'ts-unassigned' };
     }
   }
 
