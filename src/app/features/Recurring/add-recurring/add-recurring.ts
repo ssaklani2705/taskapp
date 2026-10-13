@@ -357,10 +357,10 @@ private toApiTime(value: string | null | undefined): string | null {
     if (this.checkingTaskCategoryEmployee) {
       return;
     }
-    // Do not submit if selected task category has no employee
-    if (this.taskCategoryEmployeeError) {
-      return;
-    }
+    // // Do not submit if selected task category has no employee
+    // if (this.taskCategoryEmployeeError) {
+    //   return;
+    // }
 
     const type = Number(this.recurringForm.get('type')?.value);
 
