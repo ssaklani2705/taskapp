@@ -776,7 +776,7 @@ export class ManagerDashboard {
       currentPage: 1,
       page: 0,
       size: 10,
-      statusIndex: 0,
+      statusIndex: 1,
       clientId: clientId,
       fromDate: fromDate,
       toDate: toDate,
