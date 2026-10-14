@@ -407,3 +407,34 @@
 //   text-align: center;
   font-weight: 500;
 }
+
+
+.time-wrap {
+  position: relative;
+
+  .time-placeholder {
+    position: absolute;
+    left: 12px; // match your .user-input left padding
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9aa5b1;
+    pointer-events: none;
+    display: none;
+  }
+
+  &.is-empty {
+    // show our placeholder only when empty and not focused
+    .time-placeholder {
+      display: block;
+    }
+
+    &:focus-within .time-placeholder {
+      display: none;
+    }
+
+    // hide the browser's built-in "--:--" while empty and not focused
+    input[type='time']:not(:focus)::-webkit-datetime-edit {
+      opacity: 0;
+    }
+  }
+}

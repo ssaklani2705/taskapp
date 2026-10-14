@@ -201,24 +201,26 @@ export class TaskIndex implements OnInit, OnDestroy {
       label: 'Assigned By',
       sortable: true,
     },
+    
+    {
+      key: 'priority',
+      label: 'Priority',
+      sortable: true,
+    },
+    
+    {
+      key: 'status',
+      label: 'Status',
+      sortable: true,
+    },
     {
       key: 'assignedToName',
       label: 'Assigned To',
       sortable: true,
     },
     {
-      key: 'priority',
-      label: 'Priority',
-      sortable: true,
-    },
-    {
       key: 'taskStatus',
       label: 'Update Status',
-      sortable: true,
-    },
-    {
-      key: 'status',
-      label: 'Status',
       sortable: true,
     },
   ];

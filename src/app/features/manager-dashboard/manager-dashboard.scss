@@ -976,3 +976,26 @@
   opacity: 0.6;
   pointer-events: none;
 }
+
+
+@media (max-width: 767px) {
+  .nav-btns .btn {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .action-btns .btn {
+    flex: 1 1 0;
+    text-align: center;
+  }
+}
+
+.nav-btns,
+.action-btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  .btn {
+    margin: 0; // gap handles spacing
+  }
+}

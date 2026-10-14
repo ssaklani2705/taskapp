@@ -556,7 +556,7 @@
   min-width: 1625px;
   max-width: none;
   table-layout: fixed;
-  border-collapse: collapse;
+  border-collapse: separate; /* sticky columns need this: no gaps/bleed-through */
   border-spacing: 0;
   background: var(--white);
   color: var(--text);
@@ -568,7 +568,10 @@
   height: 58px;
   padding: 8px 8px;
   background: var(--table-header);
-  border: 1px solid var(--border);
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   color: #172f4c;
   text-align: center;
   vertical-align: middle;
@@ -580,8 +583,9 @@
   overflow: hidden;
 }
 
-.user-table thead th:first-child {
-  border-left-color: var(--border);
+.user-table thead th:first-child,
+.user-table tbody td:first-child {
+  border-left: 1px solid var(--border);
 }
 
 .user-table tbody tr {
@@ -592,7 +596,9 @@
   height: 58px;
   padding: 8px 9px;
   background: var(--white);
-  border: 1px solid var(--border);
+  border: 0;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   color: var(--text);
   text-align: center;
   vertical-align: middle;
@@ -606,6 +612,12 @@
   background: var(--table-hover);
 }
 
+/* =========================================================
+   COLUMN WIDTHS (total = 1625px)
+   1 Sr.No | 2 Title | 3 Client | 4 Start | 5 Due | 6 Category
+   7 Assigned By | 8 Priority | 9 Status
+   10 Assigned To* | 11 Task Status* | 12 Action*   (* = frozen)
+   ========================================================= */
 .user-table th:nth-child(1),
 .user-table td:nth-child(1) {
   width: 65px;
@@ -643,7 +655,7 @@
 
 .user-table th:nth-child(8),
 .user-table td:nth-child(8) {
-  width: 150px;
+  width: 100px;
 }
 
 .user-table th:nth-child(9),
@@ -658,7 +670,7 @@
 
 .user-table th:nth-child(11),
 .user-table td:nth-child(11) {
-  width: 100px;
+  width: 150px;
 }
 
 .user-table th:nth-child(12),
@@ -673,15 +685,12 @@
   white-space: nowrap;
 }
 
-.user-table tbody td:nth-child(11) {
-  white-space: nowrap;
-}
-
+/* text columns: wrap (Title, Client, Category, Assigned By, Assigned To) */
 .user-table tbody td:nth-child(2),
 .user-table tbody td:nth-child(3),
 .user-table tbody td:nth-child(6),
 .user-table tbody td:nth-child(7),
-.user-table tbody td:nth-child(8) {
+.user-table tbody td:nth-child(10) {
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: normal;
@@ -696,6 +705,7 @@
   word-break: normal;
 }
 
+/* Start Date + Due Date */
 .user-table tbody td:nth-child(4),
 .user-table tbody td:nth-child(5) {
   white-space: nowrap;
@@ -703,6 +713,8 @@
   overflow: hidden;
 }
 
+/* Priority + Status badges */
+.user-table tbody td:nth-child(8),
 .user-table tbody td:nth-child(9) {
   white-space: nowrap;
   text-align: center;
@@ -741,14 +753,15 @@
   border: 1px solid #efcaca;
 }
 
-.user-table tbody td:nth-child(10) {
+/* Task Status button */
+.user-table tbody td:nth-child(11) {
   padding: 8px 6px;
   white-space: nowrap;
   text-align: center;
   overflow: hidden;
 }
 
-.user-table tbody td:nth-child(10) .change-manager-button {
+.user-table tbody td:nth-child(11) .change-manager-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -798,13 +811,6 @@
   color: #ffffff;
   cursor: not-allowed;
   opacity: 1;
-}
-
-.user-table tbody td:nth-child(11) {
-  padding: 8px 5px;
-  white-space: nowrap;
-  text-align: center;
-  overflow: hidden;
 }
 
 .status-badge {
@@ -900,28 +906,64 @@
   border: 1px solid #ce93d8;
 }
 
+/* =========================================================
+   FROZEN LAST 3 COLUMNS: Assigned To | Task Status | Action
+   ========================================================= */
+.user-table th:nth-child(10),
+.user-table td:nth-child(10),
+.user-table th:nth-child(11),
+.user-table td:nth-child(11),
 .user-table th:nth-child(12),
 .user-table td:nth-child(12) {
   position: sticky;
-  right: 0;
   z-index: 2;
-  padding: 8px 5px;
   text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
+/* header cells above body cells */
+.user-table th:nth-child(10),
+.user-table th:nth-child(11),
 .user-table th:nth-child(12) {
-  background: var(--table-header);
   z-index: 3;
+  background: var(--table-header);
 }
 
+/* solid background so scrolling columns don't show through */
+.user-table td:nth-child(10),
+.user-table td:nth-child(11),
 .user-table td:nth-child(12) {
   background: var(--white);
 }
 
+.user-table tbody tr:hover td:nth-child(10),
+.user-table tbody tr:hover td:nth-child(11),
 .user-table tbody tr:hover td:nth-child(12) {
   background: var(--table-hover);
+}
+
+/* right offset = sum of widths of frozen columns to the right */
+.user-table th:nth-child(12),
+.user-table td:nth-child(12) {
+  right: 0;
+  padding: 8px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.user-table th:nth-child(11),
+.user-table td:nth-child(11) {
+  right: 140px; /* Action width */
+}
+
+.user-table th:nth-child(10),
+.user-table td:nth-child(10) {
+  right: 290px; /* Action 140 + Task Status 150 */
+}
+
+/* separators (borders can vanish on sticky cells with border-collapse) */
+.user-table th:nth-child(10),
+.user-table td:nth-child(10) {
+  box-shadow: -3px 0 5px -2px rgba(25, 52, 90, 0.15);
 }
 
 .action-column {
@@ -3368,12 +3410,10 @@ textarea.manager-select::placeholder {
   }
 }
 
-
 .assign-date-icon-disabled {
   pointer-events: none;
   cursor: default;
 }
-
 
 .assign-date-input[readonly] {
   background-color: #e9ecef;

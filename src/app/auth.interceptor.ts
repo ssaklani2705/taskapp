@@ -27,6 +27,8 @@ export interface RefreshResponse {
 export class AuthInterceptor implements HttpInterceptor {
   private isRefreshing = false;
 
+  private sessionExpiredShown = false;
+
   constructor(
     private router: Router,
     private loginService: LoginService,

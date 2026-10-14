@@ -347,7 +347,11 @@
 
       <!-- <input type="time" step="1" class="user-input" formControlName="time" /> -->
 
+      <!-- <input type="time" class="user-input" formControlName="time" /> -->
+        <div class="time-wrap" [class.is-empty]="!recurringForm.get('time')?.value">
       <input type="time" class="user-input" formControlName="time" />
+      <span class="time-placeholder">HH:mm</span>
+    </div>
 
       <div class="user-error" *ngIf="recurringForm.get('time')?.touched && recurringForm.get('time')?.invalid">Time is required</div>
     </div>

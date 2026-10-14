@@ -38,10 +38,6 @@
       </div>
     </header>
 
-    <!-- =====================================================
-         STATISTICS
-    ====================================================== -->
-
     <section class="stats-grid">
       @for (stat of stats(); track stat.label) {
         <mat-card class="stat-card" [class.stat-danger]="stat.color === 'danger'" (click)="openTaskIndex(stat)" [class.stat-disabled]="stat.value === 0">
@@ -78,14 +74,9 @@
       }
     </section>
 
-    <!-- =====================================================
-     STATUS STATISTICS (SECOND ROW)
-====================================================== -->
-
     <section class="stats-grid status-stats-grid">
       @for (stat of statusStats(); track stat.label) {
-        <!-- <mat-card class="stat-card status-stat-card" [class.stat-wide]="stat.label == 'Assigned'" [class.stat-disabled]="stat.value === 0" (click)="openTaskIndexByStatus(stat)"> -->
-          <mat-card class="stat-card status-stat-card" [class.stat-wide]="stat.label == 'Assigned'" [class.stat-disabled]="stat.value === 0" (click)="openTaskIndexByStatus(stat)">
+        <mat-card class="stat-card status-stat-card" [class.stat-wide]="stat.label == 'Assigned'" [class.stat-disabled]="stat.value === 0" (click)="openTaskIndexByStatus(stat)">
           <div class="stat-icon">
             <mat-icon>{{ stat.icon }}</mat-icon>
           </div>
@@ -101,10 +92,6 @@
         </mat-card>
       }
     </section>
-
-    <!-- =====================================================
-         TASK BOARD
-    ====================================================== -->
 
     <section class="task-board">
       @for (column of columns(); track column.title) {
@@ -134,10 +121,6 @@
                   [class.task-progress]="task.type === 'progress'"
                   [class.task-done]="task.type === 'done'"
                 >
-                  <!-- =================================================
-                       TASK MAIN
-                  ================================================== -->
-
                   <div class="task-main">
                     <!-- LEFT -->
 
@@ -243,10 +226,6 @@
                     </div>
                   </div>
 
-                  <!-- =================================================
-                       BOTTOM STATUS
-                  ================================================== -->
-
                   <div class="task-bottom-status" [class.approved]="task.type === 'done'">
                     <div class="bottom-status-icon">
                       @if (task.type === 'done') {
@@ -271,8 +250,6 @@
                     <span class="task-status-badge" [ngClass]="task.taskStatusClass">
                       {{ task.taskStatusLabel }}
                     </span>
-
-                    <!-- <mat-icon class="more-icon"> more_vert </mat-icon> -->
                   </div>
 
                   <!-- PROGRESS -->

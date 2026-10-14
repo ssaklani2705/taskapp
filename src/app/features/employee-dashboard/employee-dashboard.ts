@@ -122,12 +122,9 @@ export interface TaskFilterState {
   size: number;
 
   statusIndex: number;
-  // searchText: string;
 
   clientId?: number | null;
-  // taskCategoryId: number;
-  // assignedTo: number;
-  // priority: number;
+
 
   fromDate: string | null;
   toDate: string | null;
@@ -153,8 +150,6 @@ export class EmployeeDashboard implements OnInit {
 
   readonly employeeName = signal('Anil Kumar');
 
-  // readonly employeeRole =
-  //   signal('Employee');
 
   readonly checkedInTime = signal('09:02');
 
@@ -169,7 +164,6 @@ export class EmployeeDashboard implements OnInit {
 
   readonly statusStats = signal<any[]>([]);
 
-  // key = field in statusCounts, statusName = value passed to Task list page
   private readonly statusConfig = [
     { key: 'unassigned', label: 'Unassigned', statusId: '-1', icon: 'person_off' },
     { key: 'assigned', label: 'Assigned', statusId: '1', icon: 'assignment_ind' },
@@ -179,9 +173,6 @@ export class EmployeeDashboard implements OnInit {
     { key: 'assignorClosure', label: 'Assignor Closure', statusId: '5', icon: 'verified' },
   ];
 
-  // ======================================================
-  // INIT
-  // ======================================================
   username: string = '';
   loginType: string = '';
   isAdmin: any;
@@ -203,9 +194,6 @@ export class EmployeeDashboard implements OnInit {
     this.loadDashboard();
   }
 
-  // ======================================================
-  // LOAD DASHBOARD
-  // ======================================================
 
   loadDashboard(): void {
     const userId = Number(sessionStorage.getItem('userId')) || 1;
@@ -218,9 +206,7 @@ export class EmployeeDashboard implements OnInit {
         }
         // Today's task count
         this.todayTasks.set(res.myTasksToday.count || 0);
-        // ----------------------------------------------
-        // STATISTICS
-        // ----------------------------------------------
+
         this.stats.set([
           {
             label: "Today's all tasks",
@@ -253,10 +239,6 @@ export class EmployeeDashboard implements OnInit {
             value: sc[s.key] || 0,
           })),
         );
-
-        // ----------------------------------------------
-        // TASK COLUMNS
-        // ----------------------------------------------
 
         this.columns.set([
           {
@@ -291,16 +273,10 @@ export class EmployeeDashboard implements OnInit {
     });
   }
 
-  // ======================================================
-  // MAP API TASKS
-  // ======================================================
 
   private mapTasks(tasks: ApiTask[], category: 'todo' | 'progress' | 'done'): Task[] {
     return tasks.map((task) => {
-      // -----------------------------------------------
-      // DONE
-      // -----------------------------------------------
-
+  
       if (category === 'done') {
         return {
           title: task.title,
@@ -322,10 +298,7 @@ export class EmployeeDashboard implements OnInit {
         };
       }
 
-      // -----------------------------------------------
-      // IN PROGRESS
-      // -----------------------------------------------
-
+    
       if (category === 'progress') {
         return {
           title: task.title,
@@ -350,10 +323,6 @@ export class EmployeeDashboard implements OnInit {
         };
       }
 
-      // -----------------------------------------------
-      // TODO
-      // -----------------------------------------------
-
       return {
         title: task.title,
 
@@ -376,9 +345,6 @@ export class EmployeeDashboard implements OnInit {
     });
   }
 
-  // ======================================================
-  // PRIORITY TYPE
-  // ======================================================
 
   private getPriorityType(priority: string): 'high' | 'medium' | 'low' {
     const normalized = (priority || '').toString().trim().toUpperCase();
@@ -406,9 +372,6 @@ export class EmployeeDashboard implements OnInit {
     }
   }
 
-  // ======================================================
-  // PRIORITY LABEL
-  // ======================================================
 
   private formatPriority(priority: string): string {
     if (!priority) {
@@ -418,9 +381,6 @@ export class EmployeeDashboard implements OnInit {
     return priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
   }
 
-  // ======================================================
-  // DATE FORMAT
-  // ======================================================
 
   private formatDate(date: string): string {
     if (!date) {
@@ -443,33 +403,19 @@ export class EmployeeDashboard implements OnInit {
     });
   }
 
-  // ======================================================
-  // CHECK IN
-  // ======================================================
 
   checkIn(): void {
     console.log(`Checked in at ${this.checkedInTime()}`);
   }
 
-  // ======================================================
-  // HELPDESK
-  // ======================================================
-
   raiseHelpdeskTicket(): void {
     console.log('Helpdesk ticket requested');
   }
 
-  // ======================================================
-  // LEAVE
-  // ======================================================
-
+  
   applyLeave(): void {
     console.log('Leave application opened');
   }
-
-  // =========================================================
-  // GET INITIALS
-  // =========================================================
 
   getInitials(name: string): string {
     if (!name) {
@@ -498,21 +444,10 @@ export class EmployeeDashboard implements OnInit {
 
     const lastName = parts[parts.length - 1];
 
-    // ---------------------------------------------
-    // Two words
-    // Example:
-    // S. Saklani
-    // ---------------------------------------------
-
+ 
     if (parts.length === 2) {
       return `${parts[0].charAt(0).toUpperCase()}. ${lastName}`;
     }
-
-    // ---------------------------------------------
-    // Three or more words
-    // Example:
-    // A.C. Thakur
-    // ---------------------------------------------
 
     const initials = parts
       .slice(0, -1)
@@ -552,27 +487,6 @@ export class EmployeeDashboard implements OnInit {
     // Reload dashboard with selected client
     this.loadDashboard();
   }
-
-  // openTaskIndex(stat: any): void {
-  //   // if (!stat || stat.value === 0) {
-  //   //   return;
-  //   // }
-  //   let taskType = '';
-
-  //   console.log(JSON.stringify(stat) + ' checking now ');
-
-  //   if (stat.label === "Today's all tasks") {
-  //     taskType = 'today';
-  //   } else if (stat.label === 'Due this week') {
-  //     taskType = 'week';
-  //   } else if (stat.label === 'Overdue') {
-  //     taskType = 'overdue';
-  //   }
-
-  //   const taskStatusIds = stat.statusIds ? stat.statusIds.split(',').map((x: string) => x.trim()) : [];
-
-  //   this.saveTaskFilterAndNavigate(taskStatusIds, taskType);
-  // }
 
   clientSearchText = '';
   showClientDropdown = false;
