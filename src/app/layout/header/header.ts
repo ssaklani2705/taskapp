@@ -27,6 +27,7 @@ export class Header implements OnInit {
   designationName: string = '';
   isAdmin: string = 'N';
   isHod: string = 'N';
+  emailId:string =''
 
   showProfileMenu: boolean = false;
   showProfileModal: boolean = false;
@@ -54,7 +55,9 @@ export class Header implements OnInit {
   // }
 
   ngOnInit(): void {
-    this.username = sessionStorage.getItem('emailId') || '';
+    this.username = sessionStorage.getItem('username') || '';
+    this.emailId = sessionStorage.getItem('emailId') || '';
+
     this.designationName = sessionStorage.getItem('designationName') || '';
     this.isAdmin = sessionStorage.getItem('isAdmin') || 'N';
     this.isHod = sessionStorage.getItem('isHod') || 'N';
@@ -191,28 +194,28 @@ export class Header implements OnInit {
     this.resetChangePasswordForm();
   }
 
- resetChangePasswordForm(): void {
-  if (this.changePasswordForm) {
-    this.changePasswordForm.reset({
-      emailId: '',
-      oldPassword: '',
-      newPassword: '',
-      confirmPassword: ''
-    });
+  resetChangePasswordForm(): void {
+    if (this.changePasswordForm) {
+      this.changePasswordForm.reset({
+        emailId: '',
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
 
-    this.changePasswordForm.markAsPristine();
-    this.changePasswordForm.markAsUntouched();
-    this.changePasswordForm.updateValueAndValidity();
+      this.changePasswordForm.markAsPristine();
+      this.changePasswordForm.markAsUntouched();
+      this.changePasswordForm.updateValueAndValidity();
+    }
+
+    // Reset password visibility
+    this.showOldPassword = false;
+    this.showNewPassword = false;
+    this.showConfirmPassword = false;
+
+    // Reset any loading state
+    this.isChangingPassword = false;
   }
-
-  // Reset password visibility
-  this.showOldPassword = false;
-  this.showNewPassword = false;
-  this.showConfirmPassword = false;
-
-  // Reset any loading state
-  this.isChangingPassword = false;
-}
 
   submitChangePassword(): void {
     if (this.changePasswordForm.invalid) {
@@ -225,7 +228,7 @@ export class Header implements OnInit {
     const request = {
       oldPassword: this.cryptoService.cipher(formValue.oldPassword),
       newPassword: this.cryptoService.cipher(formValue.newPassword),
-      username: this.cryptoService.cipher(this.username),
+      username: this.cryptoService.cipher(this.emailId),
       userId: this.cryptoService.cipher(String(this.userId)),
     };
 
@@ -234,7 +237,7 @@ export class Header implements OnInit {
         if (response && response.success) {
           Swal.fire('Success', response.message, 'success');
           this.resetChangePasswordForm();
-  this.showChangePasswordModal = false;
+          this.showChangePasswordModal = false;
         } else {
           const errorMessage = response?.data || response?.message || 'Unable to change password.';
 
