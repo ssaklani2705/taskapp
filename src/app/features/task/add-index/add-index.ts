@@ -546,33 +546,34 @@ export class AddIndexComponent implements OnInit {
   // }
   onchangeloadDropdownData(): void {
     this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
-      next: (res: any) => {
-        const data = res?.data || res;
-        this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
-          const aName = String(a.name || a.categoryName || a).trim();
-          const bName = String(b.name || b.categoryName || b).trim();
+     next: (res: any) => {
+  const data = res?.data || res;
+  this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
+    const aName = String(a.name || a.categoryName || a).trim();
+    const bName = String(b.name || b.categoryName || b).trim();
 
-          // Admin task should always be first
-          if (aName.toLowerCase() === 'admin task') return -1;
-          if (bName.toLowerCase() === 'admin task') return 1;
+    if (aName.toLowerCase() === 'admin task') return -1;
+    if (bName.toLowerCase() === 'admin task') return 1;
+    if (aName.toLowerCase() === 'general task') return 1;
+    if (bName.toLowerCase() === 'general task') return -1;
 
-          // General Task should always be last
-          if (aName.toLowerCase() === 'general task') return 1;
-          if (bName.toLowerCase() === 'general task') return -1;
+    return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' });
+  });
 
-          // Natural/alphanumeric sorting
-          // Category 2 comes before Category 10
-          return aName.localeCompare(bName, undefined, {
-            numeric: true,
-            sensitivity: 'base',
-          });
-        });
-      },
-      error: (error: any) => {
-        console.error('Error loading task dropdown data:', error);
-        this.taskCategories = [];
-        this.selectedTaskCategoryName = '';
-      },
+  this.buildGroupedCategories();
+
+  // Edit mode: show the already-selected category name
+  const selected = this.taskCategories.find((x: any) => Number(x.taskcategoryId) === Number(this.task.taskCategoryId));
+  if (selected) {
+    this.selectedTaskCategoryName = selected.name;
+  }
+},
+error: (error: any) => {
+  console.error('Error loading task dropdown data:', error);
+  this.taskCategories = [];
+  this.groupedCategories = [];
+  this.selectedTaskCategoryName = '';
+},
     });
   }
 
@@ -650,6 +651,7 @@ export class AddIndexComponent implements OnInit {
     this.task.assignedTo = null;
     this.noEmployeeError = '';
     this.taskCategories = [];
+    this.groupedCategories = [];
     this.users = [];
 
     if (!clientId) {
@@ -758,8 +760,11 @@ export class AddIndexComponent implements OnInit {
       return;
     }
 
-    const dueHours = Number(selectedCategory.dueTime || selectedCategory.ts_duetime || selectedCategory.duedatetime || 0);
+    // const dueHours = Number(selectedCategory.dueTime || selectedCategory.ts_duetime || selectedCategory.duedatetime || 0);
 
+    const dueHours = Number(
+  selectedCategory.dueDateTime || selectedCategory.dueTime || selectedCategory.ts_duetime || selectedCategory.duedatetime || 0
+);
     // Use the start date picked by the user; default to now only if empty
     let startDate: Date;
     const picked = this.task.startDate;
@@ -1003,4 +1008,20 @@ export class AddIndexComponent implements OnInit {
       this.showCategoryDropdown = false;
     }
   }
+
+  groupedCategories: { department: string; items: any[] }[] = [];
+
+private buildGroupedCategories(): void {
+  const map = new Map<string, any[]>();
+
+  for (const c of this.taskCategories || []) {
+    const key = c.departmentName || 'Other';
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
+    map.get(key)!.push(c);
+  }
+
+  this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items }));
+}
 }

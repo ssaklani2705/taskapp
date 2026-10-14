@@ -3427,3 +3427,38 @@ textarea.manager-select::placeholder {
   cursor: not-allowed;
   opacity: 0.6;
 }
+
+
+/* ===== Task Category select: department groups ===== */
+.status-select optgroup {
+  background: #edf4f8;            /* var(--table-header) */
+  color: #19345a;                 /* var(--navy) */
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.status-select optgroup option {
+  background: #ffffff;
+  color: #193b63;                 /* var(--text) */
+  font-size: 13px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  padding: 6px 12px 6px 18px;     /* indent under the department */
+}
+
+.status-select option:checked,
+.status-select option:hover {
+  background: #eef5fa;            /* var(--primary-blue-light) */
+  color: #19345a;
+}
+
+/* "--All Task Categories--" stays plain */
+.status-select > option {
+  font-weight: 400;
+  padding-left: 12px;
+}

@@ -95,13 +95,28 @@
                   </div>
 
                   <!-- Dropdown list -->
-                  <div class="category-dropdown-list" *ngIf="showCategoryDropdown && task.clientId">
+                  <!-- <div class="category-dropdown-list" *ngIf="showCategoryDropdown && task.clientId">
                     <div class="category-dropdown-item" *ngFor="let category of taskCategories" (click)="selectTaskCategory(category)">
                       {{ category.name }}
                     </div>
 
                     <div class="category-no-data" *ngIf="taskCategories.length === 0">No Task Category available</div>
-                  </div>
+                  </div> -->
+
+                  <!-- Dropdown list -->
+<div class="category-dropdown-list" *ngIf="showCategoryDropdown && task.clientId">
+  <ng-container *ngFor="let group of groupedCategories">
+    <!-- Department header (not clickable) -->
+    <div class="category-group-header">{{ group.department }}</div>
+
+    <!-- Categories of this department -->
+    <div class="category-dropdown-item category-group-item" *ngFor="let category of group.items" (click)="selectTaskCategory(category)">
+      {{ category.name }}
+    </div>
+  </ng-container>
+
+  <div class="category-no-data" *ngIf="taskCategories.length === 0">No Task Category available</div>
+</div>
 
                   <input type="hidden" [(ngModel)]="task.taskCategoryId" name="taskCategoryId" required #categoryCtrl="ngModel" />
                 </div>
@@ -112,7 +127,7 @@
                   {{ noEmployeeError }}
                 </div>
 
-                <div class="user-error" *ngIf="taskCategoryEmployeeError">No employee available for the selected category.</div>
+                <!-- <div class="user-error" *ngIf="taskCategoryEmployeeError">No employee available for the selected category.</div> -->
               </div>
             </div>
 

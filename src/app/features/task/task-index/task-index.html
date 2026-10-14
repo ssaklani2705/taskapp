@@ -54,14 +54,24 @@
           }
 
           <!-- TASK CATEGORY -->
-          <div class="status-wrapper">
+          <!-- <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
               <option value="">--All Task Categories--</option>
               <option *ngFor="let category of taskCategories" [value]="category.taskcategoryId">
                 {{ category.name }}
               </option>
             </select>
-          </div>
+          </div> -->
+          <div class="status-wrapper">
+  <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
+    <option value="">--All Task Categories--</option>
+    <optgroup *ngFor="let group of groupedCategories" [label]="group.department">
+      <option *ngFor="let category of group.items" [value]="category.taskcategoryId">
+        {{ category.name }}
+      </option>
+    </optgroup>
+  </select>
+</div>
 
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedAssignedTo" (change)="onSearch()">
