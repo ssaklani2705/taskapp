@@ -500,7 +500,9 @@ export class TaskIndex implements OnInit, OnDestroy {
 
           if (this.selectedClient && this.clients.length > 0) {
             const selectedClientObj = this.clients.find((client: any) => String(client.clientId) === String(this.selectedClient));
-            if (selectedClientObj) { this.clientSearchText = selectedClientObj.name; }
+            if (selectedClientObj) {
+              this.clientSearchText = selectedClientObj.name;
+            }
           }
         },
         error: (error) => {
@@ -797,7 +799,7 @@ export class TaskIndex implements OnInit, OnDestroy {
     this.page = 0;
     this.sortColumn = '';
     this.sortDirection = 'asc';
-    this.dashboardFilter ='';
+    this.dashboardFilter = '';
     this.saveFilterState();
 
     this.router
