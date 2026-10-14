@@ -797,7 +797,7 @@ export class TaskIndex implements OnInit, OnDestroy {
     this.page = 0;
     this.sortColumn = '';
     this.sortDirection = 'asc';
-
+    this.dashboardFilter ='';
     this.saveFilterState();
 
     this.router
