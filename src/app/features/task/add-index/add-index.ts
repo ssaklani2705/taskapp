@@ -129,8 +129,6 @@ export class AddIndexComponent implements OnInit {
 
     if (savedFilter) {
       const state = JSON.parse(savedFilter);
-
-      console.log(' Check this now  { } = ' + JSON.stringify(state) + '{  ===> }');
       this.currentPage = state.currentPage || 1;
 
       this.searchText = state.searchText || '';
@@ -374,15 +372,11 @@ export class AddIndexComponent implements OnInit {
 
     formData.append(
       'startDate',
-      // dateValue
-
       this.formatDateTimeForApi(this.task.startDate) ?? '',
     );
 
     formData.append(
       'endDate',
-      // dateValue
-
       this.formatDateTimeForApi(this.task.endDate) ?? '',
     );
 

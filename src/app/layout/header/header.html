@@ -30,6 +30,10 @@
               <mat-icon>person</mat-icon>
               <span>Profile</span>
             </button>
+            <button type="button" class="dropdown-item" (click)="onChangePasswordClick()">
+              <mat-icon>lock_reset</mat-icon>
+              <span>Change Password</span>
+            </button>
 
             <div class="dropdown-divider"></div>
 
@@ -118,5 +122,258 @@
     <div class="profile-modal-footer">
       <button type="button" class="profile-modal-close-button" (click)="closeProfileModal()">Close</button>
     </div>
+  </div>
+</div>
+
+
+
+<!-- Change Password Modal -->
+<div id="change-password-modal-backdrop"
+     class="change-password-modal-backdrop"
+     *ngIf="showChangePasswordModal"
+     (click)="closeChangePasswordModal()">
+
+  <div id="change-password-modal"
+       class="change-password-modal"
+       (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="change-password-modal-header">
+      <div class="change-password-modal-title">
+        <mat-icon>lock_reset</mat-icon>
+        <span>Change Password</span>
+      </div>
+
+      <button type="button"
+              class="change-password-close-icon"
+              (click)="closeChangePasswordModal()"
+              aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Body -->
+
+    
+<div class="change-password-modal-body">
+
+  <p class="change-password-description">
+    Update your account password to keep your account secure.
+  </p>
+
+  <form
+    [formGroup]="changePasswordForm"
+    id="change-password-form"
+    (ngSubmit)="submitChangePassword()"
+    novalidate  autocomplete="off">
+
+    <div class="change-password-form-content">
+
+      <!-- Mandatory Message -->
+      <div class="change-password-mandatory-message">
+        Fields with
+        <span class="change-password-required">*</span>
+        mark are mandatory
+      </div>
+
+  
+    
+
+      <!-- Old Password -->
+      <div class="change-password-form-group">
+        <label for="change-password-old">
+          Old Password
+          <span class="change-password-required">*</span>
+        </label>
+
+        <div class="change-password-input-wrapper">
+          <mat-icon>lock</mat-icon>
+
+          <input
+            id="change-password-old"
+            [type]="showOldPassword ? 'text' : 'password'"
+            class="change-password-input"
+            formControlName="oldPassword"
+            placeholder="Enter old password"
+            autocomplete="off"
+          />
+
+          <button
+            type="button"
+            class="change-password-visibility"
+            (click)="showOldPassword = !showOldPassword"
+            [attr.aria-label]="
+              showOldPassword ? 'Hide old password' : 'Show old password'
+            ">
+
+            <mat-icon>
+              {{ showOldPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </button>
+        </div>
+
+        <div
+          class="change-password-error"
+          *ngIf="
+            changePasswordForm.get('oldPassword')?.touched &&
+            changePasswordForm.get('oldPassword')?.invalid
+          ">
+
+          <span *ngIf="changePasswordForm.get('oldPassword')?.errors?.['required']">
+            Old password is required.
+          </span>
+        </div>
+      </div>
+
+      <!-- New Password -->
+      <div class="change-password-form-group">
+        <label for="change-password-new">
+          New Password
+          <span class="change-password-required">*</span>
+        </label>
+
+        <div class="change-password-input-wrapper">
+          <mat-icon>lock_reset</mat-icon>
+
+          <input
+            id="change-password-new"
+            [type]="showNewPassword ? 'text' : 'password'"
+            class="change-password-input"
+            formControlName="newPassword"
+            placeholder="Enter new password"
+            autocomplete="off"
+          />
+
+          <button
+            type="button"
+            class="change-password-visibility"
+            (click)="showNewPassword = !showNewPassword"
+            [attr.aria-label]="
+              showNewPassword ? 'Hide new password' : 'Show new password'
+            ">
+
+            <mat-icon>
+              {{ showNewPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </button>
+        </div>
+
+        <small class="change-password-hint">
+          Password must contain at least 8 characters.
+        </small>
+
+        <div
+          class="change-password-error"
+          *ngIf="
+            changePasswordForm.get('newPassword')?.touched &&
+            changePasswordForm.get('newPassword')?.invalid
+          ">
+
+          <span *ngIf="changePasswordForm.get('newPassword')?.errors?.['required']">
+            New password is required.
+          </span>
+
+          <span *ngIf="changePasswordForm.get('newPassword')?.errors?.['minlength']">
+            Minimum 8 characters required.
+          </span>
+        </div>
+
+        <div
+          class="change-password-error"
+          *ngIf="
+            changePasswordForm.get('newPassword')?.touched &&
+            changePasswordForm.hasError('samePassword')
+          ">
+          New password must be different from the old password.
+        </div>
+      </div>
+
+      <!-- Confirm New Password -->
+      <div class="change-password-form-group">
+        <label for="change-password-confirm">
+          Confirm New Password
+          <span class="change-password-required">*</span>
+        </label>
+
+        <div class="change-password-input-wrapper">
+          <mat-icon>verified_user</mat-icon>
+
+          <input
+            id="change-password-confirm"
+            [type]="showConfirmPassword ? 'text' : 'password'"
+            class="change-password-input"
+            formControlName="confirmPassword"
+            placeholder="Confirm new password"
+            autocomplete="new-password"
+          />
+
+          <button
+            type="button"
+            class="change-password-visibility"
+            (click)="showConfirmPassword = !showConfirmPassword"
+            [attr.aria-label]="
+              showConfirmPassword
+                ? 'Hide confirm password'
+                : 'Show confirm password'
+            ">
+
+            <mat-icon>
+              {{ showConfirmPassword ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
+          </button>
+        </div>
+
+        <div
+          class="change-password-error"
+          *ngIf="
+            changePasswordForm.get('confirmPassword')?.touched &&
+            changePasswordForm.get('confirmPassword')?.errors?.['required']
+          ">
+          Confirm password is required.
+        </div>
+
+        <div
+          class="change-password-error"
+          *ngIf="
+            changePasswordForm.get('confirmPassword')?.touched &&
+            changePasswordForm.hasError('passwordMismatch')
+          ">
+          Passwords do not match.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="change-password-modal-footer">
+
+      <button
+        type="button"
+        class="change-password-cancel-button"
+        (click)="closeChangePasswordModal()"
+        [disabled]="isChangingPassword">
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="change-password-submit-button"
+        [disabled]="isChangingPassword">
+
+        <mat-icon *ngIf="!isChangingPassword">
+          lock_reset
+        </mat-icon>
+
+        <span>
+          {{ isChangingPassword ? 'Updating...' : 'Change Password' }}
+        </span>
+      </button>
+
+    </div>
+
+  </form>
+</div>
+
+  
   </div>
 </div>

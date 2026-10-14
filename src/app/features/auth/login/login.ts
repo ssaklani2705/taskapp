@@ -107,6 +107,8 @@ export class Login {
           sessionStorage.setItem('designationName', res.data.designationName);
           sessionStorage.setItem('loginType', loginType);
           sessionStorage.setItem('isHod',  res.data.isHod);
+          sessionStorage.setItem('emailId',  res.data.emailId);
+
           sessionStorage.removeItem('selectedModuleDetail');
           // Generate new CAPTCHA
           // this.loadCaptcha();
