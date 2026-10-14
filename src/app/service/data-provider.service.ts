@@ -97,7 +97,6 @@ export class DataProviderService {
     return this.http.post(`${environment.apiBaseUrl}admin/deleteUser`, null, { params });
   }
 
-
   getActiveUsers(): Observable<UserActiveDTO[]> {
     return this.http.get<UserActiveDTO[]>(`${environment.apiBaseUrl}admin/active`);
   }
@@ -154,7 +153,6 @@ export class DataProviderService {
 
     return this.http.get(url);
   }
-
 
   getAllClient(search: string, userId: number, isAdmin: string): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/getAllClient?search=${search}&userId=${userId}&isAdmin=${isAdmin}`);
@@ -998,7 +996,7 @@ export class DataProviderService {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString())
-      .set('statusIndex', statusIndex.toString() )
+      .set('statusIndex', statusIndex.toString())
       .set('search', search || '')
       .set('clientId', (clientId || 0).toString())
       .set('taskCategoryId', (taskCategoryId || 0).toString())
@@ -1387,5 +1385,9 @@ export class DataProviderService {
         taskCategoryId: taskCategoryId.toString(),
       },
     });
+  }
+
+  updatePassword(request:any) {
+    return this.http.post<any>(`${environment.apiBaseUrl}auth/change_password`, request);
   }
 }

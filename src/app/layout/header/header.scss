@@ -558,3 +558,267 @@
     max-width: 55%;
   }
 }
+
+
+
+/* Change Password Modal */
+.change-password-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.60);
+  backdrop-filter: blur(3px);
+}
+
+.change-password-modal {
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+  animation: changePasswordModalEnter 0.2s ease-out;
+}
+
+.change-password-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.change-password-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #19345a;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.change-password-modal-title mat-icon {
+  color: #2f6fa3;
+}
+
+.change-password-close-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.change-password-close-icon:hover {
+  background: #f1f5f9;
+  color: #19345a;
+}
+
+.change-password-modal-body {
+  padding: 22px 24px 24px;
+}
+
+.change-password-description {
+  margin: 0 0 22px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.change-password-form-group {
+  margin-bottom: 19px;
+}
+
+.change-password-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.change-password-required {
+  color: #dc2626;
+}
+
+.change-password-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 45px;
+  padding: 0 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.change-password-input-wrapper:focus-within {
+  border-color: #2f6fa3;
+  box-shadow: 0 0 0 3px rgba(47, 111, 163, 0.12);
+}
+
+.change-password-input-wrapper > mat-icon {
+  flex-shrink: 0;
+  color: #64748b;
+  font-size: 20px;
+}
+
+.change-password-input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  height: 43px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #1e293b;
+  font-family: inherit;
+  font-size: 13px;
+}
+
+.change-password-input::placeholder {
+  color: #94a3b8;
+}
+
+.change-password-input-wrapper:has(
+  .change-password-input.change-password-invalid
+) {
+  border-color: #dc2626;
+}
+
+.change-password-visibility {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 5px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.change-password-visibility:hover {
+  color: #19345a;
+}
+
+.change-password-hint {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 11px;
+}
+
+.change-password-error {
+  display: block;
+  margin-top: 6px;
+  color: #dc2626;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.change-password-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+  padding-top: 18px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.change-password-cancel-button,
+.change-password-submit-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 17px;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, opacity 0.2s;
+}
+
+.change-password-cancel-button {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #475569;
+}
+
+.change-password-cancel-button:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.change-password-submit-button {
+  border: 1px solid #19345a;
+  background: #19345a;
+  color: #ffffff;
+}
+
+.change-password-submit-button:hover:not(:disabled) {
+  background: #2f6fa3;
+  border-color: #2f6fa3;
+}
+
+.change-password-submit-button mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
+.change-password-submit-button:disabled,
+.change-password-cancel-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@keyframes changePasswordModalEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 480px) {
+  .change-password-modal-backdrop {
+    padding: 12px;
+  }
+
+  .change-password-modal-header {
+    padding: 17px 18px;
+  }
+
+  .change-password-modal-body {
+    padding: 18px;
+  }
+
+  .change-password-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .change-password-cancel-button,
+  .change-password-submit-button {
+    width: 100%;
+    min-height: 43px;
+  }
+}

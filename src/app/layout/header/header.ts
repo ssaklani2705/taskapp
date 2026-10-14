@@ -5,15 +5,24 @@ import { LoginService } from '../../service/login.service';
 import { Router } from '@angular/router';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DataProviderService } from '../../service/data-provider.service';
+import { NgForm, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors } from '@angular/forms';
+import Swal from 'sweetalert2';
+import { CryptoService } from '../../service/CryptoService';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, ReactiveFormsModule],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
 export class Header implements OnInit {
+  changePasswordForm!: FormGroup;
+  showOldPassword = false;
+  showNewPassword = false;
+  showConfirmPassword = false;
+  isChangingPassword = false;
   username: string = '';
   designationName: string = '';
   isAdmin: string = 'N';
@@ -23,13 +32,15 @@ export class Header implements OnInit {
   showProfileModal: boolean = false;
 
   clientAssignmentMessage: string = '';
-
+  userId: any;
   constructor(
     private router: Router,
     private loginService: LoginService,
     @Inject(PLATFORM_ID)
     private platformId: Object,
     private dataProvider: DataProviderService,
+    private fb: FormBuilder,
+    private cryptoService: CryptoService,
   ) {}
 
   @Output()
@@ -43,10 +54,22 @@ export class Header implements OnInit {
   // }
 
   ngOnInit(): void {
-    this.username = sessionStorage.getItem('username') || '';
+    this.username = sessionStorage.getItem('emailId') || '';
     this.designationName = sessionStorage.getItem('designationName') || '';
     this.isAdmin = sessionStorage.getItem('isAdmin') || 'N';
     this.isHod = sessionStorage.getItem('isHod') || 'N';
+    this.userId = sessionStorage.getItem('userId');
+
+    this.changePasswordForm = this.fb.group(
+      {
+        oldPassword: ['', Validators.required],
+        newPassword: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', Validators.required],
+      },
+      {
+        validators: [this.passwordMismatchValidator, this.differentPasswordValidator],
+      },
+    );
   }
 
   private checkClientAssignment(): void {
@@ -144,5 +167,108 @@ export class Header implements OnInit {
 
   closeProfileMenu(): void {
     this.showProfileMenu = false;
+  }
+
+  showChangePasswordModal = false;
+
+  changePasswordData = {
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  };
+
+  onChangePasswordClick(): void {
+    this.resetChangePasswordForm();
+    this.showChangePasswordModal = true;
+  }
+
+  closeChangePasswordModal(): void {
+    if (this.isChangingPassword) {
+      return;
+    }
+
+    this.showChangePasswordModal = false;
+    this.resetChangePasswordForm();
+  }
+
+ resetChangePasswordForm(): void {
+  if (this.changePasswordForm) {
+    this.changePasswordForm.reset({
+      emailId: '',
+      oldPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+
+    this.changePasswordForm.markAsPristine();
+    this.changePasswordForm.markAsUntouched();
+    this.changePasswordForm.updateValueAndValidity();
+  }
+
+  // Reset password visibility
+  this.showOldPassword = false;
+  this.showNewPassword = false;
+  this.showConfirmPassword = false;
+
+  // Reset any loading state
+  this.isChangingPassword = false;
+}
+
+  submitChangePassword(): void {
+    if (this.changePasswordForm.invalid) {
+      this.changePasswordForm.markAllAsTouched();
+      return;
+    }
+
+    const formValue = this.changePasswordForm.getRawValue();
+
+    const request = {
+      oldPassword: this.cryptoService.cipher(formValue.oldPassword),
+      newPassword: this.cryptoService.cipher(formValue.newPassword),
+      username: this.cryptoService.cipher(this.username),
+      userId: this.cryptoService.cipher(String(this.userId)),
+    };
+
+    this.dataProvider.updatePassword(request).subscribe({
+      next: (response: any) => {
+        if (response && response.success) {
+          Swal.fire('Success', response.message, 'success');
+          this.resetChangePasswordForm();
+  this.showChangePasswordModal = false;
+        } else {
+          const errorMessage = response?.data || response?.message || 'Unable to change password.';
+
+          Swal.fire('Error', errorMessage, 'error');
+        }
+      },
+      error: (error: any) => {
+        console.error('Error changing password:', error);
+
+        const errorMessage = error?.error?.data || error?.error?.message || error?.message || 'Something went wrong.';
+        Swal.fire('Error', errorMessage, 'error');
+      },
+    });
+  }
+
+  private passwordMismatchValidator(control: AbstractControl): ValidationErrors | null {
+    const newPassword = control.get('newPassword')?.value;
+    const confirmPassword = control.get('confirmPassword')?.value;
+
+    if (!newPassword || !confirmPassword) {
+      return null;
+    }
+
+    return newPassword === confirmPassword ? null : { passwordMismatch: true };
+  }
+
+  private differentPasswordValidator(control: AbstractControl): ValidationErrors | null {
+    const oldPassword = control.get('oldPassword')?.value;
+    const newPassword = control.get('newPassword')?.value;
+
+    if (!oldPassword || !newPassword) {
+      return null;
+    }
+
+    return oldPassword === newPassword ? { samePassword: true } : null;
   }
 }
