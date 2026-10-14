@@ -418,7 +418,7 @@ export class AddIndexComponent implements OnInit {
       next: (response: any) => {
         if (response && response.success) {
           Swal.fire('Success', response.message, 'success');
-          // this.backToIndexPage();
+           this.backToIndexPage();
         } else {
           Swal.fire('Error', response?.message || 'Unable to save task.', 'error');
         }
