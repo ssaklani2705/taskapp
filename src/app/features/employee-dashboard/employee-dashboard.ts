@@ -165,7 +165,7 @@ export class EmployeeDashboard implements OnInit {
   readonly statusStats = signal<any[]>([]);
 
   private readonly statusConfig = [
-    { key: 'unassigned', label: 'Unassigned', statusId: '-1', icon: 'person_off' },
+    { key: 'unassigned', label: 'Unassigned', statusId: '0', icon: 'person_off' },
     { key: 'assigned', label: 'Assigned', statusId: '1', icon: 'assignment_ind' },
     { key: 'assigneeClosure', label: 'Assignee Closure', statusId: '2', icon: 'task_alt' },
     { key: 'reOpen', label: 'Re-Open', statusId: '3', icon: 'replay' },
