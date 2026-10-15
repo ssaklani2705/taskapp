@@ -40,7 +40,6 @@
               </select>
             </div>
           } @else {
-           
             <div class="client-dropdown-container">
               <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
               <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
@@ -63,15 +62,15 @@
             </select>
           </div> -->
           <div class="status-wrapper">
-  <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
-    <option value="">--All Task Categories--</option>
-    <optgroup *ngFor="let group of groupedCategories" [label]="group.department">
-      <option *ngFor="let category of group.items" [value]="category.taskcategoryId">
-        {{ category.name }}
-      </option>
-    </optgroup>
-  </select>
-</div>
+            <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
+              <option value="">--All Task Categories--</option>
+              <optgroup *ngFor="let group of groupedCategories" [label]="group.department">
+                <option *ngFor="let category of group.items" [value]="category.taskcategoryId">
+                  {{ category.name }}
+                </option>
+              </optgroup>
+            </select>
+          </div>
 
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedAssignedTo" (change)="onSearch()">
@@ -156,168 +155,168 @@
           <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
-     <div class="table-container">
-  <div class="table-responsive">
-    <table class="user-table">
-      <thead>
-        <tr>
-          <th class="serial-column">Sr. No.</th>
-          <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
-            <div class="column-header">
-              <span>{{ col.label }}</span>
-              <span *ngIf="col.sortable" class="sort-icons">
-                <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
-                <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
-              </span>
-            </div>
-          </th>
-          <th class="action-column">Action</th>
-        </tr>
-      </thead>
+      <div class="table-container">
+        <div class="table-responsive">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th class="serial-column">Sr. No.</th>
+                <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                  <div class="column-header">
+                    <span>{{ col.label }}</span>
+                    <span *ngIf="col.sortable" class="sort-icons">
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                    </span>
+                  </div>
+                </th>
+                <th class="action-column">Action</th>
+              </tr>
+            </thead>
 
-      <tbody>
-        <tr class="user-row" *ngFor="let task of paginatedTasks; let i = index">
-          <!-- 1: SERIAL -->
-          <td class="serial-number">
-            {{ (currentPage - 1) * recordsPerPage + i + 1 }}
-          </td>
+            <tbody>
+              <tr class="user-row" *ngFor="let task of paginatedTasks; let i = index">
+                <!-- 1: SERIAL -->
+                <td class="serial-number">
+                  {{ (currentPage - 1) * recordsPerPage + i + 1 }}
+                </td>
 
-          <!-- 2: TITLE -->
-          <td>
-            <div class="title-cell">
-              <span class="wrap-text title-text">{{ task.title || '-' }}</span>
-              <button type="button" class="description-icon-button" *ngIf="task.description" (click)="openDescriptionModal(task)" aria-label="View Description">
-                <i class="fa fa-file-text"></i>
-              </button>
-            </div>
-          </td>
+                <!-- 2: TITLE -->
+                <td>
+                  <div class="title-cell">
+                    <span class="wrap-text title-text">{{ task.title || '-' }}</span>
+                    <button type="button" class="description-icon-button" *ngIf="task.description" (click)="openDescriptionModal(task)" aria-label="View Description">
+                      <i class="fa fa-file-text"></i>
+                    </button>
+                  </div>
+                </td>
 
-          <!-- 3: CLIENT -->
-          <td>
-            <span class="wrap-text">{{ task.clientName || '-' }}</span>
-          </td>
+                <!-- 3: CLIENT -->
+                <td>
+                  <span class="wrap-text">{{ task.clientName || '-' }}</span>
+                </td>
 
-          <!-- 4: START DATE -->
-          <td>
-            <div class="date-cell" *ngIf="task.date; else noDate">
-              <div class="date-row">
-                <i class="fa fa-calendar date-icon"></i>
-                <span>{{ task.date | date: 'dd-MM-yyyy' }}</span>
-              </div>
-              <div class="time-row">
-                <i class="fa fa-clock-o date-icon"></i>
-                <span>{{ task.date | date: 'HH:mm' }}</span>
-              </div>
-            </div>
-            <ng-template #noDate><span class="wrap-text">-</span></ng-template>
-          </td>
+                <!-- 4: START DATE -->
+                <td>
+                  <div class="date-cell" *ngIf="task.date; else noDate">
+                    <div class="date-row">
+                      <i class="fa fa-calendar date-icon"></i>
+                      <span>{{ task.date | date: 'dd-MM-yyyy' }}</span>
+                    </div>
+                    <div class="time-row">
+                      <i class="fa fa-clock-o date-icon"></i>
+                      <span>{{ task.date | date: 'HH:mm' }}</span>
+                    </div>
+                  </div>
+                  <ng-template #noDate><span class="wrap-text">-</span></ng-template>
+                </td>
 
-          <!-- 5: DUE DATE -->
-          <td>
-            <div class="due-date-cell" *ngIf="task.dueDateTime; else noDueDate" [ngClass]="getDueDateClass(task.dueDateTime)">
-              <div class="due-date-row">
-                <i class="fa fa-calendar due-icon"></i>
-                <span>{{ task.dueDateTime | date: 'dd-MM-yyyy' }}</span>
-              </div>
-              <div class="due-time-row">
-                <i class="fa fa-clock-o due-icon"></i>
-                <span>{{ task.dueDateTime | date: 'HH:mm' }}</span>
-              </div>
-            </div>
-            <ng-template #noDueDate><span class="wrap-text">-</span></ng-template>
-          </td>
+                <!-- 5: DUE DATE -->
+                <td>
+                  <div class="due-date-cell" *ngIf="task.dueDateTime; else noDueDate" [ngClass]="getDueDateClass(task.dueDateTime)">
+                    <div class="due-date-row">
+                      <i class="fa fa-calendar due-icon"></i>
+                      <span>{{ task.dueDateTime | date: 'dd-MM-yyyy' }}</span>
+                    </div>
+                    <div class="due-time-row">
+                      <i class="fa fa-clock-o due-icon"></i>
+                      <span>{{ task.dueDateTime | date: 'HH:mm' }}</span>
+                    </div>
+                  </div>
+                  <ng-template #noDueDate><span class="wrap-text">-</span></ng-template>
+                </td>
 
-          <!-- 6: TASK CATEGORY -->
-          <td>
-            <span class="wrap-text">{{ task.taskCategoryName || '-' }}</span>
-          </td>
+                <!-- 6: TASK CATEGORY -->
+                <td>
+                  <span class="wrap-text">{{ task.taskCategoryName || '-' }}</span>
+                </td>
 
-          <!-- 7: ASSIGNED BY -->
-          <td>
-            <span class="wrap-text">{{ task.assignedbyName || '-' }}</span>
-          </td>
+                <!-- 7: ASSIGNED BY -->
+                <td>
+                  <span class="wrap-text">{{ task.assignedbyName || '-' }}</span>
+                </td>
 
-          <!-- 8: PRIORITY -->
-          <td>
-            <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
-              {{ getPriorityLabel(task.priority) }}
-            </span>
-          </td>
+                <!-- 8: PRIORITY -->
+                <td>
+                  <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
+                    {{ getPriorityLabel(task.priority) }}
+                  </span>
+                </td>
 
-          <!-- 9: STATUS (Active / Inactive / Deleted) -->
-          <td>
-            <span class="status-badge" [ngClass]="common.getStatusClass(task.status)">
-              {{ common.getStatusLabel(task.status) }}
-            </span>
-          </td>
+                <!-- 9: STATUS (Active / Inactive / Deleted) -->
+                <td>
+                  <span class="status-badge" [ngClass]="common.getStatusClass(task.status)">
+                    {{ common.getStatusLabel(task.status) }}
+                  </span>
+                </td>
 
-          <!-- 10: ASSIGNED TO (frozen) -->
-          <td>
-            <span
-              class="wrap-text"
-              [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
-              (click)="(!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1)) && openAssignUserModal(task)"
-            >
-              <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
-                <i class="fas fa-user-tie assign-icon"></i>
-                Assign User
-              </ng-container>
+                <!-- 10: ASSIGNED TO (frozen) -->
+                <td>
+                  <span
+                    class="wrap-text"
+                    [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+                    (click)="(!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1)) && openAssignUserModal(task)"
+                  >
+                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+                      <i class="fas fa-user-tie assign-icon"></i>
+                      Assign User
+                    </ng-container>
 
-              <ng-template #assignedBlock>
-                {{ task.assignedToName }}
-                <span class="reassign-text" *ngIf="task.taskStatus === 1 && task.taskCategoryId !== 1">
-                  <i class="fas fa-user-tie reassign-icon"></i>
-                  Re-assign
-                </span>
-              </ng-template>
-            </span>
-          </td>
+                    <ng-template #assignedBlock>
+                      {{ task.assignedToName }}
+                      <span class="reassign-text" *ngIf="task.taskStatus === 1 && task.taskCategoryId !== 1">
+                        <i class="fas fa-user-tie reassign-icon"></i>
+                        Re-assign
+                      </span>
+                    </ng-template>
+                  </span>
+                </td>
 
-          <!-- 11: TASK STATUS (frozen) -->
-          <td>
-            <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
-              <button
-                type="button"
-                class="change-manager-button"
-                (click)="openChangeManagerModal(task)"
-                [ngClass]="common.getTaskStatusClassNew(task.taskStatus)"
-                [disabled]="canDisableChangeManager(task)"
-              >
-                {{ common.getTaskStatusLabel(task.taskStatus) }}
-              </button>
-            </ng-container>
-            <ng-template #noStatus><span class="wrap-text">-</span></ng-template>
-          </td>
+                <!-- 11: TASK STATUS (frozen) -->
+                <td>
+                  <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
+                    <button
+                      type="button"
+                      class="change-manager-button"
+                      (click)="openChangeManagerModal(task)"
+                      [ngClass]="common.getTaskStatusClassNew(task.taskStatus)"
+                      [disabled]="canDisableChangeManager(task)"
+                    >
+                      {{ common.getTaskStatusLabel(task.taskStatus) }}
+                    </button>
+                  </ng-container>
+                  <ng-template #noStatus><span class="wrap-text">-</span></ng-template>
+                </td>
 
-          <!-- 12: ACTION (frozen) -->
-          <td>
-            <div class="action-buttons">
-              @if (viewPer === 'Y') {
-                <a (click)="viewTask(task.taskId)" class="action-btn view-btn" title="View">
-                  <i class="fa fa-eye"></i>
-                </a>
-              }
-              @if (deletePer === 'Y' && task.status !== 3 && (isAdmin === 'Y' || isTaskOwner(task))) {
-                <a (click)="onDeleteTask(task.taskId)" class="action-btn delete-btn" title="Delete">
-                  <i class="fa fa-trash"></i>
-                </a>
-              }
-              @if (isTaskAssignedToUser(task)) {
-                <a (click)="openTaskNotes(task)" class="action-btn note-btn" title="Notes">
-                  <i class="fa fa-sticky-note"></i>
-                </a>
-              }
-            </div>
-          </td>
-        </tr>
+                <!-- 12: ACTION (frozen) -->
+                <td>
+                  <div class="action-buttons">
+                    @if (viewPer === 'Y') {
+                      <a (click)="viewTask(task.taskId)" class="action-btn view-btn" title="View">
+                        <i class="fa fa-eye"></i>
+                      </a>
+                    }
+                    @if (deletePer === 'Y' && task.status !== 3 && (isAdmin === 'Y' || isTaskOwner(task))) {
+                      <a (click)="onDeleteTask(task.taskId)" class="action-btn delete-btn" title="Delete">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    }
+                    @if (isTaskAssignedToUser(task)) {
+                      <a (click)="openTaskNotes(task)" class="action-btn note-btn" title="Notes">
+                        <i class="fa fa-sticky-note"></i>
+                      </a>
+                    }
+                  </div>
+                </td>
+              </tr>
 
-        <tr *ngIf="!paginatedTasks || paginatedTasks.length === 0">
-          <td [attr.colspan]="columns.length + 2" class="no-records">No records found.</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+              <tr *ngIf="!paginatedTasks || paginatedTasks.length === 0">
+                <td [attr.colspan]="columns.length + 2" class="no-records">No records found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
       <div class="table-bottom-section">
         <div class="record-summary" role="status" aria-live="polite">
           {{ recordSummary }}
@@ -448,7 +447,6 @@
 
         <div>
           <div class="modal-title-text">Update Status</div>
-          
         </div>
       </div>
 
@@ -633,7 +631,7 @@
 
           <div class="assign-date-group">
             <!-- <span class="assign-date-icon" [owlDateTimeTrigger]="startDatePicker"> -->
-               <span class="assign-date-icon assign-date-icon-disabled">
+            <span class="assign-date-icon assign-date-icon-disabled">
               <i class="fa fa-calendar"></i>
             </span>
 
@@ -653,7 +651,6 @@
           </div>
 
           <div class="assign-error" *ngIf="!selectedAssignTask?.date">Start Date &amp; Time is required.</div>
-        
         </div>
 
         <!-- END DATE -->
@@ -672,7 +669,7 @@
               class="assign-input assign-date-input"
               [owlDateTime]="endDatePicker"
               [(ngModel)]="selectedAssignTask.endDate"
-                  (ngModelChange)="onAssignEndDateChange($event)"
+              (ngModelChange)="onAssignEndDateChange($event)"
               name="endDate"
               required
               placeholder="DD-MM-YYYY HH:mm"
@@ -684,9 +681,9 @@
           </div>
 
           <div class="assign-error" *ngIf="!selectedAssignTask?.endDate">End Date &amp; Time is required.</div>
-             <div class="user-error" *ngIf="holidayError">
-                  {{ holidayError }}
-                </div>
+          <div class="user-error" *ngIf="holidayError">
+            {{ holidayError }}
+          </div>
         </div>
       </div>
       <!-- ASSIGNED TO -->
@@ -703,7 +700,7 @@
           <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
         </select>
 
-        <div *ngIf="!isLoadingAssignUsers &&  users.length === 0" class="assign-error">No other user found for this category.</div>
+        <div *ngIf="!isLoadingAssignUsers && users.length === 0" class="assign-error">No other user found for this category.</div>
       </div>
 
       <div class="assign-form-group assign-full-width">

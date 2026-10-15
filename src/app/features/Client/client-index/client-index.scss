@@ -2630,3 +2630,94 @@ mat-divider {
     height: 29px;
   }
 }
+
+
+/* =========================================================
+   FREEZE COLUMNS: # + CLIENT NAME (LEFT), ACTION (RIGHT)
+   ========================================================= */
+
+/* Sticky needs separate borders (collapse borders scroll away) */
+.designation-table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* Re-create the grid lines that collapse used to provide */
+.designation-table thead th,
+.designation-table tbody td {
+  border-width: 0 1px 1px 0;
+  border-style: solid;
+  border-color: var(--border);
+}
+
+.designation-table thead th:first-child,
+.designation-table tbody td:first-child {
+  border-left-width: 1px;
+}
+
+.designation-table thead th {
+  border-top-width: 1px;
+}
+
+/* ---------- Left: # (column 1) ---------- */
+.designation-table thead th:nth-child(1),
+.designation-table tbody td:nth-child(1) {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  width: 55px;
+  min-width: 55px;
+  max-width: 55px;
+}
+
+/* ---------- Left: Client Name (column 2) ---------- */
+.designation-table thead th:nth-child(2),
+.designation-table tbody td:nth-child(2) {
+  position: sticky;
+  left: 55px;                 /* must equal the width of column 1 */
+  z-index: 2;
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+  box-shadow: 3px 0 6px rgba(25, 52, 90, 0.08);
+}
+
+/* ---------- Right: Action ---------- */
+.designation-table thead th.action-column,
+.designation-table tbody td.action-cell {
+  position: sticky;
+  right: 0;
+  z-index: 2;
+  box-shadow: -3px 0 6px rgba(25, 52, 90, 0.08);
+}
+
+/* Header cells sit above body cells */
+.designation-table thead th:nth-child(1),
+.designation-table thead th:nth-child(2),
+.designation-table thead th.action-column {
+  z-index: 3;
+  background: var(--table-header);
+}
+
+/* Body cells must be opaque or scrolled content shows through */
+.designation-table tbody td:nth-child(1),
+.designation-table tbody td:nth-child(2),
+.designation-table tbody td.action-cell {
+  background: var(--white);
+}
+
+/* Keep hover color consistent on frozen cells */
+.designation-table tbody tr:hover td:nth-child(1),
+.designation-table tbody tr:hover td:nth-child(2),
+.designation-table tbody tr:hover td.action-cell {
+  background: var(--table-hover);
+}
+
+/* Empty-state row: its colspan cell is also :first-child, so don't freeze it */
+.designation-table tbody td.no-records {
+  position: static;
+  box-shadow: none;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+}
