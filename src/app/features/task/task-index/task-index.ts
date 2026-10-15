@@ -468,6 +468,8 @@ export class TaskIndex implements OnInit, OnDestroy {
     this.isPanelVisible = !this.isPanelVisible;
   }
 
+
+
   getTaskDetails(): void {
     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
     const taskCategoryId = this.selectedTaskCategory ? Number(this.selectedTaskCategory) : 0;
