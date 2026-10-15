@@ -30,6 +30,7 @@ interface Recurring {
 interface TaskCategory {
   taskcategoryId: number;
   name: string;
+  departmentName?: string;
 }
 
 @Component({
@@ -47,6 +48,7 @@ export class RecurringIndex {
   recurring: Recurring[] = [];
   userId!: number;
   isLoading = false;
+  groupedCategories: { department: string; items: TaskCategory[] }[] = [];
 
   currentPage = 1;
   page = 0;
@@ -161,21 +163,37 @@ export class RecurringIndex {
     });
   }
 
-  private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurringForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
-      next: (response: any) => {
-        console.log('Task Categories:', response);
+private loadTaskCategories(): void {
+  this.dataprovider.getActiveTaskCategoriesForRecurringForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
+    next: (response: any) => {
+      console.log('Task Categories:', response);
 
-        this.taskCategories = response || [];
-      },
+      this.taskCategories = response || [];
+      this.buildGroupedCategories();
+    },
 
-      error: (error) => {
-        console.error('Error fetching task categories:', error);
+    error: (error) => {
+      console.error('Error fetching task categories:', error);
 
-        this.taskCategories = [];
-      },
-    });
+      this.taskCategories = [];
+      this.groupedCategories = [];
+    },
+  });
+}
+
+private buildGroupedCategories(): void {
+  const map = new Map<string, TaskCategory[]>();
+
+  for (const c of this.taskCategories) {
+    const key = c.departmentName || 'Other';
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
+    map.get(key)!.push(c);
   }
+
+  this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items }));
+}
 
   getRecurringDetails(): void {
     this.isLoading = true;

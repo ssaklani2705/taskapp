@@ -108,6 +108,10 @@ export class Login {
           sessionStorage.setItem('loginType', loginType);
           sessionStorage.setItem('isHod',  res.data.isHod);
           sessionStorage.setItem('emailId',  res.data.emailId);
+          sessionStorage.setItem(
+            'categoryIds',
+            JSON.stringify(res.data.categoryIds || [])
+          );
 
           sessionStorage.removeItem('selectedModuleDetail');
           // Generate new CAPTCHA

@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
 
-import { Component, ElementRef, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
 
@@ -122,8 +122,10 @@ export class AddIndexComponent implements OnInit {
 
     private router: Router,
     private datePipe: DatePipe,
+      private cdr: ChangeDetectorRef,
   ) {}
   dashboardFilter: string = '';
+  categoryIds: number[] = [];
   ngOnInit(): void {
     const savedFilter = sessionStorage.getItem(SESSION_KEYS.TASK_MASTER_FILTER);
 
@@ -164,6 +166,16 @@ export class AddIndexComponent implements OnInit {
       this.loginType = sessionStorage.getItem('loginType') || 'other';
 
       this.isHod = sessionStorage.getItem('isHod') || 'N';
+
+      const savedCategoryIds = sessionStorage.getItem('categoryIds');
+
+      try {
+        this.categoryIds = savedCategoryIds
+          ? JSON.parse(savedCategoryIds).map((id: any) => Number(id))
+          : [];
+      } catch {
+        this.categoryIds = [];
+      }
     }
 
     this.loadDropdownData();
@@ -532,50 +544,101 @@ export class AddIndexComponent implements OnInit {
     this.router.navigate(['/task-index']);
   }
 
-  // onchangeloadDropdownData(): void {
-  //   this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
-  //     next: (res: any) => {
-  //       const data = res?.data || res;
-  //       this.taskCategories = data?.taskCategories || [];
-  //     },
-  //     error: (error: any) => {
-  //       console.error('Error loading task dropdown data:', error);
-  //       this.taskCategories = [];
-  //     },
-  //   });
-  // }
-  onchangeloadDropdownData(): void {
-    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
-     next: (res: any) => {
-  const data = res?.data || res;
-  this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
-    const aName = String(a.name || a.categoryName || a).trim();
-    const bName = String(b.name || b.categoryName || b).trim();
+  
+//   onchangeloadDropdownData(): void {
+//     this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
+//      next: (res: any) => {
+//   const data = res?.data || res;
+//   this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
+//     const aName = String(a.name || a.categoryName || a).trim();
+//     const bName = String(b.name || b.categoryName || b).trim();
 
-    if (aName.toLowerCase() === 'admin task') return -1;
-    if (bName.toLowerCase() === 'admin task') return 1;
-    if (aName.toLowerCase() === 'general task') return 1;
-    if (bName.toLowerCase() === 'general task') return -1;
+//     if (aName.toLowerCase() === 'admin task') return -1;
+//     if (bName.toLowerCase() === 'admin task') return 1;
+//     if (aName.toLowerCase() === 'general task') return 1;
+//     if (bName.toLowerCase() === 'general task') return -1;
 
-    return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' });
-  });
+//     return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' });
+//   });
 
-  this.buildGroupedCategories();
+//   this.buildGroupedCategories();
 
-  // Edit mode: show the already-selected category name
-  const selected = this.taskCategories.find((x: any) => Number(x.taskcategoryId) === Number(this.task.taskCategoryId));
-  if (selected) {
-    this.selectedTaskCategoryName = selected.name;
-  }
-},
-error: (error: any) => {
-  console.error('Error loading task dropdown data:', error);
-  this.taskCategories = [];
-  this.groupedCategories = [];
-  this.selectedTaskCategoryName = '';
-},
+//   // Edit mode: show the already-selected category name
+// const selected = this.taskCategories.find(
+//   (x: any) =>
+//     Number(x.taskcategoryId) === Number(this.task.taskCategoryId)
+// );
+
+// if (selected) {
+//   this.selectedTaskCategoryName = selected.name;
+// }
+
+//   // Edit mode: show the already-selected category name
+//   // const selected = this.taskCategories.find((x: any) => Number(x.taskcategoryId) === Number(this.task.taskCategoryId));
+//   // if (selected) {
+//   //   this.selectedTaskCategoryName = selected.name;
+//   // }
+// },
+// error: (error: any) => {
+//   console.error('Error loading task dropdown data:', error);
+//   this.taskCategories = [];
+//   this.groupedCategories = [];
+//   this.selectedTaskCategoryName = '';
+// },
+//     });
+//   }
+
+onchangeloadDropdownData(): void {
+  this.dataprovider
+    .changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod)
+    .subscribe({
+      next: (res: any) => {
+        const data = res?.data || res;
+        this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
+          const aName = String(a.name || a.categoryName || a).trim();
+          const bName = String(b.name || b.categoryName || b).trim();
+
+          if (aName.toLowerCase() === 'admin task') return -1;
+          if (bName.toLowerCase() === 'admin task') return 1;
+          if (aName.toLowerCase() === 'general task') return 1;
+          if (bName.toLowerCase() === 'general task') return -1;
+
+          return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' });
+        });
+
+       this.buildGroupedCategories();
+
+// Edit mode: show the already-selected category name
+const selected = this.taskCategories.find(
+  (x: any) => Number(x.taskcategoryId) === Number(this.task.taskCategoryId),
+);
+if (selected) {
+  this.selectedTaskCategoryName = selected.name;
+}
+
+// Categories that belong to the logged-in user's session (categoryIds from login)
+const sessionCategories = this.categoryIds.length
+  ? this.taskCategories.filter((c: any) =>
+      this.categoryIds.includes(Number(c.taskcategoryId ?? c.taskCategoryId)),
+    )
+  : this.taskCategories;
+
+console.log('categoryIds:', this.categoryIds, 'matched:', sessionCategories);
+
+// Auto-select when exactly one category matches and none is chosen yet
+if (sessionCategories.length === 1 && !this.task.taskCategoryId) {
+  this.selectTaskCategory(sessionCategories[0]);
+  this.cdr.detectChanges();
+}
+      },
+      error: (error: any) => {
+        console.error('Error loading task dropdown data:', error);
+        this.taskCategories = [];
+        this.groupedCategories = [];
+        this.selectedTaskCategoryName = '';
+      },
     });
-  }
+}
 
   onchangeloadUserDropdownData(onLoaded?: () => void): void {
     const startDate = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd');
@@ -992,14 +1055,14 @@ error: (error: any) => {
   showCategoryDropdown = false;
   selectedTaskCategoryName = '';
 
-  selectTaskCategory(category: any): void {
-    this.task.taskCategoryId = category.taskcategoryId;
-    this.selectedTaskCategoryName = category.name;
-    this.showCategoryDropdown = false;
+ selectTaskCategory(category: any): void {
+  this.task.taskCategoryId = category.taskcategoryId ?? category.taskCategoryId;
+  this.selectedTaskCategoryName = category.name;
+  this.showCategoryDropdown = false;
 
-    this.onTaskCategoryChange();
-    this.onchangeloadUserDropdownData();
-  }
+  this.onTaskCategoryChange();
+  this.onchangeloadUserDropdownData();
+}
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {

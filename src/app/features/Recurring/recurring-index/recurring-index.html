@@ -82,15 +82,16 @@
           </div>
 
           <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedTaskCatId" (change)="onFilterChange()">
-              <option [ngValue]="0">--All Task Categories--</option>
+  <select class="status-select" [(ngModel)]="selectedTaskCatId" (change)="onFilterChange()">
+    <option [ngValue]="0">--All Task Categories--</option>
 
-              <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId">
-                {{ category.name }}
-              </option>
-            </select>
-          </div>
-        </div>
+    <optgroup *ngFor="let group of groupedCategories" [label]="group.department">
+      <option *ngFor="let category of group.items" [ngValue]="category.taskcategoryId">
+        {{ category.name }}
+      </option>
+    </optgroup>
+  </select>
+</div>
 
         <div class="filter-row">
           <div class="status-wrapper">

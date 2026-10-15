@@ -326,11 +326,13 @@
       </label>
 
       <select class="user-input user-select" formControlName="taskCatId" (change)="onTaskCategoryChange()">
-        <option [ngValue]="null">Select Task Category</option>
-        <option *ngFor="let category of taskCategories" [ngValue]="category.taskcategoryId" >
-          {{ category.name }}
-        </option>
-      </select>
+  <option [ngValue]="null">Select Task Category</option>
+  <optgroup *ngFor="let group of groupedCategories" [label]="group.department">
+    <option *ngFor="let category of group.items" [ngValue]="category.taskcategoryId">
+      {{ category.name }}
+    </option>
+  </optgroup>
+</select>
 
      <div class="user-error" *ngIf="recurringForm.get('taskCatId')?.touched && recurringForm.get('taskCatId')?.invalid && !taskCategoryEmployeeError">Task Category is required</div>
                 <div class="user-error" *ngIf="taskCategoryEmployeeError">No employee available for the selected category.</div>

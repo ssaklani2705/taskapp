@@ -15,6 +15,7 @@ interface Client {
 interface TaskCategory {
   taskcategoryId: number;
   name: string;
+  departmentName?: string;
 }
 
 @Component({
@@ -59,11 +60,21 @@ export class AddRecurring implements OnInit {
   isAdmin: any;
   isHod = '';
 
+  categoryIds: number[] = [];
+  groupedCategories: { department: string; items: TaskCategory[] }[] = [];
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.isAdmin = sessionStorage.getItem('isAdmin');
       this.loginType = sessionStorage.getItem('loginType') || 'other';
       this.isHod = sessionStorage.getItem('isHod') || 'N';
+
+      try {
+        const saved = sessionStorage.getItem('categoryIds');
+        this.categoryIds = saved ? JSON.parse(saved).map((id: any) => Number(id)) : [];
+      } catch {
+        this.categoryIds = [];
+      }
     }
     this.initializeForm();
     this.getUserId();
@@ -143,17 +154,49 @@ export class AddRecurring implements OnInit {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType,this.isHod).subscribe({
-      next: (response: any) => {
-        this.taskCategories = response || [];
-      },
+  this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType, this.isHod).subscribe({
+    next: (response: any) => {
+      this.taskCategories = response || [];
+      this.buildGroupedCategories();
+      this.autoSelectSingleCategory();
+    },
+    error: (error) => {
+      console.error('Error fetching task categories:', error);
+      this.taskCategories = [];
+      this.groupedCategories = [];
+    },
+  });
+}
 
-      error: (error) => {
-        console.error('Error fetching task categories:', error);
-        this.taskCategories = [];
-      },
-    });
+private buildGroupedCategories(): void {
+  const map = new Map<string, TaskCategory[]>();
+
+  for (const c of this.taskCategories) {
+    const key = c.departmentName || 'Other';
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
+    map.get(key)!.push(c);
   }
+
+  this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items }));
+}
+
+// Auto-select when exactly one category matches the login's categoryIds
+private autoSelectSingleCategory(): void {
+  if (this.isEditMode || this.recurringForm.get('taskCatId')?.value) {
+    return;
+  }
+
+  const matched = this.categoryIds.length
+    ? this.taskCategories.filter((c) => this.categoryIds.includes(Number(c.taskcategoryId)))
+    : this.taskCategories;
+
+  if (matched.length === 1) {
+    this.recurringForm.patchValue({ taskCatId: matched[0].taskcategoryId });
+    this.onTaskCategoryChange();
+  }
+}
 
   private getRecurringById(recurringId: number): void {
     this.isLoading = true;
