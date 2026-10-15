@@ -5,10 +5,8 @@
         <div class="avatar">
           <mat-icon>business_center</mat-icon>
         </div>
-
         <div class="profile-info">
           <h1>My Workspace</h1>
-
           <p>
             Welcome back, {{ username }}
             <span class="separator">·</span>
@@ -16,22 +14,14 @@
           </p>
         </div>
       </div>
-
       <div class="dashboard-client-container">
         <div class="client-dropdown-container">
           <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
-
           <button *ngIf="clientSearchText" type="button" class="client-clear-btn" (click)="clearClientFilter()">×</button>
-
           <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
-            <!-- <div class="client-dropdown-item" (click)="selectClient(null)">
-              All Clients
-            </div> -->
-
             <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
               {{ client.clientName }}
             </div>
-
             <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
           </div>
         </div>
@@ -41,8 +31,6 @@
     <section class="stats-grid">
       @for (stat of stats(); track stat.label) {
         <mat-card class="stat-card" [class.stat-danger]="stat.color === 'danger'" (click)="openTaskIndex(stat)" [class.stat-disabled]="stat.value === 0">
-          <!-- STAT ICON -->
-
           <div class="stat-icon">
             @if (stat.label === "Today's all tasks") {
               <mat-icon> assignment </mat-icon>
@@ -52,28 +40,21 @@
               <mat-icon> warning </mat-icon>
             }
           </div>
-
-          <!-- STAT TEXT -->
-
           <div class="stat-content">
             <div class="stat-label">
               {{ stat.label }}
             </div>
-
             <div class="stat-value">
               {{ stat.value }}
             </div>
           </div>
-
           <!-- RIGHT ARROW -->
-
           <div class="stat-arrow">
             <mat-icon> chevron_right </mat-icon>
           </div>
         </mat-card>
       }
     </section>
-
     <section class="stats-grid status-stats-grid">
       @for (stat of statusStats(); track stat.label) {
         <mat-card class="stat-card status-stat-card" [class.stat-wide]="stat.label == 'Assigned'" [class.stat-disabled]="stat.value === 0" (click)="openTaskIndexByStatus(stat)">
@@ -122,39 +103,28 @@
                   [class.task-done]="task.type === 'done'"
                 >
                   <div class="task-main">
-                    <!-- LEFT -->
-
                     <div class="task-left">
                       <div class="task-title">
                         {{ task.title }}
                       </div>
-
-                      <!-- CLIENT -->
-
                       <div class="task-info-row">
                         <div class="info-icon">
                           <mat-icon> business </mat-icon>
                         </div>
-
                         <div class="task-info-content">
                           <span class="task-label"> CLIENT </span>
-
                           <span class="task-value">
                             {{ task.clientName || '-' }}
                           </span>
                         </div>
                       </div>
-
                       <!-- ASSIGNED TO -->
-
                       <div class="task-info-row">
                         <div class="info-icon">
                           <mat-icon> person </mat-icon>
                         </div>
-
                         <div class="task-info-content">
                           <span class="task-label"> ASSIGNED TO </span>
-
                           <span class="task-value">
                             {{ task.assignedToName || 'Not Assigned' }}
                           </span>
@@ -162,11 +132,7 @@
                       </div>
                     </div>
 
-                    <!-- RIGHT -->
-
                     <div class="task-right">
-                      <!-- PRIORITY -->
-
                       <div class="priority-wrapper">
                         <span
                           class="priority-badge"
