@@ -20,6 +20,7 @@
 
     <div class="search-section">
       <div class="search-grid">
+        <!-- ROW 1 -->
         <div class="search-row">
           <div class="search-wrapper">
             <div class="search-box">
@@ -31,45 +32,31 @@
             </div>
           </div>
 
-          <!-- <div class="client-dropdown-container">
-            <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
-            <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientFilter()">×</button>
-
-            <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
-              <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
-                {{ client.name }}
-              </div>
-
-              <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
-            </div>
-          </div> -->
-
           @if (loginType === 'manager') {
-  <!-- Normal dropdown for manager -->
-  <div class="status-wrapper">
-    <select class="status-select" [(ngModel)]="selectedClientId" (change)="onFilterChange()">
-      <option [ngValue]="0">--All Clients--</option>
-      <option *ngFor="let client of clients" [ngValue]="client.clientId">
-        {{ client.name }}
-      </option>
-    </select>
-  </div>
-} @else {
-  <!-- Autofill search for other login types -->
-  <div class="client-dropdown-container">
-    <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
-    <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientFilter()">×</button>
+            <!-- Normal dropdown for manager -->
+            <div class="status-wrapper">
+              <select class="status-select" [(ngModel)]="selectedClientId" (change)="onFilterChange()">
+                <option [ngValue]="0">--All Clients--</option>
+                <option *ngFor="let client of clients" [ngValue]="client.clientId">
+                  {{ client.name }}
+                </option>
+              </select>
+            </div>
+          } @else {
+            <!-- Autofill search for other login types -->
+            <div class="client-dropdown-container">
+              <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
+              <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientFilter()">×</button>
 
-    <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
-      <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
-        {{ client.name }}
-      </div>
+              <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
+                <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
+                  {{ client.name }}
+                </div>
 
-      <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
-    </div>
-  </div>
-}
-
+                <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
+              </div>
+            </div>
+          }
 
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedType" (change)="onFilterChange()">
@@ -82,24 +69,27 @@
           </div>
 
           <div class="status-wrapper">
-  <select class="status-select" [(ngModel)]="selectedTaskCatId" (change)="onFilterChange()">
-    <option [ngValue]="0">--All Task Categories--</option>
+            <select class="status-select" [(ngModel)]="selectedTaskCatId" (change)="onFilterChange()">
+              <option [ngValue]="0">--All Task Categories--</option>
 
-    <optgroup *ngFor="let group of groupedCategories" [label]="group.department">
-      <option *ngFor="let category of group.items" [ngValue]="category.taskcategoryId">
-        {{ category.name }}
-      </option>
-    </optgroup>
-  </select>
-</div>
+              <optgroup *ngFor="let group of groupedCategories" [label]="group.department">
+                <option *ngFor="let category of group.items" [ngValue]="category.taskcategoryId">
+                  {{ category.name }}
+                </option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <!-- /ROW 1 -->
 
+        <!-- ROW 2 -->
         <div class="filter-row">
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedPriority" (change)="onFilterChange()">
-              <option value="0">--All Priority--</option>
-              <option value="1">High</option>
-              <option value="2">Medium</option>
-              <option value="3">Low</option>
+              <option [ngValue]="0">--All Priority--</option>
+              <option [ngValue]="1">High</option>
+              <option [ngValue]="2">Medium</option>
+              <option [ngValue]="3">Low</option>
             </select>
           </div>
 
@@ -123,6 +113,7 @@
             <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button>
           </div>
         </div>
+        <!-- /ROW 2 -->
       </div>
     </div>
 
@@ -178,26 +169,20 @@
               </td>
 
               <td class="title-cell">
-  <div class="title-cell-inner">
-    <span class="title-accent-bar"></span>
+                <div class="title-cell-inner">
+                  <span class="title-accent-bar"></span>
 
-    <span class="title-text">
-      {{ item.clientName || '-' }}
-    </span>
+                  <span class="title-text">
+                    {{ item.clientName || '-' }}
+                  </span>
 
-    <span class="description-icon-wrapper">
-      <button
-        type="button"
-        class="description-icon-button"
-        *ngIf="item.description"
-        (click)="openDescriptionModal(item)"
-        aria-label="View Description">
-        <i class="fa fa-file-text"></i>
-      </button>
-    </span>
-  </div>
-</td>
-
+                  <span class="description-icon-wrapper">
+                    <button type="button" class="description-icon-button" *ngIf="item.description" (click)="openDescriptionModal(item)" aria-label="View Description">
+                      <i class="fa fa-file-text"></i>
+                    </button>
+                  </span>
+                </div>
+              </td>
 
               <td class="plan-name-cell">
                 {{ item.title || '-' }}
@@ -280,6 +265,7 @@
     </div>
   </div>
 </div>
+
 <div class="modal-overlay" *ngIf="showDescriptionModal" (click)="closeDescriptionModal()">
   <div class="change-manager-modal description-modal" (click)="$event.stopPropagation()">
     <!-- HEADER -->
