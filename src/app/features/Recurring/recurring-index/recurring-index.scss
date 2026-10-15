@@ -9,6 +9,7 @@
   --page-bg: #f8fafc;
   --white: #ffffff;
   --border: #d5dee7;
+  --border-light: #e2e8f0;
   --border-dark: #c5d0db;
   --text: #17375e;
   --text-dark: #152f54;
@@ -219,6 +220,110 @@ mat-divider {
 .status-select:focus {
   border-color: var(--primary-blue);
   box-shadow: none;
+}
+
+/* =========================================================
+  CLIENT SEARCH FILTER
+  (kept above the media queries so the responsive overrides win)
+  ========================================================= */
+
+.client-dropdown-container {
+  position: relative;
+  flex: 0 0 250px; /* same fixed size as .status-wrapper, so it can't shrink */
+  width: 250px;
+  max-width: 250px;
+}
+
+.client-search-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 32px 0 12px; /* right padding leaves room for the clear (x) button */
+  border: 1px solid var(--border-dark);
+  border-radius: 0; /* match the other filters */
+  outline: none;
+  background: var(--white);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.client-search-input::placeholder {
+  color: #8b99a9;
+}
+
+.client-search-input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: none;
+}
+
+.client-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: #fff;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.client-dropdown-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.client-dropdown-item:hover {
+  background: #f5f9ff;
+  color: #1976d2;
+}
+
+.client-dropdown-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.client-dropdown-list::-webkit-scrollbar-thumb {
+  background: #c5c5c5;
+  border-radius: 10px;
+}
+
+.no-client-found {
+  color: #6c757d;
+  cursor: default;
+  padding: 12px;
+}
+
+.no-client-found:hover {
+  background: transparent;
+}
+
+/* clear (x) button inside the client input */
+.clear-search-btn,
+.clear-client-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
 }
 
 .go-wrapper,
@@ -603,7 +708,6 @@ mat-divider {
   border: 1px solid #efcaca;
 }
 
-
 .priority-badge {
   display: inline-flex;
   align-items: center;
@@ -672,8 +776,11 @@ mat-divider {
   background: #8fa5b7;
 }
 
-@media (max-width: 1200px) {
+/* =========================================================
+  RESPONSIVE
+  ========================================================= */
 
+@media (max-width: 1200px) {
   .search-row,
   .filter-row {
     flex-wrap: wrap;
@@ -686,6 +793,12 @@ mat-divider {
 
   .status-wrapper {
     flex: 1 1 220px;
+  }
+
+  .client-dropdown-container {
+    flex: 1 1 220px;
+    width: auto;
+    max-width: none;
   }
 }
 
@@ -753,6 +866,7 @@ mat-divider {
 
   .search-wrapper,
   .status-wrapper,
+  .client-dropdown-container,
   .go-wrapper,
   .clear-wrapper {
     width: 100%;
@@ -854,6 +968,10 @@ mat-divider {
   }
 }
 
+/* =========================================================
+  DESCRIPTION ICON
+  ========================================================= */
+
 .description-icon-button:hover,
 .description-icon-button:focus,
 .description-icon-button:active {
@@ -877,7 +995,10 @@ mat-divider {
   cursor: pointer;
   color: #fff;
   box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
   margin-top: 2px; // slight nudge so it aligns nicely with first line of wrapped text
 
   i {
@@ -885,6 +1006,9 @@ mat-divider {
   }
 }
 
+/* =========================================================
+  MODAL OVERLAY
+  ========================================================= */
 
 .modal-overlay {
   position: fixed;
@@ -903,27 +1027,6 @@ mat-divider {
   overflow: hidden;
   animation: modalOverlayIn 0.15s ease-out;
 }
-
-
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(21, 47, 84, 0.48);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  box-sizing: border-box;
-  overflow: hidden;
-  animation: modalOverlayIn 0.15s ease-out;
-}
-
 
 /* =========================================================
   CHANGE MANAGER MODAL
@@ -943,11 +1046,6 @@ mat-divider {
   box-sizing: border-box;
   animation: modalIn 0.18s ease-out;
 }
-
-
-/* =========================================================
-  CHANGE MANAGER HEADER
-  ========================================================= */
 
 .change-manager-modal .modal-header {
   min-height: 76px;
@@ -987,7 +1085,7 @@ mat-divider {
 
 .change-manager-modal .modal-title-text {
   color: var(--navy);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 20px;
   font-weight: 700;
   line-height: 1.2;
@@ -1019,11 +1117,6 @@ mat-divider {
   background: #f1f5f9;
   color: var(--text-dark);
 }
-
-
-/* =========================================================
-  CHANGE MANAGER BODY
-  ========================================================= */
 
 .change-manager-modal .modal-body {
   padding: 20px 22px 22px;
@@ -1083,11 +1176,6 @@ mat-divider {
   overflow-wrap: anywhere;
 }
 
-
-/* =========================================================
-  MANAGER INFORMATION
-  ========================================================= */
-
 .manager-information {
   margin-bottom: 20px;
   padding: 13px 14px;
@@ -1122,7 +1210,7 @@ mat-divider {
   width: 100%;
 }
 
-.modal-body .manager-form-group+.manager-form-group {
+.modal-body .manager-form-group + .manager-form-group {
   margin-top: 17px;
 }
 
@@ -1158,7 +1246,7 @@ mat-divider {
 
 .manager-select:focus {
   border-color: var(--primary-blue);
-  box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.10);
+  box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.1);
 }
 
 .manager-select:disabled {
@@ -1195,11 +1283,6 @@ textarea.manager-select::placeholder {
   font-size: 16px;
 }
 
-
-/* =========================================================
-  CHANGE MANAGER FOOTER
-  ========================================================= */
-
 .change-manager-modal .modal-footer {
   min-height: 64px;
   padding: 12px 18px;
@@ -1212,7 +1295,6 @@ textarea.manager-select::placeholder {
   border-top: 1px solid var(--border);
   box-sizing: border-box;
 }
-
 
 /* =========================================================
   MODAL BUTTONS
@@ -1269,7 +1351,6 @@ textarea.manager-select::placeholder {
   font-size: 17px;
 }
 
-
 /* =========================================================
   TASK NOTES MODAL
   ========================================================= */
@@ -1289,11 +1370,6 @@ textarea.manager-select::placeholder {
   box-sizing: border-box;
   animation: modalIn 0.18s ease-out;
 }
-
-
-/* =========================================================
-  NOTES HEADER
-  ========================================================= */
 
 .task-notes-modal .modal-header {
   flex: 0 0 78px;
@@ -1334,7 +1410,7 @@ textarea.manager-select::placeholder {
 
 .task-notes-modal .modal-title-text {
   color: var(--navy);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: 20px;
   font-weight: 700;
 }
@@ -1368,11 +1444,6 @@ textarea.manager-select::placeholder {
   color: #334155;
 }
 
-
-/* =========================================================
-  NOTES BODY
-  ========================================================= */
-
 .task-notes-modal .modal-body {
   flex: 1 1 auto;
   min-height: 0 !important;
@@ -1397,11 +1468,6 @@ textarea.manager-select::placeholder {
   border-radius: 10px;
 }
 
-
-/* =========================================================
-  NOTES HEADER
-  ========================================================= */
-
 .previous-notes-header {
   width: 100%;
   margin-bottom: 13px;
@@ -1417,11 +1483,6 @@ textarea.manager-select::placeholder {
   font-size: 13px;
   font-weight: 700;
 }
-
-
-/* =========================================================
-  ADD NOTE
-  ========================================================= */
 
 .add-note-modal-button {
   height: 35px;
@@ -1449,102 +1510,18 @@ textarea.manager-select::placeholder {
   font-size: 16px;
 }
 
-
-.client-dropdown-container {
-  position: relative;
-  width: 100%;
-  max-width: 280px;
-}
-
-.client-search-input {
-  width: 90%;
-  height: 42px;
-  padding: 0 14px;
-  border: 1px solid #d0d7de;
-  border-radius: 8px;
-  outline: none;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.client-search-input:focus {
-  border-color: #1976d2;
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
-}
-
-.client-dropdown-list {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: 4px;
-  background: #fff;
-  border: 1px solid #dfe3e8;
-  border-radius: 8px;
-  max-height: 250px;
-  overflow-y: auto;
-  z-index: 999;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.client-dropdown-item {
-  padding: 10px 14px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-
-.client-dropdown-item:hover {
-  background: #f5f9ff;
-  color: #1976d2;
-}
-
-.client-dropdown-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.client-dropdown-list::-webkit-scrollbar-thumb {
-  background: #c5c5c5;
-  border-radius: 10px;
-}
-
-.no-client-found {
-  color: #6c757d;
-  // text-align: center;
-  cursor: default;
-  // font-style: italic;
-  padding: 12px;
-}
-
-.no-client-found:hover {
-  background: transparent;
-}
-
-
-.clear-search-btn {
-   position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  border: none;
-  background: #ef4444;
-  color: #fff;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 14px;
-}
-
+/* =========================================================
+  TITLE CELL
+  ========================================================= */
 
 .title-cell {
   text-align: center !important;
 }
 
 .title-cell-inner {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   max-width: 100%;
 }
 
@@ -1553,7 +1530,6 @@ textarea.manager-select::placeholder {
   height: 22px;
   flex: 0 0 3px;
   background: var(--primary-blue);
-  // background: 3px solid #6366f1;
   border-radius: 2px;
 }
 
@@ -1565,12 +1541,6 @@ textarea.manager-select::placeholder {
   word-break: break-word;
   overflow-wrap: anywhere;
   text-align: left;
-}
-
-.title-cell-inner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .description-icon-wrapper {
