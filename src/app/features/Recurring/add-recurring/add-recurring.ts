@@ -184,9 +184,18 @@ private buildGroupedCategories(): void {
 
 // Auto-select when exactly one category matches the login's categoryIds
 private autoSelectSingleCategory(): void {
-  if (this.isEditMode || this.recurringForm.get('taskCatId')?.value) {
+
+  const isAdminOrManager =
+    String(this.isAdmin).toUpperCase() === 'Y' ||
+    String(this.loginType).toLowerCase() === 'manager';
+
+    if (isAdminOrManager || this.isEditMode || this.recurringForm.get('taskCatId')?.value) {
     return;
   }
+
+  // if (this.isEditMode || this.recurringForm.get('taskCatId')?.value) {
+  //   return;
+  // }
 
   const matched = this.categoryIds.length
     ? this.taskCategories.filter((c) => this.categoryIds.includes(Number(c.taskcategoryId)))

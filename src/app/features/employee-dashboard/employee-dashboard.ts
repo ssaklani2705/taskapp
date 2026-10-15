@@ -576,7 +576,7 @@ export class EmployeeDashboard implements OnInit {
     const filterState: TaskFilterState = {
       currentPage: 1,
       page: 0,
-      size: 10,
+      size: 5,
       statusIndex: 1,
       clientId: this.selectedClientId || 0,
       fromDate: fromDate,

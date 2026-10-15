@@ -625,11 +625,20 @@ const sessionCategories = this.categoryIds.length
 
 console.log('categoryIds:', this.categoryIds, 'matched:', sessionCategories);
 
-// Auto-select when exactly one category matches and none is chosen yet
-if (sessionCategories.length === 1 && !this.task.taskCategoryId) {
+// No auto-select for admin or manager
+const isAdminOrManager =
+  String(this.isAdmin).toUpperCase() === 'Y' ||
+  String(this.loginType).toLowerCase() === 'manager';
+  if (!isAdminOrManager && sessionCategories.length === 1 && !this.task.taskCategoryId) {
   this.selectTaskCategory(sessionCategories[0]);
   this.cdr.detectChanges();
 }
+
+// Auto-select when exactly one category matches and none is chosen yet
+// if (sessionCategories.length === 1 && !this.task.taskCategoryId) {
+//   this.selectTaskCategory(sessionCategories[0]);
+//   this.cdr.detectChanges();
+// }
       },
       error: (error: any) => {
         console.error('Error loading task dropdown data:', error);
