@@ -19,9 +19,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { OwlMomentDateTimeModule } from '@danielmoncada/angular-datetime-picker-moment-adapter';
 import { OwlDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
 import { forkJoin } from 'rxjs';
-import { StompSubscription } from '@stomp/stompjs';
+
 import { Subscription } from 'rxjs';
-import { TaskWebSocketService } from '../../../service/TaskWebSocketService';
+
 import { NgZone } from '@angular/core';
 export const MY_DATE_TIME_FORMATS = {
   parseInput: 'DD-MM-YYYY HH:mm',
