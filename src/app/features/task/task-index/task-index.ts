@@ -1791,12 +1791,7 @@ private downloadTasksExcel(tasks: any[]): void {
             ...user,
             hasWorkload: workloadUserIds.has(Number(user.userId)),
           }));
-
         this.selectedAssignTask.maxHours = Number(userResponse?.maxHours || 0);
-
-        console.log('Available users:', this.users);
-        console.log('Available user count:', this.users.length);
-
         this.isLoadingAssignUsers = false;
       },
 
