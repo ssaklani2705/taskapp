@@ -1743,11 +1743,9 @@ private downloadTasksExcel(tasks: any[]): void {
       this.isLoadingAssignUsers = false;
       return;
     }
-
     this.isLoadingAssignUsers = true;
     this.users = [];
     this.holidayError = '';
-
     const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
       this.isAdmin,
       this.userId,
@@ -1758,16 +1756,13 @@ private downloadTasksExcel(tasks: any[]): void {
       startDate,
       endDate,
     );
-
     const workloadRequest = this.dataprovider.getAssigneeWorkload(this.selectedAssignTask.taskCategoryId, startDate, endDate);
-
     forkJoin({
       users: usersRequest,
       workload: workloadRequest,
     }).subscribe({
       next: ({ users, workload }: any) => {
         const userResponse = users?.data ?? users;
-
         // Handle a backend validation response separately.
         if (workload?.success === false) {
           this.holidayError = workload.message || 'Unable to validate the selected date range.';
@@ -1775,15 +1770,10 @@ private downloadTasksExcel(tasks: any[]): void {
           this.isLoadingAssignUsers = false;
           return;
         }
-
         const workloadUsers: any[] = Array.isArray(workload) ? workload : Array.isArray(workload?.data) ? workload.data : [];
-
         this.workloadList = workloadUsers;
-
         const workloadUserIds = new Set(workloadUsers.map((item: any) => Number(item.assignedTo)));
-
         const allUsers: any[] = Array.isArray(userResponse?.assignedUsers) ? userResponse.assignedUsers : [];
-
         // Exclude the original assignee and add workload information.
         this.users = allUsers
           .filter((user: any) => Number(user.userId) !== Number(currentAssignedUserId))
@@ -1794,13 +1784,10 @@ private downloadTasksExcel(tasks: any[]): void {
         this.selectedAssignTask.maxHours = Number(userResponse?.maxHours || 0);
         this.isLoadingAssignUsers = false;
       },
-
       error: (error: any) => {
         console.error('Error loading assignment users:', error);
-
         this.users = [];
         this.holidayError = error?.error?.message || 'Unable to load users or validate the selected date range.';
-
         this.isLoadingAssignUsers = false;
       },
     });
