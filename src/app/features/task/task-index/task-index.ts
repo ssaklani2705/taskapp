@@ -106,7 +106,7 @@ interface AssignedUser {
     },
   ],
 })
-export class TaskIndex implements OnInit, OnDestroy {
+export class TaskIndex implements OnInit {
   showAssignUserModal = false;
   selectedAssignTask: any = null;
   assignRemarks: string = '';
@@ -233,18 +233,12 @@ export class TaskIndex implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private sessionService: SessionStorageService,
-    private datePipe: DatePipe,
-    private taskWs: TaskWebSocketService,
-    private ngZone: NgZone,
+    private datePipe: DatePipe
   ) {}
-  private noteWsSub?: Subscription;
-  ngOnDestroy(): void {
-    this.noteWsSub?.unsubscribe();
-    this.taskWs.disconnect();
-  }
+ 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      this.taskWs.connect();
+     
       //  sessionStorage.removeItem(this.filterKey);
       this.userId = sessionStorage.getItem('userId');
       this.isAdmin = sessionStorage.getItem('isAdmin');
@@ -910,11 +904,7 @@ export class TaskIndex implements OnInit, OnDestroy {
     this.showTaskNotesModal = true;
 
     this.loadTaskNotes(task.taskId);
-    this.noteWsSub?.unsubscribe();
-    this.noteWsSub = this.taskWs.watchTaskNotes(task.taskId).subscribe((note) => {
-      this.ngZone.run(() => this.loadTaskNotes(task.taskId));
-      this.onNoteReceived(note);
-    });
+  
   }
 
   loadTaskNotes(taskId: number): void {
@@ -945,8 +935,7 @@ export class TaskIndex implements OnInit, OnDestroy {
     if (this.isSavingTaskNote) {
       return;
     }
-    this.noteWsSub?.unsubscribe();
-    this.noteWsSub = undefined;
+  
     this.showTaskNotesModal = false;
     this.selectedTask = null;
     this.taskNote = '';

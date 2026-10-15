@@ -234,30 +234,23 @@ export class ViewIndex implements OnInit {
       return user.firstName || user.name || user.userName || user.fullName || '-';
     }
 
-    // -------------------------------------------------------
-    // IF API ALREADY RETURNS ASSIGNED USER NAME
-    // -------------------------------------------------------
-
+    
     if (this.task && Number(this.task.assignedTo) === Number(userId)) {
       if (this.task.assignedToName) {
         return this.task.assignedToName;
       }
-
       if (this.task.assignedUserName) {
         return this.task.assignedUserName;
       }
     }
-
     // -------------------------------------------------------
     // IF API ALREADY RETURNS ADDED BY NAME
     // -------------------------------------------------------
-
     if (this.task && Number(this.task.addedBy) === Number(userId)) {
       if (this.task.addedByName) {
         return this.task.addedByName;
       }
     }
-
     return String(userId);
   }
 

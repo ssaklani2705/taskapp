@@ -124,7 +124,7 @@
             <span class="info-label"> Assigned To: </span>
 
             <span class="info-value">
-              {{ getUserName(task.assignedTo) }}
+              {{ (task.assignedUserName) == null ? "Unassigned" : task.assignedUserName   }}
             </span>
           </div>
 
