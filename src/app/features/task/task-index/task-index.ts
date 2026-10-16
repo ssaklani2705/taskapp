@@ -19,10 +19,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { OwlMomentDateTimeModule } from '@danielmoncada/angular-datetime-picker-moment-adapter';
 import { OwlDateTimeModule, OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
 import { forkJoin } from 'rxjs';
-
 import { Subscription } from 'rxjs';
-
 import { NgZone } from '@angular/core';
+
 export const MY_DATE_TIME_FORMATS = {
   parseInput: 'DD-MM-YYYY HH:mm',
   fullPickerInput: 'DD-MM-YYYY HH:mm',
@@ -202,13 +201,13 @@ export class TaskIndex implements OnInit {
       label: 'Assigned By',
       sortable: true,
     },
-    
+
     {
       key: 'priority',
       label: 'Priority',
       sortable: true,
     },
-    
+
     {
       key: 'status',
       label: 'Status',
@@ -233,12 +232,11 @@ export class TaskIndex implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private sessionService: SessionStorageService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
   ) {}
- 
+
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-     
       //  sessionStorage.removeItem(this.filterKey);
       this.userId = sessionStorage.getItem('userId');
       this.isAdmin = sessionStorage.getItem('isAdmin');
@@ -434,7 +432,7 @@ export class TaskIndex implements OnInit {
         }
         this.filterAvailableClients();
         this.taskCategories = response.taskCategories || [];
-        this.buildGroupedCategories();          // add this line
+        this.buildGroupedCategories(); // add this line
         this.assignedUsers = response.assignedUsers || [];
       },
       error: (error) => {
@@ -461,8 +459,6 @@ export class TaskIndex implements OnInit {
   togglePanel(): void {
     this.isPanelVisible = !this.isPanelVisible;
   }
-
-
 
   getTaskDetails(): void {
     const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
@@ -904,7 +900,6 @@ export class TaskIndex implements OnInit {
     this.showTaskNotesModal = true;
 
     this.loadTaskNotes(task.taskId);
-  
   }
 
   loadTaskNotes(taskId: number): void {
@@ -935,7 +930,7 @@ export class TaskIndex implements OnInit {
     if (this.isSavingTaskNote) {
       return;
     }
-  
+
     this.showTaskNotesModal = false;
     this.selectedTask = null;
     this.taskNote = '';
@@ -967,7 +962,7 @@ export class TaskIndex implements OnInit {
         this.sendMail = false;
         this.isSavingTaskNote = false;
 
-        //  this.loadTaskNotes(this.selectedTask.taskId);
+         this.loadTaskNotes(this.selectedTask.taskId);
       },
 
       error: (error) => {
@@ -1185,106 +1180,106 @@ export class TaskIndex implements OnInit {
 
   isExporting = false;
 
-exportToExcel(): void {
-  const totalRecords = Number(this.apiResponseTaskDetails?.totalElements || 0);
+  exportToExcel(): void {
+    const totalRecords = Number(this.apiResponseTaskDetails?.totalElements || 0);
 
-  if (totalRecords === 0) {
-    alert('No tasks available for export.');
-    return;
+    if (totalRecords === 0) {
+      alert('No tasks available for export.');
+      return;
+    }
+
+    if (this.isExporting) {
+      return;
+    }
+
+    this.isExporting = true;
+
+    // same filters as getTaskDetails(), but page 0 and size = total filtered records
+    const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
+    const taskCategoryId = this.selectedTaskCategory ? Number(this.selectedTaskCategory) : 0;
+    const assignedTo = this.selectedAssignedTo ? Number(this.selectedAssignedTo) : -1;
+    const priority = this.selectedPriority ? Number(this.selectedPriority) : 0;
+    const fromDate = this.formatDateForApi(this.fromDate);
+    const toDate = this.formatDateForApi(this.toDate);
+
+    this.dataprovider
+      .getTaskDetails(
+        0,
+        totalRecords,
+        this.statusIndex,
+        this.search,
+        clientId,
+        taskCategoryId,
+        assignedTo,
+        priority,
+        fromDate,
+        toDate,
+        this.isAdmin,
+        this.userId,
+        this.selectedTaskStatuses,
+        this.loginType,
+        this.dashboardFilter,
+        this.isHod,
+      )
+      .subscribe({
+        next: (response: any) => {
+          this.isExporting = false;
+          const allTasks: any[] = response?.data || [];
+
+          if (allTasks.length === 0) {
+            alert('No tasks available for export.');
+            return;
+          }
+
+          this.downloadTasksExcel(allTasks);
+        },
+        error: (error) => {
+          this.isExporting = false;
+          console.error('Error exporting tasks:', error);
+          Swal.fire('Error', 'Unable to export tasks.', 'error');
+        },
+      });
   }
 
-  if (this.isExporting) {
-    return;
+  private downloadTasksExcel(tasks: any[]): void {
+    const exportData = tasks.map((task: any, index: number) => ({
+      'Sr. No.': index + 1,
+      Title: task.title || '-',
+      Client: task.clientName || '-',
+      Date: task.date ? this.formatExcelDate(task.date) : '-',
+      'Due Date': task.dueDateTime ? this.formatExcelDate(task.dueDateTime) : '-',
+      'Task Category': task.taskCategoryName || '-',
+      'Assigned By': task.assignedbyName || '-',
+      'Assigned To': !task.assignedToName || task.assignedToName === '0' ? 'Unassigned User' : task.assignedToName,
+      Priority: this.getPriorityLabel(task.priority),
+      'Task Status': this.common.getTaskStatusLabel(task.taskStatus),
+      Status: this.common.getStatusLabel(task.status),
+    }));
+
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
+
+    worksheet['!cols'] = [
+      { wch: 8 }, // Sr. No.
+      { wch: 35 }, // Title
+      { wch: 25 }, // Client
+      { wch: 20 }, // Date
+      { wch: 20 }, // Due Date
+      { wch: 25 }, // Task Category
+      { wch: 25 }, // Assigned By
+      { wch: 25 }, // Assigned To
+      { wch: 15 }, // Priority
+      { wch: 20 }, // Task Status
+      { wch: 15 }, // Status
+    ];
+
+    const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Tasks');
+
+    const today = new Date();
+    const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+    XLSX.writeFile(workbook, `Tasks_${dateString}.xlsx`);
   }
-
-  this.isExporting = true;
-
-  // same filters as getTaskDetails(), but page 0 and size = total filtered records
-  const clientId = this.selectedClient ? Number(this.selectedClient) : 0;
-  const taskCategoryId = this.selectedTaskCategory ? Number(this.selectedTaskCategory) : 0;
-  const assignedTo = this.selectedAssignedTo ? Number(this.selectedAssignedTo) : -1;
-  const priority = this.selectedPriority ? Number(this.selectedPriority) : 0;
-  const fromDate = this.formatDateForApi(this.fromDate);
-  const toDate = this.formatDateForApi(this.toDate);
-
-  this.dataprovider
-    .getTaskDetails(
-      0,
-      totalRecords,
-      this.statusIndex,
-      this.search,
-      clientId,
-      taskCategoryId,
-      assignedTo,
-      priority,
-      fromDate,
-      toDate,
-      this.isAdmin,
-      this.userId,
-      this.selectedTaskStatuses,
-      this.loginType,
-      this.dashboardFilter,
-      this.isHod,
-    )
-    .subscribe({
-      next: (response: any) => {
-        this.isExporting = false;
-        const allTasks: any[] = response?.data || [];
-
-        if (allTasks.length === 0) {
-          alert('No tasks available for export.');
-          return;
-        }
-
-        this.downloadTasksExcel(allTasks);
-      },
-      error: (error) => {
-        this.isExporting = false;
-        console.error('Error exporting tasks:', error);
-        Swal.fire('Error', 'Unable to export tasks.', 'error');
-      },
-    });
-}
-
-private downloadTasksExcel(tasks: any[]): void {
-  const exportData = tasks.map((task: any, index: number) => ({
-    'Sr. No.': index + 1,
-    Title: task.title || '-',
-    Client: task.clientName || '-',
-    Date: task.date ? this.formatExcelDate(task.date) : '-',
-    'Due Date': task.dueDateTime ? this.formatExcelDate(task.dueDateTime) : '-',
-    'Task Category': task.taskCategoryName || '-',
-    'Assigned By': task.assignedbyName || '-',
-    'Assigned To': !task.assignedToName || task.assignedToName === '0' ? 'Unassigned User' : task.assignedToName,
-    Priority: this.getPriorityLabel(task.priority),
-    'Task Status': this.common.getTaskStatusLabel(task.taskStatus),
-    Status: this.common.getStatusLabel(task.status),
-  }));
-
-  const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
-
-  worksheet['!cols'] = [
-    { wch: 8 },  // Sr. No.
-    { wch: 35 }, // Title
-    { wch: 25 }, // Client
-    { wch: 20 }, // Date
-    { wch: 20 }, // Due Date
-    { wch: 25 }, // Task Category
-    { wch: 25 }, // Assigned By
-    { wch: 25 }, // Assigned To
-    { wch: 15 }, // Priority
-    { wch: 20 }, // Task Status
-    { wch: 15 }, // Status
-  ];
-
-  const workbook: XLSX.WorkBook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Tasks');
-
-  const today = new Date();
-  const dateString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-
-  XLSX.writeFile(workbook, `Tasks_${dateString}.xlsx`);
-}
 
   private formatExcelDate(date: any): string {
     if (!date) {
@@ -1812,21 +1807,21 @@ private downloadTasksExcel(tasks: any[]): void {
 
   groupedCategories: { department: string; items: TaskCategory[] }[] = [];
 
-private buildGroupedCategories(): void {
-  const map = new Map<string, TaskCategory[]>();
+  private buildGroupedCategories(): void {
+    const map = new Map<string, TaskCategory[]>();
 
-  for (const c of this.taskCategories || []) {
-    const key = c.departmentName || 'Other';
-    if (!map.has(key)) {
-      map.set(key, []);
+    for (const c of this.taskCategories || []) {
+      const key = c.departmentName || 'Other';
+      if (!map.has(key)) {
+        map.set(key, []);
+      }
+      map.get(key)!.push(c);
     }
-    map.get(key)!.push(c);
-  }
 
-  this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items })).sort((a, b) => {
-    if (a.department === 'Other') return 1;
-    if (b.department === 'Other') return -1;
-    return a.department.localeCompare(b.department, undefined, { sensitivity: 'base' });
-  });
-}
+    this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items })).sort((a, b) => {
+      if (a.department === 'Other') return 1;
+      if (b.department === 'Other') return -1;
+      return a.department.localeCompare(b.department, undefined, { sensitivity: 'base' });
+    });
+  }
 }

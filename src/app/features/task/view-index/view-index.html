@@ -124,11 +124,9 @@
             <span class="info-label"> Assigned To: </span>
 
             <span class="info-value">
-              {{ (task.assignedUserName) == null ? "Unassigned" : task.assignedUserName   }}
+              {{ task.assignedUserName == null ? 'Unassigned' : task.assignedUserName }}
             </span>
           </div>
-
-          <!-- Added By -->
 
           <div class="info-row">
             <span class="info-label"> Added By: </span>
@@ -143,10 +141,7 @@
           <div class="info-row status-row">
             <span class="info-label"> Task Status: </span>
 
-            <span
-              class="change-manager-button"
-              [ngClass]="common.getTaskStatusClass(task.taskStatus)"
-            >
+            <span class="change-manager-button" [ngClass]="common.getTaskStatusClass(task.taskStatus)">
               {{ common.getTaskStatusLabel(task.taskStatus) }}
             </span>
           </div>
