@@ -649,30 +649,67 @@ const isAdminOrManager =
     });
 }
 
-  onchangeloadUserDropdownData(onLoaded?: () => void): void {
-    const startDate = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd');
+onchangeloadUserDropdownData(onLoaded?: () => void): void {
+  const startDate = this.datePipe.transform(
+    this.task.startDate,
+    'yyyy-MM-dd'
+  );
 
-    const endDate = this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd');
+  const endDate = this.datePipe.transform(
+    this.task.endDate,
+    'yyyy-MM-dd'
+  );
 
-    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId, 0, startDate, endDate).subscribe({
-      next: (res: any) => {
-        const data = res?.data || res;
-        this.users = data?.assignedUsers || [];
-        console.log(JSON.stringify(this.users) + '  checking this users ');
+  this.dataprovider.changesCategoryIdgetUserFilterData(
+    this.isAdmin,
+    this.userId,
+    this.loginType,
+    this.task.clientId,
+    this.task.taskCategoryId,
+    0,
+    startDate,
+    endDate
+  ).subscribe({
+    next: (res: any) => {
+      const data = res?.data || res;
+      this.users = data?.assignedUsers || [];
 
-        const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
+      const assignedUserIds = new Set(
+        (this.workloadList || []).map(
+          (x: any) => Number(x.assignedTo)
+        )
+      );
 
-        this.users.forEach((user: any) => {
-          user.hasWorkload = assignedUserIds.has(Number(user.userId));
-        });
-        if (onLoaded) onLoaded();
-      },
-      error: (error: any) => {
-        console.error('Error loading task dropdown data:', error);
-        this.users = [];
-      },
-    });
-  }
+      this.users = this.users.map((user: any) => ({
+        ...user,
+        hasWorkload: assignedUserIds.has(Number(user.userId))
+      }));
+
+      // Auto-select the system-recommended employee.
+      // Do not overwrite an existing selection in edit mode.
+      if (!this.task.assignedTo && !this.isEditMode) {
+        const recommendedUser = this.users.find(
+          (user: any) => user.hasWorkload
+        );
+
+        if (recommendedUser) {
+          this.task.assignedTo = recommendedUser.userId;
+        }
+      }
+
+      console.log('Users with workload:', this.users);
+      console.log('Selected employee:', this.task.assignedTo);
+
+      if (onLoaded) {
+        onLoaded();
+      }
+    },
+    error: (error: any) => {
+      console.error('Error loading task dropdown data:', error);
+      this.users = [];
+    }
+  });
+}
 
   loadDropdownData(): void {
     // alert(this.task.clientId);
@@ -885,60 +922,132 @@ const isAdminOrManager =
     }
   }
 
-  private loadAssigneeWorkload(): void {
-    this.holidayError = '';
-    this.noEmployeeError = ''; // add this (before the early return)
 
-    if (!this.task.taskCategoryId || !this.task.startDate || !this.task.endDate) {
-      return;
+
+private loadAssigneeWorkload(): void {
+  this.holidayError = '';
+  this.noEmployeeError = '';
+
+  if (
+    !this.task.taskCategoryId ||
+    !this.task.startDate ||
+    !this.task.endDate
+  ) {
+    this.workloadList = [];
+
+    this.users = this.users.map((user: any) => ({
+      ...user,
+      hasWorkload: false
+    }));
+
+    // Clear selection for a new task when required fields are missing.
+    if (!this.isEditMode) {
+      this.task.assignedTo = null;
     }
 
-    const startDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
+    return;
+  }
 
-    const endDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
+  const startDateParam = this.datePipe.transform(
+    this.task.startDate,
+    'yyyy-MM-dd HH:mm:ss'
+  );
 
-    if (!startDateParam && !endDateParam) {
-      return;
-    }
+  const endDateParam = this.datePipe.transform(
+    this.task.endDate,
+    'yyyy-MM-dd HH:mm:ss'
+  );
 
-    this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, startDateParam, endDateParam).subscribe({
+  if (!startDateParam || !endDateParam) {
+    return;
+  }
+
+  this.dataprovider
+    .getAssigneeWorkload(
+      this.task.taskCategoryId,
+      startDateParam,
+      endDateParam
+    )
+    .subscribe({
       next: (response) => {
         console.log('Assignee Workload:', response);
 
         if (!response.success) {
-          this.holidayError = response.message || 'Unable to fetch workload';
+          this.holidayError =
+            response.message || 'Unable to fetch workload';
 
           this.workloadList = [];
+
+          this.users = this.users.map((user: any) => ({
+            ...user,
+            hasWorkload: false
+          }));
+
+          if (!this.isEditMode) {
+            this.task.assignedTo = null;
+          }
+
           return;
         }
 
         this.holidayError = '';
         this.workloadList = response.data || [];
 
-        // add this
         if (this.workloadList.length === 0) {
-          this.noEmployeeError = 'No employee available for the selected category.';
+          this.noEmployeeError =
+            'No employee available for the selected category.';
         }
 
-        const assignedUserIds = new Set(this.workloadList.map((x: any) => Number(x.assignedTo)));
+        // Get the recommended employee IDs from the API response.
+        const assignedUserIds = new Set(
+          this.workloadList.map((item: any) =>
+            Number(item.assignedTo)
+          )
+        );
 
-        // Highlight matching users
+        // Update the employee recommendation indicators.
         this.users = this.users.map((user: any) => ({
           ...user,
-          hasWorkload: assignedUserIds.has(Number(user.userId)),
+          hasWorkload: assignedUserIds.has(Number(user.userId))
         }));
 
-        console.log('Users after workload comparison:', this.users);
+        // Automatically select the recommended employee for a new task.
+        if (!this.isEditMode) {
+          const recommendedUser = this.users.find(
+            (user: any) => user.hasWorkload
+          );
+
+          this.task.assignedTo = recommendedUser
+            ? recommendedUser.userId
+            : null;
+        }
+
+        console.log('Updated users:', this.users);
+        console.log('Selected employee:', this.task.assignedTo);
       },
+
       error: (error) => {
         console.error('Error fetching assignee workload', error);
 
-        this.holidayError = error?.error?.message || 'Error fetching assignee workload';
+        this.holidayError =
+          error?.error?.message ||
+          'Error fetching assignee workload';
 
         this.workloadList = [];
-      },
+
+        this.users = this.users.map((user: any) => ({
+          ...user,
+          hasWorkload: false
+        }));
+
+        if (!this.isEditMode) {
+          this.task.assignedTo = null;
+        }
+      }
     });
-  }
+}
+
+
 
   readonly MAX_TASK_HOURS = 8;
   get durationExceedsLimit(): boolean {

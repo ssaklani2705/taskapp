@@ -19,17 +19,59 @@
        MENU
   ====================================================== -->
 
-  <nav class="sidebar-menu">
-    <button type="button" class="menu-item" *ngFor="let item of menuItems" [class.active]="activeMenu === item.label" (click)="selectMenu(item)">
-      <mat-icon>
-        {{ item.icon }}
-      </mat-icon>
 
-      <span>
-        {{ item.label }}
-      </span>
-    </button>
-  </nav>
+<nav class="sidebar-menu">
+  <ng-container *ngFor="let item of menuItems">
+
+    <!-- Parent menu with children -->
+    <ng-container *ngIf="item.children?.length; else normalMenu">
+      <button
+        type="button"
+        class="menu-item"
+        [class.active]="isParentActive(item)"
+        [class.expanded]="item.expanded"
+        (click)="selectMenu(item)">
+
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+
+        <mat-icon class="submenu-arrow">
+          {{ item.expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+        </mat-icon>
+      </button>
+
+      <div class="submenu" *ngIf="item.expanded">
+        <button
+          type="button"
+          class="menu-item submenu-item"
+          *ngFor="let child of item.children"
+          [class.active]="activeMenu === child.label"
+          (click)="selectMenu(child)">
+
+          <mat-icon>{{ child.icon }}</mat-icon>
+          <span>{{ child.label }}</span>
+        </button>
+      </div>
+    </ng-container>
+
+    <!-- Normal menu item -->
+    <ng-template #normalMenu>
+      <button
+        type="button"
+        class="menu-item"
+        *ngIf="item.label !== 'Reports'"
+        [class.active]="activeMenu === item.label"
+        (click)="selectMenu(item)">
+
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+      </button>
+    </ng-template>
+
+  </ng-container>
+</nav>
+
+
 
   <!-- =====================================================
        USER
