@@ -1,6 +1,4 @@
-import {
-  Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnDestroy, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,14 +7,38 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { Chart, registerables } from 'chart.js';
 import { DataProviderService, DepartmentDTO, TaskCategoryDTO } from '../../service/data-provider.service';
-
+import { MAT_DATE_FORMATS, DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 Chart.register(...registerables);
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'DD/MM/YYYY',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-workload-report',
   standalone: true,
   imports: [CommonModule, FormsModule, MatIconModule, MatDividerModule, MatDatepickerModule],
-  providers: [provideNativeDateAdapter()],           // remove if your app already provides a date adapter
+   providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+    {
+      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+      useValue: { useUtc: false }
+    }
+  ], // remove if your app already provides a date adapter
   templateUrl: './workload-report.html',
   styleUrl: './workload-report.scss',
 })
@@ -37,14 +59,14 @@ export class WorkloadReport implements OnInit, OnDestroy {
 
   loading = false;
   errorMessage = '';
-  hasSearched = false;      // false = blank state (nothing loaded yet)
+  hasSearched = false; // false = blank state (nothing loaded yet)
 
   // ---------- department / category filters ----------
   departmentList: DepartmentDTO[] = [];
   categoryList: TaskCategoryDTO[] = [];
 
-  selectedDepartmentIds: number[] = [];     // report needs at least one department
-  selectedCategoryIds: number[] = [];       // empty = all categories of the selected departments
+  selectedDepartmentIds: number[] = []; // report needs at least one department
+  selectedCategoryIds: number[] = []; // empty = all categories of the selected departments
 
   showDepartmentDropdown = false;
   showCategoryDropdown = false;
@@ -59,7 +81,7 @@ export class WorkloadReport implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setDefaultDates();
-    this.loadDepartments();      // report stays blank until a department is selected and Go is clicked
+    this.loadDepartments(); // report stays blank until a department is selected and Go is clicked
   }
 
   ngOnDestroy(): void {
@@ -73,29 +95,26 @@ export class WorkloadReport implements OnInit, OnDestroy {
   private loadDepartments(): void {
     this.reportService.getActiveDepartments().subscribe({
       next: (res: DepartmentDTO[]) => {
-        this.departmentList = [...(res || [])].sort((a, b) =>
-          (a.name ?? '').localeCompare(b.name ?? '', undefined, this.sortOpts));
+        this.departmentList = [...(res || [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '', undefined, this.sortOpts));
         this.loadCategories();
       },
-      error: () => { this.departmentList = []; this.categoryList = []; },
+      error: () => {
+        this.departmentList = [];
+        this.categoryList = [];
+      },
     });
   }
 
   // Department name A-Z, then category name A-Z within each department
   private sortCategories(list: TaskCategoryDTO[]): TaskCategoryDTO[] {
-  // Use the DTO's departmentName if it has one, otherwise look the department up by id
-  const deptName = (c: any): string =>
-    c.departmentName ?? this.departmentList.find(d => d.departmentId === c.departmentId)?.name ?? '';
+    // Use the DTO's departmentName if it has one, otherwise look the department up by id
+    const deptName = (c: any): string => c.departmentName ?? this.departmentList.find((d) => d.departmentId === c.departmentId)?.name ?? '';
 
-  return [...list].sort((a: any, b: any) =>
-    deptName(a).localeCompare(deptName(b), undefined, this.sortOpts) ||
-    String(a.name ?? '').localeCompare(String(b.name ?? ''), undefined, this.sortOpts));
-}
+    return [...list].sort((a: any, b: any) => deptName(a).localeCompare(deptName(b), undefined, this.sortOpts) || String(a.name ?? '').localeCompare(String(b.name ?? ''), undefined, this.sortOpts));
+  }
 
   private loadCategories(): void {
-    const ids = this.selectedDepartmentIds.length
-      ? this.selectedDepartmentIds
-      : this.departmentList.map(d => d.departmentId);
+    const ids = this.selectedDepartmentIds.length ? this.selectedDepartmentIds : this.departmentList.map((d) => d.departmentId);
 
     if (!ids.length) {
       this.categoryList = [];
@@ -106,63 +125,66 @@ export class WorkloadReport implements OnInit, OnDestroy {
     this.reportService.getCategoriesByDepartmentIds(ids).subscribe({
       next: (res: TaskCategoryDTO[]) => {
         this.categoryList = this.sortCategories(res || []);
-        const valid = this.categoryList.map(c => c.taskcategoryId);
+        const valid = this.categoryList.map((c) => c.taskcategoryId);
         // drop selected categories that no longer belong to the chosen departments
-        this.selectedCategoryIds = this.selectedCategoryIds.filter(id => valid.includes(id));
+        this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => valid.includes(id));
       },
-      error: () => { this.categoryList = []; this.selectedCategoryIds = []; },
+      error: () => {
+        this.categoryList = [];
+        this.selectedCategoryIds = [];
+      },
     });
   }
 
   toggleDepartment(id: number, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
-    this.selectedDepartmentIds = checked
-      ? [...this.selectedDepartmentIds, id]
-      : this.selectedDepartmentIds.filter(x => x !== id);
+    this.selectedDepartmentIds = checked ? [...this.selectedDepartmentIds, id] : this.selectedDepartmentIds.filter((x) => x !== id);
     this.loadCategories();
     if (!this.selectedDepartmentIds.length) {
-      this.resetResults();       // no department => back to blank
+      this.resetResults(); // no department => back to blank
     }
   }
 
   toggleCategory(id: number, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
-    this.selectedCategoryIds = checked
-      ? [...this.selectedCategoryIds, id]
-      : this.selectedCategoryIds.filter(x => x !== id);
+    this.selectedCategoryIds = checked ? [...this.selectedCategoryIds, id] : this.selectedCategoryIds.filter((x) => x !== id);
   }
 
-  isDepartmentChecked(id: number): boolean { return this.selectedDepartmentIds.includes(id); }
-  isCategoryChecked(id: number): boolean { return this.selectedCategoryIds.includes(id); }
+  isDepartmentChecked(id: number): boolean {
+    return this.selectedDepartmentIds.includes(id);
+  }
+  isCategoryChecked(id: number): boolean {
+    return this.selectedCategoryIds.includes(id);
+  }
 
   getSelectedDepartmentNames(): string {
     return this.departmentList
-      .filter(d => this.selectedDepartmentIds.includes(d.departmentId))
-      .map(d => d.name).join(', ');
+      .filter((d) => this.selectedDepartmentIds.includes(d.departmentId))
+      .map((d) => d.name)
+      .join(', ');
   }
 
   getSelectedCategoryNames(): string {
     return this.categoryList
-      .filter(c => this.selectedCategoryIds.includes(c.taskcategoryId))
-      .map(c => c.name).join(', ');
+      .filter((c) => this.selectedCategoryIds.includes(c.taskcategoryId))
+      .map((c) => c.name)
+      .join(', ');
   }
 
   // Categories to send: the selected ones, or every category of the selected departments
   private effectiveCategoryIds(): number[] {
     if (this.selectedCategoryIds.length) return this.selectedCategoryIds;
-    const ids = this.categoryList.map(c => c.taskcategoryId);
-    return ids.length ? ids : [-1];          // department with no categories => no tasks
+    const ids = this.categoryList.map((c) => c.taskcategoryId);
+    return ids.length ? ids : [-1]; // department with no categories => no tasks
   }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as Node;
-    if (this.showDepartmentDropdown && this.departmentDropdown &&
-        !this.departmentDropdown.nativeElement.contains(target)) {
+    if (this.showDepartmentDropdown && this.departmentDropdown && !this.departmentDropdown.nativeElement.contains(target)) {
       this.showDepartmentDropdown = false;
     }
-    if (this.showCategoryDropdown && this.categoryDropdown &&
-        !this.categoryDropdown.nativeElement.contains(target)) {
+    if (this.showCategoryDropdown && this.categoryDropdown && !this.categoryDropdown.nativeElement.contains(target)) {
       this.showCategoryDropdown = false;
     }
   }
@@ -172,7 +194,7 @@ export class WorkloadReport implements OnInit, OnDestroy {
   setView(mode: 'table' | 'graph'): void {
     this.viewMode = mode;
     if (mode === 'graph') {
-      setTimeout(() => this.renderCharts());   // wait until the canvases exist
+      setTimeout(() => this.renderCharts()); // wait until the canvases exist
     } else {
       this.destroyCharts();
     }
@@ -211,21 +233,19 @@ export class WorkloadReport implements OnInit, OnDestroy {
     this.errorMessage = '';
     this.loading = true;
 
-    this.reportService
-      .getWorkload(this.toIso(this.fromDate), this.toIso(this.toDate), this.effectiveCategoryIds())
-      .subscribe({
-        next: res => {
-          this.allRows = res.data || [];
-          this.hasSearched = true;
-          this.applyFilter();
-          this.loading = false;
-        },
-        error: () => {
-          this.errorMessage = 'Unable to load the report.';
-          this.resetResults();
-          this.loading = false;
-        },
-      });
+    this.reportService.getWorkload(this.toIso(this.fromDate), this.toIso(this.toDate), this.effectiveCategoryIds()).subscribe({
+      next: (res) => {
+        this.allRows = res.data || [];
+        this.hasSearched = true;
+        this.applyFilter();
+        this.loading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Unable to load the report.';
+        this.resetResults();
+        this.loading = false;
+      },
+    });
   }
 
   private resetResults(): void {
@@ -253,9 +273,7 @@ export class WorkloadReport implements OnInit, OnDestroy {
 
   private applyFilter(): void {
     const q = this.searchQuery.trim().toLowerCase();
-    this.filteredRows = q
-      ? this.allRows.filter(r => (r.userName || '').toLowerCase().includes(q))
-      : [...this.allRows];
+    this.filteredRows = q ? this.allRows.filter((r) => (r.userName || '').toLowerCase().includes(q)) : [...this.allRows];
     if (this.viewMode === 'graph') {
       setTimeout(() => this.renderCharts());
     }
@@ -270,7 +288,7 @@ export class WorkloadReport implements OnInit, OnDestroy {
   // ---------- load bar (table view) ----------
 
   get maxOpenHours(): number {
-    return Math.max(1, ...this.filteredRows.map(r => Number(r.openHours) || 0));
+    return Math.max(1, ...this.filteredRows.map((r) => Number(r.openHours) || 0));
   }
 
   barWidth(r: any): number {
@@ -297,8 +315,8 @@ export class WorkloadReport implements OnInit, OnDestroy {
     const rows = this.filteredRows;
     if (!this.statusCanvas || !this.hoursCanvas || !rows.length) return;
 
-    const labels = rows.map(r => r.userName);
-    const values = (key: string) => rows.map(r => Number(r[key]) || 0);
+    const labels = rows.map((r) => r.userName);
+    const values = (key: string) => rows.map((r) => Number(r[key]) || 0);
 
     this.statusChart = new Chart(this.statusCanvas.nativeElement, {
       type: 'bar',
@@ -327,9 +345,7 @@ export class WorkloadReport implements OnInit, OnDestroy {
       type: 'bar',
       data: {
         labels,
-        datasets: [
-          { label: 'Open hours', data: values('openHours'), backgroundColor: '#19345a' },
-        ],
+        datasets: [{ label: 'Open hours', data: values('openHours'), backgroundColor: '#19345a' }],
       },
       options: {
         indexAxis: 'y',
