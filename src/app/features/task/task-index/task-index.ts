@@ -1892,21 +1892,45 @@ private loadAssignUsers(
 
   groupedCategories: { department: string; items: TaskCategory[] }[] = [];
 
+  // private buildGroupedCategories(): void {
+  //   const map = new Map<string, TaskCategory[]>();
+
+  //   for (const c of this.taskCategories || []) {
+  //     const key = c.departmentName || 'Other';
+  //     if (!map.has(key)) {
+  //       map.set(key, []);
+  //     }
+  //     map.get(key)!.push(c);
+  //   }
+
+  //   this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items })).sort((a, b) => {
+  //     if (a.department === 'Other') return 1;
+  //     if (b.department === 'Other') return -1;
+  //     return a.department.localeCompare(b.department, undefined, { sensitivity: 'base' });
+  //   });
+  // }
+
   private buildGroupedCategories(): void {
-    const map = new Map<string, TaskCategory[]>();
+  const opts = { numeric: true, sensitivity: 'base' } as const;
+  const map = new Map<string, TaskCategory[]>();
 
-    for (const c of this.taskCategories || []) {
-      const key = c.departmentName || 'Other';
-      if (!map.has(key)) {
-        map.set(key, []);
-      }
-      map.get(key)!.push(c);
+  for (const c of this.taskCategories || []) {
+    const key = c.departmentName || 'Other';
+    if (!map.has(key)) {
+      map.set(key, []);
     }
-
-    this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items })).sort((a, b) => {
-      if (a.department === 'Other') return 1;
-      if (b.department === 'Other') return -1;
-      return a.department.localeCompare(b.department, undefined, { sensitivity: 'base' });
-    });
+    map.get(key)!.push(c);
   }
+
+  this.groupedCategories = Array.from(map, ([department, items]) => ({
+    department,
+    // category A-Z inside each department
+    items: [...items].sort((a, b) => (a.name || '').localeCompare(b.name || '', undefined, opts)),
+  })).sort((a, b) => {
+    // department A-Z, "Other" always last
+    if (a.department === 'Other') return 1;
+    if (b.department === 'Other') return -1;
+    return a.department.localeCompare(b.department, undefined, opts);
+  });
+}
 }

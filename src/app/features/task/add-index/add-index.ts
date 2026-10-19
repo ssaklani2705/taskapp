@@ -122,10 +122,11 @@ export class AddIndexComponent implements OnInit {
 
     private router: Router,
     private datePipe: DatePipe,
-      private cdr: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef,
   ) {}
   dashboardFilter: string = '';
   categoryIds: number[] = [];
+
   ngOnInit(): void {
     const savedFilter = sessionStorage.getItem(SESSION_KEYS.TASK_MASTER_FILTER);
 
@@ -170,9 +171,7 @@ export class AddIndexComponent implements OnInit {
       const savedCategoryIds = sessionStorage.getItem('categoryIds');
 
       try {
-        this.categoryIds = savedCategoryIds
-          ? JSON.parse(savedCategoryIds).map((id: any) => Number(id))
-          : [];
+        this.categoryIds = savedCategoryIds ? JSON.parse(savedCategoryIds).map((id: any) => Number(id)) : [];
       } catch {
         this.categoryIds = [];
       }
@@ -191,6 +190,8 @@ export class AddIndexComponent implements OnInit {
 
       this.task = {
         taskId: null,
+
+        userType: 1, // 1 = Employee, 2 = Manager
 
         title: '',
 
@@ -217,6 +218,9 @@ export class AddIndexComponent implements OnInit {
         startDate: null,
         endDate: null,
       };
+
+      // Task Category no longer depends on Client: load the list on page load
+      this.onchangeloadDropdownData();
     }
   }
 
@@ -229,11 +233,11 @@ export class AddIndexComponent implements OnInit {
       next: (res: any) => {
         if (res && res.data) {
           this.task = { ...res.data };
-          this.originalTask = { ...res.data };
-          // Convert API date to Date
-          // if (this.task.date) {
-          //   this.task.date = new Date(this.task.date);
-          // }
+
+          // API may return userType as a string
+          this.task.userType = this.task.userType != null ? Number(this.task.userType) : null;
+
+          this.originalTask = { ...this.task };
 
           if (this.task.startDate) {
             this.task.startDate = new Date(this.task.startDate);
@@ -241,10 +245,10 @@ export class AddIndexComponent implements OnInit {
           if (this.task.endDate) {
             this.task.endDate = new Date(this.task.endDate);
           }
-          if (this.task.clientId) {
-            this.onchangeloadDropdownData();
-          }
-          if (this.task.clientId && this.task.taskCategoryId) {
+          // Load categories even if the task has no client (client is optional for some categories)
+          this.onchangeloadDropdownData();
+
+          if (this.task.taskCategoryId) {
             this.onchangeloadUserDropdownData();
           }
 
@@ -265,7 +269,7 @@ export class AddIndexComponent implements OnInit {
   }
 
   // ============================================================
-  // CLIENT LIST
+  // FILES
   // ============================================================
 
   readonly MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
@@ -361,36 +365,69 @@ export class AddIndexComponent implements OnInit {
     this.zipError = '';
   }
 
+  removePdfFile(): void {
+    this.pdfFile = null;
+    this.pdfFileName = '';
+    this.pdfError = '';
+
+    if (this.pdfInput) {
+      this.pdfInput.nativeElement.value = '';
+    }
+  }
+
+  removeZipFile(): void {
+    this.zipFile = null;
+    this.zipFileName = '';
+    this.zipError = '';
+
+    if (this.zipInput) {
+      this.zipInput.nativeElement.value = '';
+    }
+  }
+
+  // ============================================================
+  // SUBMIT
+  // ============================================================
+
   onSubmit(form: any): void {
+    
     if (form.invalid || this.pdfError || this.zipError) {
       form.control.markAllAsTouched();
       return;
     }
 
     // Do not submit while employee availability is being checked
-    if (this.checkingTaskCategoryEmployee) {
-      return;
-    }
-    // Do not submit if selected task category has no employee
-    if (this.taskCategoryEmployeeError) {
-      return;
-    }
+    // if (this.checkingTaskCategoryEmployee) {
+    //   return;
+    // }
+    // // Do not submit if selected task category has no employee
+    // if (this.taskCategoryEmployeeError) {
+    //   return;
+    // }
+     // Do not submit while employee availability is being checked
+  if (this.checkingTaskCategoryEmployee) {
+    Swal.fire('Please wait', 'Checking employee availability for the selected category...', 'info');
+    return;
+  }
+
+  // Do not submit if selected task category has no employee
+  // if (this.taskCategoryEmployeeError) {
+  //   Swal.fire('Error', 'No employee available for the selected task category.', 'error');
+  //   return;
+  // }
 
     this.task.addedBy = this.userId ? Number(this.userId) : null;
 
     const formData = new FormData();
 
-    formData.append('clientId', String(Number(this.task.clientId)));
+    // Client is optional for some categories: send it only when selected
+    if (this.task.clientId) {
+      formData.append('clientId', String(Number(this.task.clientId)));
+    }
 
-    formData.append(
-      'startDate',
-      this.formatDateTimeForApi(this.task.startDate) ?? '',
-    );
+    formData.append('startDate', this.formatDateTimeForApi(this.task.startDate) ?? '');
 
-    formData.append(
-      'endDate',
-      this.formatDateTimeForApi(this.task.endDate) ?? '',
-    );
+    formData.append('endDate', this.formatDateTimeForApi(this.task.endDate) ?? '');
 
     formData.append('taskCategoryId', String(Number(this.task.taskCategoryId)));
 
@@ -403,6 +440,8 @@ export class AddIndexComponent implements OnInit {
     formData.append('title', this.task.title || '');
 
     formData.append('addedBy', String(Number(this.task.addedBy)));
+
+    formData.append('userType', String(Number(this.task.userType)));
 
     if (this.isEditMode) {
       formData.append('taskId', String(Number(this.task.taskId)));
@@ -424,7 +463,7 @@ export class AddIndexComponent implements OnInit {
       next: (response: any) => {
         if (response && response.success) {
           Swal.fire('Success', response.message, 'success');
-           this.backToIndexPage();
+          this.backToIndexPage();
         } else {
           Swal.fire('Error', response?.message || 'Unable to save task.', 'error');
         }
@@ -435,6 +474,7 @@ export class AddIndexComponent implements OnInit {
       },
     });
   }
+  
 
   private formatDateTimeForApi(date: any): string | null {
     if (!date) {
@@ -493,6 +533,8 @@ export class AddIndexComponent implements OnInit {
       this.task = {
         taskId: null,
 
+        userType: 1,
+
         title: '',
 
         clientId: null,
@@ -515,6 +557,16 @@ export class AddIndexComponent implements OnInit {
 
         fileName2: null,
       };
+
+      this.selectedTaskCategoryName = '';
+      this.showCategoryDropdown = false;
+      this.clientSearchText = '';
+      this.filteredClients = [];
+      this.showClientDropdown = false;
+      this.users = [];
+      this.noEmployeeError = '';
+      this.holidayError = '';
+      this.endDateError = '';
     }
 
     // Clear Angular variables
@@ -544,55 +596,17 @@ export class AddIndexComponent implements OnInit {
     this.router.navigate(['/task-index']);
   }
 
-  
-//   onchangeloadDropdownData(): void {
-//     this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod).subscribe({
-//      next: (res: any) => {
-//   const data = res?.data || res;
-//   this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
-//     const aName = String(a.name || a.categoryName || a).trim();
-//     const bName = String(b.name || b.categoryName || b).trim();
+  // ============================================================
+  // DROPDOWN DATA
+  // ============================================================
 
-//     if (aName.toLowerCase() === 'admin task') return -1;
-//     if (bName.toLowerCase() === 'admin task') return 1;
-//     if (aName.toLowerCase() === 'general task') return 1;
-//     if (bName.toLowerCase() === 'general task') return -1;
-
-//     return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' });
-//   });
-
-//   this.buildGroupedCategories();
-
-//   // Edit mode: show the already-selected category name
-// const selected = this.taskCategories.find(
-//   (x: any) =>
-//     Number(x.taskcategoryId) === Number(this.task.taskCategoryId)
-// );
-
-// if (selected) {
-//   this.selectedTaskCategoryName = selected.name;
-// }
-
-//   // Edit mode: show the already-selected category name
-//   // const selected = this.taskCategories.find((x: any) => Number(x.taskcategoryId) === Number(this.task.taskCategoryId));
-//   // if (selected) {
-//   //   this.selectedTaskCategoryName = selected.name;
-//   // }
-// },
-// error: (error: any) => {
-//   console.error('Error loading task dropdown data:', error);
-//   this.taskCategories = [];
-//   this.groupedCategories = [];
-//   this.selectedTaskCategoryName = '';
-// },
-//     });
-//   }
-
-onchangeloadDropdownData(): void {
-  this.dataprovider
-    .changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod)
-    .subscribe({
+  onchangeloadDropdownData(): void {
+      const typeAtRequest = Number(this.task.userType);
+    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod,this.task.userType).subscribe({
       next: (res: any) => {
+        if (typeAtRequest !== Number(this.task.userType)) {
+          return;                       // user already switched type; ignore this stale response
+        }
         const data = res?.data || res;
         this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
           const aName = String(a.name || a.categoryName || a).trim();
@@ -606,39 +620,36 @@ onchangeloadDropdownData(): void {
           return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' });
         });
 
-       this.buildGroupedCategories();
+        this.buildGroupedCategories();
 
-// Edit mode: show the already-selected category name
-const selected = this.taskCategories.find(
-  (x: any) => Number(x.taskcategoryId) === Number(this.task.taskCategoryId),
-);
-if (selected) {
-  this.selectedTaskCategoryName = selected.name;
-}
+        // Show the already-selected category name, or clear it if it is
+        // not available for the chosen client
+        const selected = this.taskCategories.find((x: any) => Number(x.taskcategoryId) === Number(this.task.taskCategoryId));
 
-// Categories that belong to the logged-in user's session (categoryIds from login)
-const sessionCategories = this.categoryIds.length
-  ? this.taskCategories.filter((c: any) =>
-      this.categoryIds.includes(Number(c.taskcategoryId ?? c.taskCategoryId)),
-    )
-  : this.taskCategories;
+        const clientChanged = this.isEditMode && Number(this.task.clientId) !== Number(this.originalTask?.clientId);
 
-console.log('categoryIds:', this.categoryIds, 'matched:', sessionCategories);
+        if (selected) {
+          this.selectedTaskCategoryName = selected.name;
+        } else if (this.task.taskCategoryId && (!this.isEditMode || clientChanged)) {
+          this.task.taskCategoryId = null;
+          this.selectedTaskCategoryName = '';
+        }
 
-// No auto-select for admin or manager
-const isAdminOrManager =
-  String(this.isAdmin).toUpperCase() === 'Y' ||
-  String(this.loginType).toLowerCase() === 'manager';
-  if (!isAdminOrManager && sessionCategories.length === 1 && !this.task.taskCategoryId) {
-  this.selectTaskCategory(sessionCategories[0]);
-  this.cdr.detectChanges();
-}
+        // Categories that belong to the logged-in user's session (categoryIds from login)
+        const sessionCategories = this.categoryIds.length
+          ? this.taskCategories.filter((c: any) => this.categoryIds.includes(Number(c.taskcategoryId ?? c.taskCategoryId)))
+          : this.taskCategories;
 
-// Auto-select when exactly one category matches and none is chosen yet
-// if (sessionCategories.length === 1 && !this.task.taskCategoryId) {
-//   this.selectTaskCategory(sessionCategories[0]);
-//   this.cdr.detectChanges();
-// }
+        console.log('categoryIds:', this.categoryIds, 'matched:', sessionCategories);
+
+        // No auto-select for admin or manager
+        const isAdminOrManager = String(this.isAdmin).toUpperCase() === 'Y' || String(this.loginType).toLowerCase() === 'manager';
+
+        // Auto-select when exactly one category matches and none is chosen yet
+        if (!isAdminOrManager && sessionCategories.length === 1 && !this.task.taskCategoryId) {
+          this.selectTaskCategory(sessionCategories[0]);
+          this.cdr.detectChanges();
+        }
       },
       error: (error: any) => {
         console.error('Error loading task dropdown data:', error);
@@ -647,72 +658,52 @@ const isAdminOrManager =
         this.selectedTaskCategoryName = '';
       },
     });
-}
+  }
 
-onchangeloadUserDropdownData(onLoaded?: () => void): void {
-  const startDate = this.datePipe.transform(
-    this.task.startDate,
-    'yyyy-MM-dd'
-  );
+  onchangeloadUserDropdownData(onLoaded?: () => void): void {
+    const startDate = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd');
 
-  const endDate = this.datePipe.transform(
-    this.task.endDate,
-    'yyyy-MM-dd'
-  );
+    const endDate = this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd');
 
-  this.dataprovider.changesCategoryIdgetUserFilterData(
-    this.isAdmin,
-    this.userId,
-    this.loginType,
-    this.task.clientId,
-    this.task.taskCategoryId,
-    0,
-    startDate,
-    endDate
-  ).subscribe({
-    next: (res: any) => {
-      const data = res?.data || res;
-      this.users = data?.assignedUsers || [];
+    this.dataprovider
+      .changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId, 0, startDate, endDate, this.task.userType)
+      .subscribe({
+        next: (res: any) => {
+          const data = res?.data || res;
+          this.users = data?.assignedUsers || [];
 
-      const assignedUserIds = new Set(
-        (this.workloadList || []).map(
-          (x: any) => Number(x.assignedTo)
-        )
-      );
+          const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
 
-      this.users = this.users.map((user: any) => ({
-        ...user,
-        hasWorkload: assignedUserIds.has(Number(user.userId))
-      }));
+          this.users = this.users.map((user: any) => ({
+            ...user,
+            hasWorkload: assignedUserIds.has(Number(user.userId)),
+          }));
 
-      // Auto-select the system-recommended employee.
-      // Do not overwrite an existing selection in edit mode.
-      if (!this.task.assignedTo && !this.isEditMode) {
-        const recommendedUser = this.users.find(
-          (user: any) => user.hasWorkload
-        );
+          // Auto-select the system-recommended employee.
+          // Do not overwrite an existing selection in edit mode.
+          if (!this.task.assignedTo && !this.isEditMode) {
+            const recommendedUser = this.users.find((user: any) => user.hasWorkload);
 
-        if (recommendedUser) {
-          this.task.assignedTo = recommendedUser.userId;
-        }
-      }
+            if (recommendedUser) {
+              this.task.assignedTo = recommendedUser.userId;
+            }
+          }
 
-      console.log('Users with workload:', this.users);
-      console.log('Selected employee:', this.task.assignedTo);
+          console.log('Users with workload:', this.users);
+          console.log('Selected employee:', this.task.assignedTo);
 
-      if (onLoaded) {
-        onLoaded();
-      }
-    },
-    error: (error: any) => {
-      console.error('Error loading task dropdown data:', error);
-      this.users = [];
-    }
-  });
-}
+          if (onLoaded) {
+            onLoaded();
+          }
+        },
+        error: (error: any) => {
+          console.error('Error loading task dropdown data:', error);
+          this.users = [];
+        },
+      });
+  }
 
   loadDropdownData(): void {
-    // alert(this.task.clientId);
     this.dataprovider.getTaskFilterData(this.isAdmin, this.userId, this.loginType, this.isHod).subscribe({
       next: (res: any) => {
         const data = res?.data || res;
@@ -731,60 +722,24 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
         console.error('Error loading task dropdown data:', error);
 
         this.clients = [];
-        // this.taskCategories = [];
-        // this.users = [];
 
         Swal.fire('Error', 'Unable to load task dropdown data.', 'error');
       },
     });
   }
 
+  // ============================================================
+  // CLIENT
+  // ============================================================
+
   noEmployeeError = '';
-  // onClientChange(clientId: number | null): void {
-  //   this.task.taskCategoryId = null;
-  //   this.task.assignedTo = null;
-  //   this.noEmployeeError = ''; // add this
-  //   this.taskCategories = [];
-  //   this.users = [];
 
-  //   if (!clientId) {
-  //     this.task.assignedTo = null;
-  //   }
-  // }
-
+  // Task Category is independent of Client, so it is NOT cleared here.
+  // Only the assignee list depends on the client.
   onClientChange(clientId: number | null): void {
-    this.task.taskCategoryId = null;
-    this.selectedTaskCategoryName = '';
-    this.showCategoryDropdown = false;
-
     this.task.assignedTo = null;
     this.noEmployeeError = '';
-    this.taskCategories = [];
-    this.groupedCategories = [];
     this.users = [];
-
-    if (!clientId) {
-      this.task.assignedTo = null;
-    }
-  }
-  removePdfFile(): void {
-    this.pdfFile = null;
-    this.pdfFileName = '';
-    this.pdfError = '';
-
-    if (this.pdfInput) {
-      this.pdfInput.nativeElement.value = '';
-    }
-  }
-
-  removeZipFile(): void {
-    this.zipFile = null;
-    this.zipFileName = '';
-    this.zipError = '';
-
-    if (this.zipInput) {
-      this.zipInput.nativeElement.value = '';
-    }
   }
 
   clientSearchText = '';
@@ -814,6 +769,11 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
 
     this.onClientChange(client.clientId);
     this.onchangeloadDropdownData();
+
+    // Category may already be chosen: load assignees for the new client
+    if (this.task.taskCategoryId) {
+      this.onchangeloadUserDropdownData();
+    }
   }
 
   clearClientSelection(): void {
@@ -824,19 +784,30 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
     this.filteredClients = [];
 
     this.showClientDropdown = false;
+
+    this.onClientChange(null);
   }
 
   onManagerClientChange(clientId: number | null): void {
     this.task.clientId = clientId;
 
-    // Reset dependent dropdowns
+    // Reset dependent assignee list
     this.onClientChange(clientId);
 
-    // Load task categories for the selected client
     if (clientId) {
+      // Reload categories for the selected client
       this.onchangeloadDropdownData();
+
+      // Category may already be chosen: load assignees for the new client
+      if (this.task.taskCategoryId) {
+        this.onchangeloadUserDropdownData();
+      }
     }
   }
+
+  // ============================================================
+  // DATES
+  // ============================================================
 
   onEndDateChange(value: any): void {
     this.task.endDate = value;
@@ -844,11 +815,6 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
     this.validateDates();
     this.onchangeloadUserDropdownData();
   }
-
-  // onTaskCategoryChange(): void {
-  //   this.calculateEndDate();
-  //   this.loadAssigneeWorkload();
-  // }
 
   onStartDateChange(value: any): void {
     this.task.startDate = value;
@@ -869,11 +835,8 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
       return;
     }
 
-    // const dueHours = Number(selectedCategory.dueTime || selectedCategory.ts_duetime || selectedCategory.duedatetime || 0);
+    const dueHours = Number(selectedCategory.dueDateTime || selectedCategory.dueTime || selectedCategory.ts_duetime || selectedCategory.duedatetime || 0);
 
-    const dueHours = Number(
-  selectedCategory.dueDateTime || selectedCategory.dueTime || selectedCategory.ts_duetime || selectedCategory.duedatetime || 0
-);
     // Use the start date picked by the user; default to now only if empty
     let startDate: Date;
     const picked = this.task.startDate;
@@ -910,6 +873,7 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
     const d = moment.isMoment(value) ? value.toDate() : new Date(value);
     return isNaN(d.getTime()) ? null : d;
   }
+
   private validateDates(): void {
     this.endDateError = '';
 
@@ -922,65 +886,50 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
     }
   }
 
+  // ============================================================
+  // ASSIGNEE WORKLOAD
+  // ============================================================
 
+  private loadAssigneeWorkload(): void {
+    this.holidayError = '';
+    this.noEmployeeError = '';
 
-private loadAssigneeWorkload(): void {
-  this.holidayError = '';
-  this.noEmployeeError = '';
+    if (!this.task.taskCategoryId || !this.task.startDate || !this.task.endDate) {
+      this.workloadList = [];
 
-  if (
-    !this.task.taskCategoryId ||
-    !this.task.startDate ||
-    !this.task.endDate
-  ) {
-    this.workloadList = [];
+      this.users = this.users.map((user: any) => ({
+        ...user,
+        hasWorkload: false,
+      }));
 
-    this.users = this.users.map((user: any) => ({
-      ...user,
-      hasWorkload: false
-    }));
+      // Clear selection for a new task when required fields are missing.
+      if (!this.isEditMode) {
+        this.task.assignedTo = null;
+      }
 
-    // Clear selection for a new task when required fields are missing.
-    if (!this.isEditMode) {
-      this.task.assignedTo = null;
+      return;
     }
 
-    return;
-  }
+    const startDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
 
-  const startDateParam = this.datePipe.transform(
-    this.task.startDate,
-    'yyyy-MM-dd HH:mm:ss'
-  );
+    const endDateParam = this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd HH:mm:ss');
 
-  const endDateParam = this.datePipe.transform(
-    this.task.endDate,
-    'yyyy-MM-dd HH:mm:ss'
-  );
+    if (!startDateParam || !endDateParam) {
+      return;
+    }
 
-  if (!startDateParam || !endDateParam) {
-    return;
-  }
-
-  this.dataprovider
-    .getAssigneeWorkload(
-      this.task.taskCategoryId,
-      startDateParam,
-      endDateParam
-    )
-    .subscribe({
+    this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, startDateParam, endDateParam).subscribe({
       next: (response) => {
         console.log('Assignee Workload:', response);
 
         if (!response.success) {
-          this.holidayError =
-            response.message || 'Unable to fetch workload';
+          this.holidayError = response.message || 'Unable to fetch workload';
 
           this.workloadList = [];
 
           this.users = this.users.map((user: any) => ({
             ...user,
-            hasWorkload: false
+            hasWorkload: false,
           }));
 
           if (!this.isEditMode) {
@@ -994,32 +943,23 @@ private loadAssigneeWorkload(): void {
         this.workloadList = response.data || [];
 
         if (this.workloadList.length === 0) {
-          this.noEmployeeError =
-            'No employee available for the selected category.';
+          this.noEmployeeError = 'No employee available for the selected category.';
         }
 
         // Get the recommended employee IDs from the API response.
-        const assignedUserIds = new Set(
-          this.workloadList.map((item: any) =>
-            Number(item.assignedTo)
-          )
-        );
+        const assignedUserIds = new Set(this.workloadList.map((item: any) => Number(item.assignedTo)));
 
         // Update the employee recommendation indicators.
         this.users = this.users.map((user: any) => ({
           ...user,
-          hasWorkload: assignedUserIds.has(Number(user.userId))
+          hasWorkload: assignedUserIds.has(Number(user.userId)),
         }));
 
         // Automatically select the recommended employee for a new task.
         if (!this.isEditMode) {
-          const recommendedUser = this.users.find(
-            (user: any) => user.hasWorkload
-          );
+          const recommendedUser = this.users.find((user: any) => user.hasWorkload);
 
-          this.task.assignedTo = recommendedUser
-            ? recommendedUser.userId
-            : null;
+          this.task.assignedTo = recommendedUser ? recommendedUser.userId : null;
         }
 
         console.log('Updated users:', this.users);
@@ -1029,29 +969,24 @@ private loadAssigneeWorkload(): void {
       error: (error) => {
         console.error('Error fetching assignee workload', error);
 
-        this.holidayError =
-          error?.error?.message ||
-          'Error fetching assignee workload';
+        this.holidayError = error?.error?.message || 'Error fetching assignee workload';
 
         this.workloadList = [];
 
         this.users = this.users.map((user: any) => ({
           ...user,
-          hasWorkload: false
+          hasWorkload: false,
         }));
 
         if (!this.isEditMode) {
           this.task.assignedTo = null;
         }
-      }
+      },
     });
-}
-
-
+  }
 
   readonly MAX_TASK_HOURS = 8;
   get durationExceedsLimit(): boolean {
-    // alert("in");
     const start = this.toDate_(this.task.startDate);
     const end = this.toDate_(this.task.endDate);
 
@@ -1065,10 +1000,10 @@ private loadAssigneeWorkload(): void {
 
   taskCategoryEmployeeError = false;
   checkingTaskCategoryEmployee = false;
+
   onTaskCategoryChange(): void {
     this.calculateEndDate();
     this.loadAssigneeWorkload();
-    // const taskCategoryId = this.taskForm.get('taskCatId')?.value;
     const taskCategoryId = this.task.taskCategoryId;
     this.taskCategoryEmployeeError = false;
     if (!taskCategoryId) {
@@ -1090,97 +1025,47 @@ private loadAssigneeWorkload(): void {
       },
     });
   }
+
   workloadList: { assignedTo: number; hours: number }[] = [];
   holidayError: string = '';
-  // private loadAssigneeWorkload(): void {
-  //   this.holidayError = '';
-  //   this.noEmployeeError = '';
 
-  //   if (!this.task.taskCategoryId || !this.task.startDate || !this.task.endDate) {
-  //     return;
-  //   }
-
-  //   const startDateParam = this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd HH:mm:ss');
-
-  //   const endDateParam = this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd HH:mm:ss');
-
-  //   if (!startDateParam || !endDateParam) {
-  //     return;
-  //   }
-
-  //   const currentAssignedUserId = Number(this.task.assignedTo || 0);
-
-  //   // API 1: Get users
-  //   const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
-  //     this.isAdmin,
-  //     this.userId,
-  //     this.loginType,
-  //     this.task.clientId,
-  //     this.task.taskCategoryId,
-  //     Number(this.task.systemFlag ?? 0),
-  //     this.datePipe.transform(this.task.startDate, 'yyyy-MM-dd'),
-  //     this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd'),
-  //   );
-  //   const workloadRequest = this.dataprovider.getAssigneeWorkload(Number(this.task.taskCategoryId), startDateParam, endDateParam);
-
-  //   forkJoin({
-  //     usersResponse: usersRequest,
-  //     workloadResponse: workloadRequest,
-  //   }).subscribe({
-  //     next: ({ usersResponse, workloadResponse }: any) => {
-  //       console.log('Users API:', usersResponse);
-  //       console.log('Workload API:', workloadResponse);
-
-  //       const userData = usersResponse?.data || usersResponse;
-
-  //       const allUsers = userData?.assignedUsers || [];
-
-  //       //    this.selectedAssignTask.maxHours = Number(userData?.maxHours || 0);
-
-  //       if (!workloadResponse?.success) {
-  //         this.holidayError = workloadResponse?.message || 'Unable to fetch workload';
-  //         this.workloadList = [];
-  //         return;
-  //       }
-  //       this.holidayError = '';
-  //       this.workloadList = workloadResponse?.data || [];
-  //       if (this.workloadList.length === 0) {
-  //         this.noEmployeeError = 'No employee available for the selected category.';
-  //       }
-  //       const assignedUserIds = new Set(this.workloadList.map((item: any) => Number(item.assignedTo)));
-
-  //       this.users = allUsers
-  //         .filter((user: any) => Number(user.userId) !== currentAssignedUserId)
-  //         .map((user: any) => ({
-  //           ...user,
-  //           hasWorkload: assignedUserIds.has(Number(user.userId)),
-  //         }));
-
-  //       console.log('Final users:', this.users);
-  //     },
-
-  //     error: (error: any) => {
-  //       console.error('Error loading users/workload:', error);
-
-  //       this.holidayError = error?.error?.message || 'Error fetching assignee workload';
-
-  //       this.workloadList = [];
-  //       this.users = [];
-  //     },
-  //   });
-  // }
+  // ============================================================
+  // TASK CATEGORY DROPDOWN
+  // ============================================================
 
   showCategoryDropdown = false;
   selectedTaskCategoryName = '';
 
- selectTaskCategory(category: any): void {
-  this.task.taskCategoryId = category.taskcategoryId ?? category.taskCategoryId;
-  this.selectedTaskCategoryName = category.name;
-  this.showCategoryDropdown = false;
+  // Departments for which Client is not mandatory (non-manager logins only)
+  readonly CLIENT_OPTIONAL_DEPARTMENTS = [2, 3, 4, 5];
 
-  this.onTaskCategoryChange();
-  this.onchangeloadUserDropdownData();
-}
+  private getSelectedCategory(): any {
+    return this.taskCategories.find((x: any) => Number(x.taskcategoryId ?? x.taskCategoryId) === Number(this.task.taskCategoryId));
+  }
+
+  get isClientOptional(): boolean {
+    if (String(this.loginType).toLowerCase() === 'manager') {
+      return false;
+    }
+
+    const category = this.getSelectedCategory();
+
+    return this.CLIENT_OPTIONAL_DEPARTMENTS.includes(Number(category?.departmentId));
+  }
+
+  selectTaskCategory(category: any): void {
+    this.task.taskCategoryId = category.taskcategoryId ?? category.taskCategoryId;
+    this.selectedTaskCategoryName = category.name;
+    this.showCategoryDropdown = false;
+
+    this.onTaskCategoryChange();
+
+    // Assignees normally depend on the client; load them when a client is
+    // chosen or when the client is optional for this category
+    if (this.task.clientId || this.isClientOptional) {
+      this.onchangeloadUserDropdownData();
+    }
+  }
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -1192,6 +1077,19 @@ private loadAssigneeWorkload(): void {
 
   groupedCategories: { department: string; items: any[] }[] = [];
 
+  // private buildGroupedCategories(): void {
+  //   const map = new Map<string, any[]>();
+
+  //   for (const c of this.taskCategories || []) {
+  //     const key = c.departmentName || 'Other';
+  //     if (!map.has(key)) {
+  //       map.set(key, []);
+  //     }
+  //     map.get(key)!.push(c);
+  //   }
+
+  //   this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items }));
+  // }
 private buildGroupedCategories(): void {
   const map = new Map<string, any[]>();
 
@@ -1203,6 +1101,30 @@ private buildGroupedCategories(): void {
     map.get(key)!.push(c);
   }
 
-  this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items }));
+  const asc = (x: string, y: string) => x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' });
+
+  this.groupedCategories = Array.from(map, ([department, items]) => ({
+    department,
+    items: [...items].sort((a, b) => asc(String(a.name || ''), String(b.name || ''))),   // category A-Z
+  })).sort((a, b) => asc(a.department, b.department));                                  // department A-Z
+}
+
+onUserTypeChange(type: number): void {
+  this.task.userType = type;
+
+  // Everything below belonged to the previous type
+  this.task.assignedTo = null;
+  this.users = [];
+  this.workloadList = [];
+  this.noEmployeeError = '';
+  this.holidayError = '';
+  this.taskCategoryEmployeeError = false;
+
+  this.task.taskCategoryId = null;
+  this.selectedTaskCategoryName = '';
+  this.showCategoryDropdown = false;
+
+  // Reload categories for the new type
+  this.onchangeloadDropdownData();
 }
 }

@@ -181,6 +181,19 @@ private loadTaskCategories(): void {
   });
 }
 
+// private buildGroupedCategories(): void {
+//   const map = new Map<string, TaskCategory[]>();
+
+//   for (const c of this.taskCategories) {
+//     const key = c.departmentName || 'Other';
+//     if (!map.has(key)) {
+//       map.set(key, []);
+//     }
+//     map.get(key)!.push(c);
+//   }
+
+//   this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items }));
+// }
 private buildGroupedCategories(): void {
   const map = new Map<string, TaskCategory[]>();
 
@@ -192,7 +205,12 @@ private buildGroupedCategories(): void {
     map.get(key)!.push(c);
   }
 
-  this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items }));
+  const asc = (x: string, y: string) => x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' });
+
+  this.groupedCategories = Array.from(map, ([department, items]) => ({
+    department,
+    items: [...items].sort((a, b) => asc(a.name || '', b.name || '')),   // category A-Z
+  })).sort((a, b) => asc(a.department, b.department));                  // department A-Z
 }
 
   getRecurringDetails(): void {

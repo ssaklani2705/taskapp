@@ -22,6 +22,7 @@
             mark are mandatory
           </div>
           <div class="user-form-grid">
+            <!-- Title -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -35,15 +36,84 @@
                 </div>
               </div>
             </div>
+
+            <!-- Type: Employee / Manager -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Type
+                  <span class="required">*</span>
+                </label>
+
+                <div class="user-radio-group">
+                  <label class="user-radio">
+                    <input type="radio" name="userType" [value]="1" (ngModelChange)="onUserTypeChange($event)" [(ngModel)]="task.userType" required #userTypeCtrl="ngModel" />
+                    <span>Employee</span>
+                  </label>
+
+                  <label class="user-radio">
+                    <input type="radio" name="userType" [value]="2" (ngModelChange)="onUserTypeChange($event)" [(ngModel)]="task.userType" required />
+                    <span>Manager</span>
+                  </label>
+                </div>
+
+                <div class="user-error" *ngIf="userTypeCtrl.invalid && (userTypeCtrl.touched || taskForm.submitted)">Please select Employee or Manager</div>
+              </div>
+            </div>
+
+            <!-- Task Category -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Task Category
+                  <span class="required">*</span>
+                </label>
+
+                <div class="category-dropdown-container">
+                  <!-- Selected value -->
+                  <div class="user-input user-select category-dropdown-selected" (click)="showCategoryDropdown = !showCategoryDropdown">
+                    <span>
+                      {{ selectedTaskCategoryName || 'Select Task Category' }}
+                    </span>
+                    <span class="category-dropdown-arrow">▼</span>
+                  </div>
+
+                  <!-- Dropdown list -->
+                  <div class="category-dropdown-list" *ngIf="showCategoryDropdown">
+                    <ng-container *ngFor="let group of groupedCategories">
+                      <!-- Department header (not clickable) -->
+                      <div class="category-group-header">{{ group.department }}</div>
+
+                      <!-- Categories of this department -->
+                      <div class="category-dropdown-item category-group-item" *ngFor="let category of group.items" (click)="selectTaskCategory(category)">
+                        {{ category.name }}
+                      </div>
+                    </ng-container>
+
+                    <div class="category-no-data" *ngIf="taskCategories.length === 0">No Task Category available</div>
+                  </div>
+
+                  <input type="hidden" [(ngModel)]="task.taskCategoryId" name="taskCategoryId" required #categoryCtrl="ngModel" />
+                </div>
+
+                <div class="user-error" *ngIf="categoryCtrl.invalid && categoryCtrl.touched && !taskCategoryEmployeeError">Task Category is required</div>
+
+                <div class="user-error" *ngIf="noEmployeeError">
+                  {{ noEmployeeError }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Client -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
                   Client
-                  <span class="required">*</span>
+                  <span class="required" *ngIf="!isClientOptional">*</span>
                 </label>
 
                 @if (loginType === 'manager') {
-                  <!-- Normal dropdown for manager -->
+                  <!-- Normal dropdown for manager (always mandatory) -->
                   <select class="user-input user-select" [ngModel]="task.clientId" (ngModelChange)="onManagerClientChange($event)" name="clientId" required #clientCtrl="ngModel">
                     <option [ngValue]="null">Select Client</option>
                     <option *ngFor="let client of clients" [ngValue]="client.clientId">
@@ -71,66 +141,30 @@
                       <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
                     </div>
                   </div>
-                  <input type="hidden" [(ngModel)]="task.clientId" name="clientId" required #clientCtrl="ngModel" />
+                  <!-- Not mandatory when the category belongs to department 2, 3, 4 or 5 -->
+                  <input type="hidden" [(ngModel)]="task.clientId" name="clientId" [required]="!isClientOptional" #clientCtrl="ngModel" />
                   <div class="user-error" *ngIf="clientCtrl.invalid && clientCtrl.touched">Client is required</div>
                 }
               </div>
             </div>
 
+            <!-- Assigned To -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
-                  Task Category
+                  Assigned To
                   <span class="required">*</span>
+                  <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
                 </label>
-
-                <div class="category-dropdown-container">
-                  <!-- Selected value -->
-                  <div class="user-input user-select category-dropdown-selected" [class.disabled]="!task.clientId" (click)="task.clientId && (showCategoryDropdown = !showCategoryDropdown)">
-                    <span>
-                      {{ selectedTaskCategoryName || 'Select Task Category' }}
-                    </span>
-
-                    <span class="category-dropdown-arrow">▼</span>
-                  </div>
-
-                  <!-- Dropdown list -->
-                  <!-- <div class="category-dropdown-list" *ngIf="showCategoryDropdown && task.clientId">
-                    <div class="category-dropdown-item" *ngFor="let category of taskCategories" (click)="selectTaskCategory(category)">
-                      {{ category.name }}
-                    </div>
-
-                    <div class="category-no-data" *ngIf="taskCategories.length === 0">No Task Category available</div>
-                  </div> -->
-
-                  <!-- Dropdown list -->
-<div class="category-dropdown-list" *ngIf="showCategoryDropdown && task.clientId">
-  <ng-container *ngFor="let group of groupedCategories">
-    <!-- Department header (not clickable) -->
-    <div class="category-group-header">{{ group.department }}</div>
-
-    <!-- Categories of this department -->
-    <div class="category-dropdown-item category-group-item" *ngFor="let category of group.items" (click)="selectTaskCategory(category)">
-      {{ category.name }}
-    </div>
-  </ng-container>
-
-  <div class="category-no-data" *ngIf="taskCategories.length === 0">No Task Category available</div>
-</div>
-
-                  <input type="hidden" [(ngModel)]="task.taskCategoryId" name="taskCategoryId" required #categoryCtrl="ngModel" />
-                </div>
-
-                <div class="user-error" *ngIf="categoryCtrl.invalid && categoryCtrl.touched && !taskCategoryEmployeeError">Task Category is required</div>
-
-                <div class="user-error" *ngIf="noEmployeeError">
-                  {{ noEmployeeError }}
-                </div>
-
-                <!-- <div class="user-error" *ngIf="taskCategoryEmployeeError">No employee available for the selected category.</div> -->
+                <select class="user-input user-select" [(ngModel)]="task.assignedTo" name="assignedTo" [disabled]="!task.taskCategoryId || (!task.clientId && !isClientOptional)" #assignedCtrl="ngModel" required>
+                  <option [ngValue]="null">Select User</option>
+                  <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
+                </select>
+                <div class="user-error" *ngIf="assignedCtrl.invalid && assignedCtrl.touched">Assigned To is required</div>
               </div>
             </div>
 
+            <!-- Start Date -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -164,6 +198,7 @@
               </div>
             </div>
 
+            <!-- End Date -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -195,11 +230,10 @@
                 </div>
 
                 <div class="user-warning" *ngIf="durationExceedsLimit">As this task exceeds 8 hours, kindly adjust the Start Date and End Date manually.</div>
-
-                <div class="user-error" *ngIf="taskForm?.submitted && !task.startDate">End Date &amp; Time is required</div>
               </div>
             </div>
 
+            <!-- Description -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -214,6 +248,7 @@
               </div>
             </div>
 
+            <!-- Upload File 1 -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -245,6 +280,7 @@
               </div>
             </div>
 
+            <!-- Upload File 2 -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -275,22 +311,8 @@
                 </div>
               </div>
             </div>
-            
-            <div class="user-form-col">
-              <div class="user-form-group">
-                <label class="user-label">
-                  Assigned To
-                  <span class="required">*</span>
-                  <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
-                </label>
-                <select class="user-input user-select" [(ngModel)]="task.assignedTo" name="assignedTo" [disabled]="!task.clientId || !task.taskCategoryId" #assignedCtrl="ngModel" required>
-                  <option [ngValue]="null">Select User</option>
-                  <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
-                </select>
-                <div class="user-error" *ngIf="assignedCtrl.invalid && assignedCtrl.touched">Assigned To is required</div>
-              </div>
-            </div>
 
+            <!-- Priority -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -306,6 +328,8 @@
                 <div class="user-error" *ngIf="priorityCtrl.invalid && priorityCtrl.touched">Priority is required</div>
               </div>
             </div>
+
+            <!-- Status (edit only) -->
             <div class="user-form-col" *ngIf="isEditMode">
               <div class="user-form-group">
                 <label class="user-label">

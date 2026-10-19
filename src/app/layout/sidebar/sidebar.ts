@@ -292,6 +292,7 @@ export class Sidebar implements OnInit, OnDestroy {
             icon: 'admin_panel_settings',
             route: '/access-report',
           },
+          { moduleId: 13, label: 'Workload Report', icon: 'insights', route: '/workload-report' },
         ],
       },
 

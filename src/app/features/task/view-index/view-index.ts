@@ -112,6 +112,17 @@ export class ViewIndex implements OnInit {
     }
   }
 
+  getUserTypeLabel(userType: number | string | null | undefined): string {
+  switch (Number(userType)) {
+    case 1:
+      return 'Employee';
+    case 2:
+      return 'Manager';
+    default:
+      return '-';
+  }
+}
+
   // =========================================================
   // GET TASK DETAILS
   // =========================================================
@@ -169,13 +180,13 @@ export class ViewIndex implements OnInit {
 
   getClientName(clientId: number | null | undefined): string {
     if (clientId === null || clientId === undefined) {
-      return '-';
+      return 'Internal';
     }
 
     const client = this.clients.find((item: any) => Number(item.clientId) === Number(clientId));
 
     if (client) {
-      return client.name || client.clientName || '-';
+      return client.name || client.clientName || 'Internal';
     }
 
     // -------------------------------------------------------

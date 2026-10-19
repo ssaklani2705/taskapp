@@ -26,8 +26,11 @@ export class Login {
   loading = false;
   errorMessage = '';
   hidePassword = true;
-  captchaText = '';
-  captchaError = false;
+  // captchaText = '';
+  // captchaError = false;
+  captchaImage = '';   // base64 image shown to the user
+captchaId = '';      // id sent back to the server on login
+captchaError = false;
   loginForm = this.fb.nonNullable.group({
     username: ['', Validators.required],
     password: ['', Validators.required],
@@ -39,34 +42,37 @@ export class Login {
     this.loadCaptcha();
   }
 
-  loadCaptcha() {
-    this.loginForm.get('captcha')?.reset('');
-    this.authService.getCaptcha().subscribe({
-      next: (res: { success: boolean; message: string; data: string }) => {
-        if (res.success) {
-          this.captchaText = res.data;
-        }
-      },
-      error: (err: any) => {
-        console.error('Error loading captcha:', err);
-      },
-    });
-  }
+loadCaptcha() {
+  this.loginForm.get('captcha')?.reset('');
+  this.captchaImage = '';
+  this.captchaId = '';
+  this.authService.getCaptcha().subscribe({
+    next: (res: { success: boolean; message: string; data: { captchaId: string; image: string } }) => {
+      if (res.success) {
+        this.captchaId = res.data.captchaId;
+        this.captchaImage = res.data.image;
+      }
+    },
+    error: (err: any) => {
+      console.error('Error loading captcha:', err);
+    },
+  });
+}
 
-  validateCaptcha(): boolean {
-    const enteredCaptcha = this.loginForm.controls.captcha.value.trim().toUpperCase();
-    if (!enteredCaptcha) {
-      this.captchaError = true;
-      return false;
-    }
-    if (enteredCaptcha !== this.captchaText) {
-      this.captchaError = true;
-      return false;
-    }
-    this.captchaError = false;
+  // validateCaptcha(): boolean {
+  //   const enteredCaptcha = this.loginForm.controls.captcha.value.trim().toUpperCase();
+  //   if (!enteredCaptcha) {
+  //     this.captchaError = true;
+  //     return false;
+  //   }
+  //   if (enteredCaptcha !== this.captchaText) {
+  //     this.captchaError = true;
+  //     return false;
+  //   }
+  //   this.captchaError = false;
 
-    return true;
-  }
+  //   return true;
+  // }
 
   onCaptchaInput(): void {
     this.captchaError = false;
@@ -80,10 +86,10 @@ export class Login {
       return;
     }
     // Validate CAPTCHA
-    if (!this.validateCaptcha()) {
-      this.loginForm.controls.captcha.setValue('');
-      return;
-    }
+    // if (!this.validateCaptcha()) {
+    //   this.loginForm.controls.captcha.setValue('');
+    //   return;
+    // }
     this.loading = true;
     const loginType = 'other'; // manager / other
     const loginPayload = {
@@ -91,7 +97,8 @@ export class Login {
       username: this.loginForm.controls.username.value?.trim().toLowerCase(),
       password: this.loginForm.controls.password.value?.trim(),
       captcha: this.loginForm.controls.captcha.value?.trim().toUpperCase(),
-      captchaAns: this.captchaText,
+      // captchaAns: this.captchaText,
+      captchaId: this.captchaId,
     };
 
     this.authService.login(loginPayload).subscribe({

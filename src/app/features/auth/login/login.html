@@ -120,15 +120,10 @@
           </div>
           <div class="captcha-row">
             <!-- CAPTCHA IMAGE -->
-            <div class="captcha-box">
-              <span
-                *ngFor="let character of captchaText.split(''); let i = index"
-                [style.transform]="'rotate(' + ((i % 3) - 1) * 8 + 'deg) translateY(' + (i % 2 ? '2px' : '-1px') + ')'"
-                [style.margin-right]="'3px'"
-              >
-                {{ character }}
-              </span>
-            </div>
+           <div class="captcha-box">
+  <img *ngIf="captchaImage" [src]="captchaImage" alt="captcha" class="captcha-img" />
+  <span *ngIf="!captchaImage" class="captcha-loading">Loading...</span>
+</div>
             <!-- REFRESH -->
             <button type="button" mat-icon-button class="captcha-refresh" title="Refresh CAPTCHA" (click)="loadCaptcha()">
               <mat-icon> refresh </mat-icon>

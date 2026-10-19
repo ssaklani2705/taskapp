@@ -17,13 +17,25 @@ export class AuthService {
 
   private readonly apiUrl = environment.apiBaseUrl;
 
-  getCaptcha(): Observable<{ success: boolean; message: string; data: string }> {
-    return this.http.get<{ success: boolean; message: string; data: string }>(
-      `${environment.apiBaseUrl}auth/captcha`,
-          { withCredentials: true }   // MUST ADD THIS
+  // getCaptcha(): Observable<{ success: boolean; message: string; data: string }> {
+  //   return this.http.get<{ success: boolean; message: string; data: string }>(
+  //     `${environment.apiBaseUrl}auth/captcha`,
+  //         { withCredentials: true }   // MUST ADD THIS
 
-    );
-  }
+  //   );
+  // }
+
+  getCaptcha(): Observable<{
+  success: boolean;
+  message: string;
+  data: { captchaId: string; image: string };
+}> {
+  return this.http.get<{
+    success: boolean;
+    message: string;
+    data: { captchaId: string; image: string };
+  }>(`${environment.apiBaseUrl}auth/captcha`);
+}
 
   login(request: LoginRequest): Observable<LoginResponse> {
 
