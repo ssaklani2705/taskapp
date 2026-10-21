@@ -140,7 +140,7 @@
 
                   <option [ngValue]="2">Inactive</option>
 
-                  <option [ngValue]="3">Deleted</option>
+                  <!-- <option [ngValue]="3">Deleted</option> -->
                 </select>
 
                 <div class="user-error" *ngIf="recurringForm.get('status')?.touched && recurringForm.get('status')?.invalid">Status is required</div>

@@ -1043,15 +1043,26 @@ export class AddIndexComponent implements OnInit {
     return this.taskCategories.find((x: any) => Number(x.taskcategoryId ?? x.taskCategoryId) === Number(this.task.taskCategoryId));
   }
 
-  get isClientOptional(): boolean {
-    if (String(this.loginType).toLowerCase() === 'manager') {
-      return false;
-    }
+  // get isClientOptional(): boolean {
+  //   if (String(this.loginType).toLowerCase() === 'manager') {
+  //     return false;
+  //   }
 
-    const category = this.getSelectedCategory();
+  //   const category = this.getSelectedCategory();
 
-    return this.CLIENT_OPTIONAL_DEPARTMENTS.includes(Number(category?.departmentId));
-  }
+  //   return this.CLIENT_OPTIONAL_DEPARTMENTS.includes(Number(category?.departmentId));
+  // }
+
+  // Client is mandatory for Employee (1), optional for Manager (2)
+// get isClientOptional(): boolean {
+//   return Number(this.task.userType) === 1;
+// }
+// Client is optional only when the selected category belongs to department 2, 3, 4 or 5
+get isClientOptional(): boolean {
+  const category = this.getSelectedCategory();
+  if (!category) return false;   // no category selected yet: Client stays mandatory
+  return this.CLIENT_OPTIONAL_DEPARTMENTS.includes(Number(category.departmentId));
+}
 
   selectTaskCategory(category: any): void {
     this.task.taskCategoryId = category.taskcategoryId ?? category.taskCategoryId;
@@ -1112,6 +1123,9 @@ private buildGroupedCategories(): void {
 onUserTypeChange(type: number): void {
   this.task.userType = type;
 
+    // Client, assignee and category belonged to the previous type
+  this.resetClient();
+
   // Everything below belonged to the previous type
   this.task.assignedTo = null;
   this.users = [];
@@ -1127,4 +1141,32 @@ onUserTypeChange(type: number): void {
   // Reload categories for the new type
   this.onchangeloadDropdownData();
 }
+
+// Clears Client (works for both the manager dropdown and the search input)
+// and the assignee list, which depends on it
+private resetClient(): void {
+  this.task.clientId = null;
+  this.clientSearchText = '';
+  this.filteredClients = [];
+  this.showClientDropdown = false;
+
+  this.task.assignedTo = null;
+  this.users = [];
+  this.workloadList = [];
+  this.noEmployeeError = '';
+}
+
+// Called only when the user clicks a category in the dropdown
+onCategoryPicked(category: any): void {
+  const newId = Number(category.taskcategoryId ?? category.taskCategoryId);
+
+  // Clear Client only if the category actually changed
+  if (Number(this.task.taskCategoryId) !== newId) {
+    this.resetClient();
+  }
+
+  this.selectTaskCategory(category);
+}
+
+
 }

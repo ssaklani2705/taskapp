@@ -49,6 +49,7 @@ interface Task {
   assignedbyName: string;
   description: string;
   taskCategoryId: any;
+  userType:any;
 }
 
 interface Client {

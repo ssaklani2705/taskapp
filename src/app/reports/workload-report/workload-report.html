@@ -62,7 +62,7 @@
           <div class="status-dropdown" #departmentDropdown>
             <button type="button" class="dropdown-btn"
                     [disabled]="!departmentList.length"
-                    (click)="showDepartmentDropdown = !showDepartmentDropdown; showCategoryDropdown = false">
+                    (click)="showDepartmentDropdown = !showDepartmentDropdown; showCategoryDropdown = false;" (onChange)="onSearch()">
               <span class="selected-category-text">
                 {{ getSelectedDepartmentNames() || '--Select Department--' }}
               </span>

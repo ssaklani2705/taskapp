@@ -12,16 +12,15 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/mat
 Chart.register(...registerables);
 export const MY_DATE_FORMATS = {
   parse: {
-    dateInput: 'DD/MM/YYYY',
+    dateInput: 'DD-MM-YYYY',
   },
   display: {
-    dateInput: 'DD/MM/YYYY',
+    dateInput: 'DD-MM-YYYY',
     monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'DD/MM/YYYY',
+    dateA11yLabel: 'DD-MM-YYYY',
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
-
 @Component({
   selector: 'app-workload-report',
   standalone: true,
@@ -112,42 +111,60 @@ export class WorkloadReport implements OnInit, OnDestroy {
 
     return [...list].sort((a: any, b: any) => deptName(a).localeCompare(deptName(b), undefined, this.sortOpts) || String(a.name ?? '').localeCompare(String(b.name ?? ''), undefined, this.sortOpts));
   }
+  private categoryReq = 0;
 
-  private loadCategories(): void {
-    const ids = this.selectedDepartmentIds.length ? this.selectedDepartmentIds : this.departmentList.map((d) => d.departmentId);
+ private loadCategories(onLoaded?: () => void): void {
+  const ids = this.selectedDepartmentIds.length
+    ? this.selectedDepartmentIds
+    : this.departmentList.map((d) => d.departmentId);
 
-    if (!ids.length) {
+  if (!ids.length) {
+    this.categoryList = [];
+    this.selectedCategoryIds = [];
+    onLoaded?.();
+    return;
+  }
+
+  const req = ++this.categoryReq;
+
+  this.reportService.getCategoriesByDepartmentIds(ids).subscribe({
+    next: (res: TaskCategoryDTO[]) => {
+      if (req !== this.categoryReq) return;      // a newer tick has replaced this request
+      this.categoryList = this.sortCategories(res || []);
+      const valid = this.categoryList.map((c) => c.taskcategoryId);
+      this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => valid.includes(id));
+      onLoaded?.();
+    },
+    error: () => {
+      if (req !== this.categoryReq) return;
       this.categoryList = [];
       this.selectedCategoryIds = [];
-      return;
-    }
+    },
+  });
+}
 
-    this.reportService.getCategoriesByDepartmentIds(ids).subscribe({
-      next: (res: TaskCategoryDTO[]) => {
-        this.categoryList = this.sortCategories(res || []);
-        const valid = this.categoryList.map((c) => c.taskcategoryId);
-        // drop selected categories that no longer belong to the chosen departments
-        this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => valid.includes(id));
-      },
-      error: () => {
-        this.categoryList = [];
-        this.selectedCategoryIds = [];
-      },
-    });
-  }
+  
 
-  toggleDepartment(id: number, event: Event): void {
-    const checked = (event.target as HTMLInputElement).checked;
-    this.selectedDepartmentIds = checked ? [...this.selectedDepartmentIds, id] : this.selectedDepartmentIds.filter((x) => x !== id);
+toggleDepartment(id: number, event: Event): void {
+  const checked = (event.target as HTMLInputElement).checked;
+  this.selectedDepartmentIds = checked
+    ? [...this.selectedDepartmentIds, id]
+    : this.selectedDepartmentIds.filter((x) => x !== id);
+
+  if (!this.selectedDepartmentIds.length) {
+    this.resetResults();                // nothing selected => blank
     this.loadCategories();
-    if (!this.selectedDepartmentIds.length) {
-      this.resetResults(); // no department => back to blank
-    }
+    return;
   }
+
+  // refresh the category list first, then search with the right categories
+  this.loadCategories(() => this.loadReport());
+}
 
   toggleCategory(id: number, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     this.selectedCategoryIds = checked ? [...this.selectedCategoryIds, id] : this.selectedCategoryIds.filter((x) => x !== id);
+    
   }
 
   isDepartmentChecked(id: number): boolean {
@@ -217,23 +234,26 @@ export class WorkloadReport implements OnInit, OnDestroy {
 
   // ---------- load ----------
 
-  loadReport(): void {
-    if (!this.selectedDepartmentIds.length) {
-      this.errorMessage = 'Please select at least one department.';
-      return;
-    }
-    if (!this.fromDate || !this.toDate) {
-      this.errorMessage = 'Please select both dates.';
-      return;
-    }
-    if (this.toDate < this.fromDate) {
-      this.errorMessage = 'To Date cannot be before From Date.';
-      return;
-    }
-    this.errorMessage = '';
-    this.loading = true;
+ loadReport(): void {
+  if (!this.fromDate || !this.toDate) {
+    this.errorMessage = 'Please select both dates.';
+    return;
+  }
+  if (this.toDate < this.fromDate) {
+    this.errorMessage = 'To Date cannot be before From Date.';
+    return;
+  }
+  this.errorMessage = '';
+  this.loading = true;
 
-    this.reportService.getWorkload(this.toIso(this.fromDate), this.toIso(this.toDate), this.effectiveCategoryIds()).subscribe({
+  this.reportService
+    .getWorkload(
+      this.toIso(this.fromDate),
+      this.toIso(this.toDate),
+      this.selectedDepartmentIds,
+      this.selectedCategoryIds,
+    )
+    .subscribe({
       next: (res) => {
         this.allRows = res.data || [];
         this.hasSearched = true;
@@ -246,7 +266,7 @@ export class WorkloadReport implements OnInit, OnDestroy {
         this.loading = false;
       },
     });
-  }
+}
 
   private resetResults(): void {
     this.allRows = [];
