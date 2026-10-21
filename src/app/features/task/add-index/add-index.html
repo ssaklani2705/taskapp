@@ -53,7 +53,7 @@
 
                   <label class="user-radio">
                     <input type="radio" name="userType" [value]="2" (ngModelChange)="onUserTypeChange($event)" [(ngModel)]="task.userType" required />
-                    <span>Manager</span>
+                    <span>{{ loginType === 'manager' ? 'Self' : 'Manager' }}</span>
                   </label>
                 </div>
 
@@ -85,7 +85,7 @@
                       <div class="category-group-header">{{ group.department }}</div>
 
                       <!-- Categories of this department -->
-                      <div class="category-dropdown-item category-group-item" *ngFor="let category of group.items" (click)="selectTaskCategory(category)">
+                      <div class="category-dropdown-item category-group-item" *ngFor="let category of group.items" (click)="onCategoryPicked(category)">
                         {{ category.name }}
                       </div>
                     </ng-container>
@@ -114,12 +114,16 @@
 
                 @if (loginType === 'manager') {
                   <!-- Normal dropdown for manager (always mandatory) -->
-                  <select class="user-input user-select" [ngModel]="task.clientId" (ngModelChange)="onManagerClientChange($event)" name="clientId" required #clientCtrl="ngModel">
+                  <!-- <select class="user-input user-select" [ngModel]="task.clientId" (ngModelChange)="onManagerClientChange($event)" name="clientId" required #clientCtrl="ngModel">
                     <option [ngValue]="null">Select Client</option>
                     <option *ngFor="let client of clients" [ngValue]="client.clientId">
                       {{ client.name }}
                     </option>
-                  </select>
+                  </select> -->
+                  <select class="user-input user-select" [ngModel]="task.clientId" (ngModelChange)="onManagerClientChange($event)" name="clientId" [required]="!isClientOptional" #clientCtrl="ngModel">
+    <option [ngValue]="null">Select Client</option>
+    <option *ngFor="let client of clients" [ngValue]="client.clientId">{{ client.name }}</option>
+  </select>
 
                   <div class="user-error" *ngIf="clientCtrl.invalid && clientCtrl.touched">Client is required</div>
                 } @else {

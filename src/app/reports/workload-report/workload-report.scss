@@ -112,10 +112,18 @@ mat-divider {
 
 .search-grid {
   display: grid;
-  grid-template-columns: minmax(170px, 1fr) minmax(170px, 1fr) minmax(220px, 1.4fr) auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   align-items: end;
   column-gap: 18px;
   row-gap: 15px;
+}
+
+/* Go / Clear sit in the 3rd column of row 2 */
+.filter-action {
+  grid-column: 3;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
 }
 
 .search-field {
@@ -1110,6 +1118,7 @@ mat-divider {
 }
 
 
+/* ---------- multi-select dropdowns (Department / Task Category) ---------- */
 .status-dropdown {
   position: relative;
   width: 100%;
@@ -1117,16 +1126,41 @@ mat-divider {
 
 .dropdown-btn {
   width: 100%;
-  height: 38px;
-  padding: 0 10px;
-  border: 1px solid #cfd6df;
-  border-radius: 6px;
-  background: #fff;
+  height: 40px;
+  padding: 0 34px 0 12px;
+  position: relative;
+  border: 1px solid var(--border-dark);
+  border-radius: 3px;
+  background: var(--white);
+  color: var(--text);
+  font-family: Arial, sans-serif;
   font-size: 14px;
   text-align: left;
   cursor: pointer;
 
-  &:disabled { background: #f3f5f8; cursor: not-allowed; }
+  /* caret */
+  &::after {
+    content: '';
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid var(--text-muted);
+    border-bottom: 2px solid var(--text-muted);
+    transform: translateY(-70%) rotate(45deg);
+  }
+
+  &:hover:not(:disabled),
+  &:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+  }
+
+  &:disabled {
+    background: #f3f5f8;
+    cursor: not-allowed;
+  }
 
   .selected-category-text {
     display: block;
@@ -1136,7 +1170,7 @@ mat-divider {
   }
 }
 
-.dropdown-menu {
+.search-field .dropdown-menu {
   position: absolute;
   top: calc(100% + 2px);
   left: 0;
@@ -1144,19 +1178,35 @@ mat-divider {
   z-index: 20;
   max-height: 240px;
   overflow-y: auto;
-  background: #fff;
-  border: 1px solid #cfd6df;
-  border-radius: 6px;
+  background: var(--white);
+  border: 1px solid var(--border-dark);
+  border-radius: 3px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 
+  /* override the bold .search-field label style */
   label {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
+    gap: 10px;
+    padding: 9px 12px;
+    color: var(--text);
+    font-family: Arial, sans-serif;
     font-size: 14px;
+    font-weight: 400;
+    line-height: 1.3;
     cursor: pointer;
 
-    &:hover { background: #f3f5f8; }
+    &:hover {
+      background: var(--primary-blue-light);
+    }
+
+    input[type='checkbox'] {
+      flex: 0 0 auto;
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      accent-color: var(--primary-blue);
+    }
   }
 }

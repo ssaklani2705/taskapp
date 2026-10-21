@@ -1394,7 +1394,25 @@ export class DataProviderService {
     return this.http.post<any>(`${environment.apiBaseUrl}auth/change_password`, request);
   }
 
-   getWorkload(
+//    getWorkload(
+//   from: string,
+//   to: string,
+//   departmentIds: number[] = [],
+//   categoryIds: number[] = [],
+// ) {
+//   const params: { [key: string]: string } = { from, to };
+
+//   // Send a filter only when something is selected (empty = All)
+//   if (departmentIds.length) params['departmentIds'] = departmentIds.join(',');
+//   if (categoryIds.length) params['categoryIds'] = categoryIds.join(',');
+
+//   return this.http.get<{ success: boolean; message: string; data: any[] }>(
+//     `${environment.apiBaseUrl}admin/report/workload`,
+//     { params },
+//   );
+// }
+
+getWorkload(
   from: string,
   to: string,
   departmentIds: number[] = [],
