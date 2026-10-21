@@ -35,7 +35,7 @@ export const MY_DATE_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     {
-      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, 
       useValue: { useUtc: false }
     }
   ], // remove if your app already provides a date adapter
