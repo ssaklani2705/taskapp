@@ -390,7 +390,6 @@ export class AddIndexComponent implements OnInit {
   // ============================================================
 
   onSubmit(form: any): void {
-    
     if (form.invalid || this.pdfError || this.zipError) {
       form.control.markAllAsTouched();
       return;
@@ -404,17 +403,17 @@ export class AddIndexComponent implements OnInit {
     // if (this.taskCategoryEmployeeError) {
     //   return;
     // }
-     // Do not submit while employee availability is being checked
-  if (this.checkingTaskCategoryEmployee) {
-    Swal.fire('Please wait', 'Checking employee availability for the selected category...', 'info');
-    return;
-  }
+    // Do not submit while employee availability is being checked
+    if (this.checkingTaskCategoryEmployee) {
+      Swal.fire('Please wait', 'Checking employee availability for the selected category...', 'info');
+      return;
+    }
 
-  // Do not submit if selected task category has no employee
-  // if (this.taskCategoryEmployeeError) {
-  //   Swal.fire('Error', 'No employee available for the selected task category.', 'error');
-  //   return;
-  // }
+    // Do not submit if selected task category has no employee
+    // if (this.taskCategoryEmployeeError) {
+    //   Swal.fire('Error', 'No employee available for the selected task category.', 'error');
+    //   return;
+    // }
 
     this.task.addedBy = this.userId ? Number(this.userId) : null;
 
@@ -474,7 +473,6 @@ export class AddIndexComponent implements OnInit {
       },
     });
   }
-  
 
   private formatDateTimeForApi(date: any): string | null {
     if (!date) {
@@ -601,11 +599,11 @@ export class AddIndexComponent implements OnInit {
   // ============================================================
 
   onchangeloadDropdownData(): void {
-      const typeAtRequest = Number(this.task.userType);
-    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod,this.task.userType).subscribe({
+    const typeAtRequest = Number(this.task.userType);
+    this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod, this.task.userType).subscribe({
       next: (res: any) => {
         if (typeAtRequest !== Number(this.task.userType)) {
-          return;                       // user already switched type; ignore this stale response
+          return; // user already switched type; ignore this stale response
         }
         const data = res?.data || res;
         this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
@@ -636,9 +634,7 @@ export class AddIndexComponent implements OnInit {
         }
 
         // Categories that belong to the logged-in user's session (categoryIds from login)
-        const sessionCategories = this.categoryIds.length
-          ? this.taskCategories.filter((c: any) => this.categoryIds.includes(Number(c.taskcategoryId ?? c.taskCategoryId)))
-          : this.taskCategories;
+        const sessionCategories = this.categoryIds.length ? this.taskCategories.filter((c: any) => this.categoryIds.includes(Number(c.taskcategoryId ?? c.taskCategoryId))) : this.taskCategories;
 
         console.log('categoryIds:', this.categoryIds, 'matched:', sessionCategories);
 
@@ -665,42 +661,39 @@ export class AddIndexComponent implements OnInit {
 
     const endDate = this.datePipe.transform(this.task.endDate, 'yyyy-MM-dd');
 
-    this.dataprovider
-      .changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId, 0, startDate, endDate, this.task.userType)
-      .subscribe({
-        next: (res: any) => {
-          const data = res?.data || res;
-          this.users = data?.assignedUsers || [];
+    this.dataprovider.changesCategoryIdgetUserFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.task.taskCategoryId, 0, startDate, endDate, this.task.userType).subscribe({
+      next: (res: any) => {
+        const data = res?.data || res;
+        this.users = data?.assignedUsers || [];
 
-          const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
+  //      alert('CASE 4 ' + JSON.stringify(this.workloadList));
+        // const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
+        // // alert("CASE 5 " + JSON.stringify(assignedUserIds))
+        // this.users = this.users.map((user: any) => ({
+        //   ...user,
+        //   hasWorkload: assignedUserIds.has(Number(user.userId)),
+        // }));
 
-          this.users = this.users.map((user: any) => ({
-            ...user,
-            hasWorkload: assignedUserIds.has(Number(user.userId)),
-          }));
+        this.users = this.markWorkload(data?.assignedUsers || []);
 
-          // Auto-select the system-recommended employee.
-          // Do not overwrite an existing selection in edit mode.
-          if (!this.task.assignedTo && !this.isEditMode) {
-            const recommendedUser = this.users.find((user: any) => user.hasWorkload);
-
-            if (recommendedUser) {
-              this.task.assignedTo = recommendedUser.userId;
-            }
+     //   alert('FOR THE CASE 3 ' + JSON.stringify(this.users));
+        // Auto-select the system-recommended employee.
+        // Do not overwrite an existing selection in edit mode.
+        if (!this.task.assignedTo && !this.isEditMode) {
+          const recommendedUser = this.users.find((user: any) => user.hasWorkload);
+          if (recommendedUser) {
+            this.task.assignedTo = recommendedUser.userId;
           }
-
-          console.log('Users with workload:', this.users);
-          console.log('Selected employee:', this.task.assignedTo);
-
-          if (onLoaded) {
-            onLoaded();
-          }
-        },
-        error: (error: any) => {
-          console.error('Error loading task dropdown data:', error);
-          this.users = [];
-        },
-      });
+        }
+        if (onLoaded) {
+          onLoaded();
+        }
+      },
+      error: (error: any) => {
+        console.error('Error loading task dropdown data:', error);
+        this.users = [];
+      },
+    });
   }
 
   loadDropdownData(): void {
@@ -902,6 +895,8 @@ export class AddIndexComponent implements OnInit {
         hasWorkload: false,
       }));
 
+ //     alert('FIRST CASE 1 ' + JSON.stringify(this.users));
+
       // Clear selection for a new task when required fields are missing.
       if (!this.isEditMode) {
         this.task.assignedTo = null;
@@ -932,6 +927,8 @@ export class AddIndexComponent implements OnInit {
             hasWorkload: false,
           }));
 
+      //    alert('FIRST CASE 2 ' + JSON.stringify(this.users));
+
           if (!this.isEditMode) {
             this.task.assignedTo = null;
           }
@@ -946,15 +943,18 @@ export class AddIndexComponent implements OnInit {
           this.noEmployeeError = 'No employee available for the selected category.';
         }
 
-        // Get the recommended employee IDs from the API response.
-        const assignedUserIds = new Set(this.workloadList.map((item: any) => Number(item.assignedTo)));
+        // // Get the recommended employee IDs from the API response.
+        // const assignedUserIds = new Set(this.workloadList.map((item: any) => Number(item.assignedTo)));
 
-        // Update the employee recommendation indicators.
-        this.users = this.users.map((user: any) => ({
-          ...user,
-          hasWorkload: assignedUserIds.has(Number(user.userId)),
-        }));
+        // // Update the employee recommendation indicators.
+        // this.users = this.users.map((user: any) => ({
+        //   ...user,
+        //   hasWorkload: assignedUserIds.has(Number(user.userId)),
+        // }));
 
+        this.users = this.markWorkload(this.users);
+
+   //     alert(JSON.stringify(this.users));
         // Automatically select the recommended employee for a new task.
         if (!this.isEditMode) {
           const recommendedUser = this.users.find((user: any) => user.hasWorkload);
@@ -1054,15 +1054,15 @@ export class AddIndexComponent implements OnInit {
   // }
 
   // Client is mandatory for Employee (1), optional for Manager (2)
-// get isClientOptional(): boolean {
-//   return Number(this.task.userType) === 1;
-// }
-// Client is optional only when the selected category belongs to department 2, 3, 4 or 5
-get isClientOptional(): boolean {
-  const category = this.getSelectedCategory();
-  if (!category) return false;   // no category selected yet: Client stays mandatory
-  return this.CLIENT_OPTIONAL_DEPARTMENTS.includes(Number(category.departmentId));
-}
+  // get isClientOptional(): boolean {
+  //   return Number(this.task.userType) === 1;
+  // }
+  // Client is optional only when the selected category belongs to department 2, 3, 4 or 5
+  get isClientOptional(): boolean {
+    const category = this.getSelectedCategory();
+    if (!category) return false; // no category selected yet: Client stays mandatory
+    return this.CLIENT_OPTIONAL_DEPARTMENTS.includes(Number(category.departmentId));
+  }
 
   selectTaskCategory(category: any): void {
     this.task.taskCategoryId = category.taskcategoryId ?? category.taskCategoryId;
@@ -1101,72 +1101,82 @@ get isClientOptional(): boolean {
 
   //   this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items }));
   // }
-private buildGroupedCategories(): void {
-  const map = new Map<string, any[]>();
+  private buildGroupedCategories(): void {
+    const map = new Map<string, any[]>();
 
-  for (const c of this.taskCategories || []) {
-    const key = c.departmentName || 'Other';
-    if (!map.has(key)) {
-      map.set(key, []);
+    for (const c of this.taskCategories || []) {
+      const key = c.departmentName || 'Other';
+      if (!map.has(key)) {
+        map.set(key, []);
+      }
+      map.get(key)!.push(c);
     }
-    map.get(key)!.push(c);
+
+    const asc = (x: string, y: string) => x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' });
+
+    this.groupedCategories = Array.from(map, ([department, items]) => ({
+      department,
+      items: [...items].sort((a, b) => asc(String(a.name || ''), String(b.name || ''))), // category A-Z
+    })).sort((a, b) => asc(a.department, b.department)); // department A-Z
   }
 
-  const asc = (x: string, y: string) => x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' });
-
-  this.groupedCategories = Array.from(map, ([department, items]) => ({
-    department,
-    items: [...items].sort((a, b) => asc(String(a.name || ''), String(b.name || ''))),   // category A-Z
-  })).sort((a, b) => asc(a.department, b.department));                                  // department A-Z
-}
-
-onUserTypeChange(type: number): void {
-  this.task.userType = type;
+  onUserTypeChange(type: number): void {
+    this.task.userType = type;
 
     // Client, assignee and category belonged to the previous type
-  this.resetClient();
-
-  // Everything below belonged to the previous type
-  this.task.assignedTo = null;
-  this.users = [];
-  this.workloadList = [];
-  this.noEmployeeError = '';
-  this.holidayError = '';
-  this.taskCategoryEmployeeError = false;
-
-  this.task.taskCategoryId = null;
-  this.selectedTaskCategoryName = '';
-  this.showCategoryDropdown = false;
-
-  // Reload categories for the new type
-  this.onchangeloadDropdownData();
-}
-
-// Clears Client (works for both the manager dropdown and the search input)
-// and the assignee list, which depends on it
-private resetClient(): void {
-  this.task.clientId = null;
-  this.clientSearchText = '';
-  this.filteredClients = [];
-  this.showClientDropdown = false;
-
-  this.task.assignedTo = null;
-  this.users = [];
-  this.workloadList = [];
-  this.noEmployeeError = '';
-}
-
-// Called only when the user clicks a category in the dropdown
-onCategoryPicked(category: any): void {
-  const newId = Number(category.taskcategoryId ?? category.taskCategoryId);
-
-  // Clear Client only if the category actually changed
-  if (Number(this.task.taskCategoryId) !== newId) {
     this.resetClient();
+
+    // Everything below belonged to the previous type
+    this.task.assignedTo = null;
+    this.users = [];
+    this.workloadList = [];
+    this.noEmployeeError = '';
+    this.holidayError = '';
+    this.taskCategoryEmployeeError = false;
+
+    this.task.taskCategoryId = null;
+    this.selectedTaskCategoryName = '';
+    this.showCategoryDropdown = false;
+
+    // Reload categories for the new type
+    this.onchangeloadDropdownData();
   }
 
-  this.selectTaskCategory(category);
-}
+  // Clears Client (works for both the manager dropdown and the search input)
+  // and the assignee list, which depends on it
+  private resetClient(): void {
+    this.task.clientId = null;
+    this.clientSearchText = '';
+    this.filteredClients = [];
+    this.showClientDropdown = false;
 
+    this.task.assignedTo = null;
+    this.users = [];
+    this.workloadList = [];
+    this.noEmployeeError = '';
+  }
 
+  // Called only when the user clicks a category in the dropdown
+  onCategoryPicked(category: any): void {
+    const newId = Number(category.taskcategoryId ?? category.taskCategoryId);
+
+    // Clear Client only if the category actually changed
+    if (Number(this.task.taskCategoryId) !== newId) {
+      this.resetClient();
+    }
+
+    this.selectTaskCategory(category);
+  }
+
+  private markWorkload(users: any[]): any[] {
+    const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
+    const isManager = Number(this.task.userType) === 2;
+
+    return users.map((user: any) => ({
+      ...user,
+      hasWorkload: isManager
+        ? this.workloadList.length > 0 && !assignedUserIds.has(Number(user.userId)) // manager: userId != assignedTo
+        : assignedUserIds.has(Number(user.userId)), // employee: userId == assignedTo
+    }));
+  }
 }
