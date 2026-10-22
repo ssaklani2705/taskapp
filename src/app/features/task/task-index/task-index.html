@@ -53,15 +53,47 @@
           }
 
           <!-- TASK CATEGORY -->
+           <div class="status-wrapper task-category-dropdown">
+  <button type="button" class="status-select cat-trigger" (click)="toggleTaskCategoryDropdown()">
+    <span class="cat-trigger-text">{{ selectedTaskCategoryLabel }}</span>
+    <span class="cat-caret">&#9662;</span>
+  </button>
+
+  <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
+    <input
+      id="taskCategorySearchInput"
+      type="text"
+      class="cat-search"
+      placeholder="Search category..."
+      [(ngModel)]="categorySearchText"
+      autocomplete="off"
+    />
+
+    <div class="cat-list">
+      <div class="cat-item cat-all" [class.active]="!selectedTaskCategory" (click)="clearTaskCategory()">
+        --All Task Categories--
+      </div>
+
+      <ng-container *ngFor="let group of filteredGroupedCategories">
+        <div class="cat-group">{{ group.department }}</div>
+        <div
+          class="cat-item"
+          *ngFor="let category of group.items"
+          [class.active]="selectedTaskCategory === ('' + category.taskcategoryId)"
+          (click)="selectTaskCategory(category)"
+        >
+          {{ category.name }}
+        </div>
+      </ng-container>
+
+      <div class="cat-empty" *ngIf="filteredGroupedCategories.length === 0">
+        No category found
+      </div>
+    </div>
+  </div>
+</div>
+        
           <!-- <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
-              <option value="">--All Task Categories--</option>
-              <option *ngFor="let category of taskCategories" [value]="category.taskcategoryId">
-                {{ category.name }}
-              </option>
-            </select>
-          </div> -->
-          <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
               <option value="">--All Task Categories--</option>
               <optgroup *ngFor="let group of groupedCategories" [label]="group.department">
@@ -70,7 +102,7 @@
                 </option>
               </optgroup>
             </select>
-          </div>
+          </div> -->
 
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedAssignedTo" (change)="onSearch()">

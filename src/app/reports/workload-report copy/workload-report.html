@@ -1,0 +1,203 @@
+<div class="page-container">
+  <div class="main-card">
+    <!-- ================= HEADER ================= -->
+    <div class="page-header">
+      <div class="page-title">
+        <mat-icon>insights</mat-icon>
+        <span>Workload Report</span>
+      </div>
+
+      <div class="view-toggle">
+        <button type="button" [class.active-view]="viewMode === 'table'" (click)="setView('table')">
+          <mat-icon>table_rows</mat-icon> Table
+        </button>
+        <button type="button" [class.active-view]="viewMode === 'graph'" (click)="setView('graph')">
+          <mat-icon>bar_chart</mat-icon> Graph
+        </button>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- ================= SEARCH ================= -->
+    <div class="search-section">
+      <div class="search-grid">
+        <div class="search-field">
+          <label>From Date</label>
+          <div class="search-input-wrapper">
+            <input type="text" [matDatepicker]="fromPicker" [(ngModel)]="fromDate"
+                   [max]="toDate" placeholder="DD/MM/YYYY" readonly (click)="fromPicker.open()" />
+            <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
+              <mat-icon>calendar_today</mat-icon>
+            </button>
+            <mat-datepicker #fromPicker></mat-datepicker>
+          </div>
+        </div>
+
+        <div class="search-field">
+          <label>To Date</label>
+          <div class="search-input-wrapper">
+            <input type="text" [matDatepicker]="toPicker" [(ngModel)]="toDate"
+                   [min]="fromDate" placeholder="DD/MM/YYYY" readonly (click)="toPicker.open()" />
+            <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
+              <mat-icon>calendar_today</mat-icon>
+            </button>
+            <mat-datepicker #toPicker></mat-datepicker>
+          </div>
+        </div>
+
+        <div class="search-field">
+          <label>User Name</label>
+          <div class="search-input-wrapper">
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search By User Name"
+                   (keyup.enter)="onSearch()" />
+            <button type="button" class="search-button" (click)="onSearch()" title="Search">
+              <mat-icon>search</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="search-field">
+          <label>Department</label>
+          <div class="status-dropdown" #departmentDropdown>
+            <button type="button" class="dropdown-btn"
+                    [disabled]="!departmentList.length"
+                    (click)="showDepartmentDropdown = !showDepartmentDropdown; showCategoryDropdown = false;" (onChange)="onSearch()">
+              <span class="selected-category-text">
+                {{ getSelectedDepartmentNames() || '--Select Department--' }}
+              </span>
+            </button>
+
+            <div class="dropdown-menu" *ngIf="showDepartmentDropdown && departmentList.length"
+                 (click)="$event.stopPropagation()">
+              <label *ngFor="let dept of departmentList">
+                <input type="checkbox"
+                       [checked]="isDepartmentChecked(dept.departmentId)"
+                       (change)="toggleDepartment(dept.departmentId, $event)" />
+                {{ dept.name }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="search-field">
+          <label>Task Category</label>
+          <div class="status-dropdown" #categoryDropdown>
+            <button type="button" class="dropdown-btn"
+                    [disabled]="!categoryList.length"
+                    (click)="showCategoryDropdown = !showCategoryDropdown; showDepartmentDropdown = false">
+              <span class="selected-category-text">
+                {{ getSelectedCategoryNames() || 'All Categories' }}
+              </span>
+            </button>
+
+            <div class="dropdown-menu" *ngIf="showCategoryDropdown && categoryList.length"
+                 (click)="$event.stopPropagation()">
+              <label *ngFor="let category of categoryList">
+                <input type="checkbox"
+                       [checked]="isCategoryChecked(category.taskcategoryId)"
+                       (change)="toggleCategory(category.taskcategoryId, $event)" />
+                {{ category.name }}
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-action">
+          <button type="button" class="go-button" (click)="loadReport()">
+            <mat-icon>search</mat-icon>
+            Go
+          </button>
+          &nbsp;
+          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
+            Clear
+          </button>
+        </div>
+      </div>
+
+      <p *ngIf="errorMessage" class="form-error">{{ errorMessage }}</p>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- ================= TABLE SECTION ================= -->
+    <div class="table-section" *ngIf="viewMode === 'table'">
+      <div class="table-toolbar">
+        <div class="record-summary">{{ loading ? 'Loading...' : recordSummary }}</div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-wrapper">
+        <table class="mail-table">
+          <thead>
+            <tr>
+              <th>Sr. No.</th>
+              <th>User</th>
+              <th>Total</th>
+              <th>Open</th>
+              <th>Pending Review</th>
+              <th>Completed</th>
+              <th>Overdue</th>
+              <th>Open Hours</th>
+              <th>Load</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of filteredRows; let i = index">
+              <td class="serial-cell">{{ i + 1 }}</td>
+              <td class="text-left">{{ r.userName }}</td>
+              <td>{{ r.totalTasks }}</td>
+              <td>{{ r.openTasks }}</td>
+              <td>{{ r.pendingReview }}</td>
+              <td>{{ r.completedTasks }}</td>
+              <td [class.overdue-count]="r.overdueTasks > 0">{{ r.overdueTasks }}</td>
+              <td>{{ r.openHours }}</td>
+              <td>
+                <div class="load-bar"><div class="load-fill" [style.width.%]="barWidth(r)"></div></div>
+              </td>
+            </tr>
+
+            <!-- NO DATA / BLANK STATE -->
+            <tr *ngIf="!loading && !filteredRows.length">
+              <td colspan="9" class="no-records">
+                <mat-icon>info_outline</mat-icon>
+                <span>{{ hasSearched ? 'No records found' : 'Select a department and click Go to view the report' }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ================= GRAPH SECTION ================= -->
+    <div class="table-section" *ngIf="viewMode === 'graph'">
+      <div class="table-toolbar">
+        <div class="record-summary">{{ loading ? 'Loading...' : recordSummary }}</div>
+      </div>
+
+      <ng-container *ngIf="filteredRows.length; else noGraphData">
+        <div class="chart-card">
+          <h3 class="chart-title">Tasks per User</h3>
+          <div class="chart-box" [style.height.px]="chartHeight">
+            <canvas #statusCanvas></canvas>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <h3 class="chart-title">Open Hours per User</h3>
+          <div class="chart-box" [style.height.px]="chartHeight">
+            <canvas #hoursCanvas></canvas>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-template #noGraphData>
+        <div class="no-records graph-empty">
+          <mat-icon>info_outline</mat-icon>
+          <span>{{ loading ? 'Loading...' : (hasSearched ? 'No records found' : 'Select a department and click Go to view the report') }}</span>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

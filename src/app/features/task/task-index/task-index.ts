@@ -788,6 +788,8 @@ export class TaskIndex implements OnInit {
     this.clientSearchText = '';
     this.filteredClients = [...this.clients];
     this.selectedTaskCategory = '';
+    this.categorySearchText = '';
+    this.showTaskCategoryDropdown = false;
     this.selectedAssignedTo = '';
     this.selectedPriority = '';
     this.selectedStatus = '';
@@ -1635,6 +1637,10 @@ export class TaskIndex implements OnInit {
     if (!target.closest('.task-category-dropdown')) {
       this.showTaskCategoryDropdown = false;
     }
+    if (!target.closest('.task-category-dropdown')) {
+      this.showTaskCategoryDropdown = false;
+      this.categorySearchText = '';
+    }                         
   }
 
   canDisableChangeManager(task: any): boolean {
@@ -1933,5 +1939,54 @@ private loadAssignUsers(
     if (b.department === 'Other') return -1;
     return a.department.localeCompare(b.department, undefined, opts);
   });
+}
+
+categorySearchText = '';
+
+get selectedTaskCategoryLabel(): string {
+  if (!this.selectedTaskCategory) return '--All Task Categories--';
+  const c = this.taskCategories.find(
+    (x: any) => String(x.taskcategoryId) === String(this.selectedTaskCategory)
+  );
+  return c ? c.name : '--All Task Categories--';
+}
+
+get filteredGroupedCategories(): { department: string; items: TaskCategory[] }[] {
+  const q = this.categorySearchText.trim().toLowerCase();
+  if (!q) return this.groupedCategories;
+
+  return this.groupedCategories
+    .map((g) => {
+      // if the department matches, keep all its categories
+      if (g.department.toLowerCase().includes(q)) return g;
+      return {
+        department: g.department,
+        items: g.items.filter((c) => (c.name || '').toLowerCase().includes(q)),
+      };
+    })
+    .filter((g) => g.items.length > 0);
+}
+
+toggleTaskCategoryDropdown(): void {
+  this.showTaskCategoryDropdown = !this.showTaskCategoryDropdown;
+  this.categorySearchText = '';
+
+  if (this.showTaskCategoryDropdown) {
+    setTimeout(() => document.getElementById('taskCategorySearchInput')?.focus(), 0);
+  }
+}
+
+selectTaskCategory(category: TaskCategory): void {
+  this.selectedTaskCategory = String(category.taskcategoryId);
+  this.showTaskCategoryDropdown = false;
+  this.categorySearchText = '';
+  this.onSearch();
+}
+
+clearTaskCategory(): void {
+  this.selectedTaskCategory = '';
+  this.showTaskCategoryDropdown = false;
+  this.categorySearchText = '';
+  this.onSearch();
 }
 }

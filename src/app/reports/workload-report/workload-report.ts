@@ -343,10 +343,10 @@ toggleDepartment(id: number, event: Event): void {
       data: {
         labels,
         datasets: [
-          { label: 'Open', data: values('openTasks'), backgroundColor: '#2f6fa3', stack: 'status' },
-          { label: 'Pending review', data: values('pendingReview'), backgroundColor: '#f0b429', stack: 'status' },
-          { label: 'Completed', data: values('completedTasks'), backgroundColor: '#287d5e', stack: 'status' },
-          { label: 'Overdue', data: values('overdueTasks'), backgroundColor: '#b8403d', stack: 'overdue' },
+          { label: 'Open', data: values('openTasks'), backgroundColor: '#2f6fa3', stack: 'status',borderRadius: 4  },
+          { label: 'Pending review', data: values('pendingReview'), backgroundColor: '#f0b429', stack: 'status',borderRadius: 4   },
+          { label: 'Completed', data: values('completedTasks'), backgroundColor: '#287d5e', stack: 'status',borderRadius: 4   },
+          { label: 'Overdue', data: values('overdueTasks'), backgroundColor: '#b8403d', stack: 'overdue',borderRadius: 4   },
         ],
       },
       options: {
@@ -357,7 +357,8 @@ toggleDepartment(id: number, event: Event): void {
           x: { stacked: true, beginAtZero: true, ticks: { precision: 0 }, title: { display: true, text: 'Tasks' } },
           y: { stacked: true },
         },
-        plugins: { legend: { position: 'bottom' } },
+        // plugins: { legend: { position: 'bottom' } },
+        plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } } },
       },
     });
 
@@ -378,4 +379,28 @@ toggleDepartment(id: number, event: Event): void {
       },
     });
   }
+
+  // ---------- summary cards / footer ----------
+get totals() {
+  const sum = (key: string) =>
+    this.filteredRows.reduce((s, r) => s + (Number(r[key]) || 0), 0);
+  return {
+    total: sum('totalTasks'),
+    open: sum('openTasks'),
+    pending: sum('pendingReview'),
+    completed: sum('completedTasks'),
+    overdue: sum('overdueTasks'),
+    hours: sum('openHours'),
+  };
+}
+
+initials(name: string): string {
+  const parts = (name || '?').trim().split(/\s+/);
+  return ((parts[0]?.[0] || '') + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
+}
+
+loadLevel(r: any): string {
+  const pct = this.barWidth(r);
+  return pct >= 75 ? 'load-high' : pct >= 40 ? 'load-mid' : 'load-low';
+}
 }
