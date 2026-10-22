@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Inject, OnInit, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -14,6 +14,7 @@ import { DateAdapter } from '@angular/material/core';
 import { DataProviderService } from '../../../service/data-provider.service';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-add-client',
   standalone: true,
@@ -75,6 +76,10 @@ export class AddClient implements OnInit {
 
   minDate: Date = new Date();
 
+  // ===================== SEARCHABLE DROPDOWNS =====================
+  openDropdown: 'manager' | 'state' | 'plan' | null = null;
+  dropdownSearch = ''; // shared: only one dropdown is open at a time
+
   constructor(
     private fb: FormBuilder,
     private dataProvider: DataProviderService,
@@ -115,6 +120,64 @@ export class AddClient implements OnInit {
       this.setupAddMode();
     }
   }
+
+  // ===================== SEARCHABLE DROPDOWN HELPERS =====================
+
+  private filterBy(list: any[], text: string, field: string): any[] {
+    const q = text.trim().toLowerCase();
+    return q ? (list ?? []).filter((i) => String(i[field] ?? '').toLowerCase().includes(q)) : (list ?? []);
+  }
+
+  get filteredManagers(): any[] {
+    return this.filterBy(this.managers, this.dropdownSearch, 'firstName');
+  }
+
+  get filteredStates(): any[] {
+    return this.filterBy(this.states, this.dropdownSearch, 'name');
+  }
+
+  get filteredPlans(): any[] {
+    return this.filterBy(this.plans, this.dropdownSearch, 'name');
+  }
+
+  get selectedManagerName(): string {
+    const id = this.clientForm.get('managerId')?.value;
+    return this.managers.find((m) => m.userId === id)?.firstName ?? '';
+  }
+
+  get selectedStateName(): string {
+    const id = this.clientForm.get('stateId')?.value;
+    return this.states.find((s) => s.stateId === id)?.name ?? '';
+  }
+
+  get selectedPlanName(): string {
+    const id = this.clientForm.get('planId')?.value;
+    return this.plans.find((p) => p.planId === id)?.name ?? '';
+  }
+
+  toggleDropdown(name: 'manager' | 'state' | 'plan'): void {
+    this.openDropdown = this.openDropdown === name ? null : name;
+    this.dropdownSearch = '';
+  }
+
+  selectOption(controlName: 'managerId' | 'stateId' | 'planId', value: number | null): void {
+    const control = this.clientForm.get(controlName);
+
+    control?.setValue(value);
+    control?.markAsTouched();
+
+    this.openDropdown = null;
+    this.dropdownSearch = '';
+  }
+
+  // Close when clicking anywhere outside
+  @HostListener('document:click')
+  closeDropdowns(): void {
+    this.openDropdown = null;
+    this.dropdownSearch = '';
+  }
+
+  // ===================== FORM =====================
 
   private setupAddMode(): void {
     this.clientForm.reset({
@@ -157,6 +220,9 @@ export class AddClient implements OnInit {
 
     this.clientForm.markAsPristine();
     this.clientForm.markAsUntouched();
+
+    this.openDropdown = null;
+    this.dropdownSearch = '';
 
     this.isSubmitting = false;
   }
@@ -342,10 +408,14 @@ export class AddClient implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+  // ===================== DROPDOWN DATA (sorted A-Z) =====================
+
   loadStates(): void {
     this.dataProvider.getStates().subscribe({
       next: (response: any) => {
-        this.states = response?.data || response || [];
+        this.states = [...(response?.data || response || [])].sort((a, b) =>
+          (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }),
+        );
       },
       error: (error) => {
         console.error('Error loading states:', error);
@@ -357,7 +427,9 @@ export class AddClient implements OnInit {
   loadManagers(): void {
     this.dataProvider.getManagers().subscribe({
       next: (response: any) => {
-        this.managers = response?.data || response || [];
+        this.managers = [...(response?.data || response || [])].sort((a, b) =>
+          (a.firstName ?? '').localeCompare(b.firstName ?? '', undefined, { sensitivity: 'base' }),
+        );
       },
       error: (error) => {
         console.error('Error loading managers:', error);
@@ -369,7 +441,9 @@ export class AddClient implements OnInit {
   loadPlan(): void {
     this.dataProvider.getPlan().subscribe({
       next: (response: any) => {
-        this.plans = response?.data || response || [];
+        this.plans = [...(response?.data || response || [])].sort((a, b) =>
+          (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }),
+        );
       },
       error: (error) => {
         console.error('Error loading plans:', error);
@@ -410,9 +484,10 @@ export class AddClient implements OnInit {
           gstNo: client.gstNo ?? '',
           taxFlag: Number(client.taxFlag) === 1,
 
-          stateId: client.stateId ?? 0,
-          managerId: client.managerId ?? 0,
-          planId: client.planId ?? 0,
+          // null (not 0) so the required validator and placeholder behave correctly
+          stateId: client.stateId ?? null,
+          managerId: client.managerId ?? null,
+          planId: client.planId ?? null,
 
           addressLine1: client.addressLine1 ?? '',
           addressLine2: client.addressLine2 ?? '',
@@ -484,6 +559,9 @@ export class AddClient implements OnInit {
     if (this.isSubmitting) {
       return;
     }
+
+    this.openDropdown = null;
+    this.dropdownSearch = '';
 
     if (this.isEditMode && this.clientId) {
       this.loadClientDetails(this.clientId);

@@ -214,28 +214,7 @@
               </div>
             </div>
 
-            <!-- Assigned To -->
-            <div class="user-form-col">
-              <div class="user-form-group">
-                <label class="user-label">
-                  Assigned To
-                  <span class="required">*</span>
-                  <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
-                </label>
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="task.assignedTo"
-                  name="assignedTo"
-                  [disabled]="!task.taskCategoryId || (!task.clientId && !isClientOptional)"
-                  #assignedCtrl="ngModel"
-                  required
-                >
-                  <option [ngValue]="null">Select User</option>
-                  <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
-                </select>
-                <div class="user-error" *ngIf="assignedCtrl.invalid && assignedCtrl.touched">Assigned To is required</div>
-              </div>
-            </div>
+           
 
             <!-- Start Date -->
             <div class="user-form-col">
@@ -303,6 +282,29 @@
                 </div>
 
                 <div class="user-warning" *ngIf="durationExceedsLimit">As this task exceeds 8 hours, kindly adjust the Start Date and End Date manually.</div>
+              </div>
+            </div>
+
+             <!-- Assigned To -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Assigned To
+                  <span class="required">*</span>
+                  <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
+                </label>
+                <select
+                  class="user-input user-select"
+                  [(ngModel)]="task.assignedTo"
+                  name="assignedTo"
+                  [disabled]="!task.taskCategoryId || (!task.clientId && !isClientOptional)"
+                  #assignedCtrl="ngModel"
+                  required
+                >
+                  <option [ngValue]="null">Select User</option>
+                  <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
+                </select>
+                <div class="user-error" *ngIf="assignedCtrl.invalid && assignedCtrl.touched">Assigned To is required</div>
               </div>
             </div>
 
