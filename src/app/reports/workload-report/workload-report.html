@@ -1,10 +1,14 @@
 <div class="page-container">
   <div class="main-card">
+
     <!-- ================= HEADER ================= -->
     <div class="page-header">
-      <div class="page-title">
-        <mat-icon>insights</mat-icon>
-        <span>Workload Report</span>
+      <div class="page-title-block">
+        <div class="page-title">
+          <mat-icon>insights</mat-icon>
+          <span>Workload Report</span>
+        </div>
+        <p class="page-subtitle">Task distribution, overdue items and open hours per user</p>
       </div>
 
       <div class="view-toggle">
@@ -17,16 +21,16 @@
       </div>
     </div>
 
-    <mat-divider></mat-divider>
-
-    <!-- ================= SEARCH ================= -->
+    <!-- ================= FILTERS ================= -->
     <div class="search-section">
+      <div class="section-label"><mat-icon>tune</mat-icon> Filters</div>
+
       <div class="search-grid">
         <div class="search-field">
           <label>From Date</label>
           <div class="search-input-wrapper">
             <input type="text" [matDatepicker]="fromPicker" [(ngModel)]="fromDate"
-                   [max]="toDate" placeholder="DD/MM/YYYY" readonly (click)="fromPicker.open()" />
+                   [max]="toDate" placeholder="DD-MM-YYYY" readonly (click)="fromPicker.open()" />
             <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
               <mat-icon>calendar_today</mat-icon>
             </button>
@@ -38,7 +42,7 @@
           <label>To Date</label>
           <div class="search-input-wrapper">
             <input type="text" [matDatepicker]="toPicker" [(ngModel)]="toDate"
-                   [min]="fromDate" placeholder="DD/MM/YYYY" readonly (click)="toPicker.open()" />
+                   [min]="fromDate" placeholder="DD-MM-YYYY" readonly (click)="toPicker.open()" />
             <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
               <mat-icon>calendar_today</mat-icon>
             </button>
@@ -49,7 +53,7 @@
         <div class="search-field">
           <label>User Name</label>
           <div class="search-input-wrapper">
-            <input type="text" [(ngModel)]="searchQuery" placeholder="Search By User Name"
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search by user name"
                    (keyup.enter)="onSearch()" />
             <button type="button" class="search-button" (click)="onSearch()" title="Search">
               <mat-icon>search</mat-icon>
@@ -62,9 +66,9 @@
           <div class="status-dropdown" #departmentDropdown>
             <button type="button" class="dropdown-btn"
                     [disabled]="!departmentList.length"
-                    (click)="showDepartmentDropdown = !showDepartmentDropdown; showCategoryDropdown = false;" (onChange)="onSearch()">
+                    (click)="showDepartmentDropdown = !showDepartmentDropdown; showCategoryDropdown = false;">
               <span class="selected-category-text">
-                {{ getSelectedDepartmentNames() || '--Select Department--' }}
+                {{ getSelectedDepartmentNames() || '-- Select Department --' }}
               </span>
             </button>
 
@@ -105,34 +109,66 @@
 
         <div class="filter-action">
           <button type="button" class="go-button" (click)="loadReport()">
-            <mat-icon>search</mat-icon>
-            Go
+            <mat-icon>search</mat-icon> Go
           </button>
-          &nbsp;
           <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
             Clear
           </button>
         </div>
       </div>
 
-      <p *ngIf="errorMessage" class="form-error">{{ errorMessage }}</p>
+      <p *ngIf="errorMessage" class="form-error">
+        <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+      </p>
     </div>
 
-    <mat-divider></mat-divider>
+    <!-- ================= KPI CARDS ================= -->
+    <div class="kpi-grid" *ngIf="hasSearched && filteredRows.length">
+      <div class="kpi-card kpi-navy">
+        <div class="kpi-icon"><mat-icon>groups</mat-icon></div>
+        <div class="kpi-text"><span class="kpi-value">{{ filteredRows.length }}</span><span class="kpi-label">Users</span></div>
+      </div>
+      <div class="kpi-card kpi-blue">
+        <div class="kpi-icon"><mat-icon>assignment</mat-icon></div>
+        <div class="kpi-text"><span class="kpi-value">{{ totals.total }}</span><span class="kpi-label">Total Tasks</span></div>
+      </div>
+      <div class="kpi-card kpi-sky">
+        <div class="kpi-icon"><mat-icon>folder_open</mat-icon></div>
+        <div class="kpi-text"><span class="kpi-value">{{ totals.open }}</span><span class="kpi-label">Open</span></div>
+      </div>
+      <div class="kpi-card kpi-amber">
+        <div class="kpi-icon"><mat-icon>pending_actions</mat-icon></div>
+        <div class="kpi-text"><span class="kpi-value">{{ totals.pending }}</span><span class="kpi-label">Pending Review</span></div>
+      </div>
+      <div class="kpi-card kpi-green">
+        <div class="kpi-icon"><mat-icon>task_alt</mat-icon></div>
+        <div class="kpi-text"><span class="kpi-value">{{ totals.completed }}</span><span class="kpi-label">Completed</span></div>
+      </div>
+      <div class="kpi-card kpi-red">
+        <div class="kpi-icon"><mat-icon>warning_amber</mat-icon></div>
+        <div class="kpi-text"><span class="kpi-value">{{ totals.overdue }}</span><span class="kpi-label">Overdue</span></div>
+      </div>
+      <div class="kpi-card kpi-violet">
+        <div class="kpi-icon"><mat-icon>schedule</mat-icon></div>
+        <div class="kpi-text"><span class="kpi-value">{{ totals.hours | number:'1.0-1' }}</span><span class="kpi-label">Open Hours</span></div>
+      </div>
+    </div>
 
     <!-- ================= TABLE SECTION ================= -->
     <div class="table-section" *ngIf="viewMode === 'table'">
       <div class="table-toolbar">
-        <div class="record-summary">{{ loading ? 'Loading...' : recordSummary }}</div>
+        <div class="record-summary">
+          <mat-icon>list_alt</mat-icon>
+          {{ loading ? 'Loading...' : recordSummary }}
+        </div>
       </div>
 
-      <!-- TABLE -->
       <div class="table-wrapper">
         <table class="mail-table">
           <thead>
             <tr>
               <th>Sr. No.</th>
-              <th>User</th>
+              <th class="text-left">User</th>
               <th>Total</th>
               <th>Open</th>
               <th>Pending Review</th>
@@ -146,19 +182,28 @@
           <tbody>
             <tr *ngFor="let r of filteredRows; let i = index">
               <td class="serial-cell">{{ i + 1 }}</td>
-              <td class="text-left">{{ r.userName }}</td>
-              <td>{{ r.totalTasks }}</td>
-              <td>{{ r.openTasks }}</td>
-              <td>{{ r.pendingReview }}</td>
-              <td>{{ r.completedTasks }}</td>
-              <td [class.overdue-count]="r.overdueTasks > 0">{{ r.overdueTasks }}</td>
-              <td>{{ r.openHours }}</td>
+              <td class="text-left">
+                <div class="user-cell">
+                  <span class="avatar">{{ initials(r.userName) }}</span>
+                  <span class="user-name">{{ r.userName }}</span>
+                </div>
+              </td>
+              <td><span class="pill pill-total" [class.pill-zero]="!r.totalTasks">{{ r.totalTasks }}</span></td>
+              <td><span class="pill pill-open" [class.pill-zero]="!r.openTasks">{{ r.openTasks }}</span></td>
+              <td><span class="pill pill-pending" [class.pill-zero]="!r.pendingReview">{{ r.pendingReview }}</span></td>
+              <td><span class="pill pill-done" [class.pill-zero]="!r.completedTasks">{{ r.completedTasks }}</span></td>
+              <td><span class="pill pill-overdue" [class.pill-zero]="!r.overdueTasks">{{ r.overdueTasks }}</span></td>
+              <td class="hours-cell">{{ r.openHours }}</td>
               <td>
-                <div class="load-bar"><div class="load-fill" [style.width.%]="barWidth(r)"></div></div>
+                <div class="load-cell">
+                  <div class="load-bar">
+                    <div class="load-fill" [ngClass]="loadLevel(r)" [style.width.%]="barWidth(r)"></div>
+                  </div>
+                  <span class="load-pct">{{ barWidth(r) }}%</span>
+                </div>
               </td>
             </tr>
 
-            <!-- NO DATA / BLANK STATE -->
             <tr *ngIf="!loading && !filteredRows.length">
               <td colspan="9" class="no-records">
                 <mat-icon>info_outline</mat-icon>
@@ -166,6 +211,19 @@
               </td>
             </tr>
           </tbody>
+
+          <tfoot *ngIf="filteredRows.length">
+            <tr>
+              <td colspan="2" class="text-left">Total</td>
+              <td>{{ totals.total }}</td>
+              <td>{{ totals.open }}</td>
+              <td>{{ totals.pending }}</td>
+              <td>{{ totals.completed }}</td>
+              <td>{{ totals.overdue }}</td>
+              <td>{{ totals.hours | number:'1.0-1' }}</td>
+              <td></td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -173,19 +231,22 @@
     <!-- ================= GRAPH SECTION ================= -->
     <div class="table-section" *ngIf="viewMode === 'graph'">
       <div class="table-toolbar">
-        <div class="record-summary">{{ loading ? 'Loading...' : recordSummary }}</div>
+        <div class="record-summary">
+          <mat-icon>list_alt</mat-icon>
+          {{ loading ? 'Loading...' : recordSummary }}
+        </div>
       </div>
 
       <ng-container *ngIf="filteredRows.length; else noGraphData">
         <div class="chart-card">
-          <h3 class="chart-title">Tasks per User</h3>
+          <h3 class="chart-title"><mat-icon>stacked_bar_chart</mat-icon> Tasks per User</h3>
           <div class="chart-box" [style.height.px]="chartHeight">
             <canvas #statusCanvas></canvas>
           </div>
         </div>
 
         <div class="chart-card">
-          <h3 class="chart-title">Open Hours per User</h3>
+          <h3 class="chart-title"><mat-icon>schedule</mat-icon> Open Hours per User</h3>
           <div class="chart-box" [style.height.px]="chartHeight">
             <canvas #hoursCanvas></canvas>
           </div>
