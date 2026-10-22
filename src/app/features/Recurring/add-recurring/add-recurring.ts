@@ -527,6 +527,9 @@ private toApiTime(value: string | null | undefined): string | null {
       time: null,
     });
 
+    this.showTaskCategoryDropdown = false;
+    this.categorySearchText = '';
+
     this.updateTypeValidators(1);
 
     this.recurringForm.markAsPristine();
@@ -643,6 +646,12 @@ private toApiTime(value: string | null | undefined): string | null {
     if (!target.closest('.client-dropdown-container')) {
       this.showClientDropdown = false;
     }
+     // NEW
+    if (this.showTaskCategoryDropdown && !target.closest('.task-category-dropdown')) {
+      this.showTaskCategoryDropdown = false;
+      this.categorySearchText = '';
+      this.recurringForm.get('taskCatId')?.markAsTouched();
+    }
   }
   taskCategoryEmployeeError = false;
   checkingTaskCategoryEmployee = false;
@@ -670,4 +679,53 @@ private toApiTime(value: string | null | undefined): string | null {
     });
   }
 
+  showTaskCategoryDropdown = false;
+categorySearchText = '';
+
+// Label for the trigger: works for edit mode, auto-select and reset
+get selectedTaskCategoryName(): string {
+  const id = this.recurringForm?.get('taskCatId')?.value;
+  if (id === null || id === undefined || id === '') return '';
+  const c = this.taskCategories.find((x) => Number(x.taskcategoryId) === Number(id));
+  return c ? c.name : '';
+}
+
+get filteredGroupedCategories(): { department: string; items: TaskCategory[] }[] {
+  const q = this.categorySearchText.trim().toLowerCase();
+  if (!q) return this.groupedCategories;
+
+  return this.groupedCategories
+    .map((g) => {
+      // department name matches: keep all its categories
+      if (g.department.toLowerCase().includes(q)) return g;
+      return {
+        department: g.department,
+        items: g.items.filter((c) => (c.name || '').toLowerCase().includes(q)),
+      };
+    })
+    .filter((g) => g.items.length > 0);
+}
+
+toggleTaskCategoryDropdown(): void {
+  this.showTaskCategoryDropdown = !this.showTaskCategoryDropdown;
+  this.categorySearchText = '';
+
+  if (this.showTaskCategoryDropdown) {
+    setTimeout(() => document.getElementById('addRecurringCategorySearchInput')?.focus(), 0);
+  } else {
+    this.recurringForm.get('taskCatId')?.markAsTouched();
+  }
+}
+
+selectTaskCategory(category: TaskCategory): void {
+  const control = this.recurringForm.get('taskCatId');
+  control?.setValue(category.taskcategoryId);
+  control?.markAsDirty();
+  control?.markAsTouched();
+
+  this.showTaskCategoryDropdown = false;
+  this.categorySearchText = '';
+
+  this.onTaskCategoryChange();   // same employee-availability check as the old (change) handler
+}
 }

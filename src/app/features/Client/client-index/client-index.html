@@ -31,15 +31,29 @@
             </div>
           </div>
 
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="stateId" (change)="onStateChange()">
-              <option [ngValue]="0">--All States--</option>
+         <!-- State -->
+<div class="status-wrapper">
+  <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+    <div class="status-select cat-trigger" [class.cat-placeholder]="stateId === 0" (click)="toggleStateDropdown()">
+      <span class="cat-trigger-text">{{ selectedStateName || '--All States--' }}</span>
+      <span class="cat-caret">▼</span>
+    </div>
 
-              <option *ngFor="let state of states" [ngValue]="state.stateId">
-                {{ state.name }}
-              </option>
-            </select>
-          </div>
+    <div class="cat-panel" *ngIf="stateOpen">
+      <input type="text" class="cat-search" placeholder="Search state..." [(ngModel)]="stateSearch" />
+
+      <div class="cat-list">
+        <div class="cat-item" [class.active]="stateId === 0" (click)="selectState(0)">--All States--</div>
+
+        <div class="cat-item" *ngFor="let state of filteredStates" [class.active]="state.stateId === stateId" (click)="selectState(state.stateId)">
+          {{ state.name }}
+        </div>
+
+        <div class="cat-empty" *ngIf="filteredStates.length === 0">No results found</div>
+      </div>
+    </div>
+  </div>
+</div>
 
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="managerId" (change)="onManagerChange()">
@@ -71,16 +85,29 @@
             </select>
           </div>
 
-          <!-- Plan -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="planId" (change)="onPlanChange()">
-              <option [ngValue]="0">--All Plans--</option>
+         <!-- Plan -->
+<div class="status-wrapper">
+  <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+    <div class="status-select cat-trigger" [class.cat-placeholder]="planId === 0" (click)="togglePlanDropdown()">
+      <span class="cat-trigger-text">{{ selectedPlanName || '--All Plans--' }}</span>
+      <span class="cat-caret">▼</span>
+    </div>
 
-              <option *ngFor="let plan of plans" [ngValue]="plan.planId">
-                {{ plan.name }}
-              </option>
-            </select>
-          </div>
+    <div class="cat-panel" *ngIf="planOpen">
+      <input type="text" class="cat-search" placeholder="Search plan..." [(ngModel)]="planSearch" />
+
+      <div class="cat-list">
+        <div class="cat-item" [class.active]="planId === 0" (click)="selectPlan(0)">--All Plans--</div>
+
+        <div class="cat-item" *ngFor="let plan of filteredPlans" [class.active]="plan.planId === planId" (click)="selectPlan(plan.planId)">
+          {{ plan.name }}
+        </div>
+
+        <div class="cat-empty" *ngIf="filteredPlans.length === 0">No results found</div>
+      </div>
+    </div>
+  </div>
+</div>
 
           <!-- STATUS -->
           <div class="status-wrapper">

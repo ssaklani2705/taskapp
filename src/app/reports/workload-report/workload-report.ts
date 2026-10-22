@@ -200,9 +200,11 @@ toggleDepartment(id: number, event: Event): void {
     const target = event.target as Node;
     if (this.showDepartmentDropdown && this.departmentDropdown && !this.departmentDropdown.nativeElement.contains(target)) {
       this.showDepartmentDropdown = false;
+      this.departmentSearch = '';
     }
     if (this.showCategoryDropdown && this.categoryDropdown && !this.categoryDropdown.nativeElement.contains(target)) {
       this.showCategoryDropdown = false;
+      this.categorySearch = '';
     }
   }
 
@@ -286,6 +288,8 @@ toggleDepartment(id: number, event: Event): void {
     this.showDepartmentDropdown = false;
     this.showCategoryDropdown = false;
     this.errorMessage = '';
+    this.departmentSearch = '';
+    this.categorySearch = '';
     this.setDefaultDates();
     this.loadCategories();
     this.resetResults();
@@ -402,5 +406,34 @@ initials(name: string): string {
 loadLevel(r: any): string {
   const pct = this.barWidth(r);
   return pct >= 75 ? 'load-high' : pct >= 40 ? 'load-mid' : 'load-low';
+}
+
+// ---------- dropdown search ----------
+departmentSearch = '';
+categorySearch = '';
+
+private filterByName<T extends { name?: string }>(list: T[], text: string): T[] {
+  const q = text.trim().toLowerCase();
+  return q ? list.filter((i) => (i.name ?? '').toLowerCase().includes(q)) : list;
+}
+
+get filteredDepartments(): DepartmentDTO[] {
+  return this.filterByName(this.departmentList, this.departmentSearch);
+}
+
+get filteredCategories(): TaskCategoryDTO[] {
+  return this.filterByName(this.categoryList, this.categorySearch);
+}
+
+toggleDepartmentDropdown(): void {
+  this.showDepartmentDropdown = !this.showDepartmentDropdown;
+  this.showCategoryDropdown = false;
+  this.departmentSearch = '';
+}
+
+toggleCategoryDropdown(): void {
+  this.showCategoryDropdown = !this.showCategoryDropdown;
+  this.showDepartmentDropdown = false;
+  this.categorySearch = '';
 }
 }

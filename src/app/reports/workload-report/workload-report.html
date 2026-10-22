@@ -62,50 +62,48 @@
         </div>
 
         <div class="search-field">
-          <label>Department</label>
-          <div class="status-dropdown" #departmentDropdown>
-            <button type="button" class="dropdown-btn"
-                    [disabled]="!departmentList.length"
-                    (click)="showDepartmentDropdown = !showDepartmentDropdown; showCategoryDropdown = false;">
-              <span class="selected-category-text">
-                {{ getSelectedDepartmentNames() || '-- Select Department --' }}
-              </span>
-            </button>
+  <label>Department</label>
+  <div class="status-dropdown" #departmentDropdown>
+    <button type="button" class="dropdown-btn" [disabled]="!departmentList.length" (click)="toggleDepartmentDropdown()">
+      <span class="selected-category-text">
+        {{ getSelectedDepartmentNames() || '-- Select Department --' }}
+      </span>
+    </button>
 
-            <div class="dropdown-menu" *ngIf="showDepartmentDropdown && departmentList.length"
-                 (click)="$event.stopPropagation()">
-              <label *ngFor="let dept of departmentList">
-                <input type="checkbox"
-                       [checked]="isDepartmentChecked(dept.departmentId)"
-                       (change)="toggleDepartment(dept.departmentId, $event)" />
-                {{ dept.name }}
-              </label>
-            </div>
-          </div>
-        </div>
+    <div class="dropdown-menu" *ngIf="showDepartmentDropdown && departmentList.length" (click)="$event.stopPropagation()">
+      <input type="text" class="dropdown-search" placeholder="Search department..." [(ngModel)]="departmentSearch" />
 
-        <div class="search-field">
-          <label>Task Category</label>
-          <div class="status-dropdown" #categoryDropdown>
-            <button type="button" class="dropdown-btn"
-                    [disabled]="!categoryList.length"
-                    (click)="showCategoryDropdown = !showCategoryDropdown; showDepartmentDropdown = false">
-              <span class="selected-category-text">
-                {{ getSelectedCategoryNames() || 'All Categories' }}
-              </span>
-            </button>
+      <label *ngFor="let dept of filteredDepartments">
+        <input type="checkbox" [checked]="isDepartmentChecked(dept.departmentId)" (change)="toggleDepartment(dept.departmentId, $event)" />
+        {{ dept.name }}
+      </label>
 
-            <div class="dropdown-menu" *ngIf="showCategoryDropdown && categoryList.length"
-                 (click)="$event.stopPropagation()">
-              <label *ngFor="let category of categoryList">
-                <input type="checkbox"
-                       [checked]="isCategoryChecked(category.taskcategoryId)"
-                       (change)="toggleCategory(category.taskcategoryId, $event)" />
-                {{ category.name }}
-              </label>
-            </div>
-          </div>
-        </div>
+      <div class="dropdown-empty" *ngIf="filteredDepartments.length === 0">No results found</div>
+    </div>
+  </div>
+</div>
+
+<div class="search-field">
+  <label>Task Category</label>
+  <div class="status-dropdown" #categoryDropdown>
+    <button type="button" class="dropdown-btn" [disabled]="!categoryList.length" (click)="toggleCategoryDropdown()">
+      <span class="selected-category-text">
+        {{ getSelectedCategoryNames() || 'All Categories' }}
+      </span>
+    </button>
+
+    <div class="dropdown-menu" *ngIf="showCategoryDropdown && categoryList.length" (click)="$event.stopPropagation()">
+      <input type="text" class="dropdown-search" placeholder="Search category..." [(ngModel)]="categorySearch" />
+
+      <label *ngFor="let category of filteredCategories">
+        <input type="checkbox" [checked]="isCategoryChecked(category.taskcategoryId)" (change)="toggleCategory(category.taskcategoryId, $event)" />
+        {{ category.name }}
+      </label>
+
+      <div class="dropdown-empty" *ngIf="filteredCategories.length === 0">No results found</div>
+    </div>
+  </div>
+</div>
 
         <div class="filter-action">
           <button type="button" class="go-button" (click)="loadReport()">

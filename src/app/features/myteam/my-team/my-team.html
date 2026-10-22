@@ -37,8 +37,8 @@
             </div>
           </div>
 
-          <!-- DEPARTMENT -->
-          <div class="department-wrapper">
+         
+          <!-- <div class="department-wrapper">
             <select class="status-select" [(ngModel)]="selectedDepartmentId" (change)="onDepartmentChange()">
               <option [ngValue]="null">--All Departments--</option>
 
@@ -48,7 +48,7 @@
             </select>
           </div>
 
-          <!-- Category  -->
+          
           <div class="department-wrapper">
             <select class="status-select" [(ngModel)]="selectedCategoryId" (change)="onCategoryChange()">
               <option [ngValue]="null">--All Task Categories--</option>
@@ -57,7 +57,97 @@
                 {{ category.name }}
               </option>
             </select>
-          </div>
+          </div> -->
+
+          <!-- Department -->
+<div class="department-wrapper dept-width">
+  <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+    <div
+      class="status-select cat-trigger"
+      [class.cat-placeholder]="selectedDepartmentId === null"
+      (click)="toggleDeptDropdown()"
+    >
+      <span class="cat-trigger-text">{{ selectedDepartmentName }}</span>
+      <span class="cat-caret">▼</span>
+    </div>
+
+    <div class="cat-panel" *ngIf="deptOpen">
+      <input
+        type="text"
+        class="cat-search"
+        placeholder="Search department..."
+        [(ngModel)]="deptSearch"
+        autofocus
+      />
+
+      <div class="cat-list">
+        <div
+          class="cat-item"
+          [class.active]="selectedDepartmentId === null"
+          (click)="selectDepartment(null)"
+        >
+          --All Departments--
+        </div>
+
+        <div
+          class="cat-item"
+          *ngFor="let department of filteredDepartments"
+          [class.active]="department.departmentId === selectedDepartmentId"
+          (click)="selectDepartment(department.departmentId)"
+        >
+          {{ department.name }}
+        </div>
+
+        <div class="cat-empty" *ngIf="filteredDepartments.length === 0">No results found</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Category -->
+<div class="department-wrapper cat-width">
+  <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+    <div
+      class="status-select cat-trigger"
+      [class.cat-placeholder]="selectedCategoryId === null"
+      (click)="toggleCatDropdown()"
+    >
+      <span class="cat-trigger-text">{{ selectedCategoryName }}</span>
+      <span class="cat-caret">▼</span>
+    </div>
+
+    <div class="cat-panel" *ngIf="catOpen">
+      <input
+        type="text"
+        class="cat-search"
+        placeholder="Search category..."
+        [(ngModel)]="catSearch"
+        autofocus
+      />
+
+      <div class="cat-list">
+        <div
+          class="cat-item"
+          [class.active]="selectedCategoryId === null"
+          (click)="selectCategory(null)"
+        >
+          --All Task Categories--
+        </div>
+
+        <div
+          class="cat-item"
+          *ngFor="let category of filteredCategories"
+          [class.active]="category.taskcategoryId === selectedCategoryId"
+          (click)="selectCategory(category.taskcategoryId)"
+        >
+          {{ category.name }}
+        </div>
+
+        <div class="cat-empty" *ngIf="filteredCategories.length === 0">No results found</div>
+      </div>
+    </div>
+  </div>
+</div>
 
           <!-- WEEKLY OFF -->
           <div class="designation-wrapper">

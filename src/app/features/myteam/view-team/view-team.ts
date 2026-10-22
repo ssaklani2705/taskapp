@@ -247,7 +247,7 @@ export class ViewTeam implements OnInit {
           },
 
           3: {
-            name: 'Reports - 1',
+            name: 'Reports',
             modules: [],
           },
         };

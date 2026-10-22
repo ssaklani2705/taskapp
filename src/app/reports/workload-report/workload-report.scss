@@ -1591,3 +1591,39 @@ mat-divider {
   .kpi-card { padding: 10px; }
   .kpi-value { font-size: 19px; }
 }
+
+
+.dropdown-menu .dropdown-search {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: block;
+  width: calc(100% - 16px);
+  height: 34px;
+  margin: 4px 8px 6px;
+  padding: 0 10px;
+  border: 1px solid #c6d3df;
+  border-radius: 4px;
+  background: #ffffff;
+  color: #193b63;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  outline: none;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: #8296aa;
+  }
+
+  &:focus {
+    border-color: #3378a9;
+    box-shadow: 0 0 0 2px rgba(51, 120, 169, 0.08);
+  }
+}
+
+.dropdown-empty {
+  padding: 10px;
+  text-align: center;
+  color: #718096;
+  font-size: 13px;
+}

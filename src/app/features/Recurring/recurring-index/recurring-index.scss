@@ -1550,3 +1550,137 @@ textarea.manager-select::placeholder {
   width: 24px;
   min-width: 24px;
 }
+
+.task-category-dropdown {
+  position: relative;
+
+  .cat-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .cat-trigger-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cat-caret {
+    flex-shrink: 0;
+    font-size: 10px;
+    color: #718096;
+  }
+
+  .cat-panel {
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 0;
+    width: 280px;
+    max-width: calc(100vw - 40px);
+    padding: 8px;
+    background: #ffffff;
+    border: 1px solid #cfd8e3;
+    border-radius: 4px;
+    box-shadow: 0 5px 15px rgba(25, 52, 90, 0.12);
+    z-index: 9999;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .cat-search {
+    display: block;
+    width: 100%;
+    height: 36px;
+    margin: 0 0 8px;
+    padding: 0 11px;
+    border: 1px solid #c6d3df;
+    border-radius: 4px;
+    background: #ffffff;
+    color: #193b63;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    outline: none;
+    box-shadow: none;
+    box-sizing: border-box;
+
+    &::placeholder {
+      color: #8296aa;
+    }
+
+    &:focus {
+      border-color: #3378a9;
+      box-shadow: 0 0 0 2px rgba(51, 120, 169, 0.08);
+    }
+  }
+
+  .cat-list {
+    max-height: 280px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #c7d0db;
+      border-radius: 3px;
+    }
+  }
+
+  .cat-group {
+    padding: 6px 10px;
+    background: #edf4f8;
+    color: #19345a;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    line-height: 1.3;
+  }
+
+  .cat-item {
+    padding: 8px 10px 8px 18px;
+    color: #193b63;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.35;
+    cursor: pointer;
+    white-space: normal;
+    overflow-wrap: anywhere;
+
+    &:hover {
+      background: #f8fbfd;
+      color: #28658f;
+    }
+
+    &.active {
+      background: #eef5fa;
+      color: #19345a;
+      font-weight: 600;
+    }
+  }
+
+  .cat-item.cat-all {
+    padding-left: 10px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid #e5ebf0;
+  }
+
+  .cat-empty {
+    padding: 10px;
+    color: #718096;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    text-align: center;
+  }
+}

@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DataProviderService } from '../../../service/data-provider.service';
 import { Router } from '@angular/router';
@@ -229,7 +229,8 @@ export class ClientIndex {
       next: (response: any) => {
         console.log('States:', response);
 
-        this.states = response?.data || response || [];
+        // this.states = response?.data || response || [];
+        this.states = [...(response?.data || response || [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? ''));
       },
       error: (error) => {
         console.error('Error loading states:', error);
@@ -255,7 +256,10 @@ export class ClientIndex {
   loadPlan(): void {
     this.dataprovider.getPlan().subscribe({
       next: (response: any) => {
-        this.plans = response?.data || response || [];
+        //this.plans = response?.data || response || [];
+         this.plans = [...(response?.data || response || [])].sort((a, b) =>
+            (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }),
+          );
       },
       error: (error) => {
         console.error('Error loading plans:', error);
@@ -1138,4 +1142,65 @@ export class ClientIndex {
       return 0;
     });
   }
+
+
+  // ===================== SEARCHABLE DROPDOWNS =====================
+planOpen = false;
+stateOpen = false;
+planSearch = '';
+stateSearch = '';
+
+private filterByName(list: any[], text: string): any[] {
+  const q = text.trim().toLowerCase();
+  return q ? (list ?? []).filter((i) => (i.name ?? '').toLowerCase().includes(q)) : (list ?? []);
+}
+
+get filteredPlans(): any[] {
+  return this.filterByName(this.plans, this.planSearch);
+}
+
+get filteredStates(): any[] {
+  return this.filterByName(this.states, this.stateSearch);
+}
+
+get selectedPlanName(): string {
+  return this.plans.find((p) => p.planId === this.planId)?.name ?? '';
+}
+
+get selectedStateName(): string {
+  return this.states.find((s) => s.stateId === this.stateId)?.name ?? '';
+}
+
+togglePlanDropdown(): void {
+  this.planOpen = !this.planOpen;
+  this.stateOpen = false;
+  this.planSearch = '';
+}
+
+toggleStateDropdown(): void {
+  this.stateOpen = !this.stateOpen;
+  this.planOpen = false;
+  this.stateSearch = '';
+}
+
+selectPlan(id: number): void {
+  this.planId = id;
+  this.planOpen = false;
+  this.planSearch = '';
+  this.onPlanChange();
+}
+
+selectState(id: number): void {
+  this.stateId = id;
+  this.stateOpen = false;
+  this.stateSearch = '';
+  this.onStateChange();
+}
+
+// Close both dropdowns when clicking anywhere outside
+@HostListener('document:click')
+closeDropdowns(): void {
+  this.planOpen = false;
+  this.stateOpen = false;
+}
 }

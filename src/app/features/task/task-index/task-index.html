@@ -576,8 +576,7 @@
         </div>
       </div>
 
-      <!-- NORMAL FILE UPLOAD *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"-->
-      <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+      <!-- <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
         <label class="modal-field-label"> Upload File - 1:<span class="file-limit"> [.pdf, .xls, .xlsx, .doc, .docx allowed up to 10 MB] </span> </label>
 
         <input type="file" #normalFileInput class="manager-select" accept=".pdf,.xls,.xlsx,.doc,.docx" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
@@ -592,8 +591,6 @@
         </div>
       </div>
 
-      <!-- ZIP FILE UPLOAD  *ngIf="selectedTaskStatusId != 3 && selectedTaskStatusId != 5"
-       selectedTaskStatusIdForCondition != 2-->
       <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
         <label class="modal-field-label"> Upload File - 2:<span class="file-limit"> [.pdf, .xls, .xlsx, .doc, .docx, .zip allowed up to 10 MB] </span> </label>
 
@@ -608,7 +605,57 @@
             <mat-icon>close</mat-icon>
           </button>
         </div>
-      </div>
+      </div> -->
+    
+      <!-- UPLOAD FILE 1 -->
+<div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+ <div class="file-label-row">
+  <label class="modal-field-label">Upload File - 1</label>
+  <span class="file-hint">[.pdf, .xls, .xlsx, .doc, .docx &middot; up to 10 MB]</span>
+</div>
+
+  <div class="file-upload" [class.has-file]="fileTwoName" [class.is-disabled]="isChangingManager">
+    <input type="file" #normalFileInput class="file-upload-input" accept=".pdf,.xls,.xlsx,.doc,.docx" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+    <mat-icon class="file-upload-icon">cloud_upload</mat-icon>
+    <div class="file-upload-text">
+      <span class="file-upload-title">Click to choose a file</span>
+      <span class="file-upload-sub">or drag and drop it here</span>
+    </div>
+  </div>
+
+  <div class="file-chip" *ngIf="fileTwoName">
+    <mat-icon class="file-chip-icon">description</mat-icon>
+    <span class="file-chip-name" [title]="fileTwoName">{{ fileTwoName }}</span>
+    <button type="button" class="file-chip-remove" (click)="removeNormalFile(normalFileInput)" [disabled]="isChangingManager" title="Remove file">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+
+<!-- UPLOAD FILE 2 -->
+<div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+  <div class="file-label-row">
+  <label class="modal-field-label">Upload File - 2</label>
+  <span class="file-hint">[.pdf, .xls, .xlsx, .doc, .docx, .zip &middot; up to 10 MB]</span>
+</div>
+
+  <div class="file-upload" [class.has-file]="fileOneName" [class.is-disabled]="isChangingManager">
+    <input type="file" #zipFileInput class="file-upload-input" accept=".pdf,.xls,.xlsx,.doc,.docx,.zip" [disabled]="isChangingManager" (change)="onFileOneSelected($event)" />
+    <mat-icon class="file-upload-icon">cloud_upload</mat-icon>
+    <div class="file-upload-text">
+      <span class="file-upload-title">Click to choose a file</span>
+      <span class="file-upload-sub">or drag and drop it here</span>
+    </div>
+  </div>
+
+  <div class="file-chip" *ngIf="fileOneName">
+    <mat-icon class="file-chip-icon">description</mat-icon>
+    <span class="file-chip-name" [title]="fileOneName">{{ fileOneName }}</span>
+    <button type="button" class="file-chip-remove" (click)="removeZipFile(zipFileInput)" [disabled]="isChangingManager" title="Remove file">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
     </div>
 
     <div class="modal-footer">

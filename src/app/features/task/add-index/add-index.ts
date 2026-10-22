@@ -558,6 +558,7 @@ export class AddIndexComponent implements OnInit {
 
       this.selectedTaskCategoryName = '';
       this.showCategoryDropdown = false;
+      this.categorySearchText = '';           // ADD THIS LINE
       this.clientSearchText = '';
       this.filteredClients = [];
       this.showClientDropdown = false;
@@ -666,7 +667,7 @@ export class AddIndexComponent implements OnInit {
         const data = res?.data || res;
         this.users = data?.assignedUsers || [];
 
-  //      alert('CASE 4 ' + JSON.stringify(this.workloadList));
+        //      alert('CASE 4 ' + JSON.stringify(this.workloadList));
         // const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
         // // alert("CASE 5 " + JSON.stringify(assignedUserIds))
         // this.users = this.users.map((user: any) => ({
@@ -676,7 +677,7 @@ export class AddIndexComponent implements OnInit {
 
         this.users = this.markWorkload(data?.assignedUsers || []);
 
-     //   alert('FOR THE CASE 3 ' + JSON.stringify(this.users));
+        //   alert('FOR THE CASE 3 ' + JSON.stringify(this.users));
         // Auto-select the system-recommended employee.
         // Do not overwrite an existing selection in edit mode.
         if (!this.task.assignedTo && !this.isEditMode) {
@@ -895,7 +896,7 @@ export class AddIndexComponent implements OnInit {
         hasWorkload: false,
       }));
 
- //     alert('FIRST CASE 1 ' + JSON.stringify(this.users));
+      //     alert('FIRST CASE 1 ' + JSON.stringify(this.users));
 
       // Clear selection for a new task when required fields are missing.
       if (!this.isEditMode) {
@@ -927,7 +928,7 @@ export class AddIndexComponent implements OnInit {
             hasWorkload: false,
           }));
 
-      //    alert('FIRST CASE 2 ' + JSON.stringify(this.users));
+          //    alert('FIRST CASE 2 ' + JSON.stringify(this.users));
 
           if (!this.isEditMode) {
             this.task.assignedTo = null;
@@ -954,7 +955,7 @@ export class AddIndexComponent implements OnInit {
 
         this.users = this.markWorkload(this.users);
 
-   //     alert(JSON.stringify(this.users));
+        //     alert(JSON.stringify(this.users));
         // Automatically select the recommended employee for a new task.
         if (!this.isEditMode) {
           const recommendedUser = this.users.find((user: any) => user.hasWorkload);
@@ -1068,6 +1069,7 @@ export class AddIndexComponent implements OnInit {
     this.task.taskCategoryId = category.taskcategoryId ?? category.taskCategoryId;
     this.selectedTaskCategoryName = category.name;
     this.showCategoryDropdown = false;
+    this.categorySearchText = '';          // ADD THIS LINE
 
     this.onTaskCategoryChange();
 
@@ -1081,9 +1083,13 @@ export class AddIndexComponent implements OnInit {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
+    // if (!target.closest('.category-dropdown-container')) {
+    //   this.showCategoryDropdown = false;
+    // }
     if (!target.closest('.category-dropdown-container')) {
-      this.showCategoryDropdown = false;
-    }
+    this.showCategoryDropdown = false;
+    this.categorySearchText = '';        // ADD THIS LINE
+  }
   }
 
   groupedCategories: { department: string; items: any[] }[] = [];
@@ -1137,6 +1143,7 @@ export class AddIndexComponent implements OnInit {
     this.task.taskCategoryId = null;
     this.selectedTaskCategoryName = '';
     this.showCategoryDropdown = false;
+    this.categorySearchText = '';           // ADD THIS LINE
 
     // Reload categories for the new type
     this.onchangeloadDropdownData();
@@ -1172,11 +1179,38 @@ export class AddIndexComponent implements OnInit {
     const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
     const isManager = Number(this.task.userType) === 2;
 
-    return users.map((user: any) => ({
-      ...user,
-      hasWorkload: isManager
-        ? this.workloadList.length > 0 && !assignedUserIds.has(Number(user.userId)) // manager: userId != assignedTo
-        : assignedUserIds.has(Number(user.userId)), // employee: userId == assignedTo
-    }));
+    return users
+      .filter((user: any) => !isManager || !assignedUserIds.has(Number(user.userId)))
+      .map((user: any) => ({
+        ...user,
+        hasWorkload: isManager ? this.workloadList.length > 0 && !assignedUserIds.has(Number(user.userId)) : assignedUserIds.has(Number(user.userId)),
+      }));
   }
+
+  categorySearchText = '';
+
+get filteredGroupedCategories(): { department: string; items: any[] }[] {
+  const q = this.categorySearchText.trim().toLowerCase();
+  if (!q) return this.groupedCategories;
+
+  return this.groupedCategories
+    .map((g) => {
+      // department name matches: keep all its categories
+      if (g.department.toLowerCase().includes(q)) return g;
+      return {
+        department: g.department,
+        items: g.items.filter((c: any) => String(c.name || '').toLowerCase().includes(q)),
+      };
+    })
+    .filter((g) => g.items.length > 0);
+}
+
+toggleCategoryDropdown(): void {
+  this.showCategoryDropdown = !this.showCategoryDropdown;
+  this.categorySearchText = '';
+
+  if (this.showCategoryDropdown) {
+    setTimeout(() => document.getElementById('addTaskCategorySearchInput')?.focus(), 0);
+  }
+}
 }

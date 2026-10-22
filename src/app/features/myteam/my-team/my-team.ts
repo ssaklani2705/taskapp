@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, OnInit, HostListener } from '@angular/core';
 
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 
@@ -1112,7 +1112,10 @@ export class MyTeam implements OnInit {
   loadDesignations(): void {
     this.dataprovider.getActiveDesigmations().subscribe({
       next: (response: DesignationDTO[]) => {
-        this.designationList = response;
+        // this.designationList = response;
+        this.designationList = [...(response ?? [])].sort((a, b) =>
+        (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }),
+        );
       },
 
       error: (error) => {
@@ -1210,4 +1213,71 @@ export class MyTeam implements OnInit {
     this.saveFilterState();
     this.getUserDetails();
   }
+
+  // ===================== SEARCHABLE DROPDOWNS =====================
+deptOpen = false;
+catOpen = false;
+deptSearch = '';
+catSearch = '';
+
+get filteredDepartments(): DepartmentDTO[] {
+  const q = this.deptSearch.trim().toLowerCase();
+  return q
+    ? this.departmentList.filter((d) => (d.name ?? '').toLowerCase().includes(q))
+    : this.departmentList;
+}
+
+get filteredCategories(): TaskCategoryDTO[] {
+  const q = this.catSearch.trim().toLowerCase();
+  return q
+    ? this.categoryList.filter((c) => (c.name ?? '').toLowerCase().includes(q))
+    : this.categoryList;
+}
+
+get selectedDepartmentName(): string {
+  return (
+    this.departmentList.find((d) => d.departmentId === this.selectedDepartmentId)?.name ??
+    '--All Departments--'
+  );
+}
+
+get selectedCategoryName(): string {
+  return (
+    this.categoryList.find((c) => c.taskcategoryId === this.selectedCategoryId)?.name ??
+    '--All Task Categories--'
+  );
+}
+
+toggleDeptDropdown(): void {
+  this.deptOpen = !this.deptOpen;
+  this.catOpen = false;
+  this.deptSearch = '';
+}
+
+toggleCatDropdown(): void {
+  this.catOpen = !this.catOpen;
+  this.deptOpen = false;
+  this.catSearch = '';
+}
+
+selectDepartment(id: number | null): void {
+  this.selectedDepartmentId = id;
+  this.deptOpen = false;
+  this.deptSearch = '';
+  this.onDepartmentChange(); // resets category, reloads categories + users
+}
+
+selectCategory(id: number | null): void {
+  this.selectedCategoryId = id;
+  this.catOpen = false;
+  this.catSearch = '';
+  this.onCategoryChange();
+}
+
+// Close dropdowns when clicking anywhere outside
+@HostListener('document:click')
+closeDropdowns(): void {
+  this.deptOpen = false;
+  this.catOpen = false;
+}
 }

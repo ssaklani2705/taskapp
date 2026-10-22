@@ -287,6 +287,8 @@ private buildGroupedCategories(): void {
     this.selectedClientId = 0;
     this.selectedType = 0;
     this.selectedTaskCatId = 0;
+    this.categorySearchText = '';
+    this.showTaskCategoryDropdown = false;
     this.selectedPriority = 0;
 
     this.currentPage = 1;
@@ -840,6 +842,12 @@ private buildGroupedCategories(): void {
     if (!target.closest('.client-dropdown-container')) {
       this.showClientDropdown = false;
     }
+
+    // NEW
+    if (!target.closest('.task-category-dropdown')) {
+      this.showTaskCategoryDropdown = false;
+      this.categorySearchText = '';
+    }
   }
 
   clearClientFilter(): void {
@@ -851,4 +859,53 @@ private buildGroupedCategories(): void {
 
     this.onSearch();
   }
+
+
+  showTaskCategoryDropdown = false;
+categorySearchText = '';
+
+get selectedTaskCategoryLabel(): string {
+  if (!this.selectedTaskCatId) return '--All Task Categories--';
+  const c = this.taskCategories.find((x: any) => Number(x.taskcategoryId) === Number(this.selectedTaskCatId));
+  return c ? c.name : '--All Task Categories--';
+}
+
+get filteredGroupedCategories(): { department: string; items: TaskCategory[] }[] {
+  const q = this.categorySearchText.trim().toLowerCase();
+  if (!q) return this.groupedCategories;
+
+  return this.groupedCategories
+    .map((g) => {
+      // department name matches: keep all its categories
+      if (g.department.toLowerCase().includes(q)) return g;
+      return {
+        department: g.department,
+        items: g.items.filter((c) => (c.name || '').toLowerCase().includes(q)),
+      };
+    })
+    .filter((g) => g.items.length > 0);
+}
+
+toggleTaskCategoryDropdown(): void {
+  this.showTaskCategoryDropdown = !this.showTaskCategoryDropdown;
+  this.categorySearchText = '';
+
+  if (this.showTaskCategoryDropdown) {
+    setTimeout(() => document.getElementById('recurringCategorySearchInput')?.focus(), 0);
+  }
+}
+
+selectTaskCategory(category: TaskCategory): void {
+  this.selectedTaskCatId = Number(category.taskcategoryId);
+  this.showTaskCategoryDropdown = false;
+  this.categorySearchText = '';
+  this.onFilterChange();
+}
+
+clearTaskCategory(): void {
+  this.selectedTaskCatId = 0;
+  this.showTaskCategoryDropdown = false;
+  this.categorySearchText = '';
+  this.onFilterChange();
+}
 }

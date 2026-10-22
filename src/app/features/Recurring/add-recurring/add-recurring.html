@@ -318,7 +318,7 @@
           <!-- ================= TASK CATEGORY ================= -->
           <!-- ================= TASK CATEGORY + TIME ================= -->
 <div class="user-form-row">
-  <div class="user-form-col">
+  <!-- <div class="user-form-col">
     <div class="user-form-group">
       <label class="user-label">
         Task Category
@@ -337,9 +337,63 @@
      <div class="user-error" *ngIf="recurringForm.get('taskCatId')?.touched && recurringForm.get('taskCatId')?.invalid && !taskCategoryEmployeeError">Task Category is required</div>
                 <div class="user-error" *ngIf="taskCategoryEmployeeError">No employee available for the selected category.</div>
     </div>
-  </div>
+  </div> -->
 
-  <!-- TIME (HH:mm:ss) -->
+
+  <div class="user-form-col">
+  <div class="user-form-group">
+    <label class="user-label">
+      Task Category
+      <span class="required">*</span>
+    </label>
+
+    <div class="task-category-dropdown">
+      <button
+        type="button"
+        class="user-input user-select cat-trigger"
+        [class.cat-placeholder]="!selectedTaskCategoryName"
+        (click)="toggleTaskCategoryDropdown()"
+      >
+        <span class="cat-trigger-text">{{ selectedTaskCategoryName || 'Select Task Category' }}</span>
+        <span class="cat-caret">&#9662;</span>
+      </button>
+
+      <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
+        <input
+          id="addRecurringCategorySearchInput"
+          type="text"
+          class="cat-search"
+          placeholder="Search category..."
+          [value]="categorySearchText"
+          (input)="categorySearchText = $any($event.target).value"
+          (keydown.enter)="$event.preventDefault()"
+          autocomplete="off"
+        />
+
+        <div class="cat-list">
+          <ng-container *ngFor="let group of filteredGroupedCategories">
+            <div class="cat-group">{{ group.department }}</div>
+            <div
+              class="cat-item"
+              *ngFor="let category of group.items"
+              [class.active]="recurringForm.get('taskCatId')?.value === category.taskcategoryId"
+              (click)="selectTaskCategory(category)"
+            >
+              {{ category.name }}
+            </div>
+          </ng-container>
+
+          <div class="cat-empty" *ngIf="taskCategories.length === 0">No Task Category available</div>
+          <div class="cat-empty" *ngIf="taskCategories.length > 0 && filteredGroupedCategories.length === 0">No category found</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="user-error" *ngIf="recurringForm.get('taskCatId')?.touched && recurringForm.get('taskCatId')?.invalid && !taskCategoryEmployeeError">Task Category is required</div>
+    <div class="user-error" *ngIf="taskCategoryEmployeeError">No employee available for the selected category.</div>
+  </div>
+</div>
+
   <div class="user-form-col">
     <div class="user-form-group">
       <label class="user-label">
@@ -347,9 +401,6 @@
         <span class="required">*</span>
       </label>
 
-      <!-- <input type="time" step="1" class="user-input" formControlName="time" /> -->
-
-      <!-- <input type="time" class="user-input" formControlName="time" /> -->
         <div class="time-wrap" [class.is-empty]="!recurringForm.get('time')?.value">
       <input type="time" class="user-input" formControlName="time" />
       <span class="time-placeholder">HH:mm</span>
