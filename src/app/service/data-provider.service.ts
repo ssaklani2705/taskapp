@@ -939,7 +939,7 @@ export class DataProviderService {
     });
   }
 
-  changesClientIdgetTaskFilterData(isAdmin: string, userId: number, loginType: string, clientId: number, isHod: string,userType?: number | null,): Observable<any> {
+  changesClientIdgetTaskFilterData(isAdmin: string, userId: number, loginType: string, clientId: number, isHod: string, userType?: number | null): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/getTaskFilterDataOnChange`, {
       params: {
         isAdmin: isAdmin.toString(),
@@ -961,7 +961,7 @@ export class DataProviderService {
     systemFlag: number,
     startDate: string | null,
     endDate: string | null,
-    userType?: number
+    userType?: number,
   ): Observable<any> {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/changesCategoryIdgetUserFilterData`, {
       params: {
@@ -1369,7 +1369,7 @@ export class DataProviderService {
       params: {
         taskCatId: taskCatId.toString(),
         startDate: startDate || '',
-        endDate: endDate || '',
+        endDate: endDate || ''
       },
     });
   }
@@ -1390,43 +1390,35 @@ export class DataProviderService {
     });
   }
 
-  updatePassword(request:any) {
+  updatePassword(request: any) {
     return this.http.post<any>(`${environment.apiBaseUrl}auth/change_password`, request);
   }
 
-//    getWorkload(
-//   from: string,
-//   to: string,
-//   departmentIds: number[] = [],
-//   categoryIds: number[] = [],
-// ) {
-//   const params: { [key: string]: string } = { from, to };
+  //    getWorkload(
+  //   from: string,
+  //   to: string,
+  //   departmentIds: number[] = [],
+  //   categoryIds: number[] = [],
+  // ) {
+  //   const params: { [key: string]: string } = { from, to };
 
-//   // Send a filter only when something is selected (empty = All)
-//   if (departmentIds.length) params['departmentIds'] = departmentIds.join(',');
-//   if (categoryIds.length) params['categoryIds'] = categoryIds.join(',');
+  //   // Send a filter only when something is selected (empty = All)
+  //   if (departmentIds.length) params['departmentIds'] = departmentIds.join(',');
+  //   if (categoryIds.length) params['categoryIds'] = categoryIds.join(',');
 
-//   return this.http.get<{ success: boolean; message: string; data: any[] }>(
-//     `${environment.apiBaseUrl}admin/report/workload`,
-//     { params },
-//   );
-// }
+  //   return this.http.get<{ success: boolean; message: string; data: any[] }>(
+  //     `${environment.apiBaseUrl}admin/report/workload`,
+  //     { params },
+  //   );
+  // }
 
-getWorkload(
-  from: string,
-  to: string,
-  departmentIds: number[] = [],
-  categoryIds: number[] = [],
-) {
-  const params: { [key: string]: string } = { from, to };
+  getWorkload(from: string, to: string, departmentIds: number[] = [], categoryIds: number[] = []) {
+    const params: { [key: string]: string } = { from, to };
 
-  // Send a filter only when something is selected (empty = All)
-  if (departmentIds.length) params['departmentIds'] = departmentIds.join(',');
-  if (categoryIds.length) params['categoryIds'] = categoryIds.join(',');
+    // Send a filter only when something is selected (empty = All)
+    if (departmentIds.length) params['departmentIds'] = departmentIds.join(',');
+    if (categoryIds.length) params['categoryIds'] = categoryIds.join(',');
 
-  return this.http.get<{ success: boolean; message: string; data: any[] }>(
-    `${environment.apiBaseUrl}admin/report/workload`,
-    { params },
-  );
-}
+    return this.http.get<{ success: boolean; message: string; data: any[] }>(`${environment.apiBaseUrl}admin/report/workload`, { params });
+  }
 }
