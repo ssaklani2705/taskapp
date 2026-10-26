@@ -50,6 +50,8 @@ interface Task {
   description: string;
   taskCategoryId: any;
   userType:any;
+  buddyName:any;
+
 }
 
 export interface Client {
@@ -204,6 +206,7 @@ export class TaskIndex implements OnInit {
       label: 'Assigned By',
       sortable: true,
     },
+    { key: 'buddyName', label: 'Buddy', sortable: false },
 
     {
       key: 'priority',

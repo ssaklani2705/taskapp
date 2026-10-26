@@ -59,9 +59,11 @@
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedForValue" (change)="onFilterChange()">
               <option [ngValue]="0">--All For--</option>
-              <option [ngValue]="1">GST</option>
+              <option [ngValue]="1">ALL</option>
               <option [ngValue]="2">TDS</option>
-              <option [ngValue]="3">ALL</option>
+              <option [ngValue]="3">GST</option>
+              
+             
             </select>
           </div>
 

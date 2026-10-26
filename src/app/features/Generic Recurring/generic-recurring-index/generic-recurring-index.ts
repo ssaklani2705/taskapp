@@ -572,14 +572,11 @@ export class GenericRecurringIndex {
   getForLabel(forValue: number | string | null | undefined): string {
     switch (Number(forValue)) {
       case 1:
-        return 'GST';
-
-      case 2:
-        return 'TDS';
-
-      case 3:
         return 'ALL';
-
+        case 2:
+        return 'TDS';
+      case 3:
+        return 'GST';
       default:
         return '-';
     }

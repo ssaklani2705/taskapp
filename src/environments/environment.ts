@@ -5,6 +5,7 @@ export const environment = {
 
   // apiBaseUrl: 'https://app.webelement.cc/taskapp_api/',
   // baseurluploaded: 'https://app.webelement.cc/taskapp/uploads/',
+
   recordsPerPage: 50,
   size: 50,
   algorithm: 'DES',
