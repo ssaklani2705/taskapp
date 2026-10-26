@@ -551,9 +551,10 @@
   background: #94a8b8;
 }
 
+
 .user-table {
-  width: 1625px;
-  min-width: 1625px;
+  width: 1755px;
+  min-width: 1755px;
   max-width: none;
   table-layout: fixed;
   border-collapse: separate; /* sticky columns need this: no gaps/bleed-through */
@@ -613,10 +614,10 @@
 }
 
 /* =========================================================
-   COLUMN WIDTHS (total = 1625px)
+   COLUMN WIDTHS (total = 1755px)
    1 Sr.No | 2 Title | 3 Client | 4 Start | 5 Due | 6 Category
-   7 Assigned By | 8 Priority | 9 Status
-   10 Assigned To* | 11 Task Status* | 12 Action*   (* = frozen)
+   7 Assigned By | 8 Priority | 9 Status | 10 Buddy
+   11 Assigned To* | 12 Task Status* | 13 Action*   (* = frozen)
    ========================================================= */
 .user-table th:nth-child(1),
 .user-table td:nth-child(1) {
@@ -665,17 +666,22 @@
 
 .user-table th:nth-child(10),
 .user-table td:nth-child(10) {
-  width: 150px;
+  width: 130px; /* Buddy */
 }
 
 .user-table th:nth-child(11),
 .user-table td:nth-child(11) {
-  width: 150px;
+  width: 150px; /* Assigned To */
 }
 
 .user-table th:nth-child(12),
 .user-table td:nth-child(12) {
-  width: 140px;
+  width: 150px; /* Task Status */
+}
+
+.user-table th:nth-child(13),
+.user-table td:nth-child(13) {
+  width: 140px; /* Action */
 }
 
 .user-table td.serial-number {
@@ -685,12 +691,13 @@
   white-space: nowrap;
 }
 
-/* text columns: wrap (Title, Client, Category, Assigned By, Assigned To) */
+/* text columns: wrap (Title, Client, Category, Assigned By, Buddy, Assigned To) */
 .user-table tbody td:nth-child(2),
 .user-table tbody td:nth-child(3),
 .user-table tbody td:nth-child(6),
 .user-table tbody td:nth-child(7),
-.user-table tbody td:nth-child(10) {
+.user-table tbody td:nth-child(10),
+.user-table tbody td:nth-child(11) {
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: normal;
@@ -753,15 +760,15 @@
   border: 1px solid #efcaca;
 }
 
-/* Task Status button */
-.user-table tbody td:nth-child(11) {
+/* Task Status button (column 12) */
+.user-table tbody td:nth-child(12) {
   padding: 8px 6px;
   white-space: nowrap;
   text-align: center;
   overflow: hidden;
 }
 
-.user-table tbody td:nth-child(11) .change-manager-button {
+.user-table tbody td:nth-child(12) .change-manager-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -856,26 +863,6 @@
   border: 1px solid var(--danger-border);
 }
 
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 82px;
-  min-width: 82px;
-  max-width: 82px;
-  height: 32px;
-  padding: 0 8px;
-  margin: 0 auto;
-  border-radius: 3px;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-}
-
 .status-badge.status-1 {
   background: var(--success-bg);
   color: var(--success) !important;
@@ -907,64 +894,61 @@
 }
 
 /* =========================================================
-   FROZEN LAST 3 COLUMNS: Assigned To | Task Status | Action
+   FROZEN LAST 3 COLUMNS: Assigned To (11) | Task Status (12) | Action (13)
+   Buddy (10) scrolls normally
    ========================================================= */
-.user-table th:nth-child(10),
-.user-table td:nth-child(10),
 .user-table th:nth-child(11),
 .user-table td:nth-child(11),
 .user-table th:nth-child(12),
-.user-table td:nth-child(12) {
+.user-table td:nth-child(12),
+.user-table th:nth-child(13),
+.user-table td:nth-child(13) {
   position: sticky;
   z-index: 2;
   text-align: center;
 }
 
 /* header cells above body cells */
-.user-table th:nth-child(10),
 .user-table th:nth-child(11),
-.user-table th:nth-child(12) {
+.user-table th:nth-child(12),
+.user-table th:nth-child(13) {
   z-index: 3;
   background: var(--table-header);
 }
 
 /* solid background so scrolling columns don't show through */
-.user-table td:nth-child(10),
 .user-table td:nth-child(11),
-.user-table td:nth-child(12) {
+.user-table td:nth-child(12),
+.user-table td:nth-child(13) {
   background: var(--white);
 }
 
-.user-table tbody tr:hover td:nth-child(10),
 .user-table tbody tr:hover td:nth-child(11),
-.user-table tbody tr:hover td:nth-child(12) {
+.user-table tbody tr:hover td:nth-child(12),
+.user-table tbody tr:hover td:nth-child(13) {
   background: var(--table-hover);
 }
 
 /* right offset = sum of widths of frozen columns to the right */
-.user-table th:nth-child(12),
-.user-table td:nth-child(12) {
+.user-table th:nth-child(13),
+.user-table td:nth-child(13) {
   right: 0;
   padding: 8px 5px;
   white-space: nowrap;
   overflow: hidden;
 }
 
-.user-table th:nth-child(11),
-.user-table td:nth-child(11) {
+.user-table th:nth-child(12),
+.user-table td:nth-child(12) {
   right: 140px; /* Action width */
 }
 
-.user-table th:nth-child(10),
-.user-table td:nth-child(10) {
+.user-table th:nth-child(11),
+.user-table td:nth-child(11) {
   right: 290px; /* Action 140 + Task Status 150 */
-}
-
-/* separators (borders can vanish on sticky cells with border-collapse) */
-.user-table th:nth-child(10),
-.user-table td:nth-child(10) {
   box-shadow: -3px 0 5px -2px rgba(25, 52, 90, 0.15);
 }
+
 
 .action-column {
   min-width: 140px;
@@ -3889,4 +3873,19 @@ textarea.manager-select::placeholder {
 @media (max-width: 480px) {
   .rating-box { flex-direction: column; align-items: flex-start; }
   .rating-meta { align-items: flex-start; }
+}
+
+.buddy-line {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+
+  i {
+    margin-right: 3px;
+    color: var(--primary-blue);
+    font-size: 11px;
+  }
 }

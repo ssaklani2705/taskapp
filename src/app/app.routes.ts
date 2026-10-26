@@ -177,6 +177,13 @@ export const routes: Routes = [
         loadComponent: () => import('./reports/workload-report/workload-report').then(m => m.WorkloadReport)
       },
 
+         {
+        path: 'rating-report',
+        canActivate: [moduleGuard],
+        data: { moduleId: 17 },
+        loadComponent: () => import('./reports/rating-report/rating-report').then((m) => m.RatingReport),
+      },
+
       // 9 - Plan Master
       {
         path: '', canActivate: [moduleGuard], data: { moduleId: 9, loginTypes: ['other'] },

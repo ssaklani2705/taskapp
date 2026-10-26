@@ -39,9 +39,10 @@
 
                 <select class="user-input user-select" formControlName="forValue">
                   <option [ngValue]="null">Select For</option>
-                  <option [ngValue]="1">GST</option>
+                  <option [ngValue]="1">All</option>
                   <option [ngValue]="2">TDS</option>
-                  <option [ngValue]="3">All</option>
+                  <option [ngValue]="3">GST</option>
+                  
                 </select>
 
                 <div class="user-error" *ngIf="recurringForm.get('forValue')?.touched && recurringForm.get('forValue')?.invalid">For is required</div>

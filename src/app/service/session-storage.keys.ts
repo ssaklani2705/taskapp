@@ -39,4 +39,6 @@ export const SESSION_KEYS = {
   SERVICE_FILTER: 'serviceFilter',
 
   GENERIC_RECURRING_FILTER: 'genericRecurringFilter',
+
+  RATING_REPORT_FILTER: 'ratingReportFinter'
 };

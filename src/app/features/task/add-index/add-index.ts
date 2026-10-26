@@ -205,6 +205,8 @@ export class AddIndexComponent implements OnInit {
 
         assignedTo: null,
 
+        buddyId: null,          // ADD THIS LINE
+
         priority: null,
 
         status: 1,
@@ -417,6 +419,11 @@ export class AddIndexComponent implements OnInit {
 
     this.task.addedBy = this.userId ? Number(this.userId) : null;
 
+    // Buddy must not be the same person as Assigned To
+    if (this.task.buddyId && Number(this.task.buddyId) === Number(this.task.assignedTo)) {
+      this.task.buddyId = null;
+    }
+
     const formData = new FormData();
 
     // Client is optional for some categories: send it only when selected
@@ -433,6 +440,10 @@ export class AddIndexComponent implements OnInit {
     formData.append('description', this.task.description || '');
 
     formData.append('assignedTo', String(Number(this.task.assignedTo)));
+
+    if (this.task.buddyId) {
+      formData.append('buddyId', String(Number(this.task.buddyId)));
+    }
 
     formData.append('priority', String(Number(this.task.priority)));
 
@@ -545,6 +556,8 @@ export class AddIndexComponent implements OnInit {
 
         assignedTo: null,
 
+        buddyId: null,          // ADD THIS LINE
+
         priority: null,
 
         status: 1,
@@ -654,6 +667,7 @@ if (selected) {
   this.task.taskCategoryId = null;
   this.selectedTaskCategoryName = '';
   this.task.assignedTo = null;
+  this.task.buddyId = null;         // ADD
   this.users = [];
 }
         // Categories that belong to the logged-in user's session (categoryIds from login)
@@ -740,6 +754,7 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
 
         this.task.assignedTo =
           recommendedUser?.userId ?? this.users[0].userId;
+          this.clearBuddyIfSameAsAssignee();      // ADD
       }
 
       onLoaded?.();
@@ -851,6 +866,7 @@ onManagerClientChange(clientId: number | null): void {
   this.task.clientId = clientId;
 
   this.task.assignedTo = null;
+  this.task.buddyId = null;         // ADD
   this.users = [];
   this.workloadList = [];
   this.noEmployeeError = '';
@@ -1031,6 +1047,7 @@ onManagerClientChange(clientId: number | null): void {
           const recommendedUser = this.users.find((user: any) => user.hasWorkload);
 
           this.task.assignedTo = recommendedUser ? recommendedUser.userId : null;
+          this.clearBuddyIfSameAsAssignee();    // ADD
         }
 
         console.log('Updated users:', this.users);
@@ -1220,6 +1237,7 @@ onTaskCategoryChange(): void {
 
     // Everything below belonged to the previous type
     this.task.assignedTo = null;
+    this.task.buddyId = null;       // ADD
     this.users = [];
     this.workloadList = [];
     this.noEmployeeError = '';
@@ -1244,22 +1262,39 @@ onTaskCategoryChange(): void {
     this.showClientDropdown = false;
 
     this.task.assignedTo = null;
+    this.task.buddyId = null;       // ADD
     this.users = [];
     this.workloadList = [];
     this.noEmployeeError = '';
   }
 
   // Called only when the user clicks a category in the dropdown
-  onCategoryPicked(category: any): void {
-    const newId = Number(category.taskcategoryId ?? category.taskCategoryId);
+  // onCategoryPicked(category: any): void {
+  //   const newId = Number(category.taskcategoryId ?? category.taskCategoryId);
 
-    // Clear Client only if the category actually changed
-    if (Number(this.task.taskCategoryId) !== newId) {
-      this.resetClient();
-    }
+  //   // Clear Client only if the category actually changed
+  //   if (Number(this.task.taskCategoryId) !== newId) {
+  //     this.resetClient();
+  //   }
 
-    this.selectTaskCategory(category);
+  //   this.selectTaskCategory(category);
+  // }
+  // Called only when the user clicks a category in the dropdown
+onCategoryPicked(category: any): void {
+  const newId = Number(category.taskcategoryId ?? category.taskCategoryId);
+
+  // Client stays as selected. Only the assignee belonged to the previous category.
+  if (Number(this.task.taskCategoryId) !== newId) {
+    this.task.assignedTo = null;
+    this.task.buddyId = null;       // ADD
+    this.users = [];
+    this.workloadList = [];
+    this.noEmployeeError = '';
+    this.holidayError = '';
   }
+
+  this.selectTaskCategory(category);
+}
 
   private markWorkload(users: any[]): any[] {
     const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
@@ -1302,5 +1337,22 @@ toggleCategoryDropdown(): void {
 
 get isEmployeeType(): boolean {
   return Number(this.task.userType) === 1;
+}
+
+
+// Same list as Assigned To, minus the selected assignee, and without the recommended marker
+get buddyUsers(): any[] {
+  return (this.users || []).filter((u: any) => Number(u.userId) !== Number(this.task.assignedTo));
+}
+
+onAssignedToChange(userId: any): void {
+  this.task.assignedTo = userId;
+  this.clearBuddyIfSameAsAssignee();
+}
+
+private clearBuddyIfSameAsAssignee(): void {
+  if (this.task.buddyId && Number(this.task.buddyId) === Number(this.task.assignedTo)) {
+    this.task.buddyId = null;
+  }
 }
 }

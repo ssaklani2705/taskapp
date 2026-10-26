@@ -442,14 +442,14 @@ export class ViewGenericRecurring {
   getForLabel(forValue: number | string | null | undefined): string {
     switch (Number(forValue)) {
       case 1:
-        return 'GST';
-
+        return 'ALL';
       case 2:
         return 'TDS';
-
       case 3:
-        return 'ALL';
+        return 'GST';
 
+      
+      
       default:
         return '-';
     }
