@@ -207,6 +207,16 @@ export const routes: Routes = [
           { path: 'view-company/:companyId', loadComponent: () => import('./features/Company/company-view/company-view').then(m => m.CompanyView) },
         ]
       },
+
+       {
+        path: '',
+        canActivate: [moduleGuard],
+        data: { moduleId: 17, loginTypes: ['other'] },
+        children: [
+          { path: 'reassign-report-index', loadComponent: () => import('./reports/ReassignTaskReport/reassign-report/reassign-report').then((m) => m.ReassignReport) },
+        ],
+      },
+
     ]
   },
   { path: '**', redirectTo: 'login' }

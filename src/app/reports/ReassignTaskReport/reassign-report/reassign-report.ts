@@ -1,0 +1,399 @@
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+import { DataProviderService } from '../../../service/data-provider.service';
+import { SESSION_KEYS } from '../../../service/session-storage.keys';
+import { SessionStorageService } from '../../../service/session-storage.service';
+import { AssignedUser, Client, MY_DATE_TIME_FORMATS, TaskCategory } from '../../../features/task/task-index/task-index';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MyDateAdapter } from '../../../classes/my-date-adapter';
+import { OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import * as XLSX from 'xlsx';
+import Swal from 'sweetalert2';
+interface ReassignRow {
+  taskDate: any;
+  taskName: string;
+  taskCategory: string;
+  clientName: string;
+  oldUser: string;
+  newUser: string;
+}
+@Component({
+  selector: 'app-reassign-report',
+  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIconModule, MatDividerModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule],
+  providers: [
+    DatePipe,
+    {
+      provide: DateAdapter,
+      useClass: MyDateAdapter,
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB',
+    },
+    {
+      provide: OWL_DATE_TIME_LOCALE,
+      useValue: 'en-GB',
+    },
+    {
+      provide: OWL_DATE_TIME_FORMATS,
+      useValue: MY_DATE_TIME_FORMATS,
+    },
+  ],
+  templateUrl: './reassign-report.html',
+  styleUrl: './reassign-report.scss',
+})
+export class ReassignReport implements OnInit {
+  rows: ReassignRow[] = [];
+  apiResponse: any = {};
+
+  searchQuery = '';
+  search = '';
+
+  currentPage = 1;
+  page = 0;
+  size: number = environment.size;
+  recordsPerPage: number = environment.recordsPerPage;
+
+  isPanelVisible = true;
+  filterKey = SESSION_KEYS.ACCESS_REPORT_FILTER;
+
+  fromDate: Date | null = null;
+  toDate: Date | null = null;
+
+  selectedTaskCategory = '';
+  selectedClientId = 0;
+  selectedUserId = 0;
+
+  taskCategories: TaskCategory[] = [];
+  groupedCategories: { department: string; items: TaskCategory[] }[] = [];
+  showTaskCategoryDropdown = false;
+  categorySearchText = '';
+
+  constructor(
+    private dataprovider: DataProviderService,
+    private datePipe: DatePipe,
+    private sessionService: SessionStorageService,
+  ) {}
+
+  ngOnInit(): void {
+    this.sessionService.clearOtherSessions(this.filterKey);
+    const s = this.sessionService.getItem(this.filterKey);
+
+    if (s) {
+      this.currentPage = s.currentPage ?? 1;
+      this.page = s.page ?? this.currentPage - 1;
+      this.size = s.size ?? environment.size;
+      this.recordsPerPage = this.size;
+      this.search = s.searchText ?? '';
+      this.searchQuery = this.search;
+      this.selectedTaskCategory = s.taskCategory ?? '';
+      this.selectedClientId = s.clientId ?? 0;
+      this.selectedUserId = s.userId ?? 0;
+      this.fromDate = s.fromDate ? new Date(s.fromDate) : null;
+      this.toDate = s.toDate ? new Date(s.toDate) : null;
+    }
+    this.loadTaskCategories();
+    this.getReassignReport();
+    this.loadActiveUsers();
+    this.loadActiveClients();
+  }
+
+  saveFilterState(): void {
+    this.sessionService.setItem(this.filterKey, {
+      currentPage: this.currentPage,
+      page: this.page,
+      size: this.size,
+      searchText: this.search.trim(),
+      taskCategory: this.selectedTaskCategory,
+      clientId: this.selectedClientId,
+      userId: this.selectedUserId,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
+    });
+  }
+
+  getReassignReport(): void {
+    const from = this.fromDate ? (this.datePipe.transform(this.fromDate, 'yyyy-MM-dd') ?? '') : '';
+    const to = this.toDate ? (this.datePipe.transform(this.toDate, 'yyyy-MM-dd') ?? '') : '';
+
+    this.dataprovider.getTaskReassignReport(this.page, this.size, this.search, from, to, Number(this.selectedTaskCategory) || 0, this.selectedClientId || 0, this.selectedUserId || 0).subscribe({
+      next: (response) => {
+        this.apiResponse = response;
+        this.rows = response.content || []; // Spring Page uses "content"
+      },
+      error: (err) => console.error('Error fetching reassign report:', err),
+    });
+  }
+
+  onSearch(): void {
+    this.search = this.searchQuery.trim();
+    this.currentPage = 1;
+    this.page = 0;
+    this.saveFilterState();
+    this.getReassignReport();
+  }
+
+  goToPage(pageNumber: number): void {
+    if (pageNumber < 1 || pageNumber > this.totalPages) return;
+    this.currentPage = pageNumber;
+    this.page = pageNumber - 1;
+    this.saveFilterState();
+    this.getReassignReport();
+  }
+
+  goToFirstPage(): void {
+    this.goToPage(1);
+  }
+  goToLastPage(): void {
+    this.goToPage(this.totalPages);
+  }
+
+  pages(): number[] {
+    const delta = 5;
+    const start = Math.max(1, this.currentPage - delta);
+    const end = Math.min(this.totalPages, this.currentPage + delta);
+    const arr: number[] = [];
+    for (let i = start; i <= end; i++) arr.push(i);
+    return arr;
+  }
+
+  get totalRecords(): number {
+    return this.apiResponse?.totalElements || 0;
+  }
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.totalRecords / this.recordsPerPage));
+  }
+
+  get recordSummary(): string {
+    const total = this.totalRecords;
+    const start = total === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
+    const end = Math.min(this.currentPage * this.recordsPerPage, total);
+    return `Page ${this.currentPage} of ${this.totalPages}, (${start} - ${end} of ${total} record${total > 1 ? 's' : ''})`;
+  }
+
+  togglePanel(): void {
+    this.isPanelVisible = !this.isPanelVisible;
+  }
+
+  formatDateTime(value: any): string {
+    if (!value) return '';
+    return this.datePipe.transform(value, 'dd-MM-yyyy hh:mm a') || '';
+  }
+
+  toggleTaskCategoryDropdown(): void {
+    this.showTaskCategoryDropdown = !this.showTaskCategoryDropdown;
+    this.categorySearchText = '';
+
+    if (this.showTaskCategoryDropdown) {
+      setTimeout(() => document.getElementById('taskCategorySearchInput')?.focus(), 0);
+    }
+  }
+
+  selectTaskCategory(category: TaskCategory): void {
+    this.selectedTaskCategory = String(category.taskcategoryId);
+    this.showTaskCategoryDropdown = false;
+    this.categorySearchText = '';
+    this.onSearch();
+  }
+
+  clearTaskCategory(): void {
+    this.selectedTaskCategory = '';
+    this.showTaskCategoryDropdown = false;
+    this.categorySearchText = '';
+    this.onSearch();
+  }
+  get filteredCategories(): TaskCategory[] {
+    const q = this.categorySearchText.trim().toLowerCase();
+    if (!q) return this.taskCategories;
+    return this.taskCategories.filter((c) => (c.name || '').toLowerCase().includes(q));
+  }
+
+  loadTaskCategories(): void {
+    // use the same service method your Task screen uses to fill its category dropdown
+    this.dataprovider.getTaskCategories().subscribe({
+      next: (res: any) => {
+        this.taskCategories = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
+      },
+      error: (err) => console.error('Error loading task categories:', err),
+    });
+  }
+  clientSearchText: string = '';
+  showClientDropdown: boolean = false;
+  clients: Client[] = [];
+  filteredClients: any[] = [];
+  selectedClient: string = '';
+  assignedUsers: AssignedUser[] = [];
+  selectedAssignedTo: string = '';
+  filterClients(): void {
+    const search = this.clientSearchText.toLowerCase().trim();
+
+    if (search.length < 3) {
+      this.showClientDropdown = false;
+      this.filteredClients = [];
+      return;
+    }
+
+    this.filteredClients = this.clients.filter((client: any) => client.name && client.name.toLowerCase().includes(search));
+
+    this.showClientDropdown = true;
+
+    if (!search) {
+      this.selectedClient = '';
+      this.filteredClients = [...this.clients];
+    }
+  }
+
+  selectClient(client: any): void {
+    this.clientSearchText = client.name;
+    this.selectedClientId = Number(client.clientId); // this is what the API call uses
+    this.selectedClient = String(client.clientId);
+    this.showClientDropdown = false;
+
+    this.onSearch();
+  }
+
+  clearClientSearch(): void {
+    this.clientSearchText = '';
+    this.selectedClientId = 0;
+    this.selectedClient = '';
+
+    this.filteredClients = [];
+    this.showClientDropdown = false;
+
+    this.onSearch();
+  }
+  exportExcelPer = 'Y';
+  loadActiveUsers(): void {
+    this.dataprovider.getallUsers().subscribe({
+      next: (users) => (this.assignedUsers = users || []),
+      error: (err) => console.error('Error loading users:', err),
+    });
+  }
+
+  clearFilters(): void {
+    // search
+    this.searchQuery = '';
+    this.search = '';
+
+    // dates
+    this.fromDate = null;
+    this.toDate = null;
+
+    // dropdowns
+    this.selectedTaskCategory = '';
+    this.selectedUserId = 0;
+    this.selectedAssignedTo = '';
+
+    // client
+    this.selectedClientId = 0;
+    this.selectedClient = '';
+    this.clientSearchText = '';
+    this.filteredClients = [];
+    this.showClientDropdown = false;
+
+    // category dropdown state
+    this.categorySearchText = '';
+    this.showTaskCategoryDropdown = false;
+
+    // paging
+    this.currentPage = 1;
+    this.page = 0;
+
+    // clear saved filter, then reload
+    this.saveFilterState();
+    this.getReassignReport();
+  }
+
+  loadActiveClients(): void {
+    this.dataprovider.findByActiveClient().subscribe({
+      next: (res: any) => {
+        this.clients = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
+
+        // restore the client name if a client filter was saved in session
+        if (this.selectedClientId && !this.clientSearchText) {
+          const found = this.clients.find((c: any) => c.clientId === this.selectedClientId);
+          if (found) this.clientSearchText = found.name;
+        }
+      },
+      error: (err) => console.error('Error loading active clients:', err),
+    });
+  }
+
+  isExporting = false;
+
+  exportToExcel(): void {
+    const totalRecords = this.totalRecords;
+
+    if (totalRecords === 0) {
+      Swal.fire('No Data', 'No records available for export.', 'info');
+      return;
+    }
+
+    if (this.isExporting) return;
+    this.isExporting = true;
+
+    // same filters as getReassignReport(), but page 0 and size = total filtered records
+    const from = this.fromDate ? (this.datePipe.transform(this.fromDate, 'yyyy-MM-dd') ?? '') : '';
+    const to = this.toDate ? (this.datePipe.transform(this.toDate, 'yyyy-MM-dd') ?? '') : '';
+
+    this.dataprovider.getTaskReassignReport(0, totalRecords, this.search, from, to, Number(this.selectedTaskCategory) || 0, this.selectedClientId || 0, this.selectedUserId || 0).subscribe({
+      next: (response: any) => {
+        this.isExporting = false;
+        const allRows: ReassignRow[] = response?.content || [];
+
+        if (allRows.length === 0) {
+          Swal.fire('No Data', 'No records available for export.', 'info');
+          return;
+        }
+
+        this.downloadReassignExcel(allRows);
+      },
+      error: (err) => {
+        this.isExporting = false;
+        console.error('Error exporting reassign report:', err);
+        Swal.fire('Error', 'Unable to export reassign report.', 'error');
+      },
+    });
+  }
+
+  private downloadReassignExcel(rows: ReassignRow[]): void {
+    const data = rows.map((r, index) => ({
+      'Sr No': index + 1,
+      'Task Date': this.formatDateTime(r.taskDate),
+      'Task Name': r.taskName || '',
+      'Task Category': r.taskCategory || '',
+      Client: r.clientName || '',
+      'Old User': r.oldUser || '',
+      'New User': r.newUser || '',
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+
+    worksheet['!cols'] = [
+      { wch: 8 }, // Sr No
+      { wch: 20 }, // Task Date
+      { wch: 40 }, // Task Name
+      { wch: 25 }, // Task Category
+      { wch: 30 }, // Client
+      { wch: 22 }, // Old User
+      { wch: 22 }, // New User
+    ];
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Reassign Report');
+
+    const stamp = this.datePipe.transform(new Date(), 'dd-MM-yyyy_HHmm');
+    XLSX.writeFile(workbook, `Reassign_Report_${stamp}.xlsx`);
+  }
+}

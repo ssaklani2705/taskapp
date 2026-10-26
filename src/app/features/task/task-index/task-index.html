@@ -53,46 +53,30 @@
           }
 
           <!-- TASK CATEGORY -->
-           <div class="status-wrapper task-category-dropdown">
-  <button type="button" class="status-select cat-trigger" (click)="toggleTaskCategoryDropdown()">
-    <span class="cat-trigger-text">{{ selectedTaskCategoryLabel }}</span>
-    <span class="cat-caret">&#9662;</span>
-  </button>
+          <div class="status-wrapper task-category-dropdown">
+            <button type="button" class="status-select cat-trigger" (click)="toggleTaskCategoryDropdown()">
+              <span class="cat-trigger-text">{{ selectedTaskCategoryLabel }}</span>
+              <span class="cat-caret">&#9662;</span>
+            </button>
 
-  <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
-    <input
-      id="taskCategorySearchInput"
-      type="text"
-      class="cat-search"
-      placeholder="Search category..."
-      [(ngModel)]="categorySearchText"
-      autocomplete="off"
-    />
+            <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
+              <input id="taskCategorySearchInput" type="text" class="cat-search" placeholder="Search category..." [(ngModel)]="categorySearchText" autocomplete="off" />
 
-    <div class="cat-list">
-      <div class="cat-item cat-all" [class.active]="!selectedTaskCategory" (click)="clearTaskCategory()">
-        --All Task Categories--
-      </div>
+              <div class="cat-list">
+                <div class="cat-item cat-all" [class.active]="!selectedTaskCategory" (click)="clearTaskCategory()">--All Task Categories--</div>
 
-      <ng-container *ngFor="let group of filteredGroupedCategories">
-        <div class="cat-group">{{ group.department }}</div>
-        <div
-          class="cat-item"
-          *ngFor="let category of group.items"
-          [class.active]="selectedTaskCategory === ('' + category.taskcategoryId)"
-          (click)="selectTaskCategory(category)"
-        >
-          {{ category.name }}
-        </div>
-      </ng-container>
+                <ng-container *ngFor="let group of filteredGroupedCategories">
+                  <div class="cat-group">{{ group.department }}</div>
+                  <div class="cat-item" *ngFor="let category of group.items" [class.active]="selectedTaskCategory === '' + category.taskcategoryId" (click)="selectTaskCategory(category)">
+                    {{ category.name }}
+                  </div>
+                </ng-container>
 
-      <div class="cat-empty" *ngIf="filteredGroupedCategories.length === 0">
-        No category found
-      </div>
-    </div>
-  </div>
-</div>
-        
+                <div class="cat-empty" *ngIf="filteredGroupedCategories.length === 0">No category found</div>
+              </div>
+            </div>
+          </div>
+
           <!-- <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
               <option value="">--All Task Categories--</option>
@@ -329,29 +313,33 @@
                   </span>
                 </td> -->
                 <td>
-  <span
-    class="wrap-text"
-    [class.unassigned-user]="task.status === 1 && (!task.assignedToName || task.assignedToName === '0')"
-    (click)="task.status === 1 && (!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1 && task.userType !== 2)) && openAssignUserModal(task)"
-  >
-    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
-      <ng-container *ngIf="task.status === 1; else notAssigned">
-        <i class="fas fa-user-tie assign-icon"></i>
-        Assign User
-      </ng-container>
+                  <span
+                    class="wrap-text"
+                    [class.unassigned-user]="task.status === 1 && (!task.assignedToName || task.assignedToName === '0')"
+                    (click)="
+                      task.status === 1 &&
+                        (!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1 && task.userType !== 2)) &&
+                        openAssignUserModal(task)
+                    "
+                  >
+                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+                      <ng-container *ngIf="task.status === 1; else notAssigned">
+                        <i class="fas fa-user-tie assign-icon"></i>
+                        Assign User
+                      </ng-container>
 
-      <ng-template #notAssigned>Not Assigned</ng-template>
-    </ng-container>
+                      <ng-template #notAssigned>Not Assigned</ng-template>
+                    </ng-container>
 
-    <ng-template #assignedBlock>
-      {{ task.assignedToName }}
-      <span class="reassign-text" *ngIf="task.status === 1 && task.taskStatus === 1 && task.taskCategoryId !== 1 && task.userType !== 2">
-        <i class="fas fa-user-tie reassign-icon"></i>
-        Re-assign
-      </span>
-    </ng-template>
-  </span>
-</td>
+                    <ng-template #assignedBlock>
+                      {{ task.assignedToName }}
+                      <span class="reassign-text" *ngIf="task.status === 1 && task.taskStatus === 1 && task.taskCategoryId !== 1 && task.userType !== 2">
+                        <i class="fas fa-user-tie reassign-icon"></i>
+                        Re-assign
+                      </span>
+                    </ng-template>
+                  </span>
+                </td>
 
                 <!-- 11: TASK STATUS (frozen) -->
                 <td>
@@ -561,44 +549,53 @@
         </div>
       </div>
 
-
       <!-- Rating (for Assignor Closure) -->
-       <!-- RATING (only for Assignor Closure) -->
-<div class="manager-form-group" *ngIf="isAssignorClosureSelected">
-  <label class="modal-field-label">
-    Rating
-    <span class="required">*</span>
-  </label>
+      <!-- RATING (only for Assignor Closure) -->
+      <div class="manager-form-group" *ngIf="isAssignorClosureSelected">
+        <label class="modal-field-label">
+          Rating
+          <span class="required">*</span>
+        </label>
 
-  <div class="rating-box" [class.has-error]="ratingValidationError" [class.is-disabled]="isChangingManager">
-    <div class="star-rating" (mouseleave)="hoverRating = 0">
-      <div class="star" *ngFor="let star of stars">
-        <mat-icon class="star-icon" [class.filled]="displayRating >= star - 0.5">{{ getStarIcon(star) }}</mat-icon>
+        <div class="rating-box" [class.has-error]="ratingValidationError" [class.is-disabled]="isChangingManager">
+          <div class="star-rating" (mouseleave)="hoverRating = 0">
+            <div class="star" *ngFor="let star of stars">
+              <mat-icon class="star-icon" [class.filled]="displayRating >= star - 0.5">{{ getStarIcon(star) }}</mat-icon>
 
-        <!-- left half = x.5 -->
-        <button type="button" class="star-hit star-hit-half" [disabled]="isChangingManager"
-          [attr.aria-label]="(star - 0.5) + ' stars'"
-          (mouseenter)="hoverRating = star - 0.5" (click)="setRating(star - 0.5)"></button>
+              <!-- left half = x.5 -->
+              <button
+                type="button"
+                class="star-hit star-hit-half"
+                [disabled]="isChangingManager"
+                [attr.aria-label]="star - 0.5 + ' stars'"
+                (mouseenter)="hoverRating = star - 0.5"
+                (click)="setRating(star - 0.5)"
+              ></button>
 
-        <!-- right half = full star -->
-        <button type="button" class="star-hit star-hit-full" [disabled]="isChangingManager"
-          [attr.aria-label]="star + ' stars'"
-          (mouseenter)="hoverRating = star" (click)="setRating(star)"></button>
+              <!-- right half = full star -->
+              <button
+                type="button"
+                class="star-hit star-hit-full"
+                [disabled]="isChangingManager"
+                [attr.aria-label]="star + ' stars'"
+                (mouseenter)="hoverRating = star"
+                (click)="setRating(star)"
+              ></button>
+            </div>
+          </div>
+
+          <div class="rating-meta">
+            <span class="rating-score">{{ displayRating ? displayRating.toFixed(1) : '0.0' }}<small> / 5</small></span>
+            <span class="rating-text" [class.active]="displayRating > 0">{{ getRatingText() }}</span>
+            <button type="button" class="rating-clear" *ngIf="selectedRating > 0" [disabled]="isChangingManager" (click)="clearRating()">Clear</button>
+          </div>
+        </div>
+
+        <div class="manager-validation-error" *ngIf="ratingValidationError">
+          <mat-icon>error_outline</mat-icon>
+          <span>Please give a rating</span>
+        </div>
       </div>
-    </div>
-
-    <div class="rating-meta">
-      <span class="rating-score">{{ displayRating ? displayRating.toFixed(1) : '0.0' }}<small> / 5</small></span>
-      <span class="rating-text" [class.active]="displayRating > 0">{{ getRatingText() }}</span>
-      <button type="button" class="rating-clear" *ngIf="selectedRating > 0" [disabled]="isChangingManager" (click)="clearRating()">Clear</button>
-    </div>
-  </div>
-
-  <div class="manager-validation-error" *ngIf="ratingValidationError">
-    <mat-icon>error_outline</mat-icon>
-    <span>Please give a rating</span>
-  </div>
-</div>
 
       <!-- DESCRIPTION -->
       <div class="manager-form-group">
@@ -645,56 +642,56 @@
           </button>
         </div>
       </div> -->
-    
+
       <!-- UPLOAD FILE 1 -->
-<div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
- <div class="file-label-row">
-  <label class="modal-field-label">Upload File - 1</label>
-  <span class="file-hint">[.pdf, .xls, .xlsx, .doc, .docx &middot; up to 10 MB]</span>
-</div>
+      <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+        <div class="file-label-row">
+          <label class="modal-field-label">Upload File - 1</label>
+          <span class="file-hint">[.pdf, .xls, .xlsx, .doc, .docx &middot; up to 10 MB]</span>
+        </div>
 
-  <div class="file-upload" [class.has-file]="fileTwoName" [class.is-disabled]="isChangingManager">
-    <input type="file" #normalFileInput class="file-upload-input" accept=".pdf,.xls,.xlsx,.doc,.docx" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
-    <mat-icon class="file-upload-icon">cloud_upload</mat-icon>
-    <div class="file-upload-text">
-      <span class="file-upload-title">Click to choose a file</span>
-      <span class="file-upload-sub">or drag and drop it here</span>
-    </div>
-  </div>
+        <div class="file-upload" [class.has-file]="fileTwoName" [class.is-disabled]="isChangingManager">
+          <input type="file" #normalFileInput class="file-upload-input" accept=".pdf,.xls,.xlsx,.doc,.docx" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+          <mat-icon class="file-upload-icon">cloud_upload</mat-icon>
+          <div class="file-upload-text">
+            <span class="file-upload-title">Click to choose a file</span>
+            <span class="file-upload-sub">or drag and drop it here</span>
+          </div>
+        </div>
 
-  <div class="file-chip" *ngIf="fileTwoName">
-    <mat-icon class="file-chip-icon">description</mat-icon>
-    <span class="file-chip-name" [title]="fileTwoName">{{ fileTwoName }}</span>
-    <button type="button" class="file-chip-remove" (click)="removeNormalFile(normalFileInput)" [disabled]="isChangingManager" title="Remove file">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-</div>
+        <div class="file-chip" *ngIf="fileTwoName">
+          <mat-icon class="file-chip-icon">description</mat-icon>
+          <span class="file-chip-name" [title]="fileTwoName">{{ fileTwoName }}</span>
+          <button type="button" class="file-chip-remove" (click)="removeNormalFile(normalFileInput)" [disabled]="isChangingManager" title="Remove file">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
 
-<!-- UPLOAD FILE 2 -->
-<div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
-  <div class="file-label-row">
-  <label class="modal-field-label">Upload File - 2</label>
-  <span class="file-hint">[.pdf, .xls, .xlsx, .doc, .docx, .zip &middot; up to 10 MB]</span>
-</div>
+      <!-- UPLOAD FILE 2 -->
+      <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+        <div class="file-label-row">
+          <label class="modal-field-label">Upload File - 2</label>
+          <span class="file-hint">[.pdf, .xls, .xlsx, .doc, .docx, .zip &middot; up to 10 MB]</span>
+        </div>
 
-  <div class="file-upload" [class.has-file]="fileOneName" [class.is-disabled]="isChangingManager">
-    <input type="file" #zipFileInput class="file-upload-input" accept=".pdf,.xls,.xlsx,.doc,.docx,.zip" [disabled]="isChangingManager" (change)="onFileOneSelected($event)" />
-    <mat-icon class="file-upload-icon">cloud_upload</mat-icon>
-    <div class="file-upload-text">
-      <span class="file-upload-title">Click to choose a file</span>
-      <span class="file-upload-sub">or drag and drop it here</span>
-    </div>
-  </div>
+        <div class="file-upload" [class.has-file]="fileOneName" [class.is-disabled]="isChangingManager">
+          <input type="file" #zipFileInput class="file-upload-input" accept=".pdf,.xls,.xlsx,.doc,.docx,.zip" [disabled]="isChangingManager" (change)="onFileOneSelected($event)" />
+          <mat-icon class="file-upload-icon">cloud_upload</mat-icon>
+          <div class="file-upload-text">
+            <span class="file-upload-title">Click to choose a file</span>
+            <span class="file-upload-sub">or drag and drop it here</span>
+          </div>
+        </div>
 
-  <div class="file-chip" *ngIf="fileOneName">
-    <mat-icon class="file-chip-icon">description</mat-icon>
-    <span class="file-chip-name" [title]="fileOneName">{{ fileOneName }}</span>
-    <button type="button" class="file-chip-remove" (click)="removeZipFile(zipFileInput)" [disabled]="isChangingManager" title="Remove file">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-</div>
+        <div class="file-chip" *ngIf="fileOneName">
+          <mat-icon class="file-chip-icon">description</mat-icon>
+          <span class="file-chip-name" [title]="fileOneName">{{ fileOneName }}</span>
+          <button type="button" class="file-chip-remove" (click)="removeZipFile(zipFileInput)" [disabled]="isChangingManager" title="Remove file">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="modal-footer">

@@ -267,6 +267,9 @@ export class Sidebar implements OnInit, OnDestroy {
             route: '/access-report',
           },
           { moduleId: 13, label: 'Workload Report', icon: 'insights', route: '/workload-report' },
+           { moduleId: 17, label: 'Reassign Report', icon: 'insights', route: '/reassign-report-index' },
+
+
         ],
       },
     ];

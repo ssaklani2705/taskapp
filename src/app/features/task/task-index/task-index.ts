@@ -52,18 +52,18 @@ interface Task {
   userType:any;
 }
 
-interface Client {
+export interface Client {
   clientId: number;
   name: string;
 }
 
-interface TaskCategory {
+export interface TaskCategory {
   taskcategoryId: number;
   name: string;
   departmentName?: string;
 }
 
-interface AssignedUser {
+export interface AssignedUser {
   userId: number;
   firstName: string;
 }

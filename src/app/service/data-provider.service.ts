@@ -1441,52 +1441,35 @@ export class DataProviderService {
     return this.http.post(`${environment.apiBaseUrl}admin/company/delete_company`, { companyId, userId });
   }
 
-  
-
   getServiceList(page: number, size: number, statusIndex: number, search: string) {
     const params = new HttpParams().set('page', page).set('size', size).set('statusIndex', statusIndex).set('search', search);
 
     return this.http.get(`${environment.apiBaseUrl}admin/service/list`, { params });
   }
 
+  deleteService(payload: { serviceId: number; userId: number | null }) {
+    return this.http.post(`${environment.apiBaseUrl}admin/service/delete`, payload);
+  }
 
- 
+  // Get Service By ID
+  getServiceById(serviceId: number): Observable<ApiResponse<Service>> {
+    return this.http.get<ApiResponse<Service>>(`${environment.apiBaseUrl}admin/service/get_by_Id/${serviceId}`);
+  }
 
- deleteService(payload: { serviceId: number; userId: number | null }) {
-  return this.http.post(`${environment.apiBaseUrl}admin/service/delete`, payload);
-}
+  // getActiveServices(): Observable<ApiResponse<Service>> {
+  //     return this.http.get<ApiResponse<Service>>(`${environment.apiBaseUrl}admin/service/active`);
+  //   }
 
+  getActiveServices(): Observable<ApiResponse<Service[]>> {
+    return this.http.get<ApiResponse<Service[]>>(`${environment.apiBaseUrl}admin/service/active`);
+  }
 
+  // // Add or Update Service
+  saveService(payload: Service): Observable<ApiResponse<Service>> {
+    return this.http.post<ApiResponse<Service>>(`${environment.apiBaseUrl}admin/service/add_or_Update`, payload);
+  }
 
-// Get Service By ID
-getServiceById(serviceId: number): Observable<ApiResponse<Service>> {
-  return this.http.get<ApiResponse<Service>>(
-    `${environment.apiBaseUrl}admin/service/get_by_Id/${serviceId}`
-  );
-}
-
-// getActiveServices(): Observable<ApiResponse<Service>> {
-//     return this.http.get<ApiResponse<Service>>(`${environment.apiBaseUrl}admin/service/active`);
-//   }
-
-getActiveServices(): Observable<ApiResponse<Service[]>> {
-  return this.http.get<ApiResponse<Service[]>>(
-    `${environment.apiBaseUrl}admin/service/active`
-  );
-}
-
-// // Add or Update Service
-saveService(payload: Service): Observable<ApiResponse<Service>> {
-  return this.http.post<ApiResponse<Service>>(
-    `${environment.apiBaseUrl}admin/service/add_or_Update`,
-    payload
-  );
-}
-
-
-
-
-// ============================================================
+  // ============================================================
   // Generic Recurring
   // ============================================================
   // For AddOrUpdate
@@ -1556,5 +1539,28 @@ saveService(payload: Service): Observable<ApiResponse<Service>> {
         userId: userId,
       },
     });
+  }
+
+  getTaskReassignReport(page: number, size: number, search: string, fromDate: string, toDate: string, taskCategoryId: number, clientId: number, userId: number): Observable<any> {
+    let params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('search', search ?? '')
+      .set('taskCategoryId', taskCategoryId)
+      .set('clientId', clientId)
+      .set('userId', userId);
+
+    if (fromDate) params = params.set('fromDate', fromDate);
+    if (toDate) params = params.set('toDate', toDate);
+
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/task_reassign/report`, { params });
+  }
+
+  getallUsers(): Observable<any[]> {
+  return this.http.get<any>(`${environment.apiBaseUrl}admin/active_users`);
+  }
+
+  findByActiveClient() {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/active_clients`);
   }
 }
