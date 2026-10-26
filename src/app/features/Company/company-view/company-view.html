@@ -1,0 +1,157 @@
+<div class="page-container">
+  <div class="main-card">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-title">
+        <mat-icon>apartment</mat-icon>
+        <span>View Company Master</span>
+      </div>
+
+      <div class="header-action">
+        <button type="button" class="back-button" (click)="backToIndexPage()">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Back to Index</span>
+        </button>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="user-information">
+      <div class="details-section">
+        <div class="section-heading">
+          <span>Company Details</span>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="details-grid">
+          <div class="info-field">
+            <span class="field-label">Company Name:</span>
+            <span class="field-value">
+              {{ company.companyName || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">PAN:</span>
+            <span class="field-value">
+              {{ company.pan || '-' }}
+            </span>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="info-field">
+            <span class="field-label">GST Number:</span>
+            <span class="field-value">
+              {{ company.gstNo || '-' }}
+            </span>
+          </div>
+
+          <div class="empty-field"></div>
+          <div class="empty-field"></div>
+        </div>
+      </div>
+
+      <div class="details-section">
+        <div class="section-heading">
+          <span>Address Details</span>
+        </div>
+
+        <div class="details-grid">
+          <!-- Row 4 -->
+          <div class="info-field">
+            <span class="field-label">Address Line 1:</span>
+            <span class="field-value">
+              {{ company.addressLine1 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Address Line 2:</span>
+            <span class="field-value">
+              {{ company.addressLine2 || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">City:</span>
+            <span class="field-value">
+              {{ company.city || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">State:</span>
+            <span class="field-value">
+              {{ company.stateName || '-' }}
+            </span>
+          </div>
+
+          <!-- Row 5 -->
+          <div class="info-field">
+            <span class="field-label">Location:</span>
+            <span class="field-value">
+              {{ company.location || '-' }}
+            </span>
+          </div>
+
+          <div class="info-field">
+            <span class="field-label">Pincode:</span>
+            <span class="field-value">
+              {{ company.pincode || '-' }}
+            </span>
+          </div>
+
+          <div class="empty-field"></div>
+          <div class="empty-field"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="section-card">
+    <div class="section-header">
+      <div class="section-title">
+        <mat-icon>history</mat-icon>
+        <span>Action History</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="table-container">
+      <div class="history-table-wrapper">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th style="width: 5%">#</th>
+              <th style="width: 20%">Action By</th>
+              <th style="width: 20%">Updated On</th>
+              <th style="width: 55%">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let history of transactionHistory; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ history.name || '-' }}</td>
+              <td>{{ history.entryDate || '-' }}</td>
+              <td>
+                <span class="action-badge">
+                  {{ history.action || '-' }}
+                </span>
+              </td>
+            </tr>
+
+            <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
+              <td colspan="5" class="">
+              
+                  <span>No action history available</span>
+              
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

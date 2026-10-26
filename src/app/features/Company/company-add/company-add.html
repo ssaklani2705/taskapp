@@ -1,0 +1,163 @@
+<div class="user-page-wrapper">
+  <div class="user-portlet">
+    <!-- PAGE HEADER -->
+    <div class="user-portlet-title">
+      <div class="user-title">
+        <span class="user-page-title">
+          {{ isEditMode ? 'Edit Company Master' : 'Add Company Master' }}
+        </span>
+      </div>
+      <div class="user-actions">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Index
+        </button>
+      </div>
+    </div>
+    <div class="user-portlet-body">
+      <form [formGroup]="companyForm" (ngSubmit)="onSubmit()" novalidate>
+        <div class="user-form-body">
+          <div class="mandatory-message">
+            Fields with
+            <span class="required">*</span>
+            mark are mandatory
+          </div>
+         
+          <div class="form-section">
+            <div class="section-title">Company Details</div>
+            <!-- ROW 2 -->
+            <div class="user-form-row">
+              <!-- Client Name -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label">
+                    Company Name
+                    <span class="required">*</span>
+                  </label>
+                  <input type="text" class="user-input" formControlName="companyName" maxlength="200" />
+                  <div class="user-error" *ngIf="companyForm.get('companyName')?.touched && companyForm.get('companyName')?.invalid">Company Name is required</div>
+                </div>
+              </div>
+             
+              <!-- PAN -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label">
+                    PAN
+                    <span class="required">*</span>
+                  </label>
+                  <input type="text" class="user-input" formControlName="pan" maxlength="10" />
+                  <div class="user-error" *ngIf="companyForm.get('pan')?.touched && companyForm.get('pan')?.errors?.['required']">PAN is required</div>
+                  <div class="user-error" *ngIf="companyForm.get('pan')?.touched && companyForm.get('pan')?.errors?.['pattern']">Enter a valid PAN (e.g. GRBPA4562J)</div>
+                </div>
+              </div>
+               <!-- GST Number -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label">
+                    GST Number
+                    <span class="required" *ngIf="companyForm.get('gstNo')?.value"> * </span>
+                  </label>
+                  <input type="text" class="user-input" formControlName="gstNo" maxlength="15" />
+                  <div class="user-error" *ngIf="companyForm.get('gstNo')?.touched && companyForm.get('gstNo')?.errors?.['required']">GST Number is required when GST Applicable is selected</div>
+                  <div class="user-error" *ngIf="companyForm.get('gstNo')?.touched && companyForm.get('gstNo')?.errors?.['pattern']">Enter a valid GST Number</div>
+                </div>
+              </div>
+            </div>
+           
+          </div>
+
+          <div class="form-section">
+            <div class="section-title">Address Details</div>
+            <!-- ROW 4 -->
+            <div class="user-form-row">
+              <!-- Address Line 1 -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label">
+                    Address Line 1
+                    <span class="required">*</span>
+                  </label>
+                  <input type="text" class="user-input" formControlName="addressLine1" maxlength="250" />
+                  <div class="user-error" *ngIf="companyForm.get('addressLine1')?.touched && companyForm.get('addressLine1')?.invalid">Address Line 1 is required</div>
+                </div>
+              </div>
+
+              <!-- Address Line 2 -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label"> Address Line 2 </label>
+                  <input type="text" class="user-input" formControlName="addressLine2" maxlength="250" />
+                </div>
+              </div>
+
+              <!-- City -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label">
+                    City
+                    <span class="required">*</span>
+                  </label>
+                  <input type="text" class="user-input" formControlName="city" maxlength="100" />
+                  <div class="user-error" *ngIf="companyForm.get('city')?.touched && companyForm.get('city')?.invalid">City is required</div>
+                </div>
+              </div>
+
+              <!-- State -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label">
+                    State
+                    <span class="required">*</span>
+                  </label>
+                  <select class="user-input user-select" formControlName="stateId">
+                    <option [ngValue]="null">Select State</option>
+                    <option *ngFor="let state of states" [ngValue]="state.stateId">
+                      {{ state.name }}
+                    </option>
+                  </select>
+                  <div class="user-error" *ngIf="companyForm.get('stateId')?.touched && companyForm.get('stateId')?.invalid">State is required</div>
+                </div>
+              </div>
+            </div>
+            <!-- ROW 5 -->
+            <div class="user-form-row">
+              <!-- Location -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label"> Location <span class="required">*</span> </label>
+                  <input type="text" class="user-input" formControlName="location" maxlength="200" />
+                  <div class="user-error" *ngIf="companyForm.get('location')?.touched && companyForm.get('location')?.errors?.['required']">Location is required.</div>
+                </div>
+              </div>
+              <!-- Pincode -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label">
+                    Pincode
+                    <span class="required">*</span>
+                  </label>
+                  <input type="text" class="user-input" formControlName="pincode" maxlength="6" (keypress)="allowOnlyNumbers($event)" />
+                  <div class="user-error" *ngIf="companyForm.get('pincode')?.touched && companyForm.get('pincode')?.errors?.['required']">Pincode is required</div>
+                  <div class="user-error" *ngIf="companyForm.get('pincode')?.touched && companyForm.get('pincode')?.errors?.['pattern']">Enter a valid 6-digit Pincode</div>
+                </div>
+              </div>
+              <div class="user-form-col empty-column"></div>
+              <div class="user-form-col empty-column"></div>
+            </div>
+          </div>
+
+       
+
+     
+          <div class="user-buttons">
+            <button type="button" class="user-reset-btn" (click)="onReset()">Reset</button>
+            <button type="submit" class="user-submit-btn" [disabled]="isSubmitting">
+              {{ isSubmitting ? 'Submitting...' : isEditMode ? 'Update' : 'Submit' }}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

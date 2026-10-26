@@ -1369,7 +1369,7 @@ export class DataProviderService {
       params: {
         taskCatId: taskCatId.toString(),
         startDate: startDate || '',
-        endDate: endDate || ''
+        endDate: endDate || '',
       },
     });
   }
@@ -1422,123 +1422,27 @@ export class DataProviderService {
     return this.http.get<{ success: boolean; message: string; data: any[] }>(`${environment.apiBaseUrl}admin/report/workload`, { params });
   }
 
-  // Service
-  getServiceList(
-  page: number,
-  size: number,
-  statusIndex: number,
-  search: string
-): Observable<any> {
-  return this.http.get<any>(
-    `${environment.apiBaseUrl}admin/service/list`,
-    {
-      params: {
-        page: page.toString(),
-        size: size.toString(),
-        statusIndex: statusIndex.toString(),
-        search: search || ''
-      }
-    }
-  );
-}
-
-deleteService(payload: {
-  serviceId: number;
-  userId: number | null;
-}): Observable<any> {
-  return this.http.post<any>(
-    `${environment.apiBaseUrl}admin/service/delete`,
-    payload
-  );
-}
-
-getServiceById(serviceId: number): Observable<any> {
-  return this.http.get<any>(
-    `${environment.apiBaseUrl}admin/service/get_by_Id/${serviceId}`
-  );
-}
-
-saveService(service: any): Observable<any> {
-  return this.http.post<any>(
-    `${environment.apiBaseUrl}admin/service/add_or_Update`,
-    service
-  );
-}
-
-getActiveServices() {
-  return this.http.get<any[]>(`${environment.apiBaseUrl}admin/service/active`);
-}
-
- // ============================================================
-  // Generic Recurring
-  // ============================================================
-  // For AddOrUpdate
- addOrUpdateGenericRecurring(data: any, userId: number) {
-    return this.http.post<any>(`${environment.apiBaseUrl}admin/addOrUpdateGenericRecurring`, data, {
-      params: {
-        userId: userId,
-      },
-    });
-  }
-  // For Edit
-  getGenericRecurringById(genericRecurringId: number, userId: number) {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/getGenericRecurringById/${genericRecurringId}`, {
-      params: {
-        userId: userId,
-      },
-    });
+  saveCompany(payload: any) {
+    return this.http.post(`${environment.apiBaseUrl}admin/company/add_or_update`, payload);
   }
 
-  getGenericRecurringDetails(
-    page: number,
-    size: number,
-    status: number = 0,
-    search: string = '',
-    type: number = 0,
-    taskCatId: number = 0,
-    forValue: number = 0,
-    priority: number = 0,
-    sortColumn: string = 'title',
-    sortDirection: string = 'asc',
-    userId: number,
-    isAdmin: string,
-    loginType: string,
-  ) {
-    const params: any = {
-      page: page,
-      size: size,
-      status: status,
-      type: type,
-      taskCatId: taskCatId,
-      forValue,
-      priority: priority,
-      sortColumn: sortColumn,
-      sortDirection: sortDirection,
-      userId: userId,
-      isAdmin: isAdmin,
-      loginType: loginType,
-    };
-    if (search && search.trim() !== '') {
-      params.search = search.trim();
-    }
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/getGenericRecurringDetails`, { params });
-  }
-  // For View
-  getViewGenericRecurringById(genericRecurringId: number, userId: number) {
-    return this.http.get<any>(`${environment.apiBaseUrl}admin/genricRecurringDetails/${genericRecurringId}`, {
-      params: {
-        userId: userId,
-      },
-    });
-  }
-  // For Delete
-  deleteGenericRecurring(genericRecurringId: number, userId: number) {
-    return this.http.post<any>(`${environment.apiBaseUrl}admin/deleteGenericRecurring`, null, {
-      params: {
-        genericRecurringId: genericRecurringId,
-        userId: userId,
-      },
-    });
+  getCompanyById(companyId: number) {
+    return this.http.get(`${environment.apiBaseUrl}admin/company/find_by_id/${companyId}`);
   }
 
+
+  getCompanyList(page: number, size: number, statusIndex: number, search: string,stateId:any) {
+  const params = new HttpParams()
+    .set('page', page)
+    .set('size', size)
+    .set('statusIndex', statusIndex)
+    .set('search', search).set('stateId',stateId.toString());
+
+
+  return this.http.get(`${environment.apiBaseUrl}admin/company/company_list`, { params });
+}
+
+deleteCompany(companyId: number, userId: number) {
+  return this.http.post(`${environment.apiBaseUrl}admin/company/delete_company`, { companyId, userId });
+}
 }
