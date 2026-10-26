@@ -158,6 +158,56 @@ export const routes: Routes = [
           { path: 'view-holiday/:holidayId', loadComponent: () => import('./features/holiday/view-holiday/view-holiday').then(m => m.ViewHolidayComponent) },
         ]
       },
+
+      {
+  path: '',
+  canActivate: [moduleGuard],
+  data: { moduleId: 14, loginTypes: ['other'] },
+  children: [
+    {
+      path: 'service-index',
+      loadComponent: () =>
+        import('./features/service/service-index/service-index')
+          .then(m => m.ServiceIndex)
+    },
+    {
+      path: 'add-service',
+      loadComponent: () =>
+        import('./features/service/add-service/add-service')
+          .then(m => m.AddServiceComponent)
+    },
+    {
+      path: 'edit-service/:serviceId',
+      loadComponent: () =>
+        import('./features/service/add-service/add-service')
+          .then(m => m.AddServiceComponent)
+    },
+    {
+      path: 'view-service/:serviceId',
+      loadComponent: () =>
+        import('./features/service/view-service/view-service')
+          .then(m => m.ViewServiceComponent)
+    }
+  ]
+},
+// 14 - Generic Recurring Master (both login types)
+      {
+        path: '',
+        canActivate: [moduleGuard],
+        data: { moduleId: 15 },
+        children: [
+          { path: 'generic-recurring-index', loadComponent: () => import('./features/Generic Recurring/generic-recurring-index/generic-recurring-index').then((m) => m.GenericRecurringIndex) },
+          { path: 'add-generic-recurring', loadComponent: () => import('./features/Generic Recurring/add-generic-recurring/add-generic-recurring').then((m) => m.AddGenericRecurring) },
+          {
+            path: 'edit-generic-recurring/:genericRecurringId',
+            loadComponent: () => import('./features/Generic Recurring/add-generic-recurring/add-generic-recurring').then((m) => m.AddGenericRecurring),
+          },
+          {
+            path: 'view-generic-recurring/:genericRecurringId',
+            loadComponent: () => import('./features/Generic Recurring/view-generic-recurring/view-generic-recurring').then((m) => m.ViewGenericRecurring),
+          },
+        ],
+      }, 
     ]
   },
   { path: '**', redirectTo: 'login' }

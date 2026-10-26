@@ -42,6 +42,9 @@ export class PlanView implements OnInit {
   page = 0;
   size = 5;
 
+  services: any[] = [];
+  serviceNames: string[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private dataprovider: DataProviderService,
@@ -87,37 +90,56 @@ export class PlanView implements OnInit {
   }
 
   getPlanDetails(): void {
-    this.dataprovider.getPlanById(this.planId).subscribe({
-      next: (response: any) => {
-        if (!response || !response.data) {
-          console.error('Plan data not found');
-          return;
+  this.dataprovider.getPlanById(this.planId).subscribe({
+    next: (response: any) => {
+      if (!response || !response.data) {
+        console.error('Plan data not found');
+        return;
+      }
+
+      const data = response.data;
+
+      this.plan = {
+        planId: data.planId,
+        name: data.name,
+        rate: data.rate,
+        description: data.description,
+        status: data.status,
+        userId: data.userId,
+        serviceIds: data.serviceIds || []
+      };
+
+      // Load active services and match them with the plan's saved IDs
+      this.dataprovider.getActiveServices().subscribe({
+        next: (services: any[]) => {
+          this.services = services || [];
+
+          const selectedIds = (data.serviceIds || []).map(Number);
+
+          this.serviceNames = this.services
+            .filter((service: any) =>
+              selectedIds.includes(Number(service.serviceId))
+            )
+            .map((service: any) => service.name);
+        },
+        error: (err: any) => {
+          console.error('Failed to fetch services', err);
+          this.serviceNames = [];
         }
+      });
 
-        const data = response.data;
+      this.transactionHistory = data.transactionHistory || [];
 
-        this.plan = {
-          planId: data.planId,
-          name: data.name,
-          rate: data.rate,
-          description: data.description,
-          status: data.status,
-          userId: data.userId,
-        };
+      this.transactionHistory.sort((a: any, b: any) => {
+        const dateA = this.common.parseEntryDate(a.entryDate);
+        const dateB = this.common.parseEntryDate(b.entryDate);
 
-        this.transactionHistory = data.transactionHistory || [];
-
-        this.transactionHistory = this.transactionHistory.sort((a: any, b: any) => {
-          const dateA = this.common.parseEntryDate(a.entryDate);
-          const dateB = this.common.parseEntryDate(b.entryDate);
-
-          return dateB.getTime() - dateA.getTime();
-        });
-      },
-
-      error: (err) => {
-        console.error('Failed to fetch plan details', err);
-      },
-    });
-  }
+        return dateB.getTime() - dateA.getTime();
+      });
+    },
+    error: (err) => {
+      console.error('Failed to fetch plan details', err);
+    },
+  });
+}
 }

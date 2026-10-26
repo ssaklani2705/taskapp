@@ -561,6 +561,45 @@
         </div>
       </div>
 
+
+      <!-- Rating (for Assignor Closure) -->
+       <!-- RATING (only for Assignor Closure) -->
+<div class="manager-form-group" *ngIf="isAssignorClosureSelected">
+  <label class="modal-field-label">
+    Rating
+    <span class="required">*</span>
+  </label>
+
+  <div class="rating-box" [class.has-error]="ratingValidationError" [class.is-disabled]="isChangingManager">
+    <div class="star-rating" (mouseleave)="hoverRating = 0">
+      <div class="star" *ngFor="let star of stars">
+        <mat-icon class="star-icon" [class.filled]="displayRating >= star - 0.5">{{ getStarIcon(star) }}</mat-icon>
+
+        <!-- left half = x.5 -->
+        <button type="button" class="star-hit star-hit-half" [disabled]="isChangingManager"
+          [attr.aria-label]="(star - 0.5) + ' stars'"
+          (mouseenter)="hoverRating = star - 0.5" (click)="setRating(star - 0.5)"></button>
+
+        <!-- right half = full star -->
+        <button type="button" class="star-hit star-hit-full" [disabled]="isChangingManager"
+          [attr.aria-label]="star + ' stars'"
+          (mouseenter)="hoverRating = star" (click)="setRating(star)"></button>
+      </div>
+    </div>
+
+    <div class="rating-meta">
+      <span class="rating-score">{{ displayRating ? displayRating.toFixed(1) : '0.0' }}<small> / 5</small></span>
+      <span class="rating-text" [class.active]="displayRating > 0">{{ getRatingText() }}</span>
+      <button type="button" class="rating-clear" *ngIf="selectedRating > 0" [disabled]="isChangingManager" (click)="clearRating()">Clear</button>
+    </div>
+  </div>
+
+  <div class="manager-validation-error" *ngIf="ratingValidationError">
+    <mat-icon>error_outline</mat-icon>
+    <span>Please give a rating</span>
+  </div>
+</div>
+
       <!-- DESCRIPTION -->
       <div class="manager-form-group">
         <label class="modal-field-label">

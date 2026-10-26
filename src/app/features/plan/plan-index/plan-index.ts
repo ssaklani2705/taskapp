@@ -11,11 +11,34 @@ import { DataProviderService } from '../../../service/data-provider.service';
 import { SessionStorageService } from '../../../service/session-storage.service';
 import Swal from 'sweetalert2';
 import { Common } from '../../../classes/common';
-import { Plan } from '../plan-add/plan-add';
+
+interface Service {
+  serviceId: number;
+  name: string;
+}
+
+export interface Plan {
+  planId: any;
+  name: string;
+  rate: any;
+  description: string;
+  status: any;
+  userId: any;
+  serviceIds: number[];
+  serviceNames?: string[];
+}
 
 @Component({
   selector: 'app-plan-index',
-  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIcon, MatDivider],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatCardModule,
+    MatIcon,
+    MatDivider
+  ],
   templateUrl: './plan-index.html',
   styleUrl: './plan-index.scss',
 })
@@ -33,6 +56,10 @@ export class PlanIndex {
 
   selectedStatus: string = '';
   statusIndex: number = 0;
+
+  // Service filter
+  services: Service[] = [];
+  selectedServiceId: number | '' = '';
 
   addPer: string = 'N';
   editPer: string = 'N';
@@ -58,49 +85,11 @@ export class PlanIndex {
 
   constructor(
     private dataprovider: DataProviderService,
-    @Inject(PLATFORM_ID)
-    private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private router: Router,
     private route: ActivatedRoute,
     private sessionService: SessionStorageService,
   ) {}
-
-  // ngOnInit(): void {
-  //   this.sessionService.clearOtherSessions(this.filterKey);
-
-  //   if (isPlatformBrowser(this.platformId)) {
-  //     this.userId = sessionStorage.getItem('userId');
-  //   }
-
-  //   if (isPlatformBrowser(this.platformId)) {
-  //     const storedModules = sessionStorage.getItem('selectedModuleDetail');
-
-  //     if (storedModules) {
-  //       const parsed = JSON.parse(storedModules);
-
-  //       this.moduleName = parsed.name ?? '';
-  //       this.addPer = parsed.addPer ?? 'N';
-  //       this.editPer = parsed.editPer ?? 'N';
-  //       this.deletePer = parsed.deletePer ?? 'N';
-  //       this.viewPer = parsed.viewPer ?? 'N';
-  //       this.approvePer = parsed.approvePer ?? 'N';
-  //       this.adminApprovePer = parsed.adminApprovePer ?? 'N';
-  //     }
-  //   }
-
-  //   this.route.queryParams.subscribe((params) => {
-  //     this.currentPage = +(params['currentPage'] || 1);
-  //     this.page = +(params['page'] || this.currentPage - 1);
-  //     this.size = +(params['size'] || environment.size);
-  //     this.searchQuery = params['searchText'] || '';
-  //     this.search = this.searchQuery;
-  //     this.statusIndex = +(params['statusIndex'] || 0);
-  //     this.selectedStatus = this.statusIndex > 0 ? String(this.statusIndex) : '';
-  //     this.recordsPerPage = this.size;
-
-  //     this.getPlanDetails();
-  //   });
-  // }
 
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
@@ -131,14 +120,89 @@ export class PlanIndex {
         this.recordsPerPage = this.size;
 
         this.statusIndex = filterState.statusIndex ?? 0;
-        this.selectedStatus = this.statusIndex > 0 ? String(this.statusIndex) : '';
+        this.selectedStatus =
+          this.statusIndex > 0 ? String(this.statusIndex) : '';
 
         this.search = filterState.searchText ?? '';
         this.searchQuery = this.search;
+
+        this.selectedServiceId =
+          filterState.selectedServiceId !== undefined &&
+          filterState.selectedServiceId !== null &&
+          filterState.selectedServiceId !== ''
+            ? Number(filterState.selectedServiceId)
+            : '';
       }
     }
 
+    this.loadActiveServices();
     this.getPlanDetails();
+  }
+
+  // Load active services for the filter dropdown
+  loadActiveServices(): void {
+    this.dataprovider.getActiveServices().subscribe({
+      next: (response: Service[]) => {
+        this.services = response || [];
+        this.mapPlanServices();
+      },
+      error: (error) => {
+        console.error('Error loading active services:', error);
+        this.services = [];
+        this.mapPlanServices();
+      }
+    });
+  }
+
+  // Map service IDs to service names for display
+  mapPlanServices(): void {
+    this.plans = this.plans.map((plan: Plan) => {
+      const selectedIds = this.getServiceIds(plan);
+
+      return {
+        ...plan,
+        serviceNames: this.services
+          .filter(service =>
+            selectedIds.includes(Number(service.serviceId))
+          )
+          .map(service => service.name)
+      };
+    });
+  }
+
+  // Safely handle service IDs returned as numbers or strings
+  private getServiceIds(plan: Plan): number[] {
+    const ids: any = (plan as any).serviceIds;
+
+    if (Array.isArray(ids)) {
+      return ids
+        .filter((id: any) => id !== null && id !== undefined && id !== '')
+        .map((id: any) => Number(id))
+        .filter((id: number) => Number.isFinite(id));
+    }
+
+    // Fallback if the API returns comma-separated IDs
+    if (typeof ids === 'string' && ids.trim()) {
+      return ids
+        .split(',')
+        .map((id: string) => Number(id.trim()))
+        .filter((id: number) => Number.isFinite(id));
+    }
+
+    return [];
+  }
+
+  // Plans displayed in the table, filtered by selected service
+  get paginatedPlans(): Plan[] {
+    if (this.selectedServiceId === '') {
+      return this.plans;
+    }
+
+    const selectedId = Number(this.selectedServiceId);
+
+    return this.plans.filter((plan: Plan) =>
+      this.getServiceIds(plan).includes(selectedId)
+    );
   }
 
   saveFilterState(): void {
@@ -148,6 +212,7 @@ export class PlanIndex {
       searchText: this.search.trim(),
       page: this.page,
       size: this.size,
+      selectedServiceId: this.selectedServiceId
     };
 
     this.sessionService.setItem(this.filterKey, filterState);
@@ -158,56 +223,48 @@ export class PlanIndex {
   }
 
   getPlanDetails(): void {
-    this.dataprovider.getPlanList(this.page, this.size, this.statusIndex, this.search).subscribe({
-      next: (response: any) => {
-        this.apiResponsePlan = response?.data || {};
-        this.plans = response?.data?.data || [];
-      },
+    this.dataprovider
+      .getPlanList(this.page, this.size, this.statusIndex, this.search)
+      .subscribe({
+        next: (response: any) => {
+          this.apiResponsePlan = response?.data || {};
+          this.plans = response?.data?.data || [];
+          this.mapPlanServices();
+        },
+        error: (error) => {
+          console.error('Error fetching plan details:', error);
 
-      error: (error) => {
-        console.error('Error fetching state details:', error);
+          this.plans = [];
 
-        this.plans = [];
-
-        this.apiResponsePlan = {
-          totalElements: 0,
-          data: [],
-        };
-      },
-    });
-  }
-
-  get paginatedPlans(): Plan[] {
-    return this.plans;
+          this.apiResponsePlan = {
+            totalElements: 0,
+            data: [],
+          };
+        },
+      });
   }
 
   onSearch(): void {
     this.search = this.searchQuery.trim();
-    this.statusIndex = this.selectedStatus === '' ? 0 : +this.selectedStatus;
+    this.statusIndex =
+      this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
 
     this.currentPage = 1;
     this.page = 0;
 
-    // const state = {
-    //   currentPage: this.currentPage,
-    //   statusIndex: this.statusIndex,
-    //   searchText: this.search,
-    //   page: this.page,
-    //   size: this.size,
-    // };
-
-    // this.sessionService.setItem(this.filterKey, JSON.stringify(state));
-
-    // this.router
-    //   .navigate(['/plan-index'], {
-    //     state: state,
-    //   })
-    //   .then(() => {
-    //     this.getPlanDetails();
-    //   });
-
     this.saveFilterState();
     this.getPlanDetails();
+  }
+
+  // Called when the service dropdown changes
+  onServiceChange(): void {
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+
+    // The current API returns a server-paginated list.
+    // This applies the selected service to the plans currently loaded.
   }
 
   goToPage(pageNumber: number): void {
@@ -217,30 +274,6 @@ export class PlanIndex {
 
     this.currentPage = pageNumber;
     this.page = pageNumber - 1;
-
-    // const state = {
-    //   currentPage: this.currentPage,
-    //   statusIndex: this.statusIndex,
-    //   searchText: this.search,
-    //   page: this.page,
-    //   size: this.size,
-    // };
-
-    // this.sessionService.setItem(this.filterKey, JSON.stringify(state));
-
-    // this.router
-    //   .navigate(['/plan-index'], {
-    //     queryParams: {
-    //       currentPage: this.currentPage,
-    //       statusIndex: this.statusIndex || 0,
-    //       searchText: this.search || '',
-    //       page: this.page,
-    //       size: this.size || 5,
-    //     },
-    //   })
-    //   .then(() => {
-    //     this.getPlanDetails();
-    //   });
 
     this.saveFilterState();
     this.getPlanDetails();
@@ -262,7 +295,7 @@ export class PlanIndex {
 
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to delete this state?',
+      text: 'Do you really want to delete this plan?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
@@ -276,77 +309,33 @@ export class PlanIndex {
           next: (response: any) => {
             if (response.success) {
               Swal.fire('Deleted!', response.message, 'success');
-
-              this.getPlanDetails(); // or loadStateDetails()
+              this.getPlanDetails();
             } else {
               Swal.fire('Error', response.message, 'error');
             }
           },
-
           error: (error) => {
-            console.error('Error deleting state:', error);
-
-            Swal.fire('Error', 'Something went wrong while deleting the state.', 'error');
+            console.error('Error deleting plan:', error);
+            Swal.fire(
+              'Error',
+              'Something went wrong while deleting the plan.',
+              'error'
+            );
           },
         });
       }
     });
   }
 
-  // viewPlan(planId: number): void {
-  //   const filterState = {
-  //     currentPage: this.currentPage,
-  //     statusIndex: this.statusIndex,
-  //     searchText: this.searchQuery.trim(),
-  //     size: this.size,
-  //   };
-
-  //   this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
-
-  //   this.router.navigate(['/view-plan', planId], {
-  //     queryParams: filterState,
-  //   });
-  // }
-
   viewPlan(planId: number): void {
     this.saveFilterState();
     this.router.navigate(['/view-plan', planId]);
   }
 
-  // editPlan(planId: number): void {
-  //   const filterState = {
-  //     currentPage: this.currentPage,
-  //     statusIndex: this.statusIndex,
-  //     searchText: this.searchQuery.trim(),
-  //     size: this.size,
-  //   };
-
-  //   this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
-
-  //   this.router.navigate(['/edit-plan', planId], {
-  //     queryParams: filterState,
-  //   });
-  // }
-
   editPlan(planId: number): void {
     this.saveFilterState();
     this.router.navigate(['/edit-plan', planId]);
   }
-
-  // addPlan(): void {
-  //   const filterState = {
-  //     currentPage: this.currentPage,
-  //     statusIndex: this.statusIndex,
-  //     searchText: this.searchQuery.trim(),
-  //     size: this.size,
-  //   };
-
-  //   this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
-
-  //   this.router.navigate(['/add-plan'], {
-  //     queryParams: filterState,
-  //   });
-  // }
 
   addPlan(): void {
     this.saveFilterState();
@@ -370,17 +359,20 @@ export class PlanIndex {
 
   get recordSummary(): string {
     const totalRecords = this.apiResponsePlan?.totalElements || 0;
-    const startRecord = totalRecords === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
-    const endRecord = Math.min(this.currentPage * this.recordsPerPage, totalRecords);
+    const startRecord =
+      totalRecords === 0
+        ? 0
+        : (this.currentPage - 1) * this.recordsPerPage + 1;
+    const endRecord = Math.min(
+      this.currentPage * this.recordsPerPage,
+      totalRecords
+    );
 
-    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${
-      totalRecords > 1 ? 's' : ''
-    })`;
+    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} records)`;
   }
 
   get totalPages(): number {
     const total = this.apiResponsePlan?.totalElements || 0;
-
     return Math.max(1, Math.ceil(total / this.recordsPerPage));
   }
 
@@ -393,8 +385,13 @@ export class PlanIndex {
     sortable: boolean;
   }[] = [
     {
-      key: 'planName',
+      key: 'name',
       label: 'Plan Name',
+      sortable: true,
+    },
+    {
+      key: 'serviceNames',
+      label: 'Services',
       sortable: true,
     },
     {
@@ -420,7 +417,8 @@ export class PlanIndex {
     }
 
     if (this.sortColumn === column) {
-      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+      this.sortDirection =
+        this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
       this.sortColumn = column;
       this.sortDirection = 'asc';
@@ -433,7 +431,10 @@ export class PlanIndex {
       valA = valA ?? '';
       valB = valB ?? '';
 
-      if (!isNaN(valA) && !isNaN(valB)) {
+      if (column === 'serviceNames') {
+        valA = (valA || []).join(', ').toLowerCase();
+        valB = (valB || []).join(', ').toLowerCase();
+      } else if (!isNaN(valA) && !isNaN(valB)) {
         valA = Number(valA);
         valB = Number(valB);
       } else {
@@ -455,9 +456,17 @@ export class PlanIndex {
 
   clearFilters(): void {
     this.searchQuery = '';
-    this.selectedStatus = '';
-    this.currentPage = 1;
+    this.search = '';
 
-    this.onSearch();
+    this.selectedStatus = '';
+    this.statusIndex = 0;
+
+    this.selectedServiceId = '';
+
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+    this.getPlanDetails();
   }
 }

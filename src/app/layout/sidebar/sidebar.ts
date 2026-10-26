@@ -273,6 +273,19 @@ export class Sidebar implements OnInit, OnDestroy {
         icon: 'task_alt',
         route: '/task-index',
       },
+      {
+        moduleId: 14,
+        label: 'Service Master',
+        icon: 'miscellaneous_services',
+        route: '/service-index',
+      },
+
+        {
+        moduleId: 15,
+        label: 'Generic Recurring Master',
+        icon: 'bar_chart',
+        route: '/generic-recurring-index',
+      },
 
       // REPORTS PARENT WITH TWO CHILDREN
       {

@@ -34,5 +34,9 @@ export const SESSION_KEYS = {
   HOLIDAY_MASTER_FILTER: 'holidayFilter',
 
   ACCESS_REPORT_FILTER: 'accessreportFilter',
-  MAIL_LOG_FILTER: 'maillogFilter'
+  MAIL_LOG_FILTER: 'maillogFilter',
+
+  SERVICE_FILTER: 'serviceFilter',
+
+  GENERIC_RECURRING_FILTER: 'genericRecurringFilter',
 };

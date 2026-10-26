@@ -54,6 +54,7 @@ export class AddTaskCategoryComponent implements OnInit {
   taskCategory: any = {
     taskcategoryId: null,
     departmentId: null,
+    serviceId: null,
     name: '',
     status: null,
     dueDateTime: null,
@@ -78,6 +79,7 @@ export class AddTaskCategoryComponent implements OnInit {
 
   page = 0;
   size = 5;
+  services: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -102,6 +104,7 @@ export class AddTaskCategoryComponent implements OnInit {
     }
 
     this.getDepartments();
+    this.getServices();
 
     const taskcategoryId = this.route.snapshot.params['taskCategoryId'];
 
@@ -114,6 +117,7 @@ export class AddTaskCategoryComponent implements OnInit {
             this.taskCategory = {
               taskcategoryId: res.data.taskcategoryId,
               departmentId: res.data.departmentId,
+              serviceId: res.data.serviceId ?? null,
               name: res.data.name,
               status: res.data.status,
               userId: res.data.userId,
@@ -273,6 +277,7 @@ export class AddTaskCategoryComponent implements OnInit {
 
       userId: this.userId ? Number(this.userId) : null,
       departmentId: Number(this.taskCategory.departmentId),
+      serviceId: Number(this.taskCategory.serviceId),
       dueDateTime: this.taskCategory.dueDateTime,
     };
 
@@ -308,6 +313,7 @@ export class AddTaskCategoryComponent implements OnInit {
       this.taskCategory = {
         taskcategoryId: null,
         departmentId: null,
+        serviceId: null,
         name: '',
         status: null,
         dueDateTime: null,
@@ -385,4 +391,22 @@ export class AddTaskCategoryComponent implements OnInit {
       event.preventDefault();
     }
   }
+
+  getServices(): void {
+  this.dataprovider.getActiveServices().subscribe({
+    next: (response: any) => {
+      if (Array.isArray(response)) {
+        this.services = response;
+      } else if (response && Array.isArray(response.data)) {
+        this.services = response.data;
+      } else {
+        this.services = [];
+      }
+    },
+    error: (error) => {
+      console.error('Error loading services:', error);
+      this.services = [];
+    },
+  });
+}
 }

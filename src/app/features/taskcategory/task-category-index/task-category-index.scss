@@ -723,35 +723,26 @@ mat-divider {
 
 .designation-table th:first-child,
 .designation-table td:first-child {
-
   width: 7%;
 }
 
-
 .designation-table th:nth-child(2),
 .designation-table td:nth-child(2) {
-
   width: 38%;
 }
 
-
 .designation-table th:nth-child(3),
 .designation-table td:nth-child(3) {
-
   width: 15%;
 }
 
-
 .designation-table th:nth-child(4),
 .designation-table td:nth-child(4) {
-
   width: 20%;
 }
 
-
-.designation-table th:last-child,
-.designation-table td:last-child {
-
+.designation-table th:nth-child(5),
+.designation-table td:nth-child(5) {
   width: 20%;
 }
 

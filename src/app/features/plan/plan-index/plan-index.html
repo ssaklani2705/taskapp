@@ -20,30 +20,59 @@
 
     <div class="search-section">
       <div class="search-grid">
-        <!-- Search -->
+        <!-- Plan Name / Description Search -->
         <div class="search-field search-name">
-          <label>Plan Name</label>
+          <label for="planSearch">Plan Name</label>
 
           <div class="search-input-wrapper">
             <input
+              id="planSearch"
               type="text"
               [(ngModel)]="searchQuery"
               placeholder="Search by Plan Name / Description"
               (keyup.enter)="onSearch()"
             />
 
-            <button type="button" class="search-button" (click)="onSearch()">
+            <button
+              type="button"
+              class="search-button"
+              (click)="onSearch()"
+              title="Search"
+            >
               <mat-icon>search</mat-icon>
             </button>
           </div>
         </div>
 
-        <!-- Department -->
-        <!-- Status -->
+        <!-- Service Filter -->
         <div class="search-field">
-          <label>Status</label>
+          <label for="serviceFilter">Service</label>
 
-          <select [(ngModel)]="selectedStatus" (change)="onSearch()">
+          <select
+            id="serviceFilter"
+            [(ngModel)]="selectedServiceId"
+            (ngModelChange)="onServiceChange()"
+          >
+            <option [ngValue]="''">-- All Services --</option>
+
+            <option
+              *ngFor="let service of services"
+              [ngValue]="service.serviceId"
+            >
+              {{ service.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Status Filter -->
+        <div class="search-field">
+          <label for="statusFilter">Status</label>
+
+          <select
+            id="statusFilter"
+            [(ngModel)]="selectedStatus"
+            (change)="onSearch()"
+          >
             <option value="">-- All Status --</option>
             <option value="1">Active</option>
             <option value="2">Inactive</option>
@@ -51,15 +80,19 @@
           </select>
         </div>
 
-        <!-- Go Button -->
+        <!-- Filter Actions -->
         <div class="filter-action">
           <button type="button" class="go-button" (click)="onSearch()">
             <mat-icon>search</mat-icon>
             Go
           </button>
-          &nbsp;
-          <!-- Clear -->
-          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
+
+          <button
+            type="button"
+            class="btn-clear"
+            (click)="clearFilters()"
+            title="Clear Filters"
+          >
             Clear
           </button>
         </div>
@@ -76,11 +109,24 @@
         </div>
 
         <div class="pagination">
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
-
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button
+            type="button"
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1"
+          >
+            « First
+          </button>
 
           <button
+            type="button"
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+          >
+            ‹ Prev
+          </button>
+
+          <button
+            type="button"
             *ngFor="let page of pages()"
             (click)="goToPage(page)"
             [class.active-pagination]="page === currentPage"
@@ -88,15 +134,25 @@
             {{ page }}
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+          <button
+            type="button"
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
             Next ›
           </button>
 
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+          <button
+            type="button"
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Last »
+          </button>
         </div>
       </div>
 
-      <!-- Table -->
+      <!-- Plan Table -->
       <div class="table-wrapper">
         <table class="designation-table">
           <thead>
@@ -109,16 +165,22 @@
                 (click)="col.sortable && sortData(col.key)"
               >
                 <div class="column-header">
-                  <span>
-                    {{ col.label }}
-                  </span>
+                  <span>{{ col.label }}</span>
 
                   <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'">
+                    <span
+                      [class.active]="
+                        sortColumn === col.key && sortDirection === 'asc'
+                      "
+                    >
                       ▲
                     </span>
 
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'">
+                    <span
+                      [class.active]="
+                        sortColumn === col.key && sortDirection === 'desc'
+                      "
+                    >
                       ▼
                     </span>
                   </span>
@@ -131,38 +193,54 @@
 
           <tbody>
             <tr *ngFor="let rows of paginatedPlans; let i = index">
-              <!-- SERIAL -->
+              <!-- Serial Number -->
               <td class="serial-cell">
                 {{ (currentPage - 1) * recordsPerPage + i + 1 }}
               </td>
 
-              <!-- PLAN NAME -->
-              <td class="plan-name-cell">
+              <!-- Plan Name -->
+              <td class="designation-name">
                 <span class="cell-text">
                   {{ rows.name || '-' }}
                 </span>
               </td>
 
-              <!-- DESCRIPTION -->
+              <!-- Services -->
+              <td class="services-cell">
+                <span
+                  class="cell-text"
+                  [title]="(rows.serviceNames || []).join(', ')"
+                >
+                  {{ (rows.serviceNames || []).join(', ') || '-' }}
+                </span>
+              </td>
+
+              <!-- Description -->
               <td class="description-cell">
-                <span class="description-text" [title]="rows.description || ''">
+                <span
+                  class="description-text"
+                  [title]="rows.description || ''"
+                >
                   {{ rows.description || '-' }}
                 </span>
               </td>
 
-              <!-- RATE -->
+              <!-- Rate -->
               <td class="rate-cell">
                 {{ rows.rate ?? '-' }}
               </td>
 
-              <!-- STATUS -->
+              <!-- Status -->
               <td class="status-cell">
-                <span class="status-badge" [ngClass]="common.getStatusClass(rows.status)">
+                <span
+                  class="status-badge"
+                  [ngClass]="common.getStatusClass(rows.status)"
+                >
                   {{ common.getStatusLabel(rows.status) }}
                 </span>
               </td>
 
-              <!-- ACTION -->
+              <!-- Action -->
               <td class="action-cell">
                 @if (viewPer === 'Y') {
                   <button
@@ -171,7 +249,7 @@
                     (click)="viewPlan(rows.planId)"
                     title="View"
                   >
-                    <mat-icon> visibility </mat-icon>
+                    <mat-icon>visibility</mat-icon>
                   </button>
                 }
 
@@ -183,7 +261,7 @@
                       (click)="editPlan(rows.planId)"
                       title="Edit"
                     >
-                      <mat-icon> edit </mat-icon>
+                      <mat-icon>edit</mat-icon>
                     </button>
                   }
 
@@ -194,19 +272,18 @@
                       (click)="onDeletePlan(rows.planId)"
                       title="Delete"
                     >
-                      <mat-icon> delete </mat-icon>
+                      <mat-icon>delete</mat-icon>
                     </button>
                   }
                 </ng-container>
               </td>
             </tr>
 
-            <!-- NO RECORDS -->
-            <tr *ngIf="!paginatedPlans || paginatedPlans.length === 0">
-              <td colspan="6" class="no-records">
-                <mat-icon> info_outline </mat-icon>
-
-                <span> No records found </span>
+            <!-- No Records -->
+            <tr *ngIf="paginatedPlans.length === 0">
+              <td colspan="7" class="no-records">
+                <mat-icon>info_outline</mat-icon>
+                <span>No records found</span>
               </td>
             </tr>
           </tbody>
@@ -220,11 +297,24 @@
         </div>
 
         <div class="pagination">
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
-
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button
+            type="button"
+            (click)="goToFirstPage()"
+            [disabled]="currentPage === 1"
+          >
+            « First
+          </button>
 
           <button
+            type="button"
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+          >
+            ‹ Prev
+          </button>
+
+          <button
+            type="button"
             *ngFor="let page of pages()"
             (click)="goToPage(page)"
             [class.active-pagination]="page === currentPage"
@@ -232,11 +322,21 @@
             {{ page }}
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+          <button
+            type="button"
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+          >
             Next ›
           </button>
 
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+          <button
+            type="button"
+            (click)="goToLastPage()"
+            [disabled]="currentPage === totalPages"
+          >
+            Last »
+          </button>
         </div>
       </div>
     </div>

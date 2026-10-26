@@ -39,6 +39,15 @@
       </div>
 
       <div class="detail-row" style="margin-top: 10px">
+  <div class="detail-item">
+    <span class="label">Services:</span>
+    <span class="value">
+      {{ serviceNames.length ? serviceNames.join(', ') : 'NA' }}
+    </span>
+  </div>
+</div>
+
+      <div class="detail-row" style="margin-top: 10px">
         <div class="detail-item description-text">
           <span class="label">Description:</span>
           <span class="value">
@@ -46,6 +55,10 @@
           </span>
         </div>
       </div>
+
+      
+
+
     </div>
   </mat-card>
 

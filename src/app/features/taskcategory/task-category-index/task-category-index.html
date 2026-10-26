@@ -266,6 +266,11 @@
                 {{ taskCategory.departmentName }}
               </td>
 
+              <!-- Service -->
+                <td>
+                  {{ taskCategory.serviceName || '-' }}
+                </td>
+
 
               <td>
 
@@ -340,9 +345,7 @@
               !paginatedTaskCategories ||
               paginatedTaskCategories.length === 0">
 
-              <td
-                colspan="5"
-                class="no-records">
+              <td colspan="6" class="no-records">
 
                 <mat-icon>info_outline</mat-icon>
                 <span>No records found</span>

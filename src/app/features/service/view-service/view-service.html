@@ -1,0 +1,88 @@
+
+<div class="page-container">
+  <mat-card class="view-card">
+    <div class="card-header">
+      <div class="page-title">
+        <mat-icon>miscellaneous_services</mat-icon>
+        <span>View Service Master</span>
+      </div>
+
+      <button
+        mat-flat-button
+        class="back-button"
+        type="button"
+        (click)="backToIndexPage()">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Index
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="details-section">
+      <div class="details-row">
+
+        <!-- Service Name -->
+        <div class="detail-item">
+          <span class="label">Service Name:</span>
+          <span class="value">{{ service.name || 'NA' }}</span>
+        </div>
+
+        <!-- Status -->
+        <div class="detail-item">
+          <span class="label">Status:</span>
+          <span
+            class="status-badge"
+            [ngClass]="common.getStatusClass(service.status)">
+            {{ common.getStatusLabel(service.status) }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- ACTION HISTORY -->
+  <mat-card class="history-card">
+    <div class="section-header">
+      <div class="section-title">
+        <mat-icon>history</mat-icon>
+        <span>Action History</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="table-wrapper">
+      <table class="history-table" *ngIf="transactionHistory.length > 0">
+        <thead>
+          <tr>
+            <th width="5%">Sr. No.</th>
+            <th width="20%">Action By</th>
+            <th width="20%">Updated On</th>
+            <th width="55%">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let history of transactionHistory; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ history.name || 'NA' }}</td>
+            <td>{{ history.entryDate || 'NA' }}</td>
+            <td>
+              <span class="action-badge">
+                {{ history.action || 'NA' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div
+        *ngIf="transactionHistory.length === 0"
+        class="no-record">
+        No action history found
+      </div>
+    </div>
+  </mat-card>
+</div>

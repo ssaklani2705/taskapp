@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,6 +17,13 @@ export interface Plan {
   description: string;
   status: any;
   userId: any;
+  serviceIds: number[];
+  serviceNames?: string[];
+}
+
+interface Service {
+  serviceId: number;
+  name: string;
 }
 
 export interface ApiResponse<T> {
@@ -48,7 +55,10 @@ export class PlanAdd implements OnInit {
     description: '',
     status: null,
     userId: null,
+    serviceIds: []
   };
+
+  serviceIds?: number[];
 
   originalPlan: Plan = { ...this.plan };
 
@@ -72,6 +82,8 @@ export class PlanAdd implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
+    this.loadActiveServices();
     // const queryParams = this.route.snapshot.queryParamMap;
 
     // this.currentPage = Number(queryParams.get('currentPage')) || 1;
@@ -99,9 +111,16 @@ export class PlanAdd implements OnInit {
               description: res.data.description,
               status: res.data.status,
               userId: res.data.userId,
+              serviceIds: res.data.serviceIds || []
             };
 
-            this.originalPlan = { ...this.plan };
+            // Restore selected services from API response
+    this.selectedServices = (res.data.serviceIds || []).map(Number);
+
+    this.originalPlan = {
+      ...this.plan,
+      serviceIds: [...this.selectedServices]
+    };
           }
         },
         error: (err) => {
@@ -119,6 +138,9 @@ export class PlanAdd implements OnInit {
     }
 
     this.plan.userId = this.userId ? Number(this.userId) : null;
+
+    // Include selected service IDs in the request
+  this.plan.serviceIds = [...this.selectedServices];
 
     this.dataprovider.savePlan(this.plan).subscribe({
       next: (response: ApiResponse<Plan>) => {
@@ -144,22 +166,36 @@ export class PlanAdd implements OnInit {
     });
   }
 
-  onReset(): void {
-    if (this.isEditMode) {
-      this.plan = { ...this.originalPlan };
-    } else {
-      this.plan = {
-        planId: null,
-        name: '',
-        rate: null,
-        description: '',
-        status: null,
-        userId: null,
-      };
-    }
+ onReset(): void {
+  if (this.isEditMode) {
+    this.plan = {
+      ...this.originalPlan,
+      serviceIds: [...(this.originalPlan.serviceIds || [])]
+    };
 
-    this.nameError = '';
+    // Restore originally selected services
+    this.selectedServices = [...(this.originalPlan.serviceIds || [])];
+  } else {
+    this.plan = {
+      planId: null,
+      name: '',
+      rate: null,
+      description: '',
+      status: null,
+      userId: null,
+      serviceIds: []
+    };
+
+    // Clear selected services
+    this.selectedServices = [];
   }
+
+  // Keep both values synchronized
+  this.plan.serviceIds = [...this.selectedServices];
+
+  this.showServiceDropdown = false;
+  this.nameError = '';
+}
 
   // backToIndexPage(): void {
   //   this.router.navigate(['/plan-index'], {
@@ -184,4 +220,53 @@ export class PlanAdd implements OnInit {
     }
     event.preventDefault();
   }
+
+services: Service[] = [];
+selectedServices: number[] = [];
+showServiceDropdown = false;
+
+
+
+loadActiveServices(): void {
+  this.dataprovider.getActiveServices().subscribe({
+    next: (response: Service[]) => {
+      this.services = response || [];
+    },
+    error: (error: any) => {
+      console.error('Error loading active services:', error);
+      this.services = [];
+    }
+  });
+}
+
+toggleService(serviceId: number, event: Event): void {
+  const checked = (event.target as HTMLInputElement).checked;
+
+  this.selectedServices = checked
+    ? [...new Set([...this.selectedServices, serviceId])]
+    : this.selectedServices.filter(id => id !== serviceId);
+}
+
+toggleAllServices(event: Event): void {
+  const checked = (event.target as HTMLInputElement).checked;
+
+  this.selectedServices = checked
+    ? this.services.map(service => service.serviceId)
+    : [];
+}
+
+@ViewChild('serviceDropdown')
+serviceDropdown!: ElementRef;
+
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent): void {
+  if (
+    this.showServiceDropdown &&
+    this.serviceDropdown &&
+    !this.serviceDropdown.nativeElement.contains(event.target)
+  ) {
+    this.showServiceDropdown = false;
+  }
+}
+  
 }

@@ -1043,6 +1043,10 @@ export class TaskIndex implements OnInit {
     this.fileTwo = null;
     this.fileTwoName = '';
     this.showChangeManagerModal = true;
+    //Rating
+    this.selectedRating = 0;
+    this.hoverRating = 0;
+    this.ratingValidationError = false;
   }
 
   closeChangeManagerModal(): void {
@@ -1057,6 +1061,10 @@ export class TaskIndex implements OnInit {
     this.fileTwo = null;
     this.fileTwoName = '';
     this.descriptionValidationError = false;
+    //Rating
+    this.selectedRating = 0;
+    this.hoverRating = 0;
+    this.ratingValidationError = false;
   }
 
   selectedTaskStatusId: number = 5;
@@ -1145,8 +1153,16 @@ export class TaskIndex implements OnInit {
       return;
     }
 
+     // rating is mandatory only for Assignor Closure
+    if (this.isAssignorClosureSelected && this.selectedRating <= 0) {
+      this.ratingValidationError = true;
+      return;
+    }
+
     this.descriptionValidationError = false;
+    this.ratingValidationError = false;//New Added for rating validation
     this.isChangingManager = true;
+    
 
     const formData = new FormData();
 
@@ -1154,6 +1170,9 @@ export class TaskIndex implements OnInit {
     formData.append('taskId', String(this.task.taskId));
     formData.append('description', this.taskDescription.trim());
     formData.append('userId', this.userId);
+    if (this.isAssignorClosureSelected) {
+      formData.append('rating', String(this.selectedRating)); // e.g. "3.5"
+   }
 
     if (this.fileTwo) {
       formData.append('fileName3', this.fileTwo, this.fileTwo.name); // normal file → fileName1 (pdf)
@@ -1988,5 +2007,48 @@ clearTaskCategory(): void {
   this.showTaskCategoryDropdown = false;
   this.categorySearchText = '';
   this.onSearch();
+}
+
+//Rating
+// ---------- Rating (Assignor Closure) ----------
+stars: number[] = [1, 2, 3, 4, 5];
+selectedRating = 0;      // 0 = not rated, otherwise 0.5 - 5
+hoverRating = 0;
+ratingValidationError = false;
+
+get isAssignorClosureSelected(): boolean {
+  return (this.task?.taskStatus == 2 || this.task?.taskStatus == 4) && Number(this.selectedTaskStatusId) === 5;
+}
+
+get displayRating(): number {
+  return this.hoverRating || this.selectedRating;
+}
+
+getStarIcon(star: number): string {
+  const value = this.displayRating;
+  if (value >= star) return 'star';
+  if (value >= star - 0.5) return 'star_half';
+  return 'star_border';
+}
+
+setRating(value: number): void {
+  if (this.isChangingManager) return;
+  this.selectedRating = value;
+  this.ratingValidationError = false;
+}
+
+clearRating(): void {
+  this.selectedRating = 0;
+  this.hoverRating = 0;
+}
+
+getRatingText(): string {
+  const v = this.displayRating;
+  if (v === 0) return 'Not rated';
+  if (v <= 1) return 'Poor';
+  if (v <= 2) return 'Fair';
+  if (v <= 3) return 'Good';
+  if (v <= 4) return 'Very Good';
+  return 'Excellent';
 }
 }

@@ -91,6 +91,50 @@
 
           <!-- DESCRIPTION -->
           <div class="user-form-row" style="margin-top: 20px">
+
+            <div class="user-form-col">
+              <div class="service-dropdown" #serviceDropdown>
+  <button
+    type="button"
+    class="service-dropdown-toggle"
+    (click)="showServiceDropdown = !showServiceDropdown">
+    <span>
+      {{ selectedServices.length
+        ? selectedServices.length + ' service(s) selected'
+        : 'Select Services' }}
+    </span>
+    <mat-icon>
+      {{ showServiceDropdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+    </mat-icon>
+  </button>
+
+  <div class="service-dropdown-menu" *ngIf="showServiceDropdown">
+    <label class="service-option select-all-option">
+      <input
+        type="checkbox"
+        [checked]="services.length > 0 && services.every(s => selectedServices.includes(s.serviceId))"
+        (change)="toggleAllServices($event)">
+      <span>Select All</span>
+    </label>
+
+    <label
+      class="service-option"
+      *ngFor="let service of services">
+      <input
+        type="checkbox"
+        [checked]="selectedServices.includes(service.serviceId)"
+        (change)="toggleService(service.serviceId, $event)">
+      <span>{{ service.name }}</span>
+    </label>
+
+    <div class="no-services" *ngIf="services.length === 0">
+      No active services available
+    </div>
+  </div>
+</div>
+            </div>
+
+
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">

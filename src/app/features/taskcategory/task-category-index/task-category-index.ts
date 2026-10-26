@@ -12,10 +12,17 @@ import { SessionStorageService } from '../../../service/session-storage.service'
 import { MatIcon } from '@angular/material/icon';
 import { MatDivider } from '@angular/material/divider';
 
+interface Service {
+  serviceId: number;
+  name: string;
+}
+
 interface TaskCategory {
   taskcategoryId: number;
   departmentId: number;
   departmentName: string;
+  serviceId?: number | null;
+  serviceName?: string;
   name: string;
   status: number;
   userId?: number;
@@ -72,6 +79,8 @@ export class IndexTaskCategory {
 
   isPanelVisible: boolean = true;
   showHeaderBar: boolean = true;
+
+  services: Service[] = [];
 
   filterKey = SESSION_KEYS.TASK_CATEGORY_MASTER_FILTER;
 
@@ -172,6 +181,7 @@ export class IndexTaskCategory {
     this.restoreFilterState();
 
     this.getDepartments();
+    this.getServices();
     this.getTaskCategoryDetails();
   }
 
@@ -257,6 +267,7 @@ export class IndexTaskCategory {
         next: (response: any) => {
           this.apiResponseTaskCategoryDetails = response;
           this.taskCategories = response?.data || [];
+          this.mapServiceNames();
         },
         error: (error) => {
           console.error('Error fetching task category details:', error);
@@ -504,6 +515,11 @@ export class IndexTaskCategory {
       sortable: true,
     },
     {
+      key: 'serviceName',
+      label: 'Service',
+      sortable: true,
+    },
+    {
       key: 'status',
       label: 'Status',
       sortable: true,
@@ -557,4 +573,34 @@ export class IndexTaskCategory {
 
     this.onSearch();
   }
+
+  getServices(): void {
+  this.dataprovider.getActiveServices().subscribe({
+    next: (response: any) => {
+      if (Array.isArray(response)) {
+        this.services = response;
+      } else if (Array.isArray(response?.data)) {
+        this.services = response.data;
+      } else {
+        this.services = [];
+      }
+
+      this.mapServiceNames();
+    },
+    error: (error) => {
+      console.error('Error fetching services:', error);
+      this.services = [];
+    },
+  });
+}
+
+mapServiceNames(): void {
+  this.taskCategories = this.taskCategories.map((category) => ({
+    ...category,
+    serviceName:
+      this.services.find(
+        (service) => Number(service.serviceId) === Number(category.serviceId)
+      )?.name || '-',
+  }));
+}
 }
