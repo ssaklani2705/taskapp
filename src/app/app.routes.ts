@@ -218,7 +218,7 @@ export const routes: Routes = [
        {
         path: '',
         canActivate: [moduleGuard],
-        data: { moduleId: 17, loginTypes: ['other'] },
+        data: { moduleId: 18, loginTypes: ['other'] },
         children: [
           { path: 'reassign-report-index', loadComponent: () => import('./reports/ReassignTaskReport/reassign-report/reassign-report').then((m) => m.ReassignReport) },
         ],
