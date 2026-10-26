@@ -22,6 +22,8 @@
             <span class="required">*</span>
             mark are mandatory
           </div>
+
+          <!-- ================= SOCIETY MANAGER ================= -->
           <div class="form-section manager-section">
             <div class="user-form-row">
               <div class="user-form-col">
@@ -30,12 +32,28 @@
                     Society Manager
                     <span class="required">*</span>
                   </label>
-                  <select class="user-input user-select" formControlName="managerId">
-                    <option [ngValue]="null">Select Society Manager</option>
-                    <option *ngFor="let manager of managers" [ngValue]="manager.userId">
-                      {{ manager.firstName }}
-                    </option>
-                  </select>
+
+                  <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+                    <div class="user-input user-select cat-trigger" [class.cat-placeholder]="!selectedManagerName" (click)="toggleDropdown('manager')">
+                      <span class="cat-trigger-text">{{ selectedManagerName || 'Select Society Manager' }}</span>
+                      <span class="cat-caret">▼</span>
+                    </div>
+
+                    <div class="cat-panel" *ngIf="openDropdown === 'manager'">
+                      <input type="text" class="cat-search" placeholder="Search manager..." [(ngModel)]="dropdownSearch" [ngModelOptions]="{ standalone: true }" />
+
+                      <div class="cat-list">
+                        <div class="cat-item" [class.active]="!clientForm.get('managerId')?.value" (click)="selectOption('managerId', null)">Select Society Manager</div>
+
+                        <div class="cat-item" *ngFor="let manager of filteredManagers" [class.active]="manager.userId === clientForm.get('managerId')?.value" (click)="selectOption('managerId', manager.userId)">
+                          {{ manager.firstName }}
+                        </div>
+
+                        <div class="cat-empty" *ngIf="filteredManagers.length === 0">No results found</div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="user-error" *ngIf="clientForm.get('managerId')?.touched && clientForm.get('managerId')?.invalid">Society Manager is required</div>
                 </div>
               </div>
@@ -44,6 +62,8 @@
               <div class="user-form-col empty-column"></div>
             </div>
           </div>
+
+          <!-- ================= CLIENT DETAILS ================= -->
           <div class="form-section">
             <div class="section-title">Client Details</div>
             <!-- ROW 2 -->
@@ -120,6 +140,7 @@
             </div>
           </div>
 
+          <!-- ================= ADDRESS DETAILS ================= -->
           <div class="form-section">
             <div class="section-title">Address Details</div>
             <!-- ROW 4 -->
@@ -163,12 +184,28 @@
                     State
                     <span class="required">*</span>
                   </label>
-                  <select class="user-input user-select" formControlName="stateId">
-                    <option [ngValue]="null">Select State</option>
-                    <option *ngFor="let state of states" [ngValue]="state.stateId">
-                      {{ state.name }}
-                    </option>
-                  </select>
+
+                  <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+                    <div class="user-input user-select cat-trigger" [class.cat-placeholder]="!selectedStateName" (click)="toggleDropdown('state')">
+                      <span class="cat-trigger-text">{{ selectedStateName || 'Select State' }}</span>
+                      <span class="cat-caret">▼</span>
+                    </div>
+
+                    <div class="cat-panel" *ngIf="openDropdown === 'state'">
+                      <input type="text" class="cat-search" placeholder="Search state..." [(ngModel)]="dropdownSearch" [ngModelOptions]="{ standalone: true }" />
+
+                      <div class="cat-list">
+                        <div class="cat-item" [class.active]="!clientForm.get('stateId')?.value" (click)="selectOption('stateId', null)">Select State</div>
+
+                        <div class="cat-item" *ngFor="let state of filteredStates" [class.active]="state.stateId === clientForm.get('stateId')?.value" (click)="selectOption('stateId', state.stateId)">
+                          {{ state.name }}
+                        </div>
+
+                        <div class="cat-empty" *ngIf="filteredStates.length === 0">No results found</div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="user-error" *ngIf="clientForm.get('stateId')?.touched && clientForm.get('stateId')?.invalid">State is required</div>
                 </div>
               </div>
@@ -200,6 +237,7 @@
             </div>
           </div>
 
+          <!-- ================= CONTACT DETAILS ================= -->
           <div class="form-section">
             <div class="section-title">Contact Details</div>
             <!-- ROW 6 -->
@@ -228,7 +266,7 @@
                 </div>
               </div>
 
-              <!-- Contact Person 1 Name -->
+              <!-- Chairman's Name -->
               <div class="user-form-col">
                 <div class="user-form-group">
                   <label class="user-label"> Chairman’s Name </label>
@@ -236,7 +274,7 @@
                 </div>
               </div>
 
-              <!-- Contact Person 1 Email -->
+              <!-- Chairman's Email -->
               <div class="user-form-col">
                 <div class="user-form-group">
                   <label class="user-label"> Chairman’s Email ID </label>
@@ -248,7 +286,7 @@
 
             <!-- ROW 7 -->
             <div class="user-form-row">
-              <!-- Contact Person 2 Name -->
+              <!-- Secretary's Name -->
               <div class="user-form-col">
                 <div class="user-form-group">
                   <label class="user-label"> Secretary’s Name </label>
@@ -256,7 +294,7 @@
                 </div>
               </div>
 
-              <!-- Contact Person 2 Email -->
+              <!-- Secretary's Email -->
               <div class="user-form-col">
                 <div class="user-form-group">
                   <label class="user-label"> Secretary’s Email ID </label>
@@ -265,7 +303,7 @@
                 </div>
               </div>
 
-              <!-- Contact Person 3 Name -->
+              <!-- Treasurer's Name -->
               <div class="user-form-col">
                 <div class="user-form-group">
                   <label class="user-label"> Treasurer’s Name </label>
@@ -273,7 +311,7 @@
                 </div>
               </div>
 
-              <!-- Contact Person 3 Email -->
+              <!-- Treasurer's Email -->
               <div class="user-form-col">
                 <div class="user-form-group">
                   <label class="user-label"> Treasurer’s Email ID </label>
@@ -284,7 +322,7 @@
             </div>
             <!-- ROW 8 -->
             <div class="user-form-row">
-              <!-- Emails -->
+              <!-- CC Email -->
               <div class="user-form-col cc-email-col">
                 <div class="user-form-group">
                   <label class="user-label"> CC Email </label>
@@ -296,6 +334,7 @@
             </div>
           </div>
 
+          <!-- ================= OTHER DETAILS ================= -->
           <div class="form-section">
             <div class="section-title">Other Details</div>
             <!-- ROW 9 -->
@@ -326,6 +365,7 @@
                   <div class="user-error" *ngIf="clientForm.get('startDate')?.touched && clientForm.get('startDate')?.errors?.['required']">Start Date is required</div>
                 </div>
               </div>
+
               <!-- Plan -->
               <div class="user-form-col">
                 <div class="user-form-group">
@@ -333,12 +373,28 @@
                     Plan
                     <span class="required">*</span>
                   </label>
-                  <select class="user-input user-select" formControlName="planId">
-                    <option [ngValue]="null">Select Plan</option>
-                    <option *ngFor="let plan of plans" [ngValue]="plan.planId">
-                      {{ plan.name }}
-                    </option>
-                  </select>
+
+                  <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+                    <div class="user-input user-select cat-trigger" [class.cat-placeholder]="!selectedPlanName" (click)="toggleDropdown('plan')">
+                      <span class="cat-trigger-text">{{ selectedPlanName || 'Select Plan' }}</span>
+                      <span class="cat-caret">▼</span>
+                    </div>
+
+                    <div class="cat-panel" *ngIf="openDropdown === 'plan'">
+                      <input type="text" class="cat-search" placeholder="Search plan..." [(ngModel)]="dropdownSearch" [ngModelOptions]="{ standalone: true }" />
+
+                      <div class="cat-list">
+                        <div class="cat-item" [class.active]="!clientForm.get('planId')?.value" (click)="selectOption('planId', null)">Select Plan</div>
+
+                        <div class="cat-item" *ngFor="let plan of filteredPlans" [class.active]="plan.planId === clientForm.get('planId')?.value" (click)="selectOption('planId', plan.planId)">
+                          {{ plan.name }}
+                        </div>
+
+                        <div class="cat-empty" *ngIf="filteredPlans.length === 0">No results found</div>
+                      </div>
+                    </div>
+                  </div>
+
                   <div class="user-error" *ngIf="clientForm.get('planId')?.touched && clientForm.get('planId')?.invalid">Plan is required</div>
                 </div>
               </div>
@@ -350,6 +406,7 @@
                   <input type="number" class="user-input" formControlName="outstanding" min="0" step="0.01" />
                 </div>
               </div>
+
               <!-- Status -->
               <div class="user-form-col" *ngIf="isEditMode">
                 <div class="user-form-group">
@@ -366,6 +423,7 @@
               </div>
             </div>
           </div>
+
           <div class="user-buttons">
             <button type="button" class="user-reset-btn" (click)="onReset()">Reset</button>
             <button type="submit" class="user-submit-btn" [disabled]="isSubmitting">
