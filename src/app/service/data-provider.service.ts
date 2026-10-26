@@ -1369,7 +1369,7 @@ export class DataProviderService {
       params: {
         taskCatId: taskCatId.toString(),
         startDate: startDate || '',
-        endDate: endDate || ''
+        endDate: endDate || '',
       },
     });
   }
@@ -1421,4 +1421,28 @@ export class DataProviderService {
 
     return this.http.get<{ success: boolean; message: string; data: any[] }>(`${environment.apiBaseUrl}admin/report/workload`, { params });
   }
+
+  saveCompany(payload: any) {
+    return this.http.post(`${environment.apiBaseUrl}admin/company/add_or_update`, payload);
+  }
+
+  getCompanyById(companyId: number) {
+    return this.http.get(`${environment.apiBaseUrl}admin/company/find_by_id/${companyId}`);
+  }
+
+
+  getCompanyList(page: number, size: number, statusIndex: number, search: string,stateId:any) {
+  const params = new HttpParams()
+    .set('page', page)
+    .set('size', size)
+    .set('statusIndex', statusIndex)
+    .set('search', search).set('stateId',stateId.toString());
+
+
+  return this.http.get(`${environment.apiBaseUrl}admin/company/company_list`, { params });
+}
+
+deleteCompany(companyId: number, userId: number) {
+  return this.http.post(`${environment.apiBaseUrl}admin/company/delete_company`, { companyId, userId });
+}
 }

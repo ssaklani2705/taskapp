@@ -158,6 +158,15 @@ export const routes: Routes = [
           { path: 'view-holiday/:holidayId', loadComponent: () => import('./features/holiday/view-holiday/view-holiday').then(m => m.ViewHolidayComponent) },
         ]
       },
+        {
+        path: '', canActivate: [moduleGuard], data: { moduleId: 13, loginTypes: ['other'] },
+        children: [
+          { path: 'company-index', loadComponent: () => import('./features/Company/company-index/company-index').then(m => m.CompanyIndex) },
+          { path: 'add-company', loadComponent: () => import('./features/Company/company-add/company-add').then(m => m.CompanyAdd) },
+          { path: 'edit-company/:companyId', loadComponent: () => import('./features/Company/company-add/company-add').then(m => m.CompanyAdd) },
+          { path: 'view-company/:companyId', loadComponent: () => import('./features/Company/company-view/company-view').then(m => m.CompanyView) },
+        ]
+      },
     ]
   },
   { path: '**', redirectTo: 'login' }

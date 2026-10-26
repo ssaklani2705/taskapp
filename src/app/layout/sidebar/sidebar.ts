@@ -1,17 +1,4 @@
-
-import {
-  Component,
-  Inject,
-  Input,
-  Output,
-  EventEmitter,
-  PLATFORM_ID,
-  HostListener,
-  ElementRef,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
-
+import { Component, Inject, Input, Output, EventEmitter, PLATFORM_ID, HostListener, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationEnd, Router } from '@angular/router';
@@ -33,13 +20,7 @@ interface MenuItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatMenuTrigger,
-    MatButtonModule,
-    MatMenuModule,
-  ],
+  imports: [CommonModule, MatIconModule, MatMenuTrigger, MatButtonModule, MatMenuModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
@@ -52,23 +33,10 @@ export class Sidebar implements OnInit, OnDestroy {
 
   selectedModuleId: number | null = null;
   activeMenu = 'Dashboard';
-
   username = '';
   loginType = '';
-
   private routerSubscription?: Subscription;
-
-  constructor(
-    private router: Router,
-    private loginService: LoginService,
-    @Inject(PLATFORM_ID) private platformId: object,
-    private elementRef: ElementRef,
-  ) {}
-
-  // =========================================================
-  // INITIALIZATION
-  // =========================================================
-
+  constructor(private router: Router,private loginService: LoginService,@Inject(PLATFORM_ID) private platformId: object,private elementRef: ElementRef,) {}
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
@@ -90,9 +58,7 @@ export class Sidebar implements OnInit, OnDestroy {
     }
 
     // Restore selected module
-    const storedSelected = sessionStorage.getItem(
-      'selectedModuleDetail',
-    );
+    const storedSelected = sessionStorage.getItem('selectedModuleDetail');
 
     if (storedSelected) {
       try {
@@ -104,25 +70,18 @@ export class Sidebar implements OnInit, OnDestroy {
       }
     }
 
-    const allowedModuleIds = this.modules
-      .map((module) => Number(module.moduleId))
-      .filter((id) => Number.isFinite(id));
+    const allowedModuleIds = this.modules.map((module) => Number(module.moduleId)).filter((id) => Number.isFinite(id));
 
-    this.menuItems = this.filterMenuItems(
-      this.getInitialMenu(),
-      allowedModuleIds,
-    );
+    this.menuItems = this.filterMenuItems(this.getInitialMenu(), allowedModuleIds);
 
     this.setActiveMenuFromRoute(this.router.url);
     this.expandActiveParents(this.menuItems);
 
     // Update selected menu after navigation
-    this.routerSubscription = this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.setActiveMenuFromRoute(event.urlAfterRedirects);
-        this.expandActiveParents(this.menuItems);
-      });
+    this.routerSubscription = this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
+      this.setActiveMenuFromRoute(event.urlAfterRedirects);
+      this.expandActiveParents(this.menuItems);
+    });
   }
 
   ngOnDestroy(): void {
@@ -144,8 +103,7 @@ export class Sidebar implements OnInit, OnDestroy {
     }
 
     const target = event.target as Node;
-    const sidebarElement =
-      this.elementRef.nativeElement.querySelector('.sidebar');
+    const sidebarElement = this.elementRef.nativeElement.querySelector('.sidebar');
 
     if (sidebarElement?.contains(target)) {
       return;
@@ -273,8 +231,12 @@ export class Sidebar implements OnInit, OnDestroy {
         icon: 'task_alt',
         route: '/task-index',
       },
-
-      // REPORTS PARENT WITH TWO CHILDREN
+      {
+        moduleId: 16,
+        label: 'Company Master',
+        icon: 'task_alt',
+        route: '/company-index',
+      },
       {
         label: 'Reports',
         icon: 'assessment',
@@ -295,8 +257,6 @@ export class Sidebar implements OnInit, OnDestroy {
           { moduleId: 13, label: 'Workload Report', icon: 'insights', route: '/workload-report' },
         ],
       },
-
-      
     ];
   }
 
@@ -304,10 +264,7 @@ export class Sidebar implements OnInit, OnDestroy {
   // FILTER MENU ITEMS BY PERMISSIONS
   // =========================================================
 
-  private filterMenuItems(
-    items: MenuItem[],
-    allowedIds: number[],
-  ): MenuItem[] {
+  private filterMenuItems(items: MenuItem[], allowedIds: number[]): MenuItem[] {
     return items
       .map((item) => {
         // Dashboard / special menu
@@ -317,10 +274,7 @@ export class Sidebar implements OnInit, OnDestroy {
 
         // Parent menu with children
         if (item.children?.length) {
-          const filteredChildren = this.filterMenuItems(
-            item.children,
-            allowedIds,
-          );
+          const filteredChildren = this.filterMenuItems(item.children, allowedIds);
 
           if (filteredChildren.length === 0) {
             return null;
@@ -333,10 +287,7 @@ export class Sidebar implements OnInit, OnDestroy {
         }
 
         // Normal module
-        if (
-          item.moduleId !== undefined &&
-          allowedIds.includes(Number(item.moduleId))
-        ) {
+        if (item.moduleId !== undefined && allowedIds.includes(Number(item.moduleId))) {
           return { ...item };
         }
 
@@ -350,10 +301,7 @@ export class Sidebar implements OnInit, OnDestroy {
   // =========================================================
 
   isSubItemActive(subItem: MenuItem): boolean {
-    if (
-      subItem.moduleId !== undefined &&
-      subItem.moduleId === this.selectedModuleId
-    ) {
+    if (subItem.moduleId !== undefined && subItem.moduleId === this.selectedModuleId) {
       return true;
     }
 
@@ -370,11 +318,7 @@ export class Sidebar implements OnInit, OnDestroy {
   }
 
   isParentActive(item: MenuItem): boolean {
-    return !!item.children?.some(
-      (child) =>
-        this.activeMenu === child.label ||
-        this.isSubItemActive(child),
-    );
+    return !!item.children?.some((child) => this.activeMenu === child.label || this.isSubItemActive(child));
   }
 
   private expandActiveParents(items: MenuItem[]): void {
@@ -405,16 +349,10 @@ export class Sidebar implements OnInit, OnDestroy {
     this.activeMenu = item.label;
     this.selectedModuleId = item.moduleId ?? null;
 
-    const moduleDetail =
-      item.moduleId !== undefined
-        ? this.getModuleDetail(item.moduleId)
-        : null;
+    const moduleDetail = item.moduleId !== undefined ? this.getModuleDetail(item.moduleId) : null;
 
     if (isPlatformBrowser(this.platformId)) {
-      sessionStorage.setItem(
-        'selectedModuleDetail',
-        JSON.stringify(moduleDetail),
-      );
+      sessionStorage.setItem('selectedModuleDetail', JSON.stringify(moduleDetail));
     }
 
     if (item.route) {
@@ -422,10 +360,7 @@ export class Sidebar implements OnInit, OnDestroy {
     }
 
     // Close sidebar on mobile
-    if (
-      isPlatformBrowser(this.platformId) &&
-      window.innerWidth <= 900
-    ) {
+    if (isPlatformBrowser(this.platformId) && window.innerWidth <= 900) {
       this.closeSidebar();
     }
   }
@@ -438,10 +373,7 @@ export class Sidebar implements OnInit, OnDestroy {
     const currentUrl = url.split('?')[0].split('#')[0];
 
     // Dashboard routes
-    if (
-      currentUrl === '/dashboard' ||
-      currentUrl === '/employee-dashboard'
-    ) {
+    if (currentUrl === '/dashboard' || currentUrl === '/employee-dashboard') {
       this.activeMenu = 'Dashboard';
       this.selectedModuleId = null;
       return;
@@ -450,12 +382,7 @@ export class Sidebar implements OnInit, OnDestroy {
     // Match direct menu routes, including nested report children
     const allItems = this.flattenMenuItems(this.menuItems);
 
-    const activeItem = allItems.find(
-      (item) =>
-        !!item.route &&
-        (currentUrl === item.route ||
-          currentUrl.startsWith(item.route + '/')),
-    );
+    const activeItem = allItems.find((item) => !!item.route && (currentUrl === item.route || currentUrl.startsWith(item.route + '/')));
 
     if (activeItem) {
       this.activeMenu = activeItem.label;
@@ -472,96 +399,47 @@ export class Sidebar implements OnInit, OnDestroy {
       {
         label: 'User Management',
         moduleId: 1,
-        routes: [
-          '/user-management-index',
-          '/add-user-management',
-          '/edit-user-management',
-          '/view-user-management',
-          '/my-team',
-          '/add-team',
-          '/edit-team',
-          '/view-team',
-        ],
+        routes: ['/user-management-index', '/add-user-management', '/edit-user-management', '/view-user-management', '/my-team', '/add-team', '/edit-team', '/view-team'],
       },
       {
         label: 'Department Master',
         moduleId: 2,
-        routes: [
-          '/department-master',
-          '/add-department',
-          '/edit-department',
-          '/view-department',
-        ],
+        routes: ['/department-master', '/add-department', '/edit-department', '/view-department'],
       },
       {
         label: 'Designation Master',
         moduleId: 3,
-        routes: [
-          '/designation-master',
-          '/add-designation',
-          '/edit-designation',
-          '/view-designation',
-        ],
+        routes: ['/designation-master', '/add-designation', '/edit-designation', '/view-designation'],
       },
       {
         label: 'Tasks',
         moduleId: 10,
-        routes: [
-          '/task-index',
-          '/add-task',
-          '/edit-task',
-          '/view-task',
-        ],
+        routes: ['/task-index', '/add-task', '/edit-task', '/view-task'],
       },
       {
         label: 'Task Category Master',
         moduleId: 5,
-        routes: [
-          '/task-category-index',
-          '/add-task-category',
-          '/edit-task-category',
-          '/view-task-category',
-        ],
+        routes: ['/task-category-index', '/add-task-category', '/edit-task-category', '/view-task-category'],
       },
       {
         label: 'State Master',
         moduleId: 4,
-        routes: [
-          '/state-index',
-          '/add-state',
-          '/edit-state',
-          '/view-state',
-        ],
+        routes: ['/state-index', '/add-state', '/edit-state', '/view-state'],
       },
       {
         label: 'Client Master',
         moduleId: 8,
-        routes: [
-          '/client-index',
-          '/add-client',
-          '/edit-client',
-          '/view-client',
-        ],
+        routes: ['/client-index', '/add-client', '/edit-client', '/view-client'],
       },
       {
         label: 'Recurring Master',
         moduleId: 11,
-        routes: [
-          '/recurring-index',
-          '/add-recurring',
-          '/edit-recurring',
-          '/view-recurring',
-        ],
+        routes: ['/recurring-index', '/add-recurring', '/edit-recurring', '/view-recurring'],
       },
       {
         label: 'Plan Master',
         moduleId: 9,
-        routes: [
-          '/plan-index',
-          '/add-plan',
-          '/edit-plan',
-          '/view-plan',
-        ],
+        routes: ['/plan-index', '/add-plan', '/edit-plan', '/view-plan'],
       },
       {
         label: 'Holiday Master',
@@ -570,13 +448,7 @@ export class Sidebar implements OnInit, OnDestroy {
       },
     ];
 
-    const activeModule = moduleRoutes.find((module) =>
-      module.routes.some(
-        (route) =>
-          currentUrl === route ||
-          currentUrl.startsWith(route + '/'),
-      ),
-    );
+    const activeModule = moduleRoutes.find((module) => module.routes.some((route) => currentUrl === route || currentUrl.startsWith(route + '/')));
 
     if (activeModule) {
       this.activeMenu = activeModule.label;
@@ -585,12 +457,7 @@ export class Sidebar implements OnInit, OnDestroy {
   }
 
   private flattenMenuItems(items: MenuItem[]): MenuItem[] {
-    return items.flatMap((item) => [
-      item,
-      ...(item.children
-        ? this.flattenMenuItems(item.children)
-        : []),
-    ]);
+    return items.flatMap((item) => [item, ...(item.children ? this.flattenMenuItems(item.children) : [])]);
   }
 
   // =========================================================
@@ -602,11 +469,7 @@ export class Sidebar implements OnInit, OnDestroy {
       return null;
     }
 
-    return (
-      this.modules.find(
-        (module) => Number(module.moduleId) === Number(moduleId),
-      ) || null
-    );
+    return this.modules.find((module) => Number(module.moduleId) === Number(moduleId)) || null;
   }
 
   // =========================================================
@@ -627,11 +490,9 @@ export class Sidebar implements OnInit, OnDestroy {
       return;
     }
 
-    const loginType =
-      sessionStorage.getItem('loginType') || 'other';
+    const loginType = sessionStorage.getItem('loginType') || 'other';
 
-    const redirectUrl =
-      loginType === 'manager' ? '/manager-login' : '/login';
+    const redirectUrl = loginType === 'manager' ? '/manager-login' : '/login';
 
     const logoutRequest = this.loginService.logout();
 
@@ -668,10 +529,7 @@ export class Sidebar implements OnInit, OnDestroy {
       return parts[0].substring(0, 2).toUpperCase();
     }
 
-    return (
-      parts[0].charAt(0) +
-      parts[parts.length - 1].charAt(0)
-    ).toUpperCase();
+    return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
   }
 
   // =========================================================

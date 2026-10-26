@@ -1,0 +1,208 @@
+<div class="page-container">
+  <div class="main-card">
+    <div class="page-header">
+      <div class="page-title">
+        <mat-icon>business</mat-icon>
+        <span>Company Master</span>
+      </div>
+
+      <div class="header-action">
+        @if (addPer === 'Y') {
+          <button type="button" class="add-button" (click)="addCompany()">
+            Add New
+            <span class="plus-icon">+</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="search-section">
+      <div class="search-grid">
+        <div class="search-row">
+          <div class="search-wrapper">
+            <div class="search-box">
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search Company Name / City / Location" (keyup.enter)="onSearch()" class="search-input" />
+
+              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+          <div class="status-wrapper">
+            <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+              <div class="status-select cat-trigger" [class.cat-placeholder]="stateId === 0" (click)="toggleStateDropdown()">
+                <span class="cat-trigger-text">{{ selectedStateName || '--All States--' }}</span>
+                <span class="cat-caret">▼</span>
+              </div>
+
+              <div class="cat-panel" *ngIf="stateOpen">
+                <input type="text" class="cat-search" placeholder="Search state..." [(ngModel)]="stateSearch" />
+
+                <div class="cat-list">
+                  <div class="cat-item" [class.active]="stateId === 0" (click)="selectState(0)">--All States--</div>
+
+                  <div class="cat-item" *ngFor="let state of filteredStates" [class.active]="state.stateId === stateId" (click)="selectState(state.stateId)">
+                    {{ state.name }}
+                  </div>
+
+                  <div class="cat-empty" *ngIf="filteredStates.length === 0">No results found</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STATUS -->
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+              <option value="">--All Status--</option>
+              <option value="1">Active</option>
+              <option value="2">Inactive</option>
+              <option value="3">Deleted</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filter-row"></div>
+
+        <div class="filter-row">
+          <!-- From Date -->
+
+          <!-- GO -->
+          <div class="go-wrapper">
+            <button type="button" class="btn-go" (click)="onSearch()">Go</button>
+          </div>
+
+          <!-- CLEAR -->
+          <div class="clear-wrapper">
+            <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="table-section">
+      <div class="table-toolbar">
+        <div class="record-summary">
+          {{ recordSummary }}
+        </div>
+
+        <div class="pagination">
+          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+
+          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">>‹ Prev</button>
+
+          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+            {{ page }}
+          </button>
+
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+
+          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="designation-table">
+          <thead>
+            <tr>
+              <th class="serial-column">#</th>
+
+              <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                <div class="column-header">
+                  <span>{{ col.label }}</span>
+
+                  <span *ngIf="col.sortable" class="sort-icons">
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
+
+              <th class="action-column">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let client of companies; let i = index">
+              <td class="serial-cell">
+                {{ (currentPage - 1) * size + i + 1 }}
+              </td>
+
+              <td class="plan-name-cell">
+                <span class="user-name">
+                  {{ client.companyName || '-' }}
+                </span>
+              </td>
+
+              <td class="plan-name-cell">
+                {{ client.city || '-' }}
+              </td>
+
+              <td class="plan-name-cell">
+                {{ client.stateName || '-' }}
+              </td>
+
+              <td class="plan-name-cell">
+                {{ client.location || '-' }}
+              </td>
+
+              <td class="status-cell">
+                <span class="status-badge" [ngClass]="getStatusClass(client.status)">
+                  {{ getStatusLabel(client.status) }}
+                </span>
+              </td>
+
+              <td class="action-cell">
+                @if (viewPer === 'Y') {
+                  <button type="button" class="action-button view-button" title="View" (click)="viewCompany(client.companyId)">
+                    <mat-icon> visibility </mat-icon>
+                  </button>
+                }
+
+                <ng-container *ngIf="client.status === 1 || client.status === 2">
+                  @if (editPer === 'Y') {
+                    <button type="button" class="action-button edit-button" title="Edit" (click)="editCompany(client.companyId)">
+                      <mat-icon> edit </mat-icon>
+                    </button>
+                  }
+
+                  @if (deletePer === 'Y') {
+                    <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteCompany(client.companyId)">
+                      <mat-icon> delete </mat-icon>
+                    </button>
+                  }
+                </ng-container>
+              </td>
+            </tr>
+
+            <tr *ngIf="!companies || companies.length === 0">
+              <td colspan="7" class="no-records">
+                <mat-icon> info_outline </mat-icon>
+                <span> No records found </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-toolbar bottom-toolbar">
+        <div class="record-summary">
+          {{ recordSummary }}
+        </div>
+        <div class="pagination">
+          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">>‹ Prev</button>
+          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+            {{ page }}
+          </button>
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
