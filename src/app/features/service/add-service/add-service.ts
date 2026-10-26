@@ -7,14 +7,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DataProviderService } from '../../../service/data-provider.service';
 import Swal from 'sweetalert2';
 
-interface Service {
+export interface Service {
   serviceId: number | null;
   name: string;
   status: number | null;
   userId: number | null;
 }
 
-interface ApiResponse<T> {
+export interface ApiResponse<T> {
   success: boolean;
   message: string;
   data: T;
@@ -70,70 +70,70 @@ export class AddServiceComponent implements OnInit {
     };
   }
 
-  private loadService(serviceId: number): void {
-    this.dataprovider.getServiceById(serviceId).subscribe({
-      next: (res: ApiResponse<Service>) => {
-        if (res?.data) {
-          this.service = {
-            serviceId: res.data.serviceId,
-            name: res.data.name ?? '',
-            status: Number(res.data.status),
-            userId: res.data.userId ?? null
-          };
+ private loadService(serviceId: number): void {
+  this.dataprovider.getServiceById(serviceId).subscribe({
+    next: (res) => {
+      if (res?.success && res?.data) {
+        this.service = {
+          serviceId: res.data.serviceId,
+          name: res.data.name ?? '',
+          status: res.data.status != null ? Number(res.data.status) : null,
+          userId: res.data.userId ?? null
+        };
 
-          this.originalService = { ...this.service };
-        } else {
-          Swal.fire('Error', 'Service details not found.', 'error');
-        }
-      },
-      error: (err: any) => {
-        console.error('Failed to load service:', err);
-        Swal.fire('Error', 'Unable to load service details.', 'error');
+        this.originalService = { ...this.service };
+      } else {
+        Swal.fire('Error', res?.message || 'Service details not found.', 'error');
       }
-    });
-  }
+    },
+    error: (err: any) => {
+      console.error('Failed to load service:', err);
+      Swal.fire('Error', 'Unable to load service details.', 'error');
+    }
+  });
+}
 
   onSubmit(form: NgForm): void {
-    if (form.invalid) {
-      form.control.markAllAsTouched();
-      return;
-    }
+  if (form.invalid) {
+    form.control.markAllAsTouched();
+    return;
+  }
 
-    this.service.name = this.service.name.trim();
-    this.service.userId = this.userId ? Number(this.userId) : null;
+  this.service.name = this.service.name.trim();
+  this.service.userId = this.userId ? Number(this.userId) : null;
 
-    if (!this.service.name) {
-      form.control.markAllAsTouched();
-      return;
-    }
+  if (!this.service.name) {
+    form.control.markAllAsTouched();
+    return;
+  }
 
-    this.dataprovider.saveService(this.service).subscribe({
-      next: (response: ApiResponse<Service>) => {
-        if (response?.success) {
-          Swal.fire(
-            'Success',
-            response.message || 'Service saved successfully.',
-            'success'
-          ).then(() => this.backToIndexPage());
-        } else {
-          Swal.fire(
-            'Error',
-            response?.message || 'Unable to save service.',
-            'error'
-          );
-        }
-      },
-      error: (err: any) => {
-        console.error('Save service error:', err);
-
+  this.dataprovider.saveService(this.service).subscribe({
+    next: (response) => {
+      if (response?.success) {
+        Swal.fire(
+          'Success',
+          response.message || 'Service saved successfully.',
+          'success'
+        ).then(() => this.backToIndexPage());
+      } else {
         Swal.fire(
           'Error',
-          err?.error?.message || 'Something went wrong while saving the service.',
+          response?.message || 'Unable to save service.',
           'error'
         );
       }
-    });
-  }
+    },
+    error: (err: any) => {
+      console.error('Save service error:', err);
+
+      Swal.fire(
+        'Error',
+        err?.error?.message || 'Something went wrong while saving the service.',
+        'error'
+      );
+    }
+  });
+}
 
   onReset(): void {
     if (this.isEditMode) {

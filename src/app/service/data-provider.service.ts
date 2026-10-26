@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from '../classes/ApiResponse';
 import { ResponseApi } from '../classes/response-api.model';
+import { Service } from '../features/service/add-service/add-service';
 
 export interface Feedback {
   clientId: number;
@@ -1430,19 +1431,130 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}admin/company/find_by_id/${companyId}`);
   }
 
+  getCompanyList(page: number, size: number, statusIndex: number, search: string, stateId: any) {
+    const params = new HttpParams().set('page', page).set('size', size).set('statusIndex', statusIndex).set('search', search).set('stateId', stateId.toString());
 
-  getCompanyList(page: number, size: number, statusIndex: number, search: string,stateId:any) {
-  const params = new HttpParams()
-    .set('page', page)
-    .set('size', size)
-    .set('statusIndex', statusIndex)
-    .set('search', search).set('stateId',stateId.toString());
+    return this.http.get(`${environment.apiBaseUrl}admin/company/company_list`, { params });
+  }
+
+  deleteCompany(companyId: number, userId: number) {
+    return this.http.post(`${environment.apiBaseUrl}admin/company/delete_company`, { companyId, userId });
+  }
+
+  
+
+  getServiceList(page: number, size: number, statusIndex: number, search: string) {
+    const params = new HttpParams().set('page', page).set('size', size).set('statusIndex', statusIndex).set('search', search);
+
+    return this.http.get(`${environment.apiBaseUrl}admin/service/list`, { params });
+  }
 
 
-  return this.http.get(`${environment.apiBaseUrl}admin/company/company_list`, { params });
+ 
+
+ deleteService(payload: { serviceId: number; userId: number | null }) {
+  return this.http.post(`${environment.apiBaseUrl}admin/service/delete`, payload);
 }
 
-deleteCompany(companyId: number, userId: number) {
-  return this.http.post(`${environment.apiBaseUrl}admin/company/delete_company`, { companyId, userId });
+
+
+// Get Service By ID
+getServiceById(serviceId: number): Observable<ApiResponse<Service>> {
+  return this.http.get<ApiResponse<Service>>(
+    `${environment.apiBaseUrl}admin/service/get_by_Id/${serviceId}`
+  );
 }
+
+// getActiveServices(): Observable<ApiResponse<Service>> {
+//     return this.http.get<ApiResponse<Service>>(`${environment.apiBaseUrl}admin/service/active`);
+//   }
+
+getActiveServices(): Observable<ApiResponse<Service[]>> {
+  return this.http.get<ApiResponse<Service[]>>(
+    `${environment.apiBaseUrl}admin/service/active`
+  );
+}
+
+// // Add or Update Service
+saveService(payload: Service): Observable<ApiResponse<Service>> {
+  return this.http.post<ApiResponse<Service>>(
+    `${environment.apiBaseUrl}admin/service/add_or_Update`,
+    payload
+  );
+}
+
+
+
+
+// ============================================================
+  // Generic Recurring
+  // ============================================================
+  // For AddOrUpdate
+  addOrUpdateGenericRecurring(data: any, userId: number) {
+    return this.http.post<any>(`${environment.apiBaseUrl}admin/addOrUpdateGenericRecurring`, data, {
+      params: {
+        userId: userId,
+      },
+    });
+  }
+  // For Edit
+  getGenericRecurringById(genericRecurringId: number, userId: number) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/getGenericRecurringById/${genericRecurringId}`, {
+      params: {
+        userId: userId,
+      },
+    });
+  }
+  // For Index
+  getGenericRecurringDetails(
+    page: number,
+    size: number,
+    status: number = 0,
+    search: string = '',
+    type: number = 0,
+    taskCatId: number = 0,
+    forValue: number = 0,
+    priority: number = 0,
+    sortColumn: string = 'title',
+    sortDirection: string = 'asc',
+    userId: number,
+    isAdmin: string,
+    loginType: string,
+  ) {
+    const params: any = {
+      page: page,
+      size: size,
+      status: status,
+      type: type,
+      taskCatId: taskCatId,
+      forValue,
+      priority: priority,
+      sortColumn: sortColumn,
+      sortDirection: sortDirection,
+      userId: userId,
+      isAdmin: isAdmin,
+      loginType: loginType,
+    };
+    if (search && search.trim() !== '') {
+      params.search = search.trim();
+    }
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/getGenericRecurringDetails`, { params });
+  }
+  // For View
+  getViewGenericRecurringById(genericRecurringId: number, userId: number) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/genricRecurringDetails/${genericRecurringId}`, {
+      params: {
+        userId: userId,
+      },
+    });
+  }
+  // For Delete
+  deleteGenericRecurring(genericRecurringId: number, userId: number) {
+    return this.http.post<any>(`${environment.apiBaseUrl}admin/deleteGenericRecurring`, null, {
+      params: {
+        genericRecurringId: genericRecurringId,
+        userId: userId,
+      },
+    });
+  }
 }

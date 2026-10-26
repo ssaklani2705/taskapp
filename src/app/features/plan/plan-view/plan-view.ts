@@ -111,7 +111,7 @@ export class PlanView implements OnInit {
 
       // Load active services and match them with the plan's saved IDs
       this.dataprovider.getActiveServices().subscribe({
-        next: (services: any[]) => {
+        next: (services: any) => {
           this.services = services || [];
 
           const selectedIds = (data.serviceIds || []).map(Number);

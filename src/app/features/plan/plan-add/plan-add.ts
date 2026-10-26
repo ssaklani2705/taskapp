@@ -229,7 +229,7 @@ showServiceDropdown = false;
 
 loadActiveServices(): void {
   this.dataprovider.getActiveServices().subscribe({
-    next: (response: Service[]) => {
+    next: (response: any) => {
       this.services = response || [];
     },
     error: (error: any) => {

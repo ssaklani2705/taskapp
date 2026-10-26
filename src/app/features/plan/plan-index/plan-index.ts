@@ -140,35 +140,88 @@ export class PlanIndex {
   }
 
   // Load active services for the filter dropdown
-  loadActiveServices(): void {
-    this.dataprovider.getActiveServices().subscribe({
-      next: (response: Service[]) => {
-        this.services = response || [];
-        this.mapPlanServices();
-      },
-      error: (error) => {
-        console.error('Error loading active services:', error);
-        this.services = [];
-        this.mapPlanServices();
-      }
-    });
-  }
+  // loadActiveServices(): void {
+  //   this.dataprovider.getActiveServices().subscribe({
+  //     next: (response: Service[]) => {
+  //       this.services = response || [];
+  //       this.mapPlanServices();
+  //     },
+  //     error: (error) => {
+  //       console.error('Error loading active services:', error);
+  //       this.services = [];
+  //       this.mapPlanServices();
+  //     }
+  //   });
+  // }
+//   loadActiveServices(): void {
+//   this.dataprovider.getActiveServices().subscribe({
+//     next: (response: any) => {
+//       this.services = response?.data || [];
+//       this.mapPlanServices();
+//     },
+//     error: (error: any) => {
+//       console.error('Error loading active services:', error);
+//       this.services = [];
+//       this.mapPlanServices();
+//     }
+//   });
+// }
+
+loadActiveServices(): void {
+  this.dataprovider.getActiveServices().subscribe({
+    next: (response: any) => {
+      console.log('Active Services API Response:', response);
+
+      this.services = Array.isArray(response?.data)
+        ? response.data
+        : Array.isArray(response?.data?.data)
+          ? response.data.data
+          : Array.isArray(response)
+            ? response
+            : [];
+
+      console.log('Loaded Services:', this.services);
+
+      this.mapPlanServices();
+    },
+    error: (error: any) => {
+      console.error('Error loading active services:', error);
+      this.services = [];
+      this.mapPlanServices();
+    }
+  });
+}
 
   // Map service IDs to service names for display
-  mapPlanServices(): void {
-    this.plans = this.plans.map((plan: Plan) => {
-      const selectedIds = this.getServiceIds(plan);
+  // mapPlanServices(): void {
+  //   this.plans = this.plans.map((plan: Plan) => {
+  //     const selectedIds = this.getServiceIds(plan);
 
-      return {
-        ...plan,
-        serviceNames: this.services
-          .filter(service =>
-            selectedIds.includes(Number(service.serviceId))
-          )
-          .map(service => service.name)
-      };
-    });
-  }
+  //     return {
+  //       ...plan,
+  //       serviceNames: this.services
+  //         .filter(service =>
+  //           selectedIds.includes(Number(service.serviceId))
+  //         )
+  //         .map(service => service.name)
+  //     };
+  //   });
+  // }
+
+  mapPlanServices(): void {
+  this.plans = this.plans.map((plan: Plan) => {
+    const selectedIds = this.getServiceIds(plan);
+
+    return {
+      ...plan,
+      serviceNames: this.services
+        .filter((service: Service) =>
+          selectedIds.includes(Number(service.serviceId))
+        )
+        .map((service: Service) => service.name)
+    };
+  });
+}
 
   // Safely handle service IDs returned as numbers or strings
   private getServiceIds(plan: Plan): number[] {

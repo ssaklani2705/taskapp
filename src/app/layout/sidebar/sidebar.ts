@@ -237,6 +237,18 @@ export class Sidebar implements OnInit, OnDestroy {
         icon: 'task_alt',
         route: '/company-index',
       },
+       {
+        moduleId: 15,
+        label: 'Generic Recurring',
+        icon: 'task_alt',
+        route: '/generic-recurring-index',
+      },
+       {
+        moduleId: 14,
+        label: 'Service Master',
+        icon: 'task_alt',
+        route: '/service-index',
+      },
       {
         label: 'Reports',
         icon: 'assessment',
