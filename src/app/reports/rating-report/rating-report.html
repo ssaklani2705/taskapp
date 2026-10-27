@@ -13,6 +13,7 @@
     <!-- ================= SEARCH ================= -->
     <div class="search-section">
       <div class="search-grid">
+        <!-- Row 1: User Name -->
         <div class="search-field">
           <label>User Name</label>
           <div class="search-input-wrapper">
@@ -23,6 +24,35 @@
           </div>
         </div>
 
+        <!-- Row 1: Department -->
+        <div class="search-field department-filter">
+          <label>Department</label>
+
+          <div class="department-dropdown">
+            <button type="button" class="department-select" (click)="showDepartmentDropdown = !showDepartmentDropdown" [attr.aria-expanded]="showDepartmentDropdown">
+              <span>
+                {{ selectedDepartmentIds.length === 0 ? '-- Select Department --' : selectedDepartmentIds.length + ' Department(s) Selected' }}
+              </span>
+
+              <mat-icon>
+                {{ showDepartmentDropdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+              </mat-icon>
+            </button>
+
+            <div class="department-options" *ngIf="showDepartmentDropdown">
+              <label class="department-option" *ngFor="let department of departments">
+                <input type="checkbox" [checked]="selectedDepartmentIds.includes(+department.departmentId)" (change)="onDepartmentChange(+department.departmentId, $any($event.target).checked)" />
+                <span>{{ department.name }}</span>
+              </label>
+
+              <div class="no-departments" *ngIf="!departments || departments.length === 0">No departments available.</div>
+
+              <button type="button" class="clear-departments" *ngIf="selectedDepartmentIds.length > 0" (click)="clearDepartments()">Clear departments</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 1: From Date -->
         <div class="search-field">
           <label>From Date</label>
           <div class="search-input-wrapper">
@@ -34,6 +64,7 @@
           </div>
         </div>
 
+        <!-- Row 1: To Date -->
         <div class="search-field">
           <label>To Date</label>
           <div class="search-input-wrapper">
@@ -45,24 +76,19 @@
           </div>
         </div>
 
+        <!-- Row 2: Actions -->
         <div class="filter-action">
           <button type="button" class="go-button" (click)="onSearch()">
             <mat-icon>search</mat-icon>
             Go
           </button>
-          &nbsp;
+
           <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
 
-          <button
-  type="button"
-  class="btn-export-excel"
-  (click)="exportToExcel()"
-  [disabled]="exportingExcel"
->
-  {{ exportingExcel ? 'Exporting...' : 'Export to Excel' }}
-  <i class="fas fa-file-excel" aria-hidden="true"></i>
-</button>
-
+          <button type="button" class="btn-export-excel" (click)="exportToExcel()" [disabled]="exportingExcel">
+            {{ exportingExcel ? 'Exporting...' : 'Export to Excel' }}
+            <i class="fas fa-file-excel" aria-hidden="true"></i>
+          </button>
         </div>
       </div>
     </div>

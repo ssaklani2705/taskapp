@@ -1576,7 +1576,7 @@ getUserManagementDetails(
     return this.http.get<any[]>(`${environment.apiBaseUrl}admin/generic-recurring/task-categories`);
   }
 
-  getTaskRatingSummary(fromDate?: string | null, toDate?: string | null, username?: string | null, page: number = 0, size: number = 10): Observable<any> {
+ getTaskRatingSummary(fromDate?: string | null, toDate?: string | null, username?: string | null, departmentIds: number[] = [], page: number = 0, size: number = 10): Observable<any> {
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
     if (fromDate) {
       params = params.set('fromDate', fromDate);
@@ -1584,10 +1584,20 @@ getUserManagementDetails(
     if (toDate) {
       params = params.set('toDate', toDate);
     }
-    if (username && username.trim()) {
+    if (username?.trim()) {
       params = params.set('username', username.trim());
     }
+    departmentIds.forEach((id) => {
+      params = params.append('departmentIds', id.toString());
+    });
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task/rating-summary`, { params });
+  }
+  getRatingReportDepartments(username?: string | null): Observable<any[]> {
+    let params = new HttpParams();
+    if (username?.trim()) {
+      params = params.set('username', username.trim());
+    }
+    return this.http.get<any[]>(`${environment.apiBaseUrl}admin/task/rating-summary/departments`, { params });
   }
 
   getTaskReassignReport(page: number, size: number, search: string, fromDate: string, toDate: string, taskCategoryId: number, clientId: number, userId: number): Observable<any> {
