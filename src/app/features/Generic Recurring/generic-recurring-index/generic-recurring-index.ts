@@ -128,42 +128,42 @@ export class GenericRecurringIndex {
     this.getGenericRecurringDetails();
   }
 
-  private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurringForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
-      next: (response: any) => {
-        console.log('Task Categories:', response);
+  // private loadTaskCategories(): void {
+  //   this.dataprovider.getActiveTaskCategoriesForRecurringForIndex(this.userId, this.isAdmin, this.loginType).subscribe({
+  //     next: (response: any) => {
+  //       console.log('Task Categories:', response);
 
-        this.taskCategories = response || [];
-        this.buildGroupedCategories();
-      },
+  //       this.taskCategories = response || [];
+  //       this.buildGroupedCategories();
+  //     },
 
-      error: (error) => {
-        console.error('Error fetching task categories:', error);
+  //     error: (error) => {
+  //       console.error('Error fetching task categories:', error);
 
-        this.taskCategories = [];
-        this.groupedCategories = [];
-      },
-    });
-  }
+  //       this.taskCategories = [];
+  //       this.groupedCategories = [];
+  //     },
+  //   });
+  // }
 
-  private buildGroupedCategories(): void {
-    const map = new Map<string, TaskCategory[]>();
+  // private buildGroupedCategories(): void {
+  //   const map = new Map<string, TaskCategory[]>();
 
-    for (const c of this.taskCategories) {
-      const key = c.departmentName || 'Other';
-      if (!map.has(key)) {
-        map.set(key, []);
-      }
-      map.get(key)!.push(c);
-    }
+  //   for (const c of this.taskCategories) {
+  //     const key = c.departmentName || 'Other';
+  //     if (!map.has(key)) {
+  //       map.set(key, []);
+  //     }
+  //     map.get(key)!.push(c);
+  //   }
 
-    const asc = (x: string, y: string) => x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' });
+  //   const asc = (x: string, y: string) => x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' });
 
-    this.groupedCategories = Array.from(map, ([department, items]) => ({
-      department,
-      items: [...items].sort((a, b) => asc(a.name || '', b.name || '')), // category A-Z
-    })).sort((a, b) => asc(a.department, b.department)); // department A-Z
-  }
+  //   this.groupedCategories = Array.from(map, ([department, items]) => ({
+  //     department,
+  //     items: [...items].sort((a, b) => asc(a.name || '', b.name || '')), // category A-Z
+  //   })).sort((a, b) => asc(a.department, b.department)); // department A-Z
+  // }
 
   getGenericRecurringDetails(): void {
     this.isLoading = true;
@@ -820,5 +820,41 @@ export class GenericRecurringIndex {
     this.categorySearchText = '';
 
     this.onFilterChange();
+  }
+
+
+  existingTaskCategoryIds: number[] = [];
+  private loadTaskCategories(): void {
+    this.dataprovider.getTaskCategoriesUsedInGenericRecurring().subscribe({
+      next: (response: any) => {
+        console.log('Task categories used in Generic Recurring:', response);
+        this.taskCategories = response?.data ?? response ?? [];
+        this.buildGroupedCategories();
+      },
+      error: (error) => {
+        console.error('Error fetching recurring task categories:', error);
+        this.taskCategories = [];
+        this.groupedCategories = [];
+      },
+    });
+  }
+  private buildGroupedCategories(): void {
+    const map = new Map<string, TaskCategory[]>();
+    for (const category of this.taskCategories) {
+      const department = category.departmentName || 'Other';
+      if (!map.has(department)) {
+        map.set(department, []);
+      }
+      map.get(department)!.push(category);
+    }
+    const asc = (a: string, b: string) =>
+      a.localeCompare(b, undefined, {
+        numeric: true,
+        sensitivity: 'base',
+      });
+    this.groupedCategories = Array.from(map, ([department, items]) => ({
+      department,
+      items: [...items].sort((a, b) => asc(a.name || '', b.name || '')),
+    })).sort((a, b) => asc(a.department, b.department));
   }
 }

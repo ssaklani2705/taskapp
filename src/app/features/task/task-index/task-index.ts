@@ -1475,9 +1475,12 @@ private clearAssignBuddyIfSame(): void {
       return;
     }
 
-    if (this.selectedAssignTask.taskStatus === 1 && !this.assignRemarks?.trim()) {
-      return;
-    }
+    // if (this.selectedAssignTask.taskStatus === 1 && !this.assignRemarks?.trim()) {
+    //   return;
+    // }
+    if ((this.selectedAssignTask.taskStatus === 1 || this.selectedAssignTask.taskStatus === 3) && !this.assignRemarks?.trim()) {
+  return;
+}
 
     if (!this.isValidTaskDateRange()) {
       return;

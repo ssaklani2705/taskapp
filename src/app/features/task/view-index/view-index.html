@@ -120,6 +120,31 @@
               {{ getPriorityLabel(task.priority) }}
             </span>
           </div>
+
+                <!-- Rating -->
+<div class="info-row">
+  <span class="info-label"> Rating: </span>
+
+  <span class="info-value rating-value" *ngIf="task.rating > 0; else notRated">
+    <!-- <span class="rating-stars">
+      <mat-icon *ngFor="let s of [1, 2, 3, 4, 5]"
+                [class.filled]="s <= task.rating">
+        {{ s <= task.rating ? 'star' : 'star_border' }}
+      </mat-icon>
+    </span> -->
+    <span class="rating-stars">
+  <mat-icon *ngFor="let s of [1, 2, 3, 4, 5]"
+            [class.filled]="task.rating >= s - 0.5">
+    {{ task.rating >= s ? 'star' : (task.rating >= s - 0.5 ? 'star_half' : 'star_border') }}
+  </mat-icon>
+</span>
+    <span class="rating-number">{{ task.rating }} / 5</span>
+  </span>
+
+  <ng-template #notRated>
+    <span class="info-value">Not rated</span>
+  </ng-template>
+</div>
         </div>
 
         <!-- ===============================================
@@ -184,6 +209,16 @@
               {{ task.closeRemarks || '-' }}
             </span>
           </div>
+          <!-- Close Date -->
+<div class="info-row">
+  <span class="info-label"> Closed On: </span>
+
+  <span class="info-value">
+    {{ task.closeDateTime ? (task.closeDateTime | date: 'dd-MM-yyyy hh:mm a') : '-' }}
+  </span>
+</div>
+
+    
         </div>
       </div>
 
