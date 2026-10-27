@@ -52,6 +52,8 @@ interface Task {
   userType:any;
   buddyName:any;
 
+  buddyId: any;      // ADD
+
 }
 
 export interface Client {
@@ -1383,12 +1385,17 @@ export class TaskIndex implements OnInit {
 
   openAssignUserModal(task: any): void {
   this.originalAssignedUserId = Number(task.assignedTo || 0);
+  
 
   this.selectedAssignTask = {
     ...task,
     assignedTo: 0,
+    // buddyId: task.buddyId != null ? Number(task.buddyId) : null,    // ADD
+      buddyId: null,                       // overrides the value copied by ...task
+
     date: task.date ? new Date(task.date) : null,
     endDate: task.dueDateTime ? new Date(task.dueDateTime) : null,
+    
   };
 
   this.assignRemarks = '';
@@ -1447,6 +1454,22 @@ export class TaskIndex implements OnInit {
     this.users = [];
   }
 
+  // Same list as Assigned To, minus the selected assignee, no recommended marker
+get buddyUsers(): any[] {
+  return (this.users || []).filter((u: any) => Number(u.userId) !== Number(this.selectedAssignTask?.assignedTo));
+}
+
+onAssignModalUserChange(userId: any): void {
+  this.selectedAssignTask.assignedTo = userId;
+  this.clearAssignBuddyIfSame();
+}
+
+private clearAssignBuddyIfSame(): void {
+  if (this.selectedAssignTask?.buddyId && Number(this.selectedAssignTask.buddyId) === Number(this.selectedAssignTask.assignedTo)) {
+    this.selectedAssignTask.buddyId = null;
+  }
+}
+
   assignUser(): void {
     if (!this.selectedAssignTask || !this.selectedAssignTask.assignedTo || this.selectedAssignTask.assignedTo == 0) {
       return;
@@ -1466,7 +1489,10 @@ export class TaskIndex implements OnInit {
     const startDate = this.formatDateTimeForApi(this.selectedAssignTask.date);
     const endDate = this.formatDateTimeForApi(this.selectedAssignTask.endDate);
 
-    this.dataprovider.updateTaskAssignedUser(taskId, assignedTo, this.userId, remarks, startDate, endDate).subscribe({
+    const buddyId = this.selectedAssignTask.buddyId ? Number(this.selectedAssignTask.buddyId) : null;
+
+
+    this.dataprovider.updateTaskAssignedUser(taskId, assignedTo, this.userId, remarks, startDate, endDate,buddyId).subscribe({
       next: (res: any) => {
         if (res?.success) {
           const selectedUser = this.users.find((user: any) => user.userId == assignedTo);
@@ -1872,6 +1898,8 @@ private loadAssignUsers(
       this.selectedAssignTask.assignedTo = recommendedUser
         ? recommendedUser.userId
         : 0;
+
+        this.clearAssignBuddyIfSame();      // ADD
 
       if (this.users.length === 0) {
         this.holidayError = '';

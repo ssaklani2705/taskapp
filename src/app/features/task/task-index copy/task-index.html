@@ -1,0 +1,906 @@
+<div class="page-content-wrapper">
+  <div class="page-content">
+    <div class="user-management-container">
+      <div class="page-header">
+        <div class="header-title-section">
+          <mat-icon>task_alt</mat-icon>
+          <h2>Tasks</h2>
+          <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
+            {{ isPanelVisible ? '▲' : '▼' }}
+          </button>
+        </div>
+        @if (addPer === 'Y') {
+          <button type="button" class="btn-add-user" (click)="addTask()">
+            <span class="plus-icon">+</span>
+            Add New
+          </button>
+        }
+      </div>
+
+      <div class="search-panel" *ngIf="isPanelVisible">
+        <div class="search-row">
+          <!-- SEARCH -->
+          <div class="search-wrapper">
+            <div class="search-box">
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Title" class="search-input" (keyup.enter)="onSearch()" />
+              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+
+          @if (loginType === 'manager') {
+            <!-- Normal dropdown for manager -->
+            <div class="status-wrapper">
+              <select class="status-select" [(ngModel)]="selectedClient" (change)="onSearch()">
+                <option value="">--All Clients--</option>
+                <option *ngFor="let client of clients" [value]="client.clientId">
+                  {{ client.name }}
+                </option>
+              </select>
+            </div>
+          } @else {
+            <div class="client-dropdown-container">
+              <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
+              <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
+              <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
+                <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
+                  {{ client.name }}
+                </div>
+                <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
+              </div>
+            </div>
+          }
+
+          <!-- TASK CATEGORY -->
+          <div class="status-wrapper task-category-dropdown">
+            <button type="button" class="status-select cat-trigger" (click)="toggleTaskCategoryDropdown()">
+              <span class="cat-trigger-text">{{ selectedTaskCategoryLabel }}</span>
+              <span class="cat-caret">&#9662;</span>
+            </button>
+
+            <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
+              <input id="taskCategorySearchInput" type="text" class="cat-search" placeholder="Search category..." [(ngModel)]="categorySearchText" autocomplete="off" />
+
+              <div class="cat-list">
+                <div class="cat-item cat-all" [class.active]="!selectedTaskCategory" (click)="clearTaskCategory()">--All Task Categories--</div>
+
+                <ng-container *ngFor="let group of filteredGroupedCategories">
+                  <div class="cat-group">{{ group.department }}</div>
+                  <div class="cat-item" *ngFor="let category of group.items" [class.active]="selectedTaskCategory === '' + category.taskcategoryId" (click)="selectTaskCategory(category)">
+                    {{ category.name }}
+                  </div>
+                </ng-container>
+
+                <div class="cat-empty" *ngIf="filteredGroupedCategories.length === 0">No category found</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedTaskCategory" (change)="onSearch()" (click)="showTaskCategoryDropdown = true">
+              <option value="">--All Task Categories--</option>
+              <optgroup *ngFor="let group of groupedCategories" [label]="group.department">
+                <option *ngFor="let category of group.items" [value]="category.taskcategoryId">
+                  {{ category.name }}
+                </option>
+              </optgroup>
+            </select>
+          </div> -->
+
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedAssignedTo" (change)="onSearch()">
+              <option value="">--All Assigned To--</option>
+              <option *ngFor="let user of assignedUsers" [value]="user.userId">
+                {{ user.firstName }}
+              </option>
+            </select>
+          </div>
+          <!-- PRIORITY -->
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedPriority" (change)="onSearch()">
+              <option value="">--All Priority--</option>
+              <option value="1">High</option>
+              <option value="2">Medium</option>
+              <option value="3">Low</option>
+            </select>
+          </div>
+          <!-- STATUS -->
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
+              <option value="">--All Status--</option>
+              <option value="1">Active</option>
+              <!-- <option value="2">Inactive</option> -->
+              <option value="3">Deleted</option>
+            </select>
+          </div>
+          <div class="status-dropdown" #statusDropdown>
+            <!-- <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">--All Task Status--</button> -->
+            <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">
+              {{ getSelectedTaskStatusLabel() }}
+            </button>
+            <div class="dropdown-menu" *ngIf="showStatusDropdown" (click)="$event.stopPropagation()">
+              <label *ngFor="let status of taskStatusOptions">
+                <input type="checkbox" [value]="status.id" [checked]="isTaskStatusChecked(status.id)" (click)="$event.preventDefault(); toggleTaskStatus(status.id)" />
+                {{ status.label }}
+              </label>
+            </div>
+          </div>
+
+          <!-- FROM DATE -->
+          <div class="status-wrapper date-filter-wrapper">
+            <div class="date-filter-input">
+              <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" name="fromDate" placeholder="From Date" class="date-input" autocomplete="off" readonly />
+              <mat-datepicker-toggle matSuffix [for]="fromPicker"> </mat-datepicker-toggle>
+              <mat-datepicker #fromPicker> </mat-datepicker>
+            </div>
+          </div>
+          <!-- TO DATE -->
+          <div class="status-wrapper date-filter-wrapper">
+            <div class="date-filter-input">
+              <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" name="toDate" placeholder="To Date" class="date-input" autocomplete="off" readonly [min]="fromDate" />
+              <mat-datepicker-toggle matSuffix [for]="toPicker"> </mat-datepicker-toggle>
+              <mat-datepicker #toPicker> </mat-datepicker>
+            </div>
+          </div>
+          <!-- GO -->
+          <div class="go-wrapper">
+            <button type="button" class="btn-go" (click)="onSearch()">Go</button>
+            <!-- &nbsp; -->
+            <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
+            @if (exportExcelPer === 'Y') {
+              <button type="button" class="btn-export-excel" (click)="exportToExcel()">
+                Export to Excel
+                <i class="fas fa-file-excel" aria-hidden="true"></i>
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="table-top-section">
+        <div class="record-summary" role="status" aria-live="polite">
+          {{ recordSummary }}
+        </div>
+        <div class="pagination">
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button type="button" class="pagination-btn" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+            {{ page }}
+          </button>
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+        </div>
+      </div>
+      <div class="table-container">
+        <div class="table-responsive">
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th class="serial-column">Sr. No.</th>
+                <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                  <div class="column-header">
+                    <span>{{ col.label }}</span>
+                    <span *ngIf="col.sortable" class="sort-icons">
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                    </span>
+                  </div>
+                </th>
+                <th class="action-column">Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr class="user-row" *ngFor="let task of paginatedTasks; let i = index">
+                <!-- 1: SERIAL -->
+                <td class="serial-number">
+                  {{ (currentPage - 1) * recordsPerPage + i + 1 }}
+                </td>
+
+                <!-- 2: TITLE -->
+                <td>
+                  <div class="title-cell">
+                    <span class="wrap-text title-text">{{ task.title || '-' }}</span>
+                    <button type="button" class="description-icon-button" *ngIf="task.description" (click)="openDescriptionModal(task)" aria-label="View Description">
+                      <i class="fa fa-file-text"></i>
+                    </button>
+                  </div>
+                </td>
+
+                <!-- 3: CLIENT -->
+                <td>
+                  <span class="wrap-text">{{ task.clientName || 'Internal' }}</span>
+                </td>
+
+                <!-- 4: START DATE -->
+                <td>
+                  <div class="date-cell" *ngIf="task.date; else noDate">
+                    <div class="date-row">
+                      <i class="fa fa-calendar date-icon"></i>
+                      <span>{{ task.date | date: 'dd-MM-yyyy' }}</span>
+                    </div>
+                    <div class="time-row">
+                      <i class="fa fa-clock-o date-icon"></i>
+                      <span>{{ task.date | date: 'HH:mm' }}</span>
+                    </div>
+                  </div>
+                  <ng-template #noDate><span class="wrap-text">-</span></ng-template>
+                </td>
+
+                <!-- 5: DUE DATE -->
+                <td>
+                  <div class="due-date-cell" *ngIf="task.dueDateTime; else noDueDate" [ngClass]="getDueDateClass(task.dueDateTime)">
+                    <div class="due-date-row">
+                      <i class="fa fa-calendar due-icon"></i>
+                      <span>{{ task.dueDateTime | date: 'dd-MM-yyyy' }}</span>
+                    </div>
+                    <div class="due-time-row">
+                      <i class="fa fa-clock-o due-icon"></i>
+                      <span>{{ task.dueDateTime | date: 'HH:mm' }}</span>
+                    </div>
+                  </div>
+                  <ng-template #noDueDate><span class="wrap-text">-</span></ng-template>
+                </td>
+
+                <!-- 6: TASK CATEGORY -->
+                <td>
+                  <span class="wrap-text">{{ task.taskCategoryName || '-' }}</span>
+                </td>
+
+                <!-- 7: ASSIGNED BY -->
+                <td>
+                  <span class="wrap-text">{{ task.assignedbyName || '-' }}</span>
+                </td>
+
+                <!-- 10: BUDDY -->
+                <td>
+                  <span class="wrap-text">{{ task.buddyName || '-' }}</span>
+                </td>
+
+                <!-- 8: PRIORITY -->
+                <td>
+                  <span class="priority-badge" [ngClass]="getPriorityClass(task.priority)">
+                    {{ getPriorityLabel(task.priority) }}
+                  </span>
+                </td>
+
+                <!-- 9: STATUS (Active / Inactive / Deleted) -->
+                <td>
+                  <span class="status-badge" [ngClass]="common.getStatusClass(task.status)">
+                    {{ common.getStatusLabel(task.status) }}
+                  </span>
+                </td>
+
+                <!-- 10: ASSIGNED TO (frozen) -->
+                <!-- <td>
+                  <span
+                    class="wrap-text"
+                    [class.unassigned-user]="!task.assignedToName || task.assignedToName === '0'"
+                    (click)="(!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1)) && openAssignUserModal(task)"
+                  >
+                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+                      <i class="fas fa-user-tie assign-icon"></i>
+                      Assign User
+                    </ng-container>
+
+                    <ng-template #assignedBlock>
+                      {{ task.assignedToName }}
+                      <span class="reassign-text" *ngIf="task.taskStatus === 1 && task.taskCategoryId !== 1">
+                        <i class="fas fa-user-tie reassign-icon"></i>
+                        Re-assign
+                      </span>
+                    </ng-template>
+                  </span>
+                </td> -->
+
+                <!-- <td>
+                  <span
+                    class="wrap-text"
+                    [class.unassigned-user]="task.status === 1 && (!task.assignedToName || task.assignedToName === '0')"
+                    (click)="task.status === 1 && (!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1)) && openAssignUserModal(task)"
+                  >
+                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+                      <ng-container *ngIf="task.status === 1; else notAssigned">
+                        <i class="fas fa-user-tie assign-icon"></i>
+                        Assign User
+                      </ng-container>
+
+                      <ng-template #notAssigned>Not Assigned</ng-template>
+                    </ng-container>
+
+                    <ng-template #assignedBlock>
+                      {{ task.assignedToName }}
+                      <span class="reassign-text" *ngIf="task.status === 1 && task.taskStatus === 1 && task.taskCategoryId !== 1">
+                        <i class="fas fa-user-tie reassign-icon"></i>
+                        Re-assign
+                      </span>
+                    </ng-template>
+                  </span>
+                </td> -->
+                <td>
+                  <span
+                    class="wrap-text"
+                    [class.unassigned-user]="task.status === 1 && (!task.assignedToName || task.assignedToName === '0')"
+                    (click)="
+                      task.status === 1 &&
+                        (!task.assignedToName || task.assignedToName === '0' || (task.taskStatus === 1 && task.taskCategoryId !== 1 && task.userType !== 2)) &&
+                        openAssignUserModal(task)
+                    "
+                  >
+                    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+                      <ng-container *ngIf="task.status === 1; else notAssigned">
+                        <i class="fas fa-user-tie assign-icon"></i>
+                        Assign User
+                      </ng-container>
+
+                      <ng-template #notAssigned>Not Assigned</ng-template>
+                    </ng-container>
+
+                    <ng-template #assignedBlock>
+                      {{ task.assignedToName }}
+                      <span class="reassign-text" *ngIf="task.status === 1 && task.taskStatus === 1 && task.taskCategoryId !== 1 && task.userType !== 2">
+                        <i class="fas fa-user-tie reassign-icon"></i>
+                        Re-assign
+                      </span>
+                    </ng-template>
+                  </span>
+                </td>
+
+                <!-- 11: TASK STATUS (frozen) -->
+                <td>
+                  <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
+                    <button
+                      type="button"
+                      class="change-manager-button"
+                      (click)="openChangeManagerModal(task)"
+                      [ngClass]="common.getTaskStatusClassNew(task.taskStatus)"
+                      [disabled]="canDisableChangeManager(task)"
+                    >
+                      {{ common.getTaskStatusLabel(task.taskStatus) }}
+                    </button>
+                  </ng-container>
+                  <ng-template #noStatus><span class="wrap-text">-</span></ng-template>
+                </td>
+
+                <!-- 12: ACTION (frozen) -->
+                <td>
+                  <div class="action-buttons">
+                    @if (viewPer === 'Y') {
+                      <a (click)="viewTask(task.taskId)" class="action-btn view-btn" title="View">
+                        <i class="fa fa-eye"></i>
+                      </a>
+                    }
+                    @if (deletePer === 'Y' && task.status !== 3 && (isAdmin === 'Y' || isTaskOwner(task))) {
+                      <a (click)="onDeleteTask(task.taskId)" class="action-btn delete-btn" title="Delete">
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    }
+                    @if (isTaskAssignedToUser(task)) {
+                      <a (click)="openTaskNotes(task)" class="action-btn note-btn" title="Notes">
+                        <i class="fa fa-sticky-note"></i>
+                      </a>
+                    }
+                  </div>
+                </td>
+              </tr>
+
+              <tr *ngIf="!paginatedTasks || paginatedTasks.length === 0">
+                <td [attr.colspan]="columns.length + 2" class="no-records">No records found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="table-bottom-section">
+        <div class="record-summary" role="status" aria-live="polite">
+          {{ recordSummary }}
+        </div>
+        <div class="pagination">
+          <button type="button" class="pagination-btn first-btn" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button type="button" class="pagination-btn" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+            {{ page }}
+          </button>
+          <button type="button" class="pagination-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" class="pagination-btn last-btn" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showTaskNotesModal" (click)="closeTaskNotesModal()">
+  <div class="task-notes-modal" (click)="$event.stopPropagation()">
+    <!-- HEADER -->
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-title-icon note-modal-icon">
+          <mat-icon>sticky_note_2</mat-icon>
+        </div>
+        <div>
+          <div class="modal-title-text">Task Notes</div>
+          <div class="modal-subtitle">Notes for {{ selectedTask?.title || '-' }}</div>
+        </div>
+      </div>
+
+      <button type="button" class="modal-close-button" (click)="closeTaskNotesModal()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+    <!-- BODY -->
+    <div class="modal-body">
+      <div class="previous-notes-header">
+        <div class="previous-notes-title">Previous Notes</div>
+        <div *ngIf="isAddingNote">
+          <label class="send-mail-checkbox" *ngIf="addPer === 'Y' || editPer === 'Y'">
+            <input type="checkbox" [checked]="sendMail" (change)="sendMail = $any($event.target).checked" />
+            Send Email
+          </label>
+        </div>
+        <!-- ADD NOTE BUTTON -->
+        <button type="button" class="add-note-modal-button" *ngIf="!isAddingNote" (click)="startAddingNote()">
+          <mat-icon>add</mat-icon>
+          Add Note
+        </button>
+      </div>
+      <div class="add-note-form" *ngIf="isAddingNote">
+        <label class="modal-field-label">
+          Notes
+          <span class="required">*</span>
+        </label>
+
+        <textarea class="task-notes-textarea" [(ngModel)]="taskNote" placeholder="Enter your note..." rows="5" maxlength="2000"></textarea>
+
+        <div class="notes-form-footer">
+          <span class="notes-character-count"> {{ taskNote.length || 0 }} / 2000 </span>
+
+          <div class="note-form-buttons">
+            <button type="button" class="modal-cancel-button" (click)="cancelAddingNote()" [disabled]="isSavingTaskNote">Cancel</button>
+
+            <button type="button" class="modal-save-button" (click)="saveTaskNote()" [disabled]="isSavingTaskNote || !taskNote.trim()">
+              <mat-icon> send </mat-icon>
+
+              {{ isSavingTaskNote ? 'Submitting...' : 'Submit' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- =================================================
+           PREVIOUS NOTES LIST
+      ================================================== -->
+
+      <div class="notes-list">
+        <!-- NO NOTES -->
+        <div class="no-notes" *ngIf="!taskNotes || taskNotes.length === 0">No notes added yet.</div>
+
+        <!-- NOTES -->
+        <div class="task-note-item" *ngFor="let note of taskNotes">
+          <div class="task-note-header">
+            <div class="note-creator">
+              <div class="note-avatar" [style.background-color]="getCreatorColor(note.creatorName)">
+                {{ getCreatorInitial(note.creatorName) }}
+              </div>
+
+              <div class="note-creator-info">
+                <div class="note-creator-name">
+                  {{ note.creatorName || '-' }}
+                </div>
+
+                <div class="note-timestamp">
+                  {{ note.timestamp | date: 'dd MMM yyyy, hh:mm a' }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="task-note-content">
+            {{ note.note }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- FOOTER -->
+    <div class="modal-footer">
+      <button type="button" class="modal-cancel-button" (click)="closeTaskNotesModal()" [disabled]="isSavingTaskNote">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
+  <div class="change-manager-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-title-icon">
+          <mat-icon>manage_accounts</mat-icon>
+        </div>
+
+        <div>
+          <div class="modal-title-text">Update Status</div>
+        </div>
+      </div>
+
+      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="modal-body">
+      <!-- TASK ID (hidden) -->
+      <input type="hidden" name="taskId" [(ngModel)]="task.taskId" />
+
+      <div class="manager-form-group" *ngIf="task?.taskStatus == 2 || task?.taskStatus == 4">
+        <label class="modal-field-label">
+          Status
+          <span class="required">*</span>
+        </label>
+
+        <div class="status-radio-group">
+          <label class="radio-label">
+            <input default type="radio" name="taskStatus" [value]="5" [(ngModel)]="selectedTaskStatusId" [disabled]="isChangingManager" />
+            Assignor Closure
+          </label>
+
+          <label class="radio-label">
+            <input type="radio" name="taskStatus" [value]="3" [(ngModel)]="selectedTaskStatusId" [disabled]="isChangingManager" />
+            Re-Open
+          </label>
+        </div>
+      </div>
+
+      <!-- Rating (for Assignor Closure) -->
+      <!-- RATING (only for Assignor Closure) -->
+      <div class="manager-form-group" *ngIf="isAssignorClosureSelected">
+        <label class="modal-field-label">
+          Rating
+          <span class="required">*</span>
+        </label>
+
+        <div class="rating-box" [class.has-error]="ratingValidationError" [class.is-disabled]="isChangingManager">
+          <div class="star-rating" (mouseleave)="hoverRating = 0">
+            <div class="star" *ngFor="let star of stars">
+              <mat-icon class="star-icon" [class.filled]="displayRating >= star - 0.5">{{ getStarIcon(star) }}</mat-icon>
+
+              <!-- left half = x.5 -->
+              <button
+                type="button"
+                class="star-hit star-hit-half"
+                [disabled]="isChangingManager"
+                [attr.aria-label]="star - 0.5 + ' stars'"
+                (mouseenter)="hoverRating = star - 0.5"
+                (click)="setRating(star - 0.5)"
+              ></button>
+
+              <!-- right half = full star -->
+              <button
+                type="button"
+                class="star-hit star-hit-full"
+                [disabled]="isChangingManager"
+                [attr.aria-label]="star + ' stars'"
+                (mouseenter)="hoverRating = star"
+                (click)="setRating(star)"
+              ></button>
+            </div>
+          </div>
+
+          <div class="rating-meta">
+            <span class="rating-score">{{ displayRating ? displayRating.toFixed(1) : '0.0' }}<small> / 5</small></span>
+            <span class="rating-text" [class.active]="displayRating > 0">{{ getRatingText() }}</span>
+            <button type="button" class="rating-clear" *ngIf="selectedRating > 0" [disabled]="isChangingManager" (click)="clearRating()">Clear</button>
+          </div>
+        </div>
+
+        <div class="manager-validation-error" *ngIf="ratingValidationError">
+          <mat-icon>error_outline</mat-icon>
+          <span>Please give a rating</span>
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="manager-form-group">
+        <label class="modal-field-label">
+          Description
+          <span class="required">*</span>
+        </label>
+
+        <textarea class="manager-select" rows="3" [(ngModel)]="taskDescription" [disabled]="isChangingManager" placeholder="Enter description"></textarea>
+
+        <div class="manager-validation-error" *ngIf="descriptionValidationError">
+          <mat-icon>error_outline</mat-icon>
+          <span>Please enter a description</span>
+        </div>
+      </div>
+
+      <!-- <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+        <label class="modal-field-label"> Upload File - 1:<span class="file-limit"> [.pdf, .xls, .xlsx, .doc, .docx allowed up to 10 MB] </span> </label>
+
+        <input type="file" #normalFileInput class="manager-select" accept=".pdf,.xls,.xlsx,.doc,.docx" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+
+        <div class="file-info" *ngIf="fileTwoName">
+          <span class="current-manager-name">
+            {{ fileTwoName }}
+          </span>
+          <button type="button" class="remove-file-btn" (click)="removeNormalFile(normalFileInput)" title="Remove File">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+        <label class="modal-field-label"> Upload File - 2:<span class="file-limit"> [.pdf, .xls, .xlsx, .doc, .docx, .zip allowed up to 10 MB] </span> </label>
+
+        <input type="file" class="manager-select" #zipFileInput accept=".pdf,.xls,.xlsx,.doc,.docx,.zip" [disabled]="isChangingManager" (change)="onFileOneSelected($event)" />
+
+        <div class="file-info" *ngIf="fileOneName">
+          <span class="current-manager-name">
+            {{ fileOneName }}
+          </span>
+
+          <button type="button" class="remove-file-btn" (click)="removeZipFile(zipFileInput)" title="Remove ZIP">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div> -->
+
+      <!-- UPLOAD FILE 1 -->
+      <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+        <div class="file-label-row">
+          <label class="modal-field-label">Upload File - 1</label>
+          <span class="file-hint">[.pdf, .xls, .xlsx, .doc, .docx &middot; up to 10 MB]</span>
+        </div>
+
+        <div class="file-upload" [class.has-file]="fileTwoName" [class.is-disabled]="isChangingManager">
+          <input type="file" #normalFileInput class="file-upload-input" accept=".pdf,.xls,.xlsx,.doc,.docx" [disabled]="isChangingManager" (change)="onFileTwoSelected($event)" />
+          <mat-icon class="file-upload-icon">cloud_upload</mat-icon>
+          <div class="file-upload-text">
+            <span class="file-upload-title">Click to choose a file</span>
+            <span class="file-upload-sub">or drag and drop it here</span>
+          </div>
+        </div>
+
+        <div class="file-chip" *ngIf="fileTwoName">
+          <mat-icon class="file-chip-icon">description</mat-icon>
+          <span class="file-chip-name" [title]="fileTwoName">{{ fileTwoName }}</span>
+          <button type="button" class="file-chip-remove" (click)="removeNormalFile(normalFileInput)" [disabled]="isChangingManager" title="Remove file">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- UPLOAD FILE 2 -->
+      <div class="manager-form-group" *ngIf="selectedTaskStatusIdForCondition == 1 || selectedTaskStatusIdForCondition == 3">
+        <div class="file-label-row">
+          <label class="modal-field-label">Upload File - 2</label>
+          <span class="file-hint">[.pdf, .xls, .xlsx, .doc, .docx, .zip &middot; up to 10 MB]</span>
+        </div>
+
+        <div class="file-upload" [class.has-file]="fileOneName" [class.is-disabled]="isChangingManager">
+          <input type="file" #zipFileInput class="file-upload-input" accept=".pdf,.xls,.xlsx,.doc,.docx,.zip" [disabled]="isChangingManager" (change)="onFileOneSelected($event)" />
+          <mat-icon class="file-upload-icon">cloud_upload</mat-icon>
+          <div class="file-upload-text">
+            <span class="file-upload-title">Click to choose a file</span>
+            <span class="file-upload-sub">or drag and drop it here</span>
+          </div>
+        </div>
+
+        <div class="file-chip" *ngIf="fileOneName">
+          <mat-icon class="file-chip-icon">description</mat-icon>
+          <span class="file-chip-name" [title]="fileOneName">{{ fileOneName }}</span>
+          <button type="button" class="file-chip-remove" (click)="removeZipFile(zipFileInput)" [disabled]="isChangingManager" title="Remove file">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()" [disabled]="isChangingManager">Cancel</button>
+
+      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
+        <mat-icon>
+          {{ isChangingManager ? 'hourglass_top' : 'save' }}
+        </mat-icon>
+        <span>
+          {{ isChangingManager ? 'Updating...' : 'Submit' }}
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- DESCRIPTION MODAL -->
+<div class="modal-overlay" *ngIf="showDescriptionModal" (click)="closeDescriptionModal()">
+  <div class="change-manager-modal description-modal" (click)="$event.stopPropagation()">
+    <!-- HEADER -->
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-title-icon">
+          <mat-icon>description</mat-icon>
+        </div>
+
+        <div>
+          <div class="modal-title-text">Task Description</div>
+
+          <div class="modal-subtitle">
+            {{ selectedDescriptionTask?.title || 'Task' }}
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="modal-close-button" (click)="closeDescriptionModal()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- BODY -->
+    <div class="modal-body">
+      <div class="manager-form-group">
+        <label class="modal-field-label"> Description </label>
+
+        <div class="description-content">
+          {{ selectedDescriptionTask?.description || 'No description available.' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="modal-footer">
+      <button type="button" class="modal-cancel-button" (click)="closeDescriptionModal()">
+        <mat-icon>close</mat-icon>
+
+        <span> Close </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ASSIGN USER MODAL -->
+<div class="modal-overlay" *ngIf="showAssignUserModal" (click)="closeAssignUserModal()">
+  <div class="change-manager-modal assign-user-modal" (click)="$event.stopPropagation()">
+    <!-- HEADER -->
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-title-icon">
+          <mat-icon>person_add</mat-icon>
+        </div>
+
+        <div class="modal-title-content">
+          <div class="modal-title-text">
+            {{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign User' : 'Assign User' }}
+          </div>
+
+          <div class="modal-subtitle">
+            {{ selectedAssignTask?.title || 'Task' }}
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="modal-close-button" (click)="closeAssignUserModal()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div class="modal-body assign-user-modal-body">
+      <div class="assign-date-row">
+        <!-- START DATE  (ngModelChange)="onAssignStartDateChange($event)"-->
+        <div class="assign-form-group">
+          <label class="assign-field-label">
+            Start Date &amp; Time
+            <span class="required">*</span>
+          </label>
+
+          <div class="assign-date-group">
+            <!-- <span class="assign-date-icon" [owlDateTimeTrigger]="startDatePicker"> -->
+            <span class="assign-date-icon assign-date-icon-disabled">
+              <i class="fa fa-calendar"></i>
+            </span>
+
+            <input
+              class="assign-input assign-date-input"
+              [owlDateTime]="startDatePicker"
+              [(ngModel)]="selectedAssignTask.date"
+              name="startDate"
+              required
+              readonly
+              placeholder="DD-MM-YYYY HH:mm"
+              autocomplete="off"
+              [min]="today"
+            />
+
+            <owl-date-time #startDatePicker pickerType="both"> </owl-date-time>
+          </div>
+
+          <div class="assign-error" *ngIf="!selectedAssignTask?.date">Start Date &amp; Time is required.</div>
+        </div>
+
+        <!-- END DATE -->
+        <div class="assign-form-group">
+          <label class="assign-field-label">
+            End Date &amp; Time
+            <span class="required">*</span>
+          </label>
+
+          <div class="assign-date-group">
+            <span class="assign-date-icon" [owlDateTimeTrigger]="endDatePicker">
+              <i class="fa fa-calendar"></i>
+            </span>
+
+            <input
+              class="assign-input assign-date-input"
+              [owlDateTime]="endDatePicker"
+              [(ngModel)]="selectedAssignTask.endDate"
+              (ngModelChange)="onAssignEndDateChange($event)"
+              name="endDate"
+              required
+              placeholder="DD-MM-YYYY HH:mm"
+              autocomplete="off"
+              [min]="selectedAssignTask?.date || today"
+            />
+
+            <owl-date-time #endDatePicker pickerType="both"> </owl-date-time>
+          </div>
+
+          <div class="assign-error" *ngIf="!selectedAssignTask?.endDate">End Date &amp; Time is required.</div>
+          <div class="user-error" *ngIf="holidayError">
+            {{ holidayError }}
+          </div>
+        </div>
+      </div>
+      <!-- ASSIGNED TO -->
+      <div class="assign-form-group assign-full-width">
+        <label class="assign-field-label">
+          Assigned To
+          <span class="required">*</span>
+          <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
+        </label>
+
+        <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" name="assignedToModal" [disabled]="users.length === 0">
+          <option [ngValue]="0">Select User</option>
+
+          <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
+        </select>
+
+        <div *ngIf="!isLoadingAssignUsers && users.length === 0" class="assign-error">No other user found for this category.</div>
+      </div>
+
+      <div class="assign-form-group assign-full-width">
+        <label class="assign-field-label">
+          Remarks
+          <span class="required" *ngIf="selectedAssignTask?.taskStatus === 1"> * </span>
+        </label>
+
+        <textarea class="assign-input assign-textarea" [(ngModel)]="assignRemarks" name="assignRemarksModal" rows="4" maxlength="2000" placeholder="Enter remarks"> </textarea>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="modal-footer assign-modal-footer">
+      <button type="button" class="modal-cancel-button" (click)="closeAssignUserModal()">
+        <mat-icon>close</mat-icon>
+        <span>Close</span>
+      </button>
+
+      <button
+        type="button"
+        class="modal-save-button"
+        [disabled]="!selectedAssignTask?.assignedTo || !selectedAssignTask?.date || !selectedAssignTask?.endDate || (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim()) || holidayError"
+        (click)="assignUser()"
+      >
+        <mat-icon>save</mat-icon>
+
+        <span>
+          {{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign' : 'Assign' }}
+        </span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { ApiResponse } from '../classes/ApiResponse';
+// import { ApiResponse } from '../classes/ApiResponse';
 import { ResponseApi } from '../classes/response-api.model';
 import { Service } from '../features/service/add-service/add-service';
 
@@ -55,6 +55,23 @@ export interface DesignationDTO {
 export interface TaskCategoryDTO {
   taskcategoryId: number;
   name: string;
+}
+
+// ---- Company Shift ----
+
+export interface CompanyShift {
+  shiftId?: number;
+  shiftName: string;
+  fromTime: string;   // "HH:mm"
+  toTime: string;     // "HH:mm"
+  status?: number;
+  companyId: number;
+}
+
+export interface ApiResponse<T = any> {
+  success: boolean;
+  message: string;
+  data: T;
 }
 
 @Injectable({
@@ -1296,7 +1313,7 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}admin/dashboard/dashboard-clients?userId=${userId}&isAdmin=${isAdmin}&loginType=${loginType}&selectedClientId=${selectedClientId}`);
   }
 
-  updateTaskAssignedUser(taskId: any, assignedTo: any, userId: any, remarks: string, date: string | null, endDate: string | null): Observable<any> {
+  updateTaskAssignedUser(taskId: any, assignedTo: any, userId: any, remarks: string, date: string | null, endDate: string | null,buddyId: number | null = null): Observable<any> {
     return this.http.put(`${environment.apiBaseUrl}admin/task/updateAssignedUser`, {
       taskId: taskId,
       assignedTo: assignedTo,
@@ -1304,6 +1321,7 @@ export class DataProviderService {
       remarks: remarks,
       date: date,
       endDate: endDate,
+      buddyId: buddyId
     });
   }
 
@@ -1577,4 +1595,38 @@ export class DataProviderService {
   findByActiveClient() {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/active_clients`);
   }
+
+
+  //Shift
+  getCompanyShifts(companyId: number): Observable<ApiResponse<CompanyShift[]>> {
+  return this.http.get<ApiResponse<CompanyShift[]>>(
+    `${environment.apiBaseUrl}admin/companyShift/viewList/${companyId}`
+  );
+}
+
+getCompanyShiftById(shiftId: number): Observable<ApiResponse<CompanyShift>> {
+  return this.http.get<ApiResponse<CompanyShift>>(
+    `${environment.apiBaseUrl}admin/companyShift/viewById/${shiftId}`
+  );
+}
+
+addCompanyShift(body: CompanyShift): Observable<ApiResponse<null>> {
+  return this.http.post<ApiResponse<null>>(
+    `${environment.apiBaseUrl}admin/companyShift/add`,
+    body
+  );
+}
+
+updateCompanyShift(body: CompanyShift): Observable<ApiResponse<null>> {
+  return this.http.put<ApiResponse<null>>(
+    `${environment.apiBaseUrl}admin/companyShift/update`,
+    body
+  );
+}
+
+deleteCompanyShift(shiftId: number): Observable<ApiResponse<null>> {
+  return this.http.delete<ApiResponse<null>>(
+    `${environment.apiBaseUrl}admin/companyShift/delete/${shiftId}`
+  );
+}
 }

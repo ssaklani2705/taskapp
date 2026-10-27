@@ -130,8 +130,17 @@ export class PlanAdd implements OnInit {
       });
     }
   }
-
+servicesSubmitted = false;
   onSubmit(form: NgForm): void {
+
+    this.servicesSubmitted = true;
+
+  if (form.invalid || this.selectedServices.length === 0) {
+    form.control.markAllAsTouched();
+    return;
+  }
+
+
     if (form.invalid || this.nameError) {
       form.control.markAllAsTouched();
       return;
@@ -166,7 +175,15 @@ export class PlanAdd implements OnInit {
     });
   }
 
+  get allServicesSelected(): boolean {
+  return this.services.length > 0 &&
+    this.services.every((service: any) =>
+      this.selectedServices.includes(service.serviceId)
+    );
+}
+
  onReset(): void {
+  this.servicesSubmitted = false;
   if (this.isEditMode) {
     this.plan = {
       ...this.originalPlan,
@@ -184,6 +201,7 @@ export class PlanAdd implements OnInit {
       status: null,
       userId: null,
       serviceIds: []
+      
     };
 
     // Clear selected services
