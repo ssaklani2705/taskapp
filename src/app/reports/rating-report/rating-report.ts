@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -20,6 +20,11 @@ interface UserAccessLog {
   totalTasks: number;
   ratedTasks: number;
   avgRating: number | null;
+}
+
+interface Department {
+  departmentId: number;
+  name: string;
 }
 
 export const MY_DATE_FORMATS = {
@@ -69,6 +74,10 @@ export class RatingReport implements OnInit {
   apiResponse: any = {};
   accessLogs: UserAccessLog[] = [];
 
+  departments: Department[] = [];
+  selectedDepartmentIds: number[] = [];
+  showDepartmentDropdown = false;
+
   filterKey = SESSION_KEYS.RATING_REPORT_FILTER;
 
   constructor(
@@ -80,6 +89,20 @@ export class RatingReport implements OnInit {
     this.sessionService.clearOtherSessions(this.filterKey);
 
     const filterState = this.sessionService.getItem(this.filterKey);
+
+    // if (filterState) {
+    //   this.currentPage = filterState.currentPage ?? 1;
+    //   this.page = filterState.page ?? this.currentPage - 1;
+    //   this.size = filterState.size ?? environment.size;
+    //   this.recordsPerPage = this.size;
+
+    //   this.search = filterState.searchText ?? '';
+    //   this.searchQuery = this.search;
+
+    //   this.fromDate = filterState.fromDate ? moment(filterState.fromDate, 'YYYY-MM-DD', true) : null;
+
+    //   this.toDate = filterState.toDate ? moment(filterState.toDate, 'YYYY-MM-DD', true) : null;
+    // }
 
     if (filterState) {
       this.currentPage = filterState.currentPage ?? 1;
@@ -93,9 +116,13 @@ export class RatingReport implements OnInit {
       this.fromDate = filterState.fromDate ? moment(filterState.fromDate, 'YYYY-MM-DD', true) : null;
 
       this.toDate = filterState.toDate ? moment(filterState.toDate, 'YYYY-MM-DD', true) : null;
+
+      // this.selectedDepartmentIds = Array.isArray(filterState.departmentIds) ? filterState.departmentIds.map(Number) : [];
+      this.selectedDepartmentIds = Array.isArray(filterState.departmentIds) ? filterState.departmentIds.map((id: unknown) => Number(id)).filter((id: number) => Number.isInteger(id) && id > 0) : [];
     }
 
     this.getRatingDetails();
+    this.loadDepartments();
   }
 
   private formatDate(date: Moment | null): string | null {
@@ -106,11 +133,31 @@ export class RatingReport implements OnInit {
     return date.format('YYYY-MM-DD');
   }
 
+  // getRatingDetails(): void {
+  //   const fromDate = this.formatDate(this.fromDate);
+  //   const toDate = this.formatDate(this.toDate);
+
+  //   this.reportService.getTaskRatingSummary(fromDate, toDate, this.search, this.page, this.size).subscribe({
+  //     next: (response) => {
+  //       this.apiResponse = response;
+  //       this.accessLogs = response?.content ?? [];
+
+  //       this.currentPage = this.page + 1;
+  //       this.recordsPerPage = this.size;
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching task rating summary:', error);
+  //       this.apiResponse = {};
+  //       this.accessLogs = [];
+  //     },
+  //   });
+  // }
+
   getRatingDetails(): void {
     const fromDate = this.formatDate(this.fromDate);
     const toDate = this.formatDate(this.toDate);
 
-    this.reportService.getTaskRatingSummary(fromDate, toDate, this.search, this.page, this.size).subscribe({
+    this.reportService.getTaskRatingSummary(fromDate, toDate, this.search, this.selectedDepartmentIds, this.page, this.size).subscribe({
       next: (response) => {
         this.apiResponse = response;
         this.accessLogs = response?.content ?? [];
@@ -133,6 +180,7 @@ export class RatingReport implements OnInit {
 
     this.saveFilterState();
     this.getRatingDetails();
+    this.loadDepartments();
   }
 
   clearFilters(): void {
@@ -140,12 +188,15 @@ export class RatingReport implements OnInit {
     this.toDate = null;
     this.searchQuery = '';
     this.search = '';
+    this.selectedDepartmentIds = [];
+    this.showDepartmentDropdown = false;
 
     this.currentPage = 1;
     this.page = 0;
 
     this.saveFilterState();
     this.getRatingDetails();
+    this.loadDepartments();
   }
 
   saveFilterState(): void {
@@ -154,6 +205,7 @@ export class RatingReport implements OnInit {
       searchText: this.search,
       fromDate: this.formatDate(this.fromDate),
       toDate: this.formatDate(this.toDate),
+      departmentIds: [...this.selectedDepartmentIds],
       page: this.page,
       size: this.size,
     };
@@ -218,20 +270,18 @@ export class RatingReport implements OnInit {
   }
 
   exportingExcel = false;
+
   exportToExcel(): void {
-  if (this.exportingExcel) {
-    return;
-  }
+    if (this.exportingExcel) {
+      return;
+    }
 
-  this.exportingExcel = true;
+    this.exportingExcel = true;
 
-  const fromDate = this.formatDate(this.fromDate);
-  const toDate = this.formatDate(this.toDate);
+    const fromDate = this.formatDate(this.fromDate);
+    const toDate = this.formatDate(this.toDate);
 
-  // Fetch page 0 first to determine the total number of pages.
-  this.reportService
-    .getTaskRatingSummary(fromDate, toDate, this.search, 0, this.size)
-    .subscribe({
+    this.reportService.getTaskRatingSummary(fromDate, toDate, this.search, this.selectedDepartmentIds, 0, this.size).subscribe({
       next: (response: any) => {
         const totalPages = response?.totalPages ?? 0;
         const firstPageData: UserAccessLog[] = response?.content ?? [];
@@ -241,29 +291,15 @@ export class RatingReport implements OnInit {
           return;
         }
 
-        // Fetch every remaining page using the same filters.
         const requests: Observable<any>[] = [];
 
         for (let pageIndex = 1; pageIndex < totalPages; pageIndex++) {
-          requests.push(
-            this.reportService.getTaskRatingSummary(
-              fromDate,
-              toDate,
-              this.search,
-              pageIndex,
-              this.size
-            )
-          );
+          requests.push(this.reportService.getTaskRatingSummary(fromDate, toDate, this.search, this.selectedDepartmentIds, pageIndex, this.size));
         }
 
         forkJoin(requests).subscribe({
           next: (responses: any[]) => {
-            const allRows = [
-              ...firstPageData,
-              ...responses.flatMap(
-                (pageResponse) => pageResponse?.content ?? []
-              ),
-            ];
+            const allRows = [...firstPageData, ...responses.flatMap((pageResponse) => pageResponse?.content ?? [])];
 
             this.downloadExcel(allRows);
           },
@@ -280,39 +316,95 @@ export class RatingReport implements OnInit {
         this.exportingExcel = false;
       },
     });
-}
-
-private downloadExcel(data: UserAccessLog[]): void {
-  try {
-    const rows = data.map((log, index) => ({
-      'Sr. No.': index + 1,
-      'User Name': log.name ?? '',
-      'Total Task': log.totalTasks ?? 0,
-      'Rated Task': log.ratedTasks ?? 0,
-      'Average Rating': log.avgRating ?? 0,
-    }));
-
-    const worksheet = XLSX.utils.json_to_sheet(rows);
-
-    worksheet['!cols'] = [
-      { wch: 10 },
-      { wch: 30 },
-      { wch: 15 },
-      { wch: 15 },
-      { wch: 18 },
-    ];
-
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Rating Report');
-
-    const filename = `Rating_Report_${moment().format('YYYYMMDD_HHmmss')}.xlsx`;
-
-    XLSX.writeFile(workbook, filename);
-  } catch (error) {
-    console.error('Error creating Excel file:', error);
-    alert('Unable to create the Excel file. Please try again.');
-  } finally {
-    this.exportingExcel = false;
   }
-}
+
+  private downloadExcel(data: UserAccessLog[]): void {
+    try {
+      const rows = data.map((log, index) => ({
+        'Sr. No.': index + 1,
+        'User Name': log.name ?? '',
+        'Total Task': log.totalTasks ?? 0,
+        'Rated Task': log.ratedTasks ?? 0,
+        'Average Rating': log.avgRating ?? 0,
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+
+      worksheet['!cols'] = [{ wch: 10 }, { wch: 30 }, { wch: 15 }, { wch: 15 }, { wch: 18 }];
+
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Rating Report');
+
+      const filename = `Rating_Report_${moment().format('YYYYMMDD_HHmmss')}.xlsx`;
+
+      XLSX.writeFile(workbook, filename);
+    } catch (error) {
+      console.error('Error creating Excel file:', error);
+      alert('Unable to create the Excel file. Please try again.');
+    } finally {
+      this.exportingExcel = false;
+    }
+  }
+
+  onDepartmentChange(departmentId: number, checked: boolean): void {
+    if (!Number.isInteger(departmentId) || departmentId <= 0) {
+      return;
+    }
+
+    if (checked) {
+      if (!this.selectedDepartmentIds.includes(departmentId)) {
+        this.selectedDepartmentIds = [...this.selectedDepartmentIds, departmentId];
+      }
+    } else {
+      this.selectedDepartmentIds = this.selectedDepartmentIds.filter((id) => id !== departmentId);
+    }
+
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+    this.getRatingDetails();
+  }
+
+  clearDepartments(): void {
+    this.selectedDepartmentIds = [];
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+    this.getRatingDetails();
+  }
+
+  loadDepartments(): void {
+    this.reportService.getRatingReportDepartments(this.search).subscribe({
+      next: (response: any[]) => {
+        this.departments = (response ?? [])
+          .map((item: any) => ({
+            departmentId: Number(item.departmentId),
+            name: item.name,
+          }))
+          .filter((department: Department) => Number.isInteger(department.departmentId) && department.departmentId > 0)
+          .sort((a: Department, b: Department) => a.name.localeCompare(b.name));
+
+        const availableIds = new Set(this.departments.map((department) => department.departmentId));
+
+        this.selectedDepartmentIds = this.selectedDepartmentIds.filter((id) => availableIds.has(id));
+
+        this.saveFilterState();
+      },
+      error: (error) => {
+        console.error('Error loading rating report departments:', error);
+        this.departments = [];
+      },
+    });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.department-dropdown')) {
+      this.showDepartmentDropdown = false;
+    }
+  }
 }
