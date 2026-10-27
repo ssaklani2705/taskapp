@@ -115,17 +115,17 @@
             <mat-datepicker #toPicker></mat-datepicker>
           </div>
         </div>
-
-        <div class="status-dropdown" #statusDropdown>
-          <!-- <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">--All Task Status--</button> -->
-          <button type="button" class="dropdown-btn" (click)="showStatusDropdown = !showStatusDropdown">
-            {{ getSelectedTaskStatusLabel() }}
+        <div class="status-dropdown">
+          <button type="button" class="dropdown-btn" (click)="showDepartmentDropdown = !showDepartmentDropdown">
+            {{ getSelectedDepartmentLabel() }}
           </button>
-          <div class="dropdown-menu" *ngIf="showStatusDropdown" (click)="$event.stopPropagation()">
-            <label *ngFor="let status of taskStatusOptions">
-              <input type="checkbox" [value]="status.id" [checked]="isTaskStatusChecked(status.id)" (click)="$event.preventDefault(); toggleTaskStatus(status.id)" />
-              {{ status.label }}
+
+          <div class="dropdown-menu" *ngIf="showDepartmentDropdown">
+            <label *ngFor="let d of departments">
+              <input type="checkbox" [checked]="isDepartmentChecked(d.departmentId)" (change)="toggleDepartment(d.departmentId)" />
+              {{ d.name }}
             </label>
+            <div *ngIf="departments.length === 0" style="padding: 10px; text-align: center; color: #718096">No departments found</div>
           </div>
         </div>
 

@@ -88,6 +88,7 @@ export class ReassignReport implements OnInit {
 
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
+    this.loadDepartments();
     this.selectedTaskCatId = Number(this.selectedTaskCategory) || 0;
     const s = this.sessionService.getItem(this.filterKey);
 
@@ -128,13 +129,25 @@ export class ReassignReport implements OnInit {
     const from = this.fromDate ? (this.datePipe.transform(this.fromDate, 'yyyy-MM-dd') ?? '') : '';
     const to = this.toDate ? (this.datePipe.transform(this.toDate, 'yyyy-MM-dd') ?? '') : '';
 
-    this.dataprovider.getTaskReassignReport(this.page, this.size, this.search, from, to, Number(this.selectedTaskCategory) || 0, this.selectedClientId || 0, this.selectedUserId || 0).subscribe({
-      next: (response) => {
-        this.apiResponse = response;
-        this.rows = response.content || []; // Spring Page uses "content"
-      },
-      error: (err) => console.error('Error fetching reassign report:', err),
-    });
+    this.dataprovider
+      .getTaskReassignReport(
+        this.page,
+        this.size,
+        this.search,
+        from,
+        to,
+        Number(this.selectedTaskCategory) || 0,
+        this.selectedClientId || 0,
+        this.selectedUserId || 0,
+        this.selectedDepartmentIds.join(','),
+      )
+      .subscribe({
+        next: (response) => {
+          this.apiResponse = response;
+          this.rows = response.content || []; // Spring Page uses "content"
+        },
+        error: (err) => console.error('Error fetching reassign report:', err),
+      });
   }
 
   onSearch(): void {
@@ -306,6 +319,8 @@ export class ReassignReport implements OnInit {
   }
 
   clearFilters(): void {
+    this.selectedDepartmentIds = [];
+    this.selectedTaskCatId = 0;
     // search
     this.searchQuery = '';
     this.search = '';
@@ -371,7 +386,7 @@ export class ReassignReport implements OnInit {
     const from = this.fromDate ? (this.datePipe.transform(this.fromDate, 'yyyy-MM-dd') ?? '') : '';
     const to = this.toDate ? (this.datePipe.transform(this.toDate, 'yyyy-MM-dd') ?? '') : '';
 
-    this.dataprovider.getTaskReassignReport(0, totalRecords, this.search, from, to, Number(this.selectedTaskCategory) || 0, this.selectedClientId || 0, this.selectedUserId || 0).subscribe({
+    this.dataprovider.getTaskReassignReport(0, totalRecords, this.search, from, to, Number(this.selectedTaskCategory) || 0, this.selectedClientId || 0, this.selectedUserId || 0,this.selectedDepartmentIds.join(',')).subscribe({
       next: (response: any) => {
         this.isExporting = false;
         const allRows: ReassignRow[] = response?.content || [];
@@ -483,51 +498,44 @@ export class ReassignReport implements OnInit {
     return c ? c.name : '--All Task Categories--';
   }
 
-  @HostListener('document:click', ['$event'])
-  closeCategoryDropdown(event: MouseEvent): void {
-    const inside = (event.target as HTMLElement).closest('.task-category-dropdown');
-    if (!inside && this.showTaskCategoryDropdown) {
-      this.showTaskCategoryDropdown = false;
-      this.categorySearchText = '';
-    }
+@HostListener('document:click', ['$event'])
+closeDropdowns(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+
+  if (!target.closest('.task-category-dropdown')) {
+    this.showTaskCategoryDropdown = false;
+    this.categorySearchText = '';
   }
-    taskStatusOptions: { id: string; label: string }[] = [
-    { id: '0', label: 'Unassigned' },
-    { id: '1', label: 'Assigned' },
-    { id: '2', label: 'Assignee Closure' },
-    { id: '3', label: 'Re-Open' },
-    { id: '4', label: 'Assignee Re-Closure' },
-    { id: '5', label: 'Assignor Closure' },
-  ];
-  showStatusDropdown = false;
-
-   isTaskStatusChecked(id: string): boolean {
-    return this.selectedTaskStatuses.includes(id);
+  if (!target.closest('.status-dropdown')) {
+    this.showDepartmentDropdown = false;
   }
- toggleTaskStatus(id: string): void {
-    const index = this.selectedTaskStatuses.indexOf(id);
+}
+  departments: { departmentId: number; name: string }[] = [];
+  selectedDepartmentIds: number[] = [];
+  showDepartmentDropdown = false;
 
-    if (index > -1) {
-      this.selectedTaskStatuses = this.selectedTaskStatuses.filter((x) => x !== id);
-    } else {
-      this.selectedTaskStatuses = [...this.selectedTaskStatuses, id];
-    }
+  loadDepartments(): void {
+    this.dataprovider.getActiveDepartments().subscribe({
+      next: (res: any) => {
+        const list = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
+        this.departments = [...list].sort((a: any, b: any) => (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }));
+      },
+      error: (err) => console.error('Error loading departments:', err),
+    });
+  }
 
+  isDepartmentChecked(id: number): boolean {
+    return this.selectedDepartmentIds.includes(id);
+  }
+
+  toggleDepartment(id: number): void {
+    this.selectedDepartmentIds = this.isDepartmentChecked(id) ? this.selectedDepartmentIds.filter((x) => x !== id) : [...this.selectedDepartmentIds, id];
     this.onSearch();
   }
 
-  selectedTaskStatuses: string[] = [];
-    getSelectedTaskStatusLabel(): string {
-    if (this.selectedTaskStatuses.length === 0) {
-      return '--All Task Status--';
-    }
-
-    const labels = this.taskStatusOptions.filter((s) => this.selectedTaskStatuses.includes(s.id)).map((s) => s.label);
-
-    if (labels.length > 2) {
-      return `${labels.length} Statuses Selected`;
-    }
-
-    return labels.join(', ');
+  getSelectedDepartmentLabel(): string {
+    if (this.selectedDepartmentIds.length === 0) return '--All Departments--';
+    const names = this.departments.filter((d) => this.selectedDepartmentIds.includes(d.departmentId)).map((d) => d.name);
+    return names.length > 2 ? `${names.length} Departments Selected` : names.join(', ');
   }
 }
