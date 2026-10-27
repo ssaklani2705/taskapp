@@ -515,7 +515,7 @@ closeDropdowns(event: MouseEvent): void {
   showDepartmentDropdown = false;
 
   loadDepartments(): void {
-    this.dataprovider.getActiveDepartments().subscribe({
+    this.dataprovider.getActiveDepartmentsList().subscribe({
       next: (res: any) => {
         const list = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
         this.departments = [...list].sort((a: any, b: any) => (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }));

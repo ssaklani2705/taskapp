@@ -1652,4 +1652,8 @@ export class DataProviderService {
   findActiveCompanyShift(companyId: number) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/company/company_shift/${companyId}`);
   }
+
+  getActiveDepartmentsList() {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/department/active_department_list`);
+  }
 }
