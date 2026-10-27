@@ -381,7 +381,7 @@ loadActiveUsers(): void {
       'Task Name': r.taskName || '',
       'Task Category': r.taskCategory || '',
       Client: r.clientName || '',
-      'Old User': r.oldUser || '',
+      'Previous User': r.oldUser || '',
       'New User': r.newUser || '',
     }));
 

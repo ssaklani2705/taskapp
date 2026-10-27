@@ -1572,6 +1572,10 @@ getUserManagementDetails(
     });
   }
 
+  getTaskCategoriesUsedInGenericRecurring() {
+    return this.http.get<any[]>(`${environment.apiBaseUrl}admin/generic-recurring/task-categories`);
+  }
+
   getTaskRatingSummary(fromDate?: string | null, toDate?: string | null, username?: string | null, page: number = 0, size: number = 10): Observable<any> {
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
     if (fromDate) {
