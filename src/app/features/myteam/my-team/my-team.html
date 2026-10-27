@@ -197,135 +197,113 @@
       </div>
 
       <!-- ================= TABLE ================= -->
-      <div class="table-container">
-        <div class="table-responsive">
-          <table class="user-table">
-            <thead>
-              <tr>
-                <!-- NUMBER -->
-                <th class="serial-column">Sr. No.</th>
+ <!-- ================= TABLE ================= -->
+<div class="table-container">
+  <div class="table-responsive">
+    <table class="user-table">
+      <colgroup>
+        <col class="col-sr" />
+        <col class="col-name" />
+        <col class="col-email" />
+        <col class="col-mobile" />
+        <col class="col-company" />
+        <col class="col-shift" />
+        <col class="col-dept" />
+        <col class="col-desig" />
+        <col class="col-category" />
+        <col class="col-weekoff" />
+        <col class="col-status" />
+        <col class="col-action" />
+      </colgroup>
 
-                <!-- DYNAMIC COLUMNS -->
-                <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
-                  <div class="column-header">
-                    <span>
-                      {{ col.label }}
-                    </span>
+      <thead>
+        <tr>
+          <th class="serial-column">Sr. No.</th>
 
-                    <span *ngIf="col.sortable" class="sort-icons">
-                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+          <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+            <div class="column-header">
+              <span>{{ col.label }}</span>
 
-                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
-                    </span>
-                  </div>
-                </th>
+              <span *ngIf="col.sortable" class="sort-icons">
+                <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+                <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+              </span>
+            </div>
+          </th>
 
-                <!-- ACTION -->
-                <th class="action-column">Action</th>
-              </tr>
-            </thead>
+          <th class="action-column">Action</th>
+        </tr>
+      </thead>
 
-            <tbody>
-              <!-- LOADING -->
-              <tr *ngIf="isLoading">
-                <td [attr.colspan]="columns.length + 2" class="loading-cell">
-                  <div class="loading-spinner"></div>
+      <tbody>
+        <!-- LOADING -->
+        <tr *ngIf="isLoading">
+          <td [attr.colspan]="columns.length + 2" class="loading-cell">
+            <div class="loading-spinner"></div>
+            Loading users...
+          </td>
+        </tr>
 
-                  Loading users...
-                </td>
-              </tr>
+        <!-- NO RECORDS -->
+        <tr *ngIf="!isLoading && users.length === 0">
+          <td [attr.colspan]="columns.length + 2" class="no-records">No users found.</td>
+        </tr>
 
-              <!-- NO RECORDS -->
-              <tr *ngIf="!isLoading && users.length === 0">
-                <td [attr.colspan]="columns.length + 2" class="no-records">No users found.</td>
-              </tr>
+        <!-- USER RECORDS -->
+        <tr *ngFor="let user of users; let i = index" class="user-row">
+          <td class="serial-number">{{ (currentPage - 1) * size + i + 1 }}</td>
 
-              <!-- USER RECORDS -->
-              <tr *ngFor="let user of users; let i = index" class="user-row">
-                <!-- SERIAL NUMBER -->
-                <td class="serial-number">
-                  {{ (currentPage - 1) * size + i + 1 }}
-                </td>
+          <td><span class="user-name">{{ user.firstName }}</span></td>
 
-                <!-- NAME -->
-                <td>
-                  <span class="user-name">
-                    {{ user.firstName }}
-                  </span>
-                </td>
+          <td><span class="email-text">{{ user.email }}</span></td>
 
-                <!-- EMAIL -->
-                <td>
-                  <span class="email-text">
-                    {{ user.email }}
-                  </span>
-                </td>
+          <td>{{ user.mobile }}</td>
 
-                <!-- MOBILE -->
-                <td>
-                  {{ user.mobile }}
-                </td>
-                <td>
-                  {{ user.companyName ?? '-' }}
-                </td>
+          <td>{{ user.companyName || '-' }}</td>
 
-                <td>
-                  {{ user.fromTime && user.toTime ? user.fromTime + ' - ' + user.toTime : '-' }}
-                </td>
-                <td>
-                  {{ user.departmentName }}
-                </td>
+          <td>{{ user.shiftName || '-' }}</td>
 
-                <td>
-                  {{ user.designationName }}
-                </td>
+          <td>{{ user.departmentName || '-' }}</td>
 
-                <td>
-                  {{ user.taskCategoryNames }}
-                </td>
+          <td>{{ user.designationName || '-' }}</td>
 
-                <!-- weeklyOffNames -->
-                <td>
-                  {{ user.weeklyOffNames }}
-                </td>
+          <td>{{ user.taskCategoryNames || '-' }}</td>
 
-                <!-- STATUS -->
-                <td>
-                  <span class="status-badge" [ngClass]="getStatusClass(user.status)">
-                    {{ getStatusLabel(user.status) }}
-                  </span>
-                </td>
+          <td>{{ user.weeklyOffNames || '-' }}</td>
 
-                <!-- ACTION -->
-                <td>
-                  <div class="action-buttons">
-                    <!-- VIEW -->
-                    <button type="button" class="action-btn view-btn" title="View" (click)="viewUser(user.userId)">
-                      <i class="fa fa-eye"></i>
-                    </button>
+          <td>
+            <span class="status-badge" [ngClass]="getStatusClass(user.status)">
+              {{ getStatusLabel(user.status) }}
+            </span>
+          </td>
 
-                    <!-- EDIT -->
-                    <ng-container *ngIf="user.status === 1 || user.status === 2">
-                      @if (editPer === 'Y') {
-                        <button type="button" class="action-btn edit-btn" title="Edit" (click)="editUser(user.userId)">
-                          <i class="fa fa-pencil"></i>
-                        </button>
-                      }
+          <!-- ACTION (pinned on the right) -->
+          <td class="action-cell">
+            <div class="action-buttons">
+              <button type="button" class="action-btn view-btn" title="View" (click)="viewUser(user.userId)">
+                <i class="fa fa-eye"></i>
+              </button>
 
-                      <!-- DELETE -->
-                      @if (deletePer === 'Y') {
-                        <button type="button" class="action-btn delete-btn" title="Delete" (click)="onDeleteUser(user.userId)">
-                          <i class="fa fa-trash"></i>
-                        </button>
-                      }
-                    </ng-container>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+              <ng-container *ngIf="user.status === 1 || user.status === 2">
+                @if (editPer === 'Y') {
+                  <button type="button" class="action-btn edit-btn" title="Edit" (click)="editUser(user.userId)">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                }
+
+                @if (deletePer === 'Y') {
+                  <button type="button" class="action-btn delete-btn" title="Delete" (click)="onDeleteUser(user.userId)">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                }
+              </ng-container>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
       <!-- ================= BOTTOM SECTION ================= -->
       <div class="table-top-section">

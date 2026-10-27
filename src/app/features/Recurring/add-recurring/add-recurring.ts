@@ -465,44 +465,51 @@ private toApiTime(value: string | null | undefined): string | null {
     this.isSubmitting = true;
 
     this.dataprovider.addOrUpdateRecurring(requestData, this.userId).subscribe({
-      next: (response: any) => {
-        console.log('Add/Update Recurring Response:', response);
+     next: (response: any) => {
+  this.isSubmitting = false;
 
-        this.isSubmitting = false;
+  if (response?.success) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Success',
+      text: response.message || (this.isEditMode ? 'Recurring updated successfully.' : 'Recurring added successfully.'),
+      timer: 1500,
+      showConfirmButton: false,
+    }).then(() => this.backToIndexPage());
+  } else {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: this.getApiErrorMessage(response),
+    });
+  }
+},
 
-        if (response?.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: response.message || (this.isEditMode ? 'Recurring updated successfully.' : 'Recurring added successfully.'),
-            timer: 1500,
-            showConfirmButton: false,
-          }).then(() => {
-            this.backToIndexPage();
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: response?.message || 'Unable to save recurring.',
-          });
-        }
-      },
+error: (error) => {
+  console.error('Error saving recurring:', error);
+  this.isSubmitting = false;
 
-      error: (error) => {
-        console.error('Error saving recurring:', error);
-
-        this.isSubmitting = false;
-
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error?.error?.message || error?.error || 'Unable to save recurring.',
-        });
-      },
+  Swal.fire({
+    icon: 'error',
+    title: 'Error',
+    text: this.getApiErrorMessage(error?.error),
+  });
+},
     });
   }
 
+  private getApiErrorMessage(body: any, fallback = 'Unable to save recurring.'): string {
+  if (typeof body === 'string') {
+    return body;
+  }
+
+  // backend catch-all puts the real text in `data`
+  if (typeof body?.data === 'string' && body.data.trim()) {
+    return body.data;
+  }
+
+  return body?.message || fallback;
+}
   onReset(): void {
     if (this.isEditMode) {
       if (this.recurringId) {

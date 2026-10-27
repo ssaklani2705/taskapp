@@ -190,6 +190,7 @@ export class ViewTeam implements OnInit {
 
           isHod: response?.isHod,
           companyName: response?.companyName || 'NA',
+          shiftName: response?.shiftName || ''
         };
 
         // ------------------------------------------------
