@@ -274,12 +274,19 @@ export class ReassignReport implements OnInit {
     this.onSearch();
   }
   exportExcelPer = 'Y';
-  loadActiveUsers(): void {
-    this.dataprovider.getallUsers().subscribe({
-      next: (users) => (this.assignedUsers = users || []),
-      error: (err) => console.error('Error loading users:', err),
-    });
-  }
+loadActiveUsers(): void {
+  this.dataprovider.getallUsers().subscribe({
+    next: (users) => {
+      this.assignedUsers = users || [];
+
+      if (this.selectedUserId && !this.userSearchText) {
+        const found: any = this.assignedUsers.find((u: any) => u.userId === this.selectedUserId);
+        if (found) this.userSearchText = found.firstName;
+      }
+    },
+    error: (err) => console.error('Error loading users:', err),
+  });
+}
 
   clearFilters(): void {
     // search
@@ -396,4 +403,46 @@ export class ReassignReport implements OnInit {
     const stamp = this.datePipe.transform(new Date(), 'dd-MM-yyyy_HHmm');
     XLSX.writeFile(workbook, `Reassign_Report_${stamp}.xlsx`);
   }
+
+  userSearchText = '';
+showUserDropdown = false;
+filteredUsers: AssignedUser[] = [];
+
+filterUsers(): void {
+  const search = this.userSearchText.toLowerCase().trim();
+
+  // emptied the box: remove the user filter
+  if (!search) {
+    this.selectedUserId = 0;
+    this.filteredUsers = [];
+    this.showUserDropdown = false;
+    return;
+  }
+
+  if (search.length < 3) {
+    this.filteredUsers = [];
+    this.showUserDropdown = false;
+    return;
+  }
+
+  this.filteredUsers = this.assignedUsers.filter((u: any) =>
+    (u.firstName || '').toLowerCase().includes(search)
+  );
+  this.showUserDropdown = true;
+}
+
+selectUser(user: any): void {
+  this.userSearchText = user.firstName;
+  this.selectedUserId = Number(user.userId);
+  this.showUserDropdown = false;
+  this.onSearch();
+}
+
+clearUserSearch(): void {
+  this.userSearchText = '';
+  this.selectedUserId = 0;
+  this.filteredUsers = [];
+  this.showUserDropdown = false;
+  this.onSearch();
+}
 }

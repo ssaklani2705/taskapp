@@ -184,6 +184,18 @@
             </select>
           </div>
 
+          <div class="status-wrapper">
+            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+              <option value="">--All Status--</option>
+
+              <option value="1">Active</option>
+
+              <option value="2">Inactive</option>
+
+              <option value="3">Deleted</option>
+            </select>
+          </div>
+
           <!-- GO -->
           <div class="go-wrapper">
             <button type="button" class="btn-go" (click)="onSearch()">Go</button>
@@ -289,6 +301,9 @@
                 <!-- MOBILE -->
                 <td>
                   {{ user.mobile }}
+                </td>
+                   <td>
+                  {{ user.companyName ?? "-" }}
                 </td>
                 <td>
                   {{ user.departmentName }}

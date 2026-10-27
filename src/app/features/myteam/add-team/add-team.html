@@ -192,64 +192,64 @@
                 <div class="user-error" *ngIf="showDepartmentValidation && selectedDepartmentIds.length === 0">Department is required</div>
               </div>
             </div> -->
-          
 
-
-             <div class="user-form-col">
+            <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
                   Department
                   <span class="required">*</span>
                 </label>
 
-             
-                     <!-- HOD: multiple -->
-<div class="status-dropdown" #departmentDropdown *ngIf="isHod">
-  <button type="button" class="dropdown-btn" [disabled]="!departmentList || departmentList.length === 0" (click)="toggleDepartmentDropdown()">
-    <span class="selected-category-text">
-      {{ getSelectedDepartmentNames() || '--Select Department--' }}
-    </span>
-  </button>
+                <!-- HOD: multiple -->
+                <div class="status-dropdown" #departmentDropdown *ngIf="isHod">
+                  <button type="button" class="dropdown-btn" [disabled]="!departmentList || departmentList.length === 0" (click)="toggleDepartmentDropdown()">
+                    <span class="selected-category-text">
+                      {{ getSelectedDepartmentNames() || '--Select Department--' }}
+                    </span>
+                  </button>
 
-  <div class="dropdown-menu" *ngIf="showDepartmentDropdown && departmentList.length" (click)="$event.stopPropagation()">
-    <input type="text" class="dropdown-search" placeholder="Search department..." [(ngModel)]="departmentSearch" [ngModelOptions]="{ standalone: true }" />
+                  <div class="dropdown-menu" *ngIf="showDepartmentDropdown && departmentList.length" (click)="$event.stopPropagation()">
+                    <input type="text" class="dropdown-search" placeholder="Search department..." [(ngModel)]="departmentSearch" [ngModelOptions]="{ standalone: true }" />
 
-    <label *ngFor="let dept of filteredDepartments">
-      <input type="checkbox" [id]="'department-' + dept.departmentId" [checked]="isDepartmentChecked(dept.departmentId)" (change)="toggleDepartment(dept.departmentId, $event)" />
-      {{ dept.name }}
-    </label>
+                    <label *ngFor="let dept of filteredDepartments">
+                      <input type="checkbox" [id]="'department-' + dept.departmentId" [checked]="isDepartmentChecked(dept.departmentId)" (change)="toggleDepartment(dept.departmentId, $event)" />
+                      {{ dept.name }}
+                    </label>
 
-    <div class="dropdown-empty" *ngIf="filteredDepartments.length === 0">No results found</div>
-  </div>
-</div>
+                    <div class="dropdown-empty" *ngIf="filteredDepartments.length === 0">No results found</div>
+                  </div>
+                </div>
 
-<!-- Not HOD: single, searchable -->
-<div class="task-category-dropdown" #singleDeptDropdown *ngIf="!isHod">
-  <div class="user-input user-select cat-trigger" [class.cat-placeholder]="!singleDepartmentName" (click)="toggleSingleDeptDropdown()">
-    <span class="cat-trigger-text">{{ singleDepartmentName || 'Select Department' }}</span>
-    <span class="cat-caret">▼</span>
-  </div>
+                <!-- Not HOD: single, searchable -->
+                <div class="task-category-dropdown" #singleDeptDropdown *ngIf="!isHod">
+                  <div class="user-input user-select cat-trigger" [class.cat-placeholder]="!singleDepartmentName" (click)="toggleSingleDeptDropdown()">
+                    <span class="cat-trigger-text">{{ singleDepartmentName || 'Select Department' }}</span>
+                    <span class="cat-caret">▼</span>
+                  </div>
 
-  <div class="cat-panel" *ngIf="showSingleDeptDropdown">
-    <input type="text" class="cat-search" placeholder="Search department..." [(ngModel)]="singleDeptSearch" [ngModelOptions]="{ standalone: true }" />
+                  <div class="cat-panel" *ngIf="showSingleDeptDropdown">
+                    <input type="text" class="cat-search" placeholder="Search department..." [(ngModel)]="singleDeptSearch" [ngModelOptions]="{ standalone: true }" />
 
-    <div class="cat-list">
-      <div class="cat-item" [class.active]="singleDepartmentId === null" (click)="selectSingleDepartment(null)">Select Department</div>
+                    <div class="cat-list">
+                      <div class="cat-item" [class.active]="singleDepartmentId === null" (click)="selectSingleDepartment(null)">Select Department</div>
 
-      <div class="cat-item" *ngFor="let dept of filteredSingleDepartments" [class.active]="dept.departmentId === singleDepartmentId" (click)="selectSingleDepartment(dept.departmentId)">
-        {{ dept.name }}
-      </div>
+                      <div
+                        class="cat-item"
+                        *ngFor="let dept of filteredSingleDepartments"
+                        [class.active]="dept.departmentId === singleDepartmentId"
+                        (click)="selectSingleDepartment(dept.departmentId)"
+                      >
+                        {{ dept.name }}
+                      </div>
 
-      <div class="cat-empty" *ngIf="filteredSingleDepartments.length === 0">No results found</div>
-    </div>
-  </div>
-</div>
+                      <div class="cat-empty" *ngIf="filteredSingleDepartments.length === 0">No results found</div>
+                    </div>
+                  </div>
+                </div>
 
                 <div class="user-error" *ngIf="showDepartmentValidation && selectedDepartmentIds.length === 0">Department is required</div>
               </div>
             </div>
-          
-      
           </div>
 
           <!-- ================================================= -->
@@ -258,7 +258,6 @@
 ================================================== -->
 
           <div class="user-form-row">
-          
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
@@ -292,34 +291,38 @@
                 </div> -->
 
                 <div class="status-dropdown" #categoryDropdown>
-  <button type="button" class="dropdown-btn" [disabled]="!categoryList || categoryList.length === 0" (click)="toggleCategoryDropdown()">
-    <span class="selected-category-text">
-      {{ getSelectedCategoryNames() || '--Select Task Category--' }}
-    </span>
-  </button>
+                  <button type="button" class="dropdown-btn" [disabled]="!categoryList || categoryList.length === 0" (click)="toggleCategoryDropdown()">
+                    <span class="selected-category-text">
+                      {{ getSelectedCategoryNames() || '--Select Task Category--' }}
+                    </span>
+                  </button>
 
-  <div class="dropdown-menu" *ngIf="showCategoryDropdown && categoryList.length" (click)="$event.stopPropagation()">
-    <input type="text" class="dropdown-search" placeholder="Search category..." [(ngModel)]="categorySearch" [ngModelOptions]="{ standalone: true }" />
+                  <div class="dropdown-menu" *ngIf="showCategoryDropdown && categoryList.length" (click)="$event.stopPropagation()">
+                    <input type="text" class="dropdown-search" placeholder="Search category..." [(ngModel)]="categorySearch" [ngModelOptions]="{ standalone: true }" />
 
-    <label class="select-all-category" *ngIf="isHod && !categorySearch">
-      <input type="checkbox" [checked]="areAllCategoriesSelected()" [indeterminate]="isSomeCategoriesSelected()" (change)="toggleAllCategories($event)" />
-      <strong>Select All</strong>
-    </label>
+                    <label class="select-all-category" *ngIf="isHod && !categorySearch">
+                      <input type="checkbox" [checked]="areAllCategoriesSelected()" [indeterminate]="isSomeCategoriesSelected()" (change)="toggleAllCategories($event)" />
+                      <strong>Select All</strong>
+                    </label>
 
-    <label *ngFor="let category of filteredCategories">
-      <input type="checkbox" [id]="'category-' + category.taskcategoryId" [checked]="isCategoryChecked(category.taskcategoryId)" (change)="toggleCategory(category.taskcategoryId, $event)" />
-      {{ category.name }}
-    </label>
+                    <label *ngFor="let category of filteredCategories">
+                      <input
+                        type="checkbox"
+                        [id]="'category-' + category.taskcategoryId"
+                        [checked]="isCategoryChecked(category.taskcategoryId)"
+                        (change)="toggleCategory(category.taskcategoryId, $event)"
+                      />
+                      {{ category.name }}
+                    </label>
 
-    <div class="dropdown-empty" *ngIf="filteredCategories.length === 0">No results found</div>
-  </div>
-</div>
-              
+                    <div class="dropdown-empty" *ngIf="filteredCategories.length === 0">No results found</div>
+                  </div>
+                </div>
+
                 <div class="user-error" *ngIf="!categoriesLoading && selectedDepartmentIds.length > 0 && categoryList && categoryList.length === 0">
                   No task categories are available for the selected departments.
                 </div>
 
-      
                 <div class="user-error" *ngIf="showCategoryValidation && categoryList.length && (!selectedCategoryIds || selectedCategoryIds.length === 0)">Task Category is required.</div>
               </div>
             </div>
@@ -371,6 +374,15 @@
                   <option *ngFor="let d of weeklyOffOptions" [ngValue]="d.id">
                     {{ d.label }}
                   </option>
+                </select>
+              </div>
+            </div>
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">Company</label>
+                <select class="user-input user-select" formControlName="companyId">
+                <option [ngValue]="null">-- Select Company --</option>
+                  <option *ngFor="let c of companies" [ngValue]="c.companyId">{{ c.companyName }}</option>
                 </select>
               </div>
             </div>

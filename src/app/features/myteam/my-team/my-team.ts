@@ -32,6 +32,7 @@ interface User {
   taskCategoryNames: string;
 
   weeklyOffNames: any;
+  companyName:any
 }
 
 @Component({
@@ -167,6 +168,12 @@ export class MyTeam implements OnInit {
     },
 
     {
+      key: 'companyName',
+      label: 'Company Name',
+      sortable: true,
+    },
+
+    {
       key: 'departmentName',
       label: 'Department',
       sortable: true,
@@ -222,6 +229,7 @@ export class MyTeam implements OnInit {
     this.loadCategories();
 
     this.loadDesignations();
+    this.loadActiveCompany();
     /*
      * Load users
      */
@@ -1113,9 +1121,7 @@ export class MyTeam implements OnInit {
     this.dataprovider.getActiveDesigmations().subscribe({
       next: (response: DesignationDTO[]) => {
         // this.designationList = response;
-        this.designationList = [...(response ?? [])].sort((a, b) =>
-        (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }),
-        );
+        this.designationList = [...(response ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }));
       },
 
       error: (error) => {
@@ -1215,69 +1221,70 @@ export class MyTeam implements OnInit {
   }
 
   // ===================== SEARCHABLE DROPDOWNS =====================
-deptOpen = false;
-catOpen = false;
-deptSearch = '';
-catSearch = '';
+  deptOpen = false;
+  catOpen = false;
+  deptSearch = '';
+  catSearch = '';
 
-get filteredDepartments(): DepartmentDTO[] {
-  const q = this.deptSearch.trim().toLowerCase();
-  return q
-    ? this.departmentList.filter((d) => (d.name ?? '').toLowerCase().includes(q))
-    : this.departmentList;
-}
+  get filteredDepartments(): DepartmentDTO[] {
+    const q = this.deptSearch.trim().toLowerCase();
+    return q ? this.departmentList.filter((d) => (d.name ?? '').toLowerCase().includes(q)) : this.departmentList;
+  }
 
-get filteredCategories(): TaskCategoryDTO[] {
-  const q = this.catSearch.trim().toLowerCase();
-  return q
-    ? this.categoryList.filter((c) => (c.name ?? '').toLowerCase().includes(q))
-    : this.categoryList;
-}
+  get filteredCategories(): TaskCategoryDTO[] {
+    const q = this.catSearch.trim().toLowerCase();
+    return q ? this.categoryList.filter((c) => (c.name ?? '').toLowerCase().includes(q)) : this.categoryList;
+  }
 
-get selectedDepartmentName(): string {
-  return (
-    this.departmentList.find((d) => d.departmentId === this.selectedDepartmentId)?.name ??
-    '--All Departments--'
-  );
-}
+  get selectedDepartmentName(): string {
+    return this.departmentList.find((d) => d.departmentId === this.selectedDepartmentId)?.name ?? '--All Departments--';
+  }
 
-get selectedCategoryName(): string {
-  return (
-    this.categoryList.find((c) => c.taskcategoryId === this.selectedCategoryId)?.name ??
-    '--All Task Categories--'
-  );
-}
+  get selectedCategoryName(): string {
+    return this.categoryList.find((c) => c.taskcategoryId === this.selectedCategoryId)?.name ?? '--All Task Categories--';
+  }
 
-toggleDeptDropdown(): void {
-  this.deptOpen = !this.deptOpen;
-  this.catOpen = false;
-  this.deptSearch = '';
-}
+  toggleDeptDropdown(): void {
+    this.deptOpen = !this.deptOpen;
+    this.catOpen = false;
+    this.deptSearch = '';
+  }
 
-toggleCatDropdown(): void {
-  this.catOpen = !this.catOpen;
-  this.deptOpen = false;
-  this.catSearch = '';
-}
+  toggleCatDropdown(): void {
+    this.catOpen = !this.catOpen;
+    this.deptOpen = false;
+    this.catSearch = '';
+  }
 
-selectDepartment(id: number | null): void {
-  this.selectedDepartmentId = id;
-  this.deptOpen = false;
-  this.deptSearch = '';
-  this.onDepartmentChange(); // resets category, reloads categories + users
-}
+  selectDepartment(id: number | null): void {
+    this.selectedDepartmentId = id;
+    this.deptOpen = false;
+    this.deptSearch = '';
+    this.onDepartmentChange(); // resets category, reloads categories + users
+  }
 
-selectCategory(id: number | null): void {
-  this.selectedCategoryId = id;
-  this.catOpen = false;
-  this.catSearch = '';
-  this.onCategoryChange();
-}
+  selectCategory(id: number | null): void {
+    this.selectedCategoryId = id;
+    this.catOpen = false;
+    this.catSearch = '';
+    this.onCategoryChange();
+  }
 
-// Close dropdowns when clicking anywhere outside
-@HostListener('document:click')
-closeDropdowns(): void {
-  this.deptOpen = false;
-  this.catOpen = false;
-}
+  // Close dropdowns when clicking anywhere outside
+  @HostListener('document:click')
+  closeDropdowns(): void {
+    this.deptOpen = false;
+    this.catOpen = false;
+  }
+
+  companies: any[] = [];
+
+  loadActiveCompany(): void {
+    this.dataprovider.activeCompanyList().subscribe({
+      next: (res: any) => {
+        this.companies = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
+      },
+      error: (err) => console.error('Error loading companies:', err),
+    });
+  }
 }

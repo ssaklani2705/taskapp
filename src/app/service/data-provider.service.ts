@@ -1577,4 +1577,8 @@ export class DataProviderService {
   findByActiveClient() {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/active_clients`);
   }
+
+   activeCompanyList() {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/company/active_company`);
+  }
 }

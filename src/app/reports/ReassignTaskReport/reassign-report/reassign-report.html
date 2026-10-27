@@ -23,16 +23,27 @@
           </div>
         </div>
 
-         <div class="client-dropdown-container">
-              <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
-              <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
-              <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
-                <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
-                  {{ client.name }}
-                </div>
-                <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
-              </div>
+        <div class="client-dropdown-container">
+          <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
+          <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
+          <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
+            <div class="client-dropdown-item" *ngFor="let client of filteredClients" (click)="selectClient(client)">
+              {{ client.name }}
             </div>
+            <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
+          </div>
+        </div>
+         <div class="client-dropdown-container">
+          <input type="text" class="client-search-input" placeholder="Search User..." [(ngModel)]="userSearchText" name="userSearch" (input)="filterUsers()" (focus)="showUserDropdown = true" />
+          <button *ngIf="userSearchText" type="button" class="clear-search-btn" (click)="clearUserSearch()">×</button>
+
+          <div class="client-dropdown-list" *ngIf="showUserDropdown && userSearchText.trim().length >= 3">
+            <div class="client-dropdown-item" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+              {{ user.firstName }}
+            </div>
+            <div class="client-dropdown-item no-client-found" *ngIf="filteredUsers.length === 0">No User Found</div>
+          </div>
+        </div>
         <!-- TASK CATEGORY -->
         <!-- TASK CATEGORY -->
         <div class="status-wrapper">
@@ -44,14 +55,7 @@
           </select>
         </div>
 
-        <!--div class="status-wrapper">
-          <select class="status-select" name="assignedUser" [ngModel]="selectedUserId" (ngModelChange)="selectedUserId = $event; onSearch()">
-            <option [ngValue]="0">--All User--</option>
-            <option *ngFor="let user of assignedUsers" [ngValue]="user.userId">
-              {{ user.firstName }}
-            </option>
-          </select>
-        </div-->
+       
 
         <div class="status-wrapper date-filter-wrapper">
           <div class="date-filter-input">
@@ -72,13 +76,13 @@
         <!-- GO -->
         <div class="go-wrapper">
           <button type="button" class="btn-go" (click)="onSearch()">Go</button>
-           <button type="button" class="btn-go" (click)="clearFilters()">Clear</button>
-            @if (exportExcelPer === 'Y') {
-              <button type="button" class="btn-export-excel" (click)="exportToExcel()">
-                Export to Excel
-                <i class="fas fa-file-excel" aria-hidden="true"></i>
-              </button>
-            }
+          <button type="button" class="btn-go" (click)="clearFilters()">Clear</button>
+          @if (exportExcelPer === 'Y') {
+            <button type="button" class="btn-export-excel" (click)="exportToExcel()">
+              Export to Excel
+              <i class="fas fa-file-excel" aria-hidden="true"></i>
+            </button>
+          }
           <!-- &nbsp; -->
         </div>
       </div>

@@ -134,6 +134,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       isAdmin: [false],
       isHod: [false],
       weeklyOff: [null],
+      companyId: [null],
       desigmationId: [null, Validators.required],
     });
 
@@ -198,6 +199,8 @@ export class AddTeam implements OnInit, AfterViewInit {
     }
 
     this.readFilterState();
+
+    this.loadActiveCompany()
 
     const id = this.route.snapshot.paramMap.get('userId');
 
@@ -357,8 +360,7 @@ export class AddTeam implements OnInit, AfterViewInit {
 
         this.selectedCategoryIds = this.parseIdList(response.taskcategoryIds);
 
-        console.log('EDIT - Department IDs:', this.selectedDepartmentIds);
-        console.log('EDIT - Category IDs:', this.selectedCategoryIds);
+      
 
         const isHod = response.isHod === 'Y' || this.selectedDepartmentIds.length > 1;
 
@@ -373,6 +375,8 @@ export class AddTeam implements OnInit, AfterViewInit {
           isHod: isHod,
           weeklyOff: this.parseWeeklyOff(response.weeklyOffIds ?? response.weeklyOff),
           desigmationId: response.designationId || null,
+        companyId: response.companyId ?? null,
+
         });
 
         if (this.selectedDepartmentIds.length > 0) {
@@ -621,6 +625,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       createdBy: this.createdBy,
       weeklyOff: formValues.weeklyOff ? Number(formValues.weeklyOff) : null,
       module: this.isRightsHidden ? [] : this.buildModulePermissions(),
+     companyId: formValues.companyId ? Number(formValues.companyId) : null,
     };
 
     if (formValues.password && formValues.password.trim()) {
@@ -691,6 +696,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       isHod: false,
       weeklyOff: null,
       desigmationId: null,
+        companyId: null,
     });
 
     this.selectedDepartmentIds = [];
@@ -890,9 +896,7 @@ export class AddTeam implements OnInit, AfterViewInit {
     this.dataProvider.getActiveDesigmations().subscribe({
       next: (response: DesignationDTO[]) => {
         // this.designationList = response;
-         this.designationList = [...(response ?? [])].sort((a, b) =>
-            (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }),
-          );
+        this.designationList = [...(response ?? [])].sort((a, b) => (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' }));
       },
       error: (error) => {
         console.error('Error loading designations', error);
@@ -1082,15 +1086,15 @@ export class AddTeam implements OnInit, AfterViewInit {
       this.showCategoryDropdown = false;
     }
 
-     if (this.showSingleDeptDropdown && this.singleDeptDropdown && !this.singleDeptDropdown.nativeElement.contains(target)) {
-    this.showSingleDeptDropdown = false;
-    this.singleDeptSearch = '';
-  }
+    if (this.showSingleDeptDropdown && this.singleDeptDropdown && !this.singleDeptDropdown.nativeElement.contains(target)) {
+      this.showSingleDeptDropdown = false;
+      this.singleDeptSearch = '';
+    }
 
-  if (this.showDesignationDropdown && this.designationDropdown && !this.designationDropdown.nativeElement.contains(target)) {
-    this.showDesignationDropdown = false;
-    this.designationSearch = '';
-  }
+    if (this.showDesignationDropdown && this.designationDropdown && !this.designationDropdown.nativeElement.contains(target)) {
+      this.showDesignationDropdown = false;
+      this.designationSearch = '';
+    }
   }
 
   get isRightsHidden(): boolean {
@@ -1133,85 +1137,96 @@ export class AddTeam implements OnInit, AfterViewInit {
     }
   }
 
-
   // ===================== SEARCH FILTERS =====================
-departmentSearch = '';
-categorySearch = '';
-singleDeptSearch = '';
-designationSearch = '';
+  departmentSearch = '';
+  categorySearch = '';
+  singleDeptSearch = '';
+  designationSearch = '';
 
-showSingleDeptDropdown = false;
-showDesignationDropdown = false;
+  showSingleDeptDropdown = false;
+  showDesignationDropdown = false;
 
-@ViewChild('singleDeptDropdown') singleDeptDropdown?: ElementRef;
-@ViewChild('designationDropdown') designationDropdown?: ElementRef;
+  @ViewChild('singleDeptDropdown') singleDeptDropdown?: ElementRef;
+  @ViewChild('designationDropdown') designationDropdown?: ElementRef;
 
-private filterByName<T extends { name?: string }>(list: T[], text: string): T[] {
-  const q = text.trim().toLowerCase();
-  return q ? (list ?? []).filter((i) => (i.name ?? '').toLowerCase().includes(q)) : (list ?? []);
-}
+  private filterByName<T extends { name?: string }>(list: T[], text: string): T[] {
+    const q = text.trim().toLowerCase();
+    return q ? (list ?? []).filter((i) => (i.name ?? '').toLowerCase().includes(q)) : (list ?? []);
+  }
 
-get filteredDepartments(): DepartmentDTO[] {
-  return this.filterByName(this.departmentList, this.departmentSearch);
-}
+  get filteredDepartments(): DepartmentDTO[] {
+    return this.filterByName(this.departmentList, this.departmentSearch);
+  }
 
-get filteredSingleDepartments(): DepartmentDTO[] {
-  return this.filterByName(this.departmentList, this.singleDeptSearch);
-}
+  get filteredSingleDepartments(): DepartmentDTO[] {
+    return this.filterByName(this.departmentList, this.singleDeptSearch);
+  }
 
-get filteredCategories(): TaskCategoryDTO[] {
-  return this.filterByName(this.categoryList, this.categorySearch);
-}
+  get filteredCategories(): TaskCategoryDTO[] {
+    return this.filterByName(this.categoryList, this.categorySearch);
+  }
 
-get filteredDesignations(): DesignationDTO[] {
-  return this.filterByName(this.designationList, this.designationSearch);
-}
+  get filteredDesignations(): DesignationDTO[] {
+    return this.filterByName(this.designationList, this.designationSearch);
+  }
 
-get singleDepartmentName(): string {
-  return this.departmentList.find((d) => d.departmentId === this.singleDepartmentId)?.name ?? '';
-}
+  get singleDepartmentName(): string {
+    return this.departmentList.find((d) => d.departmentId === this.singleDepartmentId)?.name ?? '';
+  }
 
-get selectedDesignationName(): string {
-  const id = this.userForm.get('desigmationId')?.value;
-  return this.designationList.find((d) => d.desigmationId === id)?.name ?? '';
-}
+  get selectedDesignationName(): string {
+    const id = this.userForm.get('desigmationId')?.value;
+    return this.designationList.find((d) => d.desigmationId === id)?.name ?? '';
+  }
 
-toggleDepartmentDropdown(): void {
-  this.showDepartmentDropdown = !this.showDepartmentDropdown;
-  this.departmentSearch = '';
-  this.showCategoryDropdown = false;
-}
+  toggleDepartmentDropdown(): void {
+    this.showDepartmentDropdown = !this.showDepartmentDropdown;
+    this.departmentSearch = '';
+    this.showCategoryDropdown = false;
+  }
 
-toggleCategoryDropdown(): void {
-  if (!this.categoryList.length) return;
-  this.showCategoryDropdown = !this.showCategoryDropdown;
-  this.categorySearch = '';
-  this.showDepartmentDropdown = false;
-}
+  toggleCategoryDropdown(): void {
+    if (!this.categoryList.length) return;
+    this.showCategoryDropdown = !this.showCategoryDropdown;
+    this.categorySearch = '';
+    this.showDepartmentDropdown = false;
+  }
 
-toggleSingleDeptDropdown(): void {
-  this.showSingleDeptDropdown = !this.showSingleDeptDropdown;
-  this.singleDeptSearch = '';
-  this.showDesignationDropdown = false;
-}
+  toggleSingleDeptDropdown(): void {
+    this.showSingleDeptDropdown = !this.showSingleDeptDropdown;
+    this.singleDeptSearch = '';
+    this.showDesignationDropdown = false;
+  }
 
-toggleDesignationDropdown(): void {
-  this.showDesignationDropdown = !this.showDesignationDropdown;
-  this.designationSearch = '';
-  this.showSingleDeptDropdown = false;
-}
+  toggleDesignationDropdown(): void {
+    this.showDesignationDropdown = !this.showDesignationDropdown;
+    this.designationSearch = '';
+    this.showSingleDeptDropdown = false;
+  }
 
-selectSingleDepartment(id: number | null): void {
-  this.showSingleDeptDropdown = false;
-  this.singleDeptSearch = '';
-  this.onSingleDepartmentChange(id);
-}
+  selectSingleDepartment(id: number | null): void {
+    this.showSingleDeptDropdown = false;
+    this.singleDeptSearch = '';
+    this.onSingleDepartmentChange(id);
+  }
 
-selectDesignation(id: number | null): void {
-  const control = this.userForm.get('desigmationId');
-  control?.setValue(id);
-  control?.markAsTouched();
-  this.showDesignationDropdown = false;
-  this.designationSearch = '';
-}
+  selectDesignation(id: number | null): void {
+    const control = this.userForm.get('desigmationId');
+    control?.setValue(id);
+    control?.markAsTouched();
+    this.showDesignationDropdown = false;
+    this.designationSearch = '';
+  }
+
+  companies: any[] = [];
+
+  loadActiveCompany(): void {
+    this.dataProvider.activeCompanyList().subscribe({
+      next: (res: any) => {
+        console.log('COMPANIES:', this.companies);
+        this.companies = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
+      },
+      error: (err) => console.error('Error loading companies:', err),
+    });
+  }
 }
