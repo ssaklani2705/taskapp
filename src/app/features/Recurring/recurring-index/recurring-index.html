@@ -80,42 +80,28 @@
             </select>
           </div> -->
           <div class="status-wrapper task-category-dropdown">
-  <button type="button" class="status-select cat-trigger" (click)="toggleTaskCategoryDropdown()">
-    <span class="cat-trigger-text">{{ selectedTaskCategoryLabel }}</span>
-    <span class="cat-caret">&#9662;</span>
-  </button>
+            <button type="button" class="status-select cat-trigger" (click)="toggleTaskCategoryDropdown()">
+              <span class="cat-trigger-text">{{ selectedTaskCategoryLabel }}</span>
+              <span class="cat-caret">&#9662;</span>
+            </button>
 
-  <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
-    <input
-      id="recurringCategorySearchInput"
-      type="text"
-      class="cat-search"
-      placeholder="Search category..."
-      [(ngModel)]="categorySearchText"
-      autocomplete="off"
-    />
+            <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
+              <input id="recurringCategorySearchInput" type="text" class="cat-search" placeholder="Search category..." [(ngModel)]="categorySearchText" autocomplete="off" />
 
-    <div class="cat-list">
-      <div class="cat-item cat-all" [class.active]="!selectedTaskCatId" (click)="clearTaskCategory()">
-        --All Task Categories--
-      </div>
+              <div class="cat-list">
+                <div class="cat-item cat-all" [class.active]="!selectedTaskCatId" (click)="clearTaskCategory()">--All Task Categories--</div>
 
-      <ng-container *ngFor="let group of filteredGroupedCategories">
-        <div class="cat-group">{{ group.department }}</div>
-        <div
-          class="cat-item"
-          *ngFor="let category of group.items"
-          [class.active]="selectedTaskCatId === category.taskcategoryId"
-          (click)="selectTaskCategory(category)"
-        >
-          {{ category.name }}
-        </div>
-      </ng-container>
+                <ng-container *ngFor="let group of filteredGroupedCategories">
+                  <div class="cat-group">{{ group.department }}</div>
+                  <div class="cat-item" *ngFor="let category of group.items" [class.active]="selectedTaskCatId === category.taskcategoryId" (click)="selectTaskCategory(category)">
+                    {{ category.name }}
+                  </div>
+                </ng-container>
 
-      <div class="cat-empty" *ngIf="filteredGroupedCategories.length === 0">No category found</div>
-    </div>
-  </div>
-</div>
+                <div class="cat-empty" *ngIf="filteredGroupedCategories.length === 0">No category found</div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- /ROW 1 -->
 

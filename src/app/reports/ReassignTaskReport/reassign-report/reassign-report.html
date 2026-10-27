@@ -33,7 +33,7 @@
             <div class="client-dropdown-item no-client-found" *ngIf="filteredClients.length === 0">No Client Found</div>
           </div>
         </div>
-         <div class="client-dropdown-container">
+        <div class="client-dropdown-container">
           <input type="text" class="client-search-input" placeholder="Search User..." [(ngModel)]="userSearchText" name="userSearch" (input)="filterUsers()" (focus)="showUserDropdown = true" />
           <button *ngIf="userSearchText" type="button" class="clear-search-btn" (click)="clearUserSearch()">×</button>
 
@@ -44,32 +44,75 @@
             <div class="client-dropdown-item no-client-found" *ngIf="filteredUsers.length === 0">No User Found</div>
           </div>
         </div>
-        <!-- TASK CATEGORY -->
-        <!-- TASK CATEGORY -->
-        <div class="status-wrapper">
-          <select class="status-select" name="taskCategory" [ngModel]="selectedTaskCategory" (ngModelChange)="selectedTaskCategory = $event; onSearch()">
-            <option value="">--All Task Categories--</option>
-            <option *ngFor="let category of taskCategories" [value]="category.taskcategoryId">
-              {{ category.name }}
-            </option>
-          </select>
-        </div>
 
-       
+        <div class="status-wrapper task-category-dropdown">
+          <button type="button" class="status-select cat-trigger" (click)="toggleTaskCategoryDropdown()">
+            <span class="cat-trigger-text">{{ selectedTaskCategoryLabel }}</span>
+            <span class="cat-caret">&#9662;</span>
+          </button>
 
-        <div class="status-wrapper date-filter-wrapper">
-          <div class="date-filter-input">
-            <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" name="fromDate" placeholder="From Date" class="date-input" autocomplete="off" readonly />
-            <mat-datepicker-toggle matSuffix [for]="fromPicker"> </mat-datepicker-toggle>
-            <mat-datepicker #fromPicker> </mat-datepicker>
+          <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
+            <input id="recurringCategorySearchInput" type="text" class="cat-search" placeholder="Search category..." [(ngModel)]="categorySearchText" autocomplete="off" />
+
+            <div class="cat-list">
+              <div class="cat-item cat-all" [class.active]="!selectedTaskCatId" (click)="clearTaskCategory()">--All Task Categories--</div>
+
+              <ng-container *ngFor="let group of filteredGroupedCategories">
+                <div class="cat-group">{{ group.department }}</div>
+                <div class="cat-item" *ngFor="let category of group.items" [class.active]="selectedTaskCatId === category.taskcategoryId" (click)="selectTaskCategory(category)">
+                  {{ category.name }}
+                </div>
+              </ng-container>
+
+              <div class="cat-empty" *ngIf="filteredGroupedCategories.length === 0">No category found</div>
+            </div>
           </div>
         </div>
+        <div class="row-break"></div>
+
+        <!-- FROM DATE -->
+        <div class="status-wrapper date-filter-wrapper">
+          <div class="date-filter-input">
+            <input
+              id="fromDate"
+              matInput
+              [matDatepicker]="fromPicker"
+              [(ngModel)]="fromDate"
+              name="fromDate"
+              placeholder="DD/MM/YYYY"
+              class="date-input"
+              autocomplete="off"
+              readonly
+              [max]="toDate"
+              (click)="fromPicker.open()"
+            />
+            <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
+              <mat-icon>calendar_today</mat-icon>
+            </button>
+            <mat-datepicker #fromPicker></mat-datepicker>
+          </div>
+        </div>
+
         <!-- TO DATE -->
         <div class="status-wrapper date-filter-wrapper">
           <div class="date-filter-input">
-            <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" name="toDate" placeholder="To Date" class="date-input" autocomplete="off" readonly [min]="fromDate" />
-            <mat-datepicker-toggle matSuffix [for]="toPicker"> </mat-datepicker-toggle>
-            <mat-datepicker #toPicker> </mat-datepicker>
+            <input
+              id="toDate"
+              matInput
+              [matDatepicker]="toPicker"
+              [(ngModel)]="toDate"
+              name="toDate"
+              placeholder="DD/MM/YYYY"
+              class="date-input"
+              autocomplete="off"
+              readonly
+              [min]="fromDate"
+              (click)="toPicker.open()"
+            />
+            <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
+              <mat-icon>calendar_today</mat-icon>
+            </button>
+            <mat-datepicker #toPicker></mat-datepicker>
           </div>
         </div>
 
@@ -115,7 +158,7 @@
           <thead>
             <tr>
               <th>Sr. No.</th>
-              <th>Task Date</th>
+              <th>Task Reassign Date</th>
               <th>Task Name</th>
               <th>Task Category</th>
               <th>Client Name</th>

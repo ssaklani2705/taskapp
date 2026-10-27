@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -88,6 +88,7 @@ export class ReassignReport implements OnInit {
 
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
+    this.selectedTaskCatId = Number(this.selectedTaskCategory) || 0;
     const s = this.sessionService.getItem(this.filterKey);
 
     if (s) {
@@ -201,13 +202,14 @@ export class ReassignReport implements OnInit {
   }
 
   selectTaskCategory(category: TaskCategory): void {
-    this.selectedTaskCategory = String(category.taskcategoryId);
+    this.selectedTaskCatId = Number(category.taskcategoryId); // drives the label and highlight
+    this.selectedTaskCategory = String(category.taskcategoryId); // used by the API call
     this.showTaskCategoryDropdown = false;
     this.categorySearchText = '';
     this.onSearch();
   }
-
   clearTaskCategory(): void {
+    this.selectedTaskCatId = 0;
     this.selectedTaskCategory = '';
     this.showTaskCategoryDropdown = false;
     this.categorySearchText = '';
@@ -220,13 +222,28 @@ export class ReassignReport implements OnInit {
   }
 
   loadTaskCategories(): void {
-    // use the same service method your Task screen uses to fill its category dropdown
     this.dataprovider.getTaskCategories().subscribe({
       next: (res: any) => {
         this.taskCategories = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
+        this.buildGroupedCategories();
       },
       error: (err) => console.error('Error loading task categories:', err),
     });
+  }
+  private buildGroupedCategories(): void {
+    const map = new Map<string, TaskCategory[]>();
+
+    this.taskCategories.forEach((c: any) => {
+      const dept: string = c.departmentName || 'Other';
+      map.set(dept, [...(map.get(dept) ?? []), c]);
+    });
+
+    this.groupedCategories = [...map]
+      .map(([department, items]) => ({
+        department,
+        items: items.sort((a, b) => (a.name || '').localeCompare(b.name || '')),
+      }))
+      .sort((a, b) => a.department.localeCompare(b.department));
   }
   clientSearchText: string = '';
   showClientDropdown: boolean = false;
@@ -274,19 +291,19 @@ export class ReassignReport implements OnInit {
     this.onSearch();
   }
   exportExcelPer = 'Y';
-loadActiveUsers(): void {
-  this.dataprovider.getallUsers().subscribe({
-    next: (users) => {
-      this.assignedUsers = users || [];
+  loadActiveUsers(): void {
+    this.dataprovider.getallUsers().subscribe({
+      next: (users) => {
+        this.assignedUsers = users || [];
 
-      if (this.selectedUserId && !this.userSearchText) {
-        const found: any = this.assignedUsers.find((u: any) => u.userId === this.selectedUserId);
-        if (found) this.userSearchText = found.firstName;
-      }
-    },
-    error: (err) => console.error('Error loading users:', err),
-  });
-}
+        if (this.selectedUserId && !this.userSearchText) {
+          const found: any = this.assignedUsers.find((u: any) => u.userId === this.selectedUserId);
+          if (found) this.userSearchText = found.firstName;
+        }
+      },
+      error: (err) => console.error('Error loading users:', err),
+    });
+  }
 
   clearFilters(): void {
     // search
@@ -405,44 +422,73 @@ loadActiveUsers(): void {
   }
 
   userSearchText = '';
-showUserDropdown = false;
-filteredUsers: AssignedUser[] = [];
+  showUserDropdown = false;
+  filteredUsers: AssignedUser[] = [];
 
-filterUsers(): void {
-  const search = this.userSearchText.toLowerCase().trim();
+  filterUsers(): void {
+    const search = this.userSearchText.toLowerCase().trim();
 
-  // emptied the box: remove the user filter
-  if (!search) {
+    // emptied the box: remove the user filter
+    if (!search) {
+      this.selectedUserId = 0;
+      this.filteredUsers = [];
+      this.showUserDropdown = false;
+      return;
+    }
+
+    if (search.length < 3) {
+      this.filteredUsers = [];
+      this.showUserDropdown = false;
+      return;
+    }
+
+    this.filteredUsers = this.assignedUsers.filter((u: any) => (u.firstName || '').toLowerCase().includes(search));
+    this.showUserDropdown = true;
+  }
+
+  selectUser(user: any): void {
+    this.userSearchText = user.firstName;
+    this.selectedUserId = Number(user.userId);
+    this.showUserDropdown = false;
+    this.onSearch();
+  }
+
+  clearUserSearch(): void {
+    this.userSearchText = '';
     this.selectedUserId = 0;
     this.filteredUsers = [];
     this.showUserDropdown = false;
-    return;
+    this.onSearch();
+  }
+  selectedTaskCatId = 0;
+
+  get filteredGroupedCategories(): { department: string; items: TaskCategory[] }[] {
+    const q = this.categorySearchText.trim().toLowerCase();
+    if (!q) return this.groupedCategories;
+
+    return this.groupedCategories
+      .map((g) => {
+        // department name matches: keep all its categories
+        if (g.department.toLowerCase().includes(q)) return g;
+        return {
+          department: g.department,
+          items: g.items.filter((c) => (c.name || '').toLowerCase().includes(q)),
+        };
+      })
+      .filter((g) => g.items.length > 0);
+  }
+  get selectedTaskCategoryLabel(): string {
+    if (!this.selectedTaskCatId) return '--All Task Categories--';
+    const c = this.taskCategories.find((x: any) => Number(x.taskcategoryId) === Number(this.selectedTaskCatId));
+    return c ? c.name : '--All Task Categories--';
   }
 
-  if (search.length < 3) {
-    this.filteredUsers = [];
-    this.showUserDropdown = false;
-    return;
+  @HostListener('document:click', ['$event'])
+  closeCategoryDropdown(event: MouseEvent): void {
+    const inside = (event.target as HTMLElement).closest('.task-category-dropdown');
+    if (!inside && this.showTaskCategoryDropdown) {
+      this.showTaskCategoryDropdown = false;
+      this.categorySearchText = '';
+    }
   }
-
-  this.filteredUsers = this.assignedUsers.filter((u: any) =>
-    (u.firstName || '').toLowerCase().includes(search)
-  );
-  this.showUserDropdown = true;
-}
-
-selectUser(user: any): void {
-  this.userSearchText = user.firstName;
-  this.selectedUserId = Number(user.userId);
-  this.showUserDropdown = false;
-  this.onSearch();
-}
-
-clearUserSearch(): void {
-  this.userSearchText = '';
-  this.selectedUserId = 0;
-  this.filteredUsers = [];
-  this.showUserDropdown = false;
-  this.onSearch();
-}
 }
