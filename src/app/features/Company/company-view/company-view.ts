@@ -46,6 +46,7 @@ export class CompanyView implements OnInit {
 
     this.loadStates();
     this.loadCompanyDetails();
+    this.loadShifts();
   }
 
   loadCompanyDetails(): void {
@@ -131,4 +132,110 @@ export class CompanyView implements OnInit {
       default: return 'Unknown';
     }
   }
+
+
+  //Shirt 
+  shifts: any[] = [];
+showShiftModal = false;
+isEditShift = false;
+isSavingShift = false;
+shiftSubmitted = false;
+shiftForm: any = this.emptyShiftForm();
+
+private emptyShiftForm() {
+  return { shiftId: 0, shiftName: '', fromTime: '', toTime: '' };
+}
+
+loadShifts(): void {
+  this.dataProvider.getCompanyShifts(this.companyId).subscribe({
+    next: (res: any) => (this.shifts = res?.success ? res.data || [] : []),
+    error: () => (this.shifts = []),
+  });
+}
+
+openAddShift(): void {
+  this.isEditShift = false;
+  this.shiftSubmitted = false;
+  this.shiftForm = this.emptyShiftForm();
+  this.showShiftModal = true;
+}
+
+openEditShift(s: any): void {
+  this.isEditShift = true;
+  this.shiftSubmitted = false;
+  this.shiftForm = {
+    shiftId: s.shiftId,
+    shiftName: s.shiftName,
+    fromTime: s.fromTime,
+    toTime: s.toTime,
+  };
+  this.showShiftModal = true;
+}
+
+closeShiftModal(): void {
+  if (this.isSavingShift) return;
+  this.showShiftModal = false;
+}
+
+saveShift(): void {
+  this.shiftSubmitted = true;
+  const f = this.shiftForm;
+
+  if (!f.shiftName?.trim() || !f.fromTime || !f.toTime) return;
+  if (f.fromTime === f.toTime) {
+    Swal.fire({ icon: 'warning', title: 'Invalid Time', text: 'From time and To time cannot be same.', confirmButtonColor: '#19345a' });
+    return;
+  }
+
+  const body = {
+    shiftId: f.shiftId,
+    shiftName: f.shiftName.trim(),
+    fromTime: f.fromTime,
+    toTime: f.toTime,
+    companyId: this.companyId,
+  };
+
+  this.isSavingShift = true;
+  const req$ = this.isEditShift
+    ? this.dataProvider.updateCompanyShift(body)
+    : this.dataProvider.addCompanyShift(body);
+
+  req$.subscribe({
+    next: (res: any) => {
+      this.isSavingShift = false;
+      if (res?.success) {
+        this.showShiftModal = false;
+        this.loadShifts();
+        Swal.fire({ icon: 'success', title: 'Success', text: res.message, timer: 1500, showConfirmButton: false });
+      } else {
+        Swal.fire({ icon: 'error', title: 'Failed', text: res?.message || 'Unable to save shift.', confirmButtonColor: '#d33' });
+      }
+    },
+    error: (err) => {
+      this.isSavingShift = false;
+      Swal.fire({ icon: 'error', title: 'Failed', text: err?.error?.message || 'Unable to save shift.', confirmButtonColor: '#d33' });
+    },
+  });
+}
+
+deleteShift(s: any): void {
+  Swal.fire({
+    icon: 'warning',
+    title: 'Delete shift?',
+    text: `"${s.shiftName}" will be removed.`,
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    confirmButtonText: 'Delete',
+  }).then((r) => {
+    if (!r.isConfirmed) return;
+    this.dataProvider.deleteCompanyShift(s.shiftId).subscribe({
+      next: (res: any) => {
+        if (res?.success) this.loadShifts();
+        else Swal.fire({ icon: 'error', title: 'Failed', text: res?.message, confirmButtonColor: '#d33' });
+      },
+      error: (err) =>
+        Swal.fire({ icon: 'error', title: 'Failed', text: err?.error?.message || 'Unable to delete shift.', confirmButtonColor: '#d33' }),
+    });
+  });
+}
 }

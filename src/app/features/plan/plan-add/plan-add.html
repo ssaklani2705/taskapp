@@ -1,5 +1,7 @@
+
 <div class="user-page-wrapper">
   <div class="user-portlet">
+
     <!-- HEADER -->
     <div class="user-portlet-title">
       <div class="user-title">
@@ -9,8 +11,11 @@
       </div>
 
       <div class="user-actions">
-        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
-          <mat-icon> arrow_back </mat-icon>
+        <button
+          type="button"
+          class="back-index-btn"
+          (click)="backToIndexPage()">
+          <mat-icon>arrow_back</mat-icon>
           Back to Index
         </button>
       </div>
@@ -18,26 +23,32 @@
 
     <!-- BODY -->
     <div class="user-portlet-body">
-      <form #planForm="ngForm" (ngSubmit)="onSubmit(planForm)" novalidate>
+      <form
+        #planForm="ngForm"
+        (ngSubmit)="onSubmit(planForm)"
+        novalidate>
+
         <div class="user-form-body">
-          <!-- Mandatory Message -->
+
           <div class="mandatory-message">
             Fields with
             <span class="required">*</span>
             mark are mandatory
           </div>
 
-          <!-- NAME + RATE -->
-          <div class="user-form-row">
-            <!-- Plan Name -->
+          <!-- ROW 1 -->
+          <div class="user-form-row top-row"
+               [class.edit-mode]="isEditMode">
+
+            <!-- PLAN NAME -->
             <div class="user-form-col">
               <div class="user-form-group">
-                <label class="user-label">
-                  Plan Name
-                  <span class="required">*</span>
+                <label class="user-label" for="planName">
+                  Plan Name <span class="required">*</span>
                 </label>
 
                 <input
+                  id="planName"
                   type="text"
                   class="user-input"
                   placeholder="Enter Plan Name"
@@ -46,12 +57,14 @@
                   required
                   minlength="2"
                   maxlength="50"
-                  #nameCtrl="ngModel"
-                />
+                  #nameCtrl="ngModel" />
 
-                <div class="user-error" *ngIf="nameCtrl.invalid && nameCtrl.touched">
-                  <span *ngIf="nameCtrl.errors?.['required']"> Plan Name is required </span>
-
+                <div
+                  class="user-error"
+                  *ngIf="nameCtrl.invalid && nameCtrl.touched">
+                  <span *ngIf="nameCtrl.errors?.['required']">
+                    Plan Name is required
+                  </span>
                   <span *ngIf="nameCtrl.errors?.['minlength']">
                     Minimum 2 characters required
                   </span>
@@ -59,103 +72,164 @@
               </div>
             </div>
 
-            <!-- Rate -->
+            <!-- RATE -->
             <div class="user-form-col">
               <div class="user-form-group">
-                <label class="user-label">
-                  Rate
-                  <span class="required">*</span>
+                <label class="user-label" for="planRate">
+                  Rate <span class="required">*</span>
                 </label>
 
                 <input
+                  id="planRate"
                   type="text"
                   class="user-input"
                   placeholder="Enter Plan Rate"
                   [(ngModel)]="plan.rate"
                   name="rate"
                   required
-                  min="0"
-                  #rateCtrl="ngModel"
-                  (keypress)="allowOnlyNumbers($event)"
+                  pattern="^[0-9]+$"
                   maxlength="7"
-                />
+                  #rateCtrl="ngModel"
+                  (keypress)="allowOnlyNumbers($event)" />
 
-                <div class="user-error" *ngIf="rateCtrl.invalid && rateCtrl.touched">
-                  <span *ngIf="rateCtrl.errors?.['required']"> Rate is required </span>
+                <div
+                  class="user-error"
+                  *ngIf="rateCtrl.invalid && rateCtrl.touched">
+                  <span *ngIf="rateCtrl.errors?.['required']">
+                    Rate is required
+                  </span>
+                  <span *ngIf="rateCtrl.errors?.['pattern']">
+                    Enter a valid numeric rate
+                  </span>
+                </div>
+              </div>
+            </div>
 
-                  <span *ngIf="rateCtrl.errors?.['min']"> Rate cannot be negative </span>
+            <!-- STATUS -->
+            <div class="user-form-col" *ngIf="isEditMode">
+              <div class="user-form-group">
+                <label class="user-label" for="planStatus">
+                  Status <span class="required">*</span>
+                </label>
+
+                <select
+                  id="planStatus"
+                  class="user-input user-select"
+                  [(ngModel)]="plan.status"
+                  name="status"
+                  required
+                  #statusCtrl="ngModel">
+
+                  <option [ngValue]="null">
+                    Select Status
+                  </option>
+                  <option [ngValue]="1">Active</option>
+                  <option [ngValue]="2">Inactive</option>
+                </select>
+
+                <div
+                  class="user-error"
+                  *ngIf="statusCtrl.invalid && statusCtrl.touched">
+                  Status is required
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- DESCRIPTION -->
-          <div class="user-form-row" style="margin-top: 20px">
+          <!-- ROW 2 -->
+          <div class="user-form-row details-row">
 
-            <div class="user-form-col">
-              <div class="service-dropdown" #serviceDropdown>
-  <button
-    type="button"
-    class="service-dropdown-toggle"
-    (click)="showServiceDropdown = !showServiceDropdown">
-    <span>
-      {{ selectedServices.length
-        ? selectedServices.length + ' service(s) selected'
-        : 'Select Services' }}
-    </span>
-    <mat-icon>
-      {{ showServiceDropdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-    </mat-icon>
-  </button>
-
-  <div class="service-dropdown-menu" *ngIf="showServiceDropdown">
-    <label class="service-option select-all-option">
-      <input
-        type="checkbox"
-        [checked]="services.length > 0 && services.every(s => selectedServices.includes(s.serviceId))"
-        (change)="toggleAllServices($event)">
-      <span>Select All</span>
+            <!-- SERVICES -->
+          <div class="user-form-col">
+  <div class="user-form-group">
+    <label class="user-label" id="servicesLabel">
+      Services <span class="required">*</span>
     </label>
 
-    <label
-      class="service-option"
-      *ngFor="let service of services">
-      <input
-        type="checkbox"
-        [checked]="selectedServices.includes(service.serviceId)"
-        (change)="toggleService(service.serviceId, $event)">
-      <span>{{ service.name }}</span>
-    </label>
+    <div class="service-dropdown" #serviceDropdown>
+      <button
+        type="button"
+        class="service-dropdown-toggle"
+        [class.dropdown-open]="showServiceDropdown"
+        [class.input-error]="servicesSubmitted && selectedServices.length === 0"
+        [attr.aria-expanded]="showServiceDropdown"
+        aria-labelledby="servicesLabel"
+        (click)="showServiceDropdown = !showServiceDropdown">
 
-    <div class="no-services" *ngIf="services.length === 0">
-      No active services available
+        <span class="service-selected-text">
+          {{
+            selectedServices.length
+              ? selectedServices.length + ' service(s) selected'
+              : 'Select Services'
+          }}
+        </span>
+
+        <mat-icon>
+          {{ showServiceDropdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+        </mat-icon>
+      </button>
+
+      <div class="service-dropdown-menu" *ngIf="showServiceDropdown">
+
+        <label class="service-option select-all-option">
+          <input
+            type="checkbox"
+            [checked]="allServicesSelected"
+            (change)="toggleAllServices($event)" />
+          <span>Select All</span>
+        </label>
+
+        <label class="service-option" *ngFor="let service of services">
+          <input
+            type="checkbox"
+            [checked]="selectedServices.includes(service.serviceId)"
+            (change)="toggleService(service.serviceId, $event)" />
+          <span>{{ service.name }}</span>
+        </label>
+
+        <div class="no-services" *ngIf="services.length === 0">
+          No active services available
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="user-error"
+      *ngIf="servicesSubmitted && selectedServices.length === 0">
+      Please select at least one service.
+    </div>
+
+    <div
+      class="selected-services-info"
+      *ngIf="selectedServices.length > 0">
+      {{ selectedServices.length }} service(s) selected
     </div>
   </div>
 </div>
-            </div>
-
-
+            <!-- DESCRIPTION -->
             <div class="user-form-col">
               <div class="user-form-group">
-                <label class="user-label">
-                  Description
-                  <span class="required">*</span>
+                <label class="user-label" for="planDescription">
+                  Description <span class="required">*</span>
                 </label>
 
                 <textarea
+                  id="planDescription"
                   class="user-input user-textarea"
                   placeholder="Enter Plan Description"
-                  maxlength="250"
                   [(ngModel)]="plan.description"
                   name="description"
                   required
-                  rows="100"
-                  #descriptionCtrl="ngModel"
-                  style="height: 100px !important"
-                >
+                  minlength="5"
+                  maxlength="250"
+                  rows="4"
+                  #descriptionCtrl="ngModel">
                 </textarea>
 
-                <div class="user-error" *ngIf="descriptionCtrl.invalid && descriptionCtrl.touched">
+                <div
+                  class="user-error"
+                  *ngIf="descriptionCtrl.invalid && descriptionCtrl.touched">
+
                   <span *ngIf="descriptionCtrl.errors?.['required']">
                     Description is required
                   </span>
@@ -166,46 +240,24 @@
                 </div>
               </div>
             </div>
-
-            <div class="user-form-col" *ngIf="isEditMode">
-              <div class="user-form-group">
-                <label class="user-label">
-                  Status
-                  <span class="required">*</span>
-                </label>
-
-                <select
-                  class="user-input user-select"
-                  [(ngModel)]="plan.status"
-                  name="status"
-                  required
-                  #statusCtrl="ngModel"
-                >
-                  <option [ngValue]="null">Select Status</option>
-
-                  <option [ngValue]="1">Active</option>
-
-                  <option [ngValue]="2">Inactive</option>
-                </select>
-
-                <div class="user-error" *ngIf="statusCtrl.invalid && statusCtrl.touched">
-                  Status is required
-                </div>
-              </div>
-            </div>
           </div>
-
-          <!-- STATUS -->
-          <div class="user-form-row"></div>
 
           <!-- BUTTONS -->
           <div class="user-buttons">
-            <button type="button" class="user-reset-btn" (click)="onReset()">Reset</button>
+            <button
+              type="button"
+              class="user-reset-btn"
+              (click)="onReset()">
+              Reset
+            </button>
 
-            <button type="submit" class="user-submit-btn">
+            <button
+              type="submit"
+              class="user-submit-btn">
               {{ isEditMode ? 'Update' : 'Submit' }}
             </button>
           </div>
+
         </div>
       </form>
     </div>

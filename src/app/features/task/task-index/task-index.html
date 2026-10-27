@@ -863,7 +863,7 @@
           <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
         </label>
 
-        <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" name="assignedToModal" [disabled]="users.length === 0">
+        <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" (ngModelChange)="onAssignModalUserChange($event)" name="assignedToModal" [disabled]="users.length === 0">
           <option [ngValue]="0">Select User</option>
 
           <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
@@ -871,6 +871,16 @@
 
         <div *ngIf="!isLoadingAssignUsers && users.length === 0" class="assign-error">No other user found for this category.</div>
       </div>
+
+      <!-- BUDDY (optional) -->
+<div class="assign-form-group assign-full-width">
+  <label class="assign-field-label">Buddy</label>
+
+  <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.buddyId" name="buddyModal" [disabled]="!selectedAssignTask?.assignedTo || buddyUsers.length === 0">
+    <option [ngValue]="null">Select Buddy</option>
+    <option *ngFor="let user of buddyUsers" [ngValue]="user.userId">{{ user.firstName }}</option>
+  </select>
+</div>
 
       <div class="assign-form-group assign-full-width">
         <label class="assign-field-label">
