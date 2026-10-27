@@ -76,6 +76,8 @@
             </span>
           </div>
 
+          
+
           <!-- ADMIN PERMISSION -->
 
           <div class="admin-permission">
@@ -129,6 +131,15 @@
               {{ getWeeklyOffLabel(user.weeklyOff) }}
             </span>
           </div>
+
+          <div class="info-row">
+  <span class="info-label"> Shift: </span>
+
+  <span class="info-value">
+    {{ user.shiftName ?? '-' }}
+    <ng-container *ngIf="user.shiftTime"> ({{ user.shiftName }})</ng-container>
+  </span>
+</div>
 
           
 

@@ -34,7 +34,8 @@ interface User {
   weeklyOffNames: any;
   companyName: any;
   fromTime:any;
-  toTime:any
+  toTime:any;
+  shiftName:any;
 }
 
 @Component({

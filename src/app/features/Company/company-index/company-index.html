@@ -106,88 +106,89 @@
       </div>
 
       <div class="table-wrapper">
-        <table class="designation-table">
-          <thead>
-            <tr>
-              <th class="serial-column">#</th>
+       <table class="designation-table">
+  <colgroup>
+    <col class="col-serial" />
+    <col class="col-name" />
+    <col class="col-city" />
+    <col class="col-state" />
+    <col class="col-location" />
+    <col class="col-status" />
+    <col class="col-action" />
+  </colgroup>
 
-              <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
-                <div class="column-header">
-                  <span>{{ col.label }}</span>
+  <thead>
+    <tr>
+      <th class="serial-column sticky-1">#</th>
 
-                  <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+      <th *ngFor="let col of columns; let i = index" [class.sticky-2]="i === 0" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+        <div class="column-header">
+          <span>{{ col.label }}</span>
 
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
-                  </span>
-                </div>
-              </th>
+          <span *ngIf="col.sortable" class="sort-icons">
+            <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+            <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+          </span>
+        </div>
+      </th>
 
-              <th class="action-column">Action</th>
-            </tr>
-          </thead>
+      <th class="action-column">Action</th>
+    </tr>
+  </thead>
 
-          <tbody>
-            <tr *ngFor="let client of companies; let i = index">
-              <td class="serial-cell">
-                {{ (currentPage - 1) * size + i + 1 }}
-              </td>
+  <tbody>
+    <tr *ngFor="let client of companies; let i = index">
+      <td class="serial-cell sticky-1">
+        {{ (currentPage - 1) * size + i + 1 }}
+      </td>
 
-              <td class="plan-name-cell">
-                <span class="user-name">
-                  {{ client.companyName || '-' }}
-                </span>
-              </td>
+      <td class="plan-name-cell sticky-2">
+        <span class="user-name">{{ client.companyName || '-' }}</span>
+      </td>
 
-              <td class="plan-name-cell">
-                {{ client.city || '-' }}
-              </td>
+      <td class="plan-name-cell">{{ client.city || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.stateName || '-' }}
-              </td>
+      <td class="plan-name-cell">{{ client.stateName || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.location || '-' }}
-              </td>
+      <td class="plan-name-cell">{{ client.location || '-' }}</td>
 
-              <td class="status-cell">
-                <span class="status-badge" [ngClass]="getStatusClass(client.status)">
-                  {{ getStatusLabel(client.status) }}
-                </span>
-              </td>
+      <td class="status-cell">
+        <span class="status-badge" [ngClass]="getStatusClass(client.status)">
+          {{ getStatusLabel(client.status) }}
+        </span>
+      </td>
 
-              <td class="action-cell">
-                @if (viewPer === 'Y') {
-                  <button type="button" class="action-button view-button" title="View" (click)="viewCompany(client.companyId)">
-                    <mat-icon> visibility </mat-icon>
-                  </button>
-                }
+      <td class="action-cell">
+        @if (viewPer === 'Y') {
+          <button type="button" class="action-button view-button" title="View" (click)="viewCompany(client.companyId)">
+            <mat-icon> visibility </mat-icon>
+          </button>
+        }
 
-                <ng-container *ngIf="client.status === 1 || client.status === 2">
-                  @if (editPer === 'Y') {
-                    <button type="button" class="action-button edit-button" title="Edit" (click)="editCompany(client.companyId)">
-                      <mat-icon> edit </mat-icon>
-                    </button>
-                  }
+        <ng-container *ngIf="client.status === 1 || client.status === 2">
+          @if (editPer === 'Y') {
+            <button type="button" class="action-button edit-button" title="Edit" (click)="editCompany(client.companyId)">
+              <mat-icon> edit </mat-icon>
+            </button>
+          }
 
-                  @if (deletePer === 'Y') {
-                    <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteCompany(client.companyId)">
-                      <mat-icon> delete </mat-icon>
-                    </button>
-                  }
-                </ng-container>
-              </td>
-            </tr>
+          @if (deletePer === 'Y') {
+            <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteCompany(client.companyId)">
+              <mat-icon> delete </mat-icon>
+            </button>
+          }
+        </ng-container>
+      </td>
+    </tr>
 
-            <tr *ngIf="!companies || companies.length === 0">
-              <td colspan="7" class="no-records">
-                <mat-icon> info_outline </mat-icon>
-                <span> No records found </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <tr *ngIf="!companies || companies.length === 0">
+      <td colspan="7" class="no-records">
+        <mat-icon> info_outline </mat-icon>
+        <span> No records found </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
       </div>
       <div class="table-toolbar bottom-toolbar">
         <div class="record-summary">

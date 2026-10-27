@@ -380,9 +380,20 @@
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">Company</label>
-                <select class="user-input user-select" formControlName="companyId">
+                <select class="user-input user-select" formControlName="companyId" (change)="onCompanyChange()">
                 <option [ngValue]="null">-- Select Company --</option>
                   <option *ngFor="let c of companies" [ngValue]="c.companyId">{{ c.companyName }}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- NEW -->
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">Shift</label>
+                <select class="user-input user-select" formControlName="shiftId">
+                  <option [ngValue]="null">{{ shiftsLoading ? 'Loading...' : '-- Select Shift --' }}</option>
+                  <option *ngFor="let s of companyShifts" [ngValue]="s.shiftId">{{ s.shiftName }}</option>
                 </select>
               </div>
             </div>
