@@ -32,7 +32,9 @@ interface User {
   taskCategoryNames: string;
 
   weeklyOffNames: any;
-  companyName:any
+  companyName: any;
+  fromTime:any;
+  toTime:any
 }
 
 @Component({
@@ -82,6 +84,7 @@ export class MyTeam implements OnInit {
   selectedDepartmentId: number | null = null;
 
   selectedDesignationId: number | null = null;
+  selectComapnyId: number | null = null;
 
   // =========================================================
   // PAGINATION
@@ -170,6 +173,12 @@ export class MyTeam implements OnInit {
     {
       key: 'companyName',
       label: 'Company Name',
+      sortable: true,
+    },
+
+     {
+      key: 'shiftTime',
+      label: 'Shift Time',
       sortable: true,
     },
 
@@ -294,6 +303,8 @@ export class MyTeam implements OnInit {
         this.selectedDesignationId,
         this.selectedCategoryId,
         this.selectedWeeklyOff, // NEW
+        this.selectComapnyId, // new
+        this.selectedShiftId,
       )
       .subscribe({
         next: (response: any) => {
@@ -857,17 +868,8 @@ export class MyTeam implements OnInit {
       // DEBUG
       // =====================================================
 
-      console.log('RESTORED FILTER STATE:', {
-        currentPage: this.currentPage,
-        page: this.page,
-        size: this.size,
-        search: this.search,
-        statusIndex: this.statusIndex,
-        selectedStatus: this.selectedStatus,
-        departmentId: this.selectedDepartmentId,
-        designationId: this.selectedDesignationId,
-        categoryId: this.selectedCategoryId,
-      });
+      this.selectComapnyId = Number(filterState.companyId) > 0 ? Number(filterState.companyId) : null;
+this.selectedShiftId = Number(filterState.shiftId) > 0 ? Number(filterState.shiftId) : null;
     } catch (error) {
       console.error('Error restoring filter state:', error);
 
@@ -1155,6 +1157,9 @@ export class MyTeam implements OnInit {
     this.page = 0;
     this.selectedWeeklyOff = null;
     // Reload the first page with cleared filters
+    this.selectComapnyId = null;
+this.selectedShiftId = null;
+this.companyShifts = [];
     this.onSearch();
     this.loadCategories();
   }
@@ -1278,13 +1283,56 @@ export class MyTeam implements OnInit {
   }
 
   companies: any[] = [];
-
+  companyShifts: any[] = [];
+  selectedShiftId: number | null = null;
+  shiftsLoading = false;
   loadActiveCompany(): void {
     this.dataprovider.activeCompanyList().subscribe({
       next: (res: any) => {
         this.companies = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
       },
       error: (err) => console.error('Error loading companies:', err),
+    });
+  }
+
+  onCompanyChange(companyId: number | null): void {
+    this.selectComapnyId = companyId;
+    this.companyShifts = [];
+    this.selectedShiftId = null;
+
+    if (companyId) {
+      this.loadShifts(Number(companyId));
+    }
+
+    this.applyCompanyShiftFilter();
+  }
+
+  onShiftChange(shiftId: number | null): void {
+    this.selectedShiftId = shiftId;
+    this.applyCompanyShiftFilter();
+  }
+
+  private applyCompanyShiftFilter(): void {
+    this.currentPage = 1;
+    this.page = 0;
+    this.search = this.searchQuery.trim();
+    this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
+    this.saveFilterState();
+    this.getUserDetails();
+  }
+
+  private loadShifts(companyId: number, afterLoad?: () => void): void {
+    this.shiftsLoading = true;
+    this.dataprovider.findActiveCompanyShift(companyId).subscribe({
+      next: (res: any) => {
+        this.companyShifts = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
+        this.shiftsLoading = false;
+        afterLoad?.();
+      },
+      error: (err) => {
+        console.error('Error loading company shifts:', err);
+        this.shiftsLoading = false;
+      },
     });
   }
 }

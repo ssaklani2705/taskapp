@@ -37,7 +37,6 @@
             </div>
           </div>
 
-         
           <!-- <div class="department-wrapper">
             <select class="status-select" [(ngModel)]="selectedDepartmentId" (change)="onDepartmentChange()">
               <option [ngValue]="null">--All Departments--</option>
@@ -60,94 +59,57 @@
           </div> -->
 
           <!-- Department -->
-<div class="department-wrapper dept-width">
-  <div class="task-category-dropdown" (click)="$event.stopPropagation()">
-    <div
-      class="status-select cat-trigger"
-      [class.cat-placeholder]="selectedDepartmentId === null"
-      (click)="toggleDeptDropdown()"
-    >
-      <span class="cat-trigger-text">{{ selectedDepartmentName }}</span>
-      <span class="cat-caret">▼</span>
-    </div>
+          <div class="department-wrapper dept-width">
+            <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+              <div class="status-select cat-trigger" [class.cat-placeholder]="selectedDepartmentId === null" (click)="toggleDeptDropdown()">
+                <span class="cat-trigger-text">{{ selectedDepartmentName }}</span>
+                <span class="cat-caret">▼</span>
+              </div>
 
-    <div class="cat-panel" *ngIf="deptOpen">
-      <input
-        type="text"
-        class="cat-search"
-        placeholder="Search department..."
-        [(ngModel)]="deptSearch"
-        autofocus
-      />
+              <div class="cat-panel" *ngIf="deptOpen">
+                <input type="text" class="cat-search" placeholder="Search department..." [(ngModel)]="deptSearch" autofocus />
 
-      <div class="cat-list">
-        <div
-          class="cat-item"
-          [class.active]="selectedDepartmentId === null"
-          (click)="selectDepartment(null)"
-        >
-          --All Departments--
-        </div>
+                <div class="cat-list">
+                  <div class="cat-item" [class.active]="selectedDepartmentId === null" (click)="selectDepartment(null)">--All Departments--</div>
 
-        <div
-          class="cat-item"
-          *ngFor="let department of filteredDepartments"
-          [class.active]="department.departmentId === selectedDepartmentId"
-          (click)="selectDepartment(department.departmentId)"
-        >
-          {{ department.name }}
-        </div>
+                  <div
+                    class="cat-item"
+                    *ngFor="let department of filteredDepartments"
+                    [class.active]="department.departmentId === selectedDepartmentId"
+                    (click)="selectDepartment(department.departmentId)"
+                  >
+                    {{ department.name }}
+                  </div>
 
-        <div class="cat-empty" *ngIf="filteredDepartments.length === 0">No results found</div>
-      </div>
-    </div>
-  </div>
-</div>
+                  <div class="cat-empty" *ngIf="filteredDepartments.length === 0">No results found</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
-<!-- Category -->
-<div class="department-wrapper cat-width">
-  <div class="task-category-dropdown" (click)="$event.stopPropagation()">
-    <div
-      class="status-select cat-trigger"
-      [class.cat-placeholder]="selectedCategoryId === null"
-      (click)="toggleCatDropdown()"
-    >
-      <span class="cat-trigger-text">{{ selectedCategoryName }}</span>
-      <span class="cat-caret">▼</span>
-    </div>
+          <!-- Category -->
+          <div class="department-wrapper cat-width">
+            <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+              <div class="status-select cat-trigger" [class.cat-placeholder]="selectedCategoryId === null" (click)="toggleCatDropdown()">
+                <span class="cat-trigger-text">{{ selectedCategoryName }}</span>
+                <span class="cat-caret">▼</span>
+              </div>
 
-    <div class="cat-panel" *ngIf="catOpen">
-      <input
-        type="text"
-        class="cat-search"
-        placeholder="Search category..."
-        [(ngModel)]="catSearch"
-        autofocus
-      />
+              <div class="cat-panel" *ngIf="catOpen">
+                <input type="text" class="cat-search" placeholder="Search category..." [(ngModel)]="catSearch" autofocus />
 
-      <div class="cat-list">
-        <div
-          class="cat-item"
-          [class.active]="selectedCategoryId === null"
-          (click)="selectCategory(null)"
-        >
-          --All Task Categories--
-        </div>
+                <div class="cat-list">
+                  <div class="cat-item" [class.active]="selectedCategoryId === null" (click)="selectCategory(null)">--All Task Categories--</div>
 
-        <div
-          class="cat-item"
-          *ngFor="let category of filteredCategories"
-          [class.active]="category.taskcategoryId === selectedCategoryId"
-          (click)="selectCategory(category.taskcategoryId)"
-        >
-          {{ category.name }}
-        </div>
+                  <div class="cat-item" *ngFor="let category of filteredCategories" [class.active]="category.taskcategoryId === selectedCategoryId" (click)="selectCategory(category.taskcategoryId)">
+                    {{ category.name }}
+                  </div>
 
-        <div class="cat-empty" *ngIf="filteredCategories.length === 0">No results found</div>
-      </div>
-    </div>
-  </div>
-</div>
+                  <div class="cat-empty" *ngIf="filteredCategories.length === 0">No results found</div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <!-- WEEKLY OFF -->
           <div class="designation-wrapper">
@@ -171,16 +133,17 @@
             </select>
           </div>
 
-          <!-- STATUS -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
-              <option value="">--All Status--</option>
+          <div class="designation-wrapper">
+            <select class="status-select" [ngModel]="selectComapnyId" (ngModelChange)="onCompanyChange($event)">
+              <option [ngValue]="null">--All Companies--</option>
+              <option *ngFor="let c of companies" [ngValue]="c.companyId">{{ c.companyName }}</option>
+            </select>
+          </div>
 
-              <option value="1">Active</option>
-
-              <option value="2">Inactive</option>
-
-              <option value="3">Deleted</option>
+          <div class="designation-wrapper">
+            <select class="status-select" [(ngModel)]="selectedShiftId" [disabled]="!selectComapnyId || shiftsLoading" (ngModelChange)="onShiftChange($event)">
+              <option [ngValue]="null">--All Shifts--</option>
+              <option *ngFor="let s of companyShifts" [ngValue]="s.shiftId">{{ s.shiftName }}</option>
             </select>
           </div>
 
@@ -302,8 +265,12 @@
                 <td>
                   {{ user.mobile }}
                 </td>
-                   <td>
-                  {{ user.companyName ?? "-" }}
+                <td>
+                  {{ user.companyName ?? '-' }}
+                </td>
+
+                <td>
+                  {{ user.fromTime && user.toTime ? user.fromTime + ' - ' + user.toTime : '-' }}
                 </td>
                 <td>
                   {{ user.departmentName }}
