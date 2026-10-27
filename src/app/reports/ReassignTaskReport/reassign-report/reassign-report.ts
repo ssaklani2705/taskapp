@@ -491,4 +491,43 @@ export class ReassignReport implements OnInit {
       this.categorySearchText = '';
     }
   }
+    taskStatusOptions: { id: string; label: string }[] = [
+    { id: '0', label: 'Unassigned' },
+    { id: '1', label: 'Assigned' },
+    { id: '2', label: 'Assignee Closure' },
+    { id: '3', label: 'Re-Open' },
+    { id: '4', label: 'Assignee Re-Closure' },
+    { id: '5', label: 'Assignor Closure' },
+  ];
+  showStatusDropdown = false;
+
+   isTaskStatusChecked(id: string): boolean {
+    return this.selectedTaskStatuses.includes(id);
+  }
+ toggleTaskStatus(id: string): void {
+    const index = this.selectedTaskStatuses.indexOf(id);
+
+    if (index > -1) {
+      this.selectedTaskStatuses = this.selectedTaskStatuses.filter((x) => x !== id);
+    } else {
+      this.selectedTaskStatuses = [...this.selectedTaskStatuses, id];
+    }
+
+    this.onSearch();
+  }
+
+  selectedTaskStatuses: string[] = [];
+    getSelectedTaskStatusLabel(): string {
+    if (this.selectedTaskStatuses.length === 0) {
+      return '--All Task Status--';
+    }
+
+    const labels = this.taskStatusOptions.filter((s) => this.selectedTaskStatuses.includes(s.id)).map((s) => s.label);
+
+    if (labels.length > 2) {
+      return `${labels.length} Statuses Selected`;
+    }
+
+    return labels.join(', ');
+  }
 }
