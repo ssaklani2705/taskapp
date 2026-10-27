@@ -84,32 +84,32 @@ export class DataProviderService {
     return this.http.get<{ assigned: boolean; message: string }>(`${environment.apiBaseUrl}admin/dashboard/client/check-assignment/${managerId}`);
   }
 
-getUserManagementDetails(
-  page: any,
-  size: any,
-  statusIndex: any,
-  search: any,
-  departmentId: number | null,
-  designationId: number | null,
-  selectedCategoryId: any,
-  weeklyOff: any,
-  companyId: any,
-  shiftId: any,
-): Observable<any> {
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/getUserManagementDetails` +
-      `?page=${page}` +
-      `&size=${size}` +
-      `&statusIndex=${statusIndex}` +
-      `&search=${encodeURIComponent(search || '')}` +
-      `&departmentId=${departmentId ?? '0'}` +
-      `&designationId=${designationId ?? '0'}` +
-      `&weeklyOff=${weeklyOff ?? '0'}` +
-      `&selectedCategoryId=${selectedCategoryId ?? '0'}` +
-      `&companyId=${companyId ?? '0'}` +
-      `&shiftId=${shiftId ?? '0'}`,
-  );
-}
+  getUserManagementDetails(
+    page: any,
+    size: any,
+    statusIndex: any,
+    search: any,
+    departmentId: number | null,
+    designationId: number | null,
+    selectedCategoryId: any,
+    weeklyOff: any,
+    companyId: any,
+    shiftId: any,
+  ): Observable<any> {
+    return this.http.get(
+      `${environment.apiBaseUrl}admin/getUserManagementDetails` +
+        `?page=${page}` +
+        `&size=${size}` +
+        `&statusIndex=${statusIndex}` +
+        `&search=${encodeURIComponent(search || '')}` +
+        `&departmentId=${departmentId ?? '0'}` +
+        `&designationId=${designationId ?? '0'}` +
+        `&weeklyOff=${weeklyOff ?? '0'}` +
+        `&selectedCategoryId=${selectedCategoryId ?? '0'}` +
+        `&companyId=${companyId ?? '0'}` +
+        `&shiftId=${shiftId ?? '0'}`,
+    );
+  }
 
   getUserManagementDetailsById(id: any): Observable<any> {
     return this.http.get(`${environment.apiBaseUrl}admin/getUserManagementDetails/${id}`);
@@ -1600,14 +1600,25 @@ getUserManagementDetails(
     return this.http.get<any[]>(`${environment.apiBaseUrl}admin/task/rating-summary/departments`, { params });
   }
 
-  getTaskReassignReport(page: number, size: number, search: string, fromDate: string, toDate: string, taskCategoryId: number, clientId: number, userId: number): Observable<any> {
+  getTaskReassignReport(
+    page: number,
+    size: number,
+    search: string,
+    fromDate: string,
+    toDate: string,
+    taskCategoryId: number,
+    clientId: number,
+    userId: number,
+    departmentIds: string,
+  ): Observable<any> {
     let params = new HttpParams()
       .set('page', page)
       .set('size', size)
       .set('search', search ?? '')
       .set('taskCategoryId', taskCategoryId)
       .set('clientId', clientId)
-      .set('userId', userId);
+      .set('userId', userId)
+      .set('departmentIds', departmentIds);
 
     if (fromDate) params = params.set('fromDate', fromDate);
     if (toDate) params = params.set('toDate', toDate);

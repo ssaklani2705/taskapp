@@ -115,6 +115,19 @@
             <mat-datepicker #toPicker></mat-datepicker>
           </div>
         </div>
+        <div class="status-dropdown">
+          <button type="button" class="dropdown-btn" (click)="showDepartmentDropdown = !showDepartmentDropdown">
+            {{ getSelectedDepartmentLabel() }}
+          </button>
+
+          <div class="dropdown-menu" *ngIf="showDepartmentDropdown">
+            <label *ngFor="let d of departments">
+              <input type="checkbox" [checked]="isDepartmentChecked(d.departmentId)" (change)="toggleDepartment(d.departmentId)" />
+              {{ d.name }}
+            </label>
+            <div *ngIf="departments.length === 0" style="padding: 10px; text-align: center; color: #718096">No departments found</div>
+          </div>
+        </div>
 
         <!-- GO -->
         <div class="go-wrapper">
