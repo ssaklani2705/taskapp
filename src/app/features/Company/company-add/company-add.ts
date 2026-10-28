@@ -91,7 +91,15 @@ export class CompanyAdd implements OnInit {
       pincode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]],
       location: ['', [Validators.required, Validators.maxLength(200)]],
       stateId: [null, Validators.required],
-      gstNo: ['', [Validators.maxLength(15), Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)]],
+      // gstNo: ['', [Validators.maxLength(15), Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)]],
+      gstNo: [
+  '',
+  [
+    Validators.required,
+    Validators.maxLength(15),
+    Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)
+  ]
+],
       pan: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)]],
       status: [1, Validators.required],
       workingDays: [[1, 2, 3, 4, 5, 6, 7], Validators.required],
@@ -259,4 +267,15 @@ export class CompanyAdd implements OnInit {
   { value: 6, label: 'Saturday' },
   { value: 7, label: 'Sunday' },
 ];
+
+convertGSTToUppercase(): void {
+  const control = this.companyForm.get('gstNo');
+
+  if (control && control.value) {
+    control.setValue(
+      String(control.value).toUpperCase(),
+      { emitEvent: false }
+    );
+  }
+}
 }

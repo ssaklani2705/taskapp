@@ -88,7 +88,48 @@
                 </div>
               </div>
                <!-- GST Number -->
-              <div class="user-form-col">
+                
+<!-- GST Number -->
+<div class="user-form-col">
+  <div class="user-form-group">
+
+    <label class="user-label">
+      GST Number
+      <span class="required">*</span>
+    </label>
+
+    <input
+      type="text"
+      class="user-input"
+      formControlName="gstNo"
+      maxlength="15"
+      (input)="convertGSTToUppercase()"
+    />
+
+    <!-- Required Validation -->
+    <div
+      class="user-error"
+      *ngIf="
+        companyForm.get('gstNo')?.touched &&
+        companyForm.get('gstNo')?.errors?.['required']
+      ">
+      GST Number is required
+    </div>
+
+    <!-- Pattern Validation -->
+    <div
+      class="user-error"
+      *ngIf="
+        companyForm.get('gstNo')?.touched &&
+        companyForm.get('gstNo')?.errors?.['pattern']
+      ">
+      Enter a valid 15-character GST Number
+    </div>
+
+  </div>
+</div>
+
+              <!-- <div class="user-form-col">
                 <div class="user-form-group">
                   <label class="user-label">
                     GST Number
@@ -98,7 +139,7 @@
                   <div class="user-error" *ngIf="companyForm.get('gstNo')?.touched && companyForm.get('gstNo')?.errors?.['required']">GST Number is required when GST Applicable is selected</div>
                   <div class="user-error" *ngIf="companyForm.get('gstNo')?.touched && companyForm.get('gstNo')?.errors?.['pattern']">Enter a valid GST Number</div>
                 </div>
-              </div>
+              </div> -->
             </div>
            
           </div>

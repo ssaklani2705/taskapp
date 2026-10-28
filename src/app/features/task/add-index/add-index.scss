@@ -1085,3 +1085,124 @@
     box-shadow: 0 0 0 2px rgba(51, 120, 169, 0.08);
   }
 }
+
+//end date error design issue
+
+
+/* ================================================
+   END DATE & TIME - DESIGN FIX
+================================================ */
+
+.user-form-col {
+  min-width: 0;
+}
+
+.user-form-group {
+  width: 100%;
+  min-width: 0;
+}
+
+/* DATE INPUT CONTAINER */
+.user-date-group {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 46px;
+  min-width: 0;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* CALENDAR ICON */
+.user-date-group .user-date-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex: 0 0 54px;
+  width: 54px;
+  height: 46px;
+
+  background: #e9eef4;
+  border: 1px solid #c7d4e2;
+  border-right: none;
+
+  border-radius: 3px 0 0 3px;
+
+  color: #607d98;
+  cursor: pointer;
+
+  box-sizing: border-box;
+}
+
+/* DATE INPUT */
+.user-date-group .user-date-input {
+  display: block;
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  height: 46px;
+
+  padding: 10px 14px;
+  margin: 0;
+
+  border: 1px solid #c7d4e2;
+  border-radius: 0 3px 3px 0;
+
+  background: #fff;
+  color: #17375e;
+
+  font-size: 15px;
+  line-height: 24px;
+
+  box-sizing: border-box;
+}
+
+/* FOCUS */
+.user-date-group .user-date-input:focus {
+  outline: none;
+  border-color: #2f6fa3;
+  box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.08);
+}
+
+/* VALIDATION MESSAGE */
+.user-form-group > .user-error {
+  display: block;
+  width: 100%;
+
+  margin-top: 5px;
+
+  color: #f44336;
+  font-size: 13px;
+  line-height: 18px;
+
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+/* DURATION WARNING */
+.user-form-group > .user-warning {
+  display: block;
+  width: 100%;
+
+  margin-top: 6px;
+
+  color: #b26a00;
+  font-size: 12px;
+  line-height: 18px;
+
+  white-space: normal;
+}
+
+/* SMALL SCREENS */
+@media (max-width: 768px) {
+  .user-date-group .user-date-icon {
+    flex-basis: 46px;
+    width: 46px;
+  }
+
+  .user-date-group .user-date-input {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+}
