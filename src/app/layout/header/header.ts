@@ -274,4 +274,9 @@ export class Header implements OnInit {
 
     return oldPassword === newPassword ? { samePassword: true } : null;
   }
+
+  onUserManualClick(): void {
+  this.showProfileMenu = false;
+  window.open('assets/docs/Society123_Task_App_User_Manual.pdf', '_blank', 'noopener');
+}
 }

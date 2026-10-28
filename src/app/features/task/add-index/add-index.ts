@@ -853,36 +853,59 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
     this.onClientChange(null);
   }
 
-//  onManagerClientChange(clientId: number | null): void {
-//   this.task.clientId = clientId;
-//   this.onClientChange(clientId);
-
-//   if (clientId) {
-//     this.onchangeloadDropdownData(); // categories only
-//   }
-// }
-
-onManagerClientChange(clientId: number | null): void {
+  onManagerClientChange(clientId: number | null): void {
   this.task.clientId = clientId;
 
+  // Everything below belonged to the previous client
   this.task.assignedTo = null;
-  this.task.buddyId = null;         // ADD
+  this.task.buddyId = null;
   this.users = [];
   this.workloadList = [];
   this.noEmployeeError = '';
   this.holidayError = '';
+  this.taskCategoryEmployeeError = false;
+
+  // Category
+  this.task.taskCategoryId = null;
+  this.selectedTaskCategoryName = '';
+  this.showCategoryDropdown = false;
+  this.categorySearchText = '';
+
+  // Start and End Date & Time
+  this.task.startDate = null;
+  this.task.endDate = null;
+  // this.durationMessage = '';
 
   if (!clientId) {
     return;
   }
 
+  // Reload the category list for the new client
   this.onchangeloadDropdownData();
-
-  // Load employees immediately if a category is already selected.
-  if (this.task.taskCategoryId) {
-    this.onchangeloadUserDropdownData();
-  }
 }
+
+
+// onManagerClientChange(clientId: number | null): void {
+//   this.task.clientId = clientId;
+
+//   this.task.assignedTo = null;
+//   this.task.buddyId = null;         // ADD
+//   this.users = [];
+//   this.workloadList = [];
+//   this.noEmployeeError = '';
+//   this.holidayError = '';
+
+//   if (!clientId) {
+//     return;
+//   }
+
+//   this.onchangeloadDropdownData();
+
+//   // Load employees immediately if a category is already selected.
+//   if (this.task.taskCategoryId) {
+//     this.onchangeloadUserDropdownData();
+//   }
+// }
 
 
   // ============================================================
@@ -1243,6 +1266,11 @@ onTaskCategoryChange(): void {
     this.noEmployeeError = '';
     this.holidayError = '';
     this.taskCategoryEmployeeError = false;
+
+    // Clear Start and End Date & Time
+  this.task.startDate = null;
+  this.task.endDate = null;
+  // this.durationMessage = '';   // if you have one (the "exceeds 8 hours" message)
 
     this.task.taskCategoryId = null;
     this.selectedTaskCategoryName = '';
