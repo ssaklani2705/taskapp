@@ -238,4 +238,42 @@ deleteShift(s: any): void {
     });
   });
 }
+
+
+getCompanyTypeLabel(value: number | string | null): string {
+  switch (Number(value)) {
+    case 1:
+      return 'Main';
+    case 2:
+      return 'Site';
+    default:
+      return '-';
+  }
+}
+
+getWorkingDaysLabel(value: string | number[] | null): string {
+  if (!value || (Array.isArray(value) && value.length === 0)) {
+    return '-';
+  }
+
+  const days: Record<number, string> = {
+    1: 'Monday',
+    2: 'Tuesday',
+    3: 'Wednesday',
+    4: 'Thursday',
+    5: 'Friday',
+    6: 'Saturday',
+    7: 'Sunday',
+  };
+
+  const selectedDays = Array.isArray(value)
+    ? value
+    : String(value).split(',').map(Number);
+
+  return selectedDays
+    .map(day => days[Number(day)])
+    .filter(Boolean)
+    .join(', ') || '-';
+}
+
 }

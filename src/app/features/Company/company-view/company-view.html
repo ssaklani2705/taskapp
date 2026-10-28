@@ -23,8 +23,21 @@
           <span>Company Details</span>
         </div>
 
+        
+
+
+
+
         <!-- Row 2 -->
         <div class="details-grid">
+
+          <!-- Company Type -->
+<div class="info-field">
+  <span class="field-label">Company Type:</span>
+  <span class="field-value">
+    {{ getCompanyTypeLabel(company.companySiteOffice) }}
+  </span>
+</div>
           <div class="info-field">
             <span class="field-label">Company Name:</span>
             <span class="field-value">
@@ -102,7 +115,16 @@
             </span>
           </div>
 
-          <div class="empty-field"></div>
+          <!-- Working Days -->
+<div class="info-field working-days-field">
+  <span class="field-label">Working Days:</span>
+  <span class="field-value">
+    {{ getWorkingDaysLabel(company.workingDays) }}
+  </span>
+</div>
+
+
+          <!-- <div class="empty-field"></div> -->
           <div class="empty-field"></div>
         </div>
       </div>

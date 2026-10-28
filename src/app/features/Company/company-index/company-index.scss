@@ -1670,3 +1670,260 @@ mat-divider,
     min-height: 30px;
   }
 }
+
+/* =========================================================
+   COMPANY MASTER — FILTER AND TABLE LAYOUT FIXES
+   Keep existing Society 123 theme and all previous styles.
+========================================================= */
+
+/* Allow popovers to extend beyond the search section. */
+.main-card { overflow: visible; }
+.search-section { position: relative; z-index: 5; }
+.table-section { position: relative; z-index: 1; }
+
+/* Five filters: search + state + type + days + status. */
+.search-row {
+  display: grid;
+  grid-template-columns: minmax(250px, 1.65fr) repeat(4, minmax(140px, 1fr));
+  align-items: start;
+  gap: 12px;
+}
+.search-row > .search-wrapper,
+.search-row > .status-wrapper {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  flex: initial;
+}
+.search-row .status-select,
+.search-row .task-category-dropdown { width: 100%; min-width: 0; }
+.search-row .status-select { text-overflow: ellipsis; }
+.filter-row:empty { display: none; }
+.filter-row { gap: 12px; }
+.btn-go, .btn-clear { height: var(--control-h); }
+
+/* Dropdown panels and checkbox items */
+.task-category-dropdown { position: relative; }
+.task-category-dropdown .cat-panel {
+  top: calc(100% + 4px);
+  left: 0;
+  right: auto;
+  width: max(100%, 230px);
+  min-width: 0;
+  max-width: min(320px, calc(100vw - 40px));
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 100;
+}
+/* Put this class on the working-days dropdown wrapper. */
+.working-days-dropdown { position: relative; width: 100%; min-width: 0; }
+.working-days-dropdown .cat-panel,
+.working-days-dropdown .working-days-panel,
+.working-days-dropdown .dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: auto;
+  width: max(100%, 230px);
+  min-width: 0;
+  max-width: min(320px, calc(100vw - 40px));
+  max-height: 300px;
+  padding: 8px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: var(--white);
+  border: 1px solid var(--border-dark);
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(25, 52, 90, .14);
+  box-sizing: border-box;
+  z-index: 100;
+}
+.working-days-dropdown .cat-item,
+.working-days-dropdown .day-option,
+.working-days-dropdown .working-day-option,
+.working-days-dropdown label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+  min-height: 34px;
+  padding: 6px 8px;
+  margin: 0;
+  box-sizing: border-box;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.working-days-dropdown input[type='checkbox'] {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--primary-blue);
+}
+.working-days-dropdown .cat-item:hover,
+.working-days-dropdown label:hover { background: var(--table-hover); }
+
+/* Table columns: requires matching colgroup entries in the HTML. */
+.designation-table { min-width: 1320px; }
+.designation-table .col-serial { width: 60px; }
+.designation-table .col-name { width: 220px; }
+.designation-table .col-type { width: 110px; }
+.designation-table .col-city { width: 140px; }
+.designation-table .col-state { width: 160px; }
+.designation-table .col-location { width: 150px; }
+.designation-table .col-working-days { width: 250px; }
+.designation-table .col-status { width: 100px; }
+.designation-table .col-action { width: 130px; }
+.designation-table tbody td.working-days-cell {
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+  line-height: 1.5;
+  text-align: left;
+}
+.designation-table tbody td.working-days-cell .days-text { display: block; }
+.designation-table .action-cell { white-space: nowrap; }
+
+@media (max-width: 1450px) {
+  .search-row { grid-template-columns: minmax(260px, 1.5fr) repeat(3, minmax(160px, 1fr)); }
+  .search-row > :last-child { grid-column: auto; }
+}
+@media (max-width: 1100px) {
+  .search-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .search-row > .search-wrapper { grid-column: 1 / -1; }
+}
+@media (max-width: 768px) {
+  .search-row { display: grid; grid-template-columns: 1fr; }
+  .search-row > .search-wrapper { grid-column: auto; }
+  .search-row > .status-wrapper,
+  .search-row > .search-wrapper { width: 100%; min-width: 0; }
+  .filter-row { flex-direction: row; flex-wrap: wrap; }
+  .filter-row .go-wrapper,
+  .filter-row .clear-wrapper { flex: 1 1 120px; }
+  .working-days-dropdown .cat-panel,
+  .working-days-dropdown .working-days-panel,
+  .working-days-dropdown .dropdown-menu { width: 100%; max-width: 100%; }
+}
+
+
+/* =========================================
+   WORKING DAYS DROPDOWN FIX
+========================================= */
+
+.working-days-wrapper {
+  position: relative;
+  min-width: 0;
+}
+
+.working-days-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+/* Dropdown Trigger */
+.working-days-dropdown .cat-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.working-days-dropdown .cat-trigger-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Dropdown Panel */
+.working-days-dropdown .working-days-filter-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: auto;
+  width: 100%;
+  min-width: 260px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: #ffffff;
+  border: 1px solid #d5dee7;
+  border-radius: 5px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+  padding: 6px 0;
+  z-index: 1000;
+}
+
+/* All Working Days */
+.working-days-dropdown .working-days-all {
+  display: block;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #17375e;
+  cursor: pointer;
+  border-bottom: 1px solid #e5ebf1;
+
+  &:hover {
+    background: #eaf2f8;
+  }
+}
+
+/* Options Container */
+.working-days-dropdown .working-days-options {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Each Day - Separate Row */
+.working-days-dropdown .working-day-option {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 14px;
+  margin: 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  white-space: nowrap;
+  color: #17375e;
+  font-size: 14px;
+  font-weight: 400;
+
+  &:hover {
+    background: #f0f6fb;
+  }
+}
+
+/* Checkbox */
+.working-days-dropdown .working-day-option input[type='checkbox'] {
+  appearance: auto;
+  display: inline-block;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  accent-color: #2f6fa3;
+  cursor: pointer;
+}
+
+/* Day Text */
+.working-days-dropdown .working-day-option span {
+  display: inline-block;
+  flex: 1;
+  white-space: nowrap;
+  line-height: 20px;
+}

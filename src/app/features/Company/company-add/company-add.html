@@ -22,11 +22,47 @@
             <span class="required">*</span>
             mark are mandatory
           </div>
+
+          
+<!-- COMPANY TYPE -->
+<!-- <div class="form-section">
+  <div class="user-form-row">
+    <div class="user-form-col">
+      <div class="user-form-group">
+        <label class="user-label">
+          Company Type <span class="required">*</span>
+        </label>
+
+        <mat-radio-group formControlName="companySiteOffice"
+                         class="company-type-radio">
+          <mat-radio-button [value]="1">Main</mat-radio-button>
+          <mat-radio-button [value]="2">Site</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+  </div>
+</div> -->
+
          
           <div class="form-section">
             <div class="section-title">Company Details</div>
             <!-- ROW 2 -->
             <div class="user-form-row">
+
+              <div class="user-form-col">
+      <div class="user-form-group">
+        <label class="user-label">
+          Company Type <span class="required">*</span>
+        </label>
+
+        <mat-radio-group formControlName="companySiteOffice"
+                         class="company-type-radio">
+          <mat-radio-button [value]="1">Main</mat-radio-button>
+          <mat-radio-button [value]="2">Site</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+
               <!-- Client Name -->
               <div class="user-form-col">
                 <div class="user-form-group">
@@ -142,7 +178,37 @@
                   <div class="user-error" *ngIf="companyForm.get('pincode')?.touched && companyForm.get('pincode')?.errors?.['pattern']">Enter a valid 6-digit Pincode</div>
                 </div>
               </div>
-              <div class="user-form-col empty-column"></div>
+              
+<!-- WORKING DAYS -->
+<div class="user-form-col">
+  <div class="user-form-group">
+    <label class="user-label">
+      Working Days <span class="required">*</span>
+    </label>
+
+    <mat-select
+  class="user-input working-days-select"
+  formControlName="workingDays"
+  multiple
+  placeholder="Select Working Days"
+  [disableOptionCentering]="true"
+  panelClass="working-days-panel">
+
+  <mat-option *ngFor="let day of workingDaysList"
+              [value]="day.value">
+    {{ day.label }}
+  </mat-option>
+
+</mat-select>
+
+    <div class="user-error"
+         *ngIf="companyForm.get('workingDays')?.touched &&
+                companyForm.get('workingDays')?.invalid">
+      Please select at least one working day.
+    </div>
+  </div>
+</div>
+
               <div class="user-form-col empty-column"></div>
             </div>
           </div>

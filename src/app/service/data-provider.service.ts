@@ -243,14 +243,15 @@ export class DataProviderService {
   }
 
   //Task Category
-  getTaskCategoryDetails(page: any, size: any, statusIndex: any, search: any, departmentId: any): Observable<any> {
+ getTaskCategoryDetails(page: any, size: any, statusIndex: any, search: any, departmentId: any, serviceId: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}admin/taskcategory/getTaskCategoryDetails` +
         `?page=${page}` +
         `&size=${size}` +
         `&statusIndex=${statusIndex}` +
         `&search=${encodeURIComponent(search || '')}` +
-        `&departmentId=${departmentId || 0}`,
+        `&departmentId=${departmentId || 0}` +
+        `&serviceId=${serviceId || 0}`,
     );
   }
 
@@ -1462,11 +1463,31 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}admin/company/find_by_id/${companyId}`);
   }
 
-  getCompanyList(page: number, size: number, statusIndex: number, search: string, stateId: any) {
-    const params = new HttpParams().set('page', page).set('size', size).set('statusIndex', statusIndex).set('search', search).set('stateId', stateId.toString());
+ 
+getCompanyList(
+  page: number,
+  size: number,
+  statusIndex: number,
+  search: string,
+  stateId: any,
+  companySiteOffice: number = 0,
+  workingDays: string = ''
+) {
+  const params = new HttpParams()
+    .set('page', page.toString())
+    .set('size', size.toString())
+    .set('statusIndex', statusIndex.toString())
+    .set('search', search)
+    .set('stateId', stateId.toString())
+    .set('companySiteOffice', companySiteOffice.toString())
+    .set('workingDays', workingDays);
 
-    return this.http.get(`${environment.apiBaseUrl}admin/company/company_list`, { params });
-  }
+  return this.http.get(
+    `${environment.apiBaseUrl}admin/company/company_list`,
+    { params }
+  );
+}
+
 
   deleteCompany(companyId: number, userId: number) {
     return this.http.post(`${environment.apiBaseUrl}admin/company/delete_company`, { companyId, userId });

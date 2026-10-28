@@ -15,6 +15,7 @@ import { DateAdapter } from '@angular/material/core';
 import { DataProviderService } from '../../../service/data-provider.service';
 import { MyDateAdapter } from '../../../classes/my-date-adapter';
 import Swal from 'sweetalert2';
+import { MatRadioModule } from '@angular/material/radio';
 @Component({
   selector: 'app-company-add',
   imports: [
@@ -24,6 +25,7 @@ import Swal from 'sweetalert2';
     MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
+    MatRadioModule, // ADD THIS
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
@@ -82,7 +84,7 @@ export class CompanyAdd implements OnInit {
   createForm(): void {
     this.companyForm = this.fb.group({
       companyName: ['', [Validators.required, Validators.maxLength(100)]],
-      companySiteOffice: [''],
+      companySiteOffice: [1, Validators.required],
       addressLine1: ['', Validators.required],
       addressLine2: [''],
       city: ['', [Validators.required, Validators.maxLength(100)]],
@@ -92,13 +94,14 @@ export class CompanyAdd implements OnInit {
       gstNo: ['', [Validators.maxLength(15), Validators.pattern(/^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/)]],
       pan: ['', [Validators.required, Validators.pattern(/^[A-Z]{5}[0-9]{4}[A-Z]$/)]],
       status: [1, Validators.required],
+      workingDays: [[1, 2, 3, 4, 5, 6, 7], Validators.required],
     });
   }
 
   private setupAddMode(): void {
     this.companyForm.reset({
       companyName: '',
-      companySiteOffice: '',
+      companySiteOffice: 1,
       addressLine1: '',
       addressLine2: '',
       city: '',
@@ -108,6 +111,7 @@ export class CompanyAdd implements OnInit {
       gstNo: '',
       pan: '',
       status: 1,
+      workingDays: [1, 2, 3, 4, 5, 6, 7],
     });
     this.isSubmitting = false;
   }
@@ -127,7 +131,8 @@ export class CompanyAdd implements OnInit {
     const payload = {
       companyId: this.isEditMode ? this.companyId : 0,
       companyName: v.companyName?.trim() || '',
-      companySiteOffice: v.companySiteOffice?.trim() || '',
+      // companySiteOffice: v.companySiteOffice?.trim() || '',
+      companySiteOffice: Number(v.companySiteOffice),
       addressLine1: v.addressLine1?.trim() || '',
       addressLine2: v.addressLine2?.trim() || '',
       city: v.city?.trim() || '',
@@ -138,6 +143,7 @@ export class CompanyAdd implements OnInit {
       pan: v.pan?.trim().toUpperCase() || '',
       status: Number(v.status),
       userId: this.userId,
+      workingDays: (v.workingDays || []).join(','),
     };
 
     this.dataProvider.saveCompany(payload).subscribe({
@@ -195,7 +201,11 @@ export class CompanyAdd implements OnInit {
         const c = response.data;
         this.companyForm.patchValue({
           companyName: c.companyName ?? '',
-          companySiteOffice: c.companySiteOffice ?? '',
+          // companySiteOffice: c.companySiteOffice ?? '',
+          companySiteOffice: Number(c.companySiteOffice ?? 1),
+          workingDays: c.workingDays
+          ? String(c.workingDays).split(',').map(Number)
+          : [],
           addressLine1: c.addressLine1 ?? '',
           addressLine2: c.addressLine2 ?? '',
           city: c.city ?? '',
@@ -239,4 +249,14 @@ export class CompanyAdd implements OnInit {
       },
     });
   }
+
+  workingDaysList = [
+  { value: 1, label: 'Monday' },
+  { value: 2, label: 'Tuesday' },
+  { value: 3, label: 'Wednesday' },
+  { value: 4, label: 'Thursday' },
+  { value: 5, label: 'Friday' },
+  { value: 6, label: 'Saturday' },
+  { value: 7, label: 'Sunday' },
+];
 }
