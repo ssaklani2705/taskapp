@@ -132,7 +132,7 @@
         <!-- GO -->
         <div class="go-wrapper">
           <button type="button" class="btn-go" (click)="onSearch()">Go</button>
-          <button type="button" class="btn-go" (click)="clearFilters()">Clear</button>
+          <button type="button" class="btn-clear" (click)="clearFilters()">Clear</button>
           @if (exportExcelPer === 'Y') {
             <button type="button" class="btn-export-excel" (click)="exportToExcel()">
               Export to Excel
