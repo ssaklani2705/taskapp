@@ -171,12 +171,14 @@
           <thead>
             <tr>
               <th>Sr. No.</th>
+
               <th>Task Reassign Date</th>
               <th>Task Name</th>
               <th>Task Category</th>
               <th>Client Name</th>
               <th>Previous User</th>
               <th>New User</th>
+              <th>Assigned By</th>
             </tr>
           </thead>
 
@@ -191,6 +193,7 @@
               <td class="text-left">{{ r.clientName }}</td>
               <td class="text-left">{{ r.oldUser }}</td>
               <td class="text-left">{{ r.newUser }}</td>
+              <td class="text-left">{{ r.assignedBy }}</td>
             </tr>
 
             <!-- NO DATA -->

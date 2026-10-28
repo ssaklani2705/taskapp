@@ -27,6 +27,7 @@ interface ReassignRow {
   clientName: string;
   oldUser: string;
   newUser: string;
+  assignedBy:string
 }
 @Component({
   selector: 'app-reassign-report',
