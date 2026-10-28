@@ -49,14 +49,7 @@ export class AddDesignation implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // const queryParams = this.route.snapshot.queryParamMap;
-
-    // this.currentPage = Number(queryParams.get('currentPage')) || 1;
-    // this.searchText = queryParams.get('searchText') || '';
-    // this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
-    // this.page = Number(queryParams.get('page')) || this.currentPage - 1;
-    // this.size = Number(queryParams.get('size')) || 5;
-
+  
     if (isPlatformBrowser(this.platformId)) {
       this.userId = sessionStorage.getItem('userId');
     }
@@ -166,17 +159,6 @@ export class AddDesignation implements OnInit {
 
     this.nameError = '';
   }
-
-  // backToIndexPage(): void {
-  //   this.router.navigate(['/designation-master'], {
-  //     queryParams: {
-  //       currentPage: this.currentPage,
-  //       statusIndex: this.statusIndex,
-  //       searchText: this.searchText,
-  //       size: this.size || 5,
-  //     },
-  //   });
-  // }
 
   backToIndexPage(): void {
     this.router.navigate(['/designation-master']);

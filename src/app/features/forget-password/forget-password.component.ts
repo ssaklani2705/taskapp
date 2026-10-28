@@ -9,7 +9,7 @@ import { Common } from '../../classes/common';
 
 @Component({
   selector: 'app-forget-password',
-  imports: [CommonModule, ReactiveFormsModule, RouterModule], // ✅ Add ReactiveFormsModule here
+  imports: [CommonModule, ReactiveFormsModule, RouterModule], // Add ReactiveFormsModule here
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.scss',
 })

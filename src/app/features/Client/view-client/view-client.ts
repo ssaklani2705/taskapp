@@ -98,18 +98,6 @@ export class ViewClient {
     });
   }
 
-  // loadManagers(): void {
-  //   this.dataprovider.getManagers().subscribe({
-  //     next: (response: any) => {
-  //       this.managers = response?.data || response || [];
-  //     },
-
-  //     error: (error) => {
-  //       console.error('Error loading managers:', error);
-  //       this.managers = [];
-  //     },
-  //   });
-  // }
   loadManagers(): void {
     this.dataprovider.getManagers().subscribe({
       next: (response: any) => {

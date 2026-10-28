@@ -51,15 +51,6 @@ export class ViewDesignation implements OnInit {
 
   ngOnInit(): void {
     this.designationId = +this.route.snapshot.paramMap.get('designationId')!;
-
-    // const queryParams = this.route.snapshot.queryParamMap;
-
-    // this.currentPage = Number(queryParams.get('currentPage')) || 1;
-    // this.searchText = queryParams.get('searchText') || '';
-    // this.statusIndex = Number(queryParams.get('statusIndex')) || 0;
-    // this.page = Number(queryParams.get('page')) || this.currentPage - 1;
-    // this.size = Number(queryParams.get('size')) || 5;
-
     this.getDesignationDetails();
   }
 

@@ -126,19 +126,6 @@ export class DesignationIndexComponent {
       }
     }
 
-    // this.route.queryParams.subscribe((params) => {
-    //   this.currentPage = +(params['currentPage'] || 1);
-    //   this.page = +(params['page'] || this.currentPage - 1);
-    //   this.size = +(params['size'] || environment.size);
-    //   this.searchQuery = params['searchText'] || '';
-    //   this.search = this.searchQuery;
-    //   this.statusIndex = +(params['statusIndex'] || 0);
-    //   this.selectedStatus = this.statusIndex > 0 ? String(this.statusIndex) : '';
-    //   this.recordsPerPage = this.size;
-
-    //   this.getDesignationDetails();
-    // });
-
     this.restoreFilterState();
     this.getDesignationDetails();
   }
