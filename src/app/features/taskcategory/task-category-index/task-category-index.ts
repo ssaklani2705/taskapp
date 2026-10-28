@@ -57,8 +57,10 @@ export class IndexTaskCategory {
   statusIndex: number = 0;
 
   selectedDepartment: string = '';
+  selectedService: number = 0;
 
   departments: Department[] = [];
+  services: any[] = [];
 
   addPer: string = 'N';
   editPer: string = 'N';
@@ -80,7 +82,7 @@ export class IndexTaskCategory {
   isPanelVisible: boolean = true;
   showHeaderBar: boolean = true;
 
-  services: Service[] = [];
+  // services: Service[] = [];
 
   filterKey = SESSION_KEYS.TASK_CATEGORY_MASTER_FILTER;
 
@@ -91,71 +93,6 @@ export class IndexTaskCategory {
     private router: Router,
     private sessionService: SessionStorageService,
   ) {}
-
-  // ngOnInit(): void {
-  //   this.sessionService.clearOtherSessions(this.filterKey);
-
-  //   this.route.queryParams.subscribe((params) => {
-  //     this.currentPage = +(params['currentPage'] || 1);
-  //     this.statusIndex = +(params['statusIndex'] || 0);
-  //     this.selectedStatus = this.statusIndex === 0 ? '' : String(this.statusIndex);
-  //     this.search = params['searchText'] || '';
-  //     this.searchQuery = this.search;
-  //     this.selectedDepartment = params['departmentId'] || '';
-  //     this.page = +(params['page'] ?? this.currentPage - 1);
-  //     this.size = +(params['size'] || 5);
-  //     this.recordsPerPage = this.size;
-
-  //     if (isPlatformBrowser(this.platformId)) {
-  //       this.userId = sessionStorage.getItem('userId');
-  //     }
-
-  //     if (isPlatformBrowser(this.platformId)) {
-  //       const storedModules = sessionStorage.getItem('selectedModuleDetail');
-
-  //       if (storedModules) {
-  //         const parsed = JSON.parse(storedModules);
-
-  //         this.moduleName = parsed.name ?? '';
-  //         this.addPer = parsed.addPer ?? 'N';
-  //         this.editPer = parsed.editPer ?? 'N';
-  //         this.deletePer = parsed.deletePer ?? 'N';
-  //         this.viewPer = parsed.viewPer ?? 'N';
-  //         this.approvePer = parsed.approvePer ?? 'N';
-  //         this.adminApprovePer = parsed.adminApprovePer ?? 'N';
-  //       }
-  //     }
-
-  //     let stateData: any = null;
-
-  //     const nav = this.router.getCurrentNavigation();
-
-  //     stateData = nav?.extras?.state;
-
-  //     if (!stateData) {
-  //       const saved = sessionStorage.getItem(this.filterKey);
-
-  //       if (saved) {
-  //         stateData = JSON.parse(saved);
-  //       }
-  //     }
-
-  //     if (stateData && !params['searchText'] && !params['statusIndex'] && !params['departmentId']) {
-  //       this.currentPage = stateData.currentPage || 1;
-  //       this.page = stateData.page ?? this.currentPage - 1;
-  //       this.statusIndex = Number(stateData.statusIndex || 0);
-  //       this.selectedStatus = this.statusIndex === 0 ? '' : String(this.statusIndex);
-  //       this.search = stateData.searchText || '';
-  //       this.searchQuery = this.search;
-  //       this.size = stateData.size || this.size;
-  //       this.recordsPerPage = this.size;
-  //       this.selectedDepartment = stateData.departmentId ? String(stateData.departmentId) : '';
-  //     }
-
-  //     this.getDepartments();
-  //     this.getTaskCategoryDetails();
-  //   });
-  // }
 
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
@@ -208,6 +145,7 @@ export class IndexTaskCategory {
       this.statusIndex = filterState.statusIndex ?? 0;
       this.selectedStatus = this.statusIndex > 0 ? String(this.statusIndex) : '';
       this.selectedDepartment = filterState.departmentId ? String(filterState.departmentId) : '';
+      this.selectedService = Number(filterState.serviceId ?? 0);
     } catch (error) {
       console.error('Failed to restore task category filter state:', error);
     }
@@ -223,6 +161,7 @@ export class IndexTaskCategory {
       statusIndex: this.statusIndex,
       searchText: this.searchQuery.trim(),
       departmentId: this.selectedDepartment || '',
+      serviceId: this.selectedService,
       page: this.page,
       size: this.size,
     };
@@ -255,31 +194,23 @@ export class IndexTaskCategory {
   }
 
   getTaskCategoryDetails(): void {
-    this.dataprovider
-      .getTaskCategoryDetails(
-        this.page,
-        this.size,
-        this.statusIndex,
-        this.search,
-        this.selectedDepartment,
-      )
-      .subscribe({
-        next: (response: any) => {
-          this.apiResponseTaskCategoryDetails = response;
-          this.taskCategories = response?.data || [];
-          this.mapServiceNames();
-        },
-        error: (error) => {
-          console.error('Error fetching task category details:', error);
+    this.dataprovider.getTaskCategoryDetails(this.page, this.size, this.statusIndex, this.search, this.selectedDepartment, this.selectedService).subscribe({
+      next: (response: any) => {
+        this.apiResponseTaskCategoryDetails = response;
+        this.taskCategories = response?.data || [];
+        this.mapServiceNames();
+      },
+      error: (error) => {
+        console.error('Error fetching task category details:', error);
 
-          this.taskCategories = [];
+        this.taskCategories = [];
 
-          this.apiResponseTaskCategoryDetails = {
-            totalElements: 0,
-            data: [],
-          };
-        },
-      });
+        this.apiResponseTaskCategoryDetails = {
+          totalElements: 0,
+          data: [],
+        };
+      },
+    });
   }
 
   get paginatedTaskCategories(): TaskCategory[] {
@@ -293,25 +224,6 @@ export class IndexTaskCategory {
     this.currentPage = 1;
     this.page = 0;
 
-    // const state = {
-    //   currentPage: this.currentPage,
-    //   statusIndex: this.statusIndex,
-    //   searchText: this.search,
-    //   departmentId: this.selectedDepartment || '',
-    //   page: this.page,
-    //   size: this.size,
-    // };
-
-    // this.sessionService.setItem(this.filterKey, JSON.stringify(state));
-
-    // this.router
-    //   .navigate(['/task-category-index'], {
-    //     queryParams: state,
-    //   })
-    //   .then(() => {
-    //     this.getTaskCategoryDetails();
-    //   });
-
     this.saveFilterState();
     this.getTaskCategoryDetails();
   }
@@ -323,25 +235,6 @@ export class IndexTaskCategory {
 
     this.currentPage = pageNumber;
     this.page = pageNumber - 1;
-
-    // const state = {
-    //   currentPage: this.currentPage,
-    //   statusIndex: this.statusIndex,
-    //   searchText: this.search,
-    //   departmentId: this.selectedDepartment || '',
-    //   page: this.page,
-    //   size: this.size,
-    // };
-
-    // this.sessionService.setItem(this.filterKey, JSON.stringify(state));
-
-    // this.router
-    //   .navigate(['/task-category-index'], {
-    //     queryParams: state,
-    //   })
-    //   .then(() => {
-    //     this.getTaskCategoryDetails();
-    //   });
 
     this.saveFilterState();
     this.getTaskCategoryDetails();
@@ -396,68 +289,17 @@ export class IndexTaskCategory {
     });
   }
 
-  // viewTaskCategory(taskcategoryId: number): void {
-  //   const filterState = {
-  //     currentPage: this.currentPage,
-  //     statusIndex: this.statusIndex,
-  //     searchText: this.search,
-  //     departmentId: this.selectedDepartment,
-  //     size: this.size,
-  //     page: this.page,
-  //   };
-
-  //   this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
-
-  //   this.router.navigate(['/view-task-category', taskcategoryId], {
-  //     queryParams: filterState,
-  //   });
-  // }
-
   viewTaskCategory(taskcategoryId: number): void {
     this.saveFilterState();
 
     this.router.navigate(['/view-task-category', taskcategoryId]);
   }
 
-  // editTaskCategory(taskcategoryId: number): void {
-  //   const filterState = {
-  //     currentPage: this.currentPage,
-  //     statusIndex: this.statusIndex,
-  //     searchText: this.search,
-  //     departmentId: this.selectedDepartment,
-  //     size: this.size,
-  //     page: this.page,
-  //   };
-
-  //   this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
-
-  //   this.router.navigate(['/edit-task-category', taskcategoryId], {
-  //     queryParams: filterState,
-  //   });
-  // }
-
   editTaskCategory(taskcategoryId: number): void {
     this.saveFilterState();
 
     this.router.navigate(['/edit-task-category', taskcategoryId]);
   }
-
-  // addTaskCategory(): void {
-  //   const filterState = {
-  //     currentPage: this.currentPage,
-  //     statusIndex: this.statusIndex,
-  //     searchText: this.search,
-  //     departmentId: this.selectedDepartment,
-  //     size: this.size,
-  //     page: this.page,
-  //   };
-
-  //   this.sessionService.setItem(this.filterKey, JSON.stringify(filterState));
-
-  //   this.router.navigate(['/add-task-category'], {
-  //     queryParams: filterState,
-  //   });
-  // }
 
   addTaskCategory(): void {
     this.saveFilterState();
@@ -485,9 +327,7 @@ export class IndexTaskCategory {
     const startRecord = totalRecords === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
     const endRecord = Math.min(this.currentPage * this.recordsPerPage, totalRecords);
 
-    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${
-      totalRecords > 1 ? 's' : ''
-    })`;
+    return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${totalRecords} record${totalRecords > 1 ? 's' : ''})`;
   }
 
   get totalPages(): number {
@@ -568,6 +408,7 @@ export class IndexTaskCategory {
   clearFilters(): void {
     this.searchQuery = '';
     this.selectedDepartment = '';
+    this.selectedService = 0;
     this.selectedStatus = '';
     this.currentPage = 1;
 
@@ -575,32 +416,29 @@ export class IndexTaskCategory {
   }
 
   getServices(): void {
-  this.dataprovider.getActiveServices().subscribe({
-    next: (response: any) => {
-      if (Array.isArray(response)) {
-        this.services = response;
-      } else if (Array.isArray(response?.data)) {
-        this.services = response.data;
-      } else {
+    this.dataprovider.getActiveServices().subscribe({
+      next: (response: any) => {
+        if (Array.isArray(response)) {
+          this.services = response;
+        } else if (Array.isArray(response?.data)) {
+          this.services = response.data;
+        } else {
+          this.services = [];
+        }
+
+        this.mapServiceNames();
+      },
+      error: (error) => {
+        console.error('Error fetching services:', error);
         this.services = [];
-      }
+      },
+    });
+  }
 
-      this.mapServiceNames();
-    },
-    error: (error) => {
-      console.error('Error fetching services:', error);
-      this.services = [];
-    },
-  });
-}
-
-mapServiceNames(): void {
-  this.taskCategories = this.taskCategories.map((category) => ({
-    ...category,
-    serviceName:
-      this.services.find(
-        (service) => Number(service.serviceId) === Number(category.serviceId)
-      )?.name || '-',
-  }));
-}
+  mapServiceNames(): void {
+    this.taskCategories = this.taskCategories.map((category) => ({
+      ...category,
+      serviceName: this.services.find((service) => Number(service.serviceId) === Number(category.serviceId))?.name || '-',
+    }));
+  }
 }

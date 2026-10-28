@@ -53,6 +53,63 @@
             </div>
           </div>
 
+          
+<!-- COMPANY TYPE FILTER -->
+<div class="status-wrapper">
+  <select
+    class="status-select"
+    [(ngModel)]="companySiteOffice"
+    (change)="onSearch()">
+
+    <option [ngValue]="0">--All Company Types--</option>
+    <option [ngValue]="1">Main</option>
+    <option [ngValue]="2">Site</option>
+  </select>
+</div>
+
+
+<!-- WORKING DAYS FILTER -->
+<div class="status-wrapper working-days-wrapper">
+  <div class="task-category-dropdown working-days-dropdown"
+       (click)="$event.stopPropagation()">
+
+    <div class="status-select cat-trigger"
+         (click)="toggleWorkingDaysDropdown()">
+
+      <span class="cat-trigger-text">
+        {{ selectedWorkingDaysLabel }}
+      </span>
+
+      <span class="cat-caret">▼</span>
+    </div>
+
+    <div class="cat-panel working-days-filter-panel"
+         *ngIf="workingDaysOpen">
+
+      <div class="working-days-all"
+           (click)="clearWorkingDaysFilter()">
+        --All Working Days--
+      </div>
+
+      <div class="working-days-options">
+        <label class="working-day-option"
+               *ngFor="let day of workingDaysList">
+
+          <input
+            type="checkbox"
+            [checked]="selectedWorkingDays.includes(day.value)"
+            (change)="toggleWorkingDay(day.value)" />
+
+          <span>{{ day.label }}</span>
+        </label>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
           <!-- STATUS -->
           <div class="status-wrapper">
             <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
@@ -108,14 +165,16 @@
       <div class="table-wrapper">
        <table class="designation-table">
   <colgroup>
-    <col class="col-serial" />
-    <col class="col-name" />
-    <col class="col-city" />
-    <col class="col-state" />
-    <col class="col-location" />
-    <col class="col-status" />
-    <col class="col-action" />
-  </colgroup>
+  <col class="col-serial" />
+  <col class="col-name" />
+  <col class="col-type" />
+  <col class="col-city" />
+  <col class="col-state" />
+  <col class="col-location" />
+  <col class="col-working-days" />
+  <col class="col-status" />
+  <col class="col-action" />
+</colgroup>
 
   <thead>
     <tr>
@@ -136,58 +195,93 @@
     </tr>
   </thead>
 
-  <tbody>
-    <tr *ngFor="let client of companies; let i = index">
-      <td class="serial-cell sticky-1">
-        {{ (currentPage - 1) * size + i + 1 }}
-      </td>
+ 
+<tbody>
+  <tr *ngFor="let client of companies; let i = index">
 
-      <td class="plan-name-cell sticky-2">
-        <span class="user-name">{{ client.companyName || '-' }}</span>
-      </td>
+    <td class="serial-cell sticky-1">
+      {{ (currentPage - 1) * size + i + 1 }}
+    </td>
 
-      <td class="plan-name-cell">{{ client.city || '-' }}</td>
+    <td class="plan-name-cell sticky-2">
+      <span class="user-name">
+        {{ client.companyName || '-' }}
+      </span>
+    </td>
 
-      <td class="plan-name-cell">{{ client.stateName || '-' }}</td>
+    <!-- COMPANY TYPE -->
+    <td class="plan-name-cell">
+      {{ getCompanyTypeLabel(client.companySiteOffice) }}
+    </td>
 
-      <td class="plan-name-cell">{{ client.location || '-' }}</td>
+    <td class="plan-name-cell">
+      {{ client.city || '-' }}
+    </td>
 
-      <td class="status-cell">
-        <span class="status-badge" [ngClass]="getStatusClass(client.status)">
-          {{ getStatusLabel(client.status) }}
-        </span>
-      </td>
+    <td class="plan-name-cell">
+      {{ client.stateName || '-' }}
+    </td>
 
-      <td class="action-cell">
-        @if (viewPer === 'Y') {
-          <button type="button" class="action-button view-button" title="View" (click)="viewCompany(client.companyId)">
-            <mat-icon> visibility </mat-icon>
+    <td class="plan-name-cell">
+      {{ client.location || '-' }}
+    </td>
+
+    <!-- WORKING DAYS -->
+    <td class="plan-name-cell working-days-cell"
+        [title]="getWorkingDaysLabel(client.workingDays)">
+      {{ getWorkingDaysLabel(client.workingDays) }}
+    </td>
+
+    <td class="status-cell">
+      <span class="status-badge"
+            [ngClass]="getStatusClass(client.status)">
+        {{ getStatusLabel(client.status) }}
+      </span>
+    </td>
+
+    <td class="action-cell">
+
+      @if (viewPer === 'Y') {
+        <button type="button"
+                class="action-button view-button"
+                title="View"
+                (click)="viewCompany(client.companyId)">
+          <mat-icon>visibility</mat-icon>
+        </button>
+      }
+
+      <ng-container *ngIf="client.status === 1 || client.status === 2">
+
+        @if (editPer === 'Y') {
+          <button type="button"
+                  class="action-button edit-button"
+                  title="Edit"
+                  (click)="editCompany(client.companyId)">
+            <mat-icon>edit</mat-icon>
           </button>
         }
 
-        <ng-container *ngIf="client.status === 1 || client.status === 2">
-          @if (editPer === 'Y') {
-            <button type="button" class="action-button edit-button" title="Edit" (click)="editCompany(client.companyId)">
-              <mat-icon> edit </mat-icon>
-            </button>
-          }
+        @if (deletePer === 'Y') {
+          <button type="button"
+                  class="action-button delete-button"
+                  title="Delete"
+                  (click)="onDeleteCompany(client.companyId)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        }
 
-          @if (deletePer === 'Y') {
-            <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteCompany(client.companyId)">
-              <mat-icon> delete </mat-icon>
-            </button>
-          }
-        </ng-container>
-      </td>
-    </tr>
+      </ng-container>
+    </td>
+  </tr>
 
-    <tr *ngIf="!companies || companies.length === 0">
-      <td colspan="7" class="no-records">
-        <mat-icon> info_outline </mat-icon>
-        <span> No records found </span>
-      </td>
-    </tr>
-  </tbody>
+  <tr *ngIf="!companies || companies.length === 0">
+    <td colspan="9" class="no-records">
+      <mat-icon>info_outline</mat-icon>
+      <span>No records found</span>
+    </td>
+  </tr>
+</tbody>
+
 </table>
       </div>
       <div class="table-toolbar bottom-toolbar">

@@ -1279,6 +1279,7 @@ export class TaskIndex implements OnInit {
       'Due Date': task.dueDateTime ? this.formatExcelDate(task.dueDateTime) : '-',
       'Task Category': task.taskCategoryName || '-',
       'Assigned By': task.assignedbyName || '-',
+      'Buddy': task.buddyName || '-',
       'Assigned To': !task.assignedToName || task.assignedToName === '0' ? 'Unassigned User' : task.assignedToName,
       Priority: this.getPriorityLabel(task.priority),
       'Task Status': this.common.getTaskStatusLabel(task.taskStatus),
@@ -1287,7 +1288,7 @@ export class TaskIndex implements OnInit {
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
 
-    worksheet['!cols'] = [
+   worksheet['!cols'] = [
       { wch: 8 }, // Sr. No.
       { wch: 35 }, // Title
       { wch: 25 }, // Client
@@ -1295,6 +1296,7 @@ export class TaskIndex implements OnInit {
       { wch: 20 }, // Due Date
       { wch: 25 }, // Task Category
       { wch: 25 }, // Assigned By
+      { wch: 25 }, // Buddy
       { wch: 25 }, // Assigned To
       { wch: 15 }, // Priority
       { wch: 20 }, // Task Status
@@ -1833,7 +1835,7 @@ private loadAssignUsers(
       this.selectedAssignTask.taskCategoryId,
       Number(this.selectedAssignTask.systemFlag ?? 0),
       startDate,
-      endDate
+      endDate,this.selectedAssignTask.userType
     );
 
   const workloadRequest = this.dataprovider.getAssigneeWorkload(

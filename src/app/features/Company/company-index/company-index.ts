@@ -106,9 +106,11 @@ export class CompanyIndex implements OnInit {
 
   columns = [
     { key: 'companyName', label: 'Company Name', sortable: true },
+    { key: 'companySiteOffice', label: 'Type', sortable: true },
     { key: 'city', label: 'City', sortable: true },
     { key: 'stateName', label: 'State', sortable: true },
     { key: 'location', label: 'Location', sortable: true },
+    { key: 'workingDays', label: 'Working Days', sortable: true },
     { key: 'status', label: 'Status', sortable: true },
   ];
 
@@ -150,7 +152,10 @@ export class CompanyIndex implements OnInit {
   getCompanyList(): void {
     this.isLoading = true;
 
-    this.dataprovider.getCompanyList(this.page, this.size, this.statusIndex, this.search, this.stateId).subscribe({
+    this.dataprovider.getCompanyList(this.page, this.size, this.statusIndex, this.search, this.stateId,
+      this.companySiteOffice,
+  this.selectedWorkingDays.join(',')
+    ).subscribe({
       next: (response: any) => {
         this.isLoading = false;
 
@@ -198,6 +203,9 @@ export class CompanyIndex implements OnInit {
   }
 
   clearFilter(): void {
+    this.companySiteOffice = 0;
+this.selectedWorkingDays = [];
+this.workingDaysOpen = false;
     this.searchQuery = '';
     this.search = '';
     this.selectedStatus = '1';
@@ -399,6 +407,8 @@ export class CompanyIndex implements OnInit {
         searchText: this.search,
         size: this.size,
         stateId: this.stateId,
+        companySiteOffice: this.companySiteOffice,
+        workingDays: this.selectedWorkingDays,  
       }),
     );
   }
@@ -465,6 +475,12 @@ export class CompanyIndex implements OnInit {
       if (f.stateId !== undefined) {
         this.stateId = Number(f.stateId) || 0;
       }
+
+      this.companySiteOffice = Number(f.companySiteOffice ?? 0);
+
+this.selectedWorkingDays = Array.isArray(f.workingDays)
+  ? f.workingDays.map(Number).filter((day: number) => day >= 1 && day <= 7)
+  : [];
     } catch (error) {
       console.error('Error restoring filter state:', error);
     }
@@ -504,4 +520,93 @@ export class CompanyIndex implements OnInit {
     const q = text.trim().toLowerCase();
     return q ? (list ?? []).filter((i) => (i.name ?? '').toLowerCase().includes(q)) : (list ?? []);
   }
+
+  
+companySiteOffice = 0;
+
+workingDaysOpen = false;
+selectedWorkingDays: number[] = [];
+
+workingDaysList = [
+  { value: 1, label: 'Monday' },
+  { value: 2, label: 'Tuesday' },
+  { value: 3, label: 'Wednesday' },
+  { value: 4, label: 'Thursday' },
+  { value: 5, label: 'Friday' },
+  { value: 6, label: 'Saturday' },
+  { value: 7, label: 'Sunday' },
+];
+
+getCompanyTypeLabel(value: number | string): string {
+  switch (Number(value)) {
+    case 1: return 'Main';
+    case 2: return 'Site';
+    default: return '-';
+  }
+}
+
+getWorkingDaysLabel(value: string | number[]): string {
+  if (!value || !String(value).length) return '-';
+
+  const selected = Array.isArray(value)
+    ? value.map(Number)
+    : String(value).split(',').map(Number);
+
+  return this.workingDaysList
+    .filter(day => selected.includes(day.value))
+    .map(day => day.label)
+    .join(', ') || '-';
+}
+
+get selectedWorkingDaysLabel(): string {
+  if (!this.selectedWorkingDays.length) {
+    return '--All Working Days--';
+  }
+
+  return this.workingDaysList
+    .filter(day => this.selectedWorkingDays.includes(day.value))
+    .map(day => day.label)
+    .join(', ');
+}
+
+toggleWorkingDaysDropdown(): void {
+  this.workingDaysOpen = !this.workingDaysOpen;
+  this.stateOpen = false;
+}
+
+toggleWorkingDay(day: number): void {
+  if (this.selectedWorkingDays.includes(day)) {
+    this.selectedWorkingDays =
+      this.selectedWorkingDays.filter(x => x !== day);
+  } else {
+    this.selectedWorkingDays = [
+      ...this.selectedWorkingDays,
+      day
+    ].sort((a, b) => a - b);
+  }
+
+  this.onSearch();
+}
+
+clearWorkingDaysFilter(): void {
+  this.selectedWorkingDays = [];
+  this.workingDaysOpen = false;
+  this.onSearch();
+}
+
+
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+
+  // Close Working Days dropdown on outside click
+  if (!target.closest('.working-days-dropdown')) {
+    this.workingDaysOpen = false;
+  }
+
+  // Close State dropdown on outside click
+  if (!target.closest('.task-category-dropdown')) {
+    this.stateOpen = false;
+  }
+}
 }
