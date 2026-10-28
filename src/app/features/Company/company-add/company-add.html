@@ -82,7 +82,7 @@
                     PAN
                     <span class="required">*</span>
                   </label>
-                  <input type="text" class="user-input" formControlName="pan" maxlength="10" />
+                  <input type="text" class="user-input" formControlName="pan" maxlength="10" (input)="toUpper('pan', $event)"  />
                   <div class="user-error" *ngIf="companyForm.get('pan')?.touched && companyForm.get('pan')?.errors?.['required']">PAN is required</div>
                   <div class="user-error" *ngIf="companyForm.get('pan')?.touched && companyForm.get('pan')?.errors?.['pattern']">Enter a valid PAN (e.g. GRBPA4562J)</div>
                 </div>

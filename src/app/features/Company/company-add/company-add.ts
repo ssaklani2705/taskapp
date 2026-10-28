@@ -97,7 +97,12 @@ export class CompanyAdd implements OnInit {
       workingDays: [[1, 2, 3, 4, 5, 6, 7], Validators.required],
     });
   }
-
+toUpper(controlName: string, event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const upper = input.value.toUpperCase();
+  this.companyForm.get(controlName)!.setValue(upper, { emitEvent: false });
+  input.value = upper;
+}
   private setupAddMode(): void {
     this.companyForm.reset({
       companyName: '',
