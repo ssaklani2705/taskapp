@@ -118,11 +118,22 @@
 
               <td class="text-left">{{ log.localIp }}</td>
 
-              <td>
+              <!-- <td>
                 <span class="status-badge" [ngClass]="getStatusClass(log.status)">
                   {{ log.status === 1 ? 'Sent' : log.status === 2 ? 'Failed' : log.status }}
                 </span>
-              </td>
+              </td> -->
+              
+            <td>
+              <span class="status-badge" [ngClass]="getStatusClass(log.status)">
+                {{
+                  +log.status === 0 ? 'Pending' :
+                  +log.status === 1 ? 'Sent' :
+                  +log.status === 2 ? 'Failed' : 'Unknown'
+                }}
+              </span>
+            </td>
+
 
               <td>
                 <button

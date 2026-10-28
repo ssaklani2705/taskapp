@@ -128,15 +128,29 @@ export class MailLogReportComponent implements OnInit {
     return this.datePipe.transform(value, 'dd MMM yyyy HH:mm') || '';
   }
 
-  getStatusClass(status: number): string {
-    if (status === 1) {
+  // getStatusClass(status: number): string {
+  //   if (status === 1) {
+  //     return 'status-sent';
+  //   }
+  //   if (status === 2) {
+  //     return 'status-failed';
+  //   }
+  //   return 'status-other';
+  // }
+  
+getStatusClass(status: number | string): string {
+  switch (Number(status)) {
+    case 0:
+      return 'status-pending';
+    case 1:
       return 'status-sent';
-    }
-    if (status === 2) {
+    case 2:
       return 'status-failed';
-    }
-    return 'status-other';
+    default:
+      return 'status-other';
   }
+}
+
 
   viewMail(log: MailLog): void {
     Swal.fire({
