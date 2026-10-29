@@ -185,24 +185,19 @@
                       />
                     </div> -->
 
-                    
-<!-- Search box - Show only when categories are available -->
-<div
-  class="category-search-wrapper"
-  *ngIf="taskCategories && taskCategories.length > 0">
-
-  <input
-    id="addTaskCategorySearchInput"
-    type="text"
-    class="category-search-input"
-    placeholder="Search category..."
-    [(ngModel)]="categorySearchText"
-    [ngModelOptions]="{ standalone: true }"
-    (keydown.enter)="$event.preventDefault()"
-    autocomplete="off"
-  />
-
-</div>
+                    <!-- Search box - Show only when categories are available -->
+                    <div class="category-search-wrapper" *ngIf="taskCategories && taskCategories.length > 0">
+                      <input
+                        id="addTaskCategorySearchInput"
+                        type="text"
+                        class="category-search-input"
+                        placeholder="Search category..."
+                        [(ngModel)]="categorySearchText"
+                        [ngModelOptions]="{ standalone: true }"
+                        (keydown.enter)="$event.preventDefault()"
+                        autocomplete="off"
+                      />
+                    </div>
 
                     <ng-container *ngFor="let group of filteredGroupedCategories">
                       <!-- Department header (not clickable) -->
@@ -298,69 +293,48 @@
                 <div class="user-warning" *ngIf="durationExceedsLimit">As this task exceeds 8 hours, kindly adjust the Start Date and End Date manually.</div>
               </div>
             </div> -->
-            
-<div class="user-form-col">
-  <div class="user-form-group">
 
-    <label class="user-label">
-      End Date &amp; Time
-      <span class="required">*</span>
-    </label>
+            <div class="user-form-col">
+              <div class="user-form-group">
+                <label class="user-label">
+                  End Date &amp; Time
+                  <span class="required">*</span>
+                </label>
 
-    <!-- Date Input -->
-    <div class="user-date-group">
+                <!-- Date Input -->
+                <div class="user-date-group">
+                  <span class="user-date-icon" [owlDateTimeTrigger]="picker2">
+                    <i class="fa fa-calendar"></i>
+                  </span>
 
-      <span
-        class="user-date-icon"
-        [owlDateTimeTrigger]="picker2">
-        <i class="fa fa-calendar"></i>
-      </span>
+                  <input
+                    type="text"
+                    class="user-input user-date-input"
+                    [owlDateTime]="picker2"
+                    [(ngModel)]="task.endDate"
+                    (ngModelChange)="onEndDateChange($event)"
+                    name="endDate"
+                    required
+                    placeholder="DD-MM-YYYY HH:mm"
+                    autocomplete="off"
+                    [min]="endMinDate"
+                  />
 
-      <input
-        type="text"
-        class="user-input user-date-input"
-        [owlDateTime]="picker2"
-        [(ngModel)]="task.endDate"
-        (ngModelChange)="onEndDateChange($event)"
-        name="endDate"
-        required
-        placeholder="DD-MM-YYYY HH:mm"
-        autocomplete="off"
-        [min]="endMinDate"
-      />
+                  <owl-date-time #picker2 pickerType="both"> </owl-date-time>
+                </div>
 
-      <owl-date-time
-        #picker2
-        pickerType="both">
-      </owl-date-time>
+                <!-- Required Validation -->
+                <div class="user-error" *ngIf="taskForm?.submitted && !task.endDate">End Date &amp; Time is required</div>
 
-    </div>
+                <!-- Date Validation -->
+                <div class="user-error" *ngIf="endDateError">
+                  {{ endDateError }}
+                </div>
 
-    <!-- Required Validation -->
-    <div
-      class="user-error"
-      *ngIf="taskForm?.submitted && !task.endDate">
-      End Date &amp; Time is required
-    </div>
-
-    <!-- Date Validation -->
-    <div
-      class="user-error"
-      *ngIf="endDateError">
-      {{ endDateError }}
-    </div>
-
-    <!-- Duration Warning -->
-    <div
-      class="user-warning"
-      *ngIf="durationExceedsLimit">
-      As this task exceeds 8 hours, kindly adjust the Start Date
-      and End Date manually.
-    </div>
-
-  </div>
-</div>
-
+                <!-- Duration Warning -->
+                <div class="user-warning" *ngIf="durationExceedsLimit">As this task exceeds 8 hours, kindly adjust the Start Date and End Date manually.</div>
+              </div>
+            </div>
 
             <!-- Assigned To -->
             <div class="user-form-col">
@@ -399,8 +373,6 @@
                 </select>
               </div>
             </div>
-            
-
 
             <!-- Description -->
             <div class="user-form-col">

@@ -2330,7 +2330,8 @@ private loadBuddyUsers(): void {
       // Add    -> exclude assignee
       // Change -> exclude assignee AND the already-added buddy
       this.buddyOptions = all.filter(
-        (u: any) => Number(u.userId) !== assigneeId && (!currentBuddyId || Number(u.userId) !== currentBuddyId),
+        (u: any) => Number(u.userId) !== assigneeId && (!currentBuddyId || Number(u.userId) !== currentBuddyId)  &&
+    String(u.isHod ?? 'N').toUpperCase() !== 'Y',
       );
 
       // keep manual selection only if still available

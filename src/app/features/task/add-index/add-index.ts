@@ -1025,6 +1025,7 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
 
     this.dataprovider.getAssigneeWorkload(this.task.taskCategoryId, startDateParam, endDateParam).subscribe({
       next: (response) => {
+   //     alert("REEEEEEE 0" + JSON.stringify(response))
         console.log('Assignee Workload:', response);
 
         if (!response.success) {
@@ -1370,7 +1371,11 @@ get isEmployeeType(): boolean {
 
 // Same list as Assigned To, minus the selected assignee, and without the recommended marker
 get buddyUsers(): any[] {
-  return (this.users || []).filter((u: any) => Number(u.userId) !== Number(this.task.assignedTo));
+  return (this.users || []).filter(
+    (u: any) =>
+      Number(u.userId) !== Number(this.task.assignedTo) &&
+      String(u.isHod ?? 'N').toUpperCase() !== 'Y'
+  );
 }
 
 onAssignedToChange(userId: any): void {
