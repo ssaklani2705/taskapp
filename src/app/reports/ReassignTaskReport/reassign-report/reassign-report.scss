@@ -172,10 +172,10 @@ mat-divider {
 
 .client-search-input {
   width: 90%;
-  height: 42px;
+  height: 40px;
   padding: 0 14px;
   border: 1px solid #d0d7de;
-  border-radius: 8px;
+  border-radius: 0;
   outline: none;
   font-size: 14px;
   transition: all 0.3s ease;
@@ -194,7 +194,7 @@ mat-divider {
   margin-top: 4px;
   background: #fff;
   border: 1px solid #dfe3e8;
-  border-radius: 8px;
+  border-radius: 0px;
   max-height: 250px;
   overflow-y: auto;
   z-index: 999;
@@ -304,12 +304,12 @@ mat-divider {
     position: absolute;
     top: calc(100% + 3px);
     left: 0;
-    width: 280px;
+    width: 30px;
     max-width: calc(100vw - 40px);
     padding: 8px;
     background: var(--white);
     border: 1px solid #cfd8e3;
-    border-radius: 4px;
+    border-radius: 0px;
     box-shadow: 0 5px 15px rgba(25, 52, 90, 0.12);
     z-index: 9999;
     box-sizing: border-box;
@@ -323,7 +323,7 @@ mat-divider {
     margin: 0 0 8px;
     padding: 0 11px;
     border: 1px solid #c6d3df;
-    border-radius: 4px;
+    border-radius: 0px;
     background: var(--white);
     color: var(--text);
     font-family: Arial, Helvetica, sans-serif;
@@ -423,11 +423,12 @@ mat-divider {
 }
 
 .date-filter-input {
+  border-radius: none;
   position: relative;
   display: flex;
   align-items: stretch;
   width: 100%;
-  height: 44px;
+  height: 40px;
   background: var(--white);
   border: 1px solid #cbd8e6;
   border-radius: 4px;
@@ -440,7 +441,7 @@ mat-divider {
 }
 
 .date-input {
-  flex: 1;
+  // flex: 1;
   width: 100%;
   min-width: 150px;  /* keeps DD/MM/YYYY fully visible */
   height: 38px;
@@ -1060,4 +1061,91 @@ mat-divider {
     height: 39px;
     font-size: 11px;
   }
+}
+
+/* Add this to your existing SCSS (all other classes — .search-panel, .search-row,
+   .search-wrapper, .status-wrapper, .date-filter-*, .go-wrapper, .btn-* — are reused as-is).
+   It only styles the native <select> for Department so it matches the other inputs. */
+
+.department-select-wrapper {
+  flex: 1 1 200px;
+  min-width: 180px;
+  max-width: 275px;
+}
+
+.status-select.department-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 100%;
+  height: 40px;
+  padding: 0 32px 0 12px;
+  border: 1px solid #c6d3df;
+  border-radius: 4px;
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  box-sizing: border-box;
+  cursor: pointer;
+  background-color: var(--white);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23718096'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+
+  &:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(51, 120, 169, 0.08);
+  }
+}
+
+/* Responsive: same behaviour as the other filter controls */
+@media (max-width: 1200px) {
+  .department-select-wrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    flex: none;
+  }
+}
+
+/* ----- Field labels ----- */
+.field-label {
+  display: block;
+  margin: 0 0 6px;
+  color: var(--navy);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.field-label-date {
+  display: block;
+  margin-bottom: 0px !important;
+  margin: 0 0 6px;
+  color: var(--navy);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+/* Align every control (and the buttons) on the same bottom line */
+.search-row {
+  align-items: flex-end;
+}
+
+/* Client / User inputs: 40px, square corners, full width */
+.client-search-input {
+  display: block;
+  width: 100%;
+  height: 40px;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+/* The wrapper now includes the label, so re-centre the × button on the input */
+.clear-search-btn {
+  top: auto;
+  bottom: 9px;
+  transform: none;
 }
