@@ -1385,43 +1385,32 @@ export class TaskIndex implements OnInit {
   }
 
 
-  openAssignUserModal(task: any): void {
+ openAssignUserModal(task: any): void {
   this.originalAssignedUserId = Number(task.assignedTo || 0);
-  
+  this.lastAssignLoadKey = '';          // new modal session, allow a fresh load
 
   this.selectedAssignTask = {
     ...task,
     assignedTo: 0,
-    // buddyId: task.buddyId != null ? Number(task.buddyId) : null,    // ADD
-      buddyId: null,                       // overrides the value copied by ...task
-
+    buddyId: null,                      // overrides the value copied by ...task
     date: task.date ? new Date(task.date) : null,
     endDate: task.dueDateTime ? new Date(task.dueDateTime) : null,
-    
   };
 
   this.assignRemarks = '';
   this.holidayError = '';
+  this.recommendationNote = '';
   this.users = [];
   this.workloadList = [];
   this.showAssignUserModal = true;
 
-  const startDate = this.datePipe.transform(
-    this.selectedAssignTask.date,
-    'yyyy-MM-dd'
-  );
+  const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd');
+  const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd');
 
-  const endDate = this.datePipe.transform(
-    this.selectedAssignTask.endDate,
-    'yyyy-MM-dd'
-  );
-
-  this.loadAssignUsers(
-    startDate,
-    endDate,
-    this.originalAssignedUserId
-  );
+  this.loadAssignUsers(startDate, endDate, this.originalAssignedUserId);
 }
+
+
   private isValidTaskDateRange(): boolean {
     if (!this.selectedAssignTask?.date) {
       Swal.fire('Error', 'Start Date & Time is required.', 'error');
@@ -1449,12 +1438,28 @@ export class TaskIndex implements OnInit {
     return true;
   }
 
-  closeAssignUserModal(): void {
-    this.showAssignUserModal = false;
-    this.selectedAssignTask = null;
-    this.assignRemarks = '';
-    this.users = [];
-  }
+  // ---- field (add near the other assign-modal fields) ----
+private assignUsersSub?: Subscription;
+
+closeAssignUserModal(): void {
+  this.assignUsersSub?.unsubscribe();
+  this.lastAssignLoadKey = '';
+  this.isLoadingAssignUsers = false;
+  this.showAssignUserModal = false;
+  this.selectedAssignTask = null;
+  this.assignRemarks = '';
+  this.users = [];
+  this.workloadList = [];
+  this.holidayError = '';
+  this.recommendationNote = '';
+}
+
+  // closeAssignUserModal(): void {
+  //   this.showAssignUserModal = false;
+  //   this.selectedAssignTask = null;
+  //   this.assignRemarks = '';
+  //   this.users = [];
+  // }
 
   // Same list as Assigned To, minus the selected assignee, no recommended marker
 get buddyUsers(): any[] {
@@ -1576,15 +1581,12 @@ private clearAssignBuddyIfSame(): void {
     return `${year}-${month}-${day} ${hours}:${minutes}:00`;
   }
 
-  onchangeloadUserDropdownData(task: any): void {
-    const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd');
+onchangeloadUserDropdownData(task: any): void {
+  const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd');
+  const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd');
 
-    const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd');
-
-    const currentAssignedUserId = Number(this.selectedAssignTask.assignedTo || 0);
-
-    this.loadAssignUsers(startDate, endDate, currentAssignedUserId);
-  }
+  this.loadAssignUsers(startDate, endDate, this.originalAssignedUserId);
+}
 
   isStatusRadioDisabled(task: any): boolean {
     const selfAssigned = task.addedBy == this.userId && task.assignedTo == this.userId;
@@ -1746,6 +1748,8 @@ private clearAssignBuddyIfSame(): void {
 
   workloadList: { assignedTo: number; hours: number }[] = [];
   holidayError: string = '';
+  recommendationNote: string = '';
+
   public loadAssigneeWorkload(taskCategoryId: any, startDate: any, endDate: any): void {
     this.holidayError = '';
     console.log('{taskCategoryId : }' + taskCategoryId);
@@ -1791,71 +1795,223 @@ private clearAssignBuddyIfSame(): void {
     });
   }
 
-  onAssignEndDateChange(value: any): void {
-    this.selectedAssignTask.endDate = value;
+//   onAssignEndDateChange(value: any): void {
+//     this.selectedAssignTask.endDate = value;
 
-    const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd') || '';
-    const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd') || '';
+//     const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd') || '';
+//     const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd') || '';
 
-    this.loadAssigneeWorkload(this.selectedAssignTask.taskCategoryId, this.selectedAssignTask.date, this.selectedAssignTask.endDate);
+//     this.loadAssigneeWorkload(this.selectedAssignTask.taskCategoryId, this.selectedAssignTask.date, this.selectedAssignTask.endDate);
 
-    const currentAssignedUserId = Number(this.selectedAssignTask.assignedTo || 0);
-    // this.loadAssignUsers(startDate, endDate, currentAssignedUserId);
-     this.loadAssignUsers(
-  startDate,
-  endDate,
-  this.originalAssignedUserId
-);
-  }
+//     const currentAssignedUserId = Number(this.selectedAssignTask.assignedTo || 0);
+//     // this.loadAssignUsers(startDate, endDate, currentAssignedUserId);
+//      this.loadAssignUsers(
+//   startDate,
+//   endDate,
+//   this.originalAssignedUserId
+// );
+//   }
+
+onAssignEndDateChange(value: any): void {
+  this.selectedAssignTask.endDate = value;
+
+  const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd') || '';
+  const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd') || '';
+
+  // loadAssigneeWorkload() removed: loadAssignUsers() already fetches the workload
+  // and sets hasWorkload, so there is now a single source of truth.
+  this.loadAssignUsers(startDate, endDate, this.originalAssignedUserId);
+}
 
   isLoadingUsers = true;
   showAssignUserDropdown = false;
  
+// private loadAssignUsers(
+//   startDate: string | null,
+//   endDate: string | null,
+//   currentAssignedUserId: number
+// ): void {
+//   if (!this.selectedAssignTask || !startDate || !endDate) {
+//     this.users = [];
+//     this.isLoadingAssignUsers = false;
+//     return;
+//   }
+
+//   this.isLoadingAssignUsers = true;
+//   this.users = [];
+//   this.holidayError = '';
+
+//   const usersRequest =
+//     this.dataprovider.changesCategoryIdgetUserFilterData(
+//       this.isAdmin,
+//       this.userId,
+//       this.loginType,
+//       this.selectedAssignTask.clientId,
+//       this.selectedAssignTask.taskCategoryId,
+//       Number(this.selectedAssignTask.systemFlag ?? 0),
+//       startDate,
+//       endDate,this.selectedAssignTask.userType
+//     );
+
+//   const workloadRequest = this.dataprovider.getAssigneeWorkload(
+//     this.selectedAssignTask.taskCategoryId,
+//     startDate,
+//     endDate
+//   );
+
+//   forkJoin({
+//     users: usersRequest,
+//     workload: workloadRequest
+//   }).subscribe({
+//     next: ({ users, workload }: any) => {
+//       const userResponse = users?.data ?? users;
+
+//       if (workload?.success === false) {
+//         this.holidayError =
+//           workload.message ||
+//           'Unable to validate the selected date range.';
+
+//         this.users = [];
+//         this.workloadList = [];
+//         this.isLoadingAssignUsers = false;
+//         return;
+//       }
+
+//       const workloadUsers: any[] = Array.isArray(workload)
+//         ? workload
+//         : Array.isArray(workload?.data)
+//           ? workload.data
+//           : [];
+
+//       this.workloadList = workloadUsers;
+
+//       const workloadUserIds = new Set(
+//         workloadUsers.map((item: any) => Number(item.assignedTo))
+//       );
+
+//       const allUsers: any[] = Array.isArray(userResponse?.assignedUsers)
+//         ? userResponse.assignedUsers
+//         : [];
+
+//       // Exclude only the task's original assignee.
+//       // Do not exclude the newly selected recommended employee.
+//       this.users = allUsers
+//         .filter(
+//           (user: any) =>
+//             Number(user.userId) !== Number(currentAssignedUserId)
+//         )
+//         .map((user: any) => ({
+//           ...user,
+//           hasWorkload: workloadUserIds.has(Number(user.userId))
+//         }));
+
+//       this.selectedAssignTask.maxHours = Number(
+//         userResponse?.maxHours || 0
+//       );
+
+//       // Auto-select the first recommended employee each time
+//       // the user/workload list is refreshed.
+//       const recommendedUser = this.users.find(
+//         (user: any) => user.hasWorkload
+//       );
+
+//       this.selectedAssignTask.assignedTo = recommendedUser
+//         ? recommendedUser.userId
+//         : 0;
+
+//         this.clearAssignBuddyIfSame();      // ADD
+
+//       if (this.users.length === 0) {
+//         this.holidayError = '';
+//       }
+
+//       console.log('Recommended employee:', recommendedUser);
+//       console.log(
+//         'Selected employee ID:',
+//         this.selectedAssignTask.assignedTo
+//       );
+
+//       this.isLoadingAssignUsers = false;
+//     },
+
+//     error: (error: any) => {
+//       console.error('Error loading assignment users:', error);
+
+//       this.users = [];
+//       this.workloadList = [];
+
+//       this.holidayError =
+//         error?.error?.message ||
+//         'Unable to load users or validate the selected date range.';
+
+//       this.isLoadingAssignUsers = false;
+//     }
+//   });
+// }
+  
+private lastAssignLoadKey = '';
 private loadAssignUsers(
   startDate: string | null,
   endDate: string | null,
   currentAssignedUserId: number
 ): void {
   if (!this.selectedAssignTask || !startDate || !endDate) {
+    this.assignUsersSub?.unsubscribe();
     this.users = [];
     this.isLoadingAssignUsers = false;
     return;
   }
 
+  // full date + time for the workload API
+  const workloadStart = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd HH:mm:ss');
+  const workloadEnd = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd HH:mm:ss');
+
+  // skip an identical request that was already issued
+  const loadKey = [this.selectedAssignTask.taskCategoryId, workloadStart, workloadEnd, currentAssignedUserId].join('|');
+  if (loadKey === this.lastAssignLoadKey) {
+    return;
+  }
+  this.lastAssignLoadKey = loadKey;
+
+  // cancel any older in-flight request
+  this.assignUsersSub?.unsubscribe();
+
   this.isLoadingAssignUsers = true;
   this.users = [];
   this.holidayError = '';
+  this.recommendationNote = '';
 
-  const usersRequest =
-    this.dataprovider.changesCategoryIdgetUserFilterData(
-      this.isAdmin,
-      this.userId,
-      this.loginType,
-      this.selectedAssignTask.clientId,
-      this.selectedAssignTask.taskCategoryId,
-      Number(this.selectedAssignTask.systemFlag ?? 0),
-      startDate,
-      endDate,this.selectedAssignTask.userType
-    );
+  const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
+    this.isAdmin,
+    this.userId,
+    this.loginType,
+    this.selectedAssignTask.clientId,
+    this.selectedAssignTask.taskCategoryId,
+    Number(this.selectedAssignTask.systemFlag ?? 0),
+    startDate,
+    endDate,
+    this.selectedAssignTask.userType
+  );
 
   const workloadRequest = this.dataprovider.getAssigneeWorkload(
     this.selectedAssignTask.taskCategoryId,
-    startDate,
-    endDate
+    workloadStart,
+    workloadEnd,
+    currentAssignedUserId > 0 ? currentAssignedUserId : undefined
   );
 
-  forkJoin({
-    users: usersRequest,
-    workload: workloadRequest
-  }).subscribe({
+  this.assignUsersSub = forkJoin({ users: usersRequest, workload: workloadRequest }).subscribe({
     next: ({ users, workload }: any) => {
+      // modal was closed while the request was running
+      if (!this.selectedAssignTask) {
+        this.isLoadingAssignUsers = false;
+        return;
+      }
+
       const userResponse = users?.data ?? users;
 
       if (workload?.success === false) {
-        this.holidayError =
-          workload.message ||
-          'Unable to validate the selected date range.';
-
+        this.holidayError = workload.message || 'Unable to validate the selected date range.';
         this.users = [];
         this.workloadList = [];
         this.isLoadingAssignUsers = false;
@@ -1870,70 +2026,65 @@ private loadAssignUsers(
 
       this.workloadList = workloadUsers;
 
+      // tolerate different key names from the backend
       const workloadUserIds = new Set(
-        workloadUsers.map((item: any) => Number(item.assignedTo))
+        workloadUsers.map((item: any) => String(item.assignedTo ?? item.userId ?? item.assigned_to))
       );
 
-      const allUsers: any[] = Array.isArray(userResponse?.assignedUsers)
-        ? userResponse.assignedUsers
-        : [];
+      const allUsers: any[] = Array.isArray(userResponse?.assignedUsers) ? userResponse.assignedUsers : [];
 
-      // Exclude only the task's original assignee.
-      // Do not exclude the newly selected recommended employee.
       this.users = allUsers
-        .filter(
-          (user: any) =>
-            Number(user.userId) !== Number(currentAssignedUserId)
-        )
-        .map((user: any) => ({
-          ...user,
-          hasWorkload: workloadUserIds.has(Number(user.userId))
-        }));
+        .filter((u: any) => Number(u.userId) !== Number(currentAssignedUserId))
+        .map((u: any) => ({ ...u, hasWorkload: workloadUserIds.has(String(u.userId)) }));
 
-      this.selectedAssignTask.maxHours = Number(
-        userResponse?.maxHours || 0
-      );
+      // recommended user is the current assignee, so the filter removed them
+      const recommendedWasOriginal =
+        currentAssignedUserId !== 0 && workloadUserIds.has(String(currentAssignedUserId));
 
-      // Auto-select the first recommended employee each time
-      // the user/workload list is refreshed.
-      const recommendedUser = this.users.find(
-        (user: any) => user.hasWorkload
-      );
-
-      this.selectedAssignTask.assignedTo = recommendedUser
-        ? recommendedUser.userId
-        : 0;
-
-        this.clearAssignBuddyIfSame();      // ADD
-
-      if (this.users.length === 0) {
-        this.holidayError = '';
+      if (recommendedWasOriginal && !this.users.some((u: any) => u.hasWorkload)) {
+        this.recommendationNote = 'The system-recommended employee is the current assignee.';
       }
 
-      console.log('Recommended employee:', recommendedUser);
-      console.log(
-        'Selected employee ID:',
-        this.selectedAssignTask.assignedTo
-      );
+      // ---- DEBUG: remove after the issue is found ----
+      console.log('[assign] request        :', { workloadStart, workloadEnd, cat: this.selectedAssignTask.taskCategoryId });
+      console.log('[assign] workload raw   :', workload);
+      console.log('[assign] workload ids   :', Array.from(workloadUserIds));
+      console.log('[assign] users returned :', allUsers.map((u: any) => u.userId));
+      console.log('[assign] original user  :', currentAssignedUserId);
+      console.log('[assign] marked         :', this.users.filter((u: any) => u.hasWorkload).map((u: any) => u.userId));
+      // -------------------------------------------------
 
+      this.selectedAssignTask.maxHours = Number(userResponse?.maxHours || 0);
+
+      // keep a manual choice if still available, otherwise auto-select the recommended user
+      const currentSelectedId = Number(this.selectedAssignTask.assignedTo || 0);
+      const stillAvailable = this.users.some((u: any) => Number(u.userId) === currentSelectedId);
+
+      if (!currentSelectedId || !stillAvailable) {
+        const recommendedUser = this.users.find((u: any) => u.hasWorkload);
+        this.selectedAssignTask.assignedTo = recommendedUser ? recommendedUser.userId : 0;
+      }
+
+      this.clearAssignBuddyIfSame();
       this.isLoadingAssignUsers = false;
     },
 
     error: (error: any) => {
-      console.error('Error loading assignment users:', error);
+      this.lastAssignLoadKey = '';      // allow a retry after a failure
 
+      if (!this.selectedAssignTask) {
+        this.isLoadingAssignUsers = false;
+        return;
+      }
+
+      console.error('Error loading assignment users:', error);
       this.users = [];
       this.workloadList = [];
-
-      this.holidayError =
-        error?.error?.message ||
-        'Unable to load users or validate the selected date range.';
-
+      this.holidayError = error?.error?.message || 'Unable to load users or validate the selected date range.';
       this.isLoadingAssignUsers = false;
-    }
+    },
   });
 }
-  
 
   private normalizeClientId(value: any): string {
     if (value === null || value === undefined) return '';

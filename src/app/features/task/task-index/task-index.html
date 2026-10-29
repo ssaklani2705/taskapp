@@ -811,21 +811,23 @@
         </div>
       </div>
       <!-- ASSIGNED TO -->
-      <div class="assign-form-group assign-full-width">
-        <label class="assign-field-label">
-          Assigned To
-          <span class="required">*</span>
-          <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
-        </label>
+    <!-- ASSIGNED TO -->
+<div class="assign-form-group assign-full-width">
+  <label class="assign-field-label">
+    Assigned To
+    <span class="required">*</span>
+    <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
+  </label>
 
-        <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" (ngModelChange)="onAssignModalUserChange($event)" name="assignedToModal" [disabled]="users.length === 0">
-          <option [ngValue]="0">Select User</option>
+  <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" (ngModelChange)="onAssignModalUserChange($event)" name="assignedToModal" [disabled]="users.length === 0">
+    <option [ngValue]="0">Select User</option>
 
-          <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
-        </select>
+    <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
+  </select>
 
-        <div *ngIf="!isLoadingAssignUsers && users.length === 0" class="assign-error">No other user found for this category.</div>
-      </div>
+  <div *ngIf="!isLoadingAssignUsers && users.length === 0" class="assign-error">No other user found for this category.</div>
+  <div class="assign-error" *ngIf="recommendationNote && !isLoadingAssignUsers">{{ recommendationNote }}</div>
+</div>
 
       <!-- BUDDY (optional) -->
 <div class="assign-form-group assign-full-width">

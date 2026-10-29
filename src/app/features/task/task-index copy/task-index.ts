@@ -52,6 +52,8 @@ interface Task {
   userType:any;
   buddyName:any;
 
+  buddyId: any;      // ADD
+
 }
 
 export interface Client {
@@ -1277,6 +1279,7 @@ export class TaskIndex implements OnInit {
       'Due Date': task.dueDateTime ? this.formatExcelDate(task.dueDateTime) : '-',
       'Task Category': task.taskCategoryName || '-',
       'Assigned By': task.assignedbyName || '-',
+      'Buddy': task.buddyName || '-',
       'Assigned To': !task.assignedToName || task.assignedToName === '0' ? 'Unassigned User' : task.assignedToName,
       Priority: this.getPriorityLabel(task.priority),
       'Task Status': this.common.getTaskStatusLabel(task.taskStatus),
@@ -1285,7 +1288,7 @@ export class TaskIndex implements OnInit {
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
 
-    worksheet['!cols'] = [
+   worksheet['!cols'] = [
       { wch: 8 }, // Sr. No.
       { wch: 35 }, // Title
       { wch: 25 }, // Client
@@ -1293,6 +1296,7 @@ export class TaskIndex implements OnInit {
       { wch: 20 }, // Due Date
       { wch: 25 }, // Task Category
       { wch: 25 }, // Assigned By
+      { wch: 25 }, // Buddy
       { wch: 25 }, // Assigned To
       { wch: 15 }, // Priority
       { wch: 20 }, // Task Status
@@ -1383,12 +1387,17 @@ export class TaskIndex implements OnInit {
 
   openAssignUserModal(task: any): void {
   this.originalAssignedUserId = Number(task.assignedTo || 0);
+  
 
   this.selectedAssignTask = {
     ...task,
     assignedTo: 0,
+    // buddyId: task.buddyId != null ? Number(task.buddyId) : null,    // ADD
+      buddyId: null,                       // overrides the value copied by ...task
+
     date: task.date ? new Date(task.date) : null,
     endDate: task.dueDateTime ? new Date(task.dueDateTime) : null,
+    
   };
 
   this.assignRemarks = '';
@@ -1447,14 +1456,33 @@ export class TaskIndex implements OnInit {
     this.users = [];
   }
 
+  // Same list as Assigned To, minus the selected assignee, no recommended marker
+get buddyUsers(): any[] {
+  return (this.users || []).filter((u: any) => Number(u.userId) !== Number(this.selectedAssignTask?.assignedTo));
+}
+
+onAssignModalUserChange(userId: any): void {
+  this.selectedAssignTask.assignedTo = userId;
+  this.clearAssignBuddyIfSame();
+}
+
+private clearAssignBuddyIfSame(): void {
+  if (this.selectedAssignTask?.buddyId && Number(this.selectedAssignTask.buddyId) === Number(this.selectedAssignTask.assignedTo)) {
+    this.selectedAssignTask.buddyId = null;
+  }
+}
+
   assignUser(): void {
     if (!this.selectedAssignTask || !this.selectedAssignTask.assignedTo || this.selectedAssignTask.assignedTo == 0) {
       return;
     }
 
-    if (this.selectedAssignTask.taskStatus === 1 && !this.assignRemarks?.trim()) {
-      return;
-    }
+    // if (this.selectedAssignTask.taskStatus === 1 && !this.assignRemarks?.trim()) {
+    //   return;
+    // }
+    if ((this.selectedAssignTask.taskStatus === 1 || this.selectedAssignTask.taskStatus === 3) && !this.assignRemarks?.trim()) {
+  return;
+}
 
     if (!this.isValidTaskDateRange()) {
       return;
@@ -1466,7 +1494,10 @@ export class TaskIndex implements OnInit {
     const startDate = this.formatDateTimeForApi(this.selectedAssignTask.date);
     const endDate = this.formatDateTimeForApi(this.selectedAssignTask.endDate);
 
-    this.dataprovider.updateTaskAssignedUser(taskId, assignedTo, this.userId, remarks, startDate, endDate).subscribe({
+    const buddyId = this.selectedAssignTask.buddyId ? Number(this.selectedAssignTask.buddyId) : null;
+
+
+    this.dataprovider.updateTaskAssignedUser(taskId, assignedTo, this.userId, remarks, startDate, endDate,buddyId).subscribe({
       next: (res: any) => {
         if (res?.success) {
           const selectedUser = this.users.find((user: any) => user.userId == assignedTo);
@@ -1804,7 +1835,7 @@ private loadAssignUsers(
       this.selectedAssignTask.taskCategoryId,
       Number(this.selectedAssignTask.systemFlag ?? 0),
       startDate,
-      endDate
+      endDate,this.selectedAssignTask.userType
     );
 
   const workloadRequest = this.dataprovider.getAssigneeWorkload(
@@ -1872,6 +1903,8 @@ private loadAssignUsers(
       this.selectedAssignTask.assignedTo = recommendedUser
         ? recommendedUser.userId
         : 0;
+
+        this.clearAssignBuddyIfSame();      // ADD
 
       if (this.users.length === 0) {
         this.holidayError = '';
