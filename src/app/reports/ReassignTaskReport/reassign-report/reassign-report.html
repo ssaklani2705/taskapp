@@ -15,6 +15,7 @@
       <div class="search-row">
         <!-- SEARCH -->
         <div class="search-wrapper">
+          <label class="field-label">Task Name</label>
           <div class="search-box">
             <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Task Name" class="search-input" (keyup.enter)="onSearch()" />
             <button type="button" class="search-btn" (click)="onSearch()" title="Search">
@@ -24,6 +25,7 @@
         </div>
 
         <div class="client-dropdown-container">
+           <label class="field-label">Client Name</label>
           <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
           <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
           <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
@@ -34,6 +36,7 @@
           </div>
         </div>
         <div class="client-dropdown-container">
+          <label class="field-label">User Name</label>
           <input type="text" class="client-search-input" placeholder="Search User..." [(ngModel)]="userSearchText" name="userSearch" (input)="filterUsers()" (focus)="showUserDropdown = true" />
           <button *ngIf="userSearchText" type="button" class="clear-search-btn" (click)="clearUserSearch()">×</button>
 
@@ -46,12 +49,14 @@
         </div>
 
         <div class="status-wrapper task-category-dropdown">
+           <label class="field-label">Task Category</label>
           <button type="button" class="status-select cat-trigger" (click)="toggleTaskCategoryDropdown()">
             <span class="cat-trigger-text">{{ selectedTaskCategoryLabel }}</span>
             <span class="cat-caret">&#9662;</span>
           </button>
 
           <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
+             <label class="field-label">Task Category</label>
             <input id="recurringCategorySearchInput" type="text" class="cat-search" placeholder="Search category..." [(ngModel)]="categorySearchText" autocomplete="off" />
 
             <div class="cat-list">
@@ -72,6 +77,7 @@
 
         <!-- FROM DATE -->
         <div class="status-wrapper date-filter-wrapper">
+          <label class="field-label-date">To Date</label>
           <div class="date-filter-input">
             <input
               id="fromDate"
@@ -95,6 +101,7 @@
 
         <!-- TO DATE -->
         <div class="status-wrapper date-filter-wrapper">
+           <label class="field-label-date">From Date</label>
           <div class="date-filter-input">
             <input
               id="toDate"
@@ -116,6 +123,7 @@
           </div>
         </div>
         <div class="status-dropdown">
+           <label class="field-label">Department</label>
           <button type="button" class="dropdown-btn" (click)="showDepartmentDropdown = !showDepartmentDropdown">
             {{ getSelectedDepartmentLabel() }}
           </button>
