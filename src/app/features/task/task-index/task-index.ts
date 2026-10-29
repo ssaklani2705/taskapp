@@ -2238,4 +2238,184 @@ getRatingText(): string {
   if (v <= 4) return 'Very Good';
   return 'Excellent';
 }
+
+//buddy 
+showBuddyModal = false;
+selectedBuddyTask: any = null;
+buddyOptions: any[] = [];
+selectedBuddyId: number | null = null;
+isLoadingBuddyUsers = false;
+isSavingBuddy = false;
+
+buddyStartDate: Date | null = null;
+buddyEndDate: Date | null = null;
+buddyRemarks = '';
+buddyHolidayError = '';
+private buddyUsersSub?: Subscription;
+private lastBuddyLoadKey = '';
+
+openBuddyModal(task: any): void {
+  this.selectedBuddyTask = task;
+  this.selectedBuddyId = null;
+  this.buddyOptions = [];
+  this.buddyRemarks = '';
+  this.buddyHolidayError = '';
+  this.lastBuddyLoadKey = '';
+  this.buddyStartDate = task.date ? new Date(task.date) : null;
+  this.buddyEndDate = task.dueDateTime ? new Date(task.dueDateTime) : null;
+  this.showBuddyModal = true;
+
+  this.loadBuddyUsers();
+}
+
+// Same behaviour as onAssignEndDateChange: reload users + holiday validation
+onBuddyEndDateChange(value: any): void {
+  this.buddyEndDate = value;
+  this.loadBuddyUsers();
+}
+
+private loadBuddyUsers(): void {
+  const task = this.selectedBuddyTask;
+  const startDate = this.datePipe.transform(this.buddyStartDate, 'yyyy-MM-dd');
+  const endDate = this.datePipe.transform(this.buddyEndDate, 'yyyy-MM-dd');
+
+  if (!task || !startDate || !endDate) {
+    this.buddyUsersSub?.unsubscribe();
+    this.buddyOptions = [];
+    this.isLoadingBuddyUsers = false;
+    return;
+  }
+
+  const workloadStart = this.datePipe.transform(this.buddyStartDate, 'yyyy-MM-dd HH:mm:ss');
+  const workloadEnd = this.datePipe.transform(this.buddyEndDate, 'yyyy-MM-dd HH:mm:ss');
+
+  const loadKey = [task.taskCategoryId, workloadStart, workloadEnd].join('|');
+  if (loadKey === this.lastBuddyLoadKey) {
+    return;
+  }
+  this.lastBuddyLoadKey = loadKey;
+
+  this.buddyUsersSub?.unsubscribe();
+  this.isLoadingBuddyUsers = true;
+  this.buddyOptions = [];
+  this.buddyHolidayError = '';
+
+  const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
+    this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId,
+    Number(task.systemFlag ?? 0), startDate, endDate, task.userType,
+  );
+
+  // used only for holiday / date-range validation, same API as the assign modal
+  const workloadRequest = this.dataprovider.getAssigneeWorkload(task.taskCategoryId, workloadStart, workloadEnd);
+
+  this.buddyUsersSub = forkJoin({ users: usersRequest, workload: workloadRequest }).subscribe({
+    next: ({ users, workload }: any) => {
+      if (!this.selectedBuddyTask) {
+        this.isLoadingBuddyUsers = false;
+        return;
+      }
+
+      if (workload?.success === false) {
+        this.buddyHolidayError = workload.message || 'Unable to validate the selected date range.';
+        this.buddyOptions = [];
+        this.isLoadingBuddyUsers = false;
+        return;
+      }
+
+      const data = users?.data ?? users;
+      const all: any[] = Array.isArray(data?.assignedUsers) ? data.assignedUsers : [];
+      const assigneeId = Number(task.assignedTo || 0);
+      const currentBuddyId = Number(task.buddyId || 0);
+
+      // Add    -> exclude assignee
+      // Change -> exclude assignee AND the already-added buddy
+      this.buddyOptions = all.filter(
+        (u: any) => Number(u.userId) !== assigneeId && (!currentBuddyId || Number(u.userId) !== currentBuddyId),
+      );
+
+      // keep manual selection only if still available
+      if (this.selectedBuddyId && !this.buddyOptions.some((u: any) => Number(u.userId) === Number(this.selectedBuddyId))) {
+        this.selectedBuddyId = null;
+      }
+      this.isLoadingBuddyUsers = false;
+    },
+    error: (error: any) => {
+      this.lastBuddyLoadKey = '';
+      if (!this.selectedBuddyTask) {
+        this.isLoadingBuddyUsers = false;
+        return;
+      }
+      this.buddyOptions = [];
+      this.buddyHolidayError = error?.error?.message || 'Unable to load users or validate the selected date range.';
+      this.isLoadingBuddyUsers = false;
+    },
+  });
+}
+
+closeBuddyModal(): void {
+  if (this.isSavingBuddy) return;
+  this.buddyUsersSub?.unsubscribe();
+  this.lastBuddyLoadKey = '';
+  this.isLoadingBuddyUsers = false;
+  this.showBuddyModal = false;
+  this.selectedBuddyTask = null;
+  this.selectedBuddyId = null;
+  this.buddyOptions = [];
+  this.buddyRemarks = '';
+  this.buddyHolidayError = '';
+}
+
+saveBuddy(): void {
+  if (!this.selectedBuddyTask || !this.selectedBuddyId) return;
+
+  const isChange = !!this.selectedBuddyTask.buddyId;
+
+  if (isChange && !this.buddyRemarks.trim()) return;
+
+  if (!this.buddyStartDate || !this.buddyEndDate) {
+    Swal.fire('Error', 'Start and End Date & Time are required.', 'error');
+    return;
+  }
+  if (new Date(this.buddyEndDate) < new Date(this.buddyStartDate)) {
+    Swal.fire('Error', 'End Date & Time cannot be before Start Date & Time.', 'error');
+    return;
+  }
+
+  this.isSavingBuddy = true;
+
+  this.dataprovider
+    .updateTaskBuddy(
+      this.selectedBuddyTask.taskId,
+      this.selectedBuddyId,
+      this.userId,
+      isChange,
+      this.buddyRemarks.trim(),
+      this.formatDateTimeForApi(this.buddyStartDate),
+      this.formatDateTimeForApi(this.buddyEndDate),
+    )
+    .subscribe({
+      next: (res: any) => {
+        this.isSavingBuddy = false;
+        if (res?.success) {
+          this.showBuddyModal = false;
+          this.selectedBuddyTask = null;
+          Swal.fire('Done', res.message || (isChange ? 'Buddy changed.' : 'Buddy added.'), 'success');
+          this.getTaskDetails();
+        } else {
+          Swal.fire('Error', res?.message || 'Unable to update buddy.', 'error');
+        }
+      },
+      error: (error: any) => {
+        this.isSavingBuddy = false;
+        Swal.fire('Error', error?.error?.message || 'Something went wrong while updating the buddy.', 'error');
+      },
+    });
+}
+canManageBuddy(task: any): boolean {
+  if (Number(task.status) !== 1) return false;                              // active only
+  if (!task.assignedToName || task.assignedToName === '0') return false;    // needs an assignee first
+  if (Number(task.taskStatus) === 5) return false;                          // closed
+  const uid = Number(this.userId);
+  return this.isAdmin === 'Y' || Number(task.addedBy) === uid || Number(task.assignedTo) === uid;
+}
 }

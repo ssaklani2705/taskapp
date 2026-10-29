@@ -1708,4 +1708,14 @@ getCompanyList(
   getActiveDepartmentsList() {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/department/active_department_list`);
   }
+
+  //buddy
+  updateTaskBuddy(
+  taskId: number, buddyId: number, userId: any, isChange: boolean,
+  remarks: string, startDate: string | null, endDate: string | null,
+) {
+  return this.http.put<any>(`${environment.apiBaseUrl}admin/task/updateTaskBuddy`, {
+    taskId, buddyId, userId, isChange, remarks, startDate, endDate,
+  });
+}
 }

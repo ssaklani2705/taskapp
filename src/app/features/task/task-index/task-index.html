@@ -253,8 +253,16 @@
                 </td>
 
                 <!-- 10: BUDDY -->
+                <!-- <td>
+                  <span class="wrap-text">{{ task.buddyName || '-' }}</span>
+                </td> -->
+                <!-- BUDDY -->
                 <td>
                   <span class="wrap-text">{{ task.buddyName || '-' }}</span>
+                  <span class="reassign-text" *ngIf="canManageBuddy(task)" (click)="openBuddyModal(task)">
+                    <i class="fas fa-user-plus reassign-icon"></i>
+                    {{ task.buddyId ? 'Change' : 'Add' }}
+                  </span>
                 </td>
 
                 <!-- 8: PRIORITY -->
@@ -867,6 +875,92 @@
         <span>
           {{ selectedAssignTask?.taskStatus === 1 ? 'Re-assign' : 'Assign' }}
         </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ADD / CHANGE BUDDY MODAL -->
+<div class="modal-overlay" *ngIf="showBuddyModal" (click)="closeBuddyModal()">
+  <div class="change-manager-modal assign-user-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title">
+        <div class="modal-title-icon"><mat-icon>group_add</mat-icon></div>
+        <div class="modal-title-content">
+          <div class="modal-title-text">{{ selectedBuddyTask?.buddyId ? 'Change Buddy' : 'Add Buddy' }}</div>
+          <div class="modal-subtitle">{{ selectedBuddyTask?.title || 'Task' }}</div>
+        </div>
+      </div>
+      <button type="button" class="modal-close-button" (click)="closeBuddyModal()" aria-label="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body assign-user-modal-body">
+      <div class="assign-date-row">
+        <!-- START DATE (read-only, same as assign modal) -->
+        <div class="assign-form-group">
+          <label class="assign-field-label">Start Date &amp; Time <span class="required">*</span></label>
+          <div class="assign-date-group">
+            <span class="assign-date-icon assign-date-icon-disabled"><i class="fa fa-calendar"></i></span>
+            <input class="assign-input assign-date-input" [owlDateTime]="buddyStartPicker"
+                   [(ngModel)]="buddyStartDate" name="buddyStartDate" required readonly
+                   placeholder="DD-MM-YYYY HH:mm" autocomplete="off" [min]="today" />
+            <owl-date-time #buddyStartPicker pickerType="both"></owl-date-time>
+          </div>
+          <div class="assign-error" *ngIf="!buddyStartDate">Start Date &amp; Time is required.</div>
+        </div>
+
+        <!-- END DATE -->
+         <!-- END / DUE DATE (disabled) -->
+  <div class="assign-form-group">
+    <label class="assign-field-label">End Date &amp; Time <span class="required">*</span></label>
+    <div class="assign-date-group">
+      <span class="assign-date-icon assign-date-icon-disabled"><i class="fa fa-calendar"></i></span>
+      <input class="assign-input assign-date-input" [owlDateTime]="buddyEndPicker"
+             [(ngModel)]="buddyEndDate" name="buddyEndDate" required readonly
+             placeholder="DD-MM-YYYY HH:mm" autocomplete="off" />
+      <owl-date-time #buddyEndPicker pickerType="both"></owl-date-time>
+    </div>
+    <div class="assign-error" *ngIf="!buddyEndDate">End Date &amp; Time is required.</div>
+    <div class="user-error" *ngIf="buddyHolidayError">{{ buddyHolidayError }}</div>
+  </div>
+      </div>
+
+      <!-- BUDDY -->
+      <div class="assign-form-group assign-full-width">
+        <label class="assign-field-label">Buddy <span class="required">*</span></label>
+        <select class="assign-input assign-select" [(ngModel)]="selectedBuddyId" name="buddyOnlyModal"
+                [disabled]="isLoadingBuddyUsers || buddyOptions.length === 0">
+          <option [ngValue]="null">Select Buddy</option>
+          <option *ngFor="let user of buddyOptions" [ngValue]="user.userId">{{ user.firstName }}</option>
+        </select>
+        <div class="assign-error" *ngIf="!isLoadingBuddyUsers && buddyOptions.length === 0 && !buddyHolidayError">
+          No other user available as buddy.
+        </div>
+      </div>
+
+      <!-- REMARKS -->
+      <div class="assign-form-group assign-full-width">
+        <label class="assign-field-label">
+          Remarks
+          <span class="required" *ngIf="selectedBuddyTask?.buddyId"> * </span>
+        </label>
+        <textarea class="assign-input assign-textarea" [(ngModel)]="buddyRemarks" name="buddyRemarksModal"
+                  rows="4" maxlength="2000" placeholder="Enter remarks"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-footer assign-modal-footer">
+      <button type="button" class="modal-cancel-button" (click)="closeBuddyModal()" [disabled]="isSavingBuddy">
+        <mat-icon>close</mat-icon><span>Close</span>
+      </button>
+      <button type="button" class="modal-save-button" (click)="saveBuddy()"
+              [disabled]="!selectedBuddyId || !buddyStartDate || !buddyEndDate || buddyHolidayError || isSavingBuddy
+                          || (selectedBuddyTask?.buddyId && !buddyRemarks.trim())">
+        <mat-icon>save</mat-icon>
+        <span>{{ isSavingBuddy ? 'Saving...' : (selectedBuddyTask?.buddyId ? 'Change Buddy' : 'Add Buddy') }}</span>
       </button>
     </div>
   </div>

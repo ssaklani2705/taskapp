@@ -108,8 +108,8 @@
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
-                  Client
-                  <span class="required" *ngIf="!isClientOptional">*</span>
+                  Client<span class="client-note">(Do not select for Internal Task)</span>
+                  <!-- <span class="required" *ngIf="!isClientOptional">*</span> -->
                 </label>
 
                 @if (loginType === 'manager') {
