@@ -1397,15 +1397,36 @@ export class DataProviderService {
     });
   }
 
-  getAssigneeWorkload(taskCatId: number, startDate: string | null, endDate: string | null): Observable<any> {
-    return this.http.get(`${environment.apiBaseUrl}admin/task/assignee_workload`, {
-      params: {
-        taskCatId: taskCatId.toString(),
-        startDate: startDate || '',
-        endDate: endDate || '',
-      },
-    });
+  // getAssigneeWorkload(taskCatId: number, startDate: string | null, endDate: string | null): Observable<any> {
+  //   return this.http.get(`${environment.apiBaseUrl}admin/task/assignee_workload`, {
+  //     params: {
+  //       taskCatId: taskCatId.toString(),
+  //       startDate: startDate || '',
+  //       endDate: endDate || '',
+        
+  //     },
+  //   });
+  // }
+
+  getAssigneeWorkload(
+  taskCatId: number,
+  startDate: string | null,
+  endDate: string | null,
+  excludeUserId?: number,
+): Observable<any> {
+  const params: { [key: string]: string } = {
+    taskCatId: taskCatId.toString(),
+    startDate: startDate || '',
+    endDate: endDate || '',
+  };
+
+  // only sent when re-assigning (the task's current assignee is excluded from the recommendation)
+  if (excludeUserId && excludeUserId > 0) {
+    params['excludeUserId'] = excludeUserId.toString();
   }
+
+  return this.http.get(`${environment.apiBaseUrl}admin/task/assignee_workload`, { params });
+}
 
   isEmployeeAvailableForTaskCategory(taskCategoryId: number) {
     return this.http.get<boolean>(`${environment.apiBaseUrl}admin/taskcategory/recurring/category/employee-available`, {
