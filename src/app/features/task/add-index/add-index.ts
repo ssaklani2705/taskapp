@@ -614,8 +614,18 @@ export class AddIndexComponent implements OnInit {
 
   onchangeloadDropdownData(): void {
     const typeAtRequest = Number(this.task.userType);
+      const clientAtRequest = this.task.clientId;
+
     this.dataprovider.changesClientIdgetTaskFilterData(this.isAdmin, this.userId, this.loginType, this.task.clientId, this.isHod, this.task.userType).subscribe({
       next: (res: any) => {
+
+        // Ignore responses for an outdated client or task type
+      if (
+        typeAtRequest !== Number(this.task.userType) ||
+        Number(clientAtRequest || 0) !== Number(this.task.clientId || 0)
+      ) {
+        return;
+      }
         if (typeAtRequest !== Number(this.task.userType)) {
           return; // user already switched type; ignore this stale response
         }
@@ -801,11 +811,39 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
 
   // Task Category is independent of Client, so it is NOT cleared here.
   // Only the assignee list depends on the client.
-  onClientChange(clientId: number | null): void {
-    // this.task.assignedTo = null;
-    // this.noEmployeeError = '';
-    // this.users = [];
-  }
+  // onClientChange(clientId: number | null): void {
+  //   // this.task.assignedTo = null;
+  //   // this.noEmployeeError = '';
+  //   // this.users = [];
+  // }
+
+onClientChange(clientId: number | null): void {
+  this.task.clientId = clientId;
+
+  // Clear category selected for the previous client
+  this.task.taskCategoryId = null;
+  this.selectedTaskCategoryName = '';
+  this.taskCategories = [];
+  this.groupedCategories = [];
+  this.categorySearchText = '';
+  this.showCategoryDropdown = false;
+
+  // Clear dependent employee selections
+  this.task.assignedTo = null;
+  this.task.buddyId = null;
+  this.users = [];
+  this.workloadList = [];
+  this.noEmployeeError = '';
+  this.holidayError = '';
+  this.taskCategoryEmployeeError = false;
+
+  // Reset dates belonging to the previous category
+  this.task.startDate = null;
+  this.task.endDate = null;
+
+  // Reload categories for the current client selection
+  this.onchangeloadDropdownData();
+}
 
   clientSearchText = '';
   filteredClients: any[] = [];
@@ -825,33 +863,49 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
     this.showClientDropdown = true;
   }
 
+  // selectClient(client: any): void {
+  //   this.task.clientId = client.clientId; // value used in save API
+
+  //   this.clientSearchText = client.name;
+
+  //   this.showClientDropdown = false;
+
+  //   this.onClientChange(client.clientId);
+  //   this.onchangeloadDropdownData();
+
+  //   // Category may already be chosen: load assignees for the new client
+  //   // if (this.task.taskCategoryId) {
+  //   //   this.onchangeloadUserDropdownData();
+  //   // }
+  // }
   selectClient(client: any): void {
-    this.task.clientId = client.clientId; // value used in save API
-
-    this.clientSearchText = client.name;
-
-    this.showClientDropdown = false;
-
+  if (Number(this.task.clientId) !== Number(client.clientId)) {
     this.onClientChange(client.clientId);
-    this.onchangeloadDropdownData();
-
-    // Category may already be chosen: load assignees for the new client
-    // if (this.task.taskCategoryId) {
-    //   this.onchangeloadUserDropdownData();
-    // }
   }
+
+  this.clientSearchText = client.name;
+  this.showClientDropdown = false;
+}
+
+  // clearClientSelection(): void {
+  //   this.task.clientId = null;
+
+  //   this.clientSearchText = '';
+
+  //   this.filteredClients = [];
+
+  //   this.showClientDropdown = false;
+
+  //   this.onClientChange(null);
+  // }
 
   clearClientSelection(): void {
-    this.task.clientId = null;
+  this.clientSearchText = '';
+  this.filteredClients = [];
+  this.showClientDropdown = false;
 
-    this.clientSearchText = '';
-
-    this.filteredClients = [];
-
-    this.showClientDropdown = false;
-
-    this.onClientChange(null);
-  }
+  this.onClientChange(null);
+}
 
   onManagerClientChange(clientId: number | null): void {
   this.task.clientId = clientId;
@@ -1354,12 +1408,29 @@ get filteredGroupedCategories(): { department: string; items: any[] }[] {
     .filter((g) => g.items.length > 0);
 }
 
+// toggleCategoryDropdown(): void {
+//   this.showCategoryDropdown = !this.showCategoryDropdown;
+//   this.categorySearchText = '';
+
+//   if (this.showCategoryDropdown) {
+//     setTimeout(() => document.getElementById('addTaskCategorySearchInput')?.focus(), 0);
+//   }
+// }
 toggleCategoryDropdown(): void {
+
+  // Manager must select a client first
+  if (this.loginType === 'manager' && !this.task.clientId) {
+    this.showCategoryDropdown = false;
+    return;
+  }
+
   this.showCategoryDropdown = !this.showCategoryDropdown;
   this.categorySearchText = '';
 
   if (this.showCategoryDropdown) {
-    setTimeout(() => document.getElementById('addTaskCategorySearchInput')?.focus(), 0);
+    setTimeout(() => {
+      document.getElementById('addTaskCategorySearchInput')?.focus();
+    }, 0);
   }
 }
 
@@ -1383,4 +1454,6 @@ private clearBuddyIfSameAsAssignee(): void {
     this.task.buddyId = null;
   }
 }
+
+
 }

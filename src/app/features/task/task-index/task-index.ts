@@ -1392,7 +1392,8 @@ export class TaskIndex implements OnInit {
   this.selectedAssignTask = {
     ...task,
     assignedTo: 0,
-    buddyId: null,                      // overrides the value copied by ...task
+    // buddyId: null,                      // overrides the value copied by ...task
+     buddyId: task.buddyId ? Number(task.buddyId) : null,   // was: null
     date: task.date ? new Date(task.date) : null,
     endDate: task.dueDateTime ? new Date(task.dueDateTime) : null,
   };
@@ -1462,13 +1463,30 @@ closeAssignUserModal(): void {
   // }
 
   // Same list as Assigned To, minus the selected assignee, no recommended marker
+// All users (assignee is NOT filtered out any more), plus the current buddy
+// if the user list does not contain them
 get buddyUsers(): any[] {
-  return (this.users || []).filter((u: any) => Number(u.userId) !== Number(this.selectedAssignTask?.assignedTo));
+  const list = [...(this.users || [])];
+  const buddyId = Number(this.selectedAssignTask?.buddyId || 0);
+  if (buddyId && !list.some((u: any) => Number(u.userId) === buddyId)) {
+    list.push({ userId: buddyId, firstName: this.selectedAssignTask?.buddyName || 'Current Buddy' });
+  }
+  return list;
+}
+
+get isAssignBuddySame(): boolean {
+  const assignee = Number(this.selectedAssignTask?.assignedTo || 0);
+  const buddy = Number(this.selectedAssignTask?.buddyId || 0);
+  return assignee > 0 && buddy > 0 && assignee === buddy;
+}
+
+trackByUserId(_: number, user: any): number {
+  return user.userId;
 }
 
 onAssignModalUserChange(userId: any): void {
   this.selectedAssignTask.assignedTo = userId;
-  this.clearAssignBuddyIfSame();
+  // this.clearAssignBuddyIfSame();
 }
 
 private clearAssignBuddyIfSame(): void {
@@ -1488,6 +1506,11 @@ private clearAssignBuddyIfSame(): void {
     if ((this.selectedAssignTask.taskStatus === 1 || this.selectedAssignTask.taskStatus === 3) && !this.assignRemarks?.trim()) {
   return;
 }
+if (this.isAssignBuddySame) {
+  Swal.fire('Error', 'Buddy and Assignee User should not be same. Kindly change the Buddy User or Assignee User', 'error');
+  return;
+}
+
 
     if (!this.isValidTaskDateRange()) {
       return;
