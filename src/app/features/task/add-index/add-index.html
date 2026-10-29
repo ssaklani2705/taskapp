@@ -108,7 +108,15 @@
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
-                  Client<span class="client-note">(Do not select for Internal Task)</span>
+                   Client
+      @if (loginType === 'manager') {
+        <span class="required">*</span>
+      <!-- } @else { -->
+        } @else if (task.userType === 1) {
+        <!-- <span class="client-note">(Do not select for Internal Task)</span> -->
+         <span class="client-note">(Do not select for Internal Task)</span>
+      }
+                  <!-- Client<span class="client-note">(Do not select for Internal Task)</span> -->
                   <!-- <span class="required" *ngIf="!isClientOptional">*</span> -->
                 </label>
 
@@ -162,7 +170,7 @@
 
                 <div class="category-dropdown-container">
                   <!-- <div class="user-input user-select category-dropdown-selected" (click)="showCategoryDropdown = !showCategoryDropdown"> -->
-                  <div class="user-input user-select category-dropdown-selected" (click)="toggleCategoryDropdown()">
+                  <div class="user-input user-select category-dropdown-selected" (click)="toggleCategoryDropdown()" [class.disabled]="loginType === 'manager' && !task.clientId">
                     <span>
                       {{ selectedTaskCategoryName || 'Select Task Category' }}
                     </span>
