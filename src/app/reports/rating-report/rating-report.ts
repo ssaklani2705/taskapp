@@ -194,6 +194,8 @@ export class RatingReport implements OnInit {
     this.currentPage = 1;
     this.page = 0;
 
+
+    
     this.saveFilterState();
     this.getRatingDetails();
     this.loadDepartments();

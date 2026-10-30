@@ -357,7 +357,10 @@ export class ReassignSummaryReport implements OnInit {
     this.page = 0;
 
     this.filteredUsers = [];
+    this.userSearchText =""
     this.showUserDropdown = false;
+
+
 
     this.saveFilterState();
     this.getReassignSummaryReport();

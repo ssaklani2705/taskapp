@@ -339,6 +339,7 @@ export class ReassignReport implements OnInit {
     this.selectedClientId = 0;
     this.selectedClient = '';
     this.clientSearchText = '';
+    this.userSearchText =''
     this.filteredClients = [];
     this.showClientDropdown = false;
 
@@ -346,6 +347,9 @@ export class ReassignReport implements OnInit {
     this.categorySearchText = '';
     this.showTaskCategoryDropdown = false;
 
+    
+    this.filteredUsers = [];
+    this.showUserDropdown = false;
     // paging
     this.currentPage = 1;
     this.page = 0;
