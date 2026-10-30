@@ -109,7 +109,7 @@
               <div class="user-form-group">
                 <label class="user-label">
                    Client
-      @if (loginType === 'manager') {
+      @if (loginType === 'manager' || task.userType === 2) {
         <span class="required">*</span>
       <!-- } @else { -->
         } @else if (task.userType === 1) {
@@ -170,7 +170,10 @@
 
                 <div class="category-dropdown-container">
                   <!-- <div class="user-input user-select category-dropdown-selected" (click)="showCategoryDropdown = !showCategoryDropdown"> -->
-                  <div class="user-input user-select category-dropdown-selected" (click)="toggleCategoryDropdown()" [class.disabled]="loginType === 'manager' && !task.clientId">
+                  <!-- <div class="user-input user-select category-dropdown-selected" (click)="toggleCategoryDropdown()" [class.disabled]="loginType === 'manager' && !task.clientId"> -->
+                  <div class="user-input user-select category-dropdown-selected"
+     (click)="toggleCategoryDropdown()"
+     [class.disabled]="(loginType === 'manager' && !task.clientId) || (task.userType === 2 && !task.clientId)">
                     <span>
                       {{ selectedTaskCategoryName || 'Select Task Category' }}
                     </span>

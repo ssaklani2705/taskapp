@@ -40,5 +40,8 @@ export const SESSION_KEYS = {
 
   GENERIC_RECURRING_FILTER: 'genericRecurringFilter',
 
-  RATING_REPORT_FILTER: 'ratingReportFinter'
+  RATING_REPORT_FILTER: 'ratingReportFinter',
+
+  REASSIGN_SUMMARY_REPORT: 'reassignSummaryReport'
+
 };

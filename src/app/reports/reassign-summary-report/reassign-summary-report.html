@@ -1,0 +1,178 @@
+<div class="page-container">
+  <div class="main-card">
+    <!-- ================= HEADER ================= -->
+    <div class="page-header">
+      <div class="page-title">
+        <mat-icon>manage_accounts</mat-icon>
+        <span>Reassign Summary Report</span>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- ================= SEARCH ================= -->
+    <div class="search-panel" *ngIf="isPanelVisible">
+      <!-- FIRST ROW: FILTERS -->
+      <div class="search-row">
+        <!-- USER NAME -->
+        <div class="client-dropdown-container">
+          <label>User Name</label>
+
+          <input type="text" class="client-search-input" placeholder="Search User..." [(ngModel)]="userSearchText" name="userSearch" (input)="filterUsers()" (focus)="showUserDropdown = true" />
+
+          <button *ngIf="userSearchText" type="button" class="clear-search-btn" (click)="clearUserSearch()">×</button>
+
+          <div class="client-dropdown-list" *ngIf="showUserDropdown && userSearchText.trim().length >= 3">
+            <div class="client-dropdown-item" *ngFor="let user of filteredUsers" (click)="selectUser(user)">
+              {{ user.firstName }}
+            </div>
+
+            <div class="client-dropdown-item no-client-found" *ngIf="filteredUsers.length === 0">No User Found</div>
+          </div>
+        </div>
+
+        <!-- DEPARTMENT -->
+        <div class="search-field department-filter">
+          <label>Department</label>
+
+          <div class="department-dropdown">
+            <button type="button" class="department-select" (click)="showDepartmentDropdown = !showDepartmentDropdown" [attr.aria-expanded]="showDepartmentDropdown">
+              <span>
+                {{ selectedDepartmentIds.length === 0 ? '-- Select Department --' : selectedDepartmentIds.length + ' Department(s) Selected' }}
+              </span>
+
+              <mat-icon>
+                {{ showDepartmentDropdown ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+              </mat-icon>
+            </button>
+
+            <div class="department-options" *ngIf="showDepartmentDropdown">
+              <label class="department-option" *ngFor="let department of departments">
+                <input type="checkbox" [checked]="selectedDepartmentIds.includes(+department.departmentId)" (change)="onDepartmentChange(+department.departmentId, $any($event.target).checked)" />
+                <span>{{ department.name }}</span>
+              </label>
+
+              <div class="no-departments" *ngIf="!departments || departments.length === 0">No departments available.</div>
+
+              <button type="button" class="clear-departments" *ngIf="selectedDepartmentIds.length > 0" (click)="clearDepartments()">Clear departments</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- FROM DATE -->
+        <div class="search-field">
+          <label>From Date</label>
+
+          <div class="search-input-wrapper">
+            <input type="text" [matDatepicker]="fromPicker" [(ngModel)]="fromDate" [max]="toDate" placeholder="DD/MM/YYYY" readonly (click)="fromPicker.open()" />
+
+            <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
+              <mat-icon>calendar_today</mat-icon>
+            </button>
+
+            <mat-datepicker #fromPicker></mat-datepicker>
+          </div>
+        </div>
+
+        <!-- TO DATE -->
+        <div class="search-field">
+          <label>To Date</label>
+
+          <div class="search-input-wrapper">
+            <input type="text" [matDatepicker]="toPicker" [(ngModel)]="toDate" [min]="fromDate" placeholder="DD/MM/YYYY" readonly (click)="toPicker.open()" />
+
+            <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
+              <mat-icon>calendar_today</mat-icon>
+            </button>
+
+            <mat-datepicker #toPicker></mat-datepicker>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECOND ROW: ACTION BUTTONS -->
+      <div class="search-actions">
+        <div class="go-wrapper">
+          <button type="button" class="btn-go" (click)="onSearch()">Go</button>
+
+          <button type="button" class="btn-clear" (click)="clearFilters()">Clear</button>
+
+          <button type="button" class="btn-export-excel" (click)="exportToExcel()">
+            Export to Excel
+            <i class="fas fa-file-excel" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- ================= TABLE SECTION ================= -->
+    <div class="table-section">
+      <!-- TOP PAGINATION -->
+      <div class="table-toolbar">
+        <div class="record-summary">{{ recordSummary }}</div>
+
+        <div class="pagination">
+          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+
+          <button type="button" *ngFor="let p of pages()" (click)="goToPage(p)" [class.active-pagination]="p === currentPage">
+            {{ p }}
+          </button>
+
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+        </div>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-wrapper">
+        <table class="access-table">
+          <thead>
+            <tr>
+              <th>Sr. No.</th>
+              <th>User</th>
+              <th>Count</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let r of rows; let i = index">
+              <td class="serial-cell">
+                {{ (currentPage - 1) * recordsPerPage + i + 1 }}
+              </td>
+              <td class="text-left">{{ r.userName }}</td>
+              <td class="text-left">{{ r.taskCount }}</td>
+            </tr>
+
+            <!-- NO DATA -->
+            <tr *ngIf="!rows || rows.length === 0">
+              <td colspan="3" class="no-records">
+                <mat-icon>info_outline</mat-icon>
+                <span>No records found</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- BOTTOM PAGINATION -->
+      <div class="table-toolbar bottom-toolbar">
+        <div class="record-summary">{{ recordSummary }}</div>
+
+        <div class="pagination">
+          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+
+          <button type="button" *ngFor="let p of pages()" (click)="goToPage(p)" [class.active-pagination]="p === currentPage">
+            {{ p }}
+          </button>
+
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
