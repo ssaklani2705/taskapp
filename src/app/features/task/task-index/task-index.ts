@@ -49,11 +49,10 @@ interface Task {
   assignedbyName: string;
   description: string;
   taskCategoryId: any;
-  userType:any;
-  buddyName:any;
+  userType: any;
+  buddyName: any;
 
-  buddyId: any;      // ADD
-
+  buddyId: any; // ADD
 }
 
 export interface Client {
@@ -111,6 +110,8 @@ export interface AssignedUser {
   ],
 })
 export class TaskIndex implements OnInit {
+  taskIdQuery: string = '';
+  taskIdFilter: number = 0; // 0 = no task id filter
   showAssignUserModal = false;
   selectedAssignTask: any = null;
   assignRemarks: string = '';
@@ -362,10 +363,13 @@ export class TaskIndex implements OnInit {
       this.toDate = null;
 
       this.dashboardFilter = '';
+      this.taskIdFilter = 0;
+      this.taskIdQuery = '';
 
       return;
     }
-
+    this.taskIdFilter = Number(stateData.taskId) || 0;
+    this.taskIdQuery = this.taskIdFilter ? String(this.taskIdFilter) : '';
     this.currentPage = Number(stateData.currentPage) || 1;
     this.page = Number(stateData.page ?? this.currentPage - 1);
 
@@ -414,7 +418,7 @@ export class TaskIndex implements OnInit {
       priority: this.selectedPriority ? Number(this.selectedPriority) : null,
       fromDate: this.formatDateForApi(this.fromDate),
       toDate: this.formatDateForApi(this.toDate),
-
+      taskId: this.taskIdFilter,
       taskStatusIds: this.selectedTaskStatuses,
       dashboardFilter: this.dashboardFilter,
     };
@@ -495,6 +499,7 @@ export class TaskIndex implements OnInit {
         this.loginType,
         this.dashboardFilter,
         this.isHod,
+         this.taskIdFilter, 
       )
       .subscribe({
         next: (response: any) => {
@@ -570,6 +575,7 @@ export class TaskIndex implements OnInit {
     this.statusIndex = this.selectedStatus === '' ? 0 : Number(this.selectedStatus);
     this.currentPage = 1;
     this.page = 0;
+    this.taskIdFilter = this.taskIdQuery?.trim() ? Number(this.taskIdQuery.trim()) || 0 : 0;
 
     const fromDate = this.formatDateForApi(this.fromDate);
     const toDate = this.formatDateForApi(this.toDate);
@@ -807,6 +813,8 @@ export class TaskIndex implements OnInit {
     this.sortColumn = '';
     this.sortDirection = 'asc';
     this.dashboardFilter = '';
+    this.taskIdQuery = '';
+    this.taskIdFilter = 0;
     this.saveFilterState();
 
     this.router
@@ -972,7 +980,7 @@ export class TaskIndex implements OnInit {
         this.sendMail = false;
         this.isSavingTaskNote = false;
 
-         this.loadTaskNotes(this.selectedTask.taskId);
+        this.loadTaskNotes(this.selectedTask.taskId);
       },
 
       error: (error) => {
@@ -1158,16 +1166,15 @@ export class TaskIndex implements OnInit {
       return;
     }
 
-     // rating is mandatory only for Assignor Closure
+    // rating is mandatory only for Assignor Closure
     if (this.isAssignorClosureSelected && this.selectedRating <= 0) {
       this.ratingValidationError = true;
       return;
     }
 
     this.descriptionValidationError = false;
-    this.ratingValidationError = false;//New Added for rating validation
+    this.ratingValidationError = false; //New Added for rating validation
     this.isChangingManager = true;
-    
 
     const formData = new FormData();
 
@@ -1177,7 +1184,7 @@ export class TaskIndex implements OnInit {
     formData.append('userId', this.userId);
     if (this.isAssignorClosureSelected) {
       formData.append('rating', String(this.selectedRating)); // e.g. "3.5"
-   }
+    }
 
     if (this.fileTwo) {
       formData.append('fileName3', this.fileTwo, this.fileTwo.name); // normal file → fileName1 (pdf)
@@ -1279,7 +1286,7 @@ export class TaskIndex implements OnInit {
       'Due Date': task.dueDateTime ? this.formatExcelDate(task.dueDateTime) : '-',
       'Task Category': task.taskCategoryName || '-',
       'Assigned By': task.assignedbyName || '-',
-      'Buddy': task.buddyName || '-',
+      Buddy: task.buddyName || '-',
       'Assigned To': !task.assignedToName || task.assignedToName === '0' ? 'Unassigned User' : task.assignedToName,
       Priority: this.getPriorityLabel(task.priority),
       'Task Status': this.common.getTaskStatusLabel(task.taskStatus),
@@ -1288,7 +1295,7 @@ export class TaskIndex implements OnInit {
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
 
-   worksheet['!cols'] = [
+    worksheet['!cols'] = [
       { wch: 8 }, // Sr. No.
       { wch: 35 }, // Title
       { wch: 25 }, // Client
@@ -1384,33 +1391,31 @@ export class TaskIndex implements OnInit {
     this.selectedDescriptionTask = null;
   }
 
+  openAssignUserModal(task: any): void {
+    this.originalAssignedUserId = Number(task.assignedTo || 0);
+    this.lastAssignLoadKey = ''; // new modal session, allow a fresh load
 
- openAssignUserModal(task: any): void {
-  this.originalAssignedUserId = Number(task.assignedTo || 0);
-  this.lastAssignLoadKey = '';          // new modal session, allow a fresh load
+    this.selectedAssignTask = {
+      ...task,
+      assignedTo: 0,
+      // buddyId: null,                      // overrides the value copied by ...task
+      buddyId: task.buddyId ? Number(task.buddyId) : null, // was: null
+      date: task.date ? new Date(task.date) : null,
+      endDate: task.dueDateTime ? new Date(task.dueDateTime) : null,
+    };
 
-  this.selectedAssignTask = {
-    ...task,
-    assignedTo: 0,
-    // buddyId: null,                      // overrides the value copied by ...task
-     buddyId: task.buddyId ? Number(task.buddyId) : null,   // was: null
-    date: task.date ? new Date(task.date) : null,
-    endDate: task.dueDateTime ? new Date(task.dueDateTime) : null,
-  };
+    this.assignRemarks = '';
+    this.holidayError = '';
+    this.recommendationNote = '';
+    this.users = [];
+    this.workloadList = [];
+    this.showAssignUserModal = true;
 
-  this.assignRemarks = '';
-  this.holidayError = '';
-  this.recommendationNote = '';
-  this.users = [];
-  this.workloadList = [];
-  this.showAssignUserModal = true;
+    const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd');
+    const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd');
 
-  const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd');
-  const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd');
-
-  this.loadAssignUsers(startDate, endDate, this.originalAssignedUserId);
-}
-
+    this.loadAssignUsers(startDate, endDate, this.originalAssignedUserId);
+  }
 
   private isValidTaskDateRange(): boolean {
     if (!this.selectedAssignTask?.date) {
@@ -1440,20 +1445,20 @@ export class TaskIndex implements OnInit {
   }
 
   // ---- field (add near the other assign-modal fields) ----
-private assignUsersSub?: Subscription;
+  private assignUsersSub?: Subscription;
 
-closeAssignUserModal(): void {
-  this.assignUsersSub?.unsubscribe();
-  this.lastAssignLoadKey = '';
-  this.isLoadingAssignUsers = false;
-  this.showAssignUserModal = false;
-  this.selectedAssignTask = null;
-  this.assignRemarks = '';
-  this.users = [];
-  this.workloadList = [];
-  this.holidayError = '';
-  this.recommendationNote = '';
-}
+  closeAssignUserModal(): void {
+    this.assignUsersSub?.unsubscribe();
+    this.lastAssignLoadKey = '';
+    this.isLoadingAssignUsers = false;
+    this.showAssignUserModal = false;
+    this.selectedAssignTask = null;
+    this.assignRemarks = '';
+    this.users = [];
+    this.workloadList = [];
+    this.holidayError = '';
+    this.recommendationNote = '';
+  }
 
   // closeAssignUserModal(): void {
   //   this.showAssignUserModal = false;
@@ -1463,37 +1468,37 @@ closeAssignUserModal(): void {
   // }
 
   // Same list as Assigned To, minus the selected assignee, no recommended marker
-// All users (assignee is NOT filtered out any more), plus the current buddy
-// if the user list does not contain them
-get buddyUsers(): any[] {
-  const list = [...(this.users || [])];
-  const buddyId = Number(this.selectedAssignTask?.buddyId || 0);
-  if (buddyId && !list.some((u: any) => Number(u.userId) === buddyId)) {
-    list.push({ userId: buddyId, firstName: this.selectedAssignTask?.buddyName || 'Current Buddy' });
+  // All users (assignee is NOT filtered out any more), plus the current buddy
+  // if the user list does not contain them
+  get buddyUsers(): any[] {
+    const list = [...(this.users || [])];
+    const buddyId = Number(this.selectedAssignTask?.buddyId || 0);
+    if (buddyId && !list.some((u: any) => Number(u.userId) === buddyId)) {
+      list.push({ userId: buddyId, firstName: this.selectedAssignTask?.buddyName || 'Current Buddy' });
+    }
+    return list;
   }
-  return list;
-}
 
-get isAssignBuddySame(): boolean {
-  const assignee = Number(this.selectedAssignTask?.assignedTo || 0);
-  const buddy = Number(this.selectedAssignTask?.buddyId || 0);
-  return assignee > 0 && buddy > 0 && assignee === buddy;
-}
-
-trackByUserId(_: number, user: any): number {
-  return user.userId;
-}
-
-onAssignModalUserChange(userId: any): void {
-  this.selectedAssignTask.assignedTo = userId;
-  // this.clearAssignBuddyIfSame();
-}
-
-private clearAssignBuddyIfSame(): void {
-  if (this.selectedAssignTask?.buddyId && Number(this.selectedAssignTask.buddyId) === Number(this.selectedAssignTask.assignedTo)) {
-    this.selectedAssignTask.buddyId = null;
+  get isAssignBuddySame(): boolean {
+    const assignee = Number(this.selectedAssignTask?.assignedTo || 0);
+    const buddy = Number(this.selectedAssignTask?.buddyId || 0);
+    return assignee > 0 && buddy > 0 && assignee === buddy;
   }
-}
+
+  trackByUserId(_: number, user: any): number {
+    return user.userId;
+  }
+
+  onAssignModalUserChange(userId: any): void {
+    this.selectedAssignTask.assignedTo = userId;
+    // this.clearAssignBuddyIfSame();
+  }
+
+  private clearAssignBuddyIfSame(): void {
+    if (this.selectedAssignTask?.buddyId && Number(this.selectedAssignTask.buddyId) === Number(this.selectedAssignTask.assignedTo)) {
+      this.selectedAssignTask.buddyId = null;
+    }
+  }
 
   assignUser(): void {
     if (!this.selectedAssignTask || !this.selectedAssignTask.assignedTo || this.selectedAssignTask.assignedTo == 0) {
@@ -1504,13 +1509,12 @@ private clearAssignBuddyIfSame(): void {
     //   return;
     // }
     if ((this.selectedAssignTask.taskStatus === 1 || this.selectedAssignTask.taskStatus === 3) && !this.assignRemarks?.trim()) {
-  return;
-}
-if (this.isAssignBuddySame) {
-  Swal.fire('Error', 'Buddy and Assignee User should not be same. Kindly change the Buddy User or Assignee User', 'error');
-  return;
-}
-
+      return;
+    }
+    if (this.isAssignBuddySame) {
+      Swal.fire('Error', 'Buddy and Assignee User should not be same. Kindly change the Buddy User or Assignee User', 'error');
+      return;
+    }
 
     if (!this.isValidTaskDateRange()) {
       return;
@@ -1524,8 +1528,7 @@ if (this.isAssignBuddySame) {
 
     const buddyId = this.selectedAssignTask.buddyId ? Number(this.selectedAssignTask.buddyId) : null;
 
-
-    this.dataprovider.updateTaskAssignedUser(taskId, assignedTo, this.userId, remarks, startDate, endDate,buddyId).subscribe({
+    this.dataprovider.updateTaskAssignedUser(taskId, assignedTo, this.userId, remarks, startDate, endDate, buddyId).subscribe({
       next: (res: any) => {
         if (res?.success) {
           const selectedUser = this.users.find((user: any) => user.userId == assignedTo);
@@ -1604,12 +1607,12 @@ if (this.isAssignBuddySame) {
     return `${year}-${month}-${day} ${hours}:${minutes}:00`;
   }
 
-onchangeloadUserDropdownData(task: any): void {
-  const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd');
-  const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd');
+  onchangeloadUserDropdownData(task: any): void {
+    const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd');
+    const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd');
 
-  this.loadAssignUsers(startDate, endDate, this.originalAssignedUserId);
-}
+    this.loadAssignUsers(startDate, endDate, this.originalAssignedUserId);
+  }
 
   isStatusRadioDisabled(task: any): boolean {
     const selfAssigned = task.addedBy == this.userId && task.assignedTo == this.userId;
@@ -1718,7 +1721,7 @@ onchangeloadUserDropdownData(task: any): void {
     if (!target.closest('.task-category-dropdown')) {
       this.showTaskCategoryDropdown = false;
       this.categorySearchText = '';
-    }                         
+    }
   }
 
   canDisableChangeManager(task: any): boolean {
@@ -1818,296 +1821,284 @@ onchangeloadUserDropdownData(task: any): void {
     });
   }
 
-//   onAssignEndDateChange(value: any): void {
-//     this.selectedAssignTask.endDate = value;
+  //   onAssignEndDateChange(value: any): void {
+  //     this.selectedAssignTask.endDate = value;
 
-//     const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd') || '';
-//     const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd') || '';
+  //     const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd') || '';
+  //     const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd') || '';
 
-//     this.loadAssigneeWorkload(this.selectedAssignTask.taskCategoryId, this.selectedAssignTask.date, this.selectedAssignTask.endDate);
+  //     this.loadAssigneeWorkload(this.selectedAssignTask.taskCategoryId, this.selectedAssignTask.date, this.selectedAssignTask.endDate);
 
-//     const currentAssignedUserId = Number(this.selectedAssignTask.assignedTo || 0);
-//     // this.loadAssignUsers(startDate, endDate, currentAssignedUserId);
-//      this.loadAssignUsers(
-//   startDate,
-//   endDate,
-//   this.originalAssignedUserId
-// );
-//   }
+  //     const currentAssignedUserId = Number(this.selectedAssignTask.assignedTo || 0);
+  //     // this.loadAssignUsers(startDate, endDate, currentAssignedUserId);
+  //      this.loadAssignUsers(
+  //   startDate,
+  //   endDate,
+  //   this.originalAssignedUserId
+  // );
+  //   }
 
-onAssignEndDateChange(value: any): void {
-  this.selectedAssignTask.endDate = value;
+  onAssignEndDateChange(value: any): void {
+    this.selectedAssignTask.endDate = value;
 
-  const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd') || '';
-  const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd') || '';
+    const startDate = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd') || '';
+    const endDate = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd') || '';
 
-  // loadAssigneeWorkload() removed: loadAssignUsers() already fetches the workload
-  // and sets hasWorkload, so there is now a single source of truth.
-  this.loadAssignUsers(startDate, endDate, this.originalAssignedUserId);
-}
+    // loadAssigneeWorkload() removed: loadAssignUsers() already fetches the workload
+    // and sets hasWorkload, so there is now a single source of truth.
+    this.loadAssignUsers(startDate, endDate, this.originalAssignedUserId);
+  }
 
   isLoadingUsers = true;
   showAssignUserDropdown = false;
- 
-// private loadAssignUsers(
-//   startDate: string | null,
-//   endDate: string | null,
-//   currentAssignedUserId: number
-// ): void {
-//   if (!this.selectedAssignTask || !startDate || !endDate) {
-//     this.users = [];
-//     this.isLoadingAssignUsers = false;
-//     return;
-//   }
 
-//   this.isLoadingAssignUsers = true;
-//   this.users = [];
-//   this.holidayError = '';
+  // private loadAssignUsers(
+  //   startDate: string | null,
+  //   endDate: string | null,
+  //   currentAssignedUserId: number
+  // ): void {
+  //   if (!this.selectedAssignTask || !startDate || !endDate) {
+  //     this.users = [];
+  //     this.isLoadingAssignUsers = false;
+  //     return;
+  //   }
 
-//   const usersRequest =
-//     this.dataprovider.changesCategoryIdgetUserFilterData(
-//       this.isAdmin,
-//       this.userId,
-//       this.loginType,
-//       this.selectedAssignTask.clientId,
-//       this.selectedAssignTask.taskCategoryId,
-//       Number(this.selectedAssignTask.systemFlag ?? 0),
-//       startDate,
-//       endDate,this.selectedAssignTask.userType
-//     );
+  //   this.isLoadingAssignUsers = true;
+  //   this.users = [];
+  //   this.holidayError = '';
 
-//   const workloadRequest = this.dataprovider.getAssigneeWorkload(
-//     this.selectedAssignTask.taskCategoryId,
-//     startDate,
-//     endDate
-//   );
+  //   const usersRequest =
+  //     this.dataprovider.changesCategoryIdgetUserFilterData(
+  //       this.isAdmin,
+  //       this.userId,
+  //       this.loginType,
+  //       this.selectedAssignTask.clientId,
+  //       this.selectedAssignTask.taskCategoryId,
+  //       Number(this.selectedAssignTask.systemFlag ?? 0),
+  //       startDate,
+  //       endDate,this.selectedAssignTask.userType
+  //     );
 
-//   forkJoin({
-//     users: usersRequest,
-//     workload: workloadRequest
-//   }).subscribe({
-//     next: ({ users, workload }: any) => {
-//       const userResponse = users?.data ?? users;
+  //   const workloadRequest = this.dataprovider.getAssigneeWorkload(
+  //     this.selectedAssignTask.taskCategoryId,
+  //     startDate,
+  //     endDate
+  //   );
 
-//       if (workload?.success === false) {
-//         this.holidayError =
-//           workload.message ||
-//           'Unable to validate the selected date range.';
+  //   forkJoin({
+  //     users: usersRequest,
+  //     workload: workloadRequest
+  //   }).subscribe({
+  //     next: ({ users, workload }: any) => {
+  //       const userResponse = users?.data ?? users;
 
-//         this.users = [];
-//         this.workloadList = [];
-//         this.isLoadingAssignUsers = false;
-//         return;
-//       }
+  //       if (workload?.success === false) {
+  //         this.holidayError =
+  //           workload.message ||
+  //           'Unable to validate the selected date range.';
 
-//       const workloadUsers: any[] = Array.isArray(workload)
-//         ? workload
-//         : Array.isArray(workload?.data)
-//           ? workload.data
-//           : [];
+  //         this.users = [];
+  //         this.workloadList = [];
+  //         this.isLoadingAssignUsers = false;
+  //         return;
+  //       }
 
-//       this.workloadList = workloadUsers;
+  //       const workloadUsers: any[] = Array.isArray(workload)
+  //         ? workload
+  //         : Array.isArray(workload?.data)
+  //           ? workload.data
+  //           : [];
 
-//       const workloadUserIds = new Set(
-//         workloadUsers.map((item: any) => Number(item.assignedTo))
-//       );
+  //       this.workloadList = workloadUsers;
 
-//       const allUsers: any[] = Array.isArray(userResponse?.assignedUsers)
-//         ? userResponse.assignedUsers
-//         : [];
+  //       const workloadUserIds = new Set(
+  //         workloadUsers.map((item: any) => Number(item.assignedTo))
+  //       );
 
-//       // Exclude only the task's original assignee.
-//       // Do not exclude the newly selected recommended employee.
-//       this.users = allUsers
-//         .filter(
-//           (user: any) =>
-//             Number(user.userId) !== Number(currentAssignedUserId)
-//         )
-//         .map((user: any) => ({
-//           ...user,
-//           hasWorkload: workloadUserIds.has(Number(user.userId))
-//         }));
+  //       const allUsers: any[] = Array.isArray(userResponse?.assignedUsers)
+  //         ? userResponse.assignedUsers
+  //         : [];
 
-//       this.selectedAssignTask.maxHours = Number(
-//         userResponse?.maxHours || 0
-//       );
+  //       // Exclude only the task's original assignee.
+  //       // Do not exclude the newly selected recommended employee.
+  //       this.users = allUsers
+  //         .filter(
+  //           (user: any) =>
+  //             Number(user.userId) !== Number(currentAssignedUserId)
+  //         )
+  //         .map((user: any) => ({
+  //           ...user,
+  //           hasWorkload: workloadUserIds.has(Number(user.userId))
+  //         }));
 
-//       // Auto-select the first recommended employee each time
-//       // the user/workload list is refreshed.
-//       const recommendedUser = this.users.find(
-//         (user: any) => user.hasWorkload
-//       );
+  //       this.selectedAssignTask.maxHours = Number(
+  //         userResponse?.maxHours || 0
+  //       );
 
-//       this.selectedAssignTask.assignedTo = recommendedUser
-//         ? recommendedUser.userId
-//         : 0;
+  //       // Auto-select the first recommended employee each time
+  //       // the user/workload list is refreshed.
+  //       const recommendedUser = this.users.find(
+  //         (user: any) => user.hasWorkload
+  //       );
 
-//         this.clearAssignBuddyIfSame();      // ADD
+  //       this.selectedAssignTask.assignedTo = recommendedUser
+  //         ? recommendedUser.userId
+  //         : 0;
 
-//       if (this.users.length === 0) {
-//         this.holidayError = '';
-//       }
+  //         this.clearAssignBuddyIfSame();      // ADD
 
-//       console.log('Recommended employee:', recommendedUser);
-//       console.log(
-//         'Selected employee ID:',
-//         this.selectedAssignTask.assignedTo
-//       );
+  //       if (this.users.length === 0) {
+  //         this.holidayError = '';
+  //       }
 
-//       this.isLoadingAssignUsers = false;
-//     },
+  //       console.log('Recommended employee:', recommendedUser);
+  //       console.log(
+  //         'Selected employee ID:',
+  //         this.selectedAssignTask.assignedTo
+  //       );
 
-//     error: (error: any) => {
-//       console.error('Error loading assignment users:', error);
+  //       this.isLoadingAssignUsers = false;
+  //     },
 
-//       this.users = [];
-//       this.workloadList = [];
+  //     error: (error: any) => {
+  //       console.error('Error loading assignment users:', error);
 
-//       this.holidayError =
-//         error?.error?.message ||
-//         'Unable to load users or validate the selected date range.';
+  //       this.users = [];
+  //       this.workloadList = [];
 
-//       this.isLoadingAssignUsers = false;
-//     }
-//   });
-// }
-  
-private lastAssignLoadKey = '';
-private loadAssignUsers(
-  startDate: string | null,
-  endDate: string | null,
-  currentAssignedUserId: number
-): void {
-  if (!this.selectedAssignTask || !startDate || !endDate) {
+  //       this.holidayError =
+  //         error?.error?.message ||
+  //         'Unable to load users or validate the selected date range.';
+
+  //       this.isLoadingAssignUsers = false;
+  //     }
+  //   });
+  // }
+
+  private lastAssignLoadKey = '';
+  private loadAssignUsers(startDate: string | null, endDate: string | null, currentAssignedUserId: number): void {
+    if (!this.selectedAssignTask || !startDate || !endDate) {
+      this.assignUsersSub?.unsubscribe();
+      this.users = [];
+      this.isLoadingAssignUsers = false;
+      return;
+    }
+
+    // full date + time for the workload API
+    const workloadStart = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd HH:mm:ss');
+    const workloadEnd = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd HH:mm:ss');
+
+    // skip an identical request that was already issued
+    const loadKey = [this.selectedAssignTask.taskCategoryId, workloadStart, workloadEnd, currentAssignedUserId].join('|');
+    if (loadKey === this.lastAssignLoadKey) {
+      return;
+    }
+    this.lastAssignLoadKey = loadKey;
+
+    // cancel any older in-flight request
     this.assignUsersSub?.unsubscribe();
+
+    this.isLoadingAssignUsers = true;
     this.users = [];
-    this.isLoadingAssignUsers = false;
-    return;
-  }
+    this.holidayError = '';
+    this.recommendationNote = '';
 
-  // full date + time for the workload API
-  const workloadStart = this.datePipe.transform(this.selectedAssignTask.date, 'yyyy-MM-dd HH:mm:ss');
-  const workloadEnd = this.datePipe.transform(this.selectedAssignTask.endDate, 'yyyy-MM-dd HH:mm:ss');
+    const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
+      this.isAdmin,
+      this.userId,
+      this.loginType,
+      this.selectedAssignTask.clientId,
+      this.selectedAssignTask.taskCategoryId,
+      Number(this.selectedAssignTask.systemFlag ?? 0),
+      startDate,
+      endDate,
+      this.selectedAssignTask.userType,
+    );
 
-  // skip an identical request that was already issued
-  const loadKey = [this.selectedAssignTask.taskCategoryId, workloadStart, workloadEnd, currentAssignedUserId].join('|');
-  if (loadKey === this.lastAssignLoadKey) {
-    return;
-  }
-  this.lastAssignLoadKey = loadKey;
+    const workloadRequest = this.dataprovider.getAssigneeWorkload(this.selectedAssignTask.taskCategoryId, workloadStart, workloadEnd, currentAssignedUserId > 0 ? currentAssignedUserId : undefined);
 
-  // cancel any older in-flight request
-  this.assignUsersSub?.unsubscribe();
+    this.assignUsersSub = forkJoin({ users: usersRequest, workload: workloadRequest }).subscribe({
+      next: ({ users, workload }: any) => {
+        // modal was closed while the request was running
+        if (!this.selectedAssignTask) {
+          this.isLoadingAssignUsers = false;
+          return;
+        }
 
-  this.isLoadingAssignUsers = true;
-  this.users = [];
-  this.holidayError = '';
-  this.recommendationNote = '';
+        const userResponse = users?.data ?? users;
 
-  const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
-    this.isAdmin,
-    this.userId,
-    this.loginType,
-    this.selectedAssignTask.clientId,
-    this.selectedAssignTask.taskCategoryId,
-    Number(this.selectedAssignTask.systemFlag ?? 0),
-    startDate,
-    endDate,
-    this.selectedAssignTask.userType
-  );
+        if (workload?.success === false) {
+          this.holidayError = workload.message || 'Unable to validate the selected date range.';
+          this.users = [];
+          this.workloadList = [];
+          this.isLoadingAssignUsers = false;
+          return;
+        }
 
-  const workloadRequest = this.dataprovider.getAssigneeWorkload(
-    this.selectedAssignTask.taskCategoryId,
-    workloadStart,
-    workloadEnd,
-    currentAssignedUserId > 0 ? currentAssignedUserId : undefined
-  );
+        const workloadUsers: any[] = Array.isArray(workload) ? workload : Array.isArray(workload?.data) ? workload.data : [];
 
-  this.assignUsersSub = forkJoin({ users: usersRequest, workload: workloadRequest }).subscribe({
-    next: ({ users, workload }: any) => {
-      // modal was closed while the request was running
-      if (!this.selectedAssignTask) {
+        this.workloadList = workloadUsers;
+
+        // tolerate different key names from the backend
+        const workloadUserIds = new Set(workloadUsers.map((item: any) => String(item.assignedTo ?? item.userId ?? item.assigned_to)));
+
+        const allUsers: any[] = Array.isArray(userResponse?.assignedUsers) ? userResponse.assignedUsers : [];
+
+        this.users = allUsers.filter((u: any) => Number(u.userId) !== Number(currentAssignedUserId)).map((u: any) => ({ ...u, hasWorkload: workloadUserIds.has(String(u.userId)) }));
+
+        // recommended user is the current assignee, so the filter removed them
+        const recommendedWasOriginal = currentAssignedUserId !== 0 && workloadUserIds.has(String(currentAssignedUserId));
+
+        if (recommendedWasOriginal && !this.users.some((u: any) => u.hasWorkload)) {
+          this.recommendationNote = 'The system-recommended employee is the current assignee.';
+        }
+
+        // ---- DEBUG: remove after the issue is found ----
+        console.log('[assign] request        :', { workloadStart, workloadEnd, cat: this.selectedAssignTask.taskCategoryId });
+        console.log('[assign] workload raw   :', workload);
+        console.log('[assign] workload ids   :', Array.from(workloadUserIds));
+        console.log(
+          '[assign] users returned :',
+          allUsers.map((u: any) => u.userId),
+        );
+        console.log('[assign] original user  :', currentAssignedUserId);
+        console.log(
+          '[assign] marked         :',
+          this.users.filter((u: any) => u.hasWorkload).map((u: any) => u.userId),
+        );
+        // -------------------------------------------------
+
+        this.selectedAssignTask.maxHours = Number(userResponse?.maxHours || 0);
+
+        // keep a manual choice if still available, otherwise auto-select the recommended user
+        const currentSelectedId = Number(this.selectedAssignTask.assignedTo || 0);
+        const stillAvailable = this.users.some((u: any) => Number(u.userId) === currentSelectedId);
+
+        if (!currentSelectedId || !stillAvailable) {
+          const recommendedUser = this.users.find((u: any) => u.hasWorkload);
+          this.selectedAssignTask.assignedTo = recommendedUser ? recommendedUser.userId : 0;
+        }
+
+        this.clearAssignBuddyIfSame();
         this.isLoadingAssignUsers = false;
-        return;
-      }
+      },
 
-      const userResponse = users?.data ?? users;
+      error: (error: any) => {
+        this.lastAssignLoadKey = ''; // allow a retry after a failure
 
-      if (workload?.success === false) {
-        this.holidayError = workload.message || 'Unable to validate the selected date range.';
+        if (!this.selectedAssignTask) {
+          this.isLoadingAssignUsers = false;
+          return;
+        }
+
+        console.error('Error loading assignment users:', error);
         this.users = [];
         this.workloadList = [];
+        this.holidayError = error?.error?.message || 'Unable to load users or validate the selected date range.';
         this.isLoadingAssignUsers = false;
-        return;
-      }
-
-      const workloadUsers: any[] = Array.isArray(workload)
-        ? workload
-        : Array.isArray(workload?.data)
-          ? workload.data
-          : [];
-
-      this.workloadList = workloadUsers;
-
-      // tolerate different key names from the backend
-      const workloadUserIds = new Set(
-        workloadUsers.map((item: any) => String(item.assignedTo ?? item.userId ?? item.assigned_to))
-      );
-
-      const allUsers: any[] = Array.isArray(userResponse?.assignedUsers) ? userResponse.assignedUsers : [];
-
-      this.users = allUsers
-        .filter((u: any) => Number(u.userId) !== Number(currentAssignedUserId))
-        .map((u: any) => ({ ...u, hasWorkload: workloadUserIds.has(String(u.userId)) }));
-
-      // recommended user is the current assignee, so the filter removed them
-      const recommendedWasOriginal =
-        currentAssignedUserId !== 0 && workloadUserIds.has(String(currentAssignedUserId));
-
-      if (recommendedWasOriginal && !this.users.some((u: any) => u.hasWorkload)) {
-        this.recommendationNote = 'The system-recommended employee is the current assignee.';
-      }
-
-      // ---- DEBUG: remove after the issue is found ----
-      console.log('[assign] request        :', { workloadStart, workloadEnd, cat: this.selectedAssignTask.taskCategoryId });
-      console.log('[assign] workload raw   :', workload);
-      console.log('[assign] workload ids   :', Array.from(workloadUserIds));
-      console.log('[assign] users returned :', allUsers.map((u: any) => u.userId));
-      console.log('[assign] original user  :', currentAssignedUserId);
-      console.log('[assign] marked         :', this.users.filter((u: any) => u.hasWorkload).map((u: any) => u.userId));
-      // -------------------------------------------------
-
-      this.selectedAssignTask.maxHours = Number(userResponse?.maxHours || 0);
-
-      // keep a manual choice if still available, otherwise auto-select the recommended user
-      const currentSelectedId = Number(this.selectedAssignTask.assignedTo || 0);
-      const stillAvailable = this.users.some((u: any) => Number(u.userId) === currentSelectedId);
-
-      if (!currentSelectedId || !stillAvailable) {
-        const recommendedUser = this.users.find((u: any) => u.hasWorkload);
-        this.selectedAssignTask.assignedTo = recommendedUser ? recommendedUser.userId : 0;
-      }
-
-      this.clearAssignBuddyIfSame();
-      this.isLoadingAssignUsers = false;
-    },
-
-    error: (error: any) => {
-      this.lastAssignLoadKey = '';      // allow a retry after a failure
-
-      if (!this.selectedAssignTask) {
-        this.isLoadingAssignUsers = false;
-        return;
-      }
-
-      console.error('Error loading assignment users:', error);
-      this.users = [];
-      this.workloadList = [];
-      this.holidayError = error?.error?.message || 'Unable to load users or validate the selected date range.';
-      this.isLoadingAssignUsers = false;
-    },
-  });
-}
+      },
+    });
+  }
 
   private normalizeClientId(value: any): string {
     if (value === null || value === undefined) return '';
@@ -2147,299 +2138,311 @@ private loadAssignUsers(
   // }
 
   private buildGroupedCategories(): void {
-  const opts = { numeric: true, sensitivity: 'base' } as const;
-  const map = new Map<string, TaskCategory[]>();
+    const opts = { numeric: true, sensitivity: 'base' } as const;
+    const map = new Map<string, TaskCategory[]>();
 
-  for (const c of this.taskCategories || []) {
-    const key = c.departmentName || 'Other';
-    if (!map.has(key)) {
-      map.set(key, []);
+    for (const c of this.taskCategories || []) {
+      const key = c.departmentName || 'Other';
+      if (!map.has(key)) {
+        map.set(key, []);
+      }
+      map.get(key)!.push(c);
     }
-    map.get(key)!.push(c);
+
+    this.groupedCategories = Array.from(map, ([department, items]) => ({
+      department,
+      // category A-Z inside each department
+      items: [...items].sort((a, b) => (a.name || '').localeCompare(b.name || '', undefined, opts)),
+    })).sort((a, b) => {
+      // department A-Z, "Other" always last
+      if (a.department === 'Other') return 1;
+      if (b.department === 'Other') return -1;
+      return a.department.localeCompare(b.department, undefined, opts);
+    });
   }
 
-  this.groupedCategories = Array.from(map, ([department, items]) => ({
-    department,
-    // category A-Z inside each department
-    items: [...items].sort((a, b) => (a.name || '').localeCompare(b.name || '', undefined, opts)),
-  })).sort((a, b) => {
-    // department A-Z, "Other" always last
-    if (a.department === 'Other') return 1;
-    if (b.department === 'Other') return -1;
-    return a.department.localeCompare(b.department, undefined, opts);
-  });
-}
+  categorySearchText = '';
 
-categorySearchText = '';
-
-get selectedTaskCategoryLabel(): string {
-  if (!this.selectedTaskCategory) return '--All Task Categories--';
-  const c = this.taskCategories.find(
-    (x: any) => String(x.taskcategoryId) === String(this.selectedTaskCategory)
-  );
-  return c ? c.name : '--All Task Categories--';
-}
-
-get filteredGroupedCategories(): { department: string; items: TaskCategory[] }[] {
-  const q = this.categorySearchText.trim().toLowerCase();
-  if (!q) return this.groupedCategories;
-
-  return this.groupedCategories
-    .map((g) => {
-      // if the department matches, keep all its categories
-      if (g.department.toLowerCase().includes(q)) return g;
-      return {
-        department: g.department,
-        items: g.items.filter((c) => (c.name || '').toLowerCase().includes(q)),
-      };
-    })
-    .filter((g) => g.items.length > 0);
-}
-
-toggleTaskCategoryDropdown(): void {
-  this.showTaskCategoryDropdown = !this.showTaskCategoryDropdown;
-  this.categorySearchText = '';
-
-  if (this.showTaskCategoryDropdown) {
-    setTimeout(() => document.getElementById('taskCategorySearchInput')?.focus(), 0);
+  get selectedTaskCategoryLabel(): string {
+    if (!this.selectedTaskCategory) return '--All Task Categories--';
+    const c = this.taskCategories.find((x: any) => String(x.taskcategoryId) === String(this.selectedTaskCategory));
+    return c ? c.name : '--All Task Categories--';
   }
-}
 
-selectTaskCategory(category: TaskCategory): void {
-  this.selectedTaskCategory = String(category.taskcategoryId);
-  this.showTaskCategoryDropdown = false;
-  this.categorySearchText = '';
-  this.onSearch();
-}
+  get filteredGroupedCategories(): { department: string; items: TaskCategory[] }[] {
+    const q = this.categorySearchText.trim().toLowerCase();
+    if (!q) return this.groupedCategories;
 
-clearTaskCategory(): void {
-  this.selectedTaskCategory = '';
-  this.showTaskCategoryDropdown = false;
-  this.categorySearchText = '';
-  this.onSearch();
-}
+    return this.groupedCategories
+      .map((g) => {
+        // if the department matches, keep all its categories
+        if (g.department.toLowerCase().includes(q)) return g;
+        return {
+          department: g.department,
+          items: g.items.filter((c) => (c.name || '').toLowerCase().includes(q)),
+        };
+      })
+      .filter((g) => g.items.length > 0);
+  }
 
-//Rating
-// ---------- Rating (Assignor Closure) ----------
-stars: number[] = [1, 2, 3, 4, 5];
-selectedRating = 0;      // 0 = not rated, otherwise 0.5 - 5
-hoverRating = 0;
-ratingValidationError = false;
+  toggleTaskCategoryDropdown(): void {
+    this.showTaskCategoryDropdown = !this.showTaskCategoryDropdown;
+    this.categorySearchText = '';
 
-get isAssignorClosureSelected(): boolean {
-  return (this.task?.taskStatus == 2 || this.task?.taskStatus == 4) && Number(this.selectedTaskStatusId) === 5;
-}
+    if (this.showTaskCategoryDropdown) {
+      setTimeout(() => document.getElementById('taskCategorySearchInput')?.focus(), 0);
+    }
+  }
 
-get displayRating(): number {
-  return this.hoverRating || this.selectedRating;
-}
+  selectTaskCategory(category: TaskCategory): void {
+    this.selectedTaskCategory = String(category.taskcategoryId);
+    this.showTaskCategoryDropdown = false;
+    this.categorySearchText = '';
+    this.onSearch();
+  }
 
-getStarIcon(star: number): string {
-  const value = this.displayRating;
-  if (value >= star) return 'star';
-  if (value >= star - 0.5) return 'star_half';
-  return 'star_border';
-}
+  clearTaskCategory(): void {
+    this.selectedTaskCategory = '';
+    this.showTaskCategoryDropdown = false;
+    this.categorySearchText = '';
+    this.onSearch();
+  }
 
-setRating(value: number): void {
-  if (this.isChangingManager) return;
-  this.selectedRating = value;
-  this.ratingValidationError = false;
-}
+  //Rating
+  // ---------- Rating (Assignor Closure) ----------
+  stars: number[] = [1, 2, 3, 4, 5];
+  selectedRating = 0; // 0 = not rated, otherwise 0.5 - 5
+  hoverRating = 0;
+  ratingValidationError = false;
 
-clearRating(): void {
-  this.selectedRating = 0;
-  this.hoverRating = 0;
-}
+  get isAssignorClosureSelected(): boolean {
+    return (this.task?.taskStatus == 2 || this.task?.taskStatus == 4) && Number(this.selectedTaskStatusId) === 5;
+  }
 
-getRatingText(): string {
-  const v = this.displayRating;
-  if (v === 0) return 'Not rated';
-  if (v <= 1) return 'Poor';
-  if (v <= 2) return 'Fair';
-  if (v <= 3) return 'Good';
-  if (v <= 4) return 'Very Good';
-  return 'Excellent';
-}
+  get displayRating(): number {
+    return this.hoverRating || this.selectedRating;
+  }
 
-//buddy 
-showBuddyModal = false;
-selectedBuddyTask: any = null;
-buddyOptions: any[] = [];
-selectedBuddyId: number | null = null;
-isLoadingBuddyUsers = false;
-isSavingBuddy = false;
+  getStarIcon(star: number): string {
+    const value = this.displayRating;
+    if (value >= star) return 'star';
+    if (value >= star - 0.5) return 'star_half';
+    return 'star_border';
+  }
 
-buddyStartDate: Date | null = null;
-buddyEndDate: Date | null = null;
-buddyRemarks = '';
-buddyHolidayError = '';
-private buddyUsersSub?: Subscription;
-private lastBuddyLoadKey = '';
+  setRating(value: number): void {
+    if (this.isChangingManager) return;
+    this.selectedRating = value;
+    this.ratingValidationError = false;
+  }
 
-openBuddyModal(task: any): void {
-  this.selectedBuddyTask = task;
-  this.selectedBuddyId = null;
-  this.buddyOptions = [];
-  this.buddyRemarks = '';
-  this.buddyHolidayError = '';
-  this.lastBuddyLoadKey = '';
-  this.buddyStartDate = task.date ? new Date(task.date) : null;
-  this.buddyEndDate = task.dueDateTime ? new Date(task.dueDateTime) : null;
-  this.showBuddyModal = true;
+  clearRating(): void {
+    this.selectedRating = 0;
+    this.hoverRating = 0;
+  }
 
-  this.loadBuddyUsers();
-}
+  getRatingText(): string {
+    const v = this.displayRating;
+    if (v === 0) return 'Not rated';
+    if (v <= 1) return 'Poor';
+    if (v <= 2) return 'Fair';
+    if (v <= 3) return 'Good';
+    if (v <= 4) return 'Very Good';
+    return 'Excellent';
+  }
 
-// Same behaviour as onAssignEndDateChange: reload users + holiday validation
-onBuddyEndDateChange(value: any): void {
-  this.buddyEndDate = value;
-  this.loadBuddyUsers();
-}
+  //buddy
+  showBuddyModal = false;
+  selectedBuddyTask: any = null;
+  buddyOptions: any[] = [];
+  selectedBuddyId: number | null = null;
+  isLoadingBuddyUsers = false;
+  isSavingBuddy = false;
 
-private loadBuddyUsers(): void {
-  const task = this.selectedBuddyTask;
-  const startDate = this.datePipe.transform(this.buddyStartDate, 'yyyy-MM-dd');
-  const endDate = this.datePipe.transform(this.buddyEndDate, 'yyyy-MM-dd');
+  buddyStartDate: Date | null = null;
+  buddyEndDate: Date | null = null;
+  buddyRemarks = '';
+  buddyHolidayError = '';
+  private buddyUsersSub?: Subscription;
+  private lastBuddyLoadKey = '';
 
-  if (!task || !startDate || !endDate) {
-    this.buddyUsersSub?.unsubscribe();
+  openBuddyModal(task: any): void {
+    this.selectedBuddyTask = task;
+    this.selectedBuddyId = null;
     this.buddyOptions = [];
-    this.isLoadingBuddyUsers = false;
-    return;
+    this.buddyRemarks = '';
+    this.buddyHolidayError = '';
+    this.lastBuddyLoadKey = '';
+    this.buddyStartDate = task.date ? new Date(task.date) : null;
+    this.buddyEndDate = task.dueDateTime ? new Date(task.dueDateTime) : null;
+    this.showBuddyModal = true;
+
+    this.loadBuddyUsers();
   }
 
-  const workloadStart = this.datePipe.transform(this.buddyStartDate, 'yyyy-MM-dd HH:mm:ss');
-  const workloadEnd = this.datePipe.transform(this.buddyEndDate, 'yyyy-MM-dd HH:mm:ss');
-
-  const loadKey = [task.taskCategoryId, workloadStart, workloadEnd].join('|');
-  if (loadKey === this.lastBuddyLoadKey) {
-    return;
+  // Same behaviour as onAssignEndDateChange: reload users + holiday validation
+  onBuddyEndDateChange(value: any): void {
+    this.buddyEndDate = value;
+    this.loadBuddyUsers();
   }
-  this.lastBuddyLoadKey = loadKey;
 
-  this.buddyUsersSub?.unsubscribe();
-  this.isLoadingBuddyUsers = true;
-  this.buddyOptions = [];
-  this.buddyHolidayError = '';
+  private loadBuddyUsers(): void {
+    const task = this.selectedBuddyTask;
+    const startDate = this.datePipe.transform(this.buddyStartDate, 'yyyy-MM-dd');
+    const endDate = this.datePipe.transform(this.buddyEndDate, 'yyyy-MM-dd');
 
-  const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
-    this.isAdmin, this.userId, this.loginType, task.clientId, task.taskCategoryId,
-    Number(task.systemFlag ?? 0), startDate, endDate, task.userType,
-  );
-
-  // used only for holiday / date-range validation, same API as the assign modal
-  const workloadRequest = this.dataprovider.getAssigneeWorkload(task.taskCategoryId, workloadStart, workloadEnd);
-
-  this.buddyUsersSub = forkJoin({ users: usersRequest, workload: workloadRequest }).subscribe({
-    next: ({ users, workload }: any) => {
-      if (!this.selectedBuddyTask) {
-        this.isLoadingBuddyUsers = false;
-        return;
-      }
-
-      if (workload?.success === false) {
-        this.buddyHolidayError = workload.message || 'Unable to validate the selected date range.';
-        this.buddyOptions = [];
-        this.isLoadingBuddyUsers = false;
-        return;
-      }
-
-      const data = users?.data ?? users;
-      const all: any[] = Array.isArray(data?.assignedUsers) ? data.assignedUsers : [];
-      const assigneeId = Number(task.assignedTo || 0);
-      const currentBuddyId = Number(task.buddyId || 0);
-
-      // Add    -> exclude assignee
-      // Change -> exclude assignee AND the already-added buddy
-      this.buddyOptions = all.filter(
-        (u: any) => Number(u.userId) !== assigneeId && (!currentBuddyId || Number(u.userId) !== currentBuddyId)  &&
-    String(u.isHod ?? 'N').toUpperCase() !== 'Y',
-      );
-
-      // keep manual selection only if still available
-      if (this.selectedBuddyId && !this.buddyOptions.some((u: any) => Number(u.userId) === Number(this.selectedBuddyId))) {
-        this.selectedBuddyId = null;
-      }
-      this.isLoadingBuddyUsers = false;
-    },
-    error: (error: any) => {
-      this.lastBuddyLoadKey = '';
-      if (!this.selectedBuddyTask) {
-        this.isLoadingBuddyUsers = false;
-        return;
-      }
+    if (!task || !startDate || !endDate) {
+      this.buddyUsersSub?.unsubscribe();
       this.buddyOptions = [];
-      this.buddyHolidayError = error?.error?.message || 'Unable to load users or validate the selected date range.';
       this.isLoadingBuddyUsers = false;
-    },
-  });
-}
+      return;
+    }
 
-closeBuddyModal(): void {
-  if (this.isSavingBuddy) return;
-  this.buddyUsersSub?.unsubscribe();
-  this.lastBuddyLoadKey = '';
-  this.isLoadingBuddyUsers = false;
-  this.showBuddyModal = false;
-  this.selectedBuddyTask = null;
-  this.selectedBuddyId = null;
-  this.buddyOptions = [];
-  this.buddyRemarks = '';
-  this.buddyHolidayError = '';
-}
+    const workloadStart = this.datePipe.transform(this.buddyStartDate, 'yyyy-MM-dd HH:mm:ss');
+    const workloadEnd = this.datePipe.transform(this.buddyEndDate, 'yyyy-MM-dd HH:mm:ss');
 
-saveBuddy(): void {
-  if (!this.selectedBuddyTask || !this.selectedBuddyId) return;
+    const loadKey = [task.taskCategoryId, workloadStart, workloadEnd].join('|');
+    if (loadKey === this.lastBuddyLoadKey) {
+      return;
+    }
+    this.lastBuddyLoadKey = loadKey;
 
-  const isChange = !!this.selectedBuddyTask.buddyId;
+    this.buddyUsersSub?.unsubscribe();
+    this.isLoadingBuddyUsers = true;
+    this.buddyOptions = [];
+    this.buddyHolidayError = '';
 
-  if (isChange && !this.buddyRemarks.trim()) return;
-
-  if (!this.buddyStartDate || !this.buddyEndDate) {
-    Swal.fire('Error', 'Start and End Date & Time are required.', 'error');
-    return;
-  }
-  if (new Date(this.buddyEndDate) < new Date(this.buddyStartDate)) {
-    Swal.fire('Error', 'End Date & Time cannot be before Start Date & Time.', 'error');
-    return;
-  }
-
-  this.isSavingBuddy = true;
-
-  this.dataprovider
-    .updateTaskBuddy(
-      this.selectedBuddyTask.taskId,
-      this.selectedBuddyId,
+    const usersRequest = this.dataprovider.changesCategoryIdgetUserFilterData(
+      this.isAdmin,
       this.userId,
-      isChange,
-      this.buddyRemarks.trim(),
-      this.formatDateTimeForApi(this.buddyStartDate),
-      this.formatDateTimeForApi(this.buddyEndDate),
-    )
-    .subscribe({
-      next: (res: any) => {
-        this.isSavingBuddy = false;
-        if (res?.success) {
-          this.showBuddyModal = false;
-          this.selectedBuddyTask = null;
-          Swal.fire('Done', res.message || (isChange ? 'Buddy changed.' : 'Buddy added.'), 'success');
-          this.getTaskDetails();
-        } else {
-          Swal.fire('Error', res?.message || 'Unable to update buddy.', 'error');
+      this.loginType,
+      task.clientId,
+      task.taskCategoryId,
+      Number(task.systemFlag ?? 0),
+      startDate,
+      endDate,
+      task.userType,
+    );
+
+    // used only for holiday / date-range validation, same API as the assign modal
+    const workloadRequest = this.dataprovider.getAssigneeWorkload(task.taskCategoryId, workloadStart, workloadEnd);
+
+    this.buddyUsersSub = forkJoin({ users: usersRequest, workload: workloadRequest }).subscribe({
+      next: ({ users, workload }: any) => {
+        if (!this.selectedBuddyTask) {
+          this.isLoadingBuddyUsers = false;
+          return;
         }
+
+        if (workload?.success === false) {
+          this.buddyHolidayError = workload.message || 'Unable to validate the selected date range.';
+          this.buddyOptions = [];
+          this.isLoadingBuddyUsers = false;
+          return;
+        }
+
+        const data = users?.data ?? users;
+        const all: any[] = Array.isArray(data?.assignedUsers) ? data.assignedUsers : [];
+        const assigneeId = Number(task.assignedTo || 0);
+        const currentBuddyId = Number(task.buddyId || 0);
+
+        // Add    -> exclude assignee
+        // Change -> exclude assignee AND the already-added buddy
+        this.buddyOptions = all.filter((u: any) => Number(u.userId) !== assigneeId && (!currentBuddyId || Number(u.userId) !== currentBuddyId) && String(u.isHod ?? 'N').toUpperCase() !== 'Y');
+
+        // keep manual selection only if still available
+        if (this.selectedBuddyId && !this.buddyOptions.some((u: any) => Number(u.userId) === Number(this.selectedBuddyId))) {
+          this.selectedBuddyId = null;
+        }
+        this.isLoadingBuddyUsers = false;
       },
       error: (error: any) => {
-        this.isSavingBuddy = false;
-        Swal.fire('Error', error?.error?.message || 'Something went wrong while updating the buddy.', 'error');
+        this.lastBuddyLoadKey = '';
+        if (!this.selectedBuddyTask) {
+          this.isLoadingBuddyUsers = false;
+          return;
+        }
+        this.buddyOptions = [];
+        this.buddyHolidayError = error?.error?.message || 'Unable to load users or validate the selected date range.';
+        this.isLoadingBuddyUsers = false;
       },
     });
-}
-canManageBuddy(task: any): boolean {
-  if (Number(task.status) !== 1) return false;                              // active only
-  if (!task.assignedToName || task.assignedToName === '0') return false;    // needs an assignee first
-  if (Number(task.taskStatus) === 5) return false;                          // closed
-  const uid = Number(this.userId);
-  return this.isAdmin === 'Y' || Number(task.addedBy) === uid || Number(task.assignedTo) === uid;
+  }
+
+  closeBuddyModal(): void {
+    if (this.isSavingBuddy) return;
+    this.buddyUsersSub?.unsubscribe();
+    this.lastBuddyLoadKey = '';
+    this.isLoadingBuddyUsers = false;
+    this.showBuddyModal = false;
+    this.selectedBuddyTask = null;
+    this.selectedBuddyId = null;
+    this.buddyOptions = [];
+    this.buddyRemarks = '';
+    this.buddyHolidayError = '';
+  }
+
+  saveBuddy(): void {
+    if (!this.selectedBuddyTask || !this.selectedBuddyId) return;
+
+    const isChange = !!this.selectedBuddyTask.buddyId;
+
+    if (isChange && !this.buddyRemarks.trim()) return;
+
+    if (!this.buddyStartDate || !this.buddyEndDate) {
+      Swal.fire('Error', 'Start and End Date & Time are required.', 'error');
+      return;
+    }
+    if (new Date(this.buddyEndDate) < new Date(this.buddyStartDate)) {
+      Swal.fire('Error', 'End Date & Time cannot be before Start Date & Time.', 'error');
+      return;
+    }
+
+    this.isSavingBuddy = true;
+
+    this.dataprovider
+      .updateTaskBuddy(
+        this.selectedBuddyTask.taskId,
+        this.selectedBuddyId,
+        this.userId,
+        isChange,
+        this.buddyRemarks.trim(),
+        this.formatDateTimeForApi(this.buddyStartDate),
+        this.formatDateTimeForApi(this.buddyEndDate),
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.isSavingBuddy = false;
+          if (res?.success) {
+            this.showBuddyModal = false;
+            this.selectedBuddyTask = null;
+            Swal.fire('Done', res.message || (isChange ? 'Buddy changed.' : 'Buddy added.'), 'success');
+            this.getTaskDetails();
+          } else {
+            Swal.fire('Error', res?.message || 'Unable to update buddy.', 'error');
+          }
+        },
+        error: (error: any) => {
+          this.isSavingBuddy = false;
+          Swal.fire('Error', error?.error?.message || 'Something went wrong while updating the buddy.', 'error');
+        },
+      });
+  }
+  canManageBuddy(task: any): boolean {
+    if (Number(task.status) !== 1) return false; // active only
+    if (!task.assignedToName || task.assignedToName === '0') return false; // needs an assignee first
+    if (Number(task.taskStatus) === 5) return false; // closed
+    const uid = Number(this.userId);
+    return this.isAdmin === 'Y' || Number(task.addedBy) === uid || Number(task.assignedTo) === uid;
+  }
+
+  onTaskIdInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const digitsOnly = input.value.replace(/\D/g, '');   // strip everything except 0-9
+
+  if (input.value !== digitsOnly) {
+    input.value = digitsOnly;                           // fix what the user sees
+  }
+  this.taskIdQuery = digitsOnly;                        // keep the model in sync
 }
 }

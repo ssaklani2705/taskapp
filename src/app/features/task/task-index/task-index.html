@@ -28,6 +28,22 @@
               </button>
             </div>
           </div>
+          <div class="search-wrapper">
+            <div class="search-box">
+              <input
+                type="text"
+                inputmode="numeric"
+                [(ngModel)]="taskIdQuery"
+                placeholder="Search by Task Id"
+                class="search-input"
+                 (input)="onTaskIdInput($event)"
+                (keyup.enter)="onSearch()"
+              />
+              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
 
           @if (loginType === 'manager') {
             <!-- Normal dropdown for manager -->
@@ -176,7 +192,7 @@
           <table class="user-table">
             <thead>
               <tr>
-                <th class="serial-column">Sr. No.</th>
+                <th class="column-header">Task Id</th>
                 <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
                   <div class="column-header">
                     <span>{{ col.label }}</span>
@@ -194,7 +210,7 @@
               <tr class="user-row" *ngFor="let task of paginatedTasks; let i = index">
                 <!-- 1: SERIAL -->
                 <td class="serial-number">
-                  {{ (currentPage - 1) * recordsPerPage + i + 1 }}
+                  {{ task.taskId }}
                 </td>
 
                 <!-- 2: TITLE -->
@@ -279,7 +295,6 @@
                   </span>
                 </td>
 
-               
                 <td>
                   <span
                     class="wrap-text"
@@ -819,33 +834,33 @@
         </div>
       </div>
       <!-- ASSIGNED TO -->
-    <!-- ASSIGNED TO -->
-<div class="assign-form-group assign-full-width">
-  <label class="assign-field-label">
-    Assigned To
-    <span class="required">*</span>
-    <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
-  </label>
+      <!-- ASSIGNED TO -->
+      <div class="assign-form-group assign-full-width">
+        <label class="assign-field-label">
+          Assigned To
+          <span class="required">*</span>
+          <span class="file-limit">[👤✓ :Indicates the system-recommended employee.]</span>
+        </label>
 
-  <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" (ngModelChange)="onAssignModalUserChange($event)" name="assignedToModal" [disabled]="users.length === 0">
-    <option [ngValue]="0">Select User</option>
+        <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.assignedTo" (ngModelChange)="onAssignModalUserChange($event)" name="assignedToModal" [disabled]="users.length === 0">
+          <option [ngValue]="0">Select User</option>
 
-    <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
-  </select>
+          <option *ngFor="let user of users" [ngValue]="user.userId">{{ user.firstName }} {{ user.hasWorkload ? '👤✓ ' : '' }}</option>
+        </select>
 
-  <div *ngIf="!isLoadingAssignUsers && users.length === 0" class="assign-error">No other user found for this category.</div>
-  <div class="assign-error" *ngIf="recommendationNote && !isLoadingAssignUsers">{{ recommendationNote }}</div>
-</div>
+        <div *ngIf="!isLoadingAssignUsers && users.length === 0" class="assign-error">No other user found for this category.</div>
+        <div class="assign-error" *ngIf="recommendationNote && !isLoadingAssignUsers">{{ recommendationNote }}</div>
+      </div>
 
       <!-- BUDDY (optional) -->
-<div class="assign-form-group assign-full-width">
-  <label class="assign-field-label">Buddy</label>
+      <div class="assign-form-group assign-full-width">
+        <label class="assign-field-label">Buddy</label>
 
-  <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.buddyId" name="buddyModal" [disabled]="!selectedAssignTask?.assignedTo || buddyUsers.length === 0">
-    <option [ngValue]="null">Select Buddy</option>
-    <option *ngFor="let user of buddyUsers" [ngValue]="user.userId">{{ user.firstName }}</option>
-  </select>
-</div>
+        <select class="assign-input assign-select" [(ngModel)]="selectedAssignTask.buddyId" name="buddyModal" [disabled]="!selectedAssignTask?.assignedTo || buddyUsers.length === 0">
+          <option [ngValue]="null">Select Buddy</option>
+          <option *ngFor="let user of buddyUsers" [ngValue]="user.userId">{{ user.firstName }}</option>
+        </select>
+      </div>
 
       <div class="assign-form-group assign-full-width">
         <label class="assign-field-label">
@@ -880,7 +895,6 @@
   </div>
 </div>
 
-
 <!-- ADD / CHANGE BUDDY MODAL -->
 <div class="modal-overlay" *ngIf="showBuddyModal" (click)="closeBuddyModal()">
   <div class="change-manager-modal assign-user-modal" (click)="$event.stopPropagation()">
@@ -904,41 +918,53 @@
           <label class="assign-field-label">Start Date &amp; Time <span class="required">*</span></label>
           <div class="assign-date-group">
             <span class="assign-date-icon assign-date-icon-disabled"><i class="fa fa-calendar"></i></span>
-            <input class="assign-input assign-date-input" [owlDateTime]="buddyStartPicker"
-                   [(ngModel)]="buddyStartDate" name="buddyStartDate" required readonly
-                   placeholder="DD-MM-YYYY HH:mm" autocomplete="off" [min]="today" />
+            <input
+              class="assign-input assign-date-input"
+              [owlDateTime]="buddyStartPicker"
+              [(ngModel)]="buddyStartDate"
+              name="buddyStartDate"
+              required
+              readonly
+              placeholder="DD-MM-YYYY HH:mm"
+              autocomplete="off"
+              [min]="today"
+            />
             <owl-date-time #buddyStartPicker pickerType="both"></owl-date-time>
           </div>
           <div class="assign-error" *ngIf="!buddyStartDate">Start Date &amp; Time is required.</div>
         </div>
 
         <!-- END DATE -->
-         <!-- END / DUE DATE (disabled) -->
-  <div class="assign-form-group">
-    <label class="assign-field-label">End Date &amp; Time <span class="required">*</span></label>
-    <div class="assign-date-group">
-      <span class="assign-date-icon assign-date-icon-disabled"><i class="fa fa-calendar"></i></span>
-      <input class="assign-input assign-date-input" [owlDateTime]="buddyEndPicker"
-             [(ngModel)]="buddyEndDate" name="buddyEndDate" required readonly
-             placeholder="DD-MM-YYYY HH:mm" autocomplete="off" />
-      <owl-date-time #buddyEndPicker pickerType="both"></owl-date-time>
-    </div>
-    <div class="assign-error" *ngIf="!buddyEndDate">End Date &amp; Time is required.</div>
-    <div class="user-error" *ngIf="buddyHolidayError">{{ buddyHolidayError }}</div>
-  </div>
+        <!-- END / DUE DATE (disabled) -->
+        <div class="assign-form-group">
+          <label class="assign-field-label">End Date &amp; Time <span class="required">*</span></label>
+          <div class="assign-date-group">
+            <span class="assign-date-icon assign-date-icon-disabled"><i class="fa fa-calendar"></i></span>
+            <input
+              class="assign-input assign-date-input"
+              [owlDateTime]="buddyEndPicker"
+              [(ngModel)]="buddyEndDate"
+              name="buddyEndDate"
+              required
+              readonly
+              placeholder="DD-MM-YYYY HH:mm"
+              autocomplete="off"
+            />
+            <owl-date-time #buddyEndPicker pickerType="both"></owl-date-time>
+          </div>
+          <div class="assign-error" *ngIf="!buddyEndDate">End Date &amp; Time is required.</div>
+          <div class="user-error" *ngIf="buddyHolidayError">{{ buddyHolidayError }}</div>
+        </div>
       </div>
 
       <!-- BUDDY -->
       <div class="assign-form-group assign-full-width">
         <label class="assign-field-label">Buddy <span class="required">*</span></label>
-        <select class="assign-input assign-select" [(ngModel)]="selectedBuddyId" name="buddyOnlyModal"
-                [disabled]="isLoadingBuddyUsers || buddyOptions.length === 0">
+        <select class="assign-input assign-select" [(ngModel)]="selectedBuddyId" name="buddyOnlyModal" [disabled]="isLoadingBuddyUsers || buddyOptions.length === 0">
           <option [ngValue]="null">Select Buddy</option>
           <option *ngFor="let user of buddyOptions" [ngValue]="user.userId">{{ user.firstName }}</option>
         </select>
-        <div class="assign-error" *ngIf="!isLoadingBuddyUsers && buddyOptions.length === 0 && !buddyHolidayError">
-          No other user available as buddy.
-        </div>
+        <div class="assign-error" *ngIf="!isLoadingBuddyUsers && buddyOptions.length === 0 && !buddyHolidayError">No other user available as buddy.</div>
       </div>
 
       <!-- REMARKS -->
@@ -947,20 +973,20 @@
           Remarks
           <span class="required" *ngIf="selectedBuddyTask?.buddyId"> * </span>
         </label>
-        <textarea class="assign-input assign-textarea" [(ngModel)]="buddyRemarks" name="buddyRemarksModal"
-                  rows="4" maxlength="2000" placeholder="Enter remarks"></textarea>
+        <textarea class="assign-input assign-textarea" [(ngModel)]="buddyRemarks" name="buddyRemarksModal" rows="4" maxlength="2000" placeholder="Enter remarks"></textarea>
       </div>
     </div>
 
     <div class="modal-footer assign-modal-footer">
-      <button type="button" class="modal-cancel-button" (click)="closeBuddyModal()" [disabled]="isSavingBuddy">
-        <mat-icon>close</mat-icon><span>Close</span>
-      </button>
-      <button type="button" class="modal-save-button" (click)="saveBuddy()"
-              [disabled]="!selectedBuddyId || !buddyStartDate || !buddyEndDate || buddyHolidayError || isSavingBuddy
-                          || (selectedBuddyTask?.buddyId && !buddyRemarks.trim())">
+      <button type="button" class="modal-cancel-button" (click)="closeBuddyModal()" [disabled]="isSavingBuddy"><mat-icon>close</mat-icon><span>Close</span></button>
+      <button
+        type="button"
+        class="modal-save-button"
+        (click)="saveBuddy()"
+        [disabled]="!selectedBuddyId || !buddyStartDate || !buddyEndDate || buddyHolidayError || isSavingBuddy || (selectedBuddyTask?.buddyId && !buddyRemarks.trim())"
+      >
         <mat-icon>save</mat-icon>
-        <span>{{ isSavingBuddy ? 'Saving...' : (selectedBuddyTask?.buddyId ? 'Change Buddy' : 'Add Buddy') }}</span>
+        <span>{{ isSavingBuddy ? 'Saving...' : selectedBuddyTask?.buddyId ? 'Change Buddy' : 'Add Buddy' }}</span>
       </button>
     </div>
   </div>

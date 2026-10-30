@@ -243,7 +243,7 @@ export class DataProviderService {
   }
 
   //Task Category
- getTaskCategoryDetails(page: any, size: any, statusIndex: any, search: any, departmentId: any, serviceId: any): Observable<any> {
+  getTaskCategoryDetails(page: any, size: any, statusIndex: any, search: any, departmentId: any, serviceId: any): Observable<any> {
     return this.http.get(
       `${environment.apiBaseUrl}admin/taskcategory/getTaskCategoryDetails` +
         `?page=${page}` +
@@ -1027,6 +1027,7 @@ export class DataProviderService {
     loginType: string,
     dashboardFilter: string,
     isHod: any,
+    taskId: number = 0,
   ): Observable<any> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -1043,7 +1044,8 @@ export class DataProviderService {
       .set('userId', userId ? userId.toString() : '0')
       .set('loginType', loginType || '')
       .set('dashboardFilter', dashboardFilter || '')
-      .set('isHod', isHod || '');
+      .set('isHod', isHod || '')
+      .set('taskId', String(taskId));
 
     if (taskStatusIds && taskStatusIds.length > 0) {
       params = params.set('taskStatusIds', taskStatusIds.join(','));
@@ -1403,30 +1405,25 @@ export class DataProviderService {
   //       taskCatId: taskCatId.toString(),
   //       startDate: startDate || '',
   //       endDate: endDate || '',
-        
+
   //     },
   //   });
   // }
 
-  getAssigneeWorkload(
-  taskCatId: number,
-  startDate: string | null,
-  endDate: string | null,
-  excludeUserId?: number,
-): Observable<any> {
-  const params: { [key: string]: string } = {
-    taskCatId: taskCatId.toString(),
-    startDate: startDate || '',
-    endDate: endDate || '',
-  };
+  getAssigneeWorkload(taskCatId: number, startDate: string | null, endDate: string | null, excludeUserId?: number): Observable<any> {
+    const params: { [key: string]: string } = {
+      taskCatId: taskCatId.toString(),
+      startDate: startDate || '',
+      endDate: endDate || '',
+    };
 
-  // only sent when re-assigning (the task's current assignee is excluded from the recommendation)
-  if (excludeUserId && excludeUserId > 0) {
-    params['excludeUserId'] = excludeUserId.toString();
+    // only sent when re-assigning (the task's current assignee is excluded from the recommendation)
+    if (excludeUserId && excludeUserId > 0) {
+      params['excludeUserId'] = excludeUserId.toString();
+    }
+
+    return this.http.get(`${environment.apiBaseUrl}admin/task/assignee_workload`, { params });
   }
-
-  return this.http.get(`${environment.apiBaseUrl}admin/task/assignee_workload`, { params });
-}
 
   isEmployeeAvailableForTaskCategory(taskCategoryId: number) {
     return this.http.get<boolean>(`${environment.apiBaseUrl}admin/taskcategory/recurring/category/employee-available`, {
@@ -1484,31 +1481,18 @@ export class DataProviderService {
     return this.http.get(`${environment.apiBaseUrl}admin/company/find_by_id/${companyId}`);
   }
 
- 
-getCompanyList(
-  page: number,
-  size: number,
-  statusIndex: number,
-  search: string,
-  stateId: any,
-  companySiteOffice: number = 0,
-  workingDays: string = ''
-) {
-  const params = new HttpParams()
-    .set('page', page.toString())
-    .set('size', size.toString())
-    .set('statusIndex', statusIndex.toString())
-    .set('search', search)
-    .set('stateId', stateId.toString())
-    .set('companySiteOffice', companySiteOffice.toString())
-    .set('workingDays', workingDays);
+  getCompanyList(page: number, size: number, statusIndex: number, search: string, stateId: any, companySiteOffice: number = 0, workingDays: string = '') {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('statusIndex', statusIndex.toString())
+      .set('search', search)
+      .set('stateId', stateId.toString())
+      .set('companySiteOffice', companySiteOffice.toString())
+      .set('workingDays', workingDays);
 
-  return this.http.get(
-    `${environment.apiBaseUrl}admin/company/company_list`,
-    { params }
-  );
-}
-
+    return this.http.get(`${environment.apiBaseUrl}admin/company/company_list`, { params });
+  }
 
   deleteCompany(companyId: number, userId: number) {
     return this.http.post(`${environment.apiBaseUrl}admin/company/delete_company`, { companyId, userId });
@@ -1618,7 +1602,7 @@ getCompanyList(
     return this.http.get<any[]>(`${environment.apiBaseUrl}admin/generic-recurring/task-categories`);
   }
 
- getTaskRatingSummary(fromDate?: string | null, toDate?: string | null, username?: string | null, departmentIds: number[] = [], page: number = 0, size: number = 10): Observable<any> {
+  getTaskRatingSummary(fromDate?: string | null, toDate?: string | null, username?: string | null, departmentIds: number[] = [], page: number = 0, size: number = 10): Observable<any> {
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
     if (fromDate) {
       params = params.set('fromDate', fromDate);
@@ -1710,12 +1694,15 @@ getCompanyList(
   }
 
   //buddy
-  updateTaskBuddy(
-  taskId: number, buddyId: number, userId: any, isChange: boolean,
-  remarks: string, startDate: string | null, endDate: string | null,
-) {
-  return this.http.put<any>(`${environment.apiBaseUrl}admin/task/updateTaskBuddy`, {
-    taskId, buddyId, userId, isChange, remarks, startDate, endDate,
-  });
-}
+  updateTaskBuddy(taskId: number, buddyId: number, userId: any, isChange: boolean, remarks: string, startDate: string | null, endDate: string | null) {
+    return this.http.put<any>(`${environment.apiBaseUrl}admin/task/updateTaskBuddy`, {
+      taskId,
+      buddyId,
+      userId,
+      isChange,
+      remarks,
+      startDate,
+      endDate,
+    });
+  }
 }
