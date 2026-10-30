@@ -799,46 +799,69 @@
   color: #a6b5c3;
 }
 
+
 .task-panel {
   mat-paginator {
-    height: 48px;
-    min-height: 48px;
+    min-height: 52px;
     border-top: 1px solid #e0e7ee;
     background: #ffffff;
   }
 }
 
+
 ::ng-deep .task-panel .mat-mdc-paginator-container {
-  min-height: 48px;
-  height: 48px;
-  padding: 0 12px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  min-height: 52px !important;
+  height: 52px !important;
+  padding: 0 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  box-sizing: border-box;
 }
+
 
 ::ng-deep .task-panel .mat-mdc-paginator-range-label {
+  display: flex;
+  align-items: center;
+  height: 32px;
+  margin: 0 12px 0 0 !important;
   color: #61758a;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
+  line-height: 32px;
+  white-space: nowrap;
 }
 
+
 ::ng-deep .task-panel .mat-mdc-paginator-page-size {
-  display: none;
+  display: none !important;
 }
+
+
+::ng-deep .task-panel .mat-mdc-paginator-range-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px;
+}
+
 
 ::ng-deep .task-panel .mat-mdc-paginator-navigation-first,
 ::ng-deep .task-panel .mat-mdc-paginator-navigation-previous,
 ::ng-deep .task-panel .mat-mdc-paginator-navigation-next,
 ::ng-deep .task-panel .mat-mdc-paginator-navigation-last {
-  width: 29px;
-  height: 29px;
-  min-width: 29px;
-  margin: 0 2px;
+  width: 30px !important;
+  height: 30px !important;
+  min-width: 30px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   border-radius: 5px;
   color: #45617c;
-    cursor: pointer;
+  cursor: pointer;
 }
+
 
 ::ng-deep .task-panel .mat-mdc-paginator-navigation-first:hover,
 ::ng-deep .task-panel .mat-mdc-paginator-navigation-previous:hover,

@@ -799,18 +799,20 @@ mat-divider {
 
 .access-table {
   width: 100%;
-  min-width: 1100px;
-  table-layout: auto;
+  min-width: 0px;
+  table-layout: fixed;
   border-collapse: collapse;
   background: var(--white);
   color: var(--text);
   font-family: Arial, sans-serif;
   font-size: 15px;
 
+
   th,
   td {
     white-space: nowrap;
   }
+
 
   thead th {
     height: 47px;
@@ -825,6 +827,7 @@ mat-divider {
     box-sizing: border-box;
   }
 
+
   tbody td {
     height: 54px;
     padding: 8px 12px;
@@ -836,45 +839,29 @@ mat-divider {
     box-sizing: border-box;
   }
 
+
   tbody tr:hover td {
     background: var(--table-hover);
   }
 
+
   th:nth-child(1),
   td:nth-child(1) {
-    width: 60px;
+    width: 10%;
     text-align: center;
   }
 
+
   th:nth-child(2),
   td:nth-child(2) {
-    width: 170px;
+    width: 45%;
   }
+
 
   th:nth-child(3),
   td:nth-child(3) {
-    min-width: 180px;
+    min-width: 45%;
     white-space: normal;
-  }
-
-  th:nth-child(4),
-  td:nth-child(4) {
-    min-width: 150px;
-  }
-
-  th:nth-child(5),
-  td:nth-child(5) {
-    min-width: 170px;
-  }
-
-  th:nth-child(6),
-  td:nth-child(6) {
-    min-width: 130px;
-  }
-
-  th:nth-child(7),
-  td:nth-child(7) {
-    min-width: 130px;
   }
 }
 

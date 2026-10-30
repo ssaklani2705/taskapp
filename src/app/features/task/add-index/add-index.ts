@@ -397,15 +397,7 @@ export class AddIndexComponent implements OnInit {
       return;
     }
 
-    // Do not submit while employee availability is being checked
-    // if (this.checkingTaskCategoryEmployee) {
-    //   return;
-    // }
-    // // Do not submit if selected task category has no employee
-    // if (this.taskCategoryEmployeeError) {
-    //   return;
-    // }
-    // Do not submit while employee availability is being checked
+    
     if (this.checkingTaskCategoryEmployee) {
       Swal.fire('Please wait', 'Checking employee availability for the selected category...', 'info');
       return;
@@ -744,31 +736,55 @@ onchangeloadUserDropdownData(onLoaded?: () => void): void {
     endDate,
     userType
   ).subscribe({
-    next: (res: any) => {
-      // Ignore stale responses if the category/type changed during the request.
-      if (
-        Number(this.task.taskCategoryId) !==
-          Number(res?.requestedTaskCategoryId ?? this.task.taskCategoryId)
-      ) {
-        return;
-      }
+    // next: (res: any) => {
+    //   // Ignore stale responses if the category/type changed during the request.
+    //   if (
+    //     Number(this.task.taskCategoryId) !==
+    //       Number(res?.requestedTaskCategoryId ?? this.task.taskCategoryId)
+    //   ) {
+    //     return;
+    //   }
 
-      const data = res?.data || res;
-      this.users = this.markWorkload(data?.assignedUsers || []);
+    //   const data = res?.data || res;
+    //   this.users = this.markWorkload(data?.assignedUsers || []);
 
-      // Auto-select only for new tasks.
-      if (!this.isEditMode && !this.task.assignedTo && this.users.length) {
-        const recommendedUser = this.users.find(
-          (user: any) => user.hasWorkload
-        );
+    //   // Auto-select only for new tasks.
+    //   if (!this.isEditMode && !this.task.assignedTo && this.users.length) {
+    //     const recommendedUser = this.users.find(
+    //       (user: any) => user.hasWorkload
+    //     );
 
-        this.task.assignedTo =
-          recommendedUser?.userId ?? this.users[0].userId;
-          this.clearBuddyIfSameAsAssignee();      // ADD
-      }
+    //     this.task.assignedTo =
+    //       recommendedUser?.userId ?? this.users[0].userId;
+    //       this.clearBuddyIfSameAsAssignee();      // ADD
+    //   }
 
-      onLoaded?.();
-    },
+    //   onLoaded?.();
+    // },
+   next: (res: any) => {
+        const data = res?.data || res;
+
+
+        this.users = this.markWorkload(data?.assignedUsers || []);
+
+
+        if (!this.isEditMode && this.users.length > 0) {
+          if (Number(this.task.userType) === 2) {
+            this.task.assignedTo = this.users[0].userId;
+          } else if (!this.task.assignedTo) {
+            const recommendedUser = this.users.find((user: any) => user.hasWorkload);
+
+
+            this.task.assignedTo = recommendedUser?.userId ?? this.users[0].userId;
+          }
+
+
+          this.clearBuddyIfSameAsAssignee();
+        }
+
+
+        onLoaded?.();
+      },
     error: (error: any) => {
       console.error('Error loading assigned users:', error);
       this.users = [];
@@ -1121,11 +1137,21 @@ onClientChange(clientId: number | null): void {
 
         //     alert(JSON.stringify(this.users));
         // Automatically select the recommended employee for a new task.
-        if (!this.isEditMode) {
+        // if (!this.isEditMode) {
+        //   const recommendedUser = this.users.find((user: any) => user.hasWorkload);
+
+        //   this.task.assignedTo = recommendedUser ? recommendedUser.userId : null;
+        //   this.clearBuddyIfSameAsAssignee();    // ADD
+        // }
+
+        if (!this.isEditMode && Number(this.task.userType) === 1) {
           const recommendedUser = this.users.find((user: any) => user.hasWorkload);
 
+
           this.task.assignedTo = recommendedUser ? recommendedUser.userId : null;
-          this.clearBuddyIfSameAsAssignee();    // ADD
+
+
+          this.clearBuddyIfSameAsAssignee();
         }
 
         console.log('Updated users:', this.users);
@@ -1225,21 +1251,7 @@ onTaskCategoryChange(): void {
     return this.taskCategories.find((x: any) => Number(x.taskcategoryId ?? x.taskCategoryId) === Number(this.task.taskCategoryId));
   }
 
-  // get isClientOptional(): boolean {
-  //   if (String(this.loginType).toLowerCase() === 'manager') {
-  //     return false;
-  //   }
-
-  //   const category = this.getSelectedCategory();
-
-  //   return this.CLIENT_OPTIONAL_DEPARTMENTS.includes(Number(category?.departmentId));
-  // }
-
-  // Client is mandatory for Employee (1), optional for Manager (2)
-  // get isClientOptional(): boolean {
-  //   return Number(this.task.userType) === 1;
-  // }
-  // Client is optional only when the selected category belongs to department 2, 3, 4 or 5
+  
   get isClientOptional(): boolean {
     const category = this.getSelectedCategory();
     if (!category) return false; // no category selected yet: Client stays mandatory
@@ -1379,16 +1391,29 @@ onCategoryPicked(category: any): void {
   this.selectTaskCategory(category);
 }
 
+  // private markWorkload(users: any[]): any[] {
+  //   const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
+  //   const isManager = Number(this.task.userType) === 2;
+
+  //   return users
+  //     .filter((user: any) => !isManager || !assignedUserIds.has(Number(user.userId)))
+  //     .map((user: any) => ({
+  //       ...user,
+  //       hasWorkload: isManager ? this.workloadList.length > 0 && !assignedUserIds.has(Number(user.userId)) : assignedUserIds.has(Number(user.userId)),
+  //     }));
+  // }
+
   private markWorkload(users: any[]): any[] {
     const assignedUserIds = new Set((this.workloadList || []).map((x: any) => Number(x.assignedTo)));
+
+
     const isManager = Number(this.task.userType) === 2;
 
-    return users
-      .filter((user: any) => !isManager || !assignedUserIds.has(Number(user.userId)))
-      .map((user: any) => ({
-        ...user,
-        hasWorkload: isManager ? this.workloadList.length > 0 && !assignedUserIds.has(Number(user.userId)) : assignedUserIds.has(Number(user.userId)),
-      }));
+
+    return (users || []).map((user: any) => ({
+      ...user,
+      hasWorkload: isManager ? !assignedUserIds.has(Number(user.userId)) : assignedUserIds.has(Number(user.userId)),
+    }));
   }
 
   categorySearchText = '';
@@ -1409,31 +1434,6 @@ get filteredGroupedCategories(): { department: string; items: any[] }[] {
     .filter((g) => g.items.length > 0);
 }
 
-// toggleCategoryDropdown(): void {
-//   this.showCategoryDropdown = !this.showCategoryDropdown;
-//   this.categorySearchText = '';
-
-//   if (this.showCategoryDropdown) {
-//     setTimeout(() => document.getElementById('addTaskCategorySearchInput')?.focus(), 0);
-//   }
-// }
-// toggleCategoryDropdown(): void {
-
-//   // Manager must select a client first
-//   if (this.loginType === 'manager' && !this.task.clientId) {
-//     this.showCategoryDropdown = false;
-//     return;
-//   }
-
-//   this.showCategoryDropdown = !this.showCategoryDropdown;
-//   this.categorySearchText = '';
-
-//   if (this.showCategoryDropdown) {
-//     setTimeout(() => {
-//       document.getElementById('addTaskCategorySearchInput')?.focus();
-//     }, 0);
-//   }
-// }
 
 toggleCategoryDropdown(): void {
   if (
