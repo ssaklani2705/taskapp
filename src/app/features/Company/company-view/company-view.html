@@ -23,21 +23,15 @@
           <span>Company Details</span>
         </div>
 
-        
-
-
-
-
         <!-- Row 2 -->
         <div class="details-grid">
-
           <!-- Company Type -->
-<div class="info-field">
-  <span class="field-label">Company Type:</span>
-  <span class="field-value">
-    {{ getCompanyTypeLabel(company.companySiteOffice) }}
-  </span>
-</div>
+          <div class="info-field">
+            <span class="field-label">Company Type:</span>
+            <span class="field-value">
+              {{ getCompanyTypeLabel(company.companySiteOffice) }}
+            </span>
+          </div>
           <div class="info-field">
             <span class="field-label">Company Name:</span>
             <span class="field-value">
@@ -116,13 +110,12 @@
           </div>
 
           <!-- Working Days -->
-<div class="info-field working-days-field">
-  <span class="field-label">Working Days:</span>
-  <span class="field-value">
-    {{ getWorkingDaysLabel(company.workingDays) }}
-  </span>
-</div>
-
+          <div class="info-field working-days-field">
+            <span class="field-label">Working Days:</span>
+            <span class="field-value">
+              {{ getWorkingDaysLabel(company.workingDays) }}
+            </span>
+          </div>
 
           <!-- <div class="empty-field"></div> -->
           <div class="empty-field"></div>
@@ -132,119 +125,112 @@
   </div>
 
   <!-- Shifts -->
-<div class="section-card">
-  <div class="section-header shift-header">
-    <div class="section-title">
-      <mat-icon>schedule</mat-icon>
-      <span>Shifts</span>
-    </div>
-    <button type="button" class="back-button" (click)="openAddShift()">
-      <mat-icon>add</mat-icon>
-      <span>Add Shift</span>
-    </button>
-  </div>
-
-  <mat-divider></mat-divider>
-
-  <div class="table-container">
-    <div class="history-table-wrapper">
-      <table class="history-table">
-        <thead>
-          <tr>
-            <th style="width: 5%">#</th>
-            <th style="width: 35%">Shift Name</th>
-            <th style="width: 20%">From Time</th>
-            <th style="width: 20%">To Time</th>
-            <th style="width: 20%">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let s of shifts; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ s.shiftName || '-' }}</td>
-            <td>{{ s.fromTime || '-' }}</td>
-            <td>{{ s.toTime || '-' }}</td>
-            <td>
-              <button type="button" class="icon-action" title="Edit" (click)="openEditShift(s)">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button type="button" class="icon-action danger" title="Delete" (click)="deleteShift(s)">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </tr>
-          <tr *ngIf="!shifts || shifts.length === 0">
-  <td colspan="5" class="no-records-box">
-    <div class="no-records-content">
-      <mat-icon>info</mat-icon>
-      <span>No shifts available</span>
-    </div>
-  </td>
-</tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- Shift Modal -->
-<div class="modal-overlay" *ngIf="showShiftModal" (click)="closeShiftModal()">
-  <div class="change-manager-modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <div class="modal-title">
-        <div class="modal-title-icon"><mat-icon>schedule</mat-icon></div>
-        <div>
-          <div class="modal-title-text">{{ isEditShift ? 'Edit Shift' : 'Add Shift' }}</div>
-          <div class="modal-subtitle">{{ company.companyName }}</div>
-        </div>
+  <div class="section-card">
+    <div class="section-header shift-header">
+      <div class="section-title">
+        <mat-icon>schedule</mat-icon>
+        <span>Working Hours</span>
       </div>
-      <button type="button" class="modal-close-button" [disabled]="isSavingShift" (click)="closeShiftModal()">
-        <mat-icon>close</mat-icon>
+      <button type="button" class="back-button" (click)="openAddShift()">
+        <mat-icon>add</mat-icon>
+        <span>Add Working Hours</span>
       </button>
     </div>
 
     <mat-divider></mat-divider>
 
-    <div class="modal-body">
-      <div class="manager-form-group">
-        <label class="modal-field-label">Shift Name <span class="required">*</span></label>
-        <input type="text" class="manager-select" maxlength="100" placeholder="e.g. Morning Shift"
-               [(ngModel)]="shiftForm.shiftName" name="shiftName" />
-        <div class="manager-validation-error" *ngIf="shiftSubmitted && !shiftForm.shiftName?.trim()">
-          <mat-icon>error_outline</mat-icon><span>Shift name is required</span>
-        </div>
+    <div class="table-container">
+      <div class="history-table-wrapper">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th style="width: 5%">#</th>
+              <th style="width: 35%">Shift Name</th>
+              <th style="width: 20%">From Time</th>
+              <th style="width: 20%">To Time</th>
+              <th style="width: 20%">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of shifts; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ s.shiftName || '-' }}</td>
+              <td>{{ s.fromTime || '-' }}</td>
+              <td>{{ s.toTime || '-' }}</td>
+              <td>
+                <button type="button" class="icon-action" title="Edit" (click)="openEditShift(s)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button type="button" class="icon-action danger" title="Delete" (click)="deleteShift(s)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!shifts || shifts.length === 0">
+              <td colspan="5" class="no-records-box">
+                <div class="no-records-content">
+                  <mat-icon>info</mat-icon>
+                  <span>No shifts available</span>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-
-      <div class="time-row">
-        <div class="manager-form-group">
-          <label class="modal-field-label">From Time <span class="required">*</span></label>
-          <input type="time" class="manager-select" step="60"
-                 [(ngModel)]="shiftForm.fromTime" name="fromTime" />
-          <div class="manager-validation-error" *ngIf="shiftSubmitted && !shiftForm.fromTime">
-            <mat-icon>error_outline</mat-icon><span>Required</span>
-          </div>
-        </div>
-
-        <div class="manager-form-group">
-          <label class="modal-field-label">To Time <span class="required">*</span></label>
-          <input type="time" class="manager-select" step="60"
-                 [(ngModel)]="shiftForm.toTime" name="toTime" />
-          <div class="manager-validation-error" *ngIf="shiftSubmitted && !shiftForm.toTime">
-            <mat-icon>error_outline</mat-icon><span>Required</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button type="button" class="modal-cancel-button" [disabled]="isSavingShift" (click)="closeShiftModal()">Cancel</button>
-      <button type="button" class="modal-save-button" [disabled]="isSavingShift" (click)="saveShift()">
-        <mat-icon>save</mat-icon>
-        <span>{{ isSavingShift ? 'Saving...' : (isEditShift ? 'Update Shift' : 'Save Shift') }}</span>
-      </button>
     </div>
   </div>
-</div>
+
+  <!-- Shift Modal -->
+  <div class="modal-overlay" *ngIf="showShiftModal" (click)="closeShiftModal()">
+    <div class="change-manager-modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <div class="modal-title">
+          <div class="modal-title-icon"><mat-icon>schedule</mat-icon></div>
+          <div>
+            <div class="modal-title-text">{{ isEditShift ? 'Edit Shift' : 'Add Shift' }}</div>
+            <div class="modal-subtitle">{{ company.companyName }}</div>
+          </div>
+        </div>
+        <button type="button" class="modal-close-button" [disabled]="isSavingShift" (click)="closeShiftModal()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="modal-body">
+        <div class="manager-form-group">
+          <label class="modal-field-label">Shift Name <span class="required">*</span></label>
+          <input type="text" class="manager-select" maxlength="100" placeholder="e.g. Morning Shift" [(ngModel)]="shiftForm.shiftName" name="shiftName" />
+          <div class="manager-validation-error" *ngIf="shiftSubmitted && !shiftForm.shiftName?.trim()"><mat-icon>error_outline</mat-icon><span>Shift name is required</span></div>
+        </div>
+
+        <div class="time-row">
+          <div class="manager-form-group">
+            <label class="modal-field-label">From Time <span class="required">*</span></label>
+            <input type="time" class="manager-select" step="60" [(ngModel)]="shiftForm.fromTime" name="fromTime" />
+            <div class="manager-validation-error" *ngIf="shiftSubmitted && !shiftForm.fromTime"><mat-icon>error_outline</mat-icon><span>Required</span></div>
+          </div>
+
+          <div class="manager-form-group">
+            <label class="modal-field-label">To Time <span class="required">*</span></label>
+            <input type="time" class="manager-select" step="60" [(ngModel)]="shiftForm.toTime" name="toTime" />
+            <div class="manager-validation-error" *ngIf="shiftSubmitted && !shiftForm.toTime"><mat-icon>error_outline</mat-icon><span>Required</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="modal-cancel-button" [disabled]="isSavingShift" (click)="closeShiftModal()">Cancel</button>
+        <button type="button" class="modal-save-button" [disabled]="isSavingShift" (click)="saveShift()">
+          <mat-icon>save</mat-icon>
+          <span>{{ isSavingShift ? 'Saving...' : isEditShift ? 'Update Shift' : 'Save Shift' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
 
   <div class="section-card">
     <div class="section-header">
@@ -279,12 +265,9 @@
                 </span>
               </td>
             </tr>
-
             <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
               <td colspan="5" class="">
-              
-                  <span>No action history available</span>
-              
+                <span>No action history available</span>
               </td>
             </tr>
           </tbody>
