@@ -353,7 +353,6 @@ export class ReassignReport implements OnInit {
     // paging
     this.currentPage = 1;
     this.page = 0;
-
     // clear saved filter, then reload
     this.saveFilterState();
     this.getReassignReport();
