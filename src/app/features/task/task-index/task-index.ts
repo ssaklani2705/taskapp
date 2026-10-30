@@ -499,7 +499,7 @@ export class TaskIndex implements OnInit {
         this.loginType,
         this.dashboardFilter,
         this.isHod,
-         this.taskIdFilter, 
+        this.taskIdFilter,
       )
       .subscribe({
         next: (response: any) => {
@@ -1471,11 +1471,14 @@ export class TaskIndex implements OnInit {
   // All users (assignee is NOT filtered out any more), plus the current buddy
   // if the user list does not contain them
   get buddyUsers(): any[] {
-    const list = [...(this.users || [])];
+    const list = (this.users || []).filter((u: any) => String(u.isHod ?? 'N').toUpperCase() !== 'Y');
     const buddyId = Number(this.selectedAssignTask?.buddyId || 0);
     if (buddyId && !list.some((u: any) => Number(u.userId) === buddyId)) {
       list.push({ userId: buddyId, firstName: this.selectedAssignTask?.buddyName || 'Current Buddy' });
     }
+
+    console.log("{emaill   -}"+ JSON.stringify(list))
+  //  alert(JSON.stringify(list))
     return list;
   }
 
@@ -2437,12 +2440,12 @@ export class TaskIndex implements OnInit {
   }
 
   onTaskIdInput(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  const digitsOnly = input.value.replace(/\D/g, '');   // strip everything except 0-9
+    const input = event.target as HTMLInputElement;
+    const digitsOnly = input.value.replace(/\D/g, ''); // strip everything except 0-9
 
-  if (input.value !== digitsOnly) {
-    input.value = digitsOnly;                           // fix what the user sees
+    if (input.value !== digitsOnly) {
+      input.value = digitsOnly; // fix what the user sees
+    }
+    this.taskIdQuery = digitsOnly; // keep the model in sync
   }
-  this.taskIdQuery = digitsOnly;                        // keep the model in sync
-}
 }

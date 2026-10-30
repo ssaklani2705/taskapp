@@ -56,7 +56,7 @@
         <div class="search-field">
           <label>From Date</label>
           <div class="search-input-wrapper">
-            <input type="text" [matDatepicker]="fromPicker" [(ngModel)]="fromDate" [max]="toDate" placeholder="DD/MM/YYYY" readonly (click)="fromPicker.open()" />
+            <input type="text" [matDatepicker]="fromPicker" [(ngModel)]="fromDate" [max]="toDate" placeholder="DD-MM-YYYY" readonly (click)="fromPicker.open()" />
             <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
               <mat-icon>calendar_today</mat-icon>
             </button>
@@ -68,7 +68,7 @@
         <div class="search-field">
           <label>To Date</label>
           <div class="search-input-wrapper">
-            <input type="text" [matDatepicker]="toPicker" [(ngModel)]="toDate" [min]="fromDate" placeholder="DD/MM/YYYY" readonly (click)="toPicker.open()" />
+            <input type="text" [matDatepicker]="toPicker" [(ngModel)]="toDate" [min]="fromDate" placeholder="DD-MM-YYYY" readonly (click)="toPicker.open()" />
             <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
               <mat-icon>calendar_today</mat-icon>
             </button>
