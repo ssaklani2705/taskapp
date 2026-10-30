@@ -1693,8 +1693,8 @@ export class DataProviderService {
     return this.http.put<ApiResponse<null>>(`${environment.apiBaseUrl}admin/companyShift/update`, body);
   }
 
-  deleteCompanyShift(shiftId: number): Observable<ApiResponse<null>> {
-    return this.http.delete<ApiResponse<null>>(`${environment.apiBaseUrl}admin/companyShift/delete/${shiftId}`);
+  deleteCompanyShift(shiftId: number,userId:number): Observable<ApiResponse<null>> {
+    return this.http.delete<ApiResponse<null>>(`${environment.apiBaseUrl}admin/companyShift/delete/${shiftId}/${userId}`);
   }
 
   findActiveCompanyShift(companyId: number) {
