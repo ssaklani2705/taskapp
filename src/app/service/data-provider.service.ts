@@ -1718,4 +1718,37 @@ getCompanyList(
     taskId, buddyId, userId, isChange, remarks, startDate, endDate,
   });
 }
+
+getReassignSummaryReportDepartments(): Observable<any[]> {
+    return this.http.get<any[]>(`${environment.apiBaseUrl}admin/task_reassign/reassign-summary/departments`);
+  }
+
+
+getOldUserTaskCount(page: number, size: number, fromDate?: string, toDate?: string, search?: string, departmentIds?: number[]) {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+
+
+    if (fromDate) {
+      params = params.set('fromDate', fromDate);
+    }
+
+
+    if (toDate) {
+      params = params.set('toDate', toDate);
+    }
+
+
+    if (search && search.trim()) {
+      params = params.set('search', search.trim());
+    }
+
+
+    if (departmentIds && departmentIds.length > 0) {
+      params = params.set('departmentIds', departmentIds.join(','));
+    }
+
+
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/task_reassign/old-user-task-count`, { params });
+  }
+  
 }

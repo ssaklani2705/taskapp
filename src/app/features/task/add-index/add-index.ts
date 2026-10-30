@@ -1417,10 +1417,29 @@ get filteredGroupedCategories(): { department: string; items: any[] }[] {
 //     setTimeout(() => document.getElementById('addTaskCategorySearchInput')?.focus(), 0);
 //   }
 // }
-toggleCategoryDropdown(): void {
+// toggleCategoryDropdown(): void {
 
-  // Manager must select a client first
-  if (this.loginType === 'manager' && !this.task.clientId) {
+//   // Manager must select a client first
+//   if (this.loginType === 'manager' && !this.task.clientId) {
+//     this.showCategoryDropdown = false;
+//     return;
+//   }
+
+//   this.showCategoryDropdown = !this.showCategoryDropdown;
+//   this.categorySearchText = '';
+
+//   if (this.showCategoryDropdown) {
+//     setTimeout(() => {
+//       document.getElementById('addTaskCategorySearchInput')?.focus();
+//     }, 0);
+//   }
+// }
+
+toggleCategoryDropdown(): void {
+  if (
+    (this.loginType === 'manager' && !this.task.clientId) ||
+    (Number(this.task.userType) === 2 && !this.task.clientId)
+  ) {
     this.showCategoryDropdown = false;
     return;
   }
