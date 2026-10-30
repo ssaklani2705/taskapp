@@ -78,10 +78,33 @@ export class AddRecurring implements OnInit {
     }
     this.initializeForm();
     this.getUserId();
+    this.recurringForm.get('clientId')?.valueChanges.subscribe(clientId => {
+  this.onClientChange(clientId);
+});
     this.checkEditMode();
     this.loadClients();
-    this.loadTaskCategories();
+    // this.loadTaskCategories();
   }
+
+  private onClientChange(clientId: number | null): void {
+
+  // Clear previously selected category
+  this.recurringForm.patchValue({
+    taskCatId: null
+  }, { emitEvent: false });
+
+  this.taskCategories = [];
+  this.groupedCategories = [];
+  this.taskCategoryEmployeeError = false;
+  this.showTaskCategoryDropdown = false;
+  this.categorySearchText = '';
+
+  if (!clientId) {
+    return;
+  }
+
+  this.loadTaskCategories(clientId);
+}
 
   private initializeForm(): void {
     this.recurringForm = this.fb.group({
@@ -153,20 +176,47 @@ export class AddRecurring implements OnInit {
     });
   }
 
-  private loadTaskCategories(): void {
-  this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType, this.isHod).subscribe({
+  private loadTaskCategories(clientId: number): void {
+
+  this.dataprovider.getActiveTaskCategoriesForRecurring(
+    this.userId,
+    this.isAdmin,
+    this.loginType,
+    this.isHod,
+    clientId
+  ).subscribe({
+
     next: (response: any) => {
       this.taskCategories = response || [];
+
       this.buildGroupedCategories();
+
       this.autoSelectSingleCategory();
     },
+
     error: (error) => {
       console.error('Error fetching task categories:', error);
+
       this.taskCategories = [];
       this.groupedCategories = [];
-    },
+    }
   });
 }
+
+//   private loadTaskCategories(): void {
+//   this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType, this.isHod).subscribe({
+//     next: (response: any) => {
+//       this.taskCategories = response || [];
+//       this.buildGroupedCategories();
+//       this.autoSelectSingleCategory();
+//     },
+//     error: (error) => {
+//       console.error('Error fetching task categories:', error);
+//       this.taskCategories = [];
+//       this.groupedCategories = [];
+//     },
+//   });
+// }
 
 // private buildGroupedCategories(): void {
 //   const map = new Map<string, TaskCategory[]>();

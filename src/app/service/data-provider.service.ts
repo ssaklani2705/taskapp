@@ -1183,13 +1183,25 @@ export class DataProviderService {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/active`);
   }
 
-  getActiveTaskCategoriesForRecurring(userId: any, isAdmin: any, loginType: any, isHod: any) {
+  getActiveTaskCategoriesForRecurring(userId: any, isAdmin: any, loginType: any, isHod: any,clientId: any) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/recurring/active`, {
       params: {
         userId: userId,
         isAdmin: isAdmin,
         loginType: loginType,
         isHod: isHod,
+        clientId: clientId
+      },
+    });
+  }
+
+  getActiveTaskCategoriesForGeneric(userId: any, isAdmin: any, loginType: any, isHod: any) {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/generic/active`, {
+      params: {
+        userId: userId,
+        isAdmin: isAdmin,
+        loginType: loginType,
+        isHod: isHod
       },
     });
   }
