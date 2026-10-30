@@ -118,7 +118,7 @@ export class AddGenericRecurring implements OnInit {
   }
 
   private loadTaskCategories(): void {
-    this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType, this.isHod).subscribe({
+    this.dataprovider.getActiveTaskCategoriesForGeneric(this.userId, this.isAdmin, this.loginType, this.isHod).subscribe({
       next: (response: any) => {
         this.taskCategories = response || [];
         this.buildGroupedCategories();
