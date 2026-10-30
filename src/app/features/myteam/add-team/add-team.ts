@@ -134,8 +134,8 @@ export class AddTeam implements OnInit, AfterViewInit {
       isAdmin: [false],
       isHod: [false],
       weeklyOff: [null],
-      companyId: [null],
-      shiftId: [null],        // NEW
+      companyId: [null, Validators.required],
+      shiftId: [null], // NEW
       desigmationId: [null, Validators.required],
     });
 
@@ -201,7 +201,7 @@ export class AddTeam implements OnInit, AfterViewInit {
 
     this.readFilterState();
 
-    this.loadActiveCompany()
+    this.loadActiveCompany();
 
     const id = this.route.snapshot.paramMap.get('userId');
 
@@ -361,8 +361,6 @@ export class AddTeam implements OnInit, AfterViewInit {
 
         this.selectedCategoryIds = this.parseIdList(response.taskcategoryIds);
 
-      
-
         const isHod = response.isHod === 'Y' || this.selectedDepartmentIds.length > 1;
 
         this.userForm.patchValue({
@@ -376,8 +374,7 @@ export class AddTeam implements OnInit, AfterViewInit {
           isHod: isHod,
           weeklyOff: this.parseWeeklyOff(response.weeklyOffIds ?? response.weeklyOff),
           desigmationId: response.designationId || null,
-        companyId: response.companyId ?? null,
-
+          companyId: response.companyId ?? null,
         });
 
         if (response.companyId) {
@@ -633,8 +630,7 @@ export class AddTeam implements OnInit, AfterViewInit {
       weeklyOff: formValues.weeklyOff ? Number(formValues.weeklyOff) : null,
       module: this.isRightsHidden ? [] : this.buildModulePermissions(),
       companyId: formValues.companyId ? Number(formValues.companyId) : null,
-      shiftId: formValues.shiftId ? Number(formValues.shiftId) : null,     // NEW
-      
+      shiftId: formValues.shiftId ? Number(formValues.shiftId) : null, // NEW
     };
 
     if (formValues.password && formValues.password.trim()) {
@@ -706,7 +702,6 @@ export class AddTeam implements OnInit, AfterViewInit {
       weeklyOff: null,
       desigmationId: null,
       companyId: null,
-      
     });
 
     this.selectedDepartmentIds = [];
@@ -1241,34 +1236,34 @@ export class AddTeam implements OnInit, AfterViewInit {
     });
   }
 
-companyShifts: any[] = [];
-shiftsLoading = false;
+  companyShifts: any[] = [];
+  shiftsLoading = false;
 
-// user changes the company dropdown
-onCompanyChange(): void {
-  this.userForm.get('shiftId')?.setValue(null);
-  this.companyShifts = [];
+  // user changes the company dropdown
+  onCompanyChange(): void {
+    this.userForm.get('shiftId')?.setValue(null);
+    this.companyShifts = [];
 
-  const companyId = Number(this.userForm.get('companyId')?.value);
-  if (companyId) {
-    this.loadShifts(companyId);
+    const companyId = Number(this.userForm.get('companyId')?.value);
+    if (companyId) {
+      this.loadShifts(companyId);
+    }
   }
-}
 
-private loadShifts(companyId: number, afterLoad?: () => void): void {
-  this.shiftsLoading = true;
+  private loadShifts(companyId: number, afterLoad?: () => void): void {
+    this.shiftsLoading = true;
 
-  this.dataProvider.findActiveCompanyShift(companyId).subscribe({
-    next: (res: any) => {
-      this.companyShifts = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
-      this.shiftsLoading = false;
-      afterLoad?.();
-    },
-    error: (err) => {
-      console.error('Error loading company shifts:', err);
-      this.companyShifts = [];
-      this.shiftsLoading = false;
-    },
-  });
-}
+    this.dataProvider.findActiveCompanyShift(companyId).subscribe({
+      next: (res: any) => {
+        this.companyShifts = Array.isArray(res) ? res : (res?.data ?? res?.content ?? []);
+        this.shiftsLoading = false;
+        afterLoad?.();
+      },
+      error: (err) => {
+        console.error('Error loading company shifts:', err);
+        this.companyShifts = [];
+        this.shiftsLoading = false;
+      },
+    });
+  }
 }

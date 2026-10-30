@@ -379,11 +379,12 @@
             </div>
             <div class="user-form-col">
               <div class="user-form-group">
-                <label class="user-label">Company</label>
+                <label class="user-label">Company <span class="required">*</span></label>
                 <select class="user-input user-select" formControlName="companyId" (change)="onCompanyChange()">
                 <option [ngValue]="null">-- Select Company --</option>
                   <option *ngFor="let c of companies" [ngValue]="c.companyId">{{ c.companyName }}</option>
                 </select>
+                  <div class="user-error" *ngIf="userForm.get('companyId')?.touched && userForm.get('companyId')?.hasError('required')">Company name is required</div>
               </div>
             </div>
 
