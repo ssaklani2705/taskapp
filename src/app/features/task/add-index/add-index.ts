@@ -416,6 +416,11 @@ export class AddIndexComponent implements OnInit {
       this.task.buddyId = null;
     }
 
+    // Non-manager login: client search box is empty, so no client may be sent
+if (this.loginType !== 'manager' && !(this.clientSearchText || '').trim()) {
+  this.task.clientId = null;
+}
+
     const formData = new FormData();
 
     // Client is optional for some categories: send it only when selected
@@ -518,83 +523,157 @@ export class AddIndexComponent implements OnInit {
   // RESET
   // ============================================================
 
+  // onReset(): void {
+  //   if (this.isEditMode) {
+  //     this.task = {
+  //       ...this.originalTask,
+  //     };
+
+  //     if (this.task.startDate) {
+  //       this.task.startDate = new Date(this.task.startDate);
+  //     }
+  //     if (this.task.endDate) {
+  //       this.task.endDate = new Date(this.task.endDate);
+  //     }
+  //   } else {
+  //     this.task = {
+  //       taskId: null,
+
+  //       userType: 1,
+
+  //       title: '',
+
+  //       clientId: null,
+
+  //       startDate: null,
+  //       endDate: null,
+  //       taskCategoryId: null,
+
+  //       description: '',
+
+  //       assignedTo: null,
+
+  //       buddyId: null,          // ADD THIS LINE
+
+  //       priority: null,
+
+  //       status: 1,
+
+  //       addedBy: null,
+
+  //       fileName1: null,
+
+  //       fileName2: null,
+  //     };
+
+  //     this.selectedTaskCategoryName = '';
+  //     this.showCategoryDropdown = false;
+  //     this.categorySearchText = '';           // ADD THIS LINE
+  //     this.clientSearchText = '';
+  //     this.filteredClients = [];
+  //     this.showClientDropdown = false;
+  //     this.users = [];
+  //     this.noEmployeeError = '';
+  //     this.holidayError = '';
+  //     this.endDateError = '';
+  //   }
+
+  //   // Clear Angular variables
+  //   this.pdfFile = null;
+
+  //   this.zipFile = null;
+
+  //   this.pdfFileName = '';
+
+  //   this.zipFileName = '';
+
+  //   this.pdfError = '';
+
+  //   this.zipError = '';
+
+  //   // Clear actual file input
+  //   if (this.pdfInput) {
+  //     this.pdfInput.nativeElement.value = '';
+  //   }
+
+  //   if (this.zipInput) {
+  //     this.zipInput.nativeElement.value = '';
+  //   }
+  // }
+
   onReset(): void {
-    if (this.isEditMode) {
-      this.task = {
-        ...this.originalTask,
-      };
+  if (this.isEditMode) {
+    this.task = {
+      ...this.originalTask,
+    };
 
-      if (this.task.startDate) {
-        this.task.startDate = new Date(this.task.startDate);
-      }
-      if (this.task.endDate) {
-        this.task.endDate = new Date(this.task.endDate);
-      }
-    } else {
-      this.task = {
-        taskId: null,
-
-        userType: 1,
-
-        title: '',
-
-        clientId: null,
-
-        startDate: null,
-        endDate: null,
-        taskCategoryId: null,
-
-        description: '',
-
-        assignedTo: null,
-
-        buddyId: null,          // ADD THIS LINE
-
-        priority: null,
-
-        status: 1,
-
-        addedBy: null,
-
-        fileName1: null,
-
-        fileName2: null,
-      };
-
-      this.selectedTaskCategoryName = '';
-      this.showCategoryDropdown = false;
-      this.categorySearchText = '';           // ADD THIS LINE
-      this.clientSearchText = '';
-      this.filteredClients = [];
-      this.showClientDropdown = false;
-      this.users = [];
-      this.noEmployeeError = '';
-      this.holidayError = '';
-      this.endDateError = '';
+    if (this.task.startDate) {
+      this.task.startDate = new Date(this.task.startDate);
+    }
+    if (this.task.endDate) {
+      this.task.endDate = new Date(this.task.endDate);
     }
 
-    // Clear Angular variables
-    this.pdfFile = null;
+    // Restore the client name in the search box, otherwise it would be
+    // empty while clientId is restored
+    const originalClient = this.clients.find((c: any) => Number(c.clientId) === Number(this.task.clientId));
+    this.clientSearchText = originalClient ? originalClient.name : '';
+    this.filteredClients = [];
+    this.showClientDropdown = false;
+    this.clientTouched = false;                 // ADD
+  } else {
+    this.task = {
+      taskId: null,
+      userType: 1,
+      title: '',
+      clientId: null,
+      startDate: null,
+      endDate: null,
+      taskCategoryId: null,
+      description: '',
+      assignedTo: null,
+      buddyId: null,
+      priority: null,
+      status: 1,
+      addedBy: null,
+      fileName1: null,
+      fileName2: null,
+    };
 
-    this.zipFile = null;
+    this.selectedTaskCategoryName = '';
+    this.showCategoryDropdown = false;
+    this.categorySearchText = '';
+    this.clientSearchText = '';
+    this.clientTouched = false;                 // ADD
+    this.filteredClients = [];
+    this.showClientDropdown = false;
+    this.users = [];
+    this.workloadList = [];                     // ADD
+    this.noEmployeeError = '';
+    this.holidayError = '';
+    this.endDateError = '';
+    this.taskCategoryEmployeeError = false;     // ADD
 
-    this.pdfFileName = '';
-
-    this.zipFileName = '';
-
-    this.pdfError = '';
-
-    this.zipError = '';
-
-    // Clear actual file input
-    if (this.pdfInput) {
-      this.pdfInput.nativeElement.value = '';
-    }
-
-    if (this.zipInput) {
-      this.zipInput.nativeElement.value = '';
-    }
+    // The category list was loaded for the previous type / client
+    this.onchangeloadDropdownData();            // ADD
   }
+
+  // Clear Angular variables
+  this.pdfFile = null;
+  this.zipFile = null;
+  this.pdfFileName = '';
+  this.zipFileName = '';
+  this.pdfError = '';
+  this.zipError = '';
+
+  // Clear actual file input
+  if (this.pdfInput) {
+    this.pdfInput.nativeElement.value = '';
+  }
+  if (this.zipInput) {
+    this.zipInput.nativeElement.value = '';
+  }
+}
 
   backToIndexPage(): void {
     this.router.navigate(['/task-index']);
@@ -865,35 +944,48 @@ onClientChange(clientId: number | null): void {
   filteredClients: any[] = [];
   showClientDropdown = false;
 
-  filterClients(): void {
-    const search = this.clientSearchText.trim().toLowerCase();
+  // filterClients(): void {
+  //   const search = this.clientSearchText.trim().toLowerCase();
 
-    if (search.length < 3) {
-      this.showClientDropdown = false;
-      this.filteredClients = [];
-      return;
+  //   if (search.length < 3) {
+  //     this.showClientDropdown = false;
+  //     this.filteredClients = [];
+  //     return;
+  //   }
+
+  //   this.filteredClients = this.clients.filter((client) => client.name.toLowerCase().includes(search));
+
+  //   this.showClientDropdown = true;
+  // }
+
+  clientTouched = false;
+
+filterClients(): void {
+  this.clientTouched = true;
+
+  // The text was edited by keyboard: if it no longer matches the selected
+  // client, treat it as deselected (same as clicking the red cross)
+  if (this.task.clientId) {
+    const selected = this.clients.find((c: any) => Number(c.clientId) === Number(this.task.clientId));
+
+    if (!selected || selected.name !== this.clientSearchText) {
+      this.onClientChange(null); // clears clientId, category, assignee, buddy, dates
     }
-
-    this.filteredClients = this.clients.filter((client) => client.name.toLowerCase().includes(search));
-
-    this.showClientDropdown = true;
   }
 
-  // selectClient(client: any): void {
-  //   this.task.clientId = client.clientId; // value used in save API
+  const search = (this.clientSearchText || '').trim().toLowerCase();
 
-  //   this.clientSearchText = client.name;
+  if (search.length < 3) {
+    this.showClientDropdown = false;
+    this.filteredClients = [];
+    return;
+  }
 
-  //   this.showClientDropdown = false;
+  this.filteredClients = this.clients.filter((client) => client.name.toLowerCase().includes(search));
+  this.showClientDropdown = true;
+}
 
-  //   this.onClientChange(client.clientId);
-  //   this.onchangeloadDropdownData();
-
-  //   // Category may already be chosen: load assignees for the new client
-  //   // if (this.task.taskCategoryId) {
-  //   //   this.onchangeloadUserDropdownData();
-  //   // }
-  // }
+ 
   selectClient(client: any): void {
   if (Number(this.task.clientId) !== Number(client.clientId)) {
     this.onClientChange(client.clientId);
@@ -915,11 +1007,19 @@ onClientChange(clientId: number | null): void {
   //   this.onClientChange(null);
   // }
 
-  clearClientSelection(): void {
+//   clearClientSelection(): void {
+//   this.clientSearchText = '';
+//   this.filteredClients = [];
+//   this.showClientDropdown = false;
+
+//   this.onClientChange(null);
+// }
+
+clearClientSelection(): void {
+  this.clientTouched = true;
   this.clientSearchText = '';
   this.filteredClients = [];
   this.showClientDropdown = false;
-
   this.onClientChange(null);
 }
 

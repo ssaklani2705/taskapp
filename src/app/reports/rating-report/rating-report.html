@@ -139,7 +139,7 @@
 
               <td class="text-left">{{ log.ratedTasks }}</td>
 
-              <td class="text-left">{{ log.avgRating || 0 }}</td>
+              <td class="text-left">{{ log.avgRating ?? 0 | number: '1.2-2' }}</td>
             </tr>
 
             <!-- NO DATA -->

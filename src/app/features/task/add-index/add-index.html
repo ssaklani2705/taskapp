@@ -155,7 +155,9 @@
                   </div>
                   <!-- Not mandatory when the category belongs to department 2, 3, 4 or 5 -->
                   <input type="hidden" [(ngModel)]="task.clientId" name="clientId" [required]="!isClientOptional" #clientCtrl="ngModel" />
-                  <div class="user-error" *ngIf="clientCtrl.invalid && clientCtrl.touched">Client is required</div>
+                  <!-- <div class="user-error" *ngIf="clientCtrl.invalid && clientCtrl.touched">Client is required</div> -->
+                   <!-- AFTER -->
+<div class="user-error" *ngIf="clientCtrl.invalid && (clientCtrl.touched || taskForm.submitted)">Client is required</div>
                 }
               </div>
             </div>

@@ -330,6 +330,13 @@ export class RatingReport implements OnInit {
 
       const worksheet = XLSX.utils.json_to_sheet(rows);
 
+      data.forEach((_, index) => {
+        const cellAddress = XLSX.utils.encode_cell({ r: index + 1, c: 4 });
+        if (worksheet[cellAddress]) {
+          worksheet[cellAddress].z = '0.00';
+        }
+      });
+
       worksheet['!cols'] = [{ wch: 10 }, { wch: 30 }, { wch: 15 }, { wch: 15 }, { wch: 18 }];
 
       const workbook = XLSX.utils.book_new();
@@ -407,4 +414,5 @@ export class RatingReport implements OnInit {
       this.showDepartmentDropdown = false;
     }
   }
+
 }
