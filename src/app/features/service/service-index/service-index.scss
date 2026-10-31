@@ -379,7 +379,7 @@ mat-divider,
   background: var(--white);
   color: var(--text);
   font-family: Arial, sans-serif;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .designation-table .col-serial {
@@ -393,7 +393,7 @@ mat-divider,
 }
 
 .designation-table thead th {
-  height: 47px;
+  height: 44px;
   padding: 8px 12px;
   background: var(--table-header);
   border-style: solid;
@@ -441,7 +441,7 @@ mat-divider,
 .column-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 8px;
   white-space: nowrap;
 }
