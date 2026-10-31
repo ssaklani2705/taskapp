@@ -397,8 +397,8 @@ mat-divider {
 }
 
 .history-table thead th {
-  height: 47px;
-  padding: 8px 15px;
+  height: 44px;
+  padding: 0px 15px;
   background: var(--table-header);
   border: 1px solid var(--border);
   color: #172f4c;
@@ -407,8 +407,8 @@ mat-divider {
 }
 
 .history-table tbody td {
-  height: 52px;
-  padding: 10px 15px;
+  height: 44px;
+  padding: 0px 15px;
   background: var(--white);
   border: 1px solid var(--border);
   color: var(--text);
