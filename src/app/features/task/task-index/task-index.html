@@ -848,7 +848,7 @@
       </div>
       <!-- ASSIGNED TO -->
       <!-- ASSIGNED TO -->
-       
+
       <div class="assign-form-group assign-full-width">
         <label class="assign-field-label">
           Assigned To
@@ -897,8 +897,7 @@
         type="button"
         class="modal-save-button"
         [disabled]="!selectedAssignTask?.assignedTo || !selectedAssignTask?.date || !selectedAssignTask?.endDate || (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim()) || holidayError"
-        (click)="assignUser()"
-      >
+        (click)="assignUser()">
         <mat-icon>save</mat-icon>
 
         <span>
