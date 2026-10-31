@@ -1,7 +1,3 @@
-/* =========================================================
-   USER MANAGEMENT - SOCIETY 123 BUSINESS PORTAL
-========================================================= */
-
 :host {
   display: block;
   width: 100%;
@@ -22,7 +18,7 @@
   --danger: #e84a4a;
 }
 
-/* ---------- PAGE ---------- */
+/* ================= PAGE LAYOUT ================= */
 
 .page-content-wrapper {
   width: 100%;
@@ -44,7 +40,19 @@
   box-sizing: border-box;
 }
 
-/* ---------- HEADER ---------- */
+.user-management-container,
+.user-management-container button,
+.user-management-container input,
+.user-management-container select,
+.user-management-container table {
+  font-family: Arial, sans-serif;
+}
+
+.user-management-container * {
+  box-sizing: border-box;
+}
+
+/* ================= HEADER ================= */
 
 .page-header {
   min-height: 78px;
@@ -54,7 +62,6 @@
   justify-content: space-between;
   background: var(--white);
   border-bottom: 1px solid var(--border);
-  box-sizing: border-box;
 }
 
 .header-title-section {
@@ -74,10 +81,9 @@
   line-height: 1.2;
 }
 
-.header-title-section h2 i {
+.header-title-section h2 mat-icon {
   margin-right: 9px;
   color: var(--primary-blue);
-  font-family: Arial, sans-serif;
   font-size: 22px;
 }
 
@@ -107,7 +113,6 @@
   border-radius: 4px;
   background: var(--navy);
   color: var(--white);
-  font-family: Arial, sans-serif;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -115,7 +120,6 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  box-sizing: border-box;
 }
 
 .btn-add-user:hover {
@@ -128,14 +132,13 @@
   line-height: 1;
 }
 
-/* ---------- SEARCH PANEL ---------- */
+/* ================= SEARCH PANEL ================= */
 
 .search-panel {
   width: 100%;
   padding: 20px 24px;
-  background: #ffffff;
+  background: var(--white);
   border-bottom: 1px solid var(--border);
-  box-sizing: border-box;
 }
 
 .search-row {
@@ -151,20 +154,16 @@
   min-width: 280px;
 }
 
-.filter-wrapper,
 .designation-wrapper,
 .status-wrapper {
   min-width: 150px;
 }
 
-.status-wrapper-small {
-  flex: 0 1 150px;
-  min-width: 130px;
-}
-
 .go-wrapper {
   flex: 0 0 auto;
 }
+
+/* Search input */
 
 .search-box {
   width: 100%;
@@ -185,9 +184,7 @@
   outline: none;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, sans-serif;
   font-size: 13px;
-  box-sizing: border-box;
 }
 
 .search-input:focus {
@@ -211,7 +208,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
 }
 
 .search-btn:hover {
@@ -222,6 +218,8 @@
   font-size: 14px;
 }
 
+/* Select filters */
+
 .status-select {
   width: 100%;
   height: 40px;
@@ -231,9 +229,7 @@
   outline: none;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, sans-serif;
   font-size: 13px;
-  box-sizing: border-box;
 }
 
 .status-select:focus {
@@ -246,13 +242,7 @@
   cursor: not-allowed;
 }
 
-.filter-actions-row {
-  width: 100%;
-  margin-top: 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
+/* Go and Clear buttons */
 
 .btn-go {
   height: 40px;
@@ -262,11 +252,9 @@
   border-radius: 4px;
   background: var(--primary-blue);
   color: var(--white);
-  font-family: Arial, sans-serif;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  box-sizing: border-box;
 }
 
 .btn-go:hover {
@@ -279,28 +267,26 @@
   padding: 0 22px;
   border: 1px solid #dc3545;
   border-radius: 4px;
-  background: #fff;
+  background: var(--white);
   color: #dc3545;
-  font-family: Arial, sans-serif;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition:
     background 0.2s ease,
     color 0.2s ease;
-  box-sizing: border-box;
 }
 
 .btn-clear:hover {
   background: #dc3545;
-  color: #fff;
+  color: var(--white);
 }
 
 .btn-clear:active {
   transform: scale(0.98);
 }
 
-/* ---------- TABLE TOP / PAGINATION ---------- */
+/* ================= TABLE TOP & PAGINATION ================= */
 
 .table-top-section {
   min-height: 58px;
@@ -309,12 +295,10 @@
   align-items: center;
   justify-content: space-between;
   background: var(--white);
-  box-sizing: border-box;
 }
 
 .record-summary {
   color: var(--text-muted);
-  font-family: Arial, sans-serif;
   font-size: 13px;
   line-height: 1.4;
 }
@@ -333,10 +317,8 @@
   border-radius: 3px;
   background: var(--white);
   color: #7890a6;
-  font-family: Arial, sans-serif;
   font-size: 12px;
   cursor: pointer;
-  box-sizing: border-box;
 }
 
 .pagination-btn:hover:not(:disabled) {
@@ -363,17 +345,13 @@
   min-width: 62px;
 }
 
-/* =========================================================
-   TABLE + HORIZONTAL SCROLL
-========================================================= */
+/* ================= TABLE ================= */
 
 .table-container {
   width: 100%;
   padding: 0 24px;
-  box-sizing: border-box;
 }
 
-/* scroll area: always-visible, styled scrollbar */
 .table-responsive {
   width: 100%;
   overflow-x: auto;
@@ -381,10 +359,8 @@
   border-top: 1px solid var(--border);
   border-left: 1px solid var(--border);
   padding-bottom: 2px;
-  box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
-
-  scrollbar-width: thin; /* Firefox */
+  scrollbar-width: thin;
   scrollbar-color: #9fb5c8 #edf1f4;
 }
 
@@ -407,34 +383,68 @@
   background: #6f8aa3;
 }
 
-/* separate borders so the sticky Action column keeps its lines while scrolling */
 .user-table {
   width: 100%;
-  min-width: 1700px; /* sum of the column widths below */
+  min-width: 1700px;
   border-collapse: separate;
   border-spacing: 0;
   table-layout: fixed;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, sans-serif;
   font-size: 13px;
 }
 
-/* column widths (colgroup) */
-.user-table .col-sr       { width: 60px; }
-.user-table .col-name     { width: 150px; }
-.user-table .col-email    { width: 260px; }
-.user-table .col-mobile   { width: 120px; }
-.user-table .col-company  { width: 150px; }
-.user-table .col-shift    { width: 130px; }
-.user-table .col-dept     { width: 170px; }
-.user-table .col-desig    { width: 130px; }
-.user-table .col-category { width: 160px; }
-.user-table .col-weekoff  { width: 110px; }
-.user-table .col-status   { width: 110px; }
-.user-table .col-action   { width: 150px; }
+/* Column widths */
 
-/* ---------- header cells ---------- */
+.user-table .col-sr {
+  width: 60px;
+}
+
+.user-table .col-name {
+  width: 150px;
+}
+
+.user-table .col-email {
+  width: 260px;
+}
+
+.user-table .col-mobile {
+  width: 120px;
+}
+
+.user-table .col-company {
+  width: 150px;
+}
+
+.user-table .col-shift {
+  width: 130px;
+}
+
+.user-table .col-dept {
+  width: 170px;
+}
+
+.user-table .col-desig {
+  width: 130px;
+}
+
+.user-table .col-category {
+  width: 160px;
+}
+
+.user-table .col-weekoff {
+  width: 110px;
+}
+
+.user-table .col-status {
+  width: 110px;
+}
+
+.user-table .col-action {
+  width: 150px;
+}
+
+/* Table header */
 
 .user-table thead th {
   height: 43px;
@@ -443,22 +453,22 @@
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   color: #172f4c;
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
-  font-family: Arial, sans-serif;
   font-size: 13px;
   font-weight: 700;
-  box-sizing: border-box;
 }
 
 .column-header {
   min-height: 25px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px;
   white-space: nowrap;
 }
+
+/* Sorting */
 
 .sort-icons {
   display: inline-flex;
@@ -485,7 +495,7 @@
   background: #e5eff5 !important;
 }
 
-/* ---------- body cells ---------- */
+/* Table body */
 
 .user-table tbody td {
   height: 47px;
@@ -494,11 +504,10 @@
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   color: var(--text);
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   font-size: 13px;
   overflow-wrap: anywhere;
-  box-sizing: border-box;
 }
 
 .user-table tbody .user-row:hover td {
@@ -507,7 +516,12 @@
 
 .serial-number {
   color: #607d98 !important;
-  text-align: center !important;
+  text-align: left !important;
+}
+
+.user-table thead th.action-column,
+.user-table tbody td.action-cell {
+  text-align: center;
 }
 
 .user-name {
@@ -523,9 +537,7 @@
   word-break: break-word;
 }
 
-/* =========================================================
-   FIXED (STICKY) ACTION COLUMN
-========================================================= */
+/* ================= STICKY ACTION COLUMN ================= */
 
 .user-table thead th.action-column,
 .user-table tbody td.action-cell {
@@ -549,6 +561,8 @@
 .user-table tbody .user-row:hover td.action-cell {
   background: var(--table-hover);
 }
+
+/* Action buttons */
 
 .action-buttons {
   display: flex;
@@ -575,7 +589,6 @@
     background 0.15s ease,
     color 0.15s ease,
     border-color 0.15s ease;
-  box-sizing: border-box;
 }
 
 .action-btn i {
@@ -609,7 +622,7 @@
   background: #fff1f1;
 }
 
-/* ---------- STATUS BADGE ---------- */
+/* ================= STATUS ================= */
 
 .status-badge {
   display: inline-flex;
@@ -619,11 +632,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 2px;
-  font-family: Arial, sans-serif;
   font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
-  box-sizing: border-box;
 }
 
 .status-active,
@@ -653,7 +664,7 @@
   border: 1px solid #efcaca;
 }
 
-/* ---------- NO RECORDS / LOADING ---------- */
+/* ================= EMPTY & LOADING ================= */
 
 .no-records {
   height: 65px !important;
@@ -684,119 +695,14 @@
   }
 }
 
-/* ---------- BOTTOM SECTION ---------- */
+/* ================= RESPONSIVE ================= */
 
-.table-bottom-section {
-  min-height: 58px;
-  margin: 15px 24px 0;
-  padding: 12px 0;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.records-per-page {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: var(--text-muted);
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-}
-
-.records-select {
-  width: 58px;
-  height: 32px;
-  padding: 0 7px;
-  border: 1px solid var(--border-dark);
-  border-radius: 3px;
-  background: var(--white);
-  color: var(--text);
-  font-size: 12px;
-  outline: none;
-}
-
-.wrap-text {
-  white-space: normal;
-  word-break: break-word;
-  overflow-wrap: anywhere;
-}
-
-/* ---------- MATERIAL / BOOTSTRAP OVERRIDES ---------- */
-
-:host ::ng-deep .mat-mdc-card {
-  border-radius: 0 !important;
-  box-shadow: none !important;
-}
-
-:host ::ng-deep .mat-mdc-card-header {
-  padding: 0 !important;
-}
-
-:host ::ng-deep .mat-mdc-card-content {
-  padding: 0 !important;
-}
-
-.user-management-container,
-.user-management-container button,
-.user-management-container input,
-.user-management-container select,
-.user-management-container table {
-  font-family: Arial, sans-serif;
-}
-
-.user-management-container * {
-  box-sizing: border-box;
-}
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
-
-/* large tablet */
-@media (min-width: 901px) and (max-width: 1100px) {
-  .page-content {
-    padding: 18px 20px;
-  }
-
-  .page-header {
-    padding: 0 20px;
-  }
-
-  .search-panel {
-    padding: 20px;
-  }
-
-  .search-row {
-    gap: 16px;
-  }
-
-  .table-container {
-    padding: 0 20px;
-  }
-
-  .table-top-section {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .table-bottom-section {
-    margin-left: 20px;
-    margin-right: 20px;
-  }
-}
-
-/* tablet */
 @media (min-width: 601px) and (max-width: 1100px) {
   .page-content {
-    width: 100%;
     padding: 15px 18px;
   }
 
   .user-management-container {
-    width: 100%;
     overflow: hidden;
   }
 
@@ -832,10 +738,8 @@
     flex: 1 1 100%;
   }
 
-  .filter-wrapper,
   .designation-wrapper,
-  .status-wrapper,
-  .status-wrapper-small {
+  .status-wrapper {
     flex: 1 1 calc(50% - 9px);
   }
 
@@ -868,12 +772,6 @@
     font-size: 12px;
   }
 
-  .table-bottom-section {
-    margin-left: 18px;
-    margin-right: 18px;
-    gap: 15px;
-  }
-
   .status-badge {
     min-width: 75px;
     height: 30px;
@@ -882,7 +780,6 @@
   }
 }
 
-/* small tablet */
 @media (min-width: 601px) and (max-width: 900px) {
   .page-content {
     padding: 12px;
@@ -909,14 +806,8 @@
     padding-left: 15px;
     padding-right: 15px;
   }
-
-  .table-bottom-section {
-    margin-left: 15px;
-    margin-right: 15px;
-  }
 }
 
-/* mobile */
 @media (max-width: 600px) {
   .page-content {
     padding: 10px;
@@ -959,10 +850,8 @@
   }
 
   .search-wrapper,
-  .filter-wrapper,
   .designation-wrapper,
   .status-wrapper,
-  .status-wrapper-small,
   .go-wrapper {
     flex: 1 1 100%;
     min-width: 0;
@@ -972,11 +861,6 @@
   .department-wrapper.cat-width {
     width: 100%;
     flex: 1 1 100%;
-  }
-
-  .filter-actions-row {
-    flex-direction: column;
-    align-items: stretch;
   }
 
   .btn-go,
@@ -1016,28 +900,13 @@
     padding: 0 12px;
   }
 
-  /* on phones the pinned Action column would cover too much of the screen */
   .user-table thead th.action-column,
   .user-table tbody td.action-cell {
     position: static;
     box-shadow: none;
   }
-
-  .table-bottom-section {
-    margin-left: 12px;
-    margin-right: 12px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .records-per-page {
-    width: 100%;
-    justify-content: flex-end;
-  }
 }
 
-/* very small mobile */
 @media (max-width: 480px) {
   .page-content {
     padding: 7px;
@@ -1061,11 +930,6 @@
 
   .table-container {
     padding: 0 10px;
-  }
-
-  .table-bottom-section {
-    margin-left: 10px;
-    margin-right: 10px;
   }
 
   .pagination-btn {
@@ -1099,9 +963,7 @@
   }
 }
 
-/* =========================================================
-   SEARCHABLE DEPARTMENT / CATEGORY DROPDOWN
-========================================================= */
+/* ================= DEPARTMENT & CATEGORY DROPDOWNS ================= */
 
 .task-category-dropdown {
   position: relative;
@@ -1141,12 +1003,11 @@
     right: 0;
     min-width: 260px;
     padding: 8px;
-    background: #ffffff;
+    background: var(--white);
     border: 1px solid #cfd8e3;
     border-radius: 4px;
     box-shadow: 0 5px 15px rgba(25, 52, 90, 0.12);
     z-index: 9999;
-    box-sizing: border-box;
     font-family: Arial, Helvetica, sans-serif;
   }
 
@@ -1158,13 +1019,12 @@
     padding: 0 11px;
     border: 1px solid #c6d3df;
     border-radius: 4px;
-    background: #ffffff;
+    background: var(--white);
     color: #193b63;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 13px;
     outline: none;
     box-shadow: none;
-    box-sizing: border-box;
 
     &::placeholder {
       color: #8296aa;
@@ -1190,18 +1050,6 @@
       background: #c7d0db;
       border-radius: 3px;
     }
-  }
-
-  .cat-group {
-    padding: 6px 10px;
-    background: #edf4f8;
-    color: #19345a;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-    line-height: 1.3;
   }
 
   .cat-item {
@@ -1236,6 +1084,8 @@
   }
 }
 
+/* Department and category widths */
+
 .department-wrapper {
   &.dept-width {
     width: 200px;
@@ -1252,7 +1102,6 @@
 
     .cat-trigger {
       width: 100%;
-      box-sizing: border-box;
     }
   }
 }
