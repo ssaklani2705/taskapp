@@ -2,7 +2,7 @@ import { Component, Inject, Input, Output, EventEmitter, PLATFORM_ID, HostListen
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationEnd, Router } from '@angular/router';
-import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { LoginService } from '../../service/login.service';
 import { filter, Subscription } from 'rxjs';
@@ -20,7 +20,8 @@ interface MenuItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatMenuTrigger, MatButtonModule, MatMenuModule],
+  // imports: [CommonModule, MatIconModule, MatMenuTrigger, MatButtonModule, MatMenuModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatMenuModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
 })
