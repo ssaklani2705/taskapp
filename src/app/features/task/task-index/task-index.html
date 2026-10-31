@@ -308,7 +308,7 @@
                   </span>
                 </td>
 
-                <!-- <td>
+                <td>
                   <span
                     class="wrap-text"
                     [class.unassigned-user]="task.status === 1 && (!task.assignedToName || task.assignedToName === '0')"
@@ -335,32 +335,8 @@
                       </span>
                     </ng-template>
                   </span>
-                </td> -->
-                <td>
-  <span
-    class="wrap-text"
-    [class.unassigned-user]="canAssignUser(task) && (!task.assignedToName || task.assignedToName === '0')"
-    (click)="canAssignUser(task) && openAssignUserModal(task)"
-  >
-    <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
-      <ng-container *ngIf="canAssignUser(task); else notAssigned">
-        <i class="fas fa-user-tie assign-icon"></i>
-        Assign User
-      </ng-container>
-
-      <ng-template #notAssigned>Not Assigned</ng-template>
-    </ng-container>
-
-    <ng-template #assignedBlock>
-      {{ task.assignedToName }}
-      <span class="reassign-text" *ngIf="canReassign(task)">
-        <i class="fas fa-user-tie reassign-icon"></i>
-        Re-assign
-      </span>
-    </ng-template>
-  </span>
-</td>
-
+                </td>
+             
                 <!-- 11: TASK STATUS (frozen) -->
                 <td>
                   <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">

@@ -1393,10 +1393,6 @@ export class TaskIndex implements OnInit {
 
   openAssignUserModal(task: any): void {
 
-    if (!this.canAssignUser(task)) {
-    return;
-  }
-
     this.originalAssignedUserId = Number(task.assignedTo || 0);
     this.lastAssignLoadKey = ''; // new modal session, allow a fresh load
 
@@ -1513,10 +1509,6 @@ export class TaskIndex implements OnInit {
     if (!this.selectedAssignTask || !this.selectedAssignTask.assignedTo || this.selectedAssignTask.assignedTo == 0) {
       return;
     }
-
-    if (this.isBuddyOnly(this.selectedAssignTask)) {
-  return;
-}
 
     // if (this.selectedAssignTask.taskStatus === 1 && !this.assignRemarks?.trim()) {
     //   return;
@@ -1739,9 +1731,6 @@ export class TaskIndex implements OnInit {
 
   canDisableChangeManager(task: any): boolean {
 
-    if (this.isBuddyOnly(task)) {
-    return true;
-  }
 
     if (Number(task.status) === 2 || Number(task.status) === 3) {
       return true;
@@ -2483,35 +2472,5 @@ canManageBuddy(task: any): boolean {
   }
 
 
-//   for "
-// The Buddy should only be able to view tasks for which they are assigned as a Buddy.
-//  The Buddy should not have permission to reassign any tasks. ,disable re-assignment"
-// Buddy on this task, but not assignee / assignor / admin
-isBuddyOnly(task: any): boolean {
-  if (this.isAdmin === 'Y') return false;
-  const uid = Number(this.userId);
-  return (
-    Number(task.buddyId) === uid &&
-    Number(task.assignedTo) !== uid &&
-    Number(task.addedBy) !== uid
-  );
-}
 
-// Re-assign link visibility / permission
-canReassign(task: any): boolean {
-  return (
-    Number(task.status) === 1 &&
-    (task.taskStatus === 1 || task.taskStatus === 3) &&
-    task.taskCategoryId !== 1 &&
-    task.userType !== 2 &&
-    !this.isBuddyOnly(task)
-  );
-}
-
-// Assign (unassigned task) or Re-assign (assigned task)
-canAssignUser(task: any): boolean {
-  if (Number(task.status) !== 1 || this.isBuddyOnly(task)) return false;
-  const unassigned = !task.assignedToName || task.assignedToName === '0';
-  return unassigned || this.canReassign(task);
-}
 }
