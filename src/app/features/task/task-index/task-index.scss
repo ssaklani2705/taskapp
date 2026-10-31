@@ -79,15 +79,7 @@
   overflow-wrap: anywhere;
 }
 
-.collapse-btn {
-  padding: 5px 7px;
-  border: 0;
-  background: transparent;
-  color: var(--primary-blue);
-  font-size: 13px;
-  cursor: pointer;
-  flex-shrink: 0;
-}
+
 
 .search-panel {
   width: 100%;
@@ -3950,4 +3942,31 @@ textarea.manager-select::placeholder {
 .assign-date-input[readonly] {
   user-select: none;
   pointer-events: none;
+}
+
+
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--navy);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.page-title mat-icon {
+  width: 27px;
+  height: 27px;
+  font-size: 27px;
+  color: var(--primary-blue);
+}
+
+.page-title mat-icon {
+  width: 27px;
+  height: 27px;
+  font-size: 27px;
+  color: var(--primary-blue);
 }

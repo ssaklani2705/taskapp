@@ -1214,3 +1214,40 @@
   color: #dc2626;   /* red */
   margin-left: 6px;
 }
+
+
+/* ================================================
+   DESCRIPTION - LARGER TEXTAREA + CHAR COUNTER
+================================================ */
+.user-textarea.description-textarea {
+  height: 180px !important;
+  min-height: 180px !important;
+  resize: vertical !important;
+}
+
+.description-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 5px;
+
+  .user-error {
+    margin-top: 0;
+    flex: 1;
+  }
+}
+
+.char-counter {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 12px;
+  line-height: 17px;
+  color: #66727d;
+  white-space: nowrap;
+}
+
+.char-counter-limit {
+  color: #dc3545;
+  font-weight: 600;
+}

@@ -127,6 +127,9 @@ export class AddIndexComponent implements OnInit {
   dashboardFilter: string = '';
   categoryIds: number[] = [];
 
+  // Max characters allowed in Description (keep in sync with DB column / backend validation)
+readonly descriptionMaxLength = 2000;
+
   ngOnInit(): void {
     const savedFilter = sessionStorage.getItem(SESSION_KEYS.TASK_MASTER_FILTER);
 

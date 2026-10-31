@@ -387,20 +387,25 @@
               </div>
             </div>
 
-            <!-- Description -->
+
+            <!-- Priority -->
             <div class="user-form-col">
               <div class="user-form-group">
                 <label class="user-label">
-                  Description
+                  Priority
                   <span class="required">*</span>
                 </label>
-
-                <textarea class="user-input user-textarea" placeholder="Enter Task Description" [(ngModel)]="task.description" name="description" required maxlength="5000" #descriptionCtrl="ngModel">
-                </textarea>
-
-                <div class="user-error" *ngIf="descriptionCtrl.invalid && descriptionCtrl.touched">Description is required</div>
+                <select class="user-input user-select" [(ngModel)]="task.priority" name="priority" required #priorityCtrl="ngModel">
+                  <option [ngValue]="null">Select Priority</option>
+                  <option [ngValue]="1">High</option>
+                  <option [ngValue]="2">Medium</option>
+                  <option [ngValue]="3">Low</option>
+                </select>
+                <div class="user-error" *ngIf="priorityCtrl.invalid && priorityCtrl.touched">Priority is required</div>
               </div>
             </div>
+
+           
 
             <!-- Upload File 1 -->
             <div class="user-form-col">
@@ -466,22 +471,8 @@
               </div>
             </div>
 
-            <!-- Priority -->
-            <div class="user-form-col">
-              <div class="user-form-group">
-                <label class="user-label">
-                  Priority
-                  <span class="required">*</span>
-                </label>
-                <select class="user-input user-select" [(ngModel)]="task.priority" name="priority" required #priorityCtrl="ngModel">
-                  <option [ngValue]="null">Select Priority</option>
-                  <option [ngValue]="1">High</option>
-                  <option [ngValue]="2">Medium</option>
-                  <option [ngValue]="3">Low</option>
-                </select>
-                <div class="user-error" *ngIf="priorityCtrl.invalid && priorityCtrl.touched">Priority is required</div>
-              </div>
-            </div>
+            
+            
 
             <!-- Status (edit only) -->
             <div class="user-form-col" *ngIf="isEditMode">
@@ -499,7 +490,36 @@
                 <div class="user-error" *ngIf="statusCtrl.invalid && statusCtrl.touched">Status is required</div>
               </div>
             </div>
+            
           </div>
+
+ <!-- Description (full row, last) -->
+            <div class="user-form-col user-form-col-full">
+              <div class="user-form-group">
+                <label class="user-label">
+                  Description
+                  <span class="required">*</span>
+                </label>
+
+                <textarea
+                  class="user-input user-textarea description-textarea"
+                  placeholder="Enter Task Description"
+                  [(ngModel)]="task.description"
+                  name="description"
+                  required
+                  [maxlength]="descriptionMaxLength"
+                  #descriptionCtrl="ngModel"
+                ></textarea>
+
+                <div class="description-footer">
+                  <div class="user-error" *ngIf="descriptionCtrl.invalid && (descriptionCtrl.touched || taskForm.submitted)">Description is required</div>
+                  <div class="char-counter" [class.char-counter-limit]="(task.description?.length || 0) >= descriptionMaxLength">
+                    {{ task.description?.length || 0 }} / {{ descriptionMaxLength }}
+                  </div>
+                </div>
+              </div>
+            </div>
+
           <div class="user-buttons">
             <button type="button" class="user-reset-btn" (click)="onReset()">Reset</button>
             <button type="submit" class="user-submit-btn" [disabled]="taskForm.invalid || pdfError || zipError || holidayError">
