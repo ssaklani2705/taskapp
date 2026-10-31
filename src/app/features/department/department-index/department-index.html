@@ -3,7 +3,7 @@
     <div class="user-management-container">
 
       <div class="page-header">
-        <div class="header-title-section">
+        <!-- <div class="header-title-section">
           <mat-icon> apartment </mat-icon>
 
           <h2>Department Master</h2>
@@ -17,7 +17,25 @@
           >
             {{ isPanelVisible ? '▲' : '▼' }}
           </button>
-        </div>
+        </div> -->
+         <div class="page-title">
+        <mat-icon>apartment</mat-icon>
+        <span>Department Master</span>
+
+        <a
+          type="button"
+          class="collapse-btn"
+          (click)="togglePanel()"
+          [attr.aria-expanded]="isPanelVisible"
+          title="Toggle Search Panel"
+        >
+          @if (isPanelVisible) {
+            <i class="fa-solid fa-angle-up"></i>
+          } @else {
+            <i class="fa-solid fa-angle-down"></i>
+          }
+        </a>
+      </div>
 
         <!-- ADD NEW -->
         @if (addPer === 'Y') {

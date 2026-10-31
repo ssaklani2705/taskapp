@@ -4,6 +4,19 @@
       <div class="page-title">
         <mat-icon>event_note</mat-icon>
         <span>Plan Master</span>
+        <a
+          type="button"
+          class="collapse-btn"
+          (click)="togglePanel()"
+          [attr.aria-expanded]="isPanelVisible"
+          title="Toggle Search Panel"
+        >
+          @if (isPanelVisible) {
+            <i class="fa-solid fa-angle-up"></i>
+          } @else {
+            <i class="fa-solid fa-angle-down"></i>
+          }
+        </a>
       </div>
 
       <div class="header-action">
@@ -18,7 +31,7 @@
 
     <mat-divider></mat-divider>
 
-    <div class="search-section">
+    <div class="search-section" *ngIf="isPanelVisible">
       <div class="search-grid">
         <!-- Plan Name / Description Search -->
         <div class="search-field search-name">

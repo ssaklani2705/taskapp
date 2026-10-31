@@ -546,8 +546,7 @@ mat-divider,
   border-spacing: 0;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, sans-serif;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 /* column widths (<colgroup> in the HTML) */
@@ -561,14 +560,14 @@ mat-divider,
 
 /* header + body cells */
 .designation-table thead th {
-  height: 47px;
+  height: 44px;
   padding: 8px 12px;
   background: var(--table-header);
   border-style: solid;
   border-color: var(--border);
   border-width: 1px 1px 1px 0;
   color: #172f4c;
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   font-size: 14px;
   font-weight: 700;
@@ -576,15 +575,15 @@ mat-divider,
 }
 
 .designation-table tbody td {
-  height: 54px;
+  height: 44px;
   padding: 8px 12px;
   background: var(--white);
   border-style: solid;
   border-color: var(--border);
   border-width: 0 1px 1px 0;
   color: var(--text);
-  text-align: center;
-  vertical-align: middle;
+  text-align: left;
+  vertical-align: top;
   box-sizing: border-box;
 }
 
@@ -612,7 +611,7 @@ mat-divider,
 .column-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 8px;
   white-space: nowrap;
 }
@@ -675,7 +674,7 @@ mat-divider,
 /* ---------- cell content ---------- */
 
 .serial-column {
-  text-align: center !important;
+  text-align: center;
 }
 
 .serial-cell {
@@ -691,7 +690,7 @@ mat-divider,
 
 .user-name {
   color: var(--navy);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
 }
 

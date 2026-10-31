@@ -5,9 +5,22 @@
         <div class="header-title-section">
           <mat-icon>task_alt</mat-icon>
           <h2>Tasks</h2>
-          <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
+          <a
+          type="button"
+          class="collapse-btn"
+          (click)="togglePanel()"
+          [attr.aria-expanded]="isPanelVisible"
+          title="Toggle Search Panel"
+        >
+          @if (isPanelVisible) {
+            <i class="fa-solid fa-angle-up"></i>
+          } @else {
+            <i class="fa-solid fa-angle-down"></i>
+          }
+        </a>
+          <!-- <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
             {{ isPanelVisible ? '▲' : '▼' }}
-          </button>
+          </button> -->
         </div>
         @if (addPer === 'Y') {
           <button type="button" class="btn-add-user" (click)="addTask()">

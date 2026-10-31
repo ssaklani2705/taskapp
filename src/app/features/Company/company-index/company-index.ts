@@ -143,6 +143,8 @@ export class CompanyIndex implements OnInit {
       }
     }
 
+    
+
     this.restoreFilterState();
     this.loadStates();
     this.getCompanyList();

@@ -125,6 +125,11 @@ export class RatingReport implements OnInit {
     this.loadDepartments();
   }
 
+   isPanelVisible = true;
+ togglePanel() {
+    this.isPanelVisible = !this.isPanelVisible;
+  }
+
   private formatDate(date: Moment | null): string | null {
     if (!date || !date.isValid()) {
       return null;

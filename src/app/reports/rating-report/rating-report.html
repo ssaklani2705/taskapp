@@ -5,13 +5,26 @@
       <div class="page-title">
         <mat-icon>star_rate</mat-icon>
         <span>Rating Report</span>
+        <a
+          type="button"
+          class="collapse-btn"
+          (click)="togglePanel()"
+          [attr.aria-expanded]="isPanelVisible"
+          title="Toggle Search Panel"
+        >
+          @if (isPanelVisible) {
+            <i class="fa-solid fa-angle-up"></i>
+          } @else {
+            <i class="fa-solid fa-angle-down"></i>
+          }
+        </a>
       </div>
     </div>
 
     <mat-divider></mat-divider>
 
     <!-- ================= SEARCH ================= -->
-    <div class="search-section">
+    <div class="search-section" *ngIf="isPanelVisible">
       <div class="search-grid">
         <!-- Row 1: User Name -->
         <div class="search-field">
