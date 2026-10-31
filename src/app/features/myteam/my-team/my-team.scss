@@ -87,23 +87,6 @@
   font-size: 22px;
 }
 
-.collapse-btn {
-  width: 28px;
-  height: 28px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--primary-blue);
-  font-size: 12px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.collapse-btn:hover {
-  color: var(--primary-blue-dark);
-}
 
 .btn-add-user {
   height: 38px;
@@ -1104,4 +1087,24 @@
       width: 100%;
     }
   }
+}
+
+
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--navy);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 27px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.page-title mat-icon {
+  width: 27px;
+  height: 27px;
+  font-size: 27px;
+  color: var(--primary-blue);
 }

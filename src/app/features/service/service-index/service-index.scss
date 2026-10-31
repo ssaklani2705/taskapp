@@ -1,7 +1,3 @@
-/* =========================================================
-   SERVICE MASTER (LIST PAGE) - same look as Company Master
-========================================================= */
-
 :host {
   --navy: #19345a;
   --navy-dark: #152f54;
@@ -24,15 +20,10 @@
   --danger-bg: #fff0f0;
 
   --control-h: 42px;
-
   display: block;
   width: 100%;
   color: var(--text);
 }
-
-/* =========================================================
-   PAGE / CARD / HEADER
-========================================================= */
 
 .page-container {
   width: 100%;
@@ -116,10 +107,6 @@ mat-divider,
 ::ng-deep .mat-mdc-divider {
   border-top-color: var(--border) !important;
 }
-
-/* =========================================================
-   SEARCH / FILTERS
-========================================================= */
 
 .search-section {
   width: 100%;
@@ -269,10 +256,6 @@ mat-divider,
   transform: scale(0.98);
 }
 
-/* =========================================================
-   TABLE SECTION / TOOLBAR / PAGINATION
-========================================================= */
-
 .table-section {
   width: 100%;
   padding: 0 20px 20px;
@@ -354,10 +337,6 @@ mat-divider,
   color: var(--white);
 }
 
-/* =========================================================
-   TABLE (light header, same as Company Master)
-========================================================= */
-
 .table-wrapper {
   width: 100%;
   max-width: 100%;
@@ -403,10 +382,15 @@ mat-divider,
   font-size: 15px;
 }
 
-/* column widths (<colgroup>); Service Name takes the remaining space */
-.designation-table .col-serial { width: 80px; }
-.designation-table .col-status { width: 140px; }
-.designation-table .col-action { width: 160px; }
+.designation-table .col-serial {
+  width: 80px;
+}
+.designation-table .col-status {
+  width: 140px;
+}
+.designation-table .col-action {
+  width: 160px;
+}
 
 .designation-table thead th {
   height: 47px;
@@ -416,7 +400,7 @@ mat-divider,
   border-color: var(--border);
   border-width: 1px 1px 1px 0;
   color: #172f4c;
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   font-size: 14px;
   font-weight: 700;
@@ -431,7 +415,7 @@ mat-divider,
   border-color: var(--border);
   border-width: 0 1px 1px 0;
   color: var(--text);
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   box-sizing: border-box;
 }
@@ -445,7 +429,6 @@ mat-divider,
   background: var(--table-hover);
 }
 
-/* sorting */
 .designation-table th.sortable-column {
   cursor: pointer;
   user-select: none;
@@ -488,7 +471,6 @@ mat-divider,
   color: var(--primary-blue);
 }
 
-/* cell content */
 .serial-column {
   text-align: center !important;
 }
@@ -507,21 +489,21 @@ mat-divider,
 .user-name {
   color: var(--navy);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .status-cell {
-  text-align: center !important;
+  text-align: left !important;
   vertical-align: middle !important;
 }
 
 .action-column {
-  text-align: center;
+  text-align: left;
 }
 
 .action-cell {
   white-space: nowrap;
-  text-align: center !important;
+  text-align: left !important;
 }
 
 .action-button {
@@ -581,7 +563,6 @@ mat-divider,
   border-color: var(--danger);
 }
 
-/* status badge */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -621,7 +602,6 @@ mat-divider,
   border: 1px solid #efcaca;
 }
 
-/* no records */
 .no-records {
   height: 150px;
   padding: 20px !important;
@@ -641,10 +621,6 @@ mat-divider,
   color: var(--primary-blue);
   font-size: 20px;
 }
-
-/* =========================================================
-   RESPONSIVE
-========================================================= */
 
 @media (max-width: 1200px) {
   .page-container {
