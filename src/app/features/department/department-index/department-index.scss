@@ -301,7 +301,7 @@
 }
 
 .user-table thead th {
-  height: 44px;
+  // height: 59px;
   padding: 8px 12px;
   box-sizing: border-box;
   background: #edf4f8;
@@ -314,7 +314,7 @@
 }
 
 .user-table tbody td {
-  height: 58px;
+  // height: 58px;
   padding: 8px 14px;
   box-sizing: border-box;
   border: 1px solid var(--border);
@@ -357,7 +357,7 @@
 .column-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 7px;
 }
 
@@ -715,13 +715,13 @@
   }
 
   .user-table thead th {
-    height: 52px;
+    // height: 52px;
     padding: 7px 9px;
     font-size: 13px;
   }
 
   .user-table tbody td {
-    height: 54px;
+    // height: 54px;
     padding: 7px 9px;
     font-size: 13px;
   }
@@ -825,13 +825,13 @@
   }
 
   .user-table thead th {
-    height: 50px;
+    // height: 50px;
     padding: 6px 8px;
     font-size: 12px;
   }
 
   .user-table tbody td {
-    height: 52px;
+    // height: 52px;
     padding: 6px 8px;
     font-size: 12px;
   }

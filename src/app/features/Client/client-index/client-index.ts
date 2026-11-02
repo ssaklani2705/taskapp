@@ -826,7 +826,7 @@ export class ClientIndex {
           }
 
           const exportData = allClients.map((client: Client, index: number) => ({
-            'Sr. No.': index + 1,
+            '#': index + 1,
             'Society Manager': client.managerName || '',
             'Client Name': client.name || '',
             'Client Code': client.code || '',

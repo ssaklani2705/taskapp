@@ -499,7 +499,7 @@ mat-divider {
   background: var(--table-header);
   border: 1px solid var(--border);
   color: #172f4c;
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   font-size: 14px;
   font-weight: 700;
@@ -511,12 +511,12 @@ mat-divider {
 ========================================================= */
 
 .designation-table tbody td {
-  min-height: 54px;
+  // min-height: 54px;
   padding: 10px;
   background: var(--white);
   border: 1px solid var(--border);
   color: var(--text);
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   box-sizing: border-box;
   line-height: 20px;
@@ -673,14 +673,14 @@ mat-divider {
 
 .designation-table th:last-child,
 .designation-table td:last-child {
-  text-align: center !important;
+  text-align: left !important;
   white-space: nowrap;
   padding: 8px 6px;
 }
 
 .action-cell {
   white-space: nowrap;
-  text-align: center !important;
+  text-align: left !important;
 }
 
 .action-buttons {
@@ -1024,3 +1024,4 @@ mat-divider {
     flex: 1;
   }
 }
+

@@ -466,7 +466,7 @@ excelFileInput!: ElementRef<HTMLInputElement>;
           }
 
           const exportData = allHolidays.map((holiday: Holiday, index: number) => ({
-            'Sr. No.': index + 1,
+            '#': index + 1,
             'Holiday Name': holiday.name || '',
             'Start Date': holiday.startDate ? this.formatExcelDate(holiday.startDate) : '',
             'End Date': holiday.endDate ? this.formatExcelDate(holiday.endDate) : '',

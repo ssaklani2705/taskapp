@@ -465,7 +465,7 @@ export class ReassignSummaryReport implements OnInit {
   private downloadExcel(data: ReassignRow[]): void {
     try {
       const rows = data.map((row, index) => ({
-        'Sr. No.': index + 1,
+        '#': index + 1,
         User: row.userName ?? '',
         Count: row.taskCount ?? 0,
       }));

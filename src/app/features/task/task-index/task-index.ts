@@ -1296,7 +1296,7 @@ export class TaskIndex implements OnInit {
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
 
     worksheet['!cols'] = [
-      { wch: 8 }, // Sr. No.
+      { wch: 8 }, // #
       { wch: 35 }, // Title
       { wch: 25 }, // Client
       { wch: 20 }, // Date

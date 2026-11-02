@@ -5,13 +5,7 @@
         <mat-icon>location_on</mat-icon>
         <span>State Master</span>
 
-        <a
-          type="button"
-          class="collapse-btn"
-          (click)="togglePanel()"
-          [attr.aria-expanded]="isPanelVisible"
-          title="Toggle Search Panel"
-        >
+        <a type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
           @if (isPanelVisible) {
             <i class="fa-solid fa-angle-up"></i>
           } @else {
@@ -39,12 +33,7 @@
           <label>State Name</label>
 
           <div class="search-input-wrapper">
-            <input
-              type="text"
-              [(ngModel)]="searchQuery"
-              placeholder="Search by State Code / State Name"
-              (keyup.enter)="onSearch()"
-            />
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search by State Code / State Name" (keyup.enter)="onSearch()" />
 
             <button type="button" class="search-button" (click)="onSearch()">
               <mat-icon>search</mat-icon>
@@ -74,9 +63,7 @@
           </button>
           &nbsp;
           <!-- Clear -->
-          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
-            Clear
-          </button>
+          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
         </div>
       </div>
     </div>
@@ -95,17 +82,11 @@
 
           <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-            Next ›
-          </button>
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
 
           <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
@@ -116,24 +97,18 @@
         <table class="designation-table">
           <thead>
             <tr>
-              <th class="serial-column">Sr. No.</th>
+              <th class="serial-column">#</th>
 
-              <th
-                *ngFor="let col of columns"
-                [class.sortable]="col.sortable"
-                (click)="col.sortable && sortData(col.key)"
-              >
-                <span>{{ col.label }}</span>
+              <th *ngFor="let col of columns" [class.sortable]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                <div class="column-header">
+                  <span>{{ col.label }}</span>
 
-                <span *ngIf="col.sortable" class="sort-icons">
-                  <span [class.active]="sortColumn === col.key && sortDirection === 'asc'">
-                    ▲
+                  <span *ngIf="col.sortable" class="sort-icons">
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
                   </span>
-
-                  <span [class.active]="sortColumn === col.key && sortDirection === 'desc'">
-                    ▼
-                  </span>
-                </span>
+                </div>
               </th>
 
               <th class="action-column">Action</th>
@@ -160,29 +135,20 @@
 
               <td class="action-cell">
                 @if (viewPer === 'Y') {
-                  <button
-                    class="action-button view-button"
-                    (click)="viewTaskCategory(rows.stateId)"
-                  >
+                  <button class="action-button view-button" (click)="viewTaskCategory(rows.stateId)">
                     <mat-icon>visibility</mat-icon>
                   </button>
                 }
 
                 <ng-container *ngIf="rows.status === 1 || rows.status === 2">
                   @if (editPer === 'Y') {
-                    <button
-                      class="action-button edit-button"
-                      (click)="editTaskCategory(rows.stateId)"
-                    >
+                    <button class="action-button edit-button" (click)="editTaskCategory(rows.stateId)">
                       <mat-icon>edit</mat-icon>
                     </button>
                   }
 
                   @if (deletePer === 'Y') {
-                    <button
-                      class="action-button delete-button"
-                      (click)="onDeleteState(rows.stateId)"
-                    >
+                    <button class="action-button delete-button" (click)="onDeleteState(rows.stateId)">
                       <mat-icon>delete</mat-icon>
                     </button>
                   }
@@ -211,17 +177,11 @@
 
           <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
 
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
-            Next ›
-          </button>
+          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
 
           <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>

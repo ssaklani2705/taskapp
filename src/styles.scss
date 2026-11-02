@@ -193,3 +193,22 @@ body{
   margin: 0px;
 }
 .collapse-btn{font-size: 18px;margin-top: 5px;}
+
+
+
+
+.column-header {
+  min-height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+table thead {
+  height: 44px;
+}
+table thead tr th{
+  height: 44px;
+}
