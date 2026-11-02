@@ -179,6 +179,12 @@ export class TaskIndex implements OnInit {
     label: string;
     sortable: boolean;
   }[] = [
+
+    {
+      key: 'taskId',
+      label: 'Task Id',
+      sortable: true,
+    },
     {
       key: 'title',
       label: 'Title',
@@ -2477,4 +2483,8 @@ canAssignUser(task: any): boolean {
   return Number(task.buddyId) !== Number(this.userId);
 }
 
+getSortIcon(column: string): string {
+  if (this.sortColumn !== column) return 'fa-sort';
+  return this.sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+}
 }

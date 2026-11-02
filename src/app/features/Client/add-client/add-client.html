@@ -45,7 +45,12 @@
                       <div class="cat-list">
                         <div class="cat-item" [class.active]="!clientForm.get('managerId')?.value" (click)="selectOption('managerId', null)">Select Society Manager</div>
 
-                        <div class="cat-item" *ngFor="let manager of filteredManagers" [class.active]="manager.userId === clientForm.get('managerId')?.value" (click)="selectOption('managerId', manager.userId)">
+                        <div
+                          class="cat-item"
+                          *ngFor="let manager of filteredManagers"
+                          [class.active]="manager.userId === clientForm.get('managerId')?.value"
+                          (click)="selectOption('managerId', manager.userId)"
+                        >
                           {{ manager.firstName }}
                         </div>
 
@@ -90,6 +95,15 @@
                   <div class="user-error" *ngIf="clientForm.get('code')?.touched && clientForm.get('code')?.invalid">Client Code is required</div>
                 </div>
               </div>
+              <!-- TDS Applicable -->
+              <div class="user-form-col">
+                <div class="user-form-group">
+                  <label class="user-label"> TDS Applicable </label>
+                  <div class="admin-row">
+                    <mat-checkbox formControlName="taxFlag"></mat-checkbox>
+                  </div>
+                </div>
+              </div>
               <!-- PAN -->
               <div class="user-form-col">
                 <div class="user-form-group">
@@ -102,6 +116,9 @@
                   <div class="user-error" *ngIf="clientForm.get('pan')?.touched && clientForm.get('pan')?.errors?.['pattern']">Enter a valid PAN (e.g. GRBPA4562J)</div>
                 </div>
               </div>
+            </div>
+            <!-- ROW 3 -->
+            <div class="user-form-row">
               <!-- GST Applicable -->
               <div class="user-form-col">
                 <div class="user-form-group">
@@ -111,9 +128,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <!-- ROW 3 -->
-            <div class="user-form-row">
               <!-- GST Number -->
               <div class="user-form-col">
                 <div class="user-form-group">
@@ -126,15 +140,7 @@
                   <div class="user-error" *ngIf="clientForm.get('gstNo')?.touched && clientForm.get('gstNo')?.errors?.['pattern']">Enter a valid GST Number</div>
                 </div>
               </div>
-              <!-- TDS Applicable -->
-              <div class="user-form-col">
-                <div class="user-form-group">
-                  <label class="user-label"> TDS Applicable </label>
-                  <div class="admin-row">
-                    <mat-checkbox formControlName="taxFlag"></mat-checkbox>
-                  </div>
-                </div>
-              </div>
+
               <div class="user-form-col empty-column"></div>
               <div class="user-form-col empty-column"></div>
             </div>
