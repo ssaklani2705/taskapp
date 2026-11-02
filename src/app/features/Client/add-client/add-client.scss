@@ -52,31 +52,31 @@
   align-items: center;
 }
 
-.back-index-btn {
-  height: 44px !important;
-  min-width: 176px;
-  padding: 0 20px !important;
-  border: 0 !important;
-  border-radius: 4px !important;
-  background: #1b3b63 !important;
-  color: #ffffff !important;
-  font-family: "Open Sans", sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+// .back-index-btn {
+//   height: 44px !important;
+//   min-width: 176px;
+//   padding: 0 20px !important;
+//   border: 0 !important;
+//   border-radius: 4px !important;
+//   background: #1b3b63 !important;
+//   color: #ffffff !important;
+//   font-family: "Open Sans", sans-serif !important;
+//   font-size: 14px !important;
+//   font-weight: 600 !important;
+//   cursor: pointer;
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
 
-  transition:
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
+//   transition:
+//     background-color 0.2s ease,
+//     box-shadow 0.2s ease;
+// }
 
-.back-index-btn:hover {
-  background: #244c7b !important;
-  color: #ffffff !important;
-}
+// .back-index-btn:hover {
+//   background: #244c7b !important;
+//   color: #ffffff !important;
+// }
 
 .user-portlet-body {
   width: 100%;

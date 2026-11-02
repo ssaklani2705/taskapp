@@ -131,48 +131,48 @@
 }
 
 
-.back-index-btn {
-    height: 44px !important;
+// .back-index-btn {
+//     height: 44px !important;
 
-    min-width: 176px;
+//     min-width: 176px;
 
-    padding: 0 20px !important;
+//     padding: 0 20px !important;
 
-    border: 0 !important;
+//     border: 0 !important;
 
-    border-radius: 4px !important;
+//     border-radius: 4px !important;
 
-    background: var(--navy) !important;
+//     background: var(--navy) !important;
 
-    color: #ffffff !important;
+//     color: #ffffff !important;
 
-    font-family: "Open Sans", sans-serif !important;
+//     font-family: "Open Sans", sans-serif !important;
 
-    font-size: 14px !important;
+//     font-size: 14px !important;
 
-    font-weight: 600 !important;
+//     font-weight: 600 !important;
 
-    line-height: 1.2;
+//     line-height: 1.2;
 
-    cursor: pointer;
+//     cursor: pointer;
 
-    display: inline-flex;
+//     display: inline-flex;
 
-    align-items: center;
+//     align-items: center;
 
-    justify-content: center;
+//     justify-content: center;
 
-    transition:
-        background-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
+//     transition:
+//         background-color 0.2s ease,
+//         box-shadow 0.2s ease;
+// }
 
 
-.back-index-btn:hover {
-    background: var(--navy-hover) !important;
+// .back-index-btn:hover {
+//     background: var(--navy-hover) !important;
 
-    color: #ffffff !important;
-}
+//     color: #ffffff !important;
+// }
 
 
 /* =========================================================
@@ -861,58 +861,6 @@
 }
 
 
-/* =========================================================
-   OLD BACK-BUTTON CLASS
-   If used elsewhere in this component
-   ========================================================= */
-
-.back-button {
-    height: 38px !important;
-
-    min-width: 130px;
-
-    padding: 0 18px !important;
-
-    border-radius: 4px !important;
-
-    background: var(--navy) !important;
-
-    color: #ffffff !important;
-
-    font-family: "Open Sans", sans-serif !important;
-
-    font-size: 14px !important;
-
-    font-weight: 600 !important;
-
-    box-shadow: none !important;
-
-    display: inline-flex !important;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 5px;
-
-    border: 0 !important;
-
-    cursor: pointer;
-}
-
-
-.back-button:hover {
-    background: var(--navy-hover) !important;
-}
-
-
-.back-button mat-icon {
-    width: 18px;
-
-    height: 18px;
-
-    font-size: 18px;
-}
 
 
 /* =========================================================

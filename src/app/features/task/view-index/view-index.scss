@@ -162,59 +162,59 @@
 }
 
 
-.back-button {
+// .back-button {
 
-  height: 38px !important;
+//   height: 38px !important;
 
-  min-width: 130px;
+//   min-width: 130px;
 
-  padding: 0 18px !important;
+//   padding: 0 18px !important;
 
-  border-radius: 4px !important;
+//   border-radius: 4px !important;
 
-  border: none;
+//   border: none;
 
-  background: var(--navy) !important;
+//   background: var(--navy) !important;
 
-  color: var(--white) !important;
+//   color: var(--white) !important;
 
-  font-family: Arial, sans-serif;
+//   font-family: Arial, sans-serif;
 
-  font-size: 14px !important;
+//   font-size: 14px !important;
 
-  font-weight: 600 !important;
+//   font-weight: 600 !important;
 
-  box-shadow: none !important;
+//   box-shadow: none !important;
 
-  display: inline-flex !important;
+//   display: inline-flex !important;
 
-  align-items: center;
+//   align-items: center;
 
-  justify-content: center;
+//   justify-content: center;
 
-  gap: 5px;
+//   gap: 5px;
 
-  cursor: pointer;
+//   cursor: pointer;
 
-}
-
-
-.back-button:hover {
-
-  background: var(--navy-dark) !important;
-
-}
+// }
 
 
-.back-button mat-icon {
+// .back-button:hover {
 
-  width: 18px;
+//   background: var(--navy-dark) !important;
 
-  height: 18px;
+// }
 
-  font-size: 18px;
 
-}
+// .back-button mat-icon {
+
+//   width: 18px;
+
+//   height: 18px;
+
+//   font-size: 18px;
+
+// }
 
 
 /* =========================================================

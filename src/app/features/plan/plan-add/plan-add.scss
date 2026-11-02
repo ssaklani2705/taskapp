@@ -106,39 +106,39 @@
   flex-shrink: 0;
 }
 
-.back-index-btn {
-  min-width: 180px;
-  height: 44px;
-  padding: 0 20px;
+// .back-index-btn {
+//   min-width: 180px;
+//   height: 44px;
+//   padding: 0 20px;
 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   gap: 6px;
 
-  border: none;
-  border-radius: 4px;
+//   border: none;
+//   border-radius: 4px;
 
-  background: var(--navy);
-  color: var(--white);
+//   background: var(--navy);
+//   color: var(--white);
 
-  font-family: "Open Sans", sans-serif !important;
-  font-size: 15px;
-  font-weight: 600;
+//   font-family: "Open Sans", sans-serif !important;
+//   font-size: 15px;
+//   font-weight: 600;
 
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
+//   cursor: pointer;
+//   transition: background 0.2s ease;
+// }
 
-.back-index-btn mat-icon {
-  width: 22px;
-  height: 22px;
-  font-size: 22px;
-}
+// .back-index-btn mat-icon {
+//   width: 22px;
+//   height: 22px;
+//   font-size: 22px;
+// }
 
-.back-index-btn:hover {
-  background: var(--navy-hover);
-}
+// .back-index-btn:hover {
+//   background: var(--navy-hover);
+// }
 
 /* =========================================================
    BODY
