@@ -383,7 +383,7 @@ mat-divider,
   background: var(--white);
   color: var(--text);
   font-family: Arial, sans-serif;
-  font-size: 15px;
+  font-size: 13px;
 }
 
 .designation-table .col-serial {
@@ -442,13 +442,13 @@ mat-divider,
   background: #e4eef5;
 }
 
-// .column-header {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   gap: 8px;
-//   white-space: nowrap;
-// }
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
 
 .sort-icons {
   display: inline-flex;
