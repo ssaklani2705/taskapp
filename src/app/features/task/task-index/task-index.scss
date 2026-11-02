@@ -558,7 +558,7 @@
 }
 
 .user-table thead th {
-  height: 58px;
+  // height: 58px;
   padding: 8px 8px;
   background: var(--table-header);
   border: 0;
@@ -566,7 +566,7 @@
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   color: #172f4c;
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   font-size: 13px;
   font-weight: 700;
@@ -582,18 +582,18 @@
 }
 
 .user-table tbody tr {
-  height: 58px;
+  // height: 58px;
 }
 
 .user-table tbody td {
-  height: 58px;
+  // height: 58px;
   padding: 8px 9px;
   background: var(--white);
   border: 0;
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   color: var(--text);
-  text-align: center;
+  text-align: left;
   vertical-align: middle;
   font-size: 13px;
   line-height: 1.35;
@@ -693,7 +693,7 @@
   white-space: normal;
   overflow-wrap: anywhere;
   word-break: normal;
-  text-align: center;
+  text-align: left;
 }
 
 .wrap-text {
@@ -2586,7 +2586,7 @@ textarea.manager-select::placeholder {
 
 .title-cell {
   display: flex;
-  align-items: center;
+  align-items: left;
   gap: 6px;
   min-width: 0;
 }

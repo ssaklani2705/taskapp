@@ -375,12 +375,12 @@ mat-divider {
   font-size: 15px;
 
   thead th {
-    height: 47px;
+    // height: 47px;
     padding: 8px 12px;
     background: var(--table-header);
     border: 1px solid var(--border);
     color: #172f4c;
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
     font-size: 14px;
     font-weight: 700;
@@ -388,12 +388,12 @@ mat-divider {
   }
 
   tbody td {
-    height: 54px;
+    // height: 54px;
     padding: 8px 12px;
     background: var(--white);
     border: 1px solid var(--border);
     color: var(--text);
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
     box-sizing: border-box;
   }
@@ -403,7 +403,7 @@ mat-divider {
   }
 
   /* column widths */
-  th:nth-child(1), td:nth-child(1) { width: 5%; }    /* Sr. No.   */
+  th:nth-child(1), td:nth-child(1) { width: 5%; }    /* #   */
   th:nth-child(2), td:nth-child(2) { width: 11%; }   /* Name      */
   th:nth-child(3), td:nth-child(3) { width: 19%; }   /* Email     */
   th:nth-child(4), td:nth-child(4) { width: 18%; }   /* Subject   */

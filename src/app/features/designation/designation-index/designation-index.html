@@ -4,20 +4,13 @@
       <div class="page-title">
         <mat-icon>badge</mat-icon>
         <span>Designation Master</span>
-        <a
-          type="button"
-          class="collapse-btn"
-          (click)="togglePanel()"
-          [attr.aria-expanded]="isPanelVisible"
-          title="Toggle Search Panel"
-        >
+        <a type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
           @if (isPanelVisible) {
             <i class="fa-solid fa-angle-up"></i>
           } @else {
             <i class="fa-solid fa-angle-down"></i>
           }
         </a>
-
       </div>
 
       <div class="header-action">
@@ -39,12 +32,7 @@
           <label> Designation Name </label>
 
           <div class="search-input-wrapper">
-            <input
-              type="text"
-              [(ngModel)]="searchQuery"
-              placeholder="Search by Designation Name"
-              (keyup.enter)="onSearch()"
-            />
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Designation Name" (keyup.enter)="onSearch()" />
 
             <button type="button" class="search-button" (click)="onSearch()" title="Search">
               <mat-icon>search</mat-icon>
@@ -73,9 +61,7 @@
 
           &nbsp;
           <!-- Clear -->
-          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
-            Clear
-          </button>
+          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
         </div>
       </div>
     </div>
@@ -89,34 +75,17 @@
         </div>
 
         <div class="pagination">
-          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">
-            « First
-          </button>
+          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-            ‹ Prev
-          </button>
+          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            type="button"
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button type="button" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
 
-          <button
-            type="button"
-            (click)="goToPage(currentPage + 1)"
-            [disabled]="currentPage === totalPages"
-          >
-            Next ›
-          </button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
 
-          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">
-            Last »
-          </button>
+          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
 
@@ -124,26 +93,20 @@
         <table class="designation-table">
           <thead>
             <tr>
-              <th class="serial-column">Sr. No.</th>
+              <th class="serial-column">#</th>
 
-              <th
-                *ngFor="let col of columns"
-                [class.sortable]="col.sortable"
-                (click)="col.sortable && sortData(col.key)"
-              >
-                <span>
-                  {{ col.label }}
-                </span>
-
-                <span *ngIf="col.sortable" class="sort-icons">
-                  <span [class.active]="sortColumn === col.key && sortDirection === 'asc'">
-                    ▲
+              <th *ngFor="let col of columns" [class.sortable]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                <div class="column-header">
+                  <span>
+                    {{ col.label }}
                   </span>
 
-                  <span [class.active]="sortColumn === col.key && sortDirection === 'desc'">
-                    ▼
+                  <span *ngIf="col.sortable" class="sort-icons">
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
                   </span>
-                </span>
+                </div>
               </th>
 
               <th class="action-column">Action</th>
@@ -178,12 +141,7 @@
               <td class="action-cell">
                 <!-- View -->
 
-                <button
-                  type="button"
-                  class="action-button view-button"
-                  title="View"
-                  (click)="viewDesignation(designation.desigmationId)"
-                >
+                <button type="button" class="action-button view-button" title="View" (click)="viewDesignation(designation.desigmationId)">
                   <mat-icon>visibility</mat-icon>
                 </button>
 
@@ -191,23 +149,13 @@
 
                 <ng-container *ngIf="designation.status === 1 || designation.status === 2">
                   @if (editPer === 'Y') {
-                    <button
-                      type="button"
-                      class="action-button edit-button"
-                      title="Edit"
-                      (click)="editDesignation(designation.desigmationId)"
-                    >
+                    <button type="button" class="action-button edit-button" title="Edit" (click)="editDesignation(designation.desigmationId)">
                       <mat-icon>edit</mat-icon>
                     </button>
                   }
 
                   @if (deletePer === 'Y') {
-                    <button
-                      type="button"
-                      class="action-button delete-button"
-                      title="Delete"
-                      (click)="onDeleteDesignation(designation.desigmationId)"
-                    >
+                    <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteDesignation(designation.desigmationId)">
                       <mat-icon>delete</mat-icon>
                     </button>
                   }
@@ -232,34 +180,17 @@
         </div>
 
         <div class="pagination">
-          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">
-            « First
-          </button>
+          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
-            ‹ Prev
-          </button>
+          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
-          <button
-            type="button"
-            *ngFor="let page of pages()"
-            (click)="goToPage(page)"
-            [class.active-pagination]="page === currentPage"
-          >
+          <button type="button" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
 
-          <button
-            type="button"
-            (click)="goToPage(currentPage + 1)"
-            [disabled]="currentPage === totalPages"
-          >
-            Next ›
-          </button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
 
-          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">
-            Last »
-          </button>
+          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
     </div>

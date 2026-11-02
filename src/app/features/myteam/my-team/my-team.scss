@@ -430,7 +430,7 @@
 /* Table header */
 
 .user-table thead th {
-  height: 43px;
+  // height: 43px;
   padding: 7px 10px;
   background: var(--table-header);
   border-right: 1px solid var(--border);
@@ -446,7 +446,7 @@
   min-height: 25px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   gap: 6px;
   white-space: nowrap;
 }
@@ -481,7 +481,7 @@
 /* Table body */
 
 .user-table tbody td {
-  height: 47px;
+  // height: 47px;
   padding: 8px 10px;
   background: var(--white);
   border-right: 1px solid var(--border);

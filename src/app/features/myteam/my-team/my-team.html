@@ -234,7 +234,7 @@
 
       <thead>
         <tr>
-          <th class="serial-column">Sr. No.</th>
+          <th class="serial-column">#</th>
 
           <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
             <div class="column-header">

@@ -447,12 +447,12 @@ mat-divider {
   font-size: 15px;
 
   thead th {
-    height: 47px;
+    // height: 47px;
     padding: 8px 12px;
     background: var(--table-header);
     border: 1px solid var(--border);
     color: #172f4c;
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
     font-size: 14px;
     font-weight: 700;
@@ -460,12 +460,12 @@ mat-divider {
   }
 
   tbody td {
-    height: 54px;
+    // height: 54px;
     padding: 8px 12px;
     background: var(--white);
     border: 1px solid var(--border);
     color: var(--text);
-    text-align: center;
+    text-align: left;
     vertical-align: middle;
     box-sizing: border-box;
   }

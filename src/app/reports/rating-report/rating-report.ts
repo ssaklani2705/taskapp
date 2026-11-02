@@ -328,7 +328,7 @@ export class RatingReport implements OnInit {
   private downloadExcel(data: UserAccessLog[]): void {
     try {
       const rows = data.map((log, index) => ({
-        'Sr. No.': index + 1,
+        '#': index + 1,
         'User Name': log.name ?? '',
         'Total Task': log.totalTasks ?? 0,
         'Rated Task': log.ratedTasks ?? 0,

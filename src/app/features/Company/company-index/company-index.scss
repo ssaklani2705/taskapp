@@ -560,7 +560,7 @@ mat-divider,
 
 /* header + body cells */
 .designation-table thead th {
-  height: 44px;
+  // height: 44px;
   padding: 8px 12px;
   background: var(--table-header);
   border-style: solid;
@@ -575,7 +575,7 @@ mat-divider,
 }
 
 .designation-table tbody td {
-  height: 44px;
+  // height: 44px;
   padding: 8px 12px;
   background: var(--white);
   border-style: solid;
@@ -701,12 +701,12 @@ mat-divider,
 }
 
 .status-cell {
-  text-align: center !important;
+  text-align: left !important;
   vertical-align: middle !important;
 }
 
 .description-cell {
-  text-align: center !important;
+  text-align: left !important;
   vertical-align: middle !important;
   white-space: normal !important;
   overflow-wrap: anywhere;
@@ -726,12 +726,12 @@ mat-divider,
 }
 
 .action-column {
-  text-align: center;
+  text-align: left;
 }
 
 .action-cell {
   white-space: nowrap;
-  text-align: center !important;
+  text-align: left !important;
 }
 
 .action-button {
@@ -1282,14 +1282,14 @@ mat-divider,
   }
 
   .designation-table thead th {
-    height: 44px;
+    // height: 44px;
     padding: 7px 8px;
     font-size: 12px;
     line-height: 17px;
   }
 
   .designation-table tbody td {
-    height: 50px;
+    // height: 50px;
     padding: 7px 8px;
     font-size: 13px;
     line-height: 18px;
@@ -1483,13 +1483,13 @@ mat-divider,
   }
 
   .designation-table thead th {
-    height: 43px;
+    // height: 43px;
     padding: 6px 7px;
     font-size: 11px;
   }
 
   .designation-table tbody td {
-    height: 49px;
+    // height: 49px;
     padding: 6px 7px;
     font-size: 12px;
   }
@@ -1581,13 +1581,13 @@ mat-divider,
   }
 
   .designation-table thead th {
-    height: 42px;
+    // height: 42px;
     padding: 5px 6px;
     font-size: 10px;
   }
 
   .designation-table tbody td {
-    height: 48px;
+    // height: 48px;
     padding: 5px 6px;
     font-size: 11px;
   }

@@ -4,13 +4,7 @@
       <div class="page-title">
         <mat-icon>miscellaneous_services</mat-icon>
         <span>Service Master</span>
-        <a
-          type="button"
-          class="collapse-btn"
-          (click)="togglePanel()"
-          [attr.aria-expanded]="isPanelVisible"
-          title="Toggle Search Panel"
-        >
+        <a type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
           @if (isPanelVisible) {
             <i class="fa-solid fa-angle-up"></i>
           } @else {
@@ -30,42 +24,44 @@
     </div>
 
     <mat-divider></mat-divider>
-
     <div class="search-section" *ngIf="isPanelVisible">
       <div class="search-grid">
-        <div class="search-row">
-          <!-- Search -->
-          <div class="search-wrapper">
-            <div class="search-box">
-              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Service Name" (keyup.enter)="onSearch()" class="search-input" />
+        <!-- Search -->
+        <div class="search-field search-name">
+          <label>Service Name</label>
 
-              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-          </div>
+          <div class="search-input-wrapper">
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Service Name" (keyup.enter)="onSearch()" class="search-input" />
 
-          <!-- Status -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
-              <option value="">--All Status--</option>
-              <option value="1">Active</option>
-              <option value="2">Inactive</option>
-              <option value="3">Deleted</option>
-            </select>
+            <button type="button" class="search-button" (click)="onSearch()">
+              <mat-icon>search</mat-icon>
+            </button>
           </div>
         </div>
 
-        <div class="filter-row">
-          <!-- GO -->
-          <div class="go-wrapper">
-            <button type="button" class="btn-go" (click)="onSearch()">Go</button>
-          </div>
+        <!-- Department -->
 
-          <!-- CLEAR -->
-          <div class="clear-wrapper">
-            <button type="button" class="btn-clear" (click)="clearFilters()">Clear</button>
-          </div>
+        <!-- Status -->
+        <div class="search-field">
+          <label>Status</label>
+
+          <select class="status-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
+            <option value="">--All Status--</option>
+            <option value="1">Active</option>
+            <option value="2">Inactive</option>
+            <option value="3">Deleted</option>
+          </select>
+        </div>
+
+        <!-- Go Button -->
+        <div class="filter-action">
+          <button type="button" class="go-button" (click)="onSearch()">
+            <mat-icon>search</mat-icon>
+            Go
+          </button>
+          &nbsp;
+          <!-- Clear -->
+          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
         </div>
       </div>
     </div>
@@ -106,7 +102,7 @@
 
           <thead>
             <tr>
-              <th class="serial-column">Sr. No.</th>
+              <th class="serial-column">#</th>
 
               <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
                 <div class="column-header">
