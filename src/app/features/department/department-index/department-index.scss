@@ -176,21 +176,28 @@
 
 .go-wrapper {
   flex: 0 0 auto;
+  width: 162px;
 }
 
-.btn-go {
-  height: 38px;
-  min-width: 75px;
-  padding: 0 15px;
-  border: 0;
-  border-radius: 3px;
-  background: var(--primary-blue);
-  color: #fff;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
+.filter-action {
+  display: flex;
+  align-items: flex-end;
+  width: 162px;
 }
+
+// .btn-go {
+//   height: 38px;
+//   min-width: 75px;
+//   padding: 0 15px;
+//   border: 0;
+//   border-radius: 3px;
+//   background: var(--primary-blue);
+//   color: #fff;
+//   font-family: Arial, sans-serif;
+//   font-size: 14px;
+//   font-weight: 600;
+//   cursor: pointer;
+// }
 
 .btn-clear {
   height: 38px;

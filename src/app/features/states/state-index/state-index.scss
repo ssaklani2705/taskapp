@@ -219,35 +219,36 @@ mat-divider {
 .filter-action {
   display: flex;
   align-items: flex-end;
+  width: 162px;
 }
 
-.go-button {
-  height: 40px;
-  min-width: 75px;
-  padding: 0 15px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  border: 0;
-  border-radius: 3px;
-  background: var(--primary-blue);
-  color: var(--white);
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
+// .go-button {
+//   height: 40px;
+//   min-width: 75px;
+//   padding: 0 15px;
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   gap: 5px;
+//   border: 0;
+//   border-radius: 3px;
+//   background: var(--primary-blue);
+//   color: var(--white);
+//   font-family: Arial, sans-serif;
+//   font-size: 14px;
+//   font-weight: 600;
+//   cursor: pointer;
+// }
 
-.go-button:hover {
-  background: var(--primary-blue-dark);
-}
+// .go-button:hover {
+//   background: var(--primary-blue-dark);
+// }
 
-.go-button mat-icon {
-  width: 17px;
-  height: 17px;
-  font-size: 17px;
-}
+// .go-button mat-icon {
+//   width: 17px;
+//   height: 17px;
+//   font-size: 17px;
+// }
 
 .table-section {
   width: 100%;

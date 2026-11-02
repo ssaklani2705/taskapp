@@ -14,14 +14,14 @@
   --success-bg: #e5f3ee;
 }
 
-.mat-icon {
-  color: var(--primary-blue);
-}
+// .mat-icon {
+//   color: var(--primary-blue);
+// }
 
 .page-content-wrapper {
   width: 100%;
   min-height: 100%;
-  background: var(--page-bg);
+  // background: var(--page-bg);
 }
 
 .page-content {
@@ -405,6 +405,11 @@
   border-top: 1px solid var(--border);
 }
 
+.filter-action {
+  display: flex;
+  align-items: flex-end;
+  width: 162px;
+}
 // .record-summary {
 //   color: #58718a;
 //   font-family: Arial, sans-serif;

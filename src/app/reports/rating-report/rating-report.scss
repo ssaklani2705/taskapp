@@ -179,6 +179,15 @@ mat-divider {
   gap: 10px;
   flex-wrap: wrap;
   padding-top: 2px;
+  
+}
+
+.filter-action .go-button {
+  width: 72px !important;
+}
+
+.filter-action .btn-clear{
+  width: 72px !important;
 }
 
 .filter-action .go-button,
@@ -186,6 +195,7 @@ mat-divider {
 .filter-action .btn-export-excel {
   margin: 0;
   flex: 0 0 auto;
+  width: 162px;
 }
 
 /* Keep all filter controls aligned */

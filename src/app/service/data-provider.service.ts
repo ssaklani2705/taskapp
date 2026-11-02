@@ -1610,9 +1610,28 @@ export class DataProviderService {
     });
   }
 
-  getTaskCategoriesUsedInGenericRecurring() {
-    return this.http.get<any[]>(`${environment.apiBaseUrl}admin/generic-recurring/task-categories`);
-  }
+  // getTaskCategoriesUsedInGenericRecurring() {
+  //   return this.http.get<any[]>(`${environment.apiBaseUrl}admin/generic-recurring/task-categories`);
+  // }
+
+  getTaskCategoriesUsedInGenericRecurring(
+  userId: number,
+  loginType: string,
+  isAdmin: string,
+  isHod: string
+) {
+  return this.http.get<any[]>(
+    `${environment.apiBaseUrl}admin/generic-recurring/task-categories`,
+    {
+      params: {
+        userId: userId.toString(),
+        loginType: loginType,
+        isAdmin: isAdmin,
+        isHod: isHod
+      }
+    }
+  );
+}
 
   getTaskRatingSummary(fromDate?: string | null, toDate?: string | null, username?: string | null, departmentIds: number[] = [], page: number = 0, size: number = 10): Observable<any> {
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());

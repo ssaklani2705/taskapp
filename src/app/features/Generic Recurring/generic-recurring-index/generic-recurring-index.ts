@@ -88,6 +88,7 @@ export class GenericRecurringIndex {
 
   loginType = '';
   isAdmin: any;
+   isHod = '';
 
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
@@ -96,9 +97,11 @@ export class GenericRecurringIndex {
 
     if (isPlatformBrowser(this.platformId)) {
       const storedUserId = sessionStorage.getItem('userId');
+      
 
       if (storedUserId) {
         this.userId = Number(storedUserId);
+        this.isHod = sessionStorage.getItem('isHod') || 'N';
       }
     }
 
@@ -824,20 +827,29 @@ export class GenericRecurringIndex {
 
 
   existingTaskCategoryIds: number[] = [];
-  private loadTaskCategories(): void {
-    this.dataprovider.getTaskCategoriesUsedInGenericRecurring().subscribe({
-      next: (response: any) => {
-        console.log('Task categories used in Generic Recurring:', response);
-        this.taskCategories = response?.data ?? response ?? [];
-        this.buildGroupedCategories();
-      },
-      error: (error) => {
-        console.error('Error fetching recurring task categories:', error);
-        this.taskCategories = [];
-        this.groupedCategories = [];
-      },
-    });
-  }
+private loadTaskCategories(): void {
+  const userId = this.userId;
+  const loginType = this.loginType;
+  const isAdmin = this.isAdmin;
+  const isHod = this.isHod;
+  this.dataprovider.getTaskCategoriesUsedInGenericRecurring(
+    userId,
+    loginType,
+    isAdmin,
+    isHod
+  ).subscribe({
+    next: (response: any) => {
+      console.log('Task categories used in Generic Recurring:', response);
+      this.taskCategories = response?.data ?? response ?? [];
+      this.buildGroupedCategories();
+    },
+    error: (error) => {
+      console.error('Error fetching recurring task categories:', error);
+      this.taskCategories = [];
+      this.groupedCategories = [];
+    }
+  });
+}
   private buildGroupedCategories(): void {
     const map = new Map<string, TaskCategory[]>();
     for (const category of this.taskCategories) {
