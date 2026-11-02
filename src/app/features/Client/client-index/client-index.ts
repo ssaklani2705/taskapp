@@ -781,12 +781,14 @@ export class ClientIndex {
     });
   }
 
-  exportToExcel(): void {
+ exportToExcel(): void {
     if (this.exportExcel !== 'Y') {
       return;
     }
 
+
     this.isLoading = true;
+
 
     this.dataprovider
       .getClientDetails(
@@ -812,7 +814,9 @@ export class ClientIndex {
         next: (response: any) => {
           this.isLoading = false;
 
+
           const allClients: Client[] = response?.data || [];
+
 
           if (!allClients.length) {
             Swal.fire({
@@ -822,18 +826,20 @@ export class ClientIndex {
               confirmButtonText: 'OK',
             });
 
+
             return;
           }
 
+
           const exportData = allClients.map((client: Client, index: number) => ({
-            '#': index + 1,
+            'Sr. No.': index + 1,
             'Society Manager': client.managerName || '',
             'Client Name': client.name || '',
             'Client Code': client.code || '',
+            'TDS Applicable': client.taxFlag === 1 ? 'Yes' : 'No',
             PAN: client.pan || '',
             'GST Applicable': client.gstFlag === 1 ? 'Yes' : 'No',
             'GST Number': client.gstNo || '',
-            'TDS Applicable': client.taxFlag === 1 ? 'Yes' : 'No',
             'Address Line 1': client.addressLine1 || '',
             'Address Line 2': client.addressLine2 || '',
             City: client.city || '',
@@ -855,35 +861,47 @@ export class ClientIndex {
             Status: this.getStatusLabel(client.status),
           }));
 
+
           const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(exportData);
 
+
           const headers = Object.keys(exportData[0]);
+
 
           worksheet['!cols'] = headers.map((header) => {
             let maxLength = header.length;
 
+
             exportData.forEach((row: any) => {
               const value = row[header];
+
 
               if (value !== null && value !== undefined) {
                 maxLength = Math.max(maxLength, String(value).length);
               }
             });
 
+
             return {
               wch: Math.min(Math.max(maxLength + 2, 12), 40),
             };
           });
 
+
           const workbook: XLSX.WorkBook = XLSX.utils.book_new();
+
 
           XLSX.utils.book_append_sheet(workbook, worksheet, 'Clients');
 
+
           const date = new Date().toISOString().slice(0, 10);
+
 
           const fileName = `Clients_All_${date}.xlsx`;
 
+
           XLSX.writeFile(workbook, fileName);
+
 
           Swal.fire({
             icon: 'success',
@@ -893,10 +911,13 @@ export class ClientIndex {
           });
         },
 
+
         error: (error) => {
           this.isLoading = false;
 
+
           console.error('Failed to fetch client data for export:', error);
+
 
           Swal.fire({
             icon: 'error',

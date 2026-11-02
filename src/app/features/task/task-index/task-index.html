@@ -205,7 +205,17 @@
           <table class="user-table">
             <thead>
               <tr>
-                <th class="column-header">Task Id</th>
+                <!-- <th class="column-header">Task Id</th> -->
+                 <!-- <th class="sortable-column" (click)="sortData('taskId')">
+  <div class="column-header">
+    <span>Task Id</span>
+
+    <span class="sort-icons">
+      <span [class.active]="sortColumn === 'taskId' && sortDirection === 'asc'"> ▲ </span>
+      <span [class.active]="sortColumn === 'taskId' && sortDirection === 'desc'"> ▼ </span>
+    </span>
+  </div>
+</th> -->
                 <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
                   <div class="column-header">
                     <span>{{ col.label }}</span>
