@@ -424,6 +424,7 @@
 }
 
 .user-table .col-action {
+  text-align: left;
   width: 150px;
 }
 
@@ -431,7 +432,7 @@
 
 .user-table thead th {
   // height: 43px;
-  padding: 7px 10px;
+  padding: 4px 8px;
   background: var(--table-header);
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -453,22 +454,22 @@
 
 /* Sorting */
 
-.sort-icons {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  line-height: 6px;
-  color: #a9bac9;
-  font-size: 7px;
-}
+// .sort-icons {
+//   display: inline-flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   line-height: 6px;
+//   color: #a9bac9;
+//   font-size: 7px;
+// }
 
-.sort-icons span {
-  height: 7px;
-}
+// .sort-icons span {
+//   height: 7px;
+// }
 
-.sort-icons .sort-active {
-  color: var(--primary-blue);
-}
+// .sort-icons .sort-active {
+//   color: var(--primary-blue);
+// }
 
 .sortable-column {
   cursor: pointer;
@@ -482,7 +483,7 @@
 
 .user-table tbody td {
   // height: 47px;
-  padding: 8px 10px;
+  padding: 4px 8px;
   background: var(--white);
   border-right: 1px solid var(--border);
   border-bottom: 1px solid var(--border);

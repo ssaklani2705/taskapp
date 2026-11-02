@@ -320,4 +320,89 @@ getStatusClass(status: number | string): string {
 
     return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${total} record${total > 1 ? 's' : ''})`;
   }
+
+
+   sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  columns: {
+    key: string;
+    label: string;
+    sortable: boolean;
+  }[] = [
+    {
+      key: 'name',
+      label: 'Name',
+      sortable: true,
+    },
+    {
+      key: 'to',
+      label: 'Email',
+      sortable: true,
+    },
+    {
+      key: 'subject',
+      label: 'Subject',
+      sortable: true,
+    },
+      {
+      key: 'regDate',
+      label: 'Date',
+      sortable: true,
+    },
+      {
+      key: 'ipAddress',
+      label: 'IP Address',
+      sortable: true,
+    },
+       {
+      key: 'localIp',
+      label: 'Local Ip',
+      sortable: true,
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      sortable: true,
+    }
+  ];
+
+  sortData(column: string): void {
+    if (!column) {
+      return;
+    }
+
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.paginatedLogs.sort((a: any, b: any) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      valA = valA ?? '';
+      valB = valB ?? '';
+
+      if (!isNaN(valA) && !isNaN(valB)) {
+        valA = Number(valA);
+        valB = Number(valB);
+      } else {
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+      }
+
+      if (valA < valB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+
+      if (valA > valB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
+  }
 }

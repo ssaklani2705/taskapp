@@ -5,13 +5,7 @@
       <div class="page-title">
         <mat-icon>assessment</mat-icon>
         <span>Reassign Report</span>
-        <a
-          type="button"
-          class="collapse-btn"
-          (click)="togglePanel()"
-          [attr.aria-expanded]="isPanelVisible"
-          title="Toggle Search Panel"
-        >
+        <a type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
           @if (isPanelVisible) {
             <i class="fa-solid fa-angle-up"></i>
           } @else {
@@ -38,7 +32,7 @@
         </div>
 
         <div class="client-dropdown-container">
-           <label class="field-label">Client Name</label>
+          <label class="field-label">Client Name</label>
           <input type="text" class="client-search-input" placeholder="Search Client..." [(ngModel)]="clientSearchText" (input)="filterClients()" (focus)="showClientDropdown = true" />
           <button *ngIf="clientSearchText" type="button" class="clear-search-btn" (click)="clearClientSearch()">×</button>
           <div class="client-dropdown-list" *ngIf="showClientDropdown && clientSearchText.trim().length >= 3">
@@ -62,14 +56,13 @@
         </div>
 
         <div class="status-wrapper task-category-dropdown">
-           <label class="field-label">Task Category</label>
+          <label class="field-label">Task Category</label>
           <button type="button" class="status-select cat-trigger" (click)="toggleTaskCategoryDropdown()">
             <span class="cat-trigger-text">{{ selectedTaskCategoryLabel }}</span>
             <span class="cat-caret">&#9662;</span>
           </button>
 
           <div class="cat-panel" *ngIf="showTaskCategoryDropdown">
-            
             <input id="recurringCategorySearchInput" type="text" class="cat-search" placeholder="Search category..." [(ngModel)]="categorySearchText" autocomplete="off" />
 
             <div class="cat-list">
@@ -113,7 +106,7 @@
         </div>
         <!-- TO DATE -->
         <div class="status-wrapper date-filter-wrapper">
-           <label class="field-label-date">To Date</label>
+          <label class="field-label-date">To Date</label>
           <div class="date-filter-input">
             <input
               id="toDate"
@@ -135,7 +128,7 @@
           </div>
         </div>
         <div class="status-dropdown">
-           <label class="field-label">Department</label>
+          <label class="field-label">Department</label>
           <button type="button" class="dropdown-btn" (click)="showDepartmentDropdown = !showDepartmentDropdown">
             {{ getSelectedDepartmentLabel() }}
           </button>
@@ -192,13 +185,16 @@
             <tr>
               <th>#</th>
 
-              <th>Task Reassign Date</th>
-              <th>Task Name</th>
-              <th>Task Category</th>
-              <th>Client Name</th>
-              <th>Previous User</th>
-              <th>New User</th>
-              <th>Assigned By</th>
+              <th *ngFor="let col of columns; let i = index" [class.sticky-2]="i === 0" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                <div class="column-header">
+                  <span>{{ col.label }}</span>
+
+                  <span *ngIf="col.sortable" class="sort-icons">
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
             </tr>
           </thead>
 

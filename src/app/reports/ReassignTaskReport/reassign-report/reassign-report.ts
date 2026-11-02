@@ -27,7 +27,7 @@ interface ReassignRow {
   clientName: string;
   oldUser: string;
   newUser: string;
-  assignedBy:string
+  assignedBy: string;
 }
 @Component({
   selector: 'app-reassign-report',
@@ -339,7 +339,7 @@ export class ReassignReport implements OnInit {
     this.selectedClientId = 0;
     this.selectedClient = '';
     this.clientSearchText = '';
-    this.userSearchText =''
+    this.userSearchText = '';
     this.filteredClients = [];
     this.showClientDropdown = false;
 
@@ -347,7 +347,6 @@ export class ReassignReport implements OnInit {
     this.categorySearchText = '';
     this.showTaskCategoryDropdown = false;
 
-    
     this.filteredUsers = [];
     this.showUserDropdown = false;
     // paging
@@ -390,24 +389,26 @@ export class ReassignReport implements OnInit {
     const from = this.fromDate ? (this.datePipe.transform(this.fromDate, 'yyyy-MM-dd') ?? '') : '';
     const to = this.toDate ? (this.datePipe.transform(this.toDate, 'yyyy-MM-dd') ?? '') : '';
 
-    this.dataprovider.getTaskReassignReport(0, totalRecords, this.search, from, to, Number(this.selectedTaskCategory) || 0, this.selectedClientId || 0, this.selectedUserId || 0,this.selectedDepartmentIds.join(',')).subscribe({
-      next: (response: any) => {
-        this.isExporting = false;
-        const allRows: ReassignRow[] = response?.content || [];
+    this.dataprovider
+      .getTaskReassignReport(0, totalRecords, this.search, from, to, Number(this.selectedTaskCategory) || 0, this.selectedClientId || 0, this.selectedUserId || 0, this.selectedDepartmentIds.join(','))
+      .subscribe({
+        next: (response: any) => {
+          this.isExporting = false;
+          const allRows: ReassignRow[] = response?.content || [];
 
-        if (allRows.length === 0) {
-          Swal.fire('No Data', 'No records available for export.', 'info');
-          return;
-        }
+          if (allRows.length === 0) {
+            Swal.fire('No Data', 'No records available for export.', 'info');
+            return;
+          }
 
-        this.downloadReassignExcel(allRows);
-      },
-      error: (err) => {
-        this.isExporting = false;
-        console.error('Error exporting reassign report:', err);
-        Swal.fire('Error', 'Unable to export reassign report.', 'error');
-      },
-    });
+          this.downloadReassignExcel(allRows);
+        },
+        error: (err) => {
+          this.isExporting = false;
+          console.error('Error exporting reassign report:', err);
+          Swal.fire('Error', 'Unable to export reassign report.', 'error');
+        },
+      });
   }
 
   private downloadReassignExcel(rows: ReassignRow[]): void {
@@ -502,18 +503,18 @@ export class ReassignReport implements OnInit {
     return c ? c.name : '--All Task Categories--';
   }
 
-@HostListener('document:click', ['$event'])
-closeDropdowns(event: MouseEvent): void {
-  const target = event.target as HTMLElement;
+  @HostListener('document:click', ['$event'])
+  closeDropdowns(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
 
-  if (!target.closest('.task-category-dropdown')) {
-    this.showTaskCategoryDropdown = false;
-    this.categorySearchText = '';
+    if (!target.closest('.task-category-dropdown')) {
+      this.showTaskCategoryDropdown = false;
+      this.categorySearchText = '';
+    }
+    if (!target.closest('.status-dropdown')) {
+      this.showDepartmentDropdown = false;
+    }
   }
-  if (!target.closest('.status-dropdown')) {
-    this.showDepartmentDropdown = false;
-  }
-}
   departments: { departmentId: number; name: string }[] = [];
   selectedDepartmentIds: number[] = [];
   showDepartmentDropdown = false;
@@ -541,5 +542,89 @@ closeDropdowns(event: MouseEvent): void {
     if (this.selectedDepartmentIds.length === 0) return '--All Departments--';
     const names = this.departments.filter((d) => this.selectedDepartmentIds.includes(d.departmentId)).map((d) => d.name);
     return names.length > 2 ? `${names.length} Departments Selected` : names.join(', ');
+  }
+
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  columns: {
+    key: string;
+    label: string;
+    sortable: boolean;
+  }[] = [
+    {
+      key: 'taskDate',
+      label: 'Task Reassign Date',
+      sortable: true,
+    },
+    {
+      key: 'taskName',
+      label: 'Task Name',
+      sortable: true,
+    },
+    {
+      key: 'taskCategory',
+      label: 'Task Category',
+      sortable: true,
+    },
+    {
+      key: 'clientName',
+      label: 'Client Name',
+      sortable: true,
+    },
+    {
+      key: 'oldUser',
+      label: 'Previous User',
+      sortable: true,
+    },
+    {
+      key: 'newUser',
+      label: 'New User',
+      sortable: true,
+    },
+    {
+      key: 'assignedBy',
+      label: 'Assigned By',
+      sortable: true,
+    },
+  ];
+
+  sortData(column: string): void {
+    if (!column) {
+      return;
+    }
+
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.rows.sort((a: any, b: any) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      valA = valA ?? '';
+      valB = valB ?? '';
+
+      if (!isNaN(valA) && !isNaN(valB)) {
+        valA = Number(valA);
+        valB = Number(valB);
+      } else {
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+      }
+
+      if (valA < valB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+
+      if (valA > valB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
   }
 }

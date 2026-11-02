@@ -5,13 +5,7 @@
       <div class="page-title">
         <mat-icon>manage_accounts</mat-icon>
         <span>Reassign Summary Report</span>
-        <a
-          type="button"
-          class="collapse-btn"
-          (click)="togglePanel()"
-          [attr.aria-expanded]="isPanelVisible"
-          title="Toggle Search Panel"
-        >
+        <a type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
           @if (isPanelVisible) {
             <i class="fa-solid fa-angle-up"></i>
           } @else {
@@ -145,8 +139,16 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>User</th>
-              <th>Count</th>
+              <th *ngFor="let col of columns; let i = index" [class.sticky-2]="i === 0" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                <div class="column-header">
+                  <span>{{ col.label }}</span>
+
+                  <span *ngIf="col.sortable" class="sort-icons">
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
             </tr>
           </thead>
 

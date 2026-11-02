@@ -635,7 +635,7 @@ mat-divider,
 
 .designation-table thead th,
 .designation-table tbody td {
-  padding: 8px 12px;
+  padding: 4px 8px;
   border-width: 0 1px 1px 0;
   border-style: solid;
   border-color: var(--border);
@@ -764,30 +764,30 @@ mat-divider,
 //   gap: 8px;
 // }
 
-.sort-icons {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 16px;
-  margin-left: 5px;
-  color: #c3cbd4;
-  font-size: 8px;
-  line-height: 7px;
-  vertical-align: middle;
-}
+// .sort-icons {
+//   display: inline-flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   height: 16px;
+//   margin-left: 5px;
+//   color: #c3cbd4;
+//   font-size: 8px;
+//   line-height: 7px;
+//   vertical-align: middle;
+// }
 
-.sort-icons span {
-  display: block;
-  height: 8px;
-  color: #a9b8c5;
-  font-size: 8px;
-  line-height: 8px;
-}
+// .sort-icons span {
+//   display: block;
+//   height: 8px;
+//   color: #a9b8c5;
+//   font-size: 8px;
+//   line-height: 8px;
+// }
 
-.sort-icons .sort-active {
-  color: var(--primary-blue);
-}
+// .sort-icons .sort-active {
+//   color: var(--primary-blue);
+// }
 
 .serial-column {
   width: 55px;
@@ -1523,13 +1523,13 @@ mat-divider,
 
   .designation-table thead th {
     // height: 44px;
-    padding: 7px 8px;
+    padding: 4px 8px;
     font-size: 12px;
   }
 
   .designation-table tbody td {
     // height: 50px;
-    padding: 7px 8px;
+    padding: 4px 8px;
     font-size: 13px;
   }
 
@@ -1681,17 +1681,7 @@ mat-divider,
     font-size: 11px;
   }
 
-  .designation-table thead th {
-    // height: 42px;
-    padding: 6px 7px;
-    font-size: 11px;
-  }
 
-  .designation-table tbody td {
-    // height: 48px;
-    padding: 6px 7px;
-    font-size: 12px;
-  }
 
   .user-name {
     font-size: 12px;
@@ -1792,15 +1782,7 @@ mat-divider,
     font-size: 10px;
   }
 
-  .designation-table thead th {
-    font-size: 10px;
-    padding: 5px 6px;
-  }
-
-  .designation-table tbody td {
-    font-size: 11px;
-    padding: 5px 6px;
-  }
+ 
 
   .status-badge {
     min-width: 66px;
