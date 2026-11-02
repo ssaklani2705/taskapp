@@ -454,57 +454,57 @@
   flex-wrap: wrap;
 }
 
-.record-summary {
-  color: #58718a;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
-  line-height: 1.4;
-}
+// .record-summary {
+//   color: #58718a;
+//   font-family: Arial, Helvetica, sans-serif;
+//   font-size: 13px;
+//   line-height: 1.4;
+// }
 
 .table-bottom-section {
   margin-top: 18px;
   border-top: 1px solid var(--border);
 }
 
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  flex-wrap: wrap;
-}
+// .pagination {
+//   display: flex;
+//   align-items: center;
+//   gap: 5px;
+//   flex-wrap: wrap;
+// }
 
-.pagination-btn {
-  min-width: 40px;
-  height: 36px;
-  padding: 0 9px;
-  border: 1px solid #d7e0e8;
-  border-radius: 4px;
-  background: var(--white);
-  color: #71869a;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
-  cursor: pointer;
-  box-sizing: border-box;
-  flex-shrink: 0;
-}
+// .pagination-btn {
+//   min-width: 40px;
+//   height: 36px;
+//   padding: 0 9px;
+//   border: 1px solid #d7e0e8;
+//   border-radius: 4px;
+//   background: var(--white);
+//   color: #71869a;
+//   font-family: Arial, Helvetica, sans-serif;
+//   font-size: 12px;
+//   cursor: pointer;
+//   box-sizing: border-box;
+//   flex-shrink: 0;
+// }
 
-.pagination-btn:hover:not(:disabled) {
-  border-color: var(--primary-blue);
-  color: var(--primary-blue);
-}
+// .pagination-btn:hover:not(:disabled) {
+//   border-color: var(--primary-blue);
+//   color: var(--primary-blue);
+// }
 
-.pagination-btn:disabled {
-  color: #c4ced7;
-  background: #fafbfd;
-  cursor: not-allowed;
-}
+// .pagination-btn:disabled {
+//   color: #c4ced7;
+//   background: #fafbfd;
+//   cursor: not-allowed;
+// }
 
-.pagination-btn.active-pagination {
-  background: var(--navy);
-  border-color: var(--navy);
-  color: var(--white);
-  font-weight: 600;
-}
+// .pagination-btn.active-pagination {
+//   background: var(--navy);
+//   border-color: var(--navy);
+//   color: var(--white);
+//   font-weight: 600;
+// }
 
 .first-btn,
 .last-btn {

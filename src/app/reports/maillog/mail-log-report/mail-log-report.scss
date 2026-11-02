@@ -276,59 +276,59 @@ mat-divider {
   margin-top: 15px;
 }
 
-.record-summary {
-  color: var(--text-muted);
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-}
+// .record-summary {
+//   color: var(--text-muted);
+//   font-family: Arial, sans-serif;
+//   font-size: 14px;
+//   line-height: 20px;
+// }
 
 
 /* =========================================================
    PAGINATION
 ========================================================= */
 
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
-  flex-wrap: wrap;
+// .pagination {
+//   display: flex;
+//   align-items: center;
+//   justify-content: flex-end;
+//   gap: 4px;
+//   flex-wrap: wrap;
 
-  button {
-    min-width: 36px;
-    height: 32px;
-    padding: 0 9px;
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    background: var(--white);
-    color: var(--text);
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+//   button {
+//     min-width: 36px;
+//     height: 32px;
+//     padding: 0 9px;
+//     border: 1px solid var(--border);
+//     border-radius: 3px;
+//     background: var(--white);
+//     color: var(--text);
+//     font-family: Arial, sans-serif;
+//     font-size: 13px;
+//     cursor: pointer;
+//     transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 
-    &:hover:not(:disabled) {
-      background: var(--primary-blue-light);
-      border-color: #b8d0e1;
-      color: var(--primary-blue-dark);
-    }
+//     &:hover:not(:disabled) {
+//       background: var(--primary-blue-light);
+//       border-color: #b8d0e1;
+//       color: var(--primary-blue-dark);
+//     }
 
-    &:disabled {
-      color: #aab5bf;
-      background: #f5f7f9;
-      cursor: not-allowed;
-      opacity: 0.7;
-    }
+//     &:disabled {
+//       color: #aab5bf;
+//       background: #f5f7f9;
+//       cursor: not-allowed;
+//       opacity: 0.7;
+//     }
 
-    &.active-pagination {
-      background: var(--navy);
-      border-color: var(--navy);
-      color: var(--white);
-      font-weight: 700;
-    }
-  }
-}
+//     &.active-pagination {
+//       background: var(--navy);
+//       border-color: var(--navy);
+//       color: var(--white);
+//       font-weight: 700;
+//     }
+//   }
+// }
 
 
 /* =========================================================
