@@ -508,8 +508,10 @@
 
 /* ================= STICKY ACTION COLUMN ================= */
 
+
 .user-table thead th.action-column,
 .user-table tbody td.action-cell {
+  text-align: left;
   position: sticky;
   right: 0;
   border-left: 1px solid var(--border);
@@ -536,7 +538,7 @@
 .action-buttons {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 5px;
   flex-wrap: nowrap;
 }

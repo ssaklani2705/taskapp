@@ -19,14 +19,7 @@ interface UserAccessLog {
 
 @Component({
   selector: 'app-access-report',
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule,
-    MatCardModule,
-    MatIconModule,
-    MatDividerModule,
-  ],
+  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIconModule, MatDividerModule],
   providers: [DatePipe],
   templateUrl: './access-report.html',
   styleUrl: './access-report.scss',
@@ -210,7 +203,7 @@ export class AccessReportComponent implements OnInit {
     return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${total} record${total > 1 ? 's' : ''})`;
   }
 
-   sortColumn: string = '';
+  sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
   columns: {
@@ -233,11 +226,11 @@ export class AccessReportComponent implements OnInit {
       label: 'Login Time',
       sortable: true,
     },
-      {
+    {
       key: 'logoutTime',
       label: 'Logout Time',
       sortable: true,
-    }
+    },
   ];
 
   sortData(column: string): void {

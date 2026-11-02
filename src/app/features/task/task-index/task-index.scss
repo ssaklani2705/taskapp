@@ -950,8 +950,8 @@
 .action-buttons {
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  // justify-content: center;
   gap: 5px;
   flex-wrap: nowrap;
   box-sizing: border-box;
@@ -2901,7 +2901,7 @@ textarea.manager-select::placeholder {
 
 .reassign-text {
   display: inline-block;
-  margin-left: 8px;
+  // margin-left: 8px;
   padding: 3px 8px;
   border-radius: 4px;
   background-color: #e3f2fd;

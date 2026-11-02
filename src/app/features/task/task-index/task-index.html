@@ -5,19 +5,13 @@
         <div class="page-title">
           <mat-icon>task_alt</mat-icon>
           <span>Tasks</span>
-          <a
-          type="button"
-          class="collapse-btn"
-          (click)="togglePanel()"
-          [attr.aria-expanded]="isPanelVisible"
-          title="Toggle Search Panel"
-        >
-          @if (isPanelVisible) {
-            <i class="fa-solid fa-angle-up"></i>
-          } @else {
-            <i class="fa-solid fa-angle-down"></i>
-          }
-        </a>
+          <a type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
+            @if (isPanelVisible) {
+              <i class="fa-solid fa-angle-up"></i>
+            } @else {
+              <i class="fa-solid fa-angle-down"></i>
+            }
+          </a>
           <!-- <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
             {{ isPanelVisible ? '▲' : '▼' }}
           </button> -->
@@ -43,15 +37,7 @@
           </div>
           <div class="search-wrapper">
             <div class="search-box">
-              <input
-                type="text"
-                inputmode="numeric"
-                [(ngModel)]="taskIdQuery"
-                placeholder="Search by Task Id"
-                class="search-input"
-                 (input)="onTaskIdInput($event)"
-                (keyup.enter)="onSearch()"
-              />
+              <input type="text" inputmode="numeric" [(ngModel)]="taskIdQuery" placeholder="Search by Task Id" class="search-input" (input)="onTaskIdInput($event)" (keyup.enter)="onSearch()" />
               <button type="button" class="search-btn" (click)="onSearch()" title="Search">
                 <i class="fa fa-search"></i>
               </button>
@@ -206,7 +192,7 @@
             <thead>
               <tr>
                 <!-- <th class="column-header">Task Id</th> -->
-                 <!-- <th class="sortable-column" (click)="sortData('taskId')">
+                <!-- <th class="sortable-column" (click)="sortData('taskId')">
   <div class="column-header">
     <span>Task Id</span>
 
@@ -225,10 +211,10 @@
                     </span> -->
 
                     <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+                      <span [class.active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
 
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
-                  </span>
+                      <span [class.active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                    </span>
                   </div>
                 </th>
                 <th class="action-column">Action</th>
@@ -310,14 +296,14 @@
                   </span>
                 </td> -->
                 <td>
-  <span class="wrap-text">{{ task.buddyName || '-' }}</span>
-  @if (canAssignUser(task)) {
-    <span class="reassign-text" (click)="openBuddyModal(task)">
-      <i class="fas fa-user-plus reassign-icon"></i>
-      {{ task.buddyId ? 'Change' : 'Add' }}
-    </span>
-  }
-</td>
+                  <span class="wrap-text">{{ task.buddyName || '-' }}</span>
+                  @if (canAssignUser(task)) {
+                    <span class="reassign-text" (click)="openBuddyModal(task)">
+                      <i class="fas fa-user-plus reassign-icon"></i>
+                      {{ task.buddyId ? 'Change' : 'Add' }}
+                    </span>
+                  }
+                </td>
 
                 <!-- 8: PRIORITY -->
                 <td>
@@ -363,46 +349,46 @@
                 </td> -->
 
                 <td>
-  @if (canAssignUser(task)) {
-    <!-- NORMAL: original code, no change -->
-    <span
-      class="wrap-text"
-      [class.unassigned-user]="task.status === 1 && (!task.assignedToName || task.assignedToName === '0')"
-      (click)="
-        task.status === 1 &&
-          (!task.assignedToName || task.assignedToName === '0' || ((task.taskStatus === 1 || task.taskStatus === 3) && task.taskCategoryId !== 1 && task.userType !== 2)) &&
-          openAssignUserModal(task)
-      "
-    >
-      <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
-        <ng-container *ngIf="task.status === 1; else notAssigned">
-          <i class="fas fa-user-tie assign-icon"></i>
-          Assign User
-        </ng-container>
+                  @if (canAssignUser(task)) {
+                    <!-- NORMAL: original code, no change -->
+                    <span
+                      class="wrap-text"
+                      [class.unassigned-user]="task.status === 1 && (!task.assignedToName || task.assignedToName === '0')"
+                      (click)="
+                        task.status === 1 &&
+                          (!task.assignedToName || task.assignedToName === '0' || ((task.taskStatus === 1 || task.taskStatus === 3) && task.taskCategoryId !== 1 && task.userType !== 2)) &&
+                          openAssignUserModal(task)
+                      "
+                    >
+                      <ng-container *ngIf="!task.assignedToName || task.assignedToName === '0'; else assignedBlock">
+                        <ng-container *ngIf="task.status === 1; else notAssigned">
+                          <i class="fas fa-user-tie assign-icon"></i>
+                          Assign User
+                        </ng-container>
 
-        <ng-template #notAssigned>Not Assigned</ng-template>
-      </ng-container>
+                        <ng-template #notAssigned>Not Assigned</ng-template>
+                      </ng-container>
 
-      <ng-template #assignedBlock>
-        {{ task.assignedToName }}
-        <span class="reassign-text" *ngIf="task.status === 1 && (task.taskStatus === 1 || task.taskStatus === 3) && task.taskCategoryId !== 1 && task.userType !== 2">
-          <i class="fas fa-user-tie reassign-icon"></i>
-          Re-assign
-        </span>
-      </ng-template>
-    </span>
-  } @else {
-    <!-- BUDDY OF THIS TASK: plain text only -->
-    <span class="wrap-text">
-      @if (!task.assignedToName || task.assignedToName === '0') {
-        Not Assigned
-      } @else {
-        {{ task.assignedToName }}
-      }
-    </span>
-  }
-</td>
-             
+                      <ng-template #assignedBlock>
+                        {{ task.assignedToName }}
+                        <span class="reassign-text" *ngIf="task.status === 1 && (task.taskStatus === 1 || task.taskStatus === 3) && task.taskCategoryId !== 1 && task.userType !== 2">
+                          <i class="fas fa-user-tie reassign-icon"></i>
+                          Re-assign
+                        </span>
+                      </ng-template>
+                    </span>
+                  } @else {
+                    <!-- BUDDY OF THIS TASK: plain text only -->
+                    <span class="wrap-text">
+                      @if (!task.assignedToName || task.assignedToName === '0') {
+                        Not Assigned
+                      } @else {
+                        {{ task.assignedToName }}
+                      }
+                    </span>
+                  }
+                </td>
+
                 <!-- 11: TASK STATUS (frozen) -->
                 <!-- <td>
                   <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
@@ -419,25 +405,25 @@
                   <ng-template #noStatus><span class="wrap-text">-</span></ng-template>
                 </td> -->
                 <td>
-  <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
-    @if (canAssignUser(task)) {
-      <!-- NORMAL: clickable status button -->
-      <button
-        type="button"
-        class="change-manager-button"
-        (click)="openChangeManagerModal(task)"
-        [ngClass]="common.getTaskStatusClassNew(task.taskStatus)"
-        [disabled]="canDisableChangeManager(task)"
-      >
-        {{ common.getTaskStatusLabel(task.taskStatus) }}
-      </button>
-    } @else {
-      <!-- BUDDY: read-only text -->
-      <span class="wrap-text">{{ common.getTaskStatusLabel(task.taskStatus) }}</span>
-    }
-  </ng-container>
-  <ng-template #noStatus><span class="wrap-text">-</span></ng-template>
-</td>
+                  <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
+                    @if (canAssignUser(task)) {
+                      <!-- NORMAL: clickable status button -->
+                      <button
+                        type="button"
+                        class="change-manager-button"
+                        (click)="openChangeManagerModal(task)"
+                        [ngClass]="common.getTaskStatusClassNew(task.taskStatus)"
+                        [disabled]="canDisableChangeManager(task)"
+                      >
+                        {{ common.getTaskStatusLabel(task.taskStatus) }}
+                      </button>
+                    } @else {
+                      <!-- BUDDY: read-only text -->
+                      <span class="wrap-text">{{ common.getTaskStatusLabel(task.taskStatus) }}</span>
+                    }
+                  </ng-container>
+                  <ng-template #noStatus><span class="wrap-text">-</span></ng-template>
+                </td>
 
                 <!-- 12: ACTION (frozen) -->
                 <td>
@@ -983,7 +969,8 @@
         type="button"
         class="modal-save-button"
         [disabled]="!selectedAssignTask?.assignedTo || !selectedAssignTask?.date || !selectedAssignTask?.endDate || (selectedAssignTask?.taskStatus === 1 && !assignRemarks.trim()) || holidayError"
-        (click)="assignUser()">
+        (click)="assignUser()"
+      >
         <mat-icon>save</mat-icon>
 
         <span>

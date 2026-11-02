@@ -25,18 +25,18 @@ export const MY_DATE_FORMATS = {
   selector: 'app-workload-report',
   standalone: true,
   imports: [CommonModule, FormsModule, MatIconModule, MatDividerModule, MatDatepickerModule],
-   providers: [
+  providers: [
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
     },
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     {
-      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, 
-      useValue: { useUtc: false }
-    }
+      provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+      useValue: { useUtc: false },
+    },
   ], // remove if your app already provides a date adapter
   templateUrl: './workload-report.html',
   styleUrl: './workload-report.scss',
@@ -113,58 +113,51 @@ export class WorkloadReport implements OnInit, OnDestroy {
   }
   private categoryReq = 0;
 
- private loadCategories(onLoaded?: () => void): void {
-  const ids = this.selectedDepartmentIds.length
-    ? this.selectedDepartmentIds
-    : this.departmentList.map((d) => d.departmentId);
+  private loadCategories(onLoaded?: () => void): void {
+    const ids = this.selectedDepartmentIds.length ? this.selectedDepartmentIds : this.departmentList.map((d) => d.departmentId);
 
-  if (!ids.length) {
-    this.categoryList = [];
-    this.selectedCategoryIds = [];
-    onLoaded?.();
-    return;
-  }
-
-  const req = ++this.categoryReq;
-
-  this.reportService.getCategoriesByDepartmentIds(ids).subscribe({
-    next: (res: TaskCategoryDTO[]) => {
-      if (req !== this.categoryReq) return;      // a newer tick has replaced this request
-      this.categoryList = this.sortCategories(res || []);
-      const valid = this.categoryList.map((c) => c.taskcategoryId);
-      this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => valid.includes(id));
-      onLoaded?.();
-    },
-    error: () => {
-      if (req !== this.categoryReq) return;
+    if (!ids.length) {
       this.categoryList = [];
       this.selectedCategoryIds = [];
-    },
-  });
-}
+      onLoaded?.();
+      return;
+    }
 
-  
+    const req = ++this.categoryReq;
 
-toggleDepartment(id: number, event: Event): void {
-  const checked = (event.target as HTMLInputElement).checked;
-  this.selectedDepartmentIds = checked
-    ? [...this.selectedDepartmentIds, id]
-    : this.selectedDepartmentIds.filter((x) => x !== id);
-
-  if (!this.selectedDepartmentIds.length) {
-    this.resetResults();                // nothing selected => blank
-    this.loadCategories();
-    return;
+    this.reportService.getCategoriesByDepartmentIds(ids).subscribe({
+      next: (res: TaskCategoryDTO[]) => {
+        if (req !== this.categoryReq) return; // a newer tick has replaced this request
+        this.categoryList = this.sortCategories(res || []);
+        const valid = this.categoryList.map((c) => c.taskcategoryId);
+        this.selectedCategoryIds = this.selectedCategoryIds.filter((id) => valid.includes(id));
+        onLoaded?.();
+      },
+      error: () => {
+        if (req !== this.categoryReq) return;
+        this.categoryList = [];
+        this.selectedCategoryIds = [];
+      },
+    });
   }
 
-  // refresh the category list first, then search with the right categories
-  this.loadCategories(() => this.loadReport());
-}
+  toggleDepartment(id: number, event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.selectedDepartmentIds = checked ? [...this.selectedDepartmentIds, id] : this.selectedDepartmentIds.filter((x) => x !== id);
+
+    if (!this.selectedDepartmentIds.length) {
+      this.resetResults(); // nothing selected => blank
+      this.loadCategories();
+      return;
+    }
+
+    // refresh the category list first, then search with the right categories
+    this.loadCategories(() => this.loadReport());
+  }
 
   toggleCategory(id: number, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     this.selectedCategoryIds = checked ? [...this.selectedCategoryIds, id] : this.selectedCategoryIds.filter((x) => x !== id);
-    
   }
 
   isDepartmentChecked(id: number): boolean {
@@ -236,26 +229,19 @@ toggleDepartment(id: number, event: Event): void {
 
   // ---------- load ----------
 
- loadReport(): void {
-  if (!this.fromDate || !this.toDate) {
-    this.errorMessage = 'Please select both dates.';
-    return;
-  }
-  if (this.toDate < this.fromDate) {
-    this.errorMessage = 'To Date cannot be before From Date.';
-    return;
-  }
-  this.errorMessage = '';
-  this.loading = true;
+  loadReport(): void {
+    if (!this.fromDate || !this.toDate) {
+      this.errorMessage = 'Please select both dates.';
+      return;
+    }
+    if (this.toDate < this.fromDate) {
+      this.errorMessage = 'To Date cannot be before From Date.';
+      return;
+    }
+    this.errorMessage = '';
+    this.loading = true;
 
-  this.reportService
-    .getWorkload(
-      this.toIso(this.fromDate),
-      this.toIso(this.toDate),
-      this.selectedDepartmentIds,
-      this.selectedCategoryIds,
-    )
-    .subscribe({
+    this.reportService.getWorkload(this.toIso(this.fromDate), this.toIso(this.toDate), this.selectedDepartmentIds, this.selectedCategoryIds).subscribe({
       next: (res) => {
         this.allRows = res.data || [];
         this.hasSearched = true;
@@ -268,7 +254,7 @@ toggleDepartment(id: number, event: Event): void {
         this.loading = false;
       },
     });
-}
+  }
 
   private resetResults(): void {
     this.allRows = [];
@@ -347,10 +333,10 @@ toggleDepartment(id: number, event: Event): void {
       data: {
         labels,
         datasets: [
-          { label: 'Open', data: values('openTasks'), backgroundColor: '#2f6fa3', stack: 'status',borderRadius: 4  },
-          { label: 'Pending review', data: values('pendingReview'), backgroundColor: '#f0b429', stack: 'status',borderRadius: 4   },
-          { label: 'Completed', data: values('completedTasks'), backgroundColor: '#287d5e', stack: 'status',borderRadius: 4   },
-          { label: 'Overdue', data: values('overdueTasks'), backgroundColor: '#b8403d', stack: 'overdue',borderRadius: 4   },
+          { label: 'Open', data: values('openTasks'), backgroundColor: '#2f6fa3', stack: 'status', borderRadius: 4 },
+          { label: 'Pending review', data: values('pendingReview'), backgroundColor: '#f0b429', stack: 'status', borderRadius: 4 },
+          { label: 'Completed', data: values('completedTasks'), backgroundColor: '#287d5e', stack: 'status', borderRadius: 4 },
+          { label: 'Overdue', data: values('overdueTasks'), backgroundColor: '#b8403d', stack: 'overdue', borderRadius: 4 },
         ],
       },
       options: {
@@ -385,89 +371,84 @@ toggleDepartment(id: number, event: Event): void {
   }
 
   // ---------- summary cards / footer ----------
-get totals() {
-  const sum = (key: string) =>
-    this.filteredRows.reduce((s, r) => s + (Number(r[key]) || 0), 0);
-  return {
-    total: sum('totalTasks'),
-    open: sum('openTasks'),
-    pending: sum('pendingReview'),
-    completed: sum('completedTasks'),
-    overdue: sum('overdueTasks'),
-    hours: sum('openHours'),
-  };
-}
-
-initials(name: string): string {
-  const parts = (name || '?').trim().split(/\s+/);
-  return ((parts[0]?.[0] || '') + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
-}
-
-loadLevel(r: any): string {
-  const pct = this.barWidth(r);
-  return pct >= 75 ? 'load-high' : pct >= 40 ? 'load-mid' : 'load-low';
-}
-
-// ---------- dropdown search ----------
-departmentSearch = '';
-categorySearch = '';
-
-private filterByName<T extends { name?: string }>(list: T[], text: string): T[] {
-  const q = text.trim().toLowerCase();
-  return q ? list.filter((i) => (i.name ?? '').toLowerCase().includes(q)) : list;
-}
-
-get filteredDepartments(): DepartmentDTO[] {
-  return this.filterByName(this.departmentList, this.departmentSearch);
-}
-
-get filteredCategories(): TaskCategoryDTO[] {
-  return this.filterByName(this.categoryList, this.categorySearch);
-}
-
-toggleDepartmentDropdown(): void {
-  this.showDepartmentDropdown = !this.showDepartmentDropdown;
-  this.showCategoryDropdown = false;
-  this.departmentSearch = '';
-}
-
-toggleCategoryDropdown(): void {
-  this.showCategoryDropdown = !this.showCategoryDropdown;
-  this.showDepartmentDropdown = false;
-  this.categorySearch = '';
-}
-
-sortColumn = '';
-sortDirection: 'asc' | 'desc' = 'asc';
-sortData(column: string): void {
-  if (this.sortColumn === column) {
-    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
-  } else {
-    this.sortColumn = column;
-    this.sortDirection = 'asc';
+  get totals() {
+    const sum = (key: string) => this.filteredRows.reduce((s, r) => s + (Number(r[key]) || 0), 0);
+    return {
+      total: sum('totalTasks'),
+      open: sum('openTasks'),
+      pending: sum('pendingReview'),
+      completed: sum('completedTasks'),
+      overdue: sum('overdueTasks'),
+      hours: sum('openHours'),
+    };
   }
 
-  this.filteredRows.sort((a, b) => {
-    let valueA = a[column];
-    let valueB = b[column];
+  initials(name: string): string {
+    const parts = (name || '?').trim().split(/\s+/);
+    return ((parts[0]?.[0] || '') + (parts.length > 1 ? parts[parts.length - 1][0] : '')).toUpperCase();
+  }
 
-    let comparison = 0;
+  loadLevel(r: any): string {
+    const pct = this.barWidth(r);
+    return pct >= 75 ? 'load-high' : pct >= 40 ? 'load-mid' : 'load-low';
+  }
 
-    if (column === 'userName') {
-      comparison = String(valueA ?? '').localeCompare(
-        String(valueB ?? ''),
-        undefined,
-        { numeric: true, sensitivity: 'base' }
-      );
+  // ---------- dropdown search ----------
+  departmentSearch = '';
+  categorySearch = '';
+
+  private filterByName<T extends { name?: string }>(list: T[], text: string): T[] {
+    const q = text.trim().toLowerCase();
+    return q ? list.filter((i) => (i.name ?? '').toLowerCase().includes(q)) : list;
+  }
+
+  get filteredDepartments(): DepartmentDTO[] {
+    return this.filterByName(this.departmentList, this.departmentSearch);
+  }
+
+  get filteredCategories(): TaskCategoryDTO[] {
+    return this.filterByName(this.categoryList, this.categorySearch);
+  }
+
+  toggleDepartmentDropdown(): void {
+    this.showDepartmentDropdown = !this.showDepartmentDropdown;
+    this.showCategoryDropdown = false;
+    this.departmentSearch = '';
+  }
+
+  toggleCategoryDropdown(): void {
+    this.showCategoryDropdown = !this.showCategoryDropdown;
+    this.showDepartmentDropdown = false;
+    this.categorySearch = '';
+  }
+
+  sortColumn = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortData(column: string): void {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
     } else {
-      comparison = (Number(valueA) || 0) - (Number(valueB) || 0);
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
     }
 
-    return this.sortDirection === 'asc' ? comparison : -comparison;
-  });
+    this.filteredRows.sort((a, b) => {
+      let valueA = a[column];
+      let valueB = b[column];
 
-  if (this.viewMode === 'graph') {
-    setTimeout(() => this.renderCharts());
+      let comparison = 0;
+
+      if (column === 'userName') {
+        comparison = String(valueA ?? '').localeCompare(String(valueB ?? ''), undefined, { numeric: true, sensitivity: 'base' });
+      } else {
+        comparison = (Number(valueA) || 0) - (Number(valueB) || 0);
+      }
+
+      return this.sortDirection === 'asc' ? comparison : -comparison;
+    });
+
+    if (this.viewMode === 'graph') {
+      setTimeout(() => this.renderCharts());
+    }
   }
-}
 }
