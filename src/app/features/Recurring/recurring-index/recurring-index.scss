@@ -58,7 +58,7 @@
   align-items: center;
   gap: 10px;
   color: var(--navy);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 27px;
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -170,7 +170,7 @@ mat-divider {
   outline: none;
   background: var(--white);
   color: var(--text-dark);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 14px;
   box-sizing: border-box;
 }
@@ -211,7 +211,7 @@ mat-divider {
   outline: none;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 14px;
   cursor: pointer;
   box-sizing: border-box;
@@ -243,7 +243,7 @@ mat-divider {
   outline: none;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 14px;
   box-sizing: border-box;
   transition: border-color 0.2s ease;
@@ -339,7 +339,7 @@ mat-divider {
   border-radius: 2px;
   background: var(--primary-blue);
   color: var(--white);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -398,7 +398,7 @@ mat-divider {
 
 // .record-summary {
 //   color: var(--text-muted);
-//   font-family: Arial, Helvetica, sans-serif;
+//   font-family: "Open Sans", sans-serif !important;
 //   font-size: 14px;
 //   line-height: 20px;
 //   white-space: nowrap;
@@ -420,7 +420,7 @@ mat-divider {
 //   border-radius: 0;
 //   background: var(--white);
 //   color: #8290a0;
-//   font-family: Arial, Helvetica, sans-serif;
+//   font-family: "Open Sans", sans-serif !important;
 //   font-size: 13px;
 //   cursor: pointer;
 //   box-sizing: border-box;
@@ -1054,7 +1054,7 @@ mat-divider {
 
 .change-manager-modal .modal-title-text {
   color: var(--navy);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 20px;
   font-weight: 700;
   line-height: 1.2;
@@ -1206,7 +1206,7 @@ mat-divider {
   border-radius: 4px;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 13px;
   outline: none;
   cursor: pointer;
@@ -1278,7 +1278,7 @@ textarea.manager-select::placeholder {
   justify-content: center;
   gap: 6px;
   border-radius: 4px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -1379,7 +1379,7 @@ textarea.manager-select::placeholder {
 
 .task-notes-modal .modal-title-text {
   color: var(--navy);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 20px;
   font-weight: 700;
 }
@@ -1504,7 +1504,7 @@ textarea.manager-select::placeholder {
 
 .title-text {
   color: var(--text-dark);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 14px;
   font-weight: 700;
   word-break: break-word;
@@ -1559,7 +1559,7 @@ textarea.manager-select::placeholder {
     box-shadow: 0 5px 15px rgba(25, 52, 90, 0.12);
     z-index: 9999;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", sans-serif !important;
   }
 
   .cat-search {
@@ -1572,7 +1572,7 @@ textarea.manager-select::placeholder {
     border-radius: 4px;
     background: #ffffff;
     color: #193b63;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", sans-serif !important;
     font-size: 13px;
     outline: none;
     box-shadow: none;
@@ -1608,7 +1608,7 @@ textarea.manager-select::placeholder {
     padding: 6px 10px;
     background: #edf4f8;
     color: #19345a;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", sans-serif !important;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.3px;
@@ -1619,7 +1619,7 @@ textarea.manager-select::placeholder {
   .cat-item {
     padding: 8px 10px 8px 18px;
     color: #193b63;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", sans-serif !important;
     font-size: 13px;
     font-weight: 400;
     line-height: 1.35;
@@ -1648,7 +1648,7 @@ textarea.manager-select::placeholder {
   .cat-empty {
     padding: 10px;
     color: #718096;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", sans-serif !important;
     font-size: 13px;
     text-align: center;
   }

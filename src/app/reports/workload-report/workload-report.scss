@@ -81,7 +81,7 @@
   align-items: center;
   gap: 10px;
   color: var(--navy);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 27px;
   font-weight: 700;
   letter-spacing: -0.3px;
@@ -1085,7 +1085,7 @@ mat-divider {
 .chart-title {
   margin: 0 0 12px;
   color: var(--navy);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 18px;
   font-weight: 700;
 }
@@ -1606,7 +1606,7 @@ mat-divider {
   border-radius: 4px;
   background: #ffffff;
   color: #193b63;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 13px;
   outline: none;
   box-sizing: border-box;

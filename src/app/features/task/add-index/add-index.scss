@@ -2,7 +2,7 @@
   display: block;
   width: 100%;
   color: #193b63;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
 
   --navy: #1b3b63;
   --navy-dark: #142f50;
@@ -69,7 +69,7 @@
   border-radius: 4px !important;
   background: var(--navy) !important;
   color: #ffffff !important;
-  font-family: Arial, Helvetica, sans-serif !important;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   line-height: 1.2;
@@ -149,7 +149,7 @@
   font-size: 15px !important;
   font-weight: 700 !important;
   line-height: 20px;
-  font-family: Arial, Helvetica, sans-serif !important;
+  font-family: "Open Sans", sans-serif !important;
 }
 
 .user-input {
@@ -165,7 +165,7 @@
   color: var(--text-blue) !important;
   font-size: 15px !important;
   font-weight: 400 !important;
-  font-family: Arial, Helvetica, sans-serif !important;
+  font-family: "Open Sans", sans-serif !important;
   outline: none !important;
   box-shadow: none !important;
 
@@ -255,7 +255,7 @@
   color: var(--text-blue);
   background: #ffffff;
   font-size: 15px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   cursor: pointer;
 }
 
@@ -535,7 +535,7 @@
   border-radius: 3px;
   background: #edf4f8;
   color: var(--text-navy);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 13px;
   cursor: pointer;
 }
@@ -692,7 +692,7 @@
   border-radius: 4px !important;
   background: #ffffff !important;
   color: var(--navy) !important;
-  font-family: Arial, Helvetica, sans-serif !important;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   cursor: pointer;
@@ -721,7 +721,7 @@
   border-radius: 4px !important;
   background: var(--navy) !important;
   color: #ffffff !important;
-  font-family: Arial, Helvetica, sans-serif !important;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   cursor: pointer;
@@ -1070,7 +1070,7 @@
   border-radius: 4px;
   background: #ffffff;
   color: #193b63;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 13px;
   outline: none;
   box-shadow: none;

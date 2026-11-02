@@ -75,7 +75,7 @@
   display: flex;
   align-items: center;
   color: var(--navy);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 25px;
   font-weight: 700;
   line-height: 1.2;
@@ -979,7 +979,7 @@
     border-radius: 4px;
     box-shadow: 0 5px 15px rgba(25, 52, 90, 0.12);
     z-index: 9999;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", sans-serif !important;
   }
 
   .cat-search {
@@ -992,7 +992,7 @@
     border-radius: 4px;
     background: var(--white);
     color: #193b63;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", sans-serif !important;
     font-size: 13px;
     outline: none;
     box-shadow: none;
@@ -1026,7 +1026,7 @@
   .cat-item {
     padding: 8px 10px 8px 18px;
     color: #193b63;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", sans-serif !important;
     font-size: 13px;
     font-weight: 400;
     line-height: 1.35;
@@ -1049,7 +1049,7 @@
   .cat-empty {
     padding: 10px;
     color: #718096;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Open Sans", sans-serif !important;
     font-size: 13px;
     text-align: center;
   }
@@ -1084,7 +1084,7 @@
   align-items: center;
   gap: 10px;
   color: var(--navy);
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: "Open Sans", sans-serif !important;
   font-size: 27px;
   font-weight: 700;
   letter-spacing: -0.3px;
