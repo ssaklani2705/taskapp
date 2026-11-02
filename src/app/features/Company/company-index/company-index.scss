@@ -438,65 +438,65 @@ mat-divider,
   padding-top: 10px;
 }
 
-.record-summary {
-  color: var(--text-muted);
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  white-space: nowrap;
-}
+// .record-summary {
+//   color: var(--text-muted);
+//   font-family: Arial, Helvetica, sans-serif;
+//   font-size: 14px;
+//   line-height: 20px;
+//   white-space: nowrap;
+// }
 
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 4px;
-  flex-wrap: wrap;
-}
+// .pagination {
+//   display: flex;
+//   align-items: center;
+//   justify-content: flex-end;
+//   gap: 4px;
+//   flex-wrap: wrap;
+// }
 
-.pagination button {
-  min-width: 40px;
-  height: 40px;
-  padding: 0 11px;
-  border: 1px solid var(--border);
-  border-radius: 0;
-  background: var(--white);
-  color: #8290a0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
-  cursor: pointer;
-  box-sizing: border-box;
-  transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
-}
+// .pagination button {
+//   min-width: 40px;
+//   height: 40px;
+//   padding: 0 11px;
+//   border: 1px solid var(--border);
+//   border-radius: 0;
+//   background: var(--white);
+//   color: #8290a0;
+//   font-family: Arial, Helvetica, sans-serif;
+//   font-size: 13px;
+//   cursor: pointer;
+//   box-sizing: border-box;
+//   transition:
+//     background 0.15s ease,
+//     color 0.15s ease,
+//     border-color 0.15s ease;
+// }
 
-.pagination button:hover:not(:disabled) {
-  background: var(--primary-blue-light);
-  border-color: var(--border-dark);
-  color: var(--navy);
-}
+// .pagination button:hover:not(:disabled) {
+//   background: var(--primary-blue-light);
+//   border-color: var(--border-dark);
+//   color: var(--navy);
+// }
 
-.pagination button:disabled {
-  background: #f7f9fb;
-  border-color: #e3e8ed;
-  color: #b7c0ca;
-  cursor: not-allowed;
-}
+// .pagination button:disabled {
+//   background: #f7f9fb;
+//   border-color: #e3e8ed;
+//   color: #b7c0ca;
+//   cursor: not-allowed;
+// }
 
-.pagination button.active-pagination {
-  background: var(--primary-blue);
-  border-color: var(--primary-blue);
-  color: var(--white);
-  font-weight: 600;
-}
+// .pagination button.active-pagination {
+//   background: var(--primary-blue);
+//   border-color: var(--primary-blue);
+//   color: var(--white);
+//   font-weight: 600;
+// }
 
-.pagination button.active-pagination:hover {
-  background: var(--primary-blue-dark);
-  border-color: var(--primary-blue-dark);
-  color: var(--white);
-}
+// .pagination button.active-pagination:hover {
+//   background: var(--primary-blue-dark);
+//   border-color: var(--primary-blue-dark);
+//   color: var(--white);
+// }
 
 /* =========================================================
    TABLE: HORIZONTAL SCROLL + FROZEN COLUMNS
