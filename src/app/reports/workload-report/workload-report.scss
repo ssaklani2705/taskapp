@@ -208,33 +208,7 @@ mat-divider {
   align-items: flex-end;
 }
 
-.go-button {
-  height: 40px;
-  min-width: 75px;
-  padding: 0 15px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  border: 0;
-  border-radius: 3px;
-  background: var(--primary-blue);
-  color: var(--white);
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
 
-  &:hover {
-    background: var(--primary-blue-dark);
-  }
-
-  mat-icon {
-    width: 17px;
-    height: 17px;
-    font-size: 17px;
-  }
-}
 
 .btn-clear {
   height: 40px;
@@ -1320,18 +1294,6 @@ mat-divider {
   box-shadow: 0 0 0 3px rgba(47, 111, 163, 0.15);
 }
 
-.go-button {
-  border-radius: 6px;
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--navy) 100%);
-  box-shadow: 0 3px 8px rgba(25, 52, 90, 0.25);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-
-  &:hover {
-    background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--navy-dark) 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 5px 12px rgba(25, 52, 90, 0.3);
-  }
-}
 
 .btn-clear { border-radius: 6px; }
 
