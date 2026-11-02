@@ -213,6 +213,12 @@
                       <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
                       <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
                     </span> -->
+
+                    <span *ngIf="col.sortable" class="sort-icons">
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                  </span>
                   </div>
                 </th>
                 <th class="action-column">Action</th>
