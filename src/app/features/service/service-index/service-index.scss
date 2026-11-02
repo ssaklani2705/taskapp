@@ -583,26 +583,6 @@ mat-divider,
   border: 1px solid #efcaca;
 }
 
-.no-records {
-  height: 150px;
-  padding: 20px !important;
-  background: var(--white) !important;
-  color: var(--text-muted) !important;
-  text-align: center !important;
-  vertical-align: middle !important;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-}
-
-.no-records mat-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 6px;
-  vertical-align: middle;
-  color: var(--primary-blue);
-  font-size: 20px;
-}
-
 @media (max-width: 1200px) {
   .page-container {
     padding: 20px;

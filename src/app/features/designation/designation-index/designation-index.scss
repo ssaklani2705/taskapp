@@ -520,23 +520,6 @@ mat-divider {
   border: 1px solid #f2cccc;
 }
 
-.no-records {
-  height: 100px !important;
-  color: var(--text-muted) !important;
-  background: var(--white) !important;
-  text-align: center !important;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
-}
-
-.no-records mat-icon {
-  width: 20px;
-  height: 20px;
-  margin-right: 6px;
-  vertical-align: middle;
-  color: var(--primary-blue);
-  font-size: 20px;
-}
 
 .table-wrapper::-webkit-scrollbar {
   height: 7px;
