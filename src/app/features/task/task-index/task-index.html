@@ -448,7 +448,11 @@
               </tr>
 
               <tr *ngIf="!paginatedTasks || paginatedTasks.length === 0">
-                <td [attr.colspan]="columns.length + 2" class="no-records">No records found.</td>
+                <!-- <td [attr.colspan]="columns.length + 2" class="no-records">No records found.</td> -->
+                 <td colspan="13" class="no-records">
+                <mat-icon>info_outline</mat-icon>
+                <span>No records found</span>
+              </td>
               </tr>
             </tbody>
           </table>

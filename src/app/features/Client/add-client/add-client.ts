@@ -600,4 +600,13 @@ export class AddClient implements OnInit {
 
     return `${day}-${month}-${year}`;
   }
+
+  convertToUppercase(controlName: 'pan' | 'gstNo'): void {
+  const control = this.clientForm.get(controlName);
+  const value = control?.value;
+
+  if (value) {
+    control?.setValue(value.toUpperCase(), { emitEvent: false });
+  }
+}
 }
