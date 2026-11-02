@@ -2471,6 +2471,10 @@ canManageBuddy(task: any): boolean {
     this.taskIdQuery = digitsOnly; // keep the model in sync
   }
 
-
+// Hide Assign / Re-assign when the logged-in user is the buddy of this task.
+// Replace this.userId with whatever holds the logged-in user's id in your component.
+canAssignUser(task: any): boolean {
+  return Number(task.buddyId) !== Number(this.userId);
+}
 
 }

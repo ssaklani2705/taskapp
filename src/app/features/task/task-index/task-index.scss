@@ -558,7 +558,7 @@
 }
 
 .user-table thead th {
-  height: 58px;
+  height: 44px;
   padding: 8px 8px;
   background: var(--table-header);
   border: 0;
@@ -3969,4 +3969,34 @@ textarea.manager-select::placeholder {
   height: 27px;
   font-size: 27px;
   color: var(--primary-blue);
+}
+
+/* Align all table headers and body content to the left */
+.user-table thead th,
+.user-table tbody td {
+  text-align: left !important;
+}
+
+/* Maintain left alignment for frozen columns */
+.user-table th:nth-child(11),
+.user-table td:nth-child(11),
+.user-table th:nth-child(12),
+.user-table td:nth-child(12),
+.user-table th:nth-child(13),
+.user-table td:nth-child(13) {
+  text-align: left !important;
+}
+
+/* Consistent horizontal spacing */
+.user-table thead th,
+.user-table tbody td {
+  padding-left: 12px !important;
+  padding-right: 8px !important;
+}
+
+
+//for buddy
+.change-manager-button.buddy-readonly {
+  pointer-events: none; /* not clickable */
+  cursor: default;
 }

@@ -1684,3 +1684,15 @@ textarea.manager-select::placeholder {
     text-align: center;
   }
 }
+
+
+.designation-table thead th,
+.designation-table tbody td {
+  text-align: left !important;
+  vertical-align: middle;
+}
+
+/* any flex wrapper inside a cell should also center its content */
+.designation-table tbody td > div {
+  justify-content: left;
+}
