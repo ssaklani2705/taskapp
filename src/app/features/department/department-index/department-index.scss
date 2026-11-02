@@ -302,7 +302,7 @@
 
 .user-table thead th {
   // height: 59px;
-  padding: 8px 12px;
+  padding: 4px 8px;
   box-sizing: border-box;
   background: #edf4f8;
   border: 1px solid var(--border);
@@ -315,7 +315,7 @@
 
 .user-table tbody td {
   // height: 58px;
-  padding: 8px 14px;
+  padding: 4px 8px;
   box-sizing: border-box;
   border: 1px solid var(--border);
   background: #fff;
@@ -365,24 +365,24 @@
   cursor: pointer;
 }
 
-.sort-icons {
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0;
-  line-height: 7px;
-  color: #a8bfd1;
-  font-size: 9px;
-}
+// .sort-icons {
+//   display: inline-flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   gap: 0;
+//   line-height: 7px;
+//   color: #a8bfd1;
+//   font-size: 9px;
+// }
 
-.sort-icons span {
-  height: 7px;
-  line-height: 7px;
-}
+// .sort-icons span {
+//   height: 7px;
+//   line-height: 7px;
+// }
 
-.sort-icons .sort-active {
-  color: var(--primary-blue);
-}
+// .sort-icons .sort-active {
+//   color: var(--primary-blue);
+// }
 
 .serial-number {
   color: var(--text-muted);
@@ -826,7 +826,7 @@
 
   .user-table thead th {
     // height: 50px;
-    padding: 6px 8px;
+    padding: 6px 6px;
     font-size: 12px;
   }
 

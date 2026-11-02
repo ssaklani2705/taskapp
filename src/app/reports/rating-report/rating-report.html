@@ -133,10 +133,16 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>User Name</th>
-              <th>Total Task</th>
-              <th>Rated Task</th>
-              <th>Average Rating</th>
+              <th *ngFor="let col of columns; let i = index" [class.sticky-2]="i === 0" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                <div class="column-header">
+                  <span>{{ col.label }}</span>
+
+                  <span *ngIf="col.sortable" class="sort-icons">
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
             </tr>
           </thead>
 

@@ -209,4 +209,73 @@ export class AccessReportComponent implements OnInit {
 
     return `Page ${this.currentPage} of ${this.totalPages}, (${startRecord} - ${endRecord} of ${total} record${total > 1 ? 's' : ''})`;
   }
+
+   sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  columns: {
+    key: string;
+    label: string;
+    sortable: boolean;
+  }[] = [
+    {
+      key: 'userId',
+      label: 'User Name',
+      sortable: true,
+    },
+    {
+      key: 'ipAddress',
+      label: 'IP Address',
+      sortable: true,
+    },
+    {
+      key: 'loginTime',
+      label: 'Login Time',
+      sortable: true,
+    },
+      {
+      key: 'logoutTime',
+      label: 'Logout Time',
+      sortable: true,
+    }
+  ];
+
+  sortData(column: string): void {
+    if (!column) {
+      return;
+    }
+
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.paginatedLogs.sort((a: any, b: any) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      valA = valA ?? '';
+      valB = valB ?? '';
+
+      if (!isNaN(valA) && !isNaN(valB)) {
+        valA = Number(valA);
+        valB = Number(valB);
+      } else {
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+      }
+
+      if (valA < valB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+
+      if (valA > valB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
+  }
 }

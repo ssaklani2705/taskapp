@@ -398,7 +398,7 @@ mat-divider,
 
 .designation-table thead th {
   // height: 47px;
-  padding: 8px 12px;
+  padding: 4px 8px;
   background: var(--table-header);
   border-style: solid;
   border-color: var(--border);
@@ -413,7 +413,7 @@ mat-divider,
 
 .designation-table tbody td {
   // height: 54px;
-  padding: 8px 12px;
+  padding: 4px 8px;
   background: var(--white);
   border-style: solid;
   border-color: var(--border);
@@ -450,30 +450,30 @@ mat-divider,
   white-space: nowrap;
 }
 
-.sort-icons {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 16px;
-  margin-left: 5px;
-  color: #c3cbd4;
-  font-size: 8px;
-  line-height: 7px;
-  vertical-align: middle;
-}
+// .sort-icons {
+//   display: inline-flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   height: 16px;
+//   margin-left: 5px;
+//   color: #c3cbd4;
+//   font-size: 8px;
+//   line-height: 7px;
+//   vertical-align: middle;
+// }
 
-.sort-icons span {
-  display: block;
-  height: 8px;
-  color: #a9b8c5;
-  font-size: 8px;
-  line-height: 8px;
-}
+// .sort-icons span {
+//   display: block;
+//   height: 8px;
+//   color: #a9b8c5;
+//   font-size: 8px;
+//   line-height: 8px;
+// }
 
-.sort-icons .sort-active {
-  color: var(--primary-blue);
-}
+// .sort-icons .sort-active {
+//   color: var(--primary-blue);
+// }
 
 .serial-column {
   text-align: center !important;

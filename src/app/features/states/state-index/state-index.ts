@@ -439,7 +439,7 @@ export class StateIndex {
       sortable: true,
     },
     {
-      key: 'stateName',
+      key: 'name',
       label: 'State Name',
       sortable: true,
     },

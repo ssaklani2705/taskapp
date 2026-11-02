@@ -357,10 +357,8 @@ export class ReassignSummaryReport implements OnInit {
     this.page = 0;
 
     this.filteredUsers = [];
-    this.userSearchText =""
+    this.userSearchText = '';
     this.showUserDropdown = false;
-
-
 
     this.saveFilterState();
     this.getReassignSummaryReport();
@@ -506,5 +504,64 @@ export class ReassignSummaryReport implements OnInit {
     if (!target.closest('.department-dropdown')) {
       this.showDepartmentDropdown = false;
     }
+  }
+
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  columns: {
+    key: string;
+    label: string;
+    sortable: boolean;
+  }[] = [
+    {
+      key: 'userName',
+      label: 'User',
+      sortable: true,
+    },
+    {
+      key: 'taskCount',
+      label: 'Count',
+      sortable: true,
+    },
+  ];
+
+  sortData(column: string): void {
+    if (!column) {
+      return;
+    }
+
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.rows.sort((a: any, b: any) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      valA = valA ?? '';
+      valB = valB ?? '';
+
+      if (!isNaN(valA) && !isNaN(valB)) {
+        valA = Number(valA);
+        valB = Number(valB);
+      } else {
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+      }
+
+      if (valA < valB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+
+      if (valA > valB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
   }
 }
