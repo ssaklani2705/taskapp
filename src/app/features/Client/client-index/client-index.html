@@ -198,7 +198,7 @@
         <div class="pagination">
           <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">>‹ Prev</button>
+          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
           <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
@@ -342,7 +342,7 @@
         <div class="pagination">
           <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
 
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">>‹ Prev</button>
+          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
 
           <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
