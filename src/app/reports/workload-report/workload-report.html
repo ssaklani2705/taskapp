@@ -163,7 +163,7 @@
 
       <div class="table-wrapper">
         <table class="mail-table">
-          <thead>
+          <!-- <thead>
             <tr>
               <th>#</th>
               <th class="text-left">User</th>
@@ -175,7 +175,86 @@
               <th>Open Hours</th>
               <th>Load</th>
             </tr>
-          </thead>
+          </thead> -->
+          <thead>
+  <tr>
+    <th class="serial-column">#</th>
+
+    <th
+      class="text-left sortable-column"
+      (click)="sortData('userName')">
+      <div class="column-header">
+        <span>User</span>
+        <span class="sort-icons">
+          <span [class.sort-active]="sortColumn === 'userName' && sortDirection === 'asc'"> ▲ </span>
+          <span [class.sort-active]="sortColumn === 'userName' && sortDirection === 'desc'"> ▼ </span>
+        </span>
+      </div>
+    </th>
+
+    <th class="sortable-column" (click)="sortData('totalTasks')">
+      <div class="column-header">
+        <span>Total</span>
+        <span class="sort-icons">
+          <span [class.sort-active]="sortColumn === 'totalTasks' && sortDirection === 'asc'"> ▲ </span>
+          <span [class.sort-active]="sortColumn === 'totalTasks' && sortDirection === 'desc'"> ▼ </span>
+        </span>
+      </div>
+    </th>
+
+    <th class="sortable-column" (click)="sortData('openTasks')">
+      <div class="column-header">
+        <span>Open</span>
+        <span class="sort-icons">
+          <span [class.sort-active]="sortColumn === 'openTasks' && sortDirection === 'asc'"> ▲ </span>
+          <span [class.sort-active]="sortColumn === 'openTasks' && sortDirection === 'desc'"> ▼ </span>
+        </span>
+      </div>
+    </th>
+
+    <th class="sortable-column" (click)="sortData('pendingReview')">
+      <div class="column-header">
+        <span>Pending Review</span>
+        <span class="sort-icons">
+          <span [class.sort-active]="sortColumn === 'pendingReview' && sortDirection === 'asc'"> ▲ </span>
+          <span [class.sort-active]="sortColumn === 'pendingReview' && sortDirection === 'desc'"> ▼ </span>
+        </span>
+      </div>
+    </th>
+
+    <th class="sortable-column" (click)="sortData('completedTasks')">
+      <div class="column-header">
+        <span>Completed</span>
+        <span class="sort-icons">
+          <span [class.sort-active]="sortColumn === 'completedTasks' && sortDirection === 'asc'"> ▲ </span>
+          <span [class.sort-active]="sortColumn === 'completedTasks' && sortDirection === 'desc'"> ▼ </span>
+        </span>
+      </div>
+    </th>
+
+    <th class="sortable-column" (click)="sortData('overdueTasks')">
+      <div class="column-header">
+        <span>Overdue</span>
+        <span class="sort-icons">
+          <span [class.sort-active]="sortColumn === 'overdueTasks' && sortDirection === 'asc'"> ▲ </span>
+          <span [class.sort-active]="sortColumn === 'overdueTasks' && sortDirection === 'desc'"> ▼ </span>
+        </span>
+      </div>
+    </th>
+
+    <th class="sortable-column" (click)="sortData('openHours')">
+      <div class="column-header">
+        <span>Open Hours</span>
+        <span class="sort-icons">
+          <span [class.sort-active]="sortColumn === 'openHours' && sortDirection === 'asc'"> ▲ </span>
+          <span [class.sort-active]="sortColumn === 'openHours' && sortDirection === 'desc'"> ▼ </span>
+        </span>
+      </div>
+    </th>
+
+    <th>Load</th>
+  </tr>
+</thead>
 
           <tbody>
             <tr *ngFor="let r of filteredRows; let i = index">

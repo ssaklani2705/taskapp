@@ -436,4 +436,38 @@ toggleCategoryDropdown(): void {
   this.showDepartmentDropdown = false;
   this.categorySearch = '';
 }
+
+sortColumn = '';
+sortDirection: 'asc' | 'desc' = 'asc';
+sortData(column: string): void {
+  if (this.sortColumn === column) {
+    this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+  } else {
+    this.sortColumn = column;
+    this.sortDirection = 'asc';
+  }
+
+  this.filteredRows.sort((a, b) => {
+    let valueA = a[column];
+    let valueB = b[column];
+
+    let comparison = 0;
+
+    if (column === 'userName') {
+      comparison = String(valueA ?? '').localeCompare(
+        String(valueB ?? ''),
+        undefined,
+        { numeric: true, sensitivity: 'base' }
+      );
+    } else {
+      comparison = (Number(valueA) || 0) - (Number(valueB) || 0);
+    }
+
+    return this.sortDirection === 'asc' ? comparison : -comparison;
+  });
+
+  if (this.viewMode === 'graph') {
+    setTimeout(() => this.renderCharts());
+  }
+}
 }
