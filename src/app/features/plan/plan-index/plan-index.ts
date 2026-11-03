@@ -36,8 +36,7 @@ export interface Plan {
     FormsModule,
     RouterModule,
     MatCardModule,
-    MatIcon,
-    MatDivider
+    MatIcon
   ],
   templateUrl: './plan-index.html',
   styleUrl: './plan-index.scss',

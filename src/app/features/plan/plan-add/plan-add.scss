@@ -1,170 +1,66 @@
-
 /* =========================================================
-   PLAN MASTER - SOCIETY 123
+   ADD / EDIT PLAN MASTER - Bootstrap 5 + SOCIETY 123 colors
+   Layout (grid, flex, spacing, form controls) comes from
+   Bootstrap; this file maps the palette and styles the
+   custom services multi-select.
 ========================================================= */
 
 :host {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-
   --navy: #19345a;
   --navy-dark: #152f54;
   --navy-hover: #24466f;
-
   --primary-blue: #2f6fa3;
   --primary-blue-light: #eaf2f8;
-
   --text-navy: #19345a;
   --text-blue: #416789;
   --text-muted: #718096;
-
   --border: #d5dee7;
   --border-dark: #bccbda;
-
-  --white: #ffffff;
-  --page-bg: #f8fafc;
-
   --danger: #e84a4a;
 
-  font-family: "Open Sans", sans-serif !important;
+  --bs-body-color: var(--text-navy);
+  --bs-border-color: var(--border);
+  --bs-danger: #e84a4a;
+  --bs-danger-rgb: 232, 74, 74;
+
+  display: block;
+  width: 100%;
+  min-width: 0;
   color: var(--text-navy);
 }
 
-/* GLOBAL BOX SIZING */
-
-:host *,
-:host *::before,
-:host *::after {
-  box-sizing: border-box;
-}
-
-/* =========================================================
-   PAGE WRAPPER
-========================================================= */
-
+/* ---------- Page / card ---------- */
 .user-page-wrapper {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
   padding: 24px 34px;
-  background: var(--white);
+  background: #fff;
 }
-
-/* =========================================================
-   PORTLET
-========================================================= */
 
 .user-portlet {
-  width: 100%;
-  min-width: 0;
-  background: var(--white);
+  background: #fff;
   border: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
 }
-
-/* =========================================================
-   HEADER
-========================================================= */
 
 .user-portlet-title {
-  width: 100%;
   min-height: 64px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-
   padding: 6px 18px;
-
-  background: var(--white);
   border-bottom: 1px solid var(--border);
-}
-
-.user-title {
-  display: flex;
-  align-items: center;
-  min-width: 0;
 }
 
 .user-page-title {
   color: var(--navy);
-  font-family: "Open Sans", sans-serif !important;
   font-size: 30px;
   font-weight: 700;
   line-height: 1.25;
 }
 
-/* =========================================================
-   BACK BUTTON
-========================================================= */
-
-.user-actions {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-// .back-index-btn {
-//   min-width: 180px;
-//   height: 44px;
-//   padding: 0 20px;
-
-//   display: inline-flex;
-//   align-items: center;
-//   justify-content: center;
-//   gap: 6px;
-
-//   border: none;
-//   border-radius: 4px;
-
-//   background: var(--navy);
-//   color: var(--white);
-
-//   font-family: "Open Sans", sans-serif !important;
-//   font-size: 15px;
-//   font-weight: 600;
-
-//   cursor: pointer;
-//   transition: background 0.2s ease;
-// }
-
-// .back-index-btn mat-icon {
-//   width: 22px;
-//   height: 22px;
-//   font-size: 22px;
-// }
-
-// .back-index-btn:hover {
-//   background: var(--navy-hover);
-// }
-
-/* =========================================================
-   BODY
-========================================================= */
-
-.user-portlet-body {
-  width: 100%;
-  min-width: 0;
-  background: var(--white);
-}
-
-.user-form-body {
-  width: 100%;
-  min-width: 0;
-  padding: 24px 18px 30px;
-}
-
-/* =========================================================
-   MANDATORY MESSAGE
-========================================================= */
+.user-form-body { padding: 24px 18px 30px; }
 
 .mandatory-message {
   margin-bottom: 28px;
   color: var(--text-navy);
   font-size: 15px;
-  line-height: 22px;
 }
 
 .required {
@@ -172,143 +68,87 @@
   font-weight: 700;
 }
 
-/* =========================================================
-   FORM GRID
-========================================================= */
+/* ---------- Buttons ---------- */
+.btn-navy {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--navy);
+  --bs-btn-border-color: var(--navy);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--navy-hover);
+  --bs-btn-hover-border-color: var(--navy-hover);
+  --bs-btn-active-bg: var(--navy-dark);
+  --bs-btn-active-border-color: var(--navy-dark);
+  --bs-btn-disabled-bg: var(--navy);
+  --bs-btn-disabled-border-color: var(--navy);
+  min-width: 110px;
+  height: 44px;
+  padding: 0 24px;
+  font-size: 15px;
+  font-weight: 600;
 
-.user-form-row {
-  display: grid;
-  width: 100%;
-  min-width: 0;
-  gap: 24px;
-  margin-bottom: 24px;
+  mat-icon { width: 22px; height: 22px; font-size: 22px; }
 }
 
-/* Add Mode: 2 Columns */
-
-.top-row {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.btn-outline-navy {
+  --bs-btn-color: var(--navy);
+  --bs-btn-border-color: var(--navy);
+  --bs-btn-hover-color: var(--navy-hover);
+  --bs-btn-hover-bg: #eef4f9;
+  --bs-btn-hover-border-color: var(--navy);
+  --bs-btn-active-color: var(--navy);
+  --bs-btn-active-bg: #eef4f9;
+  --bs-btn-active-border-color: var(--navy);
+  min-width: 110px;
+  height: 44px;
+  padding: 0 24px;
+  font-size: 15px;
+  font-weight: 600;
 }
 
-/* Edit Mode: 3 Columns */
-
-.top-row.edit-mode {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-/* Services + Description */
-
-.details-row {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  align-items: start;
-}
-
-/* =========================================================
-   FORM COLUMN
-========================================================= */
-
-.user-form-col {
-  width: 100%;
-  min-width: 0;
-}
-
-.user-form-group {
-  width: 100%;
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-}
-
-/* =========================================================
-   LABEL
-========================================================= */
-
+/* ---------- Labels / inputs ---------- */
 .user-label {
-  display: block;
   margin-bottom: 9px;
-
   color: var(--text-navy);
-
-  font-family: "Open Sans", sans-serif !important;
   font-size: 15px;
   font-weight: 700;
   line-height: 20px;
 }
 
-/* =========================================================
-   INPUT
-========================================================= */
-
 .user-input {
-  display: block;
-  width: 100%;
-  max-width: 100%;
   height: 48px;
-  min-height: 48px;
-
   padding: 10px 15px;
-
   border: 1px solid var(--border-dark);
   border-radius: 4px;
-
-  background: var(--white);
   color: var(--text-blue);
-
-  font-family: "Open Sans", sans-serif !important;
   font-size: 15px;
-  font-weight: 400;
-
-  outline: none;
   box-shadow: none;
 
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  &::placeholder { color: #8794a2; opacity: 1; }
+  &:hover { border-color: #9fb2c4; }
+  &:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.1);
+  }
+
+  /* Bootstrap's validation state, recolored */
+  &.is-invalid {
+    border-color: var(--danger);
+    background-image: none;
+    padding-right: 15px;
+
+    &:focus { box-shadow: 0 0 0 2px rgba(232, 74, 74, 0.12); }
+  }
 }
 
-.user-input::placeholder {
-  color: #8794a2;
-  opacity: 1;
-}
-
-.user-input:hover {
-  border-color: #9fb2c4;
-}
-
-.user-input:focus {
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.10);
-}
-
-/* =========================================================
-   SELECT
-========================================================= */
-
-.user-select {
-  appearance: auto;
-  cursor: pointer;
-  background-color: var(--white);
-  color: var(--text-blue);
-}
-
-/* =========================================================
-   TEXTAREA
-========================================================= */
+.form-select.user-input { cursor: pointer; }
 
 .user-textarea {
-  width: 100%;
   height: 110px;
   min-height: 110px;
-
   padding: 12px 15px;
-
-  resize: vertical;
   line-height: 1.5;
+  resize: vertical;
 }
-
-/* =========================================================
-   VALIDATION ERRORS
-========================================================= */
 
 .user-error {
   margin-top: 6px;
@@ -317,53 +157,37 @@
   line-height: 18px;
 }
 
-/* =========================================================
-   SERVICES MULTI SELECT
-========================================================= */
-
-.service-dropdown {
-  position: relative;
-  width: 100%;
-  min-width: 0;
-}
-
-/* DROPDOWN BUTTON */
-
+/* ---------- Services multi-select ---------- */
 .service-dropdown-toggle {
-  width: 100%;
   min-height: 48px;
   padding: 0 15px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-
-  background: var(--white);
+  background: #fff;
   border: 1px solid var(--border-dark);
   border-radius: 4px;
-
   color: var(--text-navy);
-  font-family: "Open Sans", sans-serif !important;
   font-size: 15px;
   text-align: left;
-
   cursor: pointer;
   outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
+  &:hover { border-color: var(--primary-blue); }
 
-.service-dropdown-toggle:hover {
-  border-color: var(--primary-blue);
-}
+  &:focus,
+  &.dropdown-open {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.1);
+  }
 
-.service-dropdown-toggle:focus,
-.service-dropdown-toggle.dropdown-open {
-  border-color: var(--primary-blue);
-  box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.10);
+  &.input-error { border: 1px solid var(--danger) !important; }
+  &.input-error:focus { box-shadow: 0 0 0 2px rgba(232, 74, 74, 0.12); }
+
+  mat-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: var(--navy);
+  }
 }
 
 .service-selected-text {
@@ -374,107 +198,60 @@
   white-space: nowrap;
 }
 
-.service-dropdown-toggle mat-icon {
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0;
-  color: var(--navy);
-}
-
-/* =========================================================
-   DROPDOWN MENU
-========================================================= */
-
 .service-dropdown-menu {
   position: absolute;
   top: calc(100% + 5px);
   left: 0;
   right: 0;
   z-index: 1000;
-
-  width: 100%;
   max-height: 250px;
   overflow-y: auto;
-  overflow-x: hidden;
-
   padding: 5px 0;
-
-  background: var(--white);
+  background: #fff;
   border: 1px solid var(--border);
   border-radius: 5px;
-
   box-shadow: 0 6px 18px rgba(25, 52, 90, 0.14);
 }
-
-/* =========================================================
-   SERVICE OPTION
-========================================================= */
 
 .service-option {
   display: flex;
   align-items: center;
   gap: 12px;
-
   width: 100%;
   min-height: 42px;
   padding: 9px 15px;
   margin: 0;
-
   color: var(--text-navy);
   font-size: 14px;
-  font-weight: 400;
-  line-height: 20px;
-
   cursor: pointer;
-
   transition: background-color 0.15s ease;
+
+  &:hover { background: #f1f6fb; }
+
+  span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+
+  .form-check-input {
+    margin: 0;
+    flex-shrink: 0;
+    cursor: pointer;
+
+    &:checked {
+      background-color: var(--navy);
+      border-color: var(--navy);
+    }
+    &:focus { box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.15); }
+  }
 }
-
-.service-option:hover {
-  background: #f1f6fb;
-}
-
-.service-option span {
-  flex: 1;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-/* =========================================================
-   CHECKBOX
-========================================================= */
-
-.service-option input[type="checkbox"] {
-  width: 17px;
-  height: 17px;
-  margin: 0;
-
-  flex-shrink: 0;
-
-  accent-color: var(--navy);
-  cursor: pointer;
-}
-
-/* =========================================================
-   SELECT ALL
-========================================================= */
 
 .select-all-option {
   min-height: 44px;
   background: #f8fafc;
   border-bottom: 1px solid var(--border);
-
   color: var(--navy);
   font-weight: 700;
-}
 
-.select-all-option:hover {
-  background: var(--primary-blue-light);
+  &:hover { background: var(--primary-blue-light); }
 }
-
-/* =========================================================
-   NO SERVICES
-========================================================= */
 
 .no-services {
   padding: 16px;
@@ -483,10 +260,6 @@
   text-align: center;
 }
 
-/* =========================================================
-   SELECTED SERVICES INFO
-========================================================= */
-
 .selected-services-info {
   margin-top: 7px;
   color: var(--primary-blue);
@@ -494,261 +267,36 @@
   font-weight: 500;
 }
 
-/* =========================================================
-   BUTTON AREA
-========================================================= */
-
-.user-buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 12px;
-
-  width: 100%;
-  margin-top: 30px;
-}
-
-/* =========================================================
-   RESET BUTTON
-========================================================= */
-
-.user-reset-btn {
-  min-width: 110px;
-  height: 44px;
-  padding: 0 24px;
-
-  border: 1px solid var(--navy);
-  border-radius: 4px;
-
-  background: var(--white);
-  color: var(--navy);
-
-  font-family: "Open Sans", sans-serif !important;
-  font-size: 15px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.user-reset-btn:hover {
-  background: #eef4f9;
-  color: var(--navy-hover);
-}
-
-/* =========================================================
-   SUBMIT BUTTON
-========================================================= */
-
-.user-submit-btn {
-  min-width: 110px;
-  height: 44px;
-  padding: 0 24px;
-
-  border: 1px solid var(--navy);
-  border-radius: 4px;
-
-  background: var(--navy);
-  color: var(--white);
-
-  font-family: "Open Sans", sans-serif !important;
-  font-size: 15px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.user-submit-btn:hover {
-  background: var(--navy-hover);
-  border-color: var(--navy-hover);
-}
-
-.user-submit-btn:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-/* =========================================================
-   RESPONSIVE - LAPTOP
-========================================================= */
-
+/* ---------- Responsive ---------- */
 @media (max-width: 1200px) {
-
-  .user-page-wrapper {
-    padding: 20px;
-  }
-
-  .user-form-row {
-    gap: 18px;
-  }
-
-  .user-page-title {
-    font-size: 26px;
-  }
+  .user-page-wrapper { padding: 20px; }
+  .user-page-title { font-size: 26px; }
 }
-
-/* =========================================================
-   RESPONSIVE - TABLET
-========================================================= */
 
 @media (max-width: 992px) {
-
-  .user-page-wrapper {
-    padding: 15px;
-  }
-
-  .user-form-body {
-    padding: 20px 15px;
-  }
-
-  .top-row.edit-mode {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .details-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .user-form-row {
-    gap: 18px;
-  }
-
-  .user-page-title {
-    font-size: 24px;
-  }
-
-  .back-index-btn {
-    min-width: 150px;
-    padding: 0 14px;
-  }
+  .user-page-wrapper { padding: 15px; }
+  .user-form-body { padding: 20px 15px; }
+  .user-page-title { font-size: 24px; }
 }
-
-/* =========================================================
-   RESPONSIVE - MOBILE
-========================================================= */
 
 @media (max-width: 600px) {
-
-  .user-page-wrapper {
-    padding: 10px;
-  }
-
-  .user-portlet-title {
-    padding: 14px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .user-page-title {
-    font-size: 22px;
-  }
-
-  .user-actions {
-    width: 100%;
-  }
-
-  .back-index-btn {
-    width: 100%;
-    min-width: 0;
-    height: 42px;
-  }
-
-  .user-form-body {
-    width: 100%;
-    padding: 18px 14px 24px;
-  }
-
-  .mandatory-message {
-    font-size: 13px;
-    margin-bottom: 22px;
-  }
-
-  .user-form-row,
-  .top-row,
-  .top-row.edit-mode,
-  .details-row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 18px;
-    margin-bottom: 18px;
-  }
-
-  .user-label {
-    font-size: 14px;
-  }
-
-  .user-input {
-    height: 44px;
-    min-height: 44px;
-    font-size: 14px;
-  }
-
-  .user-textarea {
-    height: 100px;
-    min-height: 100px;
-  }
-
-  .service-dropdown-toggle {
-    min-height: 44px;
-    font-size: 14px;
-  }
-
-  .user-buttons {
-    gap: 10px;
-    margin-top: 24px;
-  }
-
-  .user-reset-btn,
-  .user-submit-btn {
-    min-width: 100px;
-    height: 42px;
-    font-size: 14px;
-  }
+  .user-page-wrapper { padding: 10px; }
+  .user-portlet-title { padding: 14px; }
+  .user-page-title { font-size: 22px; }
+  .user-portlet-title .btn-navy { width: 100%; min-width: 0; height: 42px; }
+  .user-form-body { padding: 18px 14px 24px; }
+  .mandatory-message { font-size: 13px; margin-bottom: 22px; }
+  .user-label { font-size: 14px; }
+  .user-input { height: 44px; font-size: 14px; }
+  .user-textarea { height: 100px; min-height: 100px; }
+  .service-dropdown-toggle { min-height: 44px; font-size: 14px; }
+  .btn-navy, .btn-outline-navy { min-width: 100px; height: 42px; font-size: 14px; }
 }
-
-/* =========================================================
-   EXTRA SMALL DEVICES
-========================================================= */
 
 @media (max-width: 380px) {
-
-  .user-page-wrapper {
-    padding: 6px;
-  }
-
-  .user-form-body {
-    padding: 15px 10px;
-  }
-
-  .user-page-title {
-    font-size: 20px;
-  }
-
-  .user-reset-btn,
-  .user-submit-btn {
-    flex: 1;
-    min-width: 0;
-  }
-}
-
-.service-dropdown-toggle.input-error {
-  border: 1px solid #e84a4a !important;
-}
-
-.service-dropdown-toggle.input-error:focus {
-  box-shadow: 0 0 0 2px rgba(232, 74, 74, 0.12);
-}
-
-.user-error {
-  color: #e84a4a;
-  font-size: 13px;
-  margin-top: 6px;
+  .user-page-wrapper { padding: 6px; }
+  .user-form-body { padding: 15px 10px; }
+  .user-page-title { font-size: 20px; }
+  .user-form-body .btn-navy,
+  .user-form-body .btn-outline-navy { flex: 1; min-width: 0; }
 }

@@ -1,263 +1,97 @@
-.page-container {
-  // padding: 20px;
-  background: #f7f9fb;
+/* =========================================================
+   VIEW PLAN MASTER - Bootstrap 5 + same theme colors
+========================================================= */
+
+:host {
+  --navy: #19345a;
+  --navy-dark: #152f54;
+  --blue: #2f6fa3;
+  --title: #163f70;
+  --border: #d7e0e8;
+  --table-header: #eef3f7;
+  --table-hover: #f8fbfd;
+
+  --bs-body-color: var(--title);
+  --bs-border-color: var(--border);
+
+  display: block;
   width: 100%;
-    padding: 24px 34px;
-    box-sizing: border-box;
 }
 
-/* ==================================== */
-/* CARD */
-/* ==================================== */
+/* ---------- Page / cards ---------- */
+.page-container {
+  background: #f7f9fb;
+  padding: 24px 34px;
+}
 
 .view-card,
 .history-card {
-    background-color: white;
-  border: 1px solid #d7e0e8;
-  box-shadow: none !important;
+  background: #fff;
+  border: 1px solid var(--border);
   border-radius: 0;
+  box-shadow: none;
   margin-bottom: 28px;
 }
 
-/* ==================================== */
-/* HEADER */
-/* ==================================== */
+.card-header-row { padding: 18px 24px; }
 
-.card-header,
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 24px;
+.divider { border-color: var(--border); opacity: 1; }
+
+.page-title {
+  mat-icon {
+    color: var(--blue);
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  span {
+    color: var(--title);
+    font-size: 26px;
+    font-weight: 700;
+  }
 }
 
-.page-title,
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+/* ---------- Back button ---------- */
+.btn-navy {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--navy);
+  --bs-btn-border-color: var(--navy);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--navy-dark);
+  --bs-btn-hover-border-color: var(--navy-dark);
+  --bs-btn-active-bg: var(--navy-dark);
+  --bs-btn-active-border-color: var(--navy-dark);
+  height: 38px;
+  font-size: 14px;
+  font-weight: 600;
+
+  mat-icon { width: 18px; height: 18px; font-size: 18px; }
 }
 
-.page-title mat-icon,
-.section-title mat-icon {
-  color: #2f6fa3;
-  font-size: 32px;
-  width: 32px;
-  height: 32px;
-}
-
-.page-title span,
-.section-title span {
-  color: #163f70;
-  font-size: 26px;
-  font-weight: 700;
-  font-family: "Open Sans", sans-serif !important;
-}
-
-
-
-/* ==================================== */
-/* DETAILS */
-/* ==================================== */
-
-.details-section {
-  padding: 30px;
-}
-
-.details-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 80px;
-}
-
-.detail-item {
-  flex: 1;
-}
+/* ---------- Details (label above value) ---------- */
+.details-section { padding: 30px; }
 
 .label {
+  color: var(--title);
+  font-size: 14px;
   font-weight: 700;
-  color: #163f70;
-  margin-right: 6px;
-  font-size: 16px;
+  margin-bottom: 4px;
 }
 
 .value {
-  color: #163f70;
+  color: var(--title);
   font-size: 16px;
-}
-
-.status-text {
-  font-weight: 600;
-}
-
-/* ==================================== */
-/* TABLE */
-/* ==================================== */
-/* =========================================================
-   TABLE WRAPPER
-========================================================= */
-
-.table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-}
-
-
-/* =========================================================
-   HISTORY TABLE
-========================================================= */
-
-.history-table {
-  width: 100%;
-
-  min-width: 600px;
-
-  border-collapse: collapse;
-
-  font-family: Arial, sans-serif;
-
-  font-size: 13px;
-}
-
-
-/* =========================================================
-   TABLE HEADER
-========================================================= */
-
-.history-table th {
-  height: 36px;
-
-  background: #eef3f7;
-
-  color: #163f70;
-
-  font-weight: 700;
-
-  font-size: 13px;
-
-  text-align: left;
-
-  padding: 5px 10px;
-
-  border: 1px solid #d7e0e8;
-
-  vertical-align: middle;
-}
-
-
-/* =========================================================
-   TABLE BODY
-========================================================= */
-
-.history-table td {
-  height: 36px;
-
-  padding: 5px 10px;
-
-  border: 1px solid #d7e0e8;
-
-  color: #163f70;
-
-  font-size: 13px;
-
-  vertical-align: middle;
-}
-
-
-/* =========================================================
-   ROW HOVER
-========================================================= */
-
-.history-table tbody tr:hover td {
-  background: #f8fbfd;
-}
-
-
-/* =========================================================
-   ACTION BADGE
-========================================================= */
-
-.action-badge {
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  padding: 3px 7px;
-
-  background: #edf4f8;
-
-  border: 1px solid #c9d9e7;
-
-  border-radius: 3px;
-
-  color: #215d95;
-
-  font-size: 11px;
-
-  line-height: 15px;
-
-  font-weight: 600;
-
-  white-space: nowrap;
-}
-
-
-/* =========================================================
-   NO RECORD
-========================================================= */
-
-.no-record {
-  min-height: 50px;
-
-  padding: 8px;
-
-  text-align: center;
-
-  color: #777;
-
-  font-size: 13px;
-
-  vertical-align: middle;
-}
-
-
-/* ==================================== */
-/* MOBILE */
-/* ==================================== */
-
-@media (max-width: 768px) {
-
-  .details-row {
-    flex-direction: column;
-    gap: 18px;
-  }
-
-  .card-header,
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
-  }
-
-  .back-index-btn {
-    width: 100%;
-  }
 }
 
 .description-text {
   white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
   word-break: break-word;
-  max-width: 50%;
+  max-width: 100%;
 }
 
-
-
-
-
+/* ---------- Status badge ---------- */
 .status-badge {
   display: inline-flex;
   align-items: center;
@@ -268,58 +102,77 @@
   border-radius: 2px;
   font-size: 13px;
   font-weight: 600;
-  box-sizing: border-box;
+
+  &.active, &.status-active {
+    background: #e6f4ee;
+    color: #287d5e;
+    border: 1px solid #c8e7da;
+  }
+  &.inactive, &.status-inactive {
+    background: #fff5df;
+    color: #a87308;
+    border: 1px solid #f0d99e;
+  }
+  &.deleted, &.status-deleted {
+    background: #fbeaea;
+    color: #b8403d;
+    border: 1px solid #efcaca;
+  }
 }
 
-.status-badge.active,
-.status-badge.status-active,
-.status-active {
-  background: #e6f4ee;
-  color: #287d5e;
-  border: 1px solid #c8e7da;
+/* ---------- History table ---------- */
+.history-table {
+  --bs-table-border-color: var(--border);
+  --bs-table-hover-bg: var(--table-hover);
+  min-width: 600px;
+  font-size: 13px;
+
+  th {
+    height: 36px;
+    padding: 5px 10px;
+    background: var(--table-header);
+    color: var(--title);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  td {
+    height: 36px;
+    padding: 5px 10px;
+    color: var(--title);
+    font-size: 13px;
+  }
 }
 
-.status-badge.inactive,
-.status-badge.status-inactive,
-.status-inactive {
-  background: #fff5df;
-  color: #a87308;
-  border: 1px solid #f0d99e;
-}
-
-.status-badge.deleted,
-.status-badge.status-deleted {
-  background: #fbeaea;
-  color: #b8403d;
-  border: 1px solid #efcaca;
-}
-
-.action-buttons {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.action-btn {
-  width: 38px;
-  height: 34px;
+.action-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  border-radius: 1px;
-  background: var(--white);
-  font-size: 14px;
-  cursor: pointer;
-
-  transition:
-    background 0.15s ease,
-    color 0.15s ease,
-    border-color 0.15s ease;
+  padding: 3px 7px;
+  background: #edf4f8;
+  border: 1px solid #c9d9e7;
+  border-radius: 3px;
+  color: #215d95;
+  font-size: 11px;
+  line-height: 15px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
+.no-record {
+  padding: 14px 8px;
+  color: #777;
+  font-size: 13px;
+}
+
+/* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
-.page-container{
-    margin-top: 20px;
-  }
+  .page-container { margin-top: 20px; }
+}
+
+@media (max-width: 768px) {
+  .page-container { padding: 12px; }
+  .details-section { padding: 18px; }
+  .page-title span { font-size: 22px; }
+  .btn-navy { width: 100%; }
 }
