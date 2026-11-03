@@ -772,3 +772,30 @@ mat-divider {
     touch-action: manipulation;
   }
 }
+
+
+/* Fix Go button width */
+.filter-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filter-action .go-button {
+  flex: 0 0 72px !important;
+  width: 72px !important;
+  min-width: 72px !important;
+  max-width: 72px !important;
+}
+
+.filter-action .btn-clear {
+  flex: 0 0 90px !important;
+  width: 90px !important;
+}
+
+.filter-action .btn-export-excel {
+  flex: 0 0 auto !important;
+  width: auto !important;
+}

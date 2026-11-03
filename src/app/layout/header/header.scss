@@ -1,11 +1,12 @@
+
 :host {
   display: block;
   width: 100%;
 }
 
 /* =========================================================
-  HEADER BAR
-  ========================================================= */
+   HEADER BAR
+   ========================================================= */
 
 .header {
   position: relative;
@@ -15,16 +16,27 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 12px;
   box-sizing: border-box;
-  // padding: 8px 24px;
   background: linear-gradient(90deg, #14284a 0%, #192f51 50%, #1f3c66 100%);
-  border-bottom: 3px solid #c99022; /* gold accent line */
+  border-bottom: 3px solid #c99022;
   box-shadow: 0 3px 10px rgba(10, 25, 47, 0.25);
 }
 
+/* Hamburger - visible on all screen sizes */
+
 .menu-toggle {
-  display: none;
+  display: flex;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
 }
 
 /* ---------- Logo ---------- */
@@ -32,7 +44,9 @@
 .header-title {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  margin: 0;
+  flex-shrink: 0;
 }
 
 .header-logo {
@@ -45,7 +59,7 @@
   border-radius: 6px;
   box-sizing: border-box;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
-  margin-left: -16px;
+  margin: 0;
 }
 
 /* ---------- Right side ---------- */
@@ -58,7 +72,7 @@
 
 .header-identity {
   display: flex;
-  flex-direction: row; /* organization text and profile on one line */
+  flex-direction: row;
   align-items: center;
   gap: 18px;
 }
@@ -105,7 +119,7 @@
 }
 
 .profile-avatar {
-  position: relative;               /* needed for the dot */
+  position: relative;
   width: 32px;
   height: 32px;
   flex-shrink: 0;
@@ -119,7 +133,6 @@
   font-size: 11px;
   font-weight: 700;
 
-  /* green "online" dot, same as the sidebar */
   &::after {
     content: '';
     position: absolute;
@@ -129,7 +142,7 @@
     height: 9px;
     border-radius: 50%;
     background: #3ecf8e;
-    border: 2px solid #2a3f5e;      /* matches the profile pill so the dot looks cut out */
+    border: 2px solid #2a3f5e;
   }
 }
 
@@ -230,7 +243,7 @@
   margin: 4px 0;
 }
 
-/* ---------- Client assignment warning (unchanged) ---------- */
+/* ---------- Client assignment warning ---------- */
 
 .client-assignment-warning {
   display: flex;
@@ -267,78 +280,8 @@
 }
 
 /* =========================================================
-  HEADER RESPONSIVE
-  ========================================================= */
-
-@media (max-width: 900px) {
-  .header {
-    min-height: 56px;
-    padding: 8px 14px;
-  }
-
-  .menu-toggle {
-    display: flex;
-    width: 38px;
-    height: 38px;
-    margin-right: 5px;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-  }
-
-  .organization {
-    display: none;
-  }
-
-  .header-identity {
-    gap: 0;
-  }
-
-  .profile {
-    padding: 3px;
-  }
-
-  .profile-meta {
-    display: none;
-  }
-
-  .profile-caret {
-    display: none;
-  }
-}
-
-@media (max-width: 1024px) {
-  .header-logo {
-    margin-left: 127px;
-  }
-}
-
-@media (max-width: 480px) {
-  .header-logo {
-    margin-left: -7px;
-  }
-}
-
-@media (max-width: 600px) {
-  .header {
-    min-height: 52px;
-    padding: 6px 12px;
-  }
-
-  .header-logo {
-    height: 34px;
-    padding: 2px 6px;
-  }
-
-  .profile-avatar {
-    width: 30px;
-    height: 30px;
-  }
-}
-
-/* =========================================================
-  PROFILE MODAL
-  ========================================================= */
+   PROFILE MODAL
+   ========================================================= */
 
 .profile-modal-backdrop {
   position: fixed;
@@ -524,31 +467,9 @@
   }
 }
 
-@media (max-width: 480px) {
-  .profile-modal-backdrop {
-    padding: 12px;
-  }
-
-  .profile-modal-body {
-    padding: 20px 18px 8px;
-  }
-
-  .profile-modal-footer {
-    padding: 12px 18px 16px;
-  }
-
-  .profile-info-row {
-    gap: 10px;
-  }
-
-  .profile-info-value {
-    max-width: 55%;
-  }
-}
-
 /* =========================================================
-  CHANGE PASSWORD MODAL
-  ========================================================= */
+   CHANGE PASSWORD MODAL
+   ========================================================= */
 
 .change-password-modal-backdrop {
   position: fixed;
@@ -788,6 +709,107 @@
     transform: translateY(0) scale(1);
   }
 }
+
+/* =========================================================
+   RESPONSIVE DESIGN
+   ========================================================= */
+
+/* Tablet and smaller desktop */
+
+@media (max-width: 900px) {
+  .header {
+    min-height: 56px;
+    padding: 8px 14px;
+    gap: 10px;
+  }
+
+  .organization {
+    display: none;
+  }
+
+  .header-identity {
+    gap: 0;
+  }
+
+  .profile {
+    padding: 3px;
+  }
+
+  .profile-meta,
+  .profile-caret {
+    display: none;
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .header {
+    min-height: 52px;
+    padding: 6px 12px;
+    gap: 10px;
+  }
+
+  .header-logo {
+    width: 160px;
+    height: 40px;
+    padding: 2px 6px;
+  }
+
+  .profile-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .header-actions {
+    gap: 6px;
+  }
+}
+
+/* Very small mobile screens */
+
+@media (max-width: 360px) {
+  .header {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  .menu-toggle {
+    width: 34px;
+    min-width: 34px;
+  }
+
+  .header-logo {
+    width: 140px;
+    height: 38px;
+  }
+}
+
+/* Profile modal - mobile */
+
+@media (max-width: 480px) {
+  .profile-modal-backdrop {
+    padding: 12px;
+  }
+
+  .profile-modal-body {
+    padding: 20px 18px 8px;
+  }
+
+  .profile-modal-footer {
+    padding: 12px 18px 16px;
+  }
+
+  .profile-info-row {
+    gap: 10px;
+  }
+
+  .profile-info-value {
+    max-width: 55%;
+  }
+}
+
+/* Change password modal - mobile */
 
 @media (max-width: 480px) {
   .change-password-modal-backdrop {
