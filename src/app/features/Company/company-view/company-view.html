@@ -1,284 +1,260 @@
-<div class="page-container">
-  <div class="main-card">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="page-title">
+<div class="page-container container-fluid">
+
+  <!-- ===== Company Details Card ===== -->
+  <div class="card main-card">
+    <div class="card-header page-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+      <div class="page-title d-flex align-items-center gap-2">
         <mat-icon>apartment</mat-icon>
         <span>View Company Master</span>
       </div>
 
-      <div class="header-action">
-        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
+      <div class="header-action d-grid d-md-block">
+        <button type="button" class="btn btn-outline-theme d-inline-flex align-items-center justify-content-center gap-1 back-index-btn"
+                (click)="backToIndexPage()">
           <mat-icon>arrow_back</mat-icon>
           <span>Back to Index</span>
         </button>
       </div>
     </div>
 
-    <mat-divider></mat-divider>
+    <div class="card-body user-information">
 
-    <div class="user-information">
+      <!-- Company Details -->
       <div class="details-section">
-        <div class="section-heading">
-          <span>Company Details</span>
-        </div>
+        <h5 class="section-heading">Company Details</h5>
 
-        <!-- Row 2 -->
-        <div class="details-grid">
-          <!-- Company Type -->
-          <div class="info-field">
-            <span class="field-label">Company Type:</span>
-            <span class="field-value">
-              {{ getCompanyTypeLabel(company.companySiteOffice) }}
-            </span>
-          </div>
-          <div class="info-field">
-            <span class="field-label">Company Name:</span>
-            <span class="field-value">
-              {{ company.companyName || '-' }}
-            </span>
+        <div class="row g-4">
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">Company Type:</div>
+            <div class="field-value text-break">{{ getCompanyTypeLabel(company.companySiteOffice) }}</div>
           </div>
 
-          <div class="info-field">
-            <span class="field-label">PAN:</span>
-            <span class="field-value">
-              {{ company.pan || '-' }}
-            </span>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">Company Name:</div>
+            <div class="field-value text-break">{{ company.companyName || '-' }}</div>
           </div>
 
-          <!-- Row 3 -->
-          <div class="info-field">
-            <span class="field-label">GST Number:</span>
-            <span class="field-value">
-              {{ company.gstNo || '-' }}
-            </span>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">PAN:</div>
+            <div class="field-value text-break">{{ company.pan || '-' }}</div>
           </div>
 
-          <div class="empty-field"></div>
-          <div class="empty-field"></div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">GST Number:</div>
+            <div class="field-value text-break">{{ company.gstNo || '-' }}</div>
+          </div>
         </div>
       </div>
 
+      <!-- Address Details -->
       <div class="details-section">
-        <div class="section-heading">
-          <span>Address Details</span>
-        </div>
+        <h5 class="section-heading">Address Details</h5>
 
-        <div class="details-grid">
-          <!-- Row 4 -->
-          <div class="info-field">
-            <span class="field-label">Address Line 1:</span>
-            <span class="field-value">
-              {{ company.addressLine1 || '-' }}
-            </span>
+        <div class="row g-4">
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">Address Line 1:</div>
+            <div class="field-value text-break">{{ company.addressLine1 || '-' }}</div>
           </div>
 
-          <div class="info-field">
-            <span class="field-label">Address Line 2:</span>
-            <span class="field-value">
-              {{ company.addressLine2 || '-' }}
-            </span>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">Address Line 2:</div>
+            <div class="field-value text-break">{{ company.addressLine2 || '-' }}</div>
           </div>
 
-          <div class="info-field">
-            <span class="field-label">City:</span>
-            <span class="field-value">
-              {{ company.city || '-' }}
-            </span>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">City:</div>
+            <div class="field-value text-break">{{ company.city || '-' }}</div>
           </div>
 
-          <div class="info-field">
-            <span class="field-label">State:</span>
-            <span class="field-value">
-              {{ company.stateName || '-' }}
-            </span>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">State:</div>
+            <div class="field-value text-break">{{ company.stateName || '-' }}</div>
           </div>
 
-          <!-- Row 5 -->
-          <div class="info-field">
-            <span class="field-label">Location:</span>
-            <span class="field-value">
-              {{ company.location || '-' }}
-            </span>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">Location:</div>
+            <div class="field-value text-break">{{ company.location || '-' }}</div>
           </div>
 
-          <div class="info-field">
-            <span class="field-label">Pincode:</span>
-            <span class="field-value">
-              {{ company.pincode || '-' }}
-            </span>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <div class="field-label">Pincode:</div>
+            <div class="field-value text-break">{{ company.pincode || '-' }}</div>
           </div>
 
-          <!-- Working Days -->
-          <div class="info-field working-days-field">
-            <span class="field-label">Working Days:</span>
-            <span class="field-value">
-              {{ getWorkingDaysLabel(company.workingDays) }}
-            </span>
+          <div class="col-12 col-lg-6">
+            <div class="field-label">Working Days:</div>
+            <div class="field-value text-break">{{ getWorkingDaysLabel(company.workingDays) }}</div>
           </div>
-
-          <!-- <div class="empty-field"></div> -->
-          <div class="empty-field"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Shifts -->
-  <div class="section-card">
-    <div class="section-header shift-header">
-      <div class="section-title">
+  <!-- ===== Working Hours (Shifts) ===== -->
+  <div class="card section-card">
+    <div class="card-header section-header d-flex align-items-center justify-content-between gap-2">
+      <div class="section-title d-flex align-items-center gap-2">
         <mat-icon>schedule</mat-icon>
         <span>Working Hours</span>
       </div>
+
       @if (addPer === 'Y') {
-      <button type="button" class="back-index-btn" (click)="openAddShift()">
-        <mat-icon>add</mat-icon>
-        <span>Add Working Hours</span>
-      </button>
-    }
+        <button type="button" class="btn btn-outline-theme d-inline-flex align-items-center gap-1 back-index-btn"
+                (click)="openAddShift()">
+          <mat-icon>add</mat-icon>
+          <span>Add Working Hours</span>
+        </button>
+      }
     </div>
 
-    <mat-divider></mat-divider>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle mb-0 history-table">
+        <thead>
+          <tr>
+            <th style="width: 5%">#</th>
+            <th style="width: 35%">Shift Name</th>
+            <th style="width: 20%">From Time</th>
+            <th style="width: 20%">To Time</th>
+            <th style="width: 20%">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of shifts; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ s.shiftName || '-' }}</td>
+            <td>{{ s.fromTime || '-' }}</td>
+            <td>{{ s.toTime || '-' }}</td>
+            <td>
+              <div class="d-flex gap-2">
+                @if (editPer === 'Y') {
+                  <button type="button" class="btn btn-outline-theme icon-action" title="Edit" (click)="openEditShift(s)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                }
+                @if (deletePer === 'Y') {
+                  <button type="button" class="btn btn-outline-danger icon-action" title="Delete" (click)="deleteShift(s)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                }
+              </div>
+            </td>
+          </tr>
 
-    <div class="table-container">
-      <div class="history-table-wrapper">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th style="width: 5%">#</th>
-              <th style="width: 35%">Shift Name</th>
-              <th style="width: 20%">From Time</th>
-              <th style="width: 20%">To Time</th>
-              <th style="width: 20%">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let s of shifts; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ s.shiftName || '-' }}</td>
-              <td>{{ s.fromTime || '-' }}</td>
-              <td>{{ s.toTime || '-' }}</td>
-              <td>
-                  @if (editPer === 'Y') {
-                <button type="button" class="icon-action" title="Edit" (click)="openEditShift(s)">
-                  <mat-icon>edit</mat-icon>
-                </button>
-              }
-               @if (deletePer === 'Y') {
-                <button type="button" class="icon-action danger" title="Delete" (click)="deleteShift(s)">
-                  <mat-icon>delete</mat-icon>
-                </button>
-              }
-              </td>
-            </tr>
-            <tr *ngIf="!shifts || shifts.length === 0">
-              <td colspan="5" class="no-records-box">
-                <div class="no-records-content">
-                  <mat-icon>info</mat-icon>
-                  <span>No shifts available</span>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <tr *ngIf="!shifts || shifts.length === 0">
+            <td colspan="5" class="no-records-box text-center">
+              <div class="d-flex align-items-center justify-content-center gap-2">
+                <mat-icon>info</mat-icon>
+                <span>No shifts available</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- Shift Modal -->
+  <!-- ===== Shift Modal ===== -->
   <div class="modal-overlay" *ngIf="showShiftModal" (click)="closeShiftModal()">
-    <div class="change-manager-modal" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <div class="modal-title">
-          <div class="modal-title-icon"><mat-icon>schedule</mat-icon></div>
-          <div>
-            <div class="modal-title-text">{{ isEditShift ? 'Edit Shift' : 'Add Shift' }}</div>
-            <div class="modal-subtitle">{{ company.companyName }}</div>
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-content shadow-lg">
+
+        <div class="modal-header">
+          <div class="d-flex align-items-center gap-3 min-w-0">
+            <div class="modal-title-icon"><mat-icon>schedule</mat-icon></div>
+            <div>
+              <div class="modal-title-text">{{ isEditShift ? 'Edit Shift' : 'Add Shift' }}</div>
+              <div class="modal-subtitle">{{ company.companyName }}</div>
+            </div>
           </div>
-        </div>
-        <button type="button" class="modal-close-button" [disabled]="isSavingShift" (click)="closeShiftModal()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
-
-      <mat-divider></mat-divider>
-
-      <div class="modal-body">
-        <div class="manager-form-group">
-          <label class="modal-field-label">Shift Name <span class="required">*</span></label>
-          <input type="text" class="manager-select" maxlength="100" placeholder="e.g. Morning Shift" [(ngModel)]="shiftForm.shiftName" name="shiftName" />
-          <div class="manager-validation-error" *ngIf="shiftSubmitted && !shiftForm.shiftName?.trim()"><mat-icon>error_outline</mat-icon><span>Shift name is required</span></div>
+          <button type="button" class="btn-close" aria-label="Close"
+                  [disabled]="isSavingShift" (click)="closeShiftModal()"></button>
         </div>
 
-        <div class="time-row">
-          <div class="manager-form-group">
-            <label class="modal-field-label">From Time <span class="required">*</span></label>
-            <input type="time" class="manager-select" step="60" [(ngModel)]="shiftForm.fromTime" name="fromTime" />
-            <div class="manager-validation-error" *ngIf="shiftSubmitted && !shiftForm.fromTime"><mat-icon>error_outline</mat-icon><span>Required</span></div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label modal-field-label">
+              Shift Name <span class="required">*</span>
+            </label>
+            <input type="text" class="form-control" maxlength="100" placeholder="e.g. Morning Shift"
+                   [class.is-invalid]="shiftSubmitted && !shiftForm.shiftName?.trim()"
+                   [(ngModel)]="shiftForm.shiftName" name="shiftName" />
+            <div class="invalid-feedback">Shift name is required</div>
           </div>
 
-          <div class="manager-form-group">
-            <label class="modal-field-label">To Time <span class="required">*</span></label>
-            <input type="time" class="manager-select" step="60" [(ngModel)]="shiftForm.toTime" name="toTime" />
-            <div class="manager-validation-error" *ngIf="shiftSubmitted && !shiftForm.toTime"><mat-icon>error_outline</mat-icon><span>Required</span></div>
+          <div class="row g-3">
+            <div class="col-12 col-sm-6">
+              <label class="form-label modal-field-label">
+                From Time <span class="required">*</span>
+              </label>
+              <input type="time" class="form-control" step="60"
+                     [class.is-invalid]="shiftSubmitted && !shiftForm.fromTime"
+                     [(ngModel)]="shiftForm.fromTime" name="fromTime" />
+              <div class="invalid-feedback">Required</div>
+            </div>
+
+            <div class="col-12 col-sm-6">
+              <label class="form-label modal-field-label">
+                To Time <span class="required">*</span>
+              </label>
+              <input type="time" class="form-control" step="60"
+                     [class.is-invalid]="shiftSubmitted && !shiftForm.toTime"
+                     [(ngModel)]="shiftForm.toTime" name="toTime" />
+              <div class="invalid-feedback">Required</div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="modal-footer">
-        <button type="button" class="modal-cancel-button" [disabled]="isSavingShift" (click)="closeShiftModal()">Cancel</button>
-        <button type="button" class="modal-save-button" [disabled]="isSavingShift" (click)="saveShift()">
-          <mat-icon>save</mat-icon>
-          <span>{{ isSavingShift ? 'Saving...' : isEditShift ? 'Update Shift' : 'Save Shift' }}</span>
-        </button>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary modal-btn"
+                  [disabled]="isSavingShift" (click)="closeShiftModal()">Cancel</button>
+          <button type="button" class="btn btn-navy modal-btn d-inline-flex align-items-center gap-1"
+                  [disabled]="isSavingShift" (click)="saveShift()">
+            <mat-icon>save</mat-icon>
+            <span>{{ isSavingShift ? 'Saving...' : isEditShift ? 'Update Shift' : 'Save Shift' }}</span>
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
 
- 
-
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-title">
+  <!-- ===== Action History ===== -->
+  <div class="card section-card">
+    <div class="card-header section-header d-flex align-items-center">
+      <div class="section-title d-flex align-items-center gap-2">
         <mat-icon>history</mat-icon>
         <span>Action History</span>
       </div>
     </div>
 
-    <mat-divider></mat-divider>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle mb-0 history-table">
+        <thead>
+          <tr>
+            <th style="width: 5%">#</th>
+            <th style="width: 20%">Action By</th>
+            <th style="width: 20%">Updated On</th>
+            <th style="width: 55%">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let history of transactionHistory; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ history.name || '-' }}</td>
+            <td>{{ history.entryDate || '-' }}</td>
+            <td>
+              <span class="badge action-badge">{{ history.action || '-' }}</span>
+            </td>
+          </tr>
 
-    <div class="table-container">
-      <div class="history-table-wrapper">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th style="width: 5%">#</th>
-              <th style="width: 20%">Action By</th>
-              <th style="width: 20%">Updated On</th>
-              <th style="width: 55%">Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr *ngFor="let history of transactionHistory; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ history.name || '-' }}</td>
-              <td>{{ history.entryDate || '-' }}</td>
-              <td>
-                <span class="action-badge">
-                  {{ history.action || '-' }}
-                </span>
-              </td>
-            </tr>
-            <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
-              <td colspan="5" class="">
-                <span>No action history available</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+          <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
+            <td colspan="4" class="no-records-box text-center">
+              <span>No action history available</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
+
 </div>

@@ -1,7 +1,9 @@
-<div class="page-container">
+<div class="page-container container-fluid">
   <div class="main-card">
-    <div class="page-header">
-      <div class="page-title">
+
+    <!-- ===== Header ===== -->
+    <div class="page-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 gap-md-3">
+      <div class="page-title d-flex align-items-center gap-2">
         <mat-icon>business</mat-icon>
         <span>Company Master</span>
 
@@ -14,7 +16,7 @@
         </a>
       </div>
 
-      <div class="header-action">
+      <div class="header-action d-grid d-md-flex">
         @if (addPer === 'Y') {
           <button type="button" class="add-button" (click)="addCompany()">
             Add New
@@ -26,128 +28,122 @@
 
     <mat-divider></mat-divider>
 
+    <!-- ===== Search / Filters ===== -->
     <div class="search-section" *ngIf="isPanelVisible">
-      <div class="search-grid">
-        <div class="search-row">
-          <div class="search-wrapper">
-            <div class="search-box">
-              <input type="text" [(ngModel)]="searchQuery" placeholder="Search Company Name / City / Location" (keyup.enter)="onSearch()" class="search-input" />
+      <div class="row g-2 g-lg-3 align-items-start">
 
-              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-          </div>
-          <div class="status-wrapper">
-            <div class="task-category-dropdown" (click)="$event.stopPropagation()">
-              <div class="status-select cat-trigger" [class.cat-placeholder]="stateId === 0" (click)="toggleStateDropdown()">
-                <span class="cat-trigger-text">{{ selectedStateName || '--All States--' }}</span>
-                <span class="cat-caret">▼</span>
-              </div>
-
-              <div class="cat-panel" *ngIf="stateOpen">
-                <input type="text" class="cat-search" placeholder="Search state..." [(ngModel)]="stateSearch" />
-
-                <div class="cat-list">
-                  <div class="cat-item" [class.active]="stateId === 0" (click)="selectState(0)">--All States--</div>
-
-                  <div class="cat-item" *ngFor="let state of filteredStates" [class.active]="state.stateId === stateId" (click)="selectState(state.stateId)">
-                    {{ state.name }}
-                  </div>
-
-                  <div class="cat-empty" *ngIf="filteredStates.length === 0">No results found</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- COMPANY TYPE FILTER -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="companySiteOffice" (change)="onSearch()">
-              <option [ngValue]="0">--All Company Types--</option>
-              <option [ngValue]="1">Main</option>
-              <option [ngValue]="2">Site</option>
-            </select>
-          </div>
-
-          <!-- WORKING DAYS FILTER -->
-          <div class="status-wrapper working-days-wrapper">
-            <div class="task-category-dropdown working-days-dropdown" (click)="$event.stopPropagation()">
-              <div class="status-select cat-trigger" (click)="toggleWorkingDaysDropdown()">
-                <span class="cat-trigger-text">
-                  {{ selectedWorkingDaysLabel }}
-                </span>
-
-                <span class="cat-caret">▼</span>
-              </div>
-
-              <div class="cat-panel working-days-filter-panel" *ngIf="workingDaysOpen">
-                <div class="working-days-all" (click)="clearWorkingDaysFilter()">--All Working Days--</div>
-
-                <div class="working-days-options">
-                  <label class="working-day-option" *ngFor="let day of workingDaysList">
-                    <input type="checkbox" [checked]="selectedWorkingDays.includes(day.value)" (change)="toggleWorkingDay(day.value)" />
-
-                    <span>{{ day.label }}</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- STATUS -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
-              <option value="">--All Status--</option>
-              <option value="1">Active</option>
-              <option value="2">Inactive</option>
-              <option value="3">Deleted</option>
-            </select>
+        <!-- Search box -->
+        <div class="col-12 col-xl-4">
+          <div class="search-box">
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search Company Name / City / Location"
+                   (keyup.enter)="onSearch()" class="search-input" />
+            <button type="button" class="search-btn" (click)="onSearch()" title="Search">
+              <i class="fa fa-search"></i>
+            </button>
           </div>
         </div>
 
-        <div class="filter-row"></div>
+        <!-- State -->
+        <div class="col-12 col-sm-6 col-xl-2">
+          <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+            <div class="status-select cat-trigger" [class.cat-placeholder]="stateId === 0" (click)="toggleStateDropdown()">
+              <span class="cat-trigger-text">{{ selectedStateName || '--All States--' }}</span>
+              <span class="cat-caret">▼</span>
+            </div>
 
-        <div class="filter-row">
-          <!-- From Date -->
+            <div class="cat-panel" *ngIf="stateOpen">
+              <input type="text" class="cat-search" placeholder="Search state..." [(ngModel)]="stateSearch" />
 
-          <!-- GO -->
-          <div class="go-wrapper">
-            <button type="button" class="go-button" (click)="onSearch()"><mat-icon>search</mat-icon>Go</button>
+              <div class="cat-list">
+                <div class="cat-item" [class.active]="stateId === 0" (click)="selectState(0)">--All States--</div>
+
+                <div class="cat-item" *ngFor="let state of filteredStates"
+                     [class.active]="state.stateId === stateId" (click)="selectState(state.stateId)">
+                  {{ state.name }}
+                </div>
+
+                <div class="cat-empty" *ngIf="filteredStates.length === 0">No results found</div>
+              </div>
+            </div>
           </div>
+        </div>
 
-          <!-- CLEAR -->
-          <div class="clear-wrapper">
-            <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button>
+        <!-- Company Type -->
+        <div class="col-12 col-sm-6 col-xl-2">
+          <select class="status-select" [(ngModel)]="companySiteOffice" (change)="onSearch()">
+            <option [ngValue]="0">--All Company Types--</option>
+            <option [ngValue]="1">Main</option>
+            <option [ngValue]="2">Site</option>
+          </select>
+        </div>
+
+        <!-- Working Days -->
+        <div class="col-12 col-sm-6 col-xl-2 working-days-wrapper">
+          <div class="task-category-dropdown working-days-dropdown" (click)="$event.stopPropagation()">
+            <div class="status-select cat-trigger" (click)="toggleWorkingDaysDropdown()">
+              <span class="cat-trigger-text">{{ selectedWorkingDaysLabel }}</span>
+              <span class="cat-caret">▼</span>
+            </div>
+
+            <div class="cat-panel working-days-filter-panel" *ngIf="workingDaysOpen">
+              <div class="working-days-all" (click)="clearWorkingDaysFilter()">--All Working Days--</div>
+
+              <div class="working-days-options">
+                <label class="working-day-option" *ngFor="let day of workingDaysList">
+                  <input type="checkbox" [checked]="selectedWorkingDays.includes(day.value)"
+                         (change)="toggleWorkingDay(day.value)" />
+                  <span>{{ day.label }}</span>
+                </label>
+              </div>
+            </div>
           </div>
+        </div>
+
+        <!-- Status -->
+        <div class="col-12 col-sm-6 col-xl-2">
+          <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+            <option value="">--All Status--</option>
+            <option value="1">Active</option>
+            <option value="2">Inactive</option>
+            <option value="3">Deleted</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Go / Clear -->
+      <div class="d-flex flex-wrap gap-2 mt-3">
+        <div class="go-wrapper flex-fill flex-md-grow-0">
+          <button type="button" class="go-button" (click)="onSearch()">
+            <mat-icon>search</mat-icon>Go
+          </button>
+        </div>
+        <div class="clear-wrapper flex-fill flex-md-grow-0">
+          <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button>
         </div>
       </div>
     </div>
 
     <mat-divider></mat-divider>
 
+    <!-- ===== Table ===== -->
     <div class="table-section">
-      <div class="table-toolbar">
-        <div class="record-summary">
-          {{ recordSummary }}
-        </div>
+
+      <!-- Top toolbar -->
+      <div class="table-toolbar d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+        <div class="record-summary">{{ recordSummary }}</div>
 
         <div class="pagination">
           <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
-
           <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
-
           <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
-
           <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
-
           <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
 
-      <div class="table-wrapper">
+      <div class="table-responsive table-wrapper">
         <table class="designation-table">
           <colgroup>
             <col class="col-serial" />
@@ -165,13 +161,13 @@
             <tr>
               <th class="serial-column sticky-1">#</th>
 
-              <th *ngFor="let col of columns; let i = index" [class.sticky-2]="i === 0" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+              <th *ngFor="let col of columns; let i = index" [class.sticky-2]="i === 0"
+                  [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
                 <div class="column-header">
                   <span>{{ col.label }}</span>
-
                   <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'">▲</span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'">▼</span>
                   </span>
                 </div>
               </th>
@@ -182,34 +178,17 @@
 
           <tbody>
             <tr *ngFor="let client of companies; let i = index">
-              <td class="serial-cell sticky-1">
-                {{ (currentPage - 1) * size + i + 1 }}
-              </td>
+              <td class="serial-cell sticky-1">{{ (currentPage - 1) * size + i + 1 }}</td>
 
               <td class="plan-name-cell sticky-2">
-                <span class="user-name">
-                  {{ client.companyName || '-' }}
-                </span>
+                <span class="user-name">{{ client.companyName || '-' }}</span>
               </td>
 
-              <!-- COMPANY TYPE -->
-              <td class="plan-name-cell">
-                {{ getCompanyTypeLabel(client.companySiteOffice) }}
-              </td>
+              <td class="plan-name-cell">{{ getCompanyTypeLabel(client.companySiteOffice) }}</td>
+              <td class="plan-name-cell">{{ client.city || '-' }}</td>
+              <td class="plan-name-cell">{{ client.stateName || '-' }}</td>
+              <td class="plan-name-cell">{{ client.location || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.city || '-' }}
-              </td>
-
-              <td class="plan-name-cell">
-                {{ client.stateName || '-' }}
-              </td>
-
-              <td class="plan-name-cell">
-                {{ client.location || '-' }}
-              </td>
-
-              <!-- WORKING DAYS -->
               <td class="plan-name-cell working-days-cell" [title]="getWorkingDaysLabel(client.workingDays)">
                 {{ getWorkingDaysLabel(client.workingDays) }}
               </td>
@@ -233,7 +212,6 @@
                       <mat-icon>edit</mat-icon>
                     </button>
                   }
-
                   @if (deletePer === 'Y') {
                     <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteCompany(client.companyId)">
                       <mat-icon>delete</mat-icon>
@@ -245,17 +223,20 @@
 
             <tr *ngIf="!companies || companies.length === 0">
               <td colspan="9" class="no-records">
-                <mat-icon>info_outline</mat-icon>
-                <span>No records found</span>
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                  <mat-icon>info_outline</mat-icon>
+                  <span>No records found</span>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div class="table-toolbar bottom-toolbar">
-        <div class="record-summary">
-          {{ recordSummary }}
-        </div>
+
+      <!-- Bottom toolbar -->
+      <div class="table-toolbar bottom-toolbar d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+        <div class="record-summary">{{ recordSummary }}</div>
+
         <div class="pagination">
           <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
           <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
@@ -267,5 +248,6 @@
         </div>
       </div>
     </div>
+
   </div>
 </div>
