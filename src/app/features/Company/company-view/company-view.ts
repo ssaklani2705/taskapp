@@ -29,6 +29,14 @@ export class CompanyView implements OnInit {
   transactionHistory: any[] = [];
   isLoading = false;
 
+    // Permissions
+  addPer = 'N';
+  editPer = 'N';
+  deletePer = 'N';
+  viewPer = 'N';
+  exportExcel = 'N';
+  moduleName = '';
+
   constructor(
     private route: ActivatedRoute,
     private dataProvider: DataProviderService,
@@ -40,6 +48,25 @@ export class CompanyView implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.userId = Number(sessionStorage.getItem('userId')) || 0;
     }
+
+        if (isPlatformBrowser(this.platformId)) {
+          this.userId = Number(sessionStorage.getItem('userId')) || 0;
+    
+          const storedModules = sessionStorage.getItem('selectedModuleDetail');
+          if (storedModules) {
+            try {
+              const parsed = JSON.parse(storedModules);
+              this.moduleName = parsed.name ?? '';
+              this.addPer = parsed.addPer ?? 'N';
+              this.editPer = parsed.editPer ?? 'N';
+              this.deletePer = parsed.deletePer ?? 'N';
+              this.viewPer = parsed.viewPer ?? 'N';
+              this.exportExcel = parsed.exportExcel ?? 'N';
+            } catch (error) {
+              console.error('Invalid selectedModuleDetail:', error);
+            }
+          }
+        }
 
     this.companyId = Number(this.route.snapshot.paramMap.get('companyId')) || 0;
 

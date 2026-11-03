@@ -1,5 +1,5 @@
-import { CommonModule, DatePipe } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
+import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
@@ -75,6 +75,13 @@ export class ReassignReport implements OnInit {
   selectedTaskCategory = '';
   selectedClientId = 0;
   selectedUserId = 0;
+    // Permissions
+  addPer = 'N';
+  editPer = 'N';
+  deletePer = 'N';
+  viewPer = 'N';
+  exportExcel = 'N';
+  moduleName = '';
 
   taskCategories: TaskCategory[] = [];
   groupedCategories: { department: string; items: TaskCategory[] }[] = [];
@@ -85,6 +92,7 @@ export class ReassignReport implements OnInit {
     private dataprovider: DataProviderService,
     private datePipe: DatePipe,
     private sessionService: SessionStorageService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +100,25 @@ export class ReassignReport implements OnInit {
     this.loadDepartments();
     this.selectedTaskCatId = Number(this.selectedTaskCategory) || 0;
     const s = this.sessionService.getItem(this.filterKey);
+
+        if (isPlatformBrowser(this.platformId)) {
+      // this.userId = Number(sessionStorage.getItem('userId')) || 0;
+
+      const storedModules = sessionStorage.getItem('selectedModuleDetail');
+      if (storedModules) {
+        try {
+          const parsed = JSON.parse(storedModules);
+          this.moduleName = parsed.name ?? '';
+          this.addPer = parsed.addPer ?? 'N';
+          this.editPer = parsed.editPer ?? 'N';
+          this.deletePer = parsed.deletePer ?? 'N';
+          this.viewPer = parsed.viewPer ?? 'N';
+          this.exportExcel = parsed.exportExcel ?? 'N';
+        } catch (error) {
+          console.error('Invalid selectedModuleDetail:', error);
+        }
+      }
+    }
 
     if (s) {
       this.currentPage = s.currentPage ?? 1;
@@ -304,7 +331,7 @@ export class ReassignReport implements OnInit {
 
     this.onSearch();
   }
-  exportExcelPer = 'Y';
+  // exportExcelPer = 'Y';
   loadActiveUsers(): void {
     this.dataprovider.getallUsers().subscribe({
       next: (users) => {

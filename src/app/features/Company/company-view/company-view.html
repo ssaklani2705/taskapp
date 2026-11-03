@@ -131,10 +131,12 @@
         <mat-icon>schedule</mat-icon>
         <span>Working Hours</span>
       </div>
+      @if (addPer === 'Y') {
       <button type="button" class="back-index-btn" (click)="openAddShift()">
         <mat-icon>add</mat-icon>
         <span>Add Working Hours</span>
       </button>
+    }
     </div>
 
     <mat-divider></mat-divider>
@@ -158,12 +160,16 @@
               <td>{{ s.fromTime || '-' }}</td>
               <td>{{ s.toTime || '-' }}</td>
               <td>
+                  @if (editPer === 'Y') {
                 <button type="button" class="icon-action" title="Edit" (click)="openEditShift(s)">
                   <mat-icon>edit</mat-icon>
                 </button>
+              }
+               @if (deletePer === 'Y') {
                 <button type="button" class="icon-action danger" title="Delete" (click)="deleteShift(s)">
                   <mat-icon>delete</mat-icon>
                 </button>
+              }
               </td>
             </tr>
             <tr *ngIf="!shifts || shifts.length === 0">

@@ -27,7 +27,7 @@
               {{ client.managerName || '-' }}
             </span>
 
-            <button *ngIf="client.status !== 3" type="button" class="change-manager-button" (click)="openChangeManagerModal()" matTooltip="Change Manager">
+            <button *ngIf="client.status !== 3 && (addPer === 'Y' || editPer === 'Y')" type="button" class="change-manager-button" (click)="openChangeManagerModal()" matTooltip="Change Manager">
               <mat-icon>edit</mat-icon>
               <span>Change</span>
             </button>

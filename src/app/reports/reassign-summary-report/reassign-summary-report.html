@@ -104,10 +104,12 @@
 
           <button type="button" class="btn-clear" (click)="clearFilters()">Clear</button>
 
+          @if (exportExcel === 'Y') {
           <button type="button" class="btn-export-excel" (click)="exportToExcel()">
             Export to Excel
             <i class="fas fa-file-excel" aria-hidden="true"></i>
           </button>
+        }
         </div>
       </div>
     </div>

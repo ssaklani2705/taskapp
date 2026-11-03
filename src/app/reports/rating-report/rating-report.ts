@@ -1,5 +1,5 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, HostListener, PLATFORM_ID, Inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
@@ -80,15 +80,43 @@ export class RatingReport implements OnInit {
 
   filterKey = SESSION_KEYS.RATING_REPORT_FILTER;
 
+    // Permissions
+  addPer = 'N';
+  editPer = 'N';
+  deletePer = 'N';
+  viewPer = 'N';
+  exportExcel = 'N';
+  moduleName = '';
+
   constructor(
     private reportService: DataProviderService,
     private sessionService: SessionStorageService,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {}
 
   ngOnInit(): void {
     this.sessionService.clearOtherSessions(this.filterKey);
 
     const filterState = this.sessionService.getItem(this.filterKey);
+
+        if (isPlatformBrowser(this.platformId)) {
+      // this.userId = Number(sessionStorage.getItem('userId')) || 0;
+
+      const storedModules = sessionStorage.getItem('selectedModuleDetail');
+      if (storedModules) {
+        try {
+          const parsed = JSON.parse(storedModules);
+          this.moduleName = parsed.name ?? '';
+          this.addPer = parsed.addPer ?? 'N';
+          this.editPer = parsed.editPer ?? 'N';
+          this.deletePer = parsed.deletePer ?? 'N';
+          this.viewPer = parsed.viewPer ?? 'N';
+          this.exportExcel = parsed.exportExcel ?? 'N';
+        } catch (error) {
+          console.error('Invalid selectedModuleDetail:', error);
+        }
+      }
+    }
 
     // if (filterState) {
     //   this.currentPage = filterState.currentPage ?? 1;
