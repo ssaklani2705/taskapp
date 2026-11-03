@@ -20,7 +20,7 @@
 
     <div class="col-12 col-md-6 col-xl-4 info-field">
       <div class="info-label">Title</div>
-      <div class="info-value">{{ task.title || '-' }}</div>
+      <div class="info-value">{{ task.title || 'NA' }}</div>
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 info-field">
@@ -79,7 +79,7 @@
 
     <div class="col-12 col-md-6 col-xl-4 info-field">
       <div class="info-label">Buddy</div>
-      <div class="info-value">{{ task.buddyName || '-' }}</div>
+      <div class="info-value">{{ task.buddyName || 'NA' }}</div>
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 info-field">
@@ -107,13 +107,13 @@
 
     <div class="col-12 col-md-6 col-xl-4 info-field">
       <div class="info-label">Closing Remarks</div>
-      <div class="info-value">{{ task.closeRemarks || '-' }}</div>
+      <div class="info-value">{{ task.closeRemarks || 'NA' }}</div>
     </div>
 
     <div class="col-12 col-md-6 col-xl-4 info-field">
       <div class="info-label">Closed On</div>
       <div class="info-value">
-        {{ task.closeDateTime ? (task.closeDateTime | date: 'dd-MM-yyyy hh:mm a') : '-' }}
+        {{ task.closeDateTime ? (task.closeDateTime | date: 'dd-MM-yyyy hh:mm a') : 'NA' }}
       </div>
     </div>
 
@@ -122,7 +122,7 @@
   <!-- DESCRIPTION -->
   <div class="description-section">
     <div class="description-label">Description</div>
-    <div class="description-value">{{ task.description || '-' }}</div>
+    <div class="description-value">{{ task.description || 'NA' }}</div>
   </div>
 </div>
 
@@ -217,10 +217,10 @@
         <tbody>
           <tr *ngFor="let history of transactionHistory; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ history.name || '-' }}</td>
-            <td>{{ history.entryDate || '-' }}</td>
+            <td>{{ history.name || 'NA' }}</td>
+            <td>{{ history.entryDate || 'NA' }}</td>
             <td>
-              <span class="badge action-badge">{{ history.action || '-' }}</span>
+              <span class="badge action-badge">{{ history.action || 'NA' }}</span>
             </td>
           </tr>
 
