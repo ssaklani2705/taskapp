@@ -1,212 +1,95 @@
-<div class="page-container">
+<div class="page-container container-fluid">
+
+  <!-- ===== Designation Details ===== -->
   <div class="main-card">
-    <div class="page-header">
-
-      <div class="page-title">
-
-        <mat-icon>
-          badge
-        </mat-icon>
-
-        <span>
-          View Designation Master
-        </span>
-
+    <div class="page-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 gap-md-3">
+      <div class="page-title d-flex align-items-center gap-2">
+        <mat-icon>badge</mat-icon>
+        <span>View Designation Master</span>
       </div>
 
-      <div class="header-action">
-
-        <button
-          type="button"
-          class="back-index-btn"
-          (click)="backToIndexPage()">
-
-         <mat-icon>arrow_back</mat-icon>
-
-          <span>
-            Back to Index
-          </span>
-
+      <div class="header-action d-grid d-md-flex">
+        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
+          <mat-icon>arrow_back</mat-icon>
+          <span>Back to Index</span>
         </button>
-
       </div>
-
     </div>
 
     <mat-divider></mat-divider>
-
-    <!-- Designation Information -->
 
     <div class="user-information">
+      <div class="row g-4">
 
-  <div class="user-info-grid">
+        <!-- Designation Name -->
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="info-label">Designation Name:</div>
+          <div class="info-value text-break">{{ designation.name || '-' }}</div>
+        </div>
 
-    <!-- Name -->
-    <div class="info-row">
+        <!-- Sequence -->
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="info-label">Sequence:</div>
+          <div class="info-value">{{ designation.sequence ?? '-' }}</div>
+        </div>
 
-      <span class="info-label">
-        Designation Name:
-      </span>
-
-      <span class="info-value">
-        {{ designation.name }}
-      </span>
-
-    </div>
-
-
-    <!-- Sequence -->
-    <div class="info-row">
-
-      <span class="info-label">
-        Sequence:
-      </span>
-
-      <span class="info-value">
-        {{ designation.sequence }}
-      </span>
-
-    </div>
-
-
-    <!-- Status -->
-    <div class="info-row status-row">
-
-      <span class="info-label">
-        Status:
-      </span>
-
-      <span
-        class="status-badge"
-        [ngClass]="common.getStatusClass(designation.status)"
-      >
-        {{ common.getStatusLabel(designation.status) }}
-      </span>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-  </div>
-
-
-  <!-- =========================================
-       ACTION HISTORY
-  ========================================== -->
-
-  <div class="section-card">
-
-    <div class="section-header">
-
-      <div class="section-title">
-
-        <mat-icon>
-          history
-        </mat-icon>
-
-        <span>
-          Action History
-        </span>
+        <!-- Status -->
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="info-label">Status:</div>
+          <div>
+            <span class="status-badge" [ngClass]="common.getStatusClass(designation.status)">
+              {{ common.getStatusLabel(designation.status) }}
+            </span>
+          </div>
+        </div>
 
       </div>
+    </div>
+  </div>
 
+  <!-- ===== Action History ===== -->
+  <div class="section-card">
+    <div class="section-header d-flex align-items-center">
+      <div class="section-title d-flex align-items-center gap-2">
+        <mat-icon>history</mat-icon>
+        <span>Action History</span>
+      </div>
     </div>
 
     <mat-divider></mat-divider>
 
-    <div class="table-container">
+    <div class="table-responsive history-table-wrapper">
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th style="width: 5%">#</th>
+            <th style="width: 20%">Action By</th>
+            <th style="width: 20%">Updated on</th>
+            <th style="width: 55%">Action</th>
+          </tr>
+        </thead>
 
-      <div class="history-table-wrapper">
+        <tbody>
+          <tr *ngFor="let history of transactionHistory; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ history.name }}</td>
+            <td>{{ history.entryDate }}</td>
+            <td>
+              <span class="action-badge">{{ history.action }}</span>
+            </td>
+          </tr>
 
-        <table class="history-table">
-
-          <thead>
-
-            <tr>
-
-              <th style="width:5%">
-                #
-              </th>
-
-              <th style="width:20%">
-                Action By
-              </th>
-
-              <th style="width:20%">
-                Updated on
-              </th>
-
-              <th style="width:55%">
-                Action
-              </th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            <tr
-              *ngFor="
-                let history of transactionHistory;
-                let i = index
-              ">
-
-              <td>
-                {{ i + 1 }}
-              </td>
-
-              <td>
-                {{ history.name }}
-              </td>
-
-              <td>
-                {{ history.entryDate }}
-              </td>
-
-              <td>
-
-                <span class="action-badge">
-                  {{ history.action }}
-                </span>
-
-              </td>
-
-            </tr>
-
-            <tr
-              *ngIf="
-                !transactionHistory ||
-                transactionHistory.length === 0
-              ">
-
-              <td
-                colspan="4"
-                class="no-records-box">
-
-                <mat-icon>
-                  info
-                </mat-icon>
-
-                <span>
-                  No action history found
-                </span>
-
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
+          <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
+            <td colspan="4" class="no-records-box">
+              <div class="d-flex align-items-center justify-content-center gap-2">
+                <mat-icon>info</mat-icon>
+                <span>No action history found</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
   </div>
 
 </div>

@@ -57,6 +57,14 @@ export class ViewClient {
   isChangingOutstanding = false;
   outstandingValidationError = false;
 
+    // Permissions
+  addPer = 'N';
+  editPer = 'N';
+  deletePer = 'N';
+  viewPer = 'N';
+  exportExcel = 'N';
+  moduleName = '';
+
   constructor(
     private route: ActivatedRoute,
     private dataprovider: DataProviderService,
@@ -71,6 +79,25 @@ export class ViewClient {
 
       if (storedUserId) {
         this.userId = Number(storedUserId);
+      }
+    }
+
+        if (isPlatformBrowser(this.platformId)) {
+      // this.userId = Number(sessionStorage.getItem('userId')) || 0;
+
+      const storedModules = sessionStorage.getItem('selectedModuleDetail');
+      if (storedModules) {
+        try {
+          const parsed = JSON.parse(storedModules);
+          this.moduleName = parsed.name ?? '';
+          this.addPer = parsed.addPer ?? 'N';
+          this.editPer = parsed.editPer ?? 'N';
+          this.deletePer = parsed.deletePer ?? 'N';
+          this.viewPer = parsed.viewPer ?? 'N';
+          this.exportExcel = parsed.exportExcel ?? 'N';
+        } catch (error) {
+          console.error('Invalid selectedModuleDetail:', error);
+        }
       }
     }
 
