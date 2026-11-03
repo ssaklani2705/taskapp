@@ -1,7 +1,9 @@
-<div class="page-container">
+<div class="page-container container-fluid">
   <div class="main-card">
-    <div class="page-header">
-      <div class="page-title">
+
+    <!-- ===== Header ===== -->
+    <div class="page-header d-flex flex-column flex-md-row align-items-md-stretch align-items-lg-center justify-content-between gap-2 gap-md-3">
+      <div class="page-title d-flex align-items-center gap-2">
         <mat-icon>location_on</mat-icon>
         <span>State Master</span>
 
@@ -14,7 +16,7 @@
         </a>
       </div>
 
-      <div class="header-action">
+      <div class="header-action d-grid d-md-flex">
         @if (addPer === 'Y') {
           <button type="button" class="add-button" (click)="addState()">
             <mat-icon>add</mat-icon>
@@ -26,87 +28,82 @@
 
     <mat-divider></mat-divider>
 
+    <!-- ===== Search / Filters ===== -->
     <div class="search-section" *ngIf="isPanelVisible">
-      <div class="search-grid">
-        <!-- Search -->
-        <div class="search-field search-name">
-          <label>State Name</label>
+      <div class="row g-2 g-md-3 align-items-end">
 
-          <div class="search-input-wrapper">
-            <input type="text" [(ngModel)]="searchQuery" placeholder="Search by State Code / State Name" (keyup.enter)="onSearch()" />
-
-            <button type="button" class="search-button" (click)="onSearch()">
-              <mat-icon>search</mat-icon>
-            </button>
+        <!-- State Name -->
+        <div class="col-12 col-md-5 col-lg-6">
+          <div class="search-field">
+            <label>State Name</label>
+            <div class="search-input-wrapper">
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by State Code / State Name" (keyup.enter)="onSearch()" />
+              <button type="button" class="search-button" (click)="onSearch()" title="Search">
+                <mat-icon>search</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Department -->
-
         <!-- Status -->
-        <div class="search-field">
-          <label>Status</label>
-
-          <select [(ngModel)]="selectedStatus" (change)="onSearch()">
-            <option value="">-- All Status --</option>
-            <option value="1">Active</option>
-            <option value="2">Inactive</option>
-            <option value="3">Deleted</option>
-          </select>
+        <div class="col-12 col-md-4 col-lg-3">
+          <div class="search-field">
+            <label>Status</label>
+            <select [(ngModel)]="selectedStatus" (change)="onSearch()">
+              <option value="">-- All Status --</option>
+              <option value="1">Active</option>
+              <option value="2">Inactive</option>
+              <option value="3">Deleted</option>
+            </select>
+          </div>
         </div>
 
-        <!-- Go Button -->
-        <div class="filter-action">
-          <button type="button" class="go-button" (click)="onSearch()">
-            <mat-icon>search</mat-icon>
-            Go
-          </button>
-          &nbsp;
-          <!-- Clear -->
-          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
+        <!-- Go / Clear -->
+        <div class="col-12 col-md-3 col-lg-auto">
+          <div class="filter-action d-flex gap-2">
+            <button type="button" class="go-button" (click)="onSearch()">
+              <mat-icon>search</mat-icon>
+              Go
+            </button>
+            <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
+          </div>
         </div>
+
       </div>
     </div>
 
     <mat-divider></mat-divider>
 
+    <!-- ===== Table ===== -->
     <div class="table-section">
-      <!-- Top Toolbar -->
-      <div class="table-toolbar">
-        <div class="record-summary">
-          {{ recordSummary }}
-        </div>
+
+      <!-- Top toolbar -->
+      <div class="table-toolbar d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-2">
+        <div class="record-summary">{{ recordSummary }}</div>
 
         <div class="pagination">
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
-
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
-
-          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button type="button" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
-
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
-
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
 
-      <!-- Table -->
-      <div class="table-wrapper">
+      <div class="table-responsive table-wrapper">
         <table class="designation-table">
           <thead>
             <tr>
               <th class="serial-column">#</th>
 
               <th *ngFor="let col of columns" [class.sortable]="col.sortable" (click)="col.sortable && sortData(col.key)">
-                <div class="column-header">
+                <div class="column-header d-flex align-items-center justify-content-between gap-2">
                   <span>{{ col.label }}</span>
-
                   <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
-
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'">▲</span>
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'">▼</span>
                   </span>
                 </div>
               </th>
@@ -117,15 +114,9 @@
 
           <tbody>
             <tr *ngFor="let rows of paginatedStates; let i = index">
-              <td class="serial-cell">
-                {{ (currentPage - 1) * recordsPerPage + i + 1 }}
-              </td>
-              <td>
-                {{ rows.code }}
-              </td>
-              <td>
-                {{ rows.name }}
-              </td>
+              <td class="serial-cell">{{ (currentPage - 1) * recordsPerPage + i + 1 }}</td>
+              <td>{{ rows.code }}</td>
+              <td>{{ rows.name }}</td>
 
               <td>
                 <span class="status-badge" [ngClass]="common.getStatusClass(rows.status)">
@@ -135,20 +126,19 @@
 
               <td class="action-cell">
                 @if (viewPer === 'Y') {
-                  <button class="action-button view-button" (click)="viewTaskCategory(rows.stateId)">
+                  <button type="button" class="action-button view-button" title="View" (click)="viewTaskCategory(rows.stateId)">
                     <mat-icon>visibility</mat-icon>
                   </button>
                 }
 
                 <ng-container *ngIf="rows.status === 1 || rows.status === 2">
                   @if (editPer === 'Y') {
-                    <button class="action-button edit-button" (click)="editTaskCategory(rows.stateId)">
+                    <button type="button" class="action-button edit-button" title="Edit" (click)="editTaskCategory(rows.stateId)">
                       <mat-icon>edit</mat-icon>
                     </button>
                   }
-
                   @if (deletePer === 'Y') {
-                    <button class="action-button delete-button" (click)="onDeleteState(rows.stateId)">
+                    <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteState(rows.stateId)">
                       <mat-icon>delete</mat-icon>
                     </button>
                   }
@@ -158,34 +148,31 @@
 
             <tr *ngIf="!paginatedStates || paginatedStates.length === 0">
               <td colspan="5" class="no-records">
-                <mat-icon>info_outline</mat-icon>
-                <span>No records found</span>
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                  <mat-icon>info_outline</mat-icon>
+                  <span>No records found</span>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Bottom Toolbar -->
-      <div class="table-toolbar bottom-toolbar">
-        <div class="record-summary">
-          {{ recordSummary }}
-        </div>
+      <!-- Bottom toolbar -->
+      <div class="table-toolbar bottom-toolbar d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-2">
+        <div class="record-summary">{{ recordSummary }}</div>
 
         <div class="pagination">
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
-
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
-
-          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button type="button" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
-
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
-
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
     </div>
+
   </div>
 </div>
