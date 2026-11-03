@@ -24,140 +24,131 @@
     ====================================================== -->
 
     <mat-card-content class="user-information">
-      <div class="user-info-grid">
-        <!-- LEFT COLUMN -->
-
-        <div class="user-column">
-          <div class="info-row">
-            <span class="info-label"> User Name: </span>
-
-            <span class="info-value">
+      <div class="container-fluid border p-4">
+        <div class="row g-4">
+          <!-- User Name -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">User Name:</div>
+            <div class="field-value text-break">
               {{ user.name || 'NA' }}
-            </span>
+            </div>
           </div>
 
-          <div class="info-row">
-            <span class="info-label"> Expiry Date: </span>
-
-            <span class="info-value">
-              {{ user.expiryDate | date: 'dd-MM-yyyy' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label"> Telephone Number: </span>
-
-            <span class="info-value">
-              {{ user.telephone || 'NA' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label"> Designation Name: </span>
-
-            <span class="info-value">
-              {{ user.designationName || 'NA' }}
-            </span>
-          </div>
-
-          <div class="info-row">
-            <span class="info-label"> Is HOD: </span>
-
-            <span class="info-value">
-              {{ user.isHod === 'Y' ? 'Yes' : 'No' }}
-            </span>
-          </div>
-
-            <div class="info-row">
-            <span class="info-label"> Company Name: </span>
-
-            <span class="info-value">
-              {{ user.companyName ?? "-"}}
-            </span>
-          </div>
-
-          
-
-          <!-- ADMIN PERMISSION -->
-
-          <div class="admin-permission">
-            <mat-icon [ngClass]="user.permission === 'Y' ? 'permission-yes' : 'permission-no'">
-              {{ user.permission === 'Y' ? 'verified_user' : 'close' }}
-            </mat-icon>
-
-            <span> Admin Permissions (All modules) </span>
-          </div>
-        </div>
-
-        <!-- RIGHT COLUMN -->
-
-        <div class="user-column">
-          <div class="info-row">
-            <span class="info-label"> User Name (Email): </span>
-
-            <span class="info-value email-text">
+          <!-- Email -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">User Name (Email):</div>
+            <div class="field-value text-break">
               {{ user.email || 'NA' }}
-            </span>
+            </div>
           </div>
 
-          <div class="info-row">
-            <span class="info-label"> Mobile Number: </span>
+          <!-- Expiry Date -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Expiry Date:</div>
+            <div class="field-value text-break">
+              {{ user.expiryDate ? (user.expiryDate | date: 'dd-MM-yyyy') : 'NA' }}
+            </div>
+          </div>
 
-            <span class="info-value">
+          <!-- Mobile Number -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Mobile Number:</div>
+            <div class="field-value text-break">
               {{ user.mobile || 'NA' }}
-            </span>
+            </div>
           </div>
 
-          <div class="info-row">
-            <span class="info-label"> Department Name: </span>
+          <!-- Telephone Number -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Telephone Number:</div>
+            <div class="field-value text-break">
+              {{ user.telephone || 'NA' }}
+            </div>
+          </div>
 
-            <span class="info-value">
+          <!-- Department Name -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Department Name:</div>
+            <div class="field-value text-break">
               {{ user.departmentName || 'NA' }}
-            </span>
+            </div>
           </div>
 
-          <div class="info-row status-row">
-            <span class="info-label"> Status: </span>
-
-            <span class="status-badge" [ngClass]="getStatusClass(user.status)">
-              {{ getStatusText(user.status) }}
-            </span>
+          <!-- Designation Name -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Designation Name:</div>
+            <div class="field-value text-break">
+              {{ user.designationName || 'NA' }}
+            </div>
           </div>
 
-          <div class="info-row">
-            <span class="info-label"> Weekly Off: </span>
+          <!-- Status -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Status:</div>
+            <div class="field-value">
+              <span class="badge px-4 py-2 rounded-0" [ngClass]="getStatusClass(user.status)">
+                {{ getStatusText(user.status) }}
+              </span>
+            </div>
+          </div>
 
-            <span class="info-value">
+          <!-- Is HOD -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Is HOD:</div>
+            <div class="field-value">
+              {{ user.isHod === 'Y' ? 'Yes' : 'No' }}
+            </div>
+          </div>
+
+          <!-- Weekly Off -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Weekly Off:</div>
+            <div class="field-value text-break">
               {{ getWeeklyOffLabel(user.weeklyOff) }}
-            </span>
+            </div>
           </div>
 
-          <div class="info-row">
-  <span class="info-label"> Shift: </span>
+          <!-- Company Name -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Company Name:</div>
+            <div class="field-value text-break">
+              {{ user.companyName ?? '-' }}
+            </div>
+          </div>
 
-  <span class="info-value">
-    {{ user.shiftName ?? '-' }}
-    <ng-container *ngIf="user.shiftTime"> ({{ user.shiftName }})</ng-container>
-  </span>
-</div>
+          <!-- Shift -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Shift:</div>
+            <div class="field-value text-break">
+              {{ user.shiftName ?? '-' }}
+              <ng-container *ngIf="user.shiftTime"> ({{ user.shiftTime }}) </ng-container>
+            </div>
+          </div>
 
-          
+          <!-- Admin Permission -->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="field-label">Admin Permissions (All modules):</div>
+            <div class="field-value d-flex align-items-center gap-2">
+              <mat-icon [ngClass]="user.permission === 'Y' ? 'permission-yes' : 'permission-no'">
+                {{ user.permission === 'Y' ? 'verified_user' : 'close' }}
+              </mat-icon>
+              {{ user.permission === 'Y' ? 'Yes' : 'No' }}
+            </div>
+          </div>
 
-          
+          <!-- Task Category -->
+          <div class="col-12">
+            <div class="field-label">Task Category:</div>
+
+            <div class="field-value d-flex flex-wrap gap-2">
+              <span class="chip" *ngFor="let category of taskCategoryList">
+                {{ category }}
+              </span>
+
+              <span *ngIf="!taskCategoryList || !taskCategoryList.length"> NA </span>
+            </div>
+          </div>
         </div>
-        
-
-       <div class="info-row category-row">
-  <span class="info-label">Task Category:</span>
-
-  <div class="category-chips">
-    <span class="chip" *ngFor="let category of taskCategoryList">
-      {{ category }}
-    </span>
-
-    <span class="info-value" *ngIf="!taskCategoryList.length">NA</span>
-  </div>
-</div>
       </div>
     </mat-card-content>
   </mat-card>
