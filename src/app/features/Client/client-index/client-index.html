@@ -1,12 +1,13 @@
-<div class="page-container">
-  <div class="main-card">
-    <div class="page-header">
-      <div class="page-title">
+<div class="container-fluid page-container">
+  <div class="card main-card">
+    <!-- ================= HEADER ================= -->
+    <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2 page-header">
+      <div class="d-flex align-items-center gap-2 page-title">
         <mat-icon>business</mat-icon>
         <span>Client Master</span>
         <a
           type="button"
-          class="collapse-btn"
+          class="collapse-btn ms-1"
           (click)="togglePanel()"
           [attr.aria-expanded]="isPanelVisible"
           title="Toggle Search Panel"
@@ -19,211 +20,233 @@
         </a>
       </div>
 
-      <div class="header-action">
-        @if (addPer === 'Y') {
-          <button type="button" class="add-button" (click)="addClient()">
-            Add New
-            <span class="plus-icon">+</span>
-          </button>
-        }
-      </div>
+      @if (addPer === 'Y') {
+        <button type="button" class="btn btn-navy d-inline-flex align-items-center justify-content-center gap-1" (click)="addClient()">
+          Add New
+          <span class="plus-icon">+</span>
+        </button>
+      }
     </div>
 
-    <mat-divider></mat-divider>
+    <hr class="m-0 divider" />
 
+    <!-- ================= SEARCH ================= -->
     <div class="search-section" *ngIf="isPanelVisible">
-      <div class="search-grid">
-        <div class="search-row">
-          <div class="search-wrapper">
-            <div class="search-box">
-              <input type="text" [(ngModel)]="searchQuery" placeholder="Search Client Name / Code / Contact Name / Contact Email / City / Location" (keyup.enter)="onSearch()" class="search-input" />
-
-              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- State -->
-          <div class="status-wrapper">
-            <div class="task-category-dropdown" (click)="$event.stopPropagation()">
-              <div class="status-select cat-trigger" [class.cat-placeholder]="stateId === 0" (click)="toggleStateDropdown()">
-                <span class="cat-trigger-text">{{ selectedStateName || '--All States--' }}</span>
-                <span class="cat-caret">▼</span>
-              </div>
-
-              <div class="cat-panel" *ngIf="stateOpen">
-                <input type="text" class="cat-search" placeholder="Search state..." [(ngModel)]="stateSearch" />
-
-                <div class="cat-list">
-                  <div class="cat-item" [class.active]="stateId === 0" (click)="selectState(0)">--All States--</div>
-
-                  <div class="cat-item" *ngFor="let state of filteredStates" [class.active]="state.stateId === stateId" (click)="selectState(state.stateId)">
-                    {{ state.name }}
-                  </div>
-
-                  <div class="cat-empty" *ngIf="filteredStates.length === 0">No results found</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="managerId" (change)="onManagerChange()">
-              <option [ngValue]="0">--All Society Managers--</option>
-
-              <option *ngFor="let manager of managers" [ngValue]="manager.userId">
-                {{ manager.firstName }}
-              </option>
-            </select>
+      <div class="row g-2 g-lg-3 align-items-center">
+        <!-- Search -->
+        <div class="col-12 col-xl-6">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="searchQuery"
+              placeholder="Search Client Name / Code / Contact Name / Contact Email / City / Location"
+              (keyup.enter)="onSearch()"
+            />
+            <button type="button" class="btn btn-theme search-btn" (click)="onSearch()" title="Search">
+              <i class="fa fa-search"></i>
+            </button>
           </div>
         </div>
 
-        <div class="filter-row">
-          <!-- GST Flag -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedGstFlag" (change)="onGstChange()">
-              <option value="">--All GST--</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
+        <!-- State -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+            <div class="form-select cat-trigger" [class.cat-placeholder]="stateId === 0" (click)="toggleStateDropdown()">
+              <span class="cat-trigger-text">{{ selectedStateName || '--All States--' }}</span>
+            </div>
 
-          <!-- Tax Payable -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedTaxFlag" (change)="onTaxChange()">
-              <option value="">-- All TDS --</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select>
-          </div>
+            <div class="cat-panel" *ngIf="stateOpen">
+              <input type="text" class="form-control cat-search" placeholder="Search state..." [(ngModel)]="stateSearch" />
 
-          <!-- Plan -->
-          <div class="status-wrapper">
-            <div class="task-category-dropdown" (click)="$event.stopPropagation()">
-              <div class="status-select cat-trigger" [class.cat-placeholder]="planId === 0" (click)="togglePlanDropdown()">
-                <span class="cat-trigger-text">{{ selectedPlanName || '--All Plans--' }}</span>
-                <span class="cat-caret">▼</span>
-              </div>
+              <div class="cat-list">
+                <div class="cat-item" [class.active]="stateId === 0" (click)="selectState(0)">--All States--</div>
 
-              <div class="cat-panel" *ngIf="planOpen">
-                <input type="text" class="cat-search" placeholder="Search plan..." [(ngModel)]="planSearch" />
-
-                <div class="cat-list">
-                  <div class="cat-item" [class.active]="planId === 0" (click)="selectPlan(0)">--All Plans--</div>
-
-                  <div class="cat-item" *ngFor="let plan of filteredPlans" [class.active]="plan.planId === planId" (click)="selectPlan(plan.planId)">
-                    {{ plan.name }}
-                  </div>
-
-                  <div class="cat-empty" *ngIf="filteredPlans.length === 0">No results found</div>
+                <div class="cat-item" *ngFor="let state of filteredStates" [class.active]="state.stateId === stateId" (click)="selectState(state.stateId)">
+                  {{ state.name }}
                 </div>
+
+                <div class="cat-empty" *ngIf="filteredStates.length === 0">No results found</div>
               </div>
             </div>
-          </div>
-
-          <!-- STATUS -->
-          <div class="status-wrapper">
-            <select class="status-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
-              <option value="">--All Status--</option>
-              <option value="1">Active</option>
-              <option value="2">Inactive</option>
-              <option value="3">Deleted</option>
-            </select>
           </div>
         </div>
 
-        <div class="filter-row">
-          <!-- From Date -->
-          <div class="status-wrapper date-filter-wrapper">
-            <div class="date-filter-input">
-              <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" name="fromDate" placeholder="From Date" class="date-input" autocomplete="off" readonly />
+        <!-- Society Manager -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <select class="form-select" [(ngModel)]="managerId" (change)="onManagerChange()">
+            <option [ngValue]="0">--All Society Managers--</option>
+            <option *ngFor="let manager of managers" [ngValue]="manager.userId">{{ manager.firstName }}</option>
+          </select>
+        </div>
 
-              <mat-datepicker-toggle matSuffix [for]="fromPicker"> </mat-datepicker-toggle>
+        <!-- GST -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <select class="form-select" [(ngModel)]="selectedGstFlag" (change)="onGstChange()">
+            <option value="">--All GST--</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
 
-              <mat-datepicker #fromPicker> </mat-datepicker>
+        <!-- TDS -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <select class="form-select" [(ngModel)]="selectedTaxFlag" (change)="onTaxChange()">
+            <option value="">-- All TDS --</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+
+        <!-- Plan -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <div class="task-category-dropdown" (click)="$event.stopPropagation()">
+            <div class="form-select cat-trigger" [class.cat-placeholder]="planId === 0" (click)="togglePlanDropdown()">
+              <span class="cat-trigger-text">{{ selectedPlanName || '--All Plans--' }}</span>
+            </div>
+
+            <div class="cat-panel" *ngIf="planOpen">
+              <input type="text" class="form-control cat-search" placeholder="Search plan..." [(ngModel)]="planSearch" />
+
+              <div class="cat-list">
+                <div class="cat-item" [class.active]="planId === 0" (click)="selectPlan(0)">--All Plans--</div>
+
+                <div class="cat-item" *ngFor="let plan of filteredPlans" [class.active]="plan.planId === planId" (click)="selectPlan(plan.planId)">
+                  {{ plan.name }}
+                </div>
+
+                <div class="cat-empty" *ngIf="filteredPlans.length === 0">No results found</div>
+              </div>
             </div>
           </div>
+        </div>
 
-          <!-- To Date -->
-          <div class="status-wrapper date-filter-wrapper">
-            <div class="date-filter-input">
-              <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" name="toDate" placeholder="To Date" class="date-input" autocomplete="off" readonly [min]="fromDate" />
+        <!-- Status -->
+        <div class="col-12 col-sm-6 col-lg-3">
+          <select class="form-select" [(ngModel)]="selectedStatus" (change)="onStatusChange()">
+            <option value="">--All Status--</option>
+            <option value="1">Active</option>
+            <option value="2">Inactive</option>
+            <option value="3">Deleted</option>
+          </select>
+        </div>
 
-              <mat-datepicker-toggle matSuffix [for]="toPicker"> </mat-datepicker-toggle>
-
-              <mat-datepicker #toPicker> </mat-datepicker>
-            </div>
+        <!-- From Date -->
+        <div class="col-12 col-sm-6 col-lg-3 col-xl-2">
+          <div class="date-filter-input">
+            <input
+              matInput
+              [matDatepicker]="fromPicker"
+              [(ngModel)]="fromDate"
+              name="fromDate"
+              placeholder="From Date"
+              class="form-control date-input"
+              autocomplete="off"
+              readonly
+            />
+            <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+            <mat-datepicker #fromPicker></mat-datepicker>
           </div>
+        </div>
 
-          <!-- GO -->
-          <div class="go-wrapper">
-            <button type="button" class="go-button" (click)="onSearch()"><mat-icon>search</mat-icon>Go</button>
+        <!-- To Date -->
+        <div class="col-12 col-sm-6 col-lg-3 col-xl-2">
+          <div class="date-filter-input">
+            <input
+              matInput
+              [matDatepicker]="toPicker"
+              [(ngModel)]="toDate"
+              name="toDate"
+              placeholder="To Date"
+              class="form-control date-input"
+              autocomplete="off"
+              readonly
+              [min]="fromDate"
+            />
+            <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+            <mat-datepicker #toPicker></mat-datepicker>
           </div>
+        </div>
 
-          <!-- CLEAR -->
-          <div class="clear-wrapper">
-            <button type="button" class="btn-clear" (click)="clearFilter()">Clear</button>
-          </div>
+        <!-- Go / Clear -->
+        <div class="col-12 col-lg-auto d-flex gap-2">
+          <button type="button" class="btn btn-theme flex-fill d-inline-flex align-items-center justify-content-center gap-1" (click)="onSearch()">
+            <mat-icon>search</mat-icon>
+            Go
+          </button>
+          <button type="button" class="btn btn-outline-danger flex-fill" (click)="clearFilter()">Clear</button>
+        </div>
 
+        <!-- Excel actions -->
+        <div class="col-12 col-lg d-flex flex-wrap gap-2 justify-content-lg-end">
           @if (addPer === 'Y' || editPer === 'Y') {
-            <button type="button" class="btn-upload-excel" (click)="openUploadModal()">
+            <button type="button" class="btn btn-upload-excel d-inline-flex align-items-center justify-content-center gap-2" (click)="openUploadModal()">
               Upload Excel
               <i class="fa fa-upload"></i>
             </button>
           }
 
           @if (exportExcel === 'Y') {
-            <button type="button" class="btn-export-excel" (click)="exportToExcel()">
+            <button type="button" class="btn btn-export-excel d-inline-flex align-items-center justify-content-center gap-2" (click)="exportToExcel()">
               Export to Excel
               <i class="fas fa-file-excel" aria-hidden="true"></i>
             </button>
           }
 
-          <a href="https://app.webelement.cc/taskapp/assets/template/Client.xlsx" class="btn-download-template" download="Client_Data_Template.xlsx"
-            >Download Template <i class="fa fa-cloud-download" aria-hidden="true"></i
-          ></a>
+          <a
+            href="https://app.webelement.cc/taskapp/assets/template/Client.xlsx"
+            class="btn btn-download-template d-inline-flex align-items-center justify-content-center gap-2"
+            download="Client_Data_Template.xlsx"
+          >
+            Download Template <i class="fa fa-cloud-download" aria-hidden="true"></i>
+          </a>
         </div>
       </div>
     </div>
 
-    <mat-divider></mat-divider>
+    <hr class="m-0 divider" />
 
-    <div class="table-section">
-      <div class="table-toolbar">
-        <div class="record-summary">
-          {{ recordSummary }}
-        </div>
+    <!-- ================= TABLE SECTION ================= -->
+    <div class="px-3 pb-3">
+      <!-- Top toolbar -->
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 py-3">
+        <div class="record-summary">{{ recordSummary }}</div>
 
-        <div class="pagination">
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
-
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
-
-          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
-            {{ page }}
-          </button>
-
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
-
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
-        </div>
+        <nav aria-label="Client pagination" class="pagination-nav">
+          <ul class="pagination pagination-sm mb-0 flex-nowrap">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button type="button" class="page-link" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button type="button" class="page-link" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+            </li>
+            <li class="page-item" *ngFor="let page of pages()" [class.active]="page === currentPage">
+              <button type="button" class="page-link" (click)="goToPage(page)">{{ page }}</button>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button type="button" class="page-link" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button type="button" class="page-link" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+            </li>
+          </ul>
+        </nav>
       </div>
 
-      <div class="table-wrapper">
-        <table class="designation-table">
+      <!-- Table -->
+      <div class="table-responsive client-table-wrapper">
+        <table class="table align-middle mb-0 client-table">
           <thead>
             <tr>
               <th class="serial-column">#</th>
 
               <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
-                <div class="column-header">
+                <div class="d-flex align-items-center justify-content-between gap-1 text-nowrap">
                   <span>{{ col.label }}</span>
 
                   <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
-
-                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'">▲</span>
+                    <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'">▼</span>
                   </span>
                 </div>
               </th>
@@ -234,67 +257,35 @@
 
           <tbody>
             <tr *ngFor="let client of clients; let i = index">
-              <td class="serial-cell">
-                {{ (currentPage - 1) * size + i + 1 }}
-              </td>
+              <td class="serial-cell">{{ (currentPage - 1) * size + i + 1 }}</td>
 
-              <td class="plan-name-cell">
-                <span class="user-name">
-                  {{ client.name || '-' }}
-                </span>
-              </td>
+              <td><span class="user-name">{{ client.name || '-' }}</span></td>
 
-              <td class="plan-name-cell">
-                {{ client.code || '-' }}
-              </td>
+              <td>{{ client.code || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.managerName || '-' }}
-              </td>
+              <td>{{ client.managerName || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.city || '-' }}
-              </td>
+              <td>{{ client.city || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.stateName || '-' }}
-              </td>
+              <td>{{ client.stateName || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.location || '-' }}
-              </td>
+              <td>{{ client.location || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.contactName || '-' }}
-              </td>
+              <td>{{ client.contactName || '-' }}</td>
 
-              <td class="plan-name-cell">
-                <span class="email-text">
-                  {{ client.contactEmail || '-' }}
-                </span>
-              </td>
+              <td><span class="email-text">{{ client.contactEmail || '-' }}</span></td>
 
-              <td class="plan-name-cell">
-                {{ client.startDate || '-' }}
-              </td>
+              <td>{{ client.startDate || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.planName || '-' }}
-              </td>
+              <td>{{ client.planName || '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.outstanding != null ? (client.outstanding | number: '1.2-2') : '-' }}
-              </td>
+              <td>{{ client.outstanding != null ? (client.outstanding | number: '1.2-2') : '-' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.gstFlag === 1 ? '✔️' : '❌' }}
-              </td>
+              <td>{{ client.gstFlag === 1 ? '✔️' : '❌' }}</td>
 
-              <td class="plan-name-cell">
-                {{ client.taxFlag === 1 ? '✔️' : '❌' }}
-              </td>
+              <td>{{ client.taxFlag === 1 ? '✔️' : '❌' }}</td>
 
-              <td class="status-cell">
+              <td>
                 <span class="status-badge" [ngClass]="getStatusClass(client.status)">
                   {{ getStatusLabel(client.status) }}
                 </span>
@@ -302,21 +293,21 @@
 
               <td class="action-cell">
                 @if (viewPer === 'Y') {
-                  <button type="button" class="action-button view-button" title="View" (click)="viewClient(client.clientId)">
-                    <mat-icon> visibility </mat-icon>
+                  <button type="button" class="btn action-button view-button" title="View" (click)="viewClient(client.clientId)">
+                    <mat-icon>visibility</mat-icon>
                   </button>
                 }
 
                 <ng-container *ngIf="client.status === 1 || client.status === 2">
                   @if (editPer === 'Y') {
-                    <button type="button" class="action-button edit-button" title="Edit" (click)="editClient(client.clientId)">
-                      <mat-icon> edit </mat-icon>
+                    <button type="button" class="btn action-button edit-button" title="Edit" (click)="editClient(client.clientId)">
+                      <mat-icon>edit</mat-icon>
                     </button>
                   }
 
                   @if (deletePer === 'Y') {
-                    <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteUser(client.clientId)">
-                      <mat-icon> delete </mat-icon>
+                    <button type="button" class="btn action-button delete-button" title="Delete" (click)="onDeleteUser(client.clientId)">
+                      <mat-icon>delete</mat-icon>
                     </button>
                   }
                 </ng-container>
@@ -324,98 +315,98 @@
             </tr>
 
             <tr *ngIf="!clients || clients.length === 0">
-              <td colspan="16" class="no-records">
-                <mat-icon> info_outline </mat-icon>
-
-                <span> No records found </span>
+              <td colspan="16" class="no-records text-center text-muted py-4">
+                <div class="d-inline-flex align-items-center gap-2">
+                  <mat-icon>info_outline</mat-icon>
+                  <span>No records found</span>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="table-toolbar bottom-toolbar">
-        <div class="record-summary">
-          {{ recordSummary }}
+      <!-- Bottom toolbar -->
+      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 pt-3 mt-3 border-top">
+        <div class="record-summary">{{ recordSummary }}</div>
+
+        <nav aria-label="Client pagination bottom" class="pagination-nav">
+          <ul class="pagination pagination-sm mb-0 flex-nowrap">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button type="button" class="page-link" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button type="button" class="page-link" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+            </li>
+            <li class="page-item" *ngFor="let page of pages()" [class.active]="page === currentPage">
+              <button type="button" class="page-link" (click)="goToPage(page)">{{ page }}</button>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button type="button" class="page-link" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button type="button" class="page-link" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= UPLOAD MODAL (Bootstrap modal markup, shown via *ngIf) ================= -->
+<ng-container *ngIf="showUploadModal">
+  <div class="modal-backdrop show"></div>
+
+  <div class="modal d-block upload-modal" tabindex="-1" role="dialog" (click)="closeUploadModal()">
+    <div class="modal-dialog modal-dialog-centered" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Upload Client Excel</h5>
+          <button type="button" class="btn-close" aria-label="Close" (click)="closeUploadModal()" [disabled]="isUploading"></button>
         </div>
 
-        <div class="pagination">
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+        <div class="modal-body">
+          <label for="excelFile" class="form-label fw-semibold">
+            Select Excel File <span class="required">*</span>
+          </label>
 
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <input
+            #excelFileInput
+            type="file"
+            id="excelFile"
+            class="form-control excel-file-input"
+            accept=".xls,.xlsx"
+            (change)="onFileSelected($event)"
+            [disabled]="isUploading"
+          />
 
-          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
-            {{ page }}
+          <div *ngIf="fileError" class="upload-error">{{ fileError }}</div>
+
+          <div *ngIf="selectedFile && !fileError" class="selected-file">
+            <i class="fa fa-file-excel-o"></i>
+            <span>{{ selectedFile.name }}</span>
+            <button type="button" class="remove-file-btn" (click)="removeSelectedFile()" [disabled]="isUploading">×</button>
+          </div>
+
+          <div class="upload-info">
+            <i class="fa fa-info-circle"></i>
+            <div>
+              <strong>Excel Upload</strong>
+              <p>Upload a client Excel file in the required format. Invalid or duplicate records will be reported separately.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeUploadModal()" [disabled]="isUploading">Cancel</button>
+
+          <button type="button" class="btn btn-upload-submit" (click)="submitUpload()" [disabled]="!selectedFile || !!fileError || isUploading">
+            <span *ngIf="!isUploading"><i class="fa fa-upload"></i> Upload</span>
+            <span *ngIf="isUploading"><i class="fa fa-spinner fa-spin"></i> Uploading...</span>
           </button>
-
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
-
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
     </div>
   </div>
-</div>
-
-<div class="upload-modal-overlay" *ngIf="showUploadModal" (click)="closeUploadModal()">
-  <div class="upload-modal" (click)="$event.stopPropagation()">
-    <div class="upload-modal-header">
-      <h3>Upload Client Excel</h3>
-
-      <button type="button" class="upload-close-btn" (click)="closeUploadModal()" [disabled]="isUploading">×</button>
-    </div>
-
-    <div class="upload-modal-body">
-      <div class="upload-form-group">
-        <label for="excelFile">
-          Select Excel File
-          <span class="required">*</span>
-        </label>
-
-        <input #excelFileInput type="file" id="excelFile" class="excel-file-input" accept=".xls,.xlsx" (change)="onFileSelected($event)" [disabled]="isUploading" />
-
-        <div *ngIf="fileError" class="upload-error">
-          {{ fileError }}
-        </div>
-
-        <div *ngIf="selectedFile && !fileError" class="selected-file">
-          <i class="fa fa-file-excel-o"></i>
-
-          <span>
-            {{ selectedFile.name }}
-          </span>
-
-          <button type="button" class="remove-file-btn" (click)="removeSelectedFile()" [disabled]="isUploading">×</button>
-        </div>
-      </div>
-
-      <div class="upload-info">
-        <i class="fa fa-info-circle"></i>
-
-        <div>
-          <strong>Excel Upload</strong>
-
-          <p>Upload a client Excel file in the required format. Invalid or duplicate records will be reported separately.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="upload-modal-footer">
-      <button type="button" class="btn-upload-cancel" (click)="closeUploadModal()" [disabled]="isUploading">Cancel</button>
-
-      <button type="button" class="btn-upload-submit" (click)="submitUpload()" [disabled]="!selectedFile || !!fileError || isUploading">
-        <span *ngIf="!isUploading">
-          <i class="fa fa-upload"></i>
-          Upload
-        </span>
-
-        <span *ngIf="isUploading">
-          <i class="fa fa-spinner fa-spin"></i>
-          Uploading...
-        </span>
-      </button>
-    </div>
-  </div>
-</div>
-
-
+</ng-container>

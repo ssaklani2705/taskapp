@@ -1,427 +1,160 @@
+/* =========================================================
+   ADD / EDIT CLIENT MASTER - Bootstrap 5 + same theme colors
+========================================================= */
+
 :host {
+  --navy: #1b3b63;
+  --navy-dark: #142f50;
+  --navy-hover: #244c7b;
+  --primary-blue: #3378a9;
+  --text-navy: #193b63;
+  --text-blue: #416789;
+  --border: #dce4ec;
+  --border-dark: #bccbda;
+  --danger: #d9534f;
+
+  --bs-body-color: var(--text-navy);
+  --bs-border-color: var(--border);
+
   display: block;
   width: 100%;
-  color: #193b63;
-  // font-family: "Open Sans", sans-serif !important;
-  font-family: "Open Sans", sans-serif !important;
+  color: var(--text-navy);
 }
 
+/* ---------- Page / card ---------- */
 .user-page-wrapper {
-  width: 100%;
+  margin-top: 20px;
   padding: 6px;
-  background: #ffffff;
-  box-sizing: border-box;
+  background: #fff;
 }
 
 .user-portlet {
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid #dce4ec;
-  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .user-portlet-title {
   min-height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 14px 0 14px;
-  border-bottom: 1px solid #dce4ec;
-  background: #ffffff;
-  box-sizing: border-box;
-}
-
-.user-title {
-  display: flex;
-  align-items: center;
+  padding: 6px 14px;
+  border-bottom: 1px solid var(--border);
 }
 
 .user-page-title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   color: var(--navy);
-  font-family: "Open Sans", sans-serif !important;
   font-size: 27px;
   font-weight: 700;
   letter-spacing: -0.3px;
 }
 
-.user-actions {
-  display: flex;
-  align-items: center;
-}
-
-.user-portlet-body {
-  width: 100%;
-  background: #ffffff;
-}
-
-.user-form-body {
-  padding: 18px 14px 24px 14px;
-  background: #ffffff;
-  box-sizing: border-box;
-}
+.user-form-body { padding: 18px 14px 24px; }
 
 .mandatory-message {
-  color: #193b63 !important;
-  font-size: 16px !important;
-  line-height: 22px;
   margin-bottom: 25px;
-}
-
-.required {
-  color: #d63333 !important;
-  font-weight: 700;
-}
-
-.user-form-row {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  column-gap: 38px;
-  width: 100%;
-  margin-bottom: 18px;
-  box-sizing: border-box;
-}
-
-.user-form-col {
-  min-width: 0;
-  width: 100%;
-}
-
-.empty-column {
-  min-height: 1px;
-}
-
-.user-form-group {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.user-label {
-  display: block;
-  margin-bottom: 8px;
-  color: #193b63 !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  line-height: 20px;
-  font-family: "Open Sans", sans-serif !important;
-}
-
-.user-input {
-  display: block;
-  width: 100% !important;
-  height: 43px !important;
-  min-height: 43px !important;
-  padding: 8px 14px !important;
-  box-sizing: border-box;
-  border: 1px solid #bccbda !important;
-  border-radius: 0 !important;
-  background: #ffffff !important;
-  color: #416789 !important;
-  font-size: 16px !important;
-  font-weight: 400 !important;
-  font-family: "Open Sans", sans-serif !important;
-  outline: none !important;
-  box-shadow: none !important;
-
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-.user-input:focus {
-  border-color: #4b7da5 !important;
-  background: #ffffff !important;
-  box-shadow: 0 0 0 1px rgba(75, 125, 165, 0.08) !important;
-}
-
-.user-input::placeholder {
-  color: #8794a2 !important;
-  opacity: 1;
-}
-
-.user-select {
-  appearance: auto;
-  cursor: pointer;
-  background-color: #ffffff !important;
-}
-
-.user-date-group {
-  display: flex;
-  width: 100%;
-  height: 43px;
-  box-sizing: border-box;
-}
-
-.user-date-icon {
-  width: 52px;
-  min-width: 52px;
-  height: 43px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e4e8ed;
-  color: #66727d;
-  border: 1px solid #d4dce4;
-  border-right: 0;
-  box-sizing: border-box;
-  cursor: pointer;
-}
-
-.user-date-icon i {
+  color: var(--text-navy);
   font-size: 16px;
+  line-height: 22px;
 }
 
-.user-date-group .user-date-input {
-  flex: 1;
-  width: auto !important;
-  border-left: 1px solid #bccbda !important;
-}
+.required { color: #d63333; font-weight: 700; }
 
-.user-error {
-  color: #d9534f !important;
-  font-size: 16px !important;
-  margin-top: 5px;
-  line-height: 16px;
-}
-
-.admin-row {
-  width: 100%;
-  margin-top: 4px;
-  margin-bottom: 20px;
-  min-height: 35px;
-  display: flex;
-  align-items: center;
-}
-
-.admin-row mat-checkbox {
-  color: #193b63 !important;
-}
-
-.admin-row .mat-mdc-checkbox {
-  --mdc-checkbox-selected-checkmark-color: #ffffff;
-  --mdc-checkbox-selected-focus-icon-color: #0868c8;
-  --mdc-checkbox-selected-hover-icon-color: #0868c8;
-  --mdc-checkbox-selected-icon-color: #0868c8;
-}
-
-.admin-row .mdc-form-field {
-  color: #193b63 !important;
-}
-
-.admin-row .mdc-label {
-  color: #193b63 !important;
-  font-size: 13px !important;
-}
-
-.rights-section {
-  width: 100%;
-  margin-top: 2px;
-}
-
-.rights-title {
-  color: var(--primary-blue);
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  line-height: 25px;
-  margin-bottom: 18px;
-  font-family: "Open Sans", sans-serif !important;
-}
-
-.permissions-table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-  border: 1px solid #dce4ec;
-  box-sizing: border-box;
-}
-
-.permissions-table {
-  width: 100%;
-  min-width: 1000px;
-  border-collapse: collapse;
-  border-spacing: 0;
-  background: #ffffff;
-  color: #193b63;
-  table-layout: fixed;
-}
-
-.permissions-table thead th {
-  height: 46px;
-  padding: 10px 10px;
-  border: 1px solid #dce4ec !important;
-  background: #ffffff !important;
-  color: #008fd3 !important;
-  font-size: 16px !important;
-  font-weight: 700 !important;
-  text-align: left;
-  vertical-align: middle;
-  box-sizing: border-box;
-}
-
-.permissions-table thead th:first-child {
-  color: #193b63 !important;
-}
-
-.permissions-table .module-column {
-  width: 19%;
-  color: #193b63 !important;
-}
-
-.permissions-table th:not(:first-child) {
-  width: 11.57%;
-}
-
-.permissions-table tbody td {
-  height: 56px;
-  padding: 10px;
-  border: 1px solid #dce4ec !important;
-  background: #ffffff !important;
-  color: #193b63 !important;
-  font-size: 16px !important;
-  vertical-align: middle;
-  box-sizing: border-box;
-}
-
-.permissions-table tbody tr.group-header td {
-  background: #ffffff !important;
-  color: #193b63 !important;
-  font-size: 16px !important;
-}
-
-.permissions-table tbody tr.group-header td:first-child strong {
-  color: #008fd3 !important;
-  font-weight: 700 !important;
-}
-
-.permissions-table .module-name {
-  color: #193b63 !important;
-  font-size: 16px !important;
-  font-weight: 400 !important;
-}
-
-.select-all-text {
-  color: #193b63 !important;
-  font-size: 14px !important;
-  font-weight: 400 !important;
-}
-
-.permissions-table mat-checkbox {
-  display: inline-flex;
-  align-items: center;
-  color: #193b63 !important;
-}
-
-.permissions-table .mdc-form-field {
-  color: #193b63 !important;
-}
-
-.permissions-table .mdc-label {
-  color: #193b63 !important;
-  font-size: 14px !important;
-}
-
-.permissions-table .mat-mdc-checkbox.mat-mdc-checkbox-checked .mdc-checkbox__background {
-  background-color: #0868c8 !important;
-  border-color: #0868c8 !important;
-}
-
-.permissions-table .mdc-checkbox__native-control ~ .mdc-checkbox__background {
-  border-color: #5b6269 !important;
-}
-
-.user-buttons {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 35px;
-  padding-top: 20px;
-  border-top: 1px solid #dce4ec;
-}
-
-.user-reset-btn {
-  min-width: 90px;
-  height: 40px;
-  padding: 8px 20px;
-  border: 1px solid #1b3b63 !important;
-  border-radius: 4px !important;
-  background: #ffffff !important;
-  color: #1b3b63 !important;
-  font-family: "Open Sans", sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.user-reset-btn:hover {
-  background: #eef4f9 !important;
-  border-color: #193b63 !important;
-  color: #193b63 !important;
-}
-
-.user-submit-btn {
-  min-width: 90px;
-  height: 40px;
-  padding: 8px 20px;
-  border: 1px solid #1b3b63 !important;
-  border-radius: 4px !important;
-  background: #1b3b63 !important;
-  color: #ffffff !important;
-  font-family: "Open Sans", sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 600 !important;
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.user-submit-btn:hover {
-  background: #244c7b !important;
-  border-color: #244c7b !important;
-}
-
-.user-submit-btn:disabled {
-  background: #7f91a5 !important;
-  border-color: #7f91a5 !important;
-  color: #ffffff !important;
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
+/* ---------- Sections ---------- */
 .form-section {
-  width: 100%;
   margin-top: 30px;
   padding-top: 4px;
-}
-.form-section:first-of-type {
-  margin-top: 0;
+
+  &:first-of-type { margin-top: 0; }
 }
 
+.manager-section { margin-top: 0; margin-bottom: 10px; }
+
 .section-title {
-  width: 100%;
   margin-bottom: 20px;
   padding-bottom: 9px;
-  color: #193b63;
-  font-family: "Open Sans", sans-serif !important;
+  color: var(--text-navy);
   font-size: 18px;
   font-weight: 700;
   line-height: 25px;
-  border-bottom: 1px solid #dce4ec;
+  border-bottom: 1px solid var(--border);
 }
 
-.manager-section {
-  margin-top: 0;
-  margin-bottom: 10px;
+/* ---------- Buttons ---------- */
+.btn-navy {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--navy);
+  --bs-btn-border-color: var(--navy);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--navy-hover);
+  --bs-btn-hover-border-color: var(--navy-hover);
+  --bs-btn-active-bg: var(--navy-dark);
+  --bs-btn-active-border-color: var(--navy-dark);
+  --bs-btn-disabled-bg: #7f91a5;
+  --bs-btn-disabled-border-color: #7f91a5;
+  --bs-btn-disabled-color: #fff;
+  min-width: 90px;
+  height: 40px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+
+  mat-icon { width: 20px; height: 20px; font-size: 20px; }
+}
+
+.btn-outline-navy {
+  --bs-btn-color: var(--navy);
+  --bs-btn-border-color: var(--navy);
+  --bs-btn-hover-color: var(--text-navy);
+  --bs-btn-hover-bg: #eef4f9;
+  --bs-btn-hover-border-color: var(--text-navy);
+  --bs-btn-active-color: var(--navy);
+  --bs-btn-active-bg: #eef4f9;
+  --bs-btn-active-border-color: var(--navy);
+  min-width: 90px;
+  height: 40px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.user-buttons {
+  margin-top: 35px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- Labels / inputs ---------- */
+.user-label {
+  margin-bottom: 8px;
+  color: var(--text-navy);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.user-input {
+  height: 43px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-dark);
+  border-radius: 0;
+  color: var(--text-blue);
+  font-size: 16px;
+  box-shadow: none;
+
+  &::placeholder { color: #8794a2; opacity: 1; }
+  &:focus {
+    border-color: #4b7da5;
+    box-shadow: 0 0 0 1px rgba(75, 125, 165, 0.08);
+  }
+}
+
+.form-select.user-input { cursor: pointer; }
+
+.user-error {
+  margin-top: 5px;
+  color: var(--danger);
+  font-size: 14px;
+  line-height: 18px;
 }
 
 .user-help-text {
@@ -431,317 +164,59 @@
   line-height: 16px;
 }
 
-@media (max-width: 1200px) {
-  .user-form-row {
-    column-gap: 20px;
+/* ---------- Checkbox rows (Material) ---------- */
+.check-row {
+  min-height: 43px;
+  display: flex;
+  align-items: center;
+
+  .mat-mdc-checkbox {
+    --mdc-checkbox-selected-checkmark-color: #fff;
+    --mdc-checkbox-selected-focus-icon-color: #0868c8;
+    --mdc-checkbox-selected-hover-icon-color: #0868c8;
+    --mdc-checkbox-selected-icon-color: #0868c8;
   }
 }
 
-@media (max-width: 992px) {
-  .user-form-row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 18px;
-    column-gap: 20px;
+/* ---------- Date input group ---------- */
+.user-date-group {
+  flex-wrap: nowrap;
+
+  .user-date-icon {
+    width: 52px;
+    justify-content: center;
+    background: #e4e8ed;
+    color: #66727d;
+    border: 1px solid #d4dce4;
+    border-right: 0;
+    border-radius: 0;
+    cursor: pointer;
+
+    i { font-size: 16px; }
   }
 
-  .empty-column {
-    display: none;
-  }
-}
-
-@media (max-width: 600px) {
-  .user-portlet-title {
-    min-height: 55px;
-    padding: 8px 10px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .user-actions {
-    width: 100%;
-  }
-
-  .back-index-btn {
-    width: auto;
-  }
-
-  .user-form-body {
-    padding: 15px 10px;
-  }
-
-  .user-form-row {
-    grid-template-columns: 1fr;
-    row-gap: 15px;
-  }
-
-  .user-page-title {
-    font-size: 18px !important;
-  }
-
-  .section-title {
-    font-size: 17px !important;
-    margin-bottom: 16px;
-  }
-
-  .form-section {
-    margin-top: 25px;
+  .user-date-input {
+    border-left: 1px solid var(--border-dark);
+    border-radius: 0;
   }
 }
 
-::ng-deep .cdk-overlay-container {
-  z-index: 1000 !important;
-}
-
-::ng-deep .user-date-datepicker {
-  width: 280px !important;
-  min-width: 280px !important;
-  max-width: 280px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  background: #ffffff !important;
-  border-radius: 7px !important;
-  overflow: hidden !important;
-  box-shadow: 0 6px 18px rgba(33, 75, 120, 0.18) !important;
-  box-sizing: border-box !important;
-}
-
-::ng-deep .user-date-datepicker.mat-datepicker-content {
-  width: 280px !important;
-  min-width: 280px !important;
-  max-width: 280px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  background: #ffffff !important;
-  border-radius: 7px !important;
-  box-sizing: border-box !important;
-}
-
-::ng-deep .user-date-datepicker .mat-datepicker-content-container {
-  width: 280px !important;
-  min-width: 280px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  box-sizing: border-box !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar {
-  height: 310px !important;
-  width: 280px !important;
-  min-width: 280px !important;
-  max-width: 280px !important;
-  min-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  background: #ffffff !important;
-  box-sizing: border-box !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-header {
-  width: 100% !important;
-  height: 44px !important;
-  min-height: 44px !important;
-  padding: 4px 6px !important;
-  background: #214b78 !important;
-  box-sizing: border-box !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-period-button {
-  min-width: 0 !important;
-  height: 36px !important;
-  padding: 0 6px !important;
-  font-size: 13px !important;
-  font-weight: 600 !important;
-  color: #ffffff !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-period-button .mat-button-wrapper {
-  color: #ffffff !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-arrow {
-  margin-left: 3px !important;
-  fill: #ffffff !important;
-  color: #ffffff !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-previous-button,
-::ng-deep .user-date-datepicker .mat-calendar-next-button {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
-  min-height: 36px !important;
-  padding: 7px !important;
-  color: #ffffff !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-previous-button svg,
-::ng-deep .user-date-datepicker .mat-calendar-next-button svg {
-  fill: #ffffff !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-controls {
-  height: 36px !important;
-  margin: 0 !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-content {
-  width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-  padding: 4px 6px 6px !important;
-  margin: 0 !important;
-  background: #ffffff !important;
-  box-sizing: border-box !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-table {
-  width: 100% !important;
-  table-layout: fixed !important;
-  margin: 0 !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-table-header {
-  height: 26px !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-table-header th {
-  height: 26px !important;
-  padding: 0 !important;
-  font-size: 11px !important;
-  font-weight: 600 !important;
-  color: #214b78 !important;
-  text-align: center !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-body-cell {
-  width: 14.28% !important;
-  height: 34px !important;
-  padding: 0 !important;
-  box-sizing: border-box !important;
-}
-
-::ng-deep .mat-datepicker-content .mat-calendar {
-  height: 310px !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-body-cell-content {
-  width: 28px !important;
-  height: 28px !important;
-  line-height: 28px !important;
-  font-size: 12px !important;
-  font-weight: 400 !important;
-  color: #333333 !important;
-  border-radius: 50% !important;
-  box-sizing: border-box !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-body-selected {
-  width: 28px !important;
-  height: 28px !important;
-  line-height: 28px !important;
-  background-color: #214b78 !important;
-  color: #ffffff !important;
-  border-radius: 50% !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-body-today {
-  border: 1px solid #214b78 !important;
-  border-radius: 50% !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-body-today.mat-calendar-body-selected {
-  border: none !important;
-  background-color: #214b78 !important;
-  color: #ffffff !important;
-}
-
-::ng-deep
-  .user-date-datepicker
-  .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
-  .mat-calendar-body-cell-content {
-  background-color: #e7f0f8 !important;
-  color: #214b78 !important;
-  border-radius: 50% !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-body-active .mat-calendar-body-cell-content {
-  background-color: #e7f0f8 !important;
-  color: #214b78 !important;
-  border-radius: 50% !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-body-disabled {
-  color: #b8b8b8 !important;
-  opacity: 0.6 !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-body-disabled .mat-calendar-body-cell-content {
-  color: #b8b8b8 !important;
-  background: transparent !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-body-label {
-  font-size: 11px !important;
-  font-weight: 500 !important;
-  color: #555555 !important;
-}
-
-::ng-deep .user-date-datepicker .mat-calendar-table-header-divider {
-  display: none !important;
-}
-
-@media (max-width: 600px) {
-  ::ng-deep .user-date-datepicker,
-  ::ng-deep .user-date-datepicker.mat-datepicker-content,
-  ::ng-deep .user-date-datepicker .mat-datepicker-content-container,
-  ::ng-deep .user-date-datepicker .mat-calendar {
-    width: 270px !important;
-    min-width: 270px !important;
-    max-width: 270px !important;
-  }
-
-  ::ng-deep .user-date-datepicker .mat-calendar-body-cell {
-    height: 32px !important;
-  }
-
-  ::ng-deep .user-date-datepicker .mat-calendar-body-cell-content {
-    width: 27px !important;
-    height: 27px !important;
-    line-height: 27px !important;
-  }
-}
-.user-page-wrapper {
-  margin-top: 20px;
-}
-
-.cc-email-col {
-  grid-column: span 3;
-}
-
-
+/* ---------- Searchable dropdowns (manager / state / plan) ---------- */
 .task-category-dropdown {
   position: relative;
-  display: block;
   width: 100%;
-  height: 43px; // match .user-input height; change if yours differs
+  height: 43px;
 
   .cat-trigger {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 8px;
     width: 100%;
-    height: 43px !important;
-    margin: 0 !important;
-    text-align: left;
+    margin: 0;
     cursor: pointer;
-    box-sizing: border-box;
+    text-align: left;
   }
 
-  .cat-trigger.cat-placeholder .cat-trigger-text {
-    color: #8794a2;
-  }
+  .cat-trigger.cat-placeholder .cat-trigger-text { color: #8794a2; }
 
   .cat-trigger-text {
     flex: 1;
@@ -751,48 +226,29 @@
     white-space: nowrap;
   }
 
-  .cat-caret {
-    flex-shrink: 0;
-    font-size: 10px;
-    color: #718096;
-  }
-
   .cat-panel {
     position: absolute;
-    top: 46px !important; // 43px trigger + 3px gap
+    top: 46px;
     left: 0;
     right: 0;
     min-width: 240px;
-    margin: 0 !important;
     padding: 8px;
-    background: #ffffff;
+    background: #fff;
     border: 1px solid #cfd8e3;
     border-radius: 4px;
     box-shadow: 0 5px 15px rgba(25, 52, 90, 0.12);
     z-index: 9999;
-    box-sizing: border-box;
-    font-family: "Open Sans", sans-serif !important;
   }
 
   .cat-search {
-    display: block;
-    width: 100%;
     height: 36px;
-    margin: 0 0 8px;
-    padding: 0 11px;
-    border: 1px solid #c6d3df;
+    margin-bottom: 8px;
     border-radius: 4px;
-    background: #ffffff;
-    color: #193b63;
+    border-color: #c6d3df;
     font-size: 13px;
-    outline: none;
-    box-sizing: border-box;
+    color: var(--text-navy);
 
-    &::placeholder { color: #8296aa; }
-    &:focus {
-      border-color: #3378a9;
-      box-shadow: 0 0 0 2px rgba(51, 120, 169, 0.08);
-    }
+    &:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 2px rgba(51, 120, 169, 0.08); }
   }
 
   .cat-list {
@@ -807,11 +263,10 @@
 
   .cat-item {
     padding: 8px 10px;
-    color: #193b63;
+    color: var(--text-navy);
     font-size: 13px;
     line-height: 1.35;
     cursor: pointer;
-    white-space: normal;
     overflow-wrap: anywhere;
 
     &:hover { background: #f8fbfd; color: #28658f; }
@@ -823,5 +278,120 @@
     color: #718096;
     font-size: 13px;
     text-align: center;
+  }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+  .user-portlet-title { padding: 8px 10px; }
+  .user-portlet-title .btn-navy { width: 100%; }
+  .user-page-title { font-size: 18px; }
+  .user-form-body { padding: 15px 10px; }
+  .section-title { font-size: 17px; margin-bottom: 16px; }
+  .form-section { margin-top: 25px; }
+}
+
+/* =========================================================
+   MATERIAL DATEPICKER POPUP (rendered in the CDK overlay,
+   so it needs ::ng-deep) - unchanged colors
+========================================================= */
+
+::ng-deep .cdk-overlay-container { z-index: 1000 !important; }
+
+::ng-deep .user-date-datepicker {
+  width: 280px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  border-radius: 7px !important;
+  box-shadow: 0 6px 18px rgba(33, 75, 120, 0.18) !important;
+
+  .mat-datepicker-content-container { width: 280px !important; padding: 0 !important; }
+
+  .mat-calendar {
+    width: 280px !important;
+    height: 310px !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .mat-calendar-header {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 4px 6px !important;
+    background: #214b78 !important;
+  }
+
+  .mat-calendar-period-button {
+    min-width: 0 !important;
+    height: 36px !important;
+    padding: 0 6px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+  }
+
+  .mat-calendar-arrow { margin-left: 3px !important; fill: #fff !important; color: #fff !important; }
+
+  .mat-calendar-previous-button,
+  .mat-calendar-next-button {
+    width: 36px !important;
+    height: 36px !important;
+    padding: 7px !important;
+    color: #fff !important;
+
+    svg { fill: #fff !important; }
+  }
+
+  .mat-calendar-controls { height: 36px !important; margin: 0 !important; }
+
+  .mat-calendar-content { padding: 4px 6px 6px !important; background: #fff !important; }
+
+  .mat-calendar-table { width: 100% !important; table-layout: fixed !important; }
+
+  .mat-calendar-table-header th {
+    height: 26px !important;
+    padding: 0 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #214b78 !important;
+    text-align: center !important;
+  }
+
+  .mat-calendar-table-header-divider { display: none !important; }
+
+  .mat-calendar-body-cell { width: 14.28% !important; height: 34px !important; padding: 0 !important; }
+
+  .mat-calendar-body-cell-content {
+    width: 28px !important;
+    height: 28px !important;
+    line-height: 28px !important;
+    font-size: 12px !important;
+    color: #333 !important;
+    border-radius: 50% !important;
+  }
+
+  .mat-calendar-body-selected { background-color: #214b78 !important; color: #fff !important; }
+
+  .mat-calendar-body-today { border: 1px solid #214b78 !important; border-radius: 50% !important; }
+  .mat-calendar-body-today.mat-calendar-body-selected { border: none !important; }
+
+  .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover .mat-calendar-body-cell-content,
+  .mat-calendar-body-active .mat-calendar-body-cell-content {
+    background-color: #e7f0f8 !important;
+    color: #214b78 !important;
+  }
+
+  .mat-calendar-body-disabled { opacity: 0.6 !important; }
+  .mat-calendar-body-disabled .mat-calendar-body-cell-content { color: #b8b8b8 !important; background: transparent !important; }
+
+  .mat-calendar-body-label { font-size: 11px !important; font-weight: 500 !important; color: #555 !important; }
+}
+
+@media (max-width: 600px) {
+  ::ng-deep .user-date-datepicker,
+  ::ng-deep .user-date-datepicker .mat-datepicker-content-container,
+  ::ng-deep .user-date-datepicker .mat-calendar {
+    width: 270px !important;
   }
 }

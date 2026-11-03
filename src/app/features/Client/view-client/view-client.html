@@ -1,33 +1,36 @@
-<div class="page-container">
-  <div class="main-card">
-    <!-- Page Header -->
-    <div class="page-header">
-      <div class="page-title">
+<div class="container-fluid page-container">
+  <!-- ================= CLIENT DETAILS ================= -->
+  <div class="card main-card">
+    <div class="d-flex flex-column flex-md-row align-items-stretch align-items-md-center justify-content-between gap-2 page-header">
+      <div class="d-flex align-items-center gap-2 page-title">
         <mat-icon>apartment</mat-icon>
         <span>View Client Master</span>
       </div>
 
-      <div class="header-action">
-        <button type="button" class="back-index-btn" (click)="backToIndexPage()">
-          <mat-icon>arrow_back</mat-icon>
-          <span>Back to Index</span>
-        </button>
-      </div>
+      <button type="button" class="btn btn-navy d-inline-flex align-items-center justify-content-center gap-1" (click)="backToIndexPage()">
+        <mat-icon>arrow_back</mat-icon>
+        <span>Back to Index</span>
+      </button>
     </div>
 
-    <mat-divider></mat-divider>
+    <hr class="m-0 divider" />
 
     <div class="user-information">
-      <div class="manager-section">
-        <div class="info-row manager-row">
+      <!-- Manager -->
+      <div class="details-section manager-section">
+        <div class="manager-row">
           <span class="field-label">Society Manager:</span>
 
-          <div class="manager-value">
-            <span class="info-value">
-              {{ client.managerName || '-' }}
-            </span>
+          <div class="d-flex align-items-center gap-2 min-w-0">
+            <span class="field-value">{{ client.managerName || '-' }}</span>
 
-            <button *ngIf="client.status !== 3 && (addPer === 'Y' || editPer === 'Y')" type="button" class="change-manager-button" (click)="openChangeManagerModal()" matTooltip="Change Manager">
+            <button
+              *ngIf="client.status !== 3 && (addPer === 'Y' || editPer === 'Y')"
+              type="button"
+              class="btn change-button"
+              (click)="openChangeManagerModal()"
+              matTooltip="Change Manager"
+            >
               <mat-icon>edit</mat-icon>
               <span>Change</span>
             </button>
@@ -35,228 +38,166 @@
         </div>
       </div>
 
+      <!-- Client details -->
       <div class="details-section">
-        <div class="section-heading">
-          <span>Client Details</span>
-        </div>
+        <div class="section-heading">Client Details</div>
 
-        <!-- Row 2 -->
-        <div class="details-grid">
-          <div class="info-field">
+        <div class="row g-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Client Name:</span>
-            <span class="field-value">
-              {{ client.name || '-' }}
-            </span>
+            <span class="field-value">{{ client.name || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Client Code:</span>
-            <span class="field-value">
-              {{ client.code || '-' }}
-            </span>
+            <span class="field-value">{{ client.code || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">TDS Applicable:</span>
             <span class="flag-value" [ngClass]="client.taxFlag === 1 ? 'flag-yes' : 'flag-no'">
               {{ client.taxFlag === 1 ? '✔️' : '❌' }}
             </span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">PAN:</span>
-            <span class="field-value">
-              {{ client.pan || '-' }}
-            </span>
+            <span class="field-value">{{ client.pan || '-' }}</span>
           </div>
 
-          <!-- Row 3 -->
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">GST Applicable:</span>
             <span class="flag-value" [ngClass]="client.gstFlag === 1 ? 'flag-yes' : 'flag-no'">
               {{ client.gstFlag === 1 ? '✔️' : '❌' }}
             </span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">GST Number:</span>
-            <span class="field-value">
-              {{ client.gstNo || '-' }}
-            </span>
+            <span class="field-value">{{ client.gstNo || '-' }}</span>
           </div>
-
-          <div class="empty-field"></div>
-          <div class="empty-field"></div>
         </div>
       </div>
 
+      <!-- Address details -->
       <div class="details-section">
-        <div class="section-heading">
-          <span>Address Details</span>
-        </div>
+        <div class="section-heading">Address Details</div>
 
-        <div class="details-grid">
-          <!-- Row 4 -->
-          <div class="info-field">
+        <div class="row g-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Address Line 1:</span>
-            <span class="field-value">
-              {{ client.addressLine1 || '-' }}
-            </span>
+            <span class="field-value">{{ client.addressLine1 || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Address Line 2:</span>
-            <span class="field-value">
-              {{ client.addressLine2 || '-' }}
-            </span>
+            <span class="field-value">{{ client.addressLine2 || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">City:</span>
-            <span class="field-value">
-              {{ client.city || '-' }}
-            </span>
+            <span class="field-value">{{ client.city || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">State:</span>
-            <span class="field-value">
-              {{ client.stateName || '-' }}
-            </span>
+            <span class="field-value">{{ client.stateName || '-' }}</span>
           </div>
 
-          <!-- Row 5 -->
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Location:</span>
-            <span class="field-value">
-              {{ client.location || '-' }}
-            </span>
+            <span class="field-value">{{ client.location || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Pincode:</span>
-            <span class="field-value">
-              {{ client.pincode || '-' }}
-            </span>
+            <span class="field-value">{{ client.pincode || '-' }}</span>
           </div>
-
-          <div class="empty-field"></div>
-          <div class="empty-field"></div>
         </div>
       </div>
 
+      <!-- Contact details -->
       <div class="details-section">
-        <div class="section-heading">
-          <span>Contact Details</span>
-        </div>
+        <div class="section-heading">Contact Details</div>
 
-        <div class="details-grid">
-          <!-- Row 6 -->
-          <div class="info-field">
+        <div class="row g-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Contact Name:</span>
-            <span class="field-value">
-              {{ client.contactName || '-' }}
-            </span>
+            <span class="field-value">{{ client.contactName || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Contact Email:</span>
-            <span class="field-value email-text">
-              {{ client.contactEmail || '-' }}
-            </span>
+            <span class="field-value email-text">{{ client.contactEmail || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Chairman’s Name:</span>
-            <span class="field-value">
-              {{ client.name1 || '-' }}
-            </span>
+            <span class="field-value">{{ client.name1 || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Chairman’s Email ID:</span>
-            <span class="field-value email-text">
-              {{ client.emailId1 || '-' }}
-            </span>
+            <span class="field-value email-text">{{ client.emailId1 || '-' }}</span>
           </div>
 
-          <!-- Row 7 -->
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Secretary’s Name:</span>
-            <span class="field-value">
-              {{ client.name2 || '-' }}
-            </span>
+            <span class="field-value">{{ client.name2 || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Secretary’s Email ID:</span>
-            <span class="field-value email-text">
-              {{ client.emailId2 || '-' }}
-            </span>
+            <span class="field-value email-text">{{ client.emailId2 || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Treasurer’s Name:</span>
-            <span class="field-value">
-              {{ client.name3 || '-' }}
-            </span>
+            <span class="field-value">{{ client.name3 || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Treasurer’s Email ID:</span>
-            <span class="field-value email-text">
-              {{ client.emailId3 || '-' }}
-            </span>
+            <span class="field-value email-text">{{ client.emailId3 || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">CC Email:</span>
-            <span class="field-value email-text">
-              {{ client.emails || '-' }}
-            </span>
+            <span class="field-value email-text">{{ client.emails || '-' }}</span>
           </div>
         </div>
       </div>
 
+      <!-- Other details -->
       <div class="details-section">
-        <div class="section-heading">
-          <span>Other Details</span>
-        </div>
+        <div class="section-heading">Other Details</div>
 
-        <div class="details-grid">
-          <!-- Row 9 -->
-          <div class="info-field">
+        <div class="row g-4">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Start Date:</span>
-            <span class="field-value">
-              {{ client.startDate || '-' }}
-            </span>
+            <span class="field-value">{{ client.startDate || '-' }}</span>
           </div>
 
-          <div class="info-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Plan:</span>
-            <span class="field-value">
-              {{ client.planName || '-' }}
-            </span>
+            <span class="field-value">{{ client.planName || '-' }}</span>
           </div>
 
-          <div class="info-field outstanding-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Outstanding:</span>
 
-            <div class="outstanding-value">
-              <span class="field-value">
-                {{ client.outstanding ?? 0 }}
-              </span>
+            <div class="d-flex align-items-center gap-2 min-w-0">
+              <span class="field-value">{{ client.outstanding ?? 0 }}</span>
 
-              <button *ngIf="client.status !== 3" type="button" class="change-outstanding-button" (click)="openChangeOutstandingModal()" matTooltip="Change Outstanding">
+              <button *ngIf="client.status !== 3" type="button" class="btn change-button" (click)="openChangeOutstandingModal()" matTooltip="Change Outstanding">
                 <mat-icon>edit</mat-icon>
                 <span>Change</span>
               </button>
             </div>
           </div>
 
-          <div class="info-field status-field">
+          <div class="col-12 col-sm-6 col-lg-3">
             <span class="field-label">Status:</span>
-
             <span class="status-badge" [ngClass]="getStatusClass(client.status)">
               {{ getStatusLabel(client.status) }}
             </span>
@@ -265,121 +206,92 @@
       </div>
     </div>
   </div>
-  <div class="section-card">
-    <div class="section-header">
-      <div class="section-title">
+
+  <!-- ================= ACTION HISTORY ================= -->
+  <div class="card section-card">
+    <div class="d-flex align-items-center section-header">
+      <div class="d-flex align-items-center gap-2 section-title">
         <mat-icon>history</mat-icon>
         <span>Action History</span>
       </div>
     </div>
 
-    <mat-divider></mat-divider>
+    <hr class="m-0 divider" />
 
-    <div class="table-container">
-      <div class="history-table-wrapper">
-        <table class="history-table">
-          <thead>
-            <tr>
-              <th style="width: 5%">#</th>
-              <th style="width: 20%">Action By</th>
-              <th style="width: 20%">Updated On</th>
-              <th style="width: 55%">Action</th>
-            </tr>
-          </thead>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover align-middle mb-0 history-table">
+        <thead>
+          <tr>
+            <th style="width: 5%">#</th>
+            <th style="width: 20%">Action By</th>
+            <th style="width: 20%">Updated On</th>
+            <th style="width: 55%">Action</th>
+          </tr>
+        </thead>
 
-          <tbody>
-            <tr *ngFor="let history of transactionHistory; let i = index">
-              <td>
-                {{ i + 1 }}
-              </td>
+        <tbody>
+          <tr *ngFor="let history of transactionHistory; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ history.name || '-' }}</td>
+            <td>{{ history.entryDate || '-' }}</td>
+            <td>
+              <span class="action-badge">{{ history.action || '-' }}</span>
+            </td>
+          </tr>
 
-              <td>
-                {{ history.name || '-' }}
-              </td>
-
-              <td>
-                {{ history.entryDate || '-' }}
-              </td>
-
-              <td>
-                <span class="action-badge">
-                  {{ history.action || '-' }}
-                </span>
-              </td>
-            </tr>
-
-            <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
-              <td colspan="4" class="no-records-box">
+          <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
+            <td colspan="4" class="text-center text-muted py-4">
+              <div class="d-inline-flex align-items-center gap-2 no-records-box">
                 <mat-icon>info</mat-icon>
                 <span>No action history available</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
-  <div class="change-manager-modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <div class="modal-title">
-        <div class="modal-title-icon">
-          <mat-icon>manage_accounts</mat-icon>
+<!-- ================= CHANGE MANAGER MODAL ================= -->
+<div class="modal d-block app-modal" tabindex="-1" role="dialog" *ngIf="showChangeManagerModal" (click)="closeChangeManagerModal()">
+  <div class="modal-dialog modal-dialog-centered" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex align-items-center gap-3 min-w-0">
+          <div class="modal-title-icon"><mat-icon>manage_accounts</mat-icon></div>
+          <div>
+            <div class="modal-title-text">Change Society Manager</div>
+            <div class="modal-subtitle">Update the manager assigned to this client</div>
+          </div>
         </div>
 
-        <div>
-          <div class="modal-title-text">Change Society Manager</div>
-
-          <div class="modal-subtitle">Update the manager assigned to this client</div>
-        </div>
+        <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" [disabled]="isChangingManager" aria-label="Close">
+          <mat-icon>close</mat-icon>
+        </button>
       </div>
 
-      <button type="button" class="modal-close-button" (click)="closeChangeManagerModal()" [disabled]="isChangingManager" aria-label="Close">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-
-    <mat-divider></mat-divider>
-
-    <div class="modal-body">
-      <div class="client-reference">
-        <div class="client-reference-icon">
-          <mat-icon>business</mat-icon>
+      <div class="modal-body">
+        <div class="client-reference">
+          <div class="client-reference-icon"><mat-icon>business</mat-icon></div>
+          <div class="d-flex flex-column gap-1 min-w-0">
+            <span class="client-reference-label">Client</span>
+            <span class="client-reference-name">{{ client.name || '-' }}</span>
+          </div>
         </div>
 
-        <div class="client-reference-content">
-          <span class="client-reference-label"> Client </span>
-
-          <span class="client-reference-name">
-            {{ client.name || '-' }}
-          </span>
+        <div class="manager-information">
+          <span class="modal-field-label">Current Society Manager</span>
+          <span class="current-manager-name">{{ client.managerName || '-' }}</span>
         </div>
-      </div>
 
-      <div class="manager-information">
-        <div class="manager-info-item">
-          <span class="modal-field-label"> Current Society Manager </span>
-
-          <span class="current-manager-name">
-            {{ client.managerName || '-' }}
-          </span>
-        </div>
-      </div>
-
-      <div class="manager-form-group">
         <label class="modal-field-label">
-          Change Society Manager
-          <span class="required">*</span>
+          Change Society Manager <span class="required">*</span>
         </label>
 
-        <select class="manager-select" [(ngModel)]="selectedManagerId" [disabled]="isChangingManager">
+        <select class="form-select manager-select" [(ngModel)]="selectedManagerId" [disabled]="isChangingManager">
           <option [ngValue]="null">Select Society Manager</option>
-
-          <option *ngFor="let manager of managers" [ngValue]="manager.userId">
-            {{ manager.firstName }}
-          </option>
+          <option *ngFor="let manager of managers" [ngValue]="manager.userId">{{ manager.firstName }}</option>
         </select>
 
         <div class="manager-validation-error" *ngIf="managerValidationError">
@@ -387,98 +299,79 @@
           <span>Please select a society manager</span>
         </div>
       </div>
-    </div>
 
-    <div class="modal-footer">
-      <button type="button" class="modal-cancel-button" (click)="closeChangeManagerModal()" [disabled]="isChangingManager">Cancel</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-modal" (click)="closeChangeManagerModal()" [disabled]="isChangingManager">Cancel</button>
 
-      <button type="button" class="modal-save-button" (click)="changeManager()" [disabled]="isChangingManager">
-        <mat-icon>
-          {{ isChangingManager ? 'hourglass_top' : 'save' }}
-        </mat-icon>
-
-        <span>
-          {{ isChangingManager ? 'Updating...' : 'Change Society Manager' }}
-        </span>
-      </button>
+        <button type="button" class="btn btn-navy d-inline-flex align-items-center gap-1" (click)="changeManager()" [disabled]="isChangingManager">
+          <mat-icon>{{ isChangingManager ? 'hourglass_top' : 'save' }}</mat-icon>
+          <span>{{ isChangingManager ? 'Updating...' : 'Change Society Manager' }}</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" *ngIf="showChangeOutstandingModal" (click)="closeChangeOutstandingModal()">
-  <div class="change-manager-modal" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <div class="modal-title">
-        <div class="modal-title-icon">
-          <mat-icon>payments</mat-icon>
+<!-- ================= CHANGE OUTSTANDING MODAL ================= -->
+<div class="modal d-block app-modal" tabindex="-1" role="dialog" *ngIf="showChangeOutstandingModal" (click)="closeChangeOutstandingModal()">
+  <div class="modal-dialog modal-dialog-centered" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="d-flex align-items-center gap-3 min-w-0">
+          <div class="modal-title-icon"><mat-icon>payments</mat-icon></div>
+          <div>
+            <div class="modal-title-text">Change Outstanding</div>
+            <div class="modal-subtitle">Update the outstanding amount for this client</div>
+          </div>
         </div>
 
-        <div>
-          <div class="modal-title-text">Change Outstanding</div>
-          <div class="modal-subtitle">Update the outstanding amount for this client</div>
-        </div>
+        <button type="button" class="modal-close-button" (click)="closeChangeOutstandingModal()" [disabled]="isChangingOutstanding" aria-label="Close">
+          <mat-icon>close</mat-icon>
+        </button>
       </div>
 
-      <button type="button" class="modal-close-button" (click)="closeChangeOutstandingModal()" [disabled]="isChangingOutstanding" aria-label="Close">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-
-    <mat-divider></mat-divider>
-
-    <div class="modal-body">
-      <div class="client-reference">
-        <div class="client-reference-icon">
-          <mat-icon>business</mat-icon>
+      <div class="modal-body">
+        <div class="client-reference">
+          <div class="client-reference-icon"><mat-icon>business</mat-icon></div>
+          <div class="d-flex flex-column gap-1 min-w-0">
+            <span class="client-reference-label">Client</span>
+            <span class="client-reference-name">{{ client.name || '-' }}</span>
+          </div>
         </div>
 
-        <div class="client-reference-content">
-          <span class="client-reference-label"> Client </span>
-
-          <span class="client-reference-name">
-            {{ client.name || '-' }}
-          </span>
+        <div class="manager-information">
+          <span class="modal-field-label">Current Outstanding</span>
+          <span class="current-manager-name">{{ client.outstanding ?? 0 }}</span>
         </div>
-      </div>
 
-      <div class="manager-information">
-        <div class="manager-info-item">
-          <span class="modal-field-label"> Current Outstanding </span>
-
-          <span class="current-manager-name">
-            {{ client.outstanding ?? 0 }}
-          </span>
-        </div>
-      </div>
-
-      <div class="manager-form-group">
         <label class="modal-field-label">
-          New Outstanding
-          <span class="required">*</span>
+          New Outstanding <span class="required">*</span>
         </label>
 
-        <input type="number" class="manager-select" [(ngModel)]="newOutstanding" min="0" step="0.01" [disabled]="isChangingOutstanding" placeholder="Enter outstanding amount" />
+        <input
+          type="number"
+          class="form-control manager-select"
+          [(ngModel)]="newOutstanding"
+          min="0"
+          step="0.01"
+          [disabled]="isChangingOutstanding"
+          placeholder="Enter outstanding amount"
+        />
 
         <div class="manager-validation-error" *ngIf="outstandingValidationError">
           <mat-icon>error_outline</mat-icon>
-
-          <span> Please enter a valid outstanding amount </span>
+          <span>Please enter a valid outstanding amount</span>
         </div>
       </div>
-    </div>
 
-    <div class="modal-footer">
-      <button type="button" class="modal-cancel-button" (click)="closeChangeOutstandingModal()" [disabled]="isChangingOutstanding">Cancel</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-modal" (click)="closeChangeOutstandingModal()" [disabled]="isChangingOutstanding">Cancel</button>
 
-      <button type="button" class="modal-save-button" (click)="updateOutstanding()" [disabled]="isChangingOutstanding">
-        <mat-icon>
-          {{ isChangingOutstanding ? 'hourglass_top' : 'save' }}
-        </mat-icon>
-
-        <span>
-          {{ isChangingOutstanding ? 'Updating...' : 'Change Outstanding' }}
-        </span>
-      </button>
+        <button type="button" class="btn btn-navy d-inline-flex align-items-center gap-1" (click)="updateOutstanding()" [disabled]="isChangingOutstanding">
+          <mat-icon>{{ isChangingOutstanding ? 'hourglass_top' : 'save' }}</mat-icon>
+          <span>{{ isChangingOutstanding ? 'Updating...' : 'Change Outstanding' }}</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>

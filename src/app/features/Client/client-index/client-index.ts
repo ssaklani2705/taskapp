@@ -55,7 +55,7 @@ interface Client {
 
 @Component({
   selector: 'app-client-index',
-  imports: [CommonModule, FormsModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatIcon, MatDivider],
+  imports: [CommonModule, FormsModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatCardModule, MatIcon],
   templateUrl: './client-index.html',
   styleUrl: './client-index.scss',
   providers: [
