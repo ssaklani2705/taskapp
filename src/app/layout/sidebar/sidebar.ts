@@ -344,6 +344,7 @@ export class Sidebar implements OnInit, OnDestroy {
           icon: 'task_alt',
           route: '/task-index',
         },
+        { moduleId: 15, label: 'Generic Recurring', icon: 'autorenew', route: '/generic-recurring-index' },
       ];
     }
 
