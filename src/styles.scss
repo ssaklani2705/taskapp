@@ -436,3 +436,19 @@ padding: 8px 4px;
     flex: 1;
   }
 }
+
+.field-label {
+  margin-bottom: 6px;
+  color: var(--text-dark);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.field-value {
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
