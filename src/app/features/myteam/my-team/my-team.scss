@@ -221,7 +221,7 @@ nav[aria-label^="User pagination"] {
   font-size: 13px;
   color: var(--text);
 
-  .col-sr { width: 60px; }
+  .col-sr { width: 35px; }
   .col-name { width: 150px; }
   .col-email { width: 260px; }
   .col-mobile { width: 120px; }
@@ -230,8 +230,8 @@ nav[aria-label^="User pagination"] {
   .col-dept { width: 170px; }
   .col-desig { width: 130px; }
   .col-category { width: 160px; }
-  .col-weekoff { width: 110px; }
-  .col-status { width: 110px; }
+  .col-weekoff { width: 100px; }
+  .col-status { width: 100px; }
   .col-action { width: 150px; }
 
   thead th {
@@ -249,8 +249,6 @@ nav[aria-label^="User pagination"] {
     overflow-wrap: anywhere;
   }
 
-  /* border-collapse is "separate" (needed for the sticky Action column),
-     so Bootstrap's row-level borders don't render. Draw them on the cells. */
   > thead > tr > th,
   > tbody > tr > td {
     border-width: 0 1px 1px 0;

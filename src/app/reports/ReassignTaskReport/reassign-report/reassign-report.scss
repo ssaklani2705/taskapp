@@ -805,7 +805,7 @@ mat-divider {
 
   // column widths
   th:nth-child(1),
-  td:nth-child(1) { width: 60px;  text-align: center; }   // #
+  td:nth-child(1) { width: 40px;  text-align: center; }   // #
   th:nth-child(2),
   td:nth-child(2) { width: 170px; }                       // Task Reassign Date
   th:nth-child(3),
@@ -815,9 +815,9 @@ mat-divider {
   th:nth-child(5),
   td:nth-child(5) { min-width: 170px; }                   // Client Name
   th:nth-child(6),
-  td:nth-child(6) { min-width: 130px; }                   // Previous User
+  td:nth-child(6) { min-width: 100px; }                   // Previous User
   th:nth-child(7),
-  td:nth-child(7) { min-width: 130px; }                   // New User
+  td:nth-child(7) { min-width: 100px; }                   // New User
 }
 
 .text-left {

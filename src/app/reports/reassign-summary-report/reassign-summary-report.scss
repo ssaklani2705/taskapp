@@ -847,20 +847,20 @@ mat-divider {
 
   th:nth-child(1),
   td:nth-child(1) {
-    width: 10%;
+    width: 5%;
     text-align: center;
   }
 
 
   th:nth-child(2),
   td:nth-child(2) {
-    width: 45%;
+    width: 80%;
   }
 
 
   th:nth-child(3),
   td:nth-child(3) {
-    min-width: 45%;
+    min-width:5%;
     white-space: normal;
   }
 }

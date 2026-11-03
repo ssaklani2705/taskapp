@@ -511,32 +511,33 @@
 
 .user-table th.serial-column,
 .user-table td.serial-number {
-  width: 6%;
+  width: 
+  2%;
 }
 
 .user-table th:nth-child(2),
 .user-table td:nth-child(2) {
-  width: 28%;
+  width: 27%;
 }
 
 .user-table th:nth-child(3),
 .user-table td:nth-child(3) {
-  width: 16%;
+  width: 5%;
 }
 
 .user-table th:nth-child(4),
 .user-table td:nth-child(4) {
-  width: 16%;
+  width: 5%;
 }
 
 .user-table th:nth-child(5),
 .user-table td:nth-child(5) {
-  width: 16%;
+  width: 6%;
 }
 
 .user-table th.action-column,
 .user-table td:last-child {
-  width: 18%;
+  width: 8%;
 }
 
 // .column-header {

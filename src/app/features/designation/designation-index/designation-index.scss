@@ -297,11 +297,11 @@ mat-divider,
 .designation-table tbody tr:hover td { background: var(--table-hover); }
 
 /* Column widths */
-.designation-table th:nth-child(1), .designation-table td:nth-child(1) { width: 7%; }
-.designation-table th:nth-child(2), .designation-table td:nth-child(2) { width: 38%; }
-.designation-table th:nth-child(3), .designation-table td:nth-child(3) { width: 15%; }
-.designation-table th:nth-child(4), .designation-table td:nth-child(4) { width: 20%; }
-.designation-table th:nth-child(5), .designation-table td:nth-child(5) { width: 20%; }
+.designation-table th:nth-child(1), .designation-table td:nth-child(1) { width: 2%; }
+.designation-table th:nth-child(2), .designation-table td:nth-child(2) { width: 30%; }
+.designation-table th:nth-child(3), .designation-table td:nth-child(3) { width: 5%; }
+.designation-table th:nth-child(4), .designation-table td:nth-child(4) { width: 5%; }
+.designation-table th:nth-child(5), .designation-table td:nth-child(5) { width: 5%; }
 
 .designation-table th.sortable {
   cursor: pointer;
