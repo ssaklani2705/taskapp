@@ -30,7 +30,7 @@
         <div class="container-fluid border p-4">
           <div class="row g-4">
             <!-- Title -->
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Title:</div>
               <div class="field-value text-break">
                 {{ recurring.title || '-' }}
@@ -38,7 +38,7 @@
             </div>
 
             <!-- For -->
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">For:</div>
               <div class="field-value text-break">
                 {{ getForLabel(recurring.forValue) }}
@@ -46,7 +46,7 @@
             </div>
 
             <!-- Task Category -->
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Task Category:</div>
               <div class="field-value text-break">
                 {{ recurring.taskCatName || '-' }}
@@ -54,7 +54,7 @@
             </div>
 
             <!-- Type -->
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Type:</div>
               <div class="field-value text-break">
                 {{ getTypeLabel(recurring.type) }}
@@ -62,7 +62,7 @@
             </div>
 
             <!-- Schedule -->
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Schedule:</div>
               <div class="field-value text-break">
                 {{ getSchedule() }}
@@ -70,7 +70,7 @@
             </div>
 
             <!-- Priority -->
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Priority:</div>
               <div class="field-value">
                 <span class="badge px-4 py-2 rounded-0" [ngClass]="getPriorityClass(recurring.priority)">
@@ -80,7 +80,7 @@
             </div>
 
             <!-- Status -->
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Status:</div>
               <div class="field-value">
                 <span class="badge px-4 py-2 rounded-0" [ngClass]="getStatusClass(recurring.status)">
@@ -90,7 +90,7 @@
             </div>
 
             <!-- Day -->
-            <div class="col-12 col-sm-6 col-lg-4" *ngIf="recurring.type === 2">
+            <div class="col-12 col-sm-6 col-lg-3" *ngIf="recurring.type === 2">
               <div class="field-label">Day:</div>
               <div class="field-value text-break">
                 {{ getDayLabel(recurring.day) }}
@@ -98,7 +98,7 @@
             </div>
 
             <!-- Date -->
-            <div class="col-12 col-sm-6 col-lg-4" *ngIf="recurring.type === 3 || recurring.type === 4">
+            <div class="col-12 col-sm-6 col-lg-3" *ngIf="recurring.type === 3 || recurring.type === 4">
               <div class="field-label">Date:</div>
               <div class="field-value text-break">
                 {{ recurring.date === -2 ? 'Last Day of the Month' : recurring.date || '-' }}
@@ -106,7 +106,7 @@
             </div>
 
             <!-- Time -->
-            <div class="col-12 col-sm-6 col-lg-4">
+            <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Time:</div>
               <div class="field-value text-break">
                 {{ recurring.time ? (recurring.time | slice: 0 : 5) : '-' }}
@@ -114,7 +114,7 @@
             </div>
 
             <!-- Month -->
-            <div class="col-12 col-sm-6 col-lg-4" *ngIf="recurring.type === 4">
+            <div class="col-12 col-sm-6 col-lg-3" *ngIf="recurring.type === 4">
               <div class="field-label">Month:</div>
               <div class="field-value text-break">
                 {{ getMonthLabel(recurring.month) }}

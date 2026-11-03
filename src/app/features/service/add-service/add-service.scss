@@ -38,7 +38,7 @@
 .user-page-title {
   color: var(--navy);
   font-family: "Open Sans", sans-serif !important;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   line-height: 1.3;
 }
@@ -198,4 +198,8 @@ select:focus-visible {
   .back-index-btn { min-height: 38px; }
   .user-form-body { padding: 16px 12px 22px; }
   .user-buttons { margin-top: 22px; }
+}
+
+.user-title{
+  font-size: 22px;
 }
