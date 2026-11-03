@@ -13,28 +13,32 @@
       </div>
     </div>
     <mat-divider></mat-divider>
-    <div class="user-information">
-      <div class="user-info-grid">
-        <!-- Name -->
-        <div class="info-row">
-          <span class="info-label"> Department Name: </span>
-          <span class="info-value">
-            {{ department.name }}
-          </span>
+    <div class="container-fluid border p-4">
+      <div class="row g-4">
+        <!-- Department Name -->
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="field-label">Department Name:</div>
+          <div class="field-value text-break">
+            {{ department.name || '-' }}
+          </div>
         </div>
+
         <!-- Sequence -->
-        <div class="info-row">
-          <span class="info-label"> Sequence: </span>
-          <span class="info-value">
-            {{ department.sequence }}
-          </span>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="field-label">Sequence:</div>
+          <div class="field-value text-break">
+            {{ department.sequence ?? '-' }}
+          </div>
         </div>
+
         <!-- Status -->
-        <div class="info-row status-row">
-          <span class="info-label"> Status: </span>
-          <span class="status-badge" [ngClass]="common.getStatusClass(department.status)">
-            {{ common.getStatusLabel(department.status) }}
-          </span>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="field-label">Status:</div>
+          <div class="field-value">
+            <span class="badge px-4 py-2 rounded-0" [ngClass]="common.getStatusClass(department.status)">
+              {{ common.getStatusLabel(department.status) }}
+            </span>
+          </div>
         </div>
       </div>
     </div>
@@ -62,17 +66,14 @@
           <tbody>
             <tr *ngFor="let history of transactionHistory; let i = index">
               <!-- Serial Number -->
-              <td>
-                {{ i + 1 }}
-              </td>
+              <td>{{ i + 1 }}</td>
+
               <!-- Action By -->
-              <td>
-                {{ history.name }}
-              </td>
+              <td>{{ history.name }}</td>
+
               <!-- Updated Date -->
-              <td>
-                {{ history.entryDate }}
-              </td>
+              <td>{{ history.entryDate }}</td>
+
               <!-- Action -->
               <td>
                 <span class="action-badge">
@@ -80,10 +81,14 @@
                 </span>
               </td>
             </tr>
+
+            <!-- No Records -->
             <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
               <td colspan="4" class="no-records-box">
-                <mat-icon> info </mat-icon>
-                <span> No action history available </span>
+                <div class="no-records-content">
+                  <mat-icon>info</mat-icon>
+                  <span>No action history available</span>
+                </div>
               </td>
             </tr>
           </tbody>
