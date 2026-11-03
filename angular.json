@@ -32,7 +32,10 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.scss", "node_modules/@angular/cdk/overlay-prebuilt.css", "node_modules/@danielmoncada/angular-datetime-picker/assets/style/picker.min.css"],
+            "styles": ["src/styles.scss", "node_modules/@angular/cdk/overlay-prebuilt.css", "node_modules/@danielmoncada/angular-datetime-picker/assets/style/picker.min.css","node_modules/bootstrap/dist/css/bootstrap.min.css"],
+             "scripts": [
+    "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+  ],
             "define": {
               "global": "globalThis"
             }
