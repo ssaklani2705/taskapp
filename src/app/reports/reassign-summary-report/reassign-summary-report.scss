@@ -634,12 +634,13 @@ mat-divider {
 
   th:nth-child(2),
   td:nth-child(2) {
-    min-width: 220px;
+    width: 45%;
   }
 
   th:nth-child(3),
   td:nth-child(3) {
-    min-width: 150px;
+    min-width: 45%;
+    white-space: normal;
   }
 }
 

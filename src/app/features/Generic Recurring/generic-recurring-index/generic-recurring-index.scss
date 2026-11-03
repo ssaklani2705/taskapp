@@ -410,12 +410,12 @@ mat-divider {
 
 .designation-table th:nth-child(1),
 .designation-table td:nth-child(1) {
-  width: 55px;
+  width: 25px;
 }
 
 .designation-table th:nth-child(2),
 .designation-table td:nth-child(2) {
-  width: 180px;
+  width: 100px;
 }
 
 .designation-table th:nth-child(3),
@@ -425,19 +425,27 @@ mat-divider {
 
 .designation-table th:nth-child(4),
 .designation-table td:nth-child(4) {
-  width: 130px;
+  width: 60px;
 }
 
 .designation-table th:nth-child(5),
 .designation-table td:nth-child(5) {
-  width: 180px;
+  width: 100px;
 }
 
 .designation-table th:nth-child(6),
 .designation-table td:nth-child(6) {
-  width: 110px;
+  width: 80px;
 }
 
+.designation-table th:nth-child(7),
+.designation-table td:nth-child(7) {
+  width: 80px;
+}
+.designation-table th:nth-child(8),
+.designation-table td:nth-child(8) {
+  width: 100px;
+}
 .designation-table th.sortable-column {
   cursor: pointer;
   user-select: none;

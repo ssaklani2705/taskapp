@@ -464,7 +464,7 @@ mat-divider {
 }
 
 .designation-table {
-  // width: 100%;
+  width: 100%;
   min-width: 900px;
   border-collapse: collapse;
   table-layout: fixed;
@@ -504,7 +504,7 @@ mat-divider {
 
 .designation-table th:nth-child(1),
 .designation-table td:nth-child(1) {
-  width: 55px;
+  width: 40px;
 }
 
 .designation-table th:nth-child(2),
@@ -524,12 +524,12 @@ mat-divider {
 
 .designation-table th:nth-child(5),
 .designation-table td:nth-child(5) {
-  width: 180px;
+  width: 200px;
 }
 
 .designation-table th:nth-child(6),
 .designation-table td:nth-child(6) {
-  width: 110px;
+  width: 100px;
 }
 
 .designation-table th.sortable,
