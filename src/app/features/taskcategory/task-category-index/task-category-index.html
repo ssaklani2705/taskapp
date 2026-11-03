@@ -1,10 +1,9 @@
-<div class="page-container">
+<div class="page-container container-fluid">
   <div class="main-card">
-    <!-- =========================================================
-         PAGE HEADER
-    ========================================================== -->
-    <div class="page-header">
-      <div class="page-title">
+
+    <!-- ===== Header ===== -->
+    <div class="page-header d-flex flex-column flex-md-row align-items-md-stretch align-items-lg-center justify-content-between gap-2 gap-md-3">
+      <div class="page-title d-flex align-items-center gap-2">
         <mat-icon>task_alt</mat-icon>
         <span>Task Category Master</span>
         <a type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
@@ -16,7 +15,7 @@
         </a>
       </div>
 
-      <div class="header-action">
+      <div class="header-action d-grid d-md-flex">
         @if (addPer === 'Y') {
           <button type="button" class="add-button" (click)="addTaskCategory()">
             <mat-icon>add</mat-icon>
@@ -28,119 +27,108 @@
 
     <mat-divider></mat-divider>
 
-    <!-- =========================================================
-         SEARCH SECTION
-    ========================================================== -->
+    <!-- ===== Search / Filters ===== -->
     <div class="search-section" *ngIf="isPanelVisible">
-      <div class="search-grid">
-        <!-- Search -->
-        <div class="search-field search-name">
-          <label>Task Category Name</label>
+      <div class="row g-2 g-md-3 align-items-end">
 
-          <div class="search-input-wrapper">
-            <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Task Category Name" (keyup.enter)="onSearch()" />
-
-            <button type="button" class="search-button" (click)="onSearch()">
-              <mat-icon>search</mat-icon>
-            </button>
+        <!-- Task Category Name -->
+        <div class="col-12 col-md-6 col-xl-3">
+          <div class="search-field">
+            <label>Task Category Name</label>
+            <div class="search-input-wrapper">
+              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Task Category Name" (keyup.enter)="onSearch()" />
+              <button type="button" class="search-button" (click)="onSearch()" title="Search">
+                <mat-icon>search</mat-icon>
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- Department -->
-        <div class="search-field">
-          <label>Department</label>
-
-          <select [(ngModel)]="selectedDepartment" (change)="onSearch()">
-            <option value="">-- All Department --</option>
-
-            <option *ngFor="let department of departments" [value]="department.departmentId">
-              {{ department.name }}
-            </option>
-          </select>
+        <div class="col-12 col-sm-6 col-md-6 col-xl-2">
+          <div class="search-field">
+            <label>Department</label>
+            <select [(ngModel)]="selectedDepartment" (change)="onSearch()">
+              <option value="">-- All Department --</option>
+              <option *ngFor="let department of departments" [value]="department.departmentId">
+                {{ department.name }}
+              </option>
+            </select>
+          </div>
         </div>
 
         <!-- Service -->
-        <div class="search-field">
-          <label>Service</label>
-
-          <select [(ngModel)]="selectedService" (change)="onSearch()">
-            <option [ngValue]="0">-- All Services --</option>
-
-            <option *ngFor="let service of services" [ngValue]="service.serviceId">
-              {{ service.name }}
-            </option>
-          </select>
+        <div class="col-12 col-sm-6 col-md-6 col-xl-2">
+          <div class="search-field">
+            <label>Service</label>
+            <select [(ngModel)]="selectedService" (change)="onSearch()">
+              <option [ngValue]="0">-- All Services --</option>
+              <option *ngFor="let service of services" [ngValue]="service.serviceId">
+                {{ service.name }}
+              </option>
+            </select>
+          </div>
         </div>
 
         <!-- Status -->
-        <div class="search-field">
-          <label>Status</label>
-
-          <select [(ngModel)]="selectedStatus" (change)="onSearch()">
-            <option value="">-- All Status --</option>
-            <option value="1">Active</option>
-            <option value="2">Inactive</option>
-            <option value="3">Deleted</option>
-          </select>
+        <div class="col-12 col-sm-6 col-md-6 col-xl-2">
+          <div class="search-field">
+            <label>Status</label>
+            <select [(ngModel)]="selectedStatus" (change)="onSearch()">
+              <option value="">-- All Status --</option>
+              <option value="1">Active</option>
+              <option value="2">Inactive</option>
+              <option value="3">Deleted</option>
+            </select>
+          </div>
         </div>
 
-        <!-- Go Button -->
-        <div class="filter-action">
-          <button type="button" class="go-button" (click)="onSearch()">
-            <mat-icon>search</mat-icon>
-            Go
-          </button>
-
-          <!-- Clear -->
-          <button type="button" class="btn-clear" (click)="clearFilters()">Clear</button>
+        <!-- Go / Clear -->
+        <div class="col-12 col-sm-6 col-md-6 col-xl-auto">
+          <div class="filter-action d-flex gap-2">
+            <button type="button" class="go-button" (click)="onSearch()">
+              <mat-icon>search</mat-icon>
+              Go
+            </button>
+            <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
+          </div>
         </div>
+
       </div>
     </div>
 
     <mat-divider></mat-divider>
 
-    <!-- =========================================================
-         TABLE SECTION
-    ========================================================== -->
-
+    <!-- ===== Table ===== -->
     <div class="table-section">
-      <!-- Top Toolbar -->
-      <div class="table-toolbar">
-        <div class="record-summary">
-          {{ recordSummary }}
-        </div>
+
+      <!-- Top toolbar -->
+      <div class="table-toolbar d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-2">
+        <div class="record-summary">{{ recordSummary }}</div>
 
         <div class="pagination">
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
-
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
-
-          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button type="button" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
-
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
-
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
 
-      <!-- Table -->
-
-      <div class="table-wrapper">
+      <div class="table-responsive table-wrapper">
         <table class="designation-table">
           <thead>
             <tr>
               <th class="serial-column">#</th>
 
               <th *ngFor="let col of columns" [class.sortable]="col.sortable" (click)="col.sortable && sortData(col.key)">
-                <div class="column-header">
+                <div class="column-header d-flex align-items-center justify-content-between gap-2">
                   <span>{{ col.label }}</span>
-
                   <span *ngIf="col.sortable" class="sort-icons">
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
-
-                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'asc'">▲</span>
+                    <span [class.active]="sortColumn === col.key && sortDirection === 'desc'">▼</span>
                   </span>
                 </div>
               </th>
@@ -151,22 +139,10 @@
 
           <tbody>
             <tr *ngFor="let taskCategory of paginatedTaskCategories; let i = index">
-              <td class="serial-cell">
-                {{ (currentPage - 1) * recordsPerPage + i + 1 }}
-              </td>
-
-              <td>
-                {{ taskCategory.name }}
-              </td>
-
-              <td>
-                {{ taskCategory.departmentName }}
-              </td>
-
-              <!-- Service -->
-              <td>
-                {{ taskCategory.serviceName || '-' }}
-              </td>
+              <td class="serial-cell">{{ (currentPage - 1) * recordsPerPage + i + 1 }}</td>
+              <td>{{ taskCategory.name }}</td>
+              <td>{{ taskCategory.departmentName }}</td>
+              <td>{{ taskCategory.serviceName || '-' }}</td>
 
               <td>
                 <span class="status-badge" [ngClass]="common.getStatusClass(taskCategory.status)">
@@ -176,20 +152,19 @@
 
               <td class="action-cell">
                 @if (viewPer === 'Y') {
-                  <button class="action-button view-button" (click)="viewTaskCategory(taskCategory.taskcategoryId)">
+                  <button type="button" class="action-button view-button" title="View" (click)="viewTaskCategory(taskCategory.taskcategoryId)">
                     <mat-icon>visibility</mat-icon>
                   </button>
                 }
 
                 <ng-container *ngIf="taskCategory.status === 1 || taskCategory.status === 2">
                   @if (editPer === 'Y') {
-                    <button class="action-button edit-button" (click)="editTaskCategory(taskCategory.taskcategoryId)">
+                    <button type="button" class="action-button edit-button" title="Edit" (click)="editTaskCategory(taskCategory.taskcategoryId)">
                       <mat-icon>edit</mat-icon>
                     </button>
                   }
-
                   @if (deletePer === 'Y') {
-                    <button class="action-button delete-button" (click)="onDeleteTaskCategory(taskCategory.taskcategoryId)">
+                    <button type="button" class="action-button delete-button" title="Delete" (click)="onDeleteTaskCategory(taskCategory.taskcategoryId)">
                       <mat-icon>delete</mat-icon>
                     </button>
                   }
@@ -199,35 +174,31 @@
 
             <tr *ngIf="!paginatedTaskCategories || paginatedTaskCategories.length === 0">
               <td colspan="6" class="no-records">
-                <mat-icon>info_outline</mat-icon>
-                <span>No records found</span>
+                <div class="d-flex align-items-center justify-content-center gap-2">
+                  <mat-icon>info_outline</mat-icon>
+                  <span>No records found</span>
+                </div>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <!-- Bottom Toolbar -->
-
-      <div class="table-toolbar bottom-toolbar">
-        <div class="record-summary">
-          {{ recordSummary }}
-        </div>
+      <!-- Bottom toolbar -->
+      <div class="table-toolbar bottom-toolbar d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-2">
+        <div class="record-summary">{{ recordSummary }}</div>
 
         <div class="pagination">
-          <button (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
-
-          <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
-
-          <button *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
+          <button type="button" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+          <button type="button" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+          <button type="button" *ngFor="let page of pages()" (click)="goToPage(page)" [class.active-pagination]="page === currentPage">
             {{ page }}
           </button>
-
-          <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
-
-          <button (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+          <button type="button" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+          <button type="button" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
         </div>
       </div>
     </div>
+
   </div>
 </div>

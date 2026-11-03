@@ -1,47 +1,56 @@
-<div class="page-container">
-  <mat-card class="view-card">
-    <div class="card-header">
-      <div class="page-title">
+<div class="page-container container-fluid">
+
+  <!-- ===== State Details ===== -->
+  <div class="view-card">
+    <div class="card-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 gap-md-3">
+      <div class="page-title d-flex align-items-center gap-2">
         <mat-icon>location_on</mat-icon>
         <span>View State Master</span>
       </div>
 
-      <button mat-flat-button class="back-index-btn" (click)="backToIndexPage()">
-        <mat-icon>arrow_back</mat-icon>
-        Back to Index
-      </button>
+      <div class="d-grid d-md-block">
+        <button mat-flat-button class="back-index-btn" (click)="backToIndexPage()">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Index
+        </button>
+      </div>
     </div>
 
     <mat-divider></mat-divider>
 
     <div class="details-section">
-      <div class="details-row">
-        <div class="detail-item">
-          <span class="label">State Code:</span>
-          <span class="value">
-            {{ taskCategory.code || 'NA' }}
-          </span>
+      <div class="row g-4">
+
+        <!-- State Code -->
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="label">State Code:</div>
+          <div class="value text-break">{{ taskCategory.code || 'NA' }}</div>
         </div>
 
-        <div class="detail-item">
-          <span class="label">State Name:</span>
-          <span class="value">{{ taskCategory.name }}</span>
+        <!-- State Name -->
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="label">State Name:</div>
+          <div class="value text-break">{{ taskCategory.name || '-' }}</div>
         </div>
 
-        <div class="detail-item">
-          <span class="label">Status:</span>
-
-          <span class="status-text" [ngClass]="common.getStatusClass(taskCategory.status)">
-            {{ common.getStatusLabel(taskCategory.status) }}
-          </span>
+        <!-- Status -->
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="label">Status:</div>
+          <div>
+            <span class="status-badge" [ngClass]="common.getStatusClass(taskCategory.status)">
+              {{ common.getStatusLabel(taskCategory.status) }}
+            </span>
+          </div>
         </div>
+
       </div>
     </div>
-  </mat-card>
+  </div>
 
-  <mat-card class="history-card">
-    <div class="section-header">
-      <div class="section-title">
+  <!-- ===== Action History ===== -->
+  <div class="history-card">
+    <div class="section-header d-flex align-items-center">
+      <div class="section-title d-flex align-items-center gap-2">
         <mat-icon>history</mat-icon>
         <span>Action History</span>
       </div>
@@ -49,14 +58,14 @@
 
     <mat-divider></mat-divider>
 
-    <div class="table-wrapper">
-      <table class="history-table" *ngIf="transactionHistory.length">
+    <div class="table-responsive table-wrapper">
+      <table class="history-table">
         <thead>
           <tr>
-            <th width="5%">#</th>
-            <th width="20%">Action By</th>
-            <th width="20%">Updated On</th>
-            <th width="55%">Action</th>
+            <th style="width: 5%">#</th>
+            <th style="width: 20%">Action By</th>
+            <th style="width: 20%">Updated On</th>
+            <th style="width: 55%">Action</th>
           </tr>
         </thead>
 
@@ -66,15 +75,16 @@
             <td>{{ history.name }}</td>
             <td>{{ history.entryDate }}</td>
             <td>
-              <span class="action-badge">
-                {{ history.action }}
-              </span>
+              <span class="action-badge">{{ history.action }}</span>
             </td>
+          </tr>
+
+          <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
+            <td colspan="4" class="no-record">No action history found</td>
           </tr>
         </tbody>
       </table>
-
-      <div *ngIf="!transactionHistory.length" class="no-record">No action history found</div>
     </div>
-  </mat-card>
+  </div>
+
 </div>

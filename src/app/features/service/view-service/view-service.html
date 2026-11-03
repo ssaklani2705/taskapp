@@ -1,51 +1,50 @@
+<div class="page-container container-fluid">
 
-<div class="page-container">
-  <mat-card class="view-card">
-    <div class="card-header">
-      <div class="page-title">
+  <!-- ===== Service Details ===== -->
+  <div class="view-card">
+    <div class="card-header d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 gap-md-3">
+      <div class="page-title d-flex align-items-center gap-2">
         <mat-icon>miscellaneous_services</mat-icon>
         <span>View Service Master</span>
       </div>
 
-      <button
-        mat-flat-button
-        class="back-index-btn"
-        type="button"
-        (click)="backToIndexPage()">
-        <mat-icon>arrow_back</mat-icon>
-        Back to Index
-      </button>
+      <div class="d-grid d-md-block">
+        <button mat-flat-button class="back-index-btn" type="button" (click)="backToIndexPage()">
+          <mat-icon>arrow_back</mat-icon>
+          Back to Index
+        </button>
+      </div>
     </div>
 
     <mat-divider></mat-divider>
 
     <div class="details-section">
-      <div class="details-row">
+      <div class="row g-4">
 
         <!-- Service Name -->
-        <div class="detail-item">
-          <span class="label">Service Name:</span>
-          <span class="value">{{ service.name || 'NA' }}</span>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="label">Service Name:</div>
+          <div class="value text-break">{{ service.name || 'NA' }}</div>
         </div>
 
         <!-- Status -->
-        <div class="detail-item">
-          <span class="label">Status:</span>
-          <span
-            class="status-badge"
-            [ngClass]="common.getStatusClass(service.status)">
-            {{ common.getStatusLabel(service.status) }}
-          </span>
+        <div class="col-12 col-sm-6 col-lg-4">
+          <div class="label">Status:</div>
+          <div>
+            <span class="status-badge" [ngClass]="common.getStatusClass(service.status)">
+              {{ common.getStatusLabel(service.status) }}
+            </span>
+          </div>
         </div>
 
       </div>
     </div>
-  </mat-card>
+  </div>
 
-  <!-- ACTION HISTORY -->
-  <mat-card class="history-card">
-    <div class="section-header">
-      <div class="section-title">
+  <!-- ===== Action History ===== -->
+  <div class="history-card">
+    <div class="section-header d-flex align-items-center">
+      <div class="section-title d-flex align-items-center gap-2">
         <mat-icon>history</mat-icon>
         <span>Action History</span>
       </div>
@@ -53,14 +52,14 @@
 
     <mat-divider></mat-divider>
 
-    <div class="table-wrapper">
-      <table class="history-table" *ngIf="transactionHistory.length > 0">
+    <div class="table-responsive table-wrapper">
+      <table class="history-table">
         <thead>
           <tr>
-            <th width="5%">#</th>
-            <th width="20%">Action By</th>
-            <th width="20%">Updated On</th>
-            <th width="55%">Action</th>
+            <th style="width: 5%">#</th>
+            <th style="width: 20%">Action By</th>
+            <th style="width: 20%">Updated On</th>
+            <th style="width: 55%">Action</th>
           </tr>
         </thead>
 
@@ -70,19 +69,16 @@
             <td>{{ history.name || 'NA' }}</td>
             <td>{{ history.entryDate || 'NA' }}</td>
             <td>
-              <span class="action-badge">
-                {{ history.action || 'NA' }}
-              </span>
+              <span class="action-badge">{{ history.action || 'NA' }}</span>
             </td>
+          </tr>
+
+          <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
+            <td colspan="4" class="no-record">No action history found</td>
           </tr>
         </tbody>
       </table>
-
-      <div
-        *ngIf="transactionHistory.length === 0"
-        class="no-record">
-        No action history found
-      </div>
     </div>
-  </mat-card>
+  </div>
+
 </div>
