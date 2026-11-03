@@ -37,7 +37,7 @@ export class AddRecurring implements OnInit {
   isEditMode = false;
   recurringId: number | null = null;
 
-  userId!: number;
+  // userId!: number;
 
   isSubmitting = false;
   isLoading = false;
@@ -59,6 +59,7 @@ export class AddRecurring implements OnInit {
   loginType = '';
   isAdmin: any;
   isHod = '';
+  userId: any;
 
   categoryIds: number[] = [];
   groupedCategories: { department: string; items: TaskCategory[] }[] = [];
@@ -68,6 +69,7 @@ export class AddRecurring implements OnInit {
       this.isAdmin = sessionStorage.getItem('isAdmin');
       this.loginType = sessionStorage.getItem('loginType') || 'other';
       this.isHod = sessionStorage.getItem('isHod') || 'N';
+      this.userId = sessionStorage.getItem('userId');
 
       try {
         const saved = sessionStorage.getItem('categoryIds');
@@ -508,6 +510,7 @@ private toApiTime(value: string | null | undefined): string | null {
       status: this.isEditMode ? Number(formValue.status) : 1,
       // time: this.normalizeTime(formValue.time),
       time: this.toApiTime(formValue.time),
+      userId: this.userId,
     };
 
     console.log('Recurring Request:', requestData);
