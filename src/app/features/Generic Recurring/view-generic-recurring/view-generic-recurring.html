@@ -27,115 +27,107 @@
       </div>
 
       <ng-container *ngIf="!loading && recurring">
-        <div class="user-info-grid">
-          <!-- ================= LEFT COLUMN ================= -->
-          <div class="user-column">
-            <!-- TITLE -->
-            <div class="info-row">
-              <span class="info-label">Title:</span>
-
-              <span class="info-value">
+        <div class="container-fluid border p-4">
+          <div class="row g-4">
+            <!-- Title -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <div class="field-label">Title:</div>
+              <div class="field-value text-break">
                 {{ recurring.title || '-' }}
-              </span>
+              </div>
             </div>
 
-            <!-- CLIENT -->
-            <div class="info-row">
-              <span class="info-label">For:</span>
-
-              <span class="info-value">
+            <!-- For -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <div class="field-label">For:</div>
+              <div class="field-value text-break">
                 {{ getForLabel(recurring.forValue) }}
-              </span>
+              </div>
             </div>
 
-            <!-- TASK CATEGORY -->
-            <div class="info-row">
-              <span class="info-label">Task Category:</span>
-
-              <span class="info-value">
+            <!-- Task Category -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <div class="field-label">Task Category:</div>
+              <div class="field-value text-break">
                 {{ recurring.taskCatName || '-' }}
-              </span>
+              </div>
             </div>
 
-            <!-- TYPE -->
-            <div class="info-row">
-              <span class="info-label">Type:</span>
-
-              <span class="info-value">
+            <!-- Type -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <div class="field-label">Type:</div>
+              <div class="field-value text-break">
                 {{ getTypeLabel(recurring.type) }}
-              </span>
+              </div>
             </div>
 
-            <!-- SCHEDULE -->
-            <div class="info-row">
-              <span class="info-label">Schedule:</span>
-
-              <span class="info-value">
+            <!-- Schedule -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <div class="field-label">Schedule:</div>
+              <div class="field-value text-break">
                 {{ getSchedule() }}
-              </span>
-            </div>
-          </div>
-
-          <!-- ================= RIGHT COLUMN ================= -->
-          <div class="user-column">
-            <!-- priority -->
-            <div class="info-row status-row">
-              <span class="info-label">Priority:</span>
-
-              <span class="priority-badge" [ngClass]="getPriorityClass(recurring.status)">
-                {{ getPriorityLabel(recurring.priority) }}
-              </span>
+              </div>
             </div>
 
-            <!-- STATUS -->
-            <div class="info-row status-row">
-              <span class="info-label">Status:</span>
-
-              <span class="status-badge" [ngClass]="getStatusClass(recurring.status)">
-                {{ getStatusLabel(recurring.status) }}
-              </span>
+            <!-- Priority -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <div class="field-label">Priority:</div>
+              <div class="field-value">
+                <span class="badge px-4 py-2 rounded-0" [ngClass]="getPriorityClass(recurring.priority)">
+                  {{ getPriorityLabel(recurring.priority) }}
+                </span>
+              </div>
             </div>
 
-            <!-- DAY -->
-            <div class="info-row" *ngIf="recurring.type === 2">
-              <span class="info-label">Day:</span>
-
-              <span class="info-value"> {{ getDayLabel(recurring.day) }} </span>
+            <!-- Status -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <div class="field-label">Status:</div>
+              <div class="field-value">
+                <span class="badge px-4 py-2 rounded-0" [ngClass]="getStatusClass(recurring.status)">
+                  {{ getStatusLabel(recurring.status) }}
+                </span>
+              </div>
             </div>
 
-            <!-- DATE -->
-            <div class="info-row" *ngIf="recurring.type === 3 || recurring.type === 4">
-              <span class="info-label">Date:</span>
-              <span class="info-value">
+            <!-- Day -->
+            <div class="col-12 col-sm-6 col-lg-4" *ngIf="recurring.type === 2">
+              <div class="field-label">Day:</div>
+              <div class="field-value text-break">
+                {{ getDayLabel(recurring.day) }}
+              </div>
+            </div>
+
+            <!-- Date -->
+            <div class="col-12 col-sm-6 col-lg-4" *ngIf="recurring.type === 3 || recurring.type === 4">
+              <div class="field-label">Date:</div>
+              <div class="field-value text-break">
                 {{ recurring.date === -2 ? 'Last Day of the Month' : recurring.date || '-' }}
-              </span>
+              </div>
             </div>
 
-            <div class="info-row">
-              <span class="info-label">Time:</span>
-
-              <span class="info-value">
-                {{ recurring.time | slice: 0 : 5 }}
-              </span>
+            <!-- Time -->
+            <div class="col-12 col-sm-6 col-lg-4">
+              <div class="field-label">Time:</div>
+              <div class="field-value text-break">
+                {{ recurring.time ? (recurring.time | slice: 0 : 5) : '-' }}
+              </div>
             </div>
 
-            <!-- MONTH -->
-            <div class="info-row" *ngIf="recurring.type === 4">
-              <span class="info-label">Month:</span>
-
-              <span class="info-value">
+            <!-- Month -->
+            <div class="col-12 col-sm-6 col-lg-4" *ngIf="recurring.type === 4">
+              <div class="field-label">Month:</div>
+              <div class="field-value text-break">
                 {{ getMonthLabel(recurring.month) }}
-              </span>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <!-- ================= DESCRIPTION ================= -->
-        <div class="description-section">
-          <div class="description-label">Description:</div>
-
-          <div class="description-value">
-            {{ recurring.description || '-' }}
+            <!-- Description -->
+            <div class="col-12">
+              <div class="field-label">Description:</div>
+              <div class="field-value text-break">
+                {{ recurring.description || '-' }}
+              </div>
+            </div>
           </div>
         </div>
       </ng-container>
