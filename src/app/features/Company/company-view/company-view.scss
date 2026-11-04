@@ -70,7 +70,7 @@
 
 .section-title {
   color: var(--primary-blue);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 21px;
   font-weight: 700;
 }
@@ -103,7 +103,7 @@
   padding-bottom: 10px;
   border-bottom: 1px solid var(--border);
   color: var(--primary-blue);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 19px;
   font-weight: 700;
   line-height: 25px;
@@ -112,7 +112,7 @@
 .field-label {
   margin-bottom: 6px;
   color: var(--text-dark);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 14px;
   font-weight: 700;
   line-height: 20px;
@@ -120,14 +120,14 @@
 
 .field-value {
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 14px;
   line-height: 20px;
 }
 
 /* ---------- Buttons ---------- */
 .btn {
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
   font-weight: 600;
   border-radius: 4px;
@@ -203,7 +203,7 @@
   --bs-table-hover-color: var(--text);
   --bs-border-color: var(--border);
   min-width: 650px;
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 15px;
 }
 
@@ -317,7 +317,7 @@
 .modal-subtitle {
   margin-top: 3px;
   color: var(--text-muted);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 12px;
 }
 
@@ -328,7 +328,7 @@
 .modal-field-label {
   margin-bottom: 7px;
   color: var(--text-dark);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
   font-weight: 700;
 }
@@ -343,7 +343,7 @@
   border-color: var(--border-dark);
   border-radius: 4px;
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 14px;
 }
 
@@ -353,7 +353,7 @@
 }
 
 .invalid-feedback {
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 12px;
   font-weight: 500;
 }
@@ -428,7 +428,7 @@
 
 /* ---------- Buttons ---------- */
 .btn {
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
   font-weight: 600;
   border-radius: 4px;

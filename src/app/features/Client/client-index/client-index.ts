@@ -1050,7 +1050,7 @@ export class ClientIndex {
     },
     {
       key: 'code',
-      label: 'Client Code',
+      label: 'Client Code(Tally)',
       sortable: true,
     },
     {

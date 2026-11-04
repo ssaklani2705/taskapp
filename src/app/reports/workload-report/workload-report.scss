@@ -133,7 +133,7 @@ mat-divider {
 
   label {
     color: var(--text-dark);
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 14px;
     font-weight: 700;
   }
@@ -164,7 +164,7 @@ mat-divider {
     outline: none;
     color: var(--text);
     background: var(--white);
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 14px;
     box-sizing: border-box;
 
@@ -261,7 +261,7 @@ mat-divider {
 
 .record-summary {
   color: var(--text-muted);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 14px;
   line-height: 20px;
 }
@@ -286,7 +286,7 @@ mat-divider {
     border-radius: 3px;
     background: var(--white);
     color: var(--text);
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 13px;
     cursor: pointer;
     transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
@@ -354,7 +354,7 @@ mat-divider {
   table-layout: fixed;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 15px;
 
   thead th {
@@ -421,7 +421,7 @@ mat-divider {
   height: 30px;
   padding: 0 12px;
   border-radius: 2px;
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
   font-weight: 600;
   box-sizing: border-box;
@@ -488,7 +488,7 @@ mat-divider {
   color: var(--text-muted) !important;
   background: var(--white) !important;
   text-align: center !important;
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 14px;
 
   mat-icon {
@@ -980,7 +980,7 @@ mat-divider {
 .form-error {
   margin: 12px 0 0;
   color: #b8403d;
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
 }
 
@@ -1022,7 +1022,7 @@ mat-divider {
     border: 0;
     background: var(--white);
     color: var(--text);
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -1108,7 +1108,7 @@ mat-divider {
   border-radius: 3px;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 14px;
   text-align: left;
   cursor: pointer;
@@ -1166,7 +1166,7 @@ mat-divider {
     gap: 10px;
     padding: 9px 12px;
     color: var(--text);
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 14px;
     font-weight: 400;
     line-height: 1.3;
@@ -1230,7 +1230,7 @@ mat-divider {
 .page-subtitle {
   margin: 0 0 0 52px;
   color: rgba(255, 255, 255, 0.75);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
 }
 
@@ -1275,7 +1275,7 @@ mat-divider {
   gap: 6px;
   margin-bottom: 14px;
   color: var(--primary-blue);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.8px;
@@ -1352,7 +1352,7 @@ mat-divider {
 
 .kpi-value {
   color: var(--navy);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 22px;
   font-weight: 700;
   line-height: 1.1;
@@ -1361,7 +1361,7 @@ mat-divider {
 .kpi-label {
   margin-top: 3px;
   color: var(--text-muted);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 12px;
   white-space: nowrap;
   overflow: hidden;
@@ -1456,7 +1456,7 @@ mat-divider {
   border-radius: 50%;
   background: linear-gradient(135deg, var(--primary-blue), var(--navy));
   color: var(--white);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.5px;
