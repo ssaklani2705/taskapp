@@ -897,3 +897,221 @@
     margin-top: 20px;
   }
 }
+
+
+@media (max-width: 768px) {
+  .page-content {
+    padding: 10px;
+  }
+
+  .user-management-container {
+    width: 100%;
+    border-radius: 2px;
+  }
+
+  /* Header: title row, then full-width Add New */
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .page-title {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    gap: 7px;
+    font-size: 20px;
+  }
+
+  .page-title mat-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .btn-add-user {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+  }
+
+  /* Search panel: stacked fields, same height */
+  .search-panel {
+    padding: 14px;
+  }
+
+  .search-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .search-wrapper,
+  .status-wrapper {
+    width: 100%;
+  }
+
+  .search-input,
+  .search-btn,
+  .status-select {
+    height: 44px;
+  }
+
+  .search-btn {
+    width: 52px;
+  }
+
+  .status-select {
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+
+  /* Go + Clear: one line, equal width */
+  .filter-action {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .go-button,
+  .btn-go,
+  .btn-clear {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+  }
+
+  /* Summary on top, pagination on one scrollable line */
+  .table-top-section,
+  .table-bottom-section {
+    min-height: auto;
+    padding: 14px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .record-summary {
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .pagination {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pagination::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pagination-btn {
+    flex: 0 0 auto;
+    min-width: 40px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .first-btn,
+  .last-btn {
+    min-width: 58px;
+  }
+
+  /* Table: columns size to content, scroll sideways */
+  .table-container {
+    padding: 0 14px;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .user-table {
+    table-layout: auto;
+    min-width: 640px;
+  }
+
+  .user-table th:nth-child(n),
+  .user-table td:nth-child(n) {
+    width: auto;
+  }
+
+  .user-table th.serial-column,
+  .user-table td.serial-number {
+    width: 45px;
+  }
+
+  .user-table thead th,
+  .user-table tbody td {
+    padding: 7px 10px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* Department name can wrap */
+  .user-table tbody td:nth-child(2) {
+    white-space: normal;
+    min-width: 200px;
+  }
+
+  .user-name {
+    font-size: 13px;
+  }
+
+  .column-header {
+    gap: 8px;
+  }
+
+  .sort-icons {
+    flex-shrink: 0;
+  }
+
+  .status-badge {
+    min-width: 76px;
+    height: 29px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+
+  /* Action column: room for 3 buttons with a gap */
+  .user-table th.action-column,
+  .user-table td:last-child {
+    width: 140px;
+    min-width: 140px;
+  }
+
+  .action-buttons {
+    flex-wrap: nowrap;
+    gap: 5px;
+  }
+
+  .action-btn {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 34px;
+  }
+
+  .action-btn i {
+    font-size: 14px;
+  }
+}
