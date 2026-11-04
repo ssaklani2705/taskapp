@@ -190,6 +190,7 @@
     font-size: 14px;
     font-weight: 700;
     vertical-align: middle;
+    width: 10px;
 
     &.sortable { cursor: pointer; user-select: none; }
     &.sortable:hover { background: #e4eef5; }

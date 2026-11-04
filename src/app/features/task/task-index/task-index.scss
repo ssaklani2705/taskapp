@@ -1,7 +1,7 @@
 /* =========================================================
    TASK LIST PAGE - Bootstrap 5 version, ORIGINAL COLOURS KEPT
    ========================================================= */
-
+@use 'sass:list';
 :host {
   display: block;
   width: 100%;
@@ -261,8 +261,8 @@ textarea.form-control { height: auto; line-height: 1.5; }
 }
 
 .user-table {
-  width: 1775px;
-  min-width: 1775px;
+  width: 1835px;
+  min-width: 1835px;
   max-width: none;
   table-layout: fixed;
   border-collapse: separate; /* required for sticky columns */
@@ -319,12 +319,13 @@ textarea.form-control { height: auto; line-height: 1.5; }
 }
 
 /* ---------- COLUMN WIDTHS (total 1775px) ---------- */
-$col-widths: 75px, 180px, 150px, 120px, 120px, 120px, 130px, 100px, 100px, 100px, 150px, 170px, 140px;
+/* ---------- COLUMN WIDTHS (total 1835px) ---------- */
+$col-widths: 95px, 180px, 150px, 120px, 120px, 160px, 130px, 100px, 100px, 100px, 150px, 170px, 140px;
 
-@for $i from 1 through 13 {
+@for $i from 1 through list.length($col-widths) {
   .user-table th:nth-child(#{$i}),
   .user-table td:nth-child(#{$i}) {
-    width: nth($col-widths, $i);
+    width: list.nth($col-widths, $i);
   }
 }
 
@@ -893,3 +894,83 @@ $col-widths: 75px, 180px, 150px, 120px, 120px, 120px, 130px, 100px, 100px, 100px
   cursor: default;
 }
 
+
+
+/* ---------- Mobile: disable frozen columns (keep at END of file) ---------- */
+@media (max-width: 900px) {
+  .user-table {
+    th:nth-child(11), td:nth-child(11),
+    th:nth-child(12), td:nth-child(12),
+    th:nth-child(13), td:nth-child(13) {
+      position: static !important;
+      right: auto !important;
+      z-index: auto !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+.status-menu {
+  min-width: 230px;
+  max-height: 260px;
+  margin: 4px 0 0;
+  padding: 6px;
+  background: #fff;
+  border: 1px solid #d7e1ea;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(25, 52, 90, 0.15);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 9999;
+
+  > *,
+  .list-group-item,
+  .form-check {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    margin: 0 0 2px;
+    padding: 9px 12px !important;
+    border: 0 !important;
+    border-radius: 6px;
+    background: #fff !important;      /* plain white, no blue */
+    color: #263f5b;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+    white-space: normal;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:last-child { margin-bottom: 0; }
+
+    &:hover {
+      background: #f5f5f5 !important; /* neutral light grey */
+      color: #263f5b;
+    }
+  }
+
+  input[type='checkbox'] {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin: 0 !important;
+    float: none;
+    accent-color: #19345a;            /* navy checkbox, matches your theme */
+    cursor: pointer;
+  }
+
+  /* checked rows: no background, only slightly bolder text */
+  > *:has(input:checked) {
+    background: #fff !important;
+    font-weight: 600;
+  }
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: #c7d0db; border-radius: 3px; }
+}
+
+.user-table thead th {
+  white-space: nowrap;
+}
