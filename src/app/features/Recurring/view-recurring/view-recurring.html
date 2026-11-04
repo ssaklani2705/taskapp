@@ -35,7 +35,7 @@
             <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Title:</div>
               <div class="field-value text-break">
-                {{ recurring.title || '-' }}
+                {{ recurring.title || 'NA' }}
               </div>
             </div>
 
@@ -43,7 +43,7 @@
             <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Client:</div>
               <div class="field-value text-break">
-                {{ recurring.clientName || '-' }}
+                {{ recurring.clientName || 'NA' }}
               </div>
             </div>
 
@@ -51,7 +51,7 @@
             <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Task Category:</div>
               <div class="field-value text-break">
-                {{ recurring.taskCatName || '-' }}
+                {{ recurring.taskCatName || 'NA' }}
               </div>
             </div>
 
@@ -103,7 +103,7 @@
             <div class="col-12 col-sm-6 col-lg-3" *ngIf="recurring.type === 3 || recurring.type === 4">
               <div class="field-label">Date:</div>
               <div class="field-value text-break">
-                {{ recurring.date === -2 ? 'Last Day of the Month' : recurring.date || '-' }}
+                {{ recurring.date === -2 ? 'Last Day of the Month' : recurring.date || 'NA' }}
               </div>
             </div>
 
@@ -111,7 +111,7 @@
             <div class="col-12 col-sm-6 col-lg-3">
               <div class="field-label">Time:</div>
               <div class="field-value text-break">
-                {{ recurring.time ? (recurring.time | slice: 0 : 5) : '-' }}
+                {{ recurring.time ? (recurring.time | slice: 0 : 5) : 'NA' }}
               </div>
             </div>
 
@@ -127,7 +127,7 @@
             <div class="col-12">
               <div class="field-label">Description:</div>
               <div class="field-value text-break">
-                {{ recurring.description || '-' }}
+                {{ recurring.description || 'NA' }}
               </div>
             </div>
           </div>
@@ -176,16 +176,16 @@
               </td>
 
               <td>
-                {{ history.name || '-' }}
+                {{ history.name || 'NA' }}
               </td>
 
               <td>
-                {{ history.entryDate || '-' }}
+                {{ history.entryDate || 'NA' }}
               </td>
 
               <td>
                 <span class="action-badge">
-                  {{ history.action || '-' }}
+                  {{ history.action || 'NA' }}
                 </span>
               </td>
             </tr>
