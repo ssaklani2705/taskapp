@@ -462,6 +462,26 @@ mat-divider,
   .designation-table { min-width: 700px; }
   .designation-table thead th { padding: 7px 8px; font-size: 12px; white-space: normal; }
   .designation-table tbody td { padding: 7px 8px; font-size: 12px; }
+    .designation-table th:nth-child(5),
+  .designation-table td:nth-child(5),
+  .designation-table th.action-column,
+  .designation-table td.action-cell {
+    width: 140px;
+    min-width: 140px;
+  }
+
+  .action-cell {
+    white-space: nowrap;
+    padding: 6px 10px !important;
+  }
+  .action-cell .action-button {
+    margin: 0 4px 0 0;   /* 4px gap to the right of each button */
+    flex: 0 0 auto;
+  }
+
+   .action-cell .action-button:last-child {
+    margin-right: 0;
+  }
 
   .status-badge { min-width: 68px; height: 28px; padding: 3px 8px; font-size: 11px; }
   .action-button { width: 33px; height: 33px; }
@@ -483,6 +503,14 @@ mat-divider,
   .status-badge { min-width: 62px; height: 27px; padding: 2px 7px; font-size: 10px; }
   .action-button { width: 31px; height: 31px; margin: 0; }
   .action-button mat-icon { width: 15px; height: 15px; font-size: 15px; }
+
+   .action-cell .action-button {
+    margin: 0 4px 0 0;
+  }
+
+  .action-cell .action-button:last-child {
+    margin-right: 0;
+  }
 }
 
 @media (hover: none) and (pointer: coarse) {
