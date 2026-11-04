@@ -16,7 +16,8 @@
          MOBILE OVERLAY
     ==================================================== -->
 
-    <div class="sidebar-overlay" *ngIf="sidebarOpened" (click)="closeSidebar()"></div>
+    <!-- <div class="sidebar-overlay" *ngIf="sidebarOpened" (click)="closeSidebar()"></div> -->
+     <div class="sidebar-overlay" *ngIf="isMobile && sidebarOpened" (click)="closeSidebar()"></div>
 
     <!-- ===================================================
          SIDEBAR

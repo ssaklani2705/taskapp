@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
 
-  apiBaseUrl: 'http://localhost:9091/taskapp_api/',
+  apiBaseUrl: 'http://localhost:9091/taskapp/',
   baseurluploaded: 'http://localhost:9091/taskapp/uploads/',
 
 
