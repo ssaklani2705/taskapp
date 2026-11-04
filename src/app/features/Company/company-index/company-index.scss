@@ -220,8 +220,8 @@ mat-divider,
   font-size: 13px;
 }
 
-.designation-table .col-serial       { width: 50px; }
-.designation-table .col-name         { width: 100px; }
+.designation-table .col-serial       { width: 30px; }
+.designation-table .col-name         { width: 120px; }
 .designation-table .col-type         { width: 70px; }
 .designation-table .col-city         { width: 70px; }
 .designation-table .col-state        { width: 80px; }
@@ -285,7 +285,7 @@ mat-divider,
 
 .designation-table .sticky-2 {
   position: sticky;
-  left: 60px; /* = .col-serial width */
+  left: 30px;   /* = .col-serial width */
   z-index: 2;
   box-shadow: 6px 0 8px -6px rgba(25, 52, 90, 0.28);
 }

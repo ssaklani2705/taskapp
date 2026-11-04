@@ -261,8 +261,8 @@ textarea.form-control { height: auto; line-height: 1.5; }
 }
 
 .user-table {
-  width: 1835px;
-  min-width: 1835px;
+  width: 1715px;
+  min-width: 1715px;
   max-width: none;
   table-layout: fixed;
   border-collapse: separate; /* required for sticky columns */
@@ -829,8 +829,8 @@ $col-widths: 95px, 180px, 150px, 120px, 120px, 160px, 130px, 100px, 100px, 100px
 }
 
 .user-table {
-  width: 1775px;      /* was 1755px */
-  min-width: 1775px;
+  width: 1715px;      /* was 1755px */
+  min-width: 1715px;
 }
 
 // .user-table th:nth-child(10),
@@ -973,4 +973,16 @@ $col-widths: 95px, 180px, 150px, 120px, 120px, 160px, 130px, 100px, 100px, 100px
 
 .user-table thead th {
   white-space: nowrap;
+}
+
+/* frozen columns */
+.user-table {
+  th:nth-child(13), td:nth-child(13) { right: 0; }
+  th:nth-child(12), td:nth-child(12) { right: 140px; }
+
+  th:nth-child(11), td:nth-child(11) {
+    right: 310px;                       /* was 290px: 140 + 170 */
+    border-left: 1px solid var(--border); /* keeps the divider on the left */
+    box-shadow: -3px 0 5px -2px rgba(25, 52, 90, 0.15);
+  }
 }
