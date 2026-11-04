@@ -301,14 +301,14 @@
   .page-container { padding: 8px; }
   .page-title { font-size: 19px; }
 }
-// .plan-table {
-//   th:nth-child(1),
-//   td:nth-child(1) {
-//     width: 40px;           /* change this number to make it wider or narrower */
-//     min-width: 40px;
-//     max-width: 40px;
-//     padding-left: 4px;
-//     padding-right: 4px;
-//     text-align: center;
-//   }
-// }
+.plan-table {
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: 20px;           /* change this number to make it wider or narrower */
+    min-width: 20px;
+    max-width: 20px;
+    padding-left: 4px;
+    padding-right: 4px;
+    text-align: center;
+  }
+}
