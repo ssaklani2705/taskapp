@@ -103,7 +103,7 @@ mat-divider {
 
   label {
     color: var(--text-dark);
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 14px;
     font-weight: 700;
   }
@@ -131,7 +131,7 @@ mat-divider {
     outline: none;
     color: var(--text);
     background: var(--white);
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     font-size: 14px;
     box-sizing: border-box;
 
@@ -218,7 +218,7 @@ mat-divider {
 
 // .record-summary {
 //   color: var(--text-muted);
-//   font-family: Arial, sans-serif;
+//   font-family: "Open Sans", sans-serif;
 //   font-size: 14px;
 //   line-height: 20px;
 // }
@@ -240,7 +240,7 @@ mat-divider {
 //     border-radius: 3px;
 //     background: var(--white);
 //     color: var(--text);
-//     font-family: Arial, sans-serif;
+//     font-family: "Open Sans", sans-serif;
 //     font-size: 13px;
 //     cursor: pointer;
 //     transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
@@ -297,7 +297,7 @@ mat-divider {
   table-layout: fixed;
   background: var(--white);
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 15px;
 
   thead th {

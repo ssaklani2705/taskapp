@@ -623,7 +623,21 @@ $col-widths: 95px, 180px, 150px, 120px, 120px, 160px, 130px, 100px, 100px, 100px
 /* =========================================================
    MODAL EXTRAS
    ========================================================= */
-.modal.d-block { overflow-y: auto; }
+// .modal.d-block { overflow-y: auto; margin-top: 52px;}
+.modal.d-block {
+  top: 52px;                      /* header height */
+  height: calc(100% - 52px);
+  margin-top: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 70px;           /* space for the fixed footer (adjust to its height) */
+}
+
+@media (max-width: 767px) {
+  .modal.d-block .modal-dialog {
+    margin: 0.5rem;
+  }
+}
 
 .assign-date-input[readonly] {
   background-color: #e9ecef;
@@ -771,12 +785,14 @@ $col-widths: 95px, 180px, 150px, 120px, 120px, 160px, 130px, 100px, 100px, 100px
    RESPONSIVE
    ========================================================= */
 @media (max-width: 767px) {
+  .exportbtn{font-size: 13px;
+    width: 140px;}
   .user-table { font-size: 12px; }
 
   .status-badge {
-    width: 76px;
-    min-width: 76px;
-    max-width: 76px;
+    width: 120px;
+    min-width: 120px;
+    max-width: 120px;
     height: 30px;
     font-size: 11px;
   }
@@ -823,7 +839,7 @@ $col-widths: 95px, 180px, 150px, 120px, 120px, 160px, 130px, 100px, 100px, 100px
   }
 
   &:hover {
-    background: #1976d2;
+    // background: #1976d2;
     color: #fff;
   }
 }

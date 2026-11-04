@@ -154,7 +154,7 @@ mat-divider {
   flex-wrap: wrap;
   min-height: 27px;
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 15px;
   line-height: 1.5;
 }
@@ -167,16 +167,16 @@ mat-divider {
   margin-bottom: 4px;
   // color: var(--text-muted);
   color: var(--text-dark);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.3px;
-  text-transform: uppercase;
+  // text-transform: uppercase;
 }
 
 .info-value {
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 15px;
   font-weight: 400;
   line-height: 1.5;
@@ -196,7 +196,7 @@ mat-divider {
   padding: 0 13px;
   border: 1px solid transparent;
   border-radius: 3px;
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
   font-weight: 600;
 }
@@ -260,7 +260,7 @@ mat-divider {
 .description-label {
   margin-bottom: 8px;
   color: var(--text-dark);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 15px;
   font-weight: 700;
 }
@@ -271,7 +271,7 @@ mat-divider {
   background: #f8fafc;
   border: 1px solid var(--border);
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 15px;
   line-height: 1.6;
   white-space: pre-wrap;
@@ -281,7 +281,7 @@ mat-divider {
 /* ---------- attachments ---------- */
 .attachment-section {
   color: var(--primary-blue);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 21px;
   font-weight: 700;
 }
@@ -297,7 +297,7 @@ mat-divider {
 
 .section-title {
   color: var(--primary-blue);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 21px;
   font-weight: 700;
 }
@@ -325,7 +325,7 @@ mat-divider {
   gap: 8px;
   min-width: 0;
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 14px;
 
   mat-icon {
@@ -380,7 +380,7 @@ mat-divider {
   --bs-table-border-color: var(--border);
   --bs-table-hover-bg: #f8fbfd;
   color: var(--text);
-  font-family: Arial, sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 13px;
 
   thead th {
@@ -460,13 +460,26 @@ mat-divider {
 }
 
 @media (max-width: 480px) {
+  .info-row {
+    display: block;
+    line-height: 1.5;
+  }
+
+  .info-label {
+    display: block;
+    margin: 0 0 2px;
+  }
+
+  .info-value {
+    display: block;
+  }
   .page-container { padding: 8px; }
   .page-title { font-size: 19px; mat-icon { width: 22px; height: 22px; font-size: 22px; } }
   .user-information { padding: 15px; }
 
-  .info-row { display: block; line-height: 24px; }
-  .info-label { display: inline; margin-right: 4px; }
-  .info-value { display: inline; }
+  // .info-row { display: block; line-height: 24px; }
+  // .info-label { display: inline; margin-right: 4px; }
+  // .info-value { display: inline; }
   .status-badge, .priority-badge { margin-top: 3px; }
 
   .description-section { margin-top: 18px; padding-top: 15px; }
