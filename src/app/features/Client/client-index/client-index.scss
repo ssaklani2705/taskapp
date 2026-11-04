@@ -606,3 +606,21 @@
   .search-section { padding: 11px; }
   .pagination .page-link { min-width: 34px; height: 34px; padding: 0 6px; font-size: 11px; }
 }
+
+/* ---------- Mobile: disable frozen columns (keep at END of file) ---------- */
+@media (max-width: 900px) {
+  .client-table {
+    thead th:nth-child(1),
+    thead th:nth-child(2),
+    thead th.action-column,
+    tbody td:nth-child(1),
+    tbody td:nth-child(2),
+    tbody td.action-cell {
+      position: static !important;
+      left: auto !important;
+      right: auto !important;
+      z-index: auto !important;
+      box-shadow: none !important;
+    }
+  }
+}
