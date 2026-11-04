@@ -250,6 +250,10 @@ mat-divider {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
 }
 
 .btn-go:hover {
@@ -302,65 +306,6 @@ mat-divider {
   padding-top: 10px;
 }
 
-// .record-summary {
-//   color: var(--text-muted);
-//   font-family: "Open Sans", sans-serif !important;
-//   font-size: 14px;
-//   line-height: 20px;
-//   white-space: nowrap;
-// }
-
-// .pagination {
-//   display: flex;
-//   align-items: center;
-//   justify-content: flex-end;
-//   gap: 4px;
-//   flex-wrap: wrap;
-// }
-
-// .pagination button {
-//   min-width: 40px;
-//   height: 40px;
-//   padding: 0 11px;
-//   border: 1px solid var(--border);
-//   border-radius: 0;
-//   background: var(--white);
-//   color: #8290a0;
-//   font-family: "Open Sans", sans-serif !important;
-//   font-size: 13px;
-//   cursor: pointer;
-//   box-sizing: border-box;
-//   transition:
-//     background 0.15s ease,
-//     color 0.15s ease,
-//     border-color 0.15s ease;
-// }
-
-// .pagination button:hover:not(:disabled) {
-//   background: var(--primary-blue-light);
-//   border-color: var(--border-dark);
-//   color: var(--navy);
-// }
-
-// .pagination button:disabled {
-//   background: #f7f9fb;
-//   border-color: #e3e8ed;
-//   color: #b7c0ca;
-//   cursor: not-allowed;
-// }
-
-// .pagination button.active-pagination {
-//   background: var(--primary-blue);
-//   border-color: var(--primary-blue);
-//   color: var(--white);
-//   font-weight: 600;
-// }
-
-// .pagination button.active-pagination:hover {
-//   background: var(--primary-blue-dark);
-//   border-color: var(--primary-blue-dark);
-//   color: var(--white);
-// }
 
 .table-wrapper {
   width: 100%;
@@ -694,97 +639,6 @@ mat-divider {
     justify-content: flex-start;
     overflow-x: auto;
     padding-bottom: 3px;
-  }
-}
-
-@media (max-width: 768px) {
-  .page-container {
-    padding: 12px;
-  }
-
-  .page-header {
-    min-height: auto;
-    padding: 15px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  .page-title {
-    font-size: 22px;
-  }
-
-  .header-action {
-    width: 100%;
-  }
-
-  .add-button {
-    width: 100%;
-  }
-
-  .search-section {
-    padding: 15px;
-  }
-
-  .search-row,
-  .filter-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .search-wrapper,
-  .status-wrapper,
-  .go-wrapper,
-  .clear-wrapper {
-    width: 100%;
-    min-width: 0;
-    max-width: none;
-    flex: none;
-  }
-
-  .search-box,
-  .status-select {
-    width: 100%;
-  }
-
-  .btn-go,
-  .btn-clear {
-    width: 100%;
-  }
-
-  .table-section {
-    padding: 0 15px 15px;
-  }
-
-  .table-toolbar {
-    min-height: auto;
-    padding: 13px 0;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .record-summary {
-    white-space: normal;
-    line-height: 20px;
-  }
-
-  .pagination {
-    width: 100%;
-    justify-content: flex-start;
-    overflow-x: auto;
-  }
-
-  .pagination button {
-    flex-shrink: 0;
-    min-width: 36px;
-    height: 36px;
-    padding: 0 8px;
-  }
-
-  .designation-table {
-    min-width: 900px;
   }
 }
 
@@ -1233,5 +1087,197 @@ mat-divider {
     font-family: "Open Sans", sans-serif !important;
     font-size: 13px;
     text-align: center;
+  }
+}
+@media (max-width: 768px) {
+   .designation-table {
+    table-layout: auto;
+    min-width: 0;            /* width now comes from the content */
+  }
+
+  /* reset the fixed pixel widths */
+  .designation-table th:nth-child(n),
+  .designation-table td:nth-child(n) {
+    width: auto;
+  }
+
+  .designation-table thead th,
+  .designation-table tbody td {
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  /* leave room on the right so the sort arrows never touch the label */
+  .designation-table thead th.sortable-column {
+    padding-right: 26px;
+    position: relative;
+  }
+
+  .designation-table .column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .designation-table .sort-icons {
+    flex-shrink: 0;
+  }
+
+  /* serial number column */
+  .designation-table th:nth-child(1),
+  .designation-table td:nth-child(1) {
+    width: 45px;
+    min-width: 45px;
+  }
+
+  /* title column can wrap */
+  .designation-table th:nth-child(3),
+  .designation-table td:nth-child(3) {
+    min-width: 220px;
+    white-space: normal;
+  }
+
+  /* badges keep their full size */
+  .status-badge,
+  .priority-badge {
+    white-space: nowrap;
+  }
+
+  .status-badge {
+    min-width: 82px;
+  }
+
+  .priority-badge {
+    min-width: 68px;
+  }
+
+  /* action column: three buttons stay on one line */
+  .designation-table th.action-column,
+  .designation-table td.action-cell {
+    min-width: 135px;
+    width: 135px;
+  }
+
+  .action-cell {
+    white-space: nowrap;
+  }
+
+  .action-button {
+    flex: 0 0 auto;
+  }
+  /* Header: title row, then full-width Add New */
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .page-title {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    font-size: 20px;
+  }
+
+  .header-action,
+  .add-button {
+    width: 100%;
+  }
+
+  .add-button {
+    height: 44px;
+  }
+
+  /* Search section */
+  .search-section {
+    padding: 14px;
+  }
+
+  .search-grid {
+    gap: 12px;
+  }
+
+  /* Row 1: all fields stacked */
+  .search-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .search-wrapper,
+  .status-wrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    flex: none;
+  }
+
+  /* Same height for every field */
+  .search-box,
+  .search-input,
+  .search-btn,
+  .status-select {
+    height: 44px;
+  }
+
+  .status-select {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;   /* stops iOS zoom on tap */
+  }
+
+  /* Row 2: Priority and Status full width, Go + Clear side by side */
+  .filter-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .filter-row .status-wrapper {
+    grid-column: 1 / -1;
+  }
+
+  .filter-row .go-wrapper,
+  .filter-row .clear-wrapper {
+    width: 100%;
+    min-width: 0;
+    flex: none;
+  }
+
+  .btn-go,
+  .btn-clear {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    font-size: 14px;
+  }
+
+  /* Task category dropdown: trigger looks like the other selects */
+  .task-category-dropdown .cat-trigger {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    background: var(--white);
+    font-size: 16px;
+  }
+
+  .task-category-dropdown .cat-caret {
+    font-size: 12px;
+  }
+
+  /* Open list matches the field width */
+  .task-category-dropdown .cat-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .task-category-dropdown .cat-search {
+    font-size: 16px;
   }
 }

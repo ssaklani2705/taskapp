@@ -7,23 +7,16 @@
 
           <span>Holiday Master</span>
 
-
           <!-- <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
             {{ isPanelVisible ? '▲' : '▼' }}
           </button> -->
-          <a
-          type="button"
-          class="collapse-btn"
-          (click)="togglePanel()"
-          [attr.aria-expanded]="isPanelVisible"
-          title="Toggle Search Panel"
-        >
-          @if (isPanelVisible) {
-            <i class="fa-solid fa-angle-up"></i>
-          } @else {
-            <i class="fa-solid fa-angle-down"></i>
-          }
-        </a>
+          <a type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
+            @if (isPanelVisible) {
+              <i class="fa-solid fa-angle-up"></i>
+            } @else {
+              <i class="fa-solid fa-angle-down"></i>
+            }
+          </a>
         </div>
 
         <!-- ADD NEW -->
@@ -103,11 +96,9 @@
           </div>
 
           <!-- GO + CLEAR -->
-          <!-- <div class="go-wrapper"> -->
-            <div class="filter-action">
-            <!-- <button type="button" class="go-button" (click)="onSearch()"><mat-icon>search</mat-icon>Go</button> -->
-             <button type="button" class="go-button" (click)="onSearch()"><mat-icon>search</mat-icon>Go</button>
-            &nbsp;
+
+          <div class="filter-action">
+            <button type="button" class="btn-go" (click)="onSearch()"><i class="fa fa-search"></i> Go</button>
             <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
           </div>
         </div>

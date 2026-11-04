@@ -1,144 +1,138 @@
 <div class="container-fluid page-container">
-
   <!-- MAIN TASK CARD -->
   <div class="card main-card">
-
     <div class="card-header bg-white d-flex flex-wrap align-items-center justify-content-between gap-2">
       <h4 class="page-title mb-0 d-flex align-items-center gap-2">
         <mat-icon>task_alt</mat-icon>
         <span>View Task</span>
       </h4>
 
-      <button type="button" class="btn btn-dark d-inline-flex align-items-center gap-1 back-index-btn " (click)="backToIndexPage()">
+      <button type="button" class="btn btn-dark d-inline-flex align-items-center gap-1 back-index-btn" (click)="backToIndexPage()">
         <mat-icon>arrow_back</mat-icon>
         <span>Back to Index</span>
       </button>
     </div>
 
-  <div class="card-body user-information">
-  <div class="row g-4">
+    <div class="card-body user-information">
+      <div class="row g-4">
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Title</div>
+          <div class="info-value">{{ task.title || 'NA' }}</div>
+        </div>
 
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Title</div>
-      <div class="info-value">{{ task.title || 'NA' }}</div>
-    </div>
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Type</div>
+          <div class="info-value">{{ getUserTypeLabel(task.userType) }}</div>
+        </div>
 
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Type</div>
-      <div class="info-value">{{ getUserTypeLabel(task.userType) }}</div>
-    </div>
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Client</div>
+          <div class="info-value">{{ getClientName(task.clientId) }}</div>
+        </div>
 
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Client</div>
-      <div class="info-value">{{ getClientName(task.clientId) }}</div>
-    </div>
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Task Category</div>
+          <div class="info-value">{{ getTaskCategoryName(task.taskCategoryId) }}</div>
+        </div>
 
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Task Category</div>
-      <div class="info-value">{{ getTaskCategoryName(task.taskCategoryId) }}</div>
-    </div>
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Start Date</div>
+          <div class="info-value">{{ task.date | date: 'dd-MM-yyyy hh:mm a' }}</div>
+        </div>
 
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Start Date</div>
-      <div class="info-value">{{ task.date | date: 'dd-MM-yyyy hh:mm a' }}</div>
-    </div>
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Due Date</div>
+          <div class="info-value">{{ task.dueDateTime | date: 'dd-MM-yyyy hh:mm a' }}</div>
+        </div>
 
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Due Date</div>
-      <div class="info-value">{{ task.dueDateTime | date: 'dd-MM-yyyy hh:mm a' }}</div>
-    </div>
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Priority</div>
+          <div>
+            <span class="badge priority-badge" [ngClass]="getPriorityClass(task.priority)">
+              {{ getPriorityLabel(task.priority) }}
+            </span>
+          </div>
+        </div>
 
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Priority</div>
-      <div>
-        <span class="badge priority-badge" [ngClass]="getPriorityClass(task.priority)">
-          {{ getPriorityLabel(task.priority) }}
-        </span>
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Rating</div>
+          <div class="info-value rating-value" *ngIf="task.rating > 0; else notRated">
+            <span class="rating-stars">
+              <mat-icon *ngFor="let s of [1, 2, 3, 4, 5]" [class.filled]="task.rating >= s - 0.5">
+                {{ task.rating >= s ? 'star' : task.rating >= s - 0.5 ? 'star_half' : 'star_border' }}
+              </mat-icon>
+            </span>
+            <span class="rating-number">{{ task.rating }} / 5</span>
+          </div>
+          <ng-template #notRated>
+            <div class="info-value">Not rated</div>
+          </ng-template>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Assigned To</div>
+          <div class="info-value">{{ task.assignedUserName == null ? 'Unassigned' : task.assignedUserName }}</div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Buddy</div>
+          <div class="info-value">{{ task.buddyName || 'NA' }}</div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Added By</div>
+          <div class="info-value">{{ getUserName(task.addedBy) }}</div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Task Status</div>
+          <div>
+            <span class="change-manager-button" [ngClass]="common.getTaskStatusClass(task.taskStatus)">
+              {{ common.getTaskStatusLabel(task.taskStatus) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Status</div>
+          <div>
+            <span class="badge status-badge" [ngClass]="common.getStatusClass(task.status)">
+              {{ common.getStatusLabel(task.status) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Closing Remarks</div>
+          <div class="info-value">{{ task.closeRemarks || 'NA' }}</div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xl-4 info-field">
+          <div class="info-label">Closed On</div>
+          <div class="info-value">
+            {{ task.closeDateTime ? (task.closeDateTime | date: 'dd-MM-yyyy hh:mm a') : 'NA' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- DESCRIPTION -->
+      <div class="description-section">
+        <div class="description-label">Description</div>
+        <div class="description-value">{{ task.description || 'NA' }}</div>
       </div>
     </div>
-
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Rating</div>
-      <div class="info-value rating-value" *ngIf="task.rating > 0; else notRated">
-        <span class="rating-stars">
-          <mat-icon *ngFor="let s of [1, 2, 3, 4, 5]" [class.filled]="task.rating >= s - 0.5">
-            {{ task.rating >= s ? 'star' : (task.rating >= s - 0.5 ? 'star_half' : 'star_border') }}
-          </mat-icon>
-        </span>
-        <span class="rating-number">{{ task.rating }} / 5</span>
-      </div>
-      <ng-template #notRated>
-        <div class="info-value">Not rated</div>
-      </ng-template>
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Assigned To</div>
-      <div class="info-value">{{ task.assignedUserName == null ? 'Unassigned' : task.assignedUserName }}</div>
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Buddy</div>
-      <div class="info-value">{{ task.buddyName || 'NA' }}</div>
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Added By</div>
-      <div class="info-value">{{ getUserName(task.addedBy) }}</div>
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Task Status</div>
-      <div>
-        <span class="change-manager-button" [ngClass]="common.getTaskStatusClass(task.taskStatus)">
-          {{ common.getTaskStatusLabel(task.taskStatus) }}
-        </span>
-      </div>
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Status</div>
-      <div>
-        <span class="badge status-badge" [ngClass]="common.getStatusClass(task.status)">
-          {{ common.getStatusLabel(task.status) }}
-        </span>
-      </div>
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Closing Remarks</div>
-      <div class="info-value">{{ task.closeRemarks || 'NA' }}</div>
-    </div>
-
-    <div class="col-12 col-md-6 col-xl-4 info-field">
-      <div class="info-label">Closed On</div>
-      <div class="info-value">
-        {{ task.closeDateTime ? (task.closeDateTime | date: 'dd-MM-yyyy hh:mm a') : 'NA' }}
-      </div>
-    </div>
-
-  </div>
-
-  <!-- DESCRIPTION -->
-  <div class="description-section">
-    <div class="description-label">Description</div>
-    <div class="description-value">{{ task.description || 'NA' }}</div>
-  </div>
-</div>
-
   </div>
 
   <!-- ATTACHMENTS CARD -->
   <div class="card section-card">
-    <div class="card-header bg-white section-header">
-      <h5 class="section-title mb-0 d-flex align-items-center gap-2">
+    <div class="card-header section-header d-flex align-items-center">
+      <h5 class="section-title d-flex align-items-center gap-2">
         <mat-icon>attach_file</mat-icon>
         <span>Attachments</span>
       </h5>
     </div>
 
     <div class="card-body d-flex flex-column gap-3">
-
       <!-- TASK ATTACHMENTS -->
       <div class="attachment-section" *ngIf="task.fileName1 || task.fileName2">
         <div class="attachment-section-title">Task Attachments</div>
@@ -197,14 +191,14 @@
 
   <!-- ACTION HISTORY CARD -->
   <div class="card section-card">
-    <div class="card-header bg-white section-header">
-      <h5 class="section-title mb-0 d-flex align-items-center gap-2">
+    <div class="card-header section-header d-flex align-items-center">
+      <div class="section-title d-flex align-items-center gap-2">
         <mat-icon>history</mat-icon>
         <span>Action History</span>
-      </h5>
+      </div>
     </div>
 
-    <div class="table-responsive history-table-wrapper">
+    <div class="table-responsive">
       <table class="table table-bordered table-hover align-middle mb-0 history-table">
         <thead>
           <tr>
@@ -217,16 +211,15 @@
         <tbody>
           <tr *ngFor="let history of transactionHistory; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ history.name || 'NA' }}</td>
-            <td>{{ history.entryDate || 'NA' }}</td>
+            <td>{{ history.name || '-' }}</td>
+            <td>{{ history.entryDate || '-' }}</td>
             <td>
-              <span class="badge action-badge">{{ history.action || 'NA' }}</span>
+              <span class="badge action-badge">{{ history.action || '-' }}</span>
             </td>
           </tr>
 
           <tr *ngIf="!transactionHistory || transactionHistory.length === 0">
-            <td colspan="4" class="no-records-box">
-              <mat-icon>info</mat-icon>
+            <td colspan="4" class="no-records-box text-center">
               <span>No action history available</span>
             </td>
           </tr>
@@ -234,5 +227,4 @@
       </table>
     </div>
   </div>
-
 </div>

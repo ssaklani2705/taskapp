@@ -253,16 +253,20 @@
 
 .btn-go {
   height: 38px;
-  min-width: 75px;
-  padding: 0 15px;
+  min-width: 80px;
+  padding: 0 18px;
   border: 0;
-  border-radius: 3px;
+  border-radius: 4px;
   background: var(--primary-blue);
   color: #fff;
   font-family: Arial, sans-serif;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
 }
 
 .btn-go:hover {
@@ -408,7 +412,9 @@
 .filter-action {
   display: flex;
   align-items: flex-end;
-  width: 162px;
+  // width: 162px;
+   gap: 10px;
+  flex: 0 0 auto;
 }
 // .record-summary {
 //   color: #58718a;
@@ -959,196 +965,7 @@
   }
 }
 
-@media (max-width: 768px) {
-  .page-content {
-    padding: 10px;
-  }
 
-  .user-management-container {
-    width: 100%;
-    border-radius: 2px;
-  }
-
-  .page-header {
-    min-height: 64px;
-    padding: 0 14px;
-  }
-
-  .header-title-section {
-    gap: 7px;
-  }
-
-  .header-title-section h2 {
-    font-size: 21px;
-    line-height: 1.25;
-  }
-
- 
-
-  .search-panel {
-    padding: 15px 14px;
-  }
-
-  .search-row {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    width: 100%;
-  }
-
-  .search-wrapper,
-  .status-wrapper,
-  .go-wrapper {
-    width: 100%;
-    margin: 0;
-  }
-
-  .btn-add-user,
-  .btn-go,
-  .btn-clear {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .btn-add-user {
-    height: 40px;
-  }
-
-  .btn-upload-excel,
-  .btn-export-excel,
-  .btn-download-template {
-    width: 100%;
-    height: 40px;
-    margin-left: 0;
-    box-sizing: border-box;
-  }
-
-  .excel-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .search-input,
-  .search-btn,
-  .status-select {
-    height: 40px;
-  }
-
-  .table-top-section,
-  .table-bottom-section {
-    min-height: auto;
-    padding: 14px;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    gap: 12px;
-  }
-
-  .record-summary {
-    font-size: 13px;
-    text-align: left;
-  }
-
-  .pagination {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 2px;
-    gap: 5px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-
-  .pagination::-webkit-scrollbar {
-    display: none;
-  }
-
-  .pagination-btn {
-    flex: 0 0 auto;
-    min-width: 40px;
-    height: 36px;
-    padding: 0 9px;
-    font-size: 12px;
-  }
-
-  .first-btn,
-  .last-btn {
-    min-width: 58px;
-  }
-
-  .table-container {
-    width: 100%;
-    padding: 0 14px;
-    box-sizing: border-box;
-  }
-
-  .table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-  }
-
-  .user-table {
-    min-width: 760px;
-    table-layout: fixed;
-  }
-
-  .user-table thead th {
-    // height: 52px;
-    padding: 7px 9px;
-    font-size: 13px;
-  }
-
-  .user-table tbody td {
-    // height: 54px;
-    padding: 7px 9px;
-    font-size: 13px;
-  }
-
-  .user-name {
-    font-size: 13px;
-  }
-
-  .status-badge {
-    min-width: 70px;
-    height: 29px;
-    padding: 0 9px;
-    font-size: 12px;
-  }
-
-  .action-buttons {
-    gap: 5px;
-  }
-
-  .action-btn {
-    width: 36px;
-    height: 34px;
-  }
-
-  .action-btn i {
-    font-size: 14px;
-  }
-
-  .date-filter-input,
-  .date-filter-input .date-input {
-    height: 40px;
-  }
-
-  .date-filter-input .mat-datepicker-toggle {
-    width: 38px;
-    height: 38px;
-  }
-
-  .date-filter-input .mat-datepicker-toggle button {
-    width: 38px;
-    height: 38px;
-  }
-}
 
 @media (max-width: 480px) {
   .page-content {
@@ -1405,3 +1222,191 @@
   color: var(--primary-blue);
 }
 
+@media (max-width: 768px) {
+  /* Header: title row, then full-width Add New */
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .page-title {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    font-size: 20px;
+  }
+
+  .btn-add-user {
+    width: 100%;
+    height: 40px;
+  }
+
+  /* Filters stacked, same height */
+  .search-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .search-wrapper,
+  .status-wrapper {
+    width: 100%;
+  }
+
+  .search-input,
+  .search-btn,
+  .status-select,
+  .date-filter-input,
+  .date-filter-input .date-input {
+    height: 44px;
+  }
+
+  .search-btn {
+    width: 52px;
+  }
+
+  .status-select {
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+
+  /* Go + Clear: equal width, full row */
+  .filter-action {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .btn-go,
+  .btn-clear {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    font-size: 14px;
+  }
+
+  /* Excel buttons: full width, same height */
+  .excel-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .btn-upload-excel,
+  .btn-export-excel,
+  .btn-download-template {
+    width: 100%;
+    height: 44px;
+    font-size: 14px;
+    padding: 0 12px;
+  }
+
+  /* Pagination: one scrollable line */
+  .pagination {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  /* Table: columns size to content, scroll sideways */
+  .user-table {
+    table-layout: auto;
+    min-width: 720px;
+  }
+
+  .user-table th.serial-column,
+  .user-table td.serial-number,
+  .user-table th:nth-child(n),
+  .user-table td:nth-child(n),
+  .user-table th.action-column,
+  .user-table td:last-child {
+    width: auto;
+  }
+
+  .user-table th.serial-column,
+  .user-table td.serial-number {
+    width: 45px;
+  }
+
+  .user-table thead th,
+  .user-table tbody td {
+    white-space: nowrap;
+  }
+
+  .user-table tbody td:nth-child(2) {
+    white-space: normal;
+    min-width: 180px;
+  }
+
+  .status-badge {
+    min-width: 76px;
+  }
+
+  .action-buttons {
+    flex-wrap: nowrap;
+  }
+
+  .action-btn {
+    flex: 0 0 auto;
+  }
+
+
+  .table-top-section,
+  .table-bottom-section {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 12px;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .record-summary {
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .pagination {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pagination::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pagination-btn {
+    flex: 0 0 auto;        /* stops the buttons from shrinking and wrapping */
+    min-width: 40px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 12px;
+    white-space: nowrap;   /* keeps "‹ Prev" and "Next ›" on one line */
+  }
+
+  .first-btn,
+  .last-btn {
+    min-width: 58px;
+  }
+
+   .column-header {
+    gap: 8px;
+  }
+
+  .sort-icons {
+    flex-shrink: 0;
+  }
+}
