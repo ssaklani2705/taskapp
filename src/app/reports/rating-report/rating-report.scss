@@ -799,3 +799,75 @@ mat-divider {
   flex: 0 0 auto !important;
   width: auto !important;
 }
+
+
+@media (max-width: 768px) {
+  .access-table {
+    table-layout: auto;
+    min-width: 0;            /* width now comes from the content */
+
+    /* reset the fixed % widths */
+    th:nth-child(n),
+    td:nth-child(n) {
+      width: auto;
+    }
+
+    thead th,
+    tbody td {
+      padding: 7px 10px;
+      white-space: nowrap;
+    }
+
+    /* serial number column */
+    th:nth-child(1),
+    td:nth-child(1) {
+      width: 45px;
+      min-width: 45px;
+    }
+
+    /* long text columns can wrap */
+    td.text-left {
+      white-space: normal;
+    }
+
+    /* Email and Subject need some room before they wrap */
+    th:nth-child(3),
+    td:nth-child(3),
+    th:nth-child(4),
+    td:nth-child(4) {
+      min-width: 180px;
+    }
+
+    /* View Mail column */
+    th:last-child,
+    td:last-child {
+      min-width: 90px;
+      text-align: center;
+    }
+  }
+
+  /* label on the left, sort arrows on the right, never touching */
+  .access-table .column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .access-table .sort-icons {
+    flex-shrink: 0;
+  }
+
+  .access-table thead th.sortable-column {
+    cursor: pointer;
+    padding-right: 12px;
+  }
+
+  .status-badge {
+    white-space: nowrap;
+  }
+
+  .action-button {
+    flex: 0 0 auto;
+  }
+}

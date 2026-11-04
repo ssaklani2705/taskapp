@@ -344,6 +344,10 @@ mat-divider {
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
 }
 
 .btn-go:hover {
@@ -1664,4 +1668,222 @@ textarea.manager-select::placeholder {
 /* any flex wrapper inside a cell should also center its content */
 .designation-table tbody td > div {
   justify-content: left;
+}
+
+@media (max-width: 768px) {
+  /* Header: title row, then full-width Add New */
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 12px;
+    min-height: auto;
+    padding: 14px;
+  }
+
+  .page-title {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    font-size: 20px;
+  }
+
+  .header-action,
+  .add-button {
+    width: 100%;
+  }
+
+  .add-button {
+    height: 44px;
+  }
+
+  /* Search section */
+  .search-section {
+    padding: 14px;
+  }
+
+  .search-grid {
+    gap: 12px;
+  }
+
+  /* Row 1: all fields stacked */
+  .search-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .search-wrapper,
+  .status-wrapper,
+  .client-dropdown-container {
+    width: 100%;
+    min-width: 0;
+    max-width: none;
+    flex: none;
+  }
+
+  /* Same height for every field */
+  .search-box,
+  .search-input,
+  .search-btn,
+  .status-select,
+  .client-search-input {
+    height: 44px;
+  }
+
+  .status-select,
+  .client-search-input {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;   /* stops iOS zoom on tap */
+  }
+
+  /* Row 2: Priority and Status full width, Go + Clear on ONE line */
+  .filter-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .filter-row .status-wrapper {
+    grid-column: 1 / -1;
+  }
+
+  .filter-row .go-wrapper,
+  .filter-row .clear-wrapper {
+    width: 100%;
+    min-width: 0;
+    flex: none;
+  }
+
+  .btn-go,
+  .btn-clear {
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    font-size: 14px;
+  }
+
+  /* Task category dropdown: trigger looks like the other selects */
+  .task-category-dropdown .cat-trigger {
+    width: 100%;
+    height: 44px;
+    padding: 0 12px;
+    background: var(--white);
+    font-size: 16px;
+  }
+
+  .task-category-dropdown .cat-caret {
+    font-size: 12px;
+  }
+
+  /* Open list matches the field width */
+  .task-category-dropdown .cat-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .task-category-dropdown .cat-search {
+    font-size: 16px;
+  }
+
+  /* Pagination: summary on top, buttons on one scrollable line */
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    min-height: auto;
+    padding: 14px 0;
+  }
+
+  .pagination {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .pagination::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pagination button {
+    flex: 0 0 auto;
+    min-width: 40px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* Table: columns size to content, scroll sideways */
+  .designation-table {
+    table-layout: auto;
+    min-width: 0;
+  }
+
+  .designation-table th:nth-child(n),
+  .designation-table td:nth-child(n) {
+    width: auto;
+  }
+
+  .designation-table thead th,
+  .designation-table tbody td {
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  .designation-table thead th.sortable-column {
+    padding-right: 26px;
+  }
+
+  .designation-table .column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .designation-table .sort-icons {
+    flex-shrink: 0;
+  }
+
+  .designation-table th:nth-child(1),
+  .designation-table td:nth-child(1) {
+    width: 45px;
+    min-width: 45px;
+  }
+
+  /* Client and Title columns can wrap */
+  .designation-table th:nth-child(2),
+  .designation-table td:nth-child(2),
+  .designation-table th:nth-child(3),
+  .designation-table td:nth-child(3) {
+    min-width: 200px;
+    white-space: normal;
+  }
+
+  .status-badge,
+  .priority-badge {
+    white-space: nowrap;
+  }
+
+  .designation-table th.action-column,
+  .designation-table td.action-cell {
+    min-width: 135px;
+    width: 135px;
+  }
+
+  .action-button {
+    flex: 0 0 auto;
+  }
 }
