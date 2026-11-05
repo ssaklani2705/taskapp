@@ -190,9 +190,14 @@
     </div>
 
     <!-- ================= TABLE ================= -->
-    <div class="table-container">
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0 user-table">
+    <div class="table-container scroll-area" style="--table-min-width: 1850px">
+
+  <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+    <div class="top-scroll-inner"></div>
+  </div>
+
+  <div class="table-responsive table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
+    <table class="table table-bordered table-hover align-middle mb-0 user-table">
           <colgroup>
             <col class="col-sr" />
             <col class="col-name" />

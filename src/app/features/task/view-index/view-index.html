@@ -16,37 +16,37 @@
     <div class="card-body user-information">
       <div class="row g-4">
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Title</div>
+          <div class="info-label">Title:</div>
           <div class="info-value">{{ task.title || 'NA' }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Type</div>
+          <div class="info-label">Type:</div>
           <div class="info-value">{{ getUserTypeLabel(task.userType) }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Client</div>
+          <div class="info-label">Client:</div>
           <div class="info-value">{{ getClientName(task.clientId) }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Task Category</div>
+          <div class="info-label">Task Category:</div>
           <div class="info-value">{{ getTaskCategoryName(task.taskCategoryId) }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Start Date</div>
+          <div class="info-label">Start Date:</div>
           <div class="info-value">{{ task.date | date: 'dd-MM-yyyy hh:mm a' }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Due Date</div>
+          <div class="info-label">Due Date:</div>
           <div class="info-value">{{ task.dueDateTime | date: 'dd-MM-yyyy hh:mm a' }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Priority</div>
+          <div class="info-label">Priority:</div>
           <div>
             <span class="badge priority-badge" [ngClass]="getPriorityClass(task.priority)">
               {{ getPriorityLabel(task.priority) }}
@@ -55,7 +55,7 @@
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Rating</div>
+          <div class="info-label">Rating:</div>
           <div class="info-value rating-value" *ngIf="task.rating > 0; else notRated">
             <span class="rating-stars">
               <mat-icon *ngFor="let s of [1, 2, 3, 4, 5]" [class.filled]="task.rating >= s - 0.5">
@@ -70,22 +70,22 @@
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Assigned To</div>
+          <div class="info-label">Assigned To:</div>
           <div class="info-value">{{ task.assignedUserName == null ? 'Unassigned' : task.assignedUserName }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Buddy</div>
+          <div class="info-label">Buddy:</div>
           <div class="info-value">{{ task.buddyName || 'NA' }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Added By</div>
+          <div class="info-label">Added By:</div>
           <div class="info-value">{{ getUserName(task.addedBy) }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Task Status</div>
+          <div class="info-label">Task Status:</div>
           <div>
             <span class="change-manager-button" [ngClass]="common.getTaskStatusClass(task.taskStatus)">
               {{ common.getTaskStatusLabel(task.taskStatus) }}
@@ -94,7 +94,7 @@
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Status</div>
+          <div class="info-label">Status:</div>
           <div>
             <span class="badge status-badge" [ngClass]="common.getStatusClass(task.status)">
               {{ common.getStatusLabel(task.status) }}
@@ -103,12 +103,12 @@
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Closing Remarks</div>
+          <div class="info-label">Closing Remarks:</div>
           <div class="info-value">{{ task.closeRemarks || 'NA' }}</div>
         </div>
 
         <div class="col-12 col-md-6 col-xl-4 info-field">
-          <div class="info-label">Closed On</div>
+          <div class="info-label">Closed On:</div>
           <div class="info-value">
             {{ task.closeDateTime ? (task.closeDateTime | date: 'dd-MM-yyyy hh:mm a') : 'NA' }}
           </div>
@@ -117,7 +117,7 @@
 
       <!-- DESCRIPTION -->
       <div class="description-section">
-        <div class="description-label">Description</div>
+        <div class="description-label">Description:</div>
         <div class="description-value">{{ task.description || 'NA' }}</div>
       </div>
     </div>

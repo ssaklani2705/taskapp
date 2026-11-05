@@ -234,8 +234,14 @@
       </div>
 
       <!-- Table -->
-      <div class="table-responsive client-table-wrapper">
-        <table class="table align-middle mb-0 client-table">
+   <div class="scroll-area" style="--table-min-width: 1850px">
+
+  <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+    <div class="top-scroll-inner"></div>
+  </div>
+
+  <div class="table-responsive client-table-wrapper table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
+    <table class="table align-middle mb-0 client-table">
           <thead>
             <tr>
               <th class="serial-column">#</th>

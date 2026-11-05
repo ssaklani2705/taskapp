@@ -125,7 +125,15 @@
 
       <!-- Table -->
       <div class="table-responsive border plan-table-wrapper">
-        <table class="table table-bordered table-hover align-middle mb-0 plan-table">
+     <!-- Table -->
+<div class="scroll-area" style="--table-min-width: 1000px">
+
+  <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+    <div class="top-scroll-inner"></div>
+  </div>
+
+  <div class="table-responsive border plan-table-wrapper table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
+    <table class="table table-bordered table-hover align-middle mb-0 plan-table">
           <thead>
             <tr>
               <th class="col-serial">#</th>

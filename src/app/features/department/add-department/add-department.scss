@@ -842,6 +842,11 @@
 }
 
 @media (max-width: 600px) {
+
+
+    .user-input {
+       width: 77% !important;
+    }
     .user-form-row {
         grid-template-columns: 1fr;
     }

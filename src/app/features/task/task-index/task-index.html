@@ -185,8 +185,14 @@
 
     <!-- TABLE -->
     <div class="px-3">
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover align-middle mb-0 user-table">
+     <div class="scroll-area" style="--table-min-width: 1850px">
+
+  <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+    <div class="top-scroll-inner"></div>
+  </div>
+
+  <div class="table-responsive table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
+    <table class="table table-bordered table-hover align-middle mb-0 user-table">
           <thead class="table-light">
             <tr>
               <th *ngFor="let col of columns" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
