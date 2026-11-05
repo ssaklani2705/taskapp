@@ -462,3 +462,26 @@ padding: 8px 4px;
     letter-spacing: -0.3px;
 }
 
+
+/* Tablet and below */
+@media (max-width: 992px) {
+  .back-index-btn {
+    width: auto;
+    min-width: 176px;
+  }
+}
+
+/* Large mobile / small tablet */
+@media (max-width: 786px) {
+  .back-index-btn {
+    width: 100%;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 600px) {
+  .back-index-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}

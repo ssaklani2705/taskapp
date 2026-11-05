@@ -389,7 +389,7 @@ mat-divider {
 }
 .designation-table th:nth-child(8),
 .designation-table td:nth-child(8) {
-  width: 100px;
+  width: 115px !important;
 }
 .designation-table th.sortable-column {
   cursor: pointer;
@@ -425,7 +425,7 @@ mat-divider {
 
 .action-column {
   width: 170px;
-  text-align: left;
+  text-align: left !important;
 }
 
 .action-cell {

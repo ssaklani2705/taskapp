@@ -1002,3 +1002,18 @@ $col-widths: 95px, 180px, 150px, 120px, 120px, 160px, 130px, 100px, 100px, 100px
     box-shadow: -3px 0 5px -2px rgba(25, 52, 90, 0.15);
   }
 }
+
+/* Tasks header: Add New button goes below the title on mobile */
+@media (max-width: 786px) {
+  .card-header > h4 {
+    width: 100%;
+  }
+
+  .card-header > .btn-dark {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+}

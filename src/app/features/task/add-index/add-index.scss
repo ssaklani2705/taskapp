@@ -503,3 +503,18 @@ input[type='file'].form-control {
   input[type='file'].form-control { font-size: 12px; }
   input[type='file'].form-control::file-selector-button { padding: 0 8px; margin-right: 6px; font-size: 12px; }
 }
+
+@media (max-width: 786px) {
+  .card-header > h4,
+  .card-header > .btn-dark {
+    width: 100%;
+  }
+
+  .back-index-btn {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+}
