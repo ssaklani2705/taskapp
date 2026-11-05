@@ -144,9 +144,14 @@
         </div>
       </div>
 
-      <div class="table-container">
-        <div class="table-responsive">
-          <table class="user-table">
+      <div class="table-container scroll-area" style="--table-min-width: 700px">
+
+  <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+    <div class="top-scroll-inner"></div>
+  </div>
+
+  <div class="table-responsive table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
+    <table class="user-table">
             <thead>
               <tr>
                 <th class="serial-column">#</th>

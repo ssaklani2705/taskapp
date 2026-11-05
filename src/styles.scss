@@ -462,3 +462,48 @@ padding: 8px 4px;
     letter-spacing: -0.3px;
 }
 
+
+
+/* =========================================================
+   COMMON: table with horizontal scrollbars on top AND bottom
+   Usage: wrap in .scroll-area and set --table-min-width
+========================================================= */
+.scroll-area .top-scroll,
+.scroll-area .table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #9fb5c8 #edf1f4;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scroll-area .top-scroll {
+  height: 12px;
+  margin-bottom: 4px;
+}
+
+.scroll-area .top-scroll-inner {
+  width: var(--table-min-width, 1000px);
+  height: 1px;
+}
+
+.scroll-area .table-scroll > table {
+  min-width: var(--table-min-width, 1000px);
+}
+
+.scroll-area .top-scroll::-webkit-scrollbar,
+.scroll-area .table-scroll::-webkit-scrollbar { height: 10px; }
+
+.scroll-area .top-scroll::-webkit-scrollbar-track,
+.scroll-area .table-scroll::-webkit-scrollbar-track { background: #edf1f4; border-radius: 6px; }
+
+.scroll-area .top-scroll::-webkit-scrollbar-thumb,
+.scroll-area .table-scroll::-webkit-scrollbar-thumb {
+  background: #9fb5c8;
+  border-radius: 6px;
+  border: 2px solid #edf1f4;
+}
+
+.scroll-area .top-scroll::-webkit-scrollbar-thumb:hover,
+.scroll-area .table-scroll::-webkit-scrollbar-thumb:hover { background: #6f8aa3; }

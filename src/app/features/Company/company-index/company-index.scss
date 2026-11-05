@@ -20,6 +20,7 @@
   --success: #17805f;
   --danger: #e84a4a;
   --control-h: 42px;
+  --table-min-width: 1320px;   /* add this line */
 
   display: block;
   width: 100%;
@@ -194,6 +195,16 @@ mat-divider,
 }
 
 /* ---------- Table: horizontal scroll + frozen columns ---------- */
+// .table-wrapper {
+//   width: 100%;
+//   overflow-x: auto;
+//   overflow-y: hidden;
+//   padding-bottom: 2px;
+//   -webkit-overflow-scrolling: touch;
+//   scrollbar-width: thin;
+//   scrollbar-color: #9fb5c8 #edf1f4;
+// }
+
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
@@ -211,7 +222,8 @@ mat-divider,
 
 .designation-table {
   width: 100%;
-  min-width: 1320px;
+  // min-width: 1320px;
+   min-width: var(--table-min-width);   /* was 1320px */
   table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
@@ -662,3 +674,25 @@ mat-divider,
   .status-badge { min-width: 66px; height: 27px; font-size: 10px; }
 }
 
+
+
+/* ---------- Top horizontal scrollbar ---------- */
+.top-scroll {
+  width: 100%;
+  height: 12px;
+  margin-bottom: 4px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #9fb5c8 #edf1f4;
+}
+
+.top-scroll::-webkit-scrollbar { height: 10px; }
+.top-scroll::-webkit-scrollbar-track { background: #edf1f4; border-radius: 6px; }
+.top-scroll::-webkit-scrollbar-thumb { background: #9fb5c8; border-radius: 6px; border: 2px solid #edf1f4; }
+.top-scroll::-webkit-scrollbar-thumb:hover { background: #6f8aa3; }
+
+.top-scroll-inner {
+  width: var(--table-min-width);
+  height: 1px;
+}

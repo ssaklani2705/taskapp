@@ -84,8 +84,15 @@
       </div>
 
       <!-- TABLE -->
-      <div class="table-wrapper">
-        <table class="access-table">
+ 
+          <div class="scroll-area" style="--table-min-width: 900px">
+
+  <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+    <div class="top-scroll-inner"></div>
+  </div>
+
+  <div class="table-wrapper table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
+    <table class="access-table">
           <thead>
             <tr>
               <th>#</th>

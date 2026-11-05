@@ -143,7 +143,12 @@
         </div>
       </div>
 
-      <div class="table-responsive table-wrapper">
+      <!-- top scrollbar -->
+<div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+  <div class="top-scroll-inner"></div>
+</div>
+
+      <div class="table-responsive table-wrapper" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
         <table class="designation-table">
           <colgroup>
             <col class="col-serial" />

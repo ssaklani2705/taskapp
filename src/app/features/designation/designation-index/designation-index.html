@@ -92,7 +92,13 @@
       </div>
 
       <div class="table-responsive table-wrapper">
-        <table class="designation-table">
+        <div class="scroll-area" style="--table-min-width: 760px">
+            <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+    <div class="top-scroll-inner"></div>
+  </div>
+
+  <div class="table-responsive table-wrapper table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
+    <table class="designation-table">
           <thead>
             <tr>
               <th class="serial-column">#</th>
