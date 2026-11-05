@@ -156,41 +156,23 @@
 
     font-family: "Open Sans", sans-serif !important;
 }
-
 .user-input {
-    display: block;
-
-    width: 100% !important;
-
-    height: 43px !important;
-
-    min-height: 43px !important;
-
-    padding: 8px 14px !important;
-
-    box-sizing: border-box;
-
-    border: 1px solid var(--border-dark) !important;
-
-    border-radius: 2px !important;
-
-    background: #ffffff !important;
-
-    color: var(--text-blue) !important;
-
-    font-size: 15px !important;
-
-    font-weight: 400 !important;
-
-    font-family: "Open Sans", sans-serif !important;
-
-    outline: none !important;
-
-    box-shadow: none !important;
-
-    transition:
-        border-color 0.15s ease,
-        box-shadow 0.15s ease;
+  display: block;
+  width: 100% !important;
+  height: 43px !important;
+  min-height: 43px !important;
+  padding: 8px 14px !important;
+  box-sizing: border-box;
+  border: 1px solid var(--border-dark) !important;
+  border-radius: 2px !important;
+  background: #ffffff !important;
+  color: var(--text-blue) !important;
+  font-family: "Open Sans", sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 
@@ -859,4 +841,42 @@
     .user-page-wrapper{
         margin-top: 20px;
     }
+}
+
+// .user-date-group .user-date-input {
+//   min-width: 0 !important;   /* stops the date input forcing extra width */
+// }
+
+@media (max-width: 786px) {
+  .user-page-wrapper {
+    padding: 12px !important;
+  }
+
+  .user-portlet,
+  .user-portlet-body,
+  .user-form-body {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .user-form-row {
+    display: flex !important;
+    flex-direction: column;
+    gap: 18px;
+    width: 100% !important;
+    margin-top: 0;
+  }
+
+  .user-form-col,
+  .user-form-group,
+  .user-date-group,
+  .user-input {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .user-buttons {
+    justify-content: center;
+    margin-left: 0 !important;
+  }
 }
