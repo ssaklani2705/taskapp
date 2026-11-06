@@ -4,7 +4,6 @@ export const environment = {
   apiBaseUrl: 'http://localhost:9091/taskapp/',
   baseurluploaded: 'http://localhost:9091/taskapp/uploads/',
 
-
   // apiBaseUrl: 'https://app.webelement.cc/taskapp_api/',
   // baseurluploaded: 'https://app.webelement.cc/taskapp/uploads/',
 
