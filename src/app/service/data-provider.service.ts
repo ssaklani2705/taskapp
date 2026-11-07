@@ -1781,4 +1781,47 @@ export class DataProviderService {
   getTransactionActionUsers() {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/transaction/getTransactionActionUsers`);
   }
+
+
+  getReopenReport(page: number, size: number, search?: string, fromDate?: string, toDate?: string, assignedToId?: number | null, reopenById?: number | null) {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+
+
+    if (search) {
+      params = params.set('search', search);
+    }
+
+
+    if (fromDate) {
+      params = params.set('fromDate', fromDate);
+    }
+
+
+    if (toDate) {
+      params = params.set('toDate', toDate);
+    }
+
+
+    if (assignedToId != null && assignedToId !== 0) {
+      params = params.set('assignedToId', assignedToId.toString());
+    }
+
+
+    if (reopenById != null && reopenById !== 0) {
+      params = params.set('reopenById', reopenById.toString());
+    }
+
+
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/reopen-report`, { params });
+  }
+
+
+  getReopenReportAssignedUsers() {
+    return this.http.get<any[]>(`${environment.apiBaseUrl}admin/reopen-report/assigned-users`);
+  }
+
+
+  getReopenReportReopenedByUsers() {
+    return this.http.get<any[]>(`${environment.apiBaseUrl}admin/reopen-report/reopened-by-users`);
+  }
 }

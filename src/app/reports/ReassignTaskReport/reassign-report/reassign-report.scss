@@ -122,7 +122,7 @@ mat-divider {
 .field-label,
 .field-label-date {
   display: block;
-  margin-bottom: 7px;
+  // margin-bottom: 7px;
   color: var(--navy);
   font-family: "Open Sans", sans-serif !important;
   font-size: 14px;
@@ -137,9 +137,10 @@ mat-divider {
 }
 
 .search-box {
-  width: 100%;
+ width: 100%;
   height: 40px;
   display: flex;
+  flex-wrap: nowrap !important;
   border: 1px solid #c6d3df;
   border-radius: 4px;
   overflow: hidden;
@@ -153,7 +154,7 @@ mat-divider {
 }
 
 .search-input {
-  width: 100%;
+   width: 100%;
   min-width: 0;
   height: 38px;
   padding: 0 12px;
@@ -162,7 +163,7 @@ mat-divider {
   outline: none;
   background: var(--white);
   color: var(--text);
-  font-family: "Open Sans", sans-serif !important;
+  font-family: 'Open Sans', sans-serif !important;
   font-size: 14px;
   box-sizing: border-box;
 
@@ -361,7 +362,7 @@ mat-divider {
     position: absolute;
     top: calc(100% + 3px);
     left: 0;
-    width: 330px;
+    width: 100%;
     max-width: calc(100vw - 40px);
     padding: 8px;
     background: var(--white);

@@ -598,7 +598,7 @@ export class TransactionReport {
     const stamp = this.datePipe.transform(new Date(), 'dd-MM-yyyy_HHmm');
 
     link.href = url;
-    link.download = `Transaction_Report_${stamp}.csv`;
+    link.download = `Transaction_Report.csv`;
 
     document.body.appendChild(link);
     link.click();

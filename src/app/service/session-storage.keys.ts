@@ -44,6 +44,7 @@ export const SESSION_KEYS = {
 
   REASSIGN_SUMMARY_REPORT: 'reassignSummaryReport',
 
-  TRANSACTION_REPORT_FILTER :'transactionReportFilter'
-
+  TRANSACTION_REPORT_FILTER: 'transactionReportFilter',
+  
+  REOPEN_REPORT_FILTER: 'reopenReportFilter',
 };

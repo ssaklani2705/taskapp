@@ -195,6 +195,13 @@ export const routes: Routes = [
         canActivate: [moduleGuard],
         data: { moduleId: 20 },
         loadComponent: () => import('./reports/transaction-report/transaction-report').then((m) => m.TransactionReport),
+
+      },
+       {
+        path: 'reopen-report',
+        canActivate: [moduleGuard],
+        data: { moduleId: 21 },
+        loadComponent: () => import('./reports/reopen-report/reopen-report').then((m) => m.ReopenReport),
       },
 
       // 9 - Plan Master

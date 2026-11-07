@@ -20,7 +20,7 @@
 
     <!-- SEARCH PANEL -->
     <div class="search-panel" *ngIf="isPanelVisible">
-      <div class="row g-3 align-items-end">
+      <div class="row g-2 align-items-end">
         <!-- ACTION / DESCRIPTION -->
         <div class="col-12 col-md-6 col-xl-4">
           <div class="search-wrapper">
@@ -29,8 +29,8 @@
             <div class="search-box input-group">
               <input type="text" class="form-control search-input" [(ngModel)]="searchQuery" placeholder="Search by Action / Description" (keyup.enter)="onSearch()" />
 
-              <button type="button" class="btn search-btn" (click)="onSearch()" title="Search">
-                <i class="fa fa-search"></i>
+              <button type="button" class="btn search-button" (click)="onSearch()" title="Search">
+                <mat-icon>search</mat-icon>
               </button>
             </div>
           </div>

@@ -28,7 +28,7 @@
 
     <!-- SEARCH PANEL -->
     <div class="search-panel" *ngIf="isPanelVisible">
-      <div class="row g-3 align-items-end">
+      <div class="row g-2 align-items-end">
 
         <!-- TASK NAME -->
         <div class="col-12 col-md-6 col-xl-3">
@@ -46,11 +46,11 @@
 
               <button
                 type="button"
-                class="btn search-btn"
+                class="btn search-button"
                 (click)="onSearch()"
                 title="Search"
               >
-                <i class="fa fa-search"></i>
+               <mat-icon>search</mat-icon>
               </button>
             </div>
           </div>
