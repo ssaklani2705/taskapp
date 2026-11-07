@@ -1183,14 +1183,14 @@ export class DataProviderService {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/active`);
   }
 
-  getActiveTaskCategoriesForRecurring(userId: any, isAdmin: any, loginType: any, isHod: any,clientId: any) {
+  getActiveTaskCategoriesForRecurring(userId: any, isAdmin: any, loginType: any, isHod: any, clientId: any) {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/taskcategory/recurring/active`, {
       params: {
         userId: userId,
         isAdmin: isAdmin,
         loginType: loginType,
         isHod: isHod,
-        clientId: clientId
+        clientId: clientId,
       },
     });
   }
@@ -1201,7 +1201,7 @@ export class DataProviderService {
         userId: userId,
         isAdmin: isAdmin,
         loginType: loginType,
-        isHod: isHod
+        isHod: isHod,
       },
     });
   }
@@ -1614,24 +1614,16 @@ export class DataProviderService {
   //   return this.http.get<any[]>(`${environment.apiBaseUrl}admin/generic-recurring/task-categories`);
   // }
 
-  getTaskCategoriesUsedInGenericRecurring(
-  userId: number,
-  loginType: string,
-  isAdmin: string,
-  isHod: string
-) {
-  return this.http.get<any[]>(
-    `${environment.apiBaseUrl}admin/generic-recurring/task-categories`,
-    {
+  getTaskCategoriesUsedInGenericRecurring(userId: number, loginType: string, isAdmin: string, isHod: string) {
+    return this.http.get<any[]>(`${environment.apiBaseUrl}admin/generic-recurring/task-categories`, {
       params: {
         userId: userId.toString(),
         loginType: loginType,
         isAdmin: isAdmin,
-        isHod: isHod
-      }
-    }
-  );
-}
+        isHod: isHod,
+      },
+    });
+  }
 
   getTaskRatingSummary(fromDate?: string | null, toDate?: string | null, username?: string | null, departmentIds: number[] = [], page: number = 0, size: number = 10): Observable<any> {
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
@@ -1712,7 +1704,7 @@ export class DataProviderService {
     return this.http.put<ApiResponse<null>>(`${environment.apiBaseUrl}admin/companyShift/update`, body);
   }
 
-  deleteCompanyShift(shiftId: number,userId:number): Observable<ApiResponse<null>> {
+  deleteCompanyShift(shiftId: number, userId: number): Observable<ApiResponse<null>> {
     return this.http.delete<ApiResponse<null>>(`${environment.apiBaseUrl}admin/companyShift/delete/${shiftId}/${userId}`);
   }
 
@@ -1725,45 +1717,68 @@ export class DataProviderService {
   }
 
   //buddy
-  updateTaskBuddy(
-  taskId: number, buddyId: number, userId: any, isChange: boolean,
-  remarks: string, startDate: string | null, endDate: string | null,
-) {
-  return this.http.put<any>(`${environment.apiBaseUrl}admin/task/updateTaskBuddy`, {
-    taskId, buddyId, userId, isChange, remarks, startDate, endDate,
-  });
-}
+  updateTaskBuddy(taskId: number, buddyId: number, userId: any, isChange: boolean, remarks: string, startDate: string | null, endDate: string | null) {
+    return this.http.put<any>(`${environment.apiBaseUrl}admin/task/updateTaskBuddy`, {
+      taskId,
+      buddyId,
+      userId,
+      isChange,
+      remarks,
+      startDate,
+      endDate,
+    });
+  }
 
-getReassignSummaryReportDepartments(): Observable<any[]> {
+  getReassignSummaryReportDepartments(): Observable<any[]> {
     return this.http.get<any[]>(`${environment.apiBaseUrl}admin/task_reassign/reassign-summary/departments`);
   }
 
-
-getOldUserTaskCount(page: number, size: number, fromDate?: string, toDate?: string, search?: string, departmentIds?: number[]) {
+  getOldUserTaskCount(page: number, size: number, fromDate?: string, toDate?: string, search?: string, departmentIds?: number[]) {
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
-
 
     if (fromDate) {
       params = params.set('fromDate', fromDate);
     }
 
-
     if (toDate) {
       params = params.set('toDate', toDate);
     }
-
 
     if (search && search.trim()) {
       params = params.set('search', search.trim());
     }
 
-
     if (departmentIds && departmentIds.length > 0) {
       params = params.set('departmentIds', departmentIds.join(','));
     }
 
-
     return this.http.get<any>(`${environment.apiBaseUrl}admin/task_reassign/old-user-task-count`, { params });
   }
-  
+
+  getTransactionHistory(page: number, size: number, search?: string, moduleId?: number, userId?: number, fromDate?: string, toDate?: string) {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('search', search || '')
+      .set('moduleId', (moduleId || 0).toString())
+      .set('userId', (userId || 0).toString());
+
+    if (fromDate) {
+      params = params.set('fromDate', fromDate);
+    }
+
+    if (toDate) {
+      params = params.set('toDate', toDate);
+    }
+
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/transaction/transaction-history`, { params });
+  }
+
+  getActiveModules() {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/transaction/getActiveModules`);
+  }
+
+  getTransactionActionUsers() {
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/transaction/getTransactionActionUsers`);
+  }
 }

@@ -419,8 +419,11 @@ return [
     children: [
       { moduleId: 7, label: 'Mail Log Report', icon: 'mail_outline', route: '/mail-log-report' },
       { moduleId: 6, label: 'Access Report', icon: 'security', route: '/access-report' },
+       { moduleId: 20, label: 'Transaction Report', icon: 'fact_check', route: '/transaction-report' },
     ],
+
   },
+
 
  
 ];
