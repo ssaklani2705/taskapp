@@ -20,7 +20,6 @@ interface MenuItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  // imports: [CommonModule, MatIconModule, MatMenuTrigger, MatButtonModule, MatMenuModule],
   imports: [CommonModule, MatIconModule, MatButtonModule, MatMenuModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
@@ -37,7 +36,14 @@ export class Sidebar implements OnInit, OnDestroy {
   username = '';
   loginType = '';
   private routerSubscription?: Subscription;
-  constructor(private router: Router,private loginService: LoginService,@Inject(PLATFORM_ID) private platformId: object,private elementRef: ElementRef,) {}
+
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    @Inject(PLATFORM_ID) private platformId: object,
+    private elementRef: ElementRef,
+  ) {}
+
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
@@ -139,190 +145,7 @@ export class Sidebar implements OnInit, OnDestroy {
   // MENU CONFIGURATION
   // =========================================================
 
-//   private getInitialMenu(): MenuItem[] {
-//     // MANAGER MENU
-//     if (this.loginType === 'manager') {
-//       return [
-//         {
-//           moduleId: -1,
-//           label: 'Dashboard',
-//           icon: 'dashboard',
-//           route: '/dashboard',
-//         },
-//         {
-//           moduleId: 11,
-//           label: 'Recurring Master',
-//           icon: 'bar_chart',
-//           route: '/recurring-index',
-//         },
-//         {
-//           moduleId: 10,
-//           label: 'Tasks',
-//           icon: 'task_alt',
-//           route: '/task-index',
-//         },
-//       ];
-//     }
-
-//     // OTHER USERS MENU
-//     return [
-//       {
-//         moduleId: -1,
-//         label: 'Dashboard',
-//         icon: 'dashboard',
-//         route: '/employee-dashboard',
-//       },
-//       {
-//         moduleId: 12,
-//         label: 'Holiday Master',
-//         icon: 'event',
-//         route: '/hodiday-index',
-//       },
-//       {
-//         moduleId: 2,
-//         label: 'Department Master',
-//         icon: 'apartment',
-//         route: '/department-master',
-//       },
-//       {
-//         moduleId: 3,
-//         label: 'Designation Master',
-//         icon: 'badge',
-//         route: '/designation-master',
-//       },
-//       {
-//         moduleId: 5,
-//         label: 'Task Category Master',
-//         icon: 'task_alt',
-//         route: '/task-category-index',
-//       },
-//       {
-//         moduleId: 1,
-//         label: 'User Management',
-//         icon: 'groups',
-//         route: '/user-management-index',
-//       },
-//       {
-//         moduleId: 4,
-//         label: 'State Master',
-//         icon: 'location_on',
-//         route: '/state-index',
-//       },
-//       {
-//         moduleId: 9,
-//         label: 'Plan Master',
-//         icon: 'event_note',
-//         route: '/plan-index',
-//       },
-//       {
-//         moduleId: 8,
-//         label: 'Client Master',
-//         icon: 'business',
-//         route: '/client-index',
-//       },
-//       {
-//         moduleId: 11,
-//         label: 'Recurring Master',
-//         icon: 'bar_chart',
-//         route: '/recurring-index',
-//       },
-//       {
-//         moduleId: 10,
-//         label: 'Tasks',
-//         icon: 'task_alt',
-//         route: '/task-index',
-//       },
-//       {
-//         moduleId: 16,
-//         label: 'Company Master',
-//         icon: 'task_alt',
-//         route: '/company-index',
-//       },
-//        {
-//         moduleId: 15,
-//         label: 'Generic Recurring',
-//         icon: 'task_alt',
-//         route: '/generic-recurring-index',
-//       },
-//        {
-//         moduleId: 14,
-//         label: 'Service Master',
-//         icon: 'task_alt',
-//         route: '/service-index',
-//       },
-//       {
-//   label: 'Task Reports',
-//   icon: 'assessment',
-//   expanded: false,
-//   children: [
-//     {
-//       moduleId: 13,
-//       label: 'Workload Report',
-//       icon: 'insights',
-//       route: '/workload-report',
-//     },
-//     {
-//       moduleId: 17,
-//       label: 'Rating Report',
-//       icon: 'star_rate',
-//       route: '/rating-report',
-//     },
-//     {
-//       moduleId: 18,
-//       label: 'Reassign Report',
-//       icon: 'sync_alt',
-//       route: '/reassign-report-index',
-//     },
-//   ],
-// },
-      
-// {
-//   label: 'System Reports',
-//   icon: 'admin_panel_settings',
-//   expanded: false,
-//   children: [
-//     {
-//       moduleId: 7,
-//       label: 'Mail Log Report',
-//       icon: 'mail_outline',
-//       route: '/mail-log-report',
-//     },
-//     {
-//       moduleId: 6,
-//       label: 'Access Report',
-//       icon: 'security',
-//       route: '/access-report',
-//     },
-//   ],
-// },
-
-
-//       // {
-//       //   label: 'Reports',
-//       //   icon: 'assessment',
-//       //   expanded: false,
-//       //   children: [
-//       //     {
-//       //       moduleId: 7,
-//       //       label: 'Mail Log Report',
-//       //       icon: 'mail_outline',
-//       //       route: '/mail-log-report',
-//       //     },
-//       //     {
-//       //       moduleId: 6,
-//       //       label: 'Access Report',
-//       //       icon: 'admin_panel_settings',
-//       //       route: '/access-report',
-//       //     },
-//       //     { moduleId: 13, label: 'Workload Report', icon: 'insights', route: '/workload-report' },
-//       //     { moduleId: 17, label: 'Rating Report', icon: 'star_rate', route: '/rating-report' },
-//       //       { moduleId: 18, label: 'Reassign Report', icon: 'insights', route: '/reassign-report-index' },
-//       //   ],
-//       // },
-//     ];
-//   }
-
- private getInitialMenu(): MenuItem[] {
+  private getInitialMenu(): MenuItem[] {
     // MANAGER MENU
     if (this.loginType === 'manager') {
       return [
@@ -349,82 +172,78 @@ export class Sidebar implements OnInit, OnDestroy {
     }
 
     // OTHER USERS MENU
-   
-return [
-  {
-    moduleId: -1,
-    label: 'Dashboard',
-    icon: 'dashboard',
-    route: '/employee-dashboard',
-  },
+    return [
+      {
+        moduleId: -1,
+        label: 'Dashboard',
+        icon: 'dashboard',
+        route: '/employee-dashboard',
+      },
 
-  // MASTER MENU
-  {
-    label: 'Masters',
-    icon: 'storage',
-    expanded: false,
-    children: [
-      { moduleId: 16, label: 'Company Master', icon: 'business', route: '/company-index' },
-      { moduleId: 2, label: 'Department Master', icon: 'apartment', route: '/department-master' },
-      { moduleId: 3, label: 'Designation Master', icon: 'badge', route: '/designation-master' },
-      { moduleId: 4, label: 'State Master', icon: 'location_on', route: '/state-index' },
-      { moduleId: 5, label: 'Task Category Master', icon: 'category', route: '/task-category-index' },
-      { moduleId: 14, label: 'Service Master', icon: 'miscellaneous_services', route: '/service-index' },
-      { moduleId: 9, label: 'Plan Master', icon: 'event_note', route: '/plan-index' },
-      { moduleId: 12, label: 'Holiday Master', icon: 'event', route: '/hodiday-index' },
-    ],
-  },
+      // MASTER MENU
+      {
+        label: 'Masters',
+        icon: 'storage',
+        expanded: false,
+        children: [
+          { moduleId: 16, label: 'Company Master', icon: 'business', route: '/company-index' },
+          { moduleId: 2, label: 'Department Master', icon: 'apartment', route: '/department-master' },
+          { moduleId: 3, label: 'Designation Master', icon: 'badge', route: '/designation-master' },
+          { moduleId: 4, label: 'State Master', icon: 'location_on', route: '/state-index' },
+          { moduleId: 5, label: 'Task Category Master', icon: 'category', route: '/task-category-index' },
+          { moduleId: 14, label: 'Service Master', icon: 'miscellaneous_services', route: '/service-index' },
+          { moduleId: 9, label: 'Plan Master', icon: 'event_note', route: '/plan-index' },
+          { moduleId: 12, label: 'Holiday Master', icon: 'event', route: '/hodiday-index' },
+        ],
+      },
 
-  // MANAGEMENT MENU
-  {
-    label: 'Management',
-    icon: 'groups',
-    expanded: false,
-    children: [
-      { moduleId: 1, label: 'User Management', icon: 'people', route: '/user-management-index' },
-      { moduleId: 8, label: 'Client Master', icon: 'business_center', route: '/client-index' },
-    ],
-  },
+      // MANAGEMENT MENU
+      {
+        label: 'Management',
+        icon: 'groups',
+        expanded: false,
+        children: [
+          { moduleId: 1, label: 'User Management', icon: 'people', route: '/user-management-index' },
+          { moduleId: 8, label: 'Client Master', icon: 'business_center', route: '/client-index' },
+        ],
+      },
 
-  // TASK MANAGEMENT MENU
-  {
-    label: 'Task Management',
-    icon: 'task_alt',
-    expanded: false,
-    children: [
-      { moduleId: 10, label: 'Tasks', icon: 'assignment', route: '/task-index' },
-      { moduleId: 11, label: 'Recurring Master', icon: 'repeat', route: '/recurring-index' },
-      { moduleId: 15, label: 'Generic Recurring', icon: 'autorenew', route: '/generic-recurring-index' },
-    ],
-  },
+      // TASK MANAGEMENT MENU
+      {
+        label: 'Task Management',
+        icon: 'task_alt',
+        expanded: false,
+        children: [
+          { moduleId: 10, label: 'Tasks', icon: 'assignment', route: '/task-index' },
+          { moduleId: 11, label: 'Recurring Master', icon: 'repeat', route: '/recurring-index' },
+          { moduleId: 15, label: 'Generic Recurring', icon: 'autorenew', route: '/generic-recurring-index' },
+        ],
+      },
 
-   // TASK REPORTS MENU
-  {
-    label: 'Task Reports',
-    icon: 'assessment',
-    expanded: false,
-    children: [
-      { moduleId: 13, label: 'Workload Report', icon: 'insights', route: '/workload-report' },
-      { moduleId: 17, label: 'Rating Report', icon: 'star_rate', route: '/rating-report' },
-      { moduleId: 18, label: 'Reassign Report', icon: 'sync_alt', route: '/reassign-report-index' },
-      { moduleId: 19, label: 'Reassign Summary Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
-    ],
-  },
+      // TASK REPORTS MENU
+      {
+        label: 'Task Reports',
+        icon: 'assessment',
+        expanded: false,
+        children: [
+          { moduleId: 13, label: 'Workload Report', icon: 'insights', route: '/workload-report' },
+          { moduleId: 17, label: 'Rating Report', icon: 'star_rate', route: '/rating-report' },
+          { moduleId: 18, label: 'Reassign Report', icon: 'sync_alt', route: '/reassign-report-index' },
+          { moduleId: 19, label: 'Reassign Summary Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
+        ],
+      },
 
-  // SYSTEM REPORTS MENU
-  {
-    label: 'System Reports',
-    icon: 'admin_panel_settings',
-    expanded: false,
-    children: [
-      { moduleId: 7, label: 'Mail Log Report', icon: 'mail_outline', route: '/mail-log-report' },
-      { moduleId: 6, label: 'Access Report', icon: 'security', route: '/access-report' },
-    ],
-  },
-
- 
-];
-
+      // SYSTEM REPORTS MENU
+      {
+        label: 'System Reports',
+        icon: 'admin_panel_settings',
+        expanded: false,
+        children: [
+          { moduleId: 7, label: 'Mail Log Report', icon: 'mail_outline', route: '/mail-log-report' },
+          { moduleId: 6, label: 'Access Report', icon: 'security', route: '/access-report' },
+        ],
+      },
+    ];
   }
 
   // =========================================================
@@ -488,17 +307,24 @@ return [
     return !!item.children?.some((child) => this.activeMenu === child.label || this.isSubItemActive(child));
   }
 
+  // Accordion: only the parent that contains the active page stays open
   private expandActiveParents(items: MenuItem[]): void {
+    const activeParent = items.find((item) => item.children?.length && item.children.some((child) => this.isSubItemActive(child)));
+
     items.forEach((item) => {
       if (!item.children?.length) {
         return;
       }
 
-      if (item.children.some((child) => this.isSubItemActive(child))) {
-        item.expanded = true;
-      }
+      item.expanded = item === activeParent;
+    });
+  }
 
-      this.expandActiveParents(item.children);
+  private collapseAllParents(): void {
+    this.menuItems.forEach((menu) => {
+      if (menu.children?.length) {
+        menu.expanded = false;
+      }
     });
   }
 
@@ -507,10 +333,18 @@ return [
   // =========================================================
 
   selectMenu(item: MenuItem): void {
-    // Parent menu only expands/collapses
+    // Parent menu: toggle it and close every other parent
     if (item.children?.length) {
-      item.expanded = !item.expanded;
+      const willOpen = !item.expanded;
+
+      this.collapseAllParents();
+      item.expanded = willOpen;
       return;
+    }
+
+    // Top-level normal item (e.g. Dashboard): close any open parent
+    if (this.menuItems.includes(item)) {
+      this.collapseAllParents();
     }
 
     this.activeMenu = item.label;

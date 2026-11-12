@@ -124,7 +124,7 @@
   </div>
 
   <!-- ATTACHMENTS CARD -->
-  <div class="card section-card">
+  <!-- <div class="card section-card">
     <div class="card-header section-header d-flex align-items-center">
       <h5 class="section-title d-flex align-items-center gap-2">
         <mat-icon>attach_file</mat-icon>
@@ -133,7 +133,7 @@
     </div>
 
     <div class="card-body d-flex flex-column gap-3">
-      <!-- TASK ATTACHMENTS -->
+     
       <div class="attachment-section" *ngIf="task.fileName1 || task.fileName2">
         <div class="attachment-section-title">Task Attachments</div>
 
@@ -160,7 +160,7 @@
         </div>
       </div>
 
-      <!-- STATUS CHANGE ATTACHMENTS -->
+     
       <div class="attachment-section" *ngIf="task.fileName3 || task.fileName4">
         <div class="attachment-section-title">Status Change Attachments</div>
 
@@ -187,7 +187,96 @@
         </div>
       </div>
     </div>
+  </div> -->
+<!-- ATTACHMENTS CARD (hidden when there are no attachments) -->
+<div class="card section-card"
+     *ngIf="task?.fileName1 || task?.fileName2 || task?.fileName3 || task?.fileName4">
+  <div class="card-header section-header d-flex align-items-center">
+    <h5 class="section-title d-flex align-items-center gap-2">
+      <mat-icon>attach_file</mat-icon>
+      <span>Attachments</span>
+    </h5>
   </div>
+
+  <div class="card-body d-flex flex-column gap-3">
+    <!-- TASK ATTACHMENTS -->
+    <div class="attachment-section" *ngIf="task.fileName1 || task.fileName2">
+      <div class="attachment-section-title">Task Attachments</div>
+
+      <div class="attachment-row" *ngIf="task.fileName1">
+        <div class="attachment-info">
+          <mat-icon>{{ getFileIcon(task.fileName1) }}</mat-icon>
+          <span>{{ task.fileName1 }}</span>
+        </div>
+        <button type="button" class="btn btn-link view-file-button" (click)="downloadFile(task.fileName1)">
+          <mat-icon>{{ isPdf(task.fileName1) ? 'visibility' : 'download' }}</mat-icon>
+          {{ isPdf(task.fileName1) ? 'View' : 'Download' }}
+        </button>
+      </div>
+
+      <div class="attachment-row" *ngIf="task.fileName2">
+        <div class="attachment-info">
+          <mat-icon>{{ getFileIcon(task.fileName2) }}</mat-icon>
+          <span>{{ task.fileName2 }}</span>
+        </div>
+        <button type="button" class="btn btn-link view-file-button" (click)="downloadFile(task.fileName2)">
+          <mat-icon>{{ isPdf(task.fileName2) ? 'visibility' : 'download' }}</mat-icon>
+          {{ isPdf(task.fileName2) ? 'View' : 'Download' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- STATUS CHANGE ATTACHMENTS -->
+    <div class="attachment-section" *ngIf="task.fileName3 || task.fileName4">
+      <div class="attachment-section-title">Status Change Attachments</div>
+
+      <div class="attachment-row" *ngIf="task.fileName3">
+        <div class="attachment-info">
+          <mat-icon>{{ getFileIcon(task.fileName3) }}</mat-icon>
+          <span>{{ task.fileName3 }}</span>
+        </div>
+        <button type="button" class="btn btn-link view-file-button" (click)="downloadFile(task.fileName3)">
+          <mat-icon>{{ isPdf(task.fileName3) ? 'visibility' : 'download' }}</mat-icon>
+          {{ isPdf(task.fileName3) ? 'View' : 'Download' }}
+        </button>
+      </div>
+
+      <div class="attachment-row" *ngIf="task.fileName4">
+        <div class="attachment-info">
+          <mat-icon>{{ getFileIcon(task.fileName4) }}</mat-icon>
+          <span>{{ task.fileName4 }}</span>
+        </div>
+        <button type="button" class="btn btn-link view-file-button" (click)="downloadFile(task.fileName4)">
+          <mat-icon>{{ isPdf(task.fileName4) ? 'visibility' : 'download' }}</mat-icon>
+          {{ isPdf(task.fileName4) ? 'View' : 'Download' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  <!-- ATTACHMENTS CARD -->
+<div class="card section-card"
+     *ngIf="task.fileName1 || task.fileName2 || task.fileName3 || task.fileName4">
+  <div class="card-header section-header d-flex align-items-center">
+    <h5 class="section-title d-flex align-items-center gap-2">
+      <mat-icon>attach_file</mat-icon>
+      <span>Attachments</span>
+    </h5>
+  </div>
+
+  <div class="card-body d-flex flex-column gap-3">
+    <!-- TASK ATTACHMENTS -->
+    <div class="attachment-section" *ngIf="task.fileName1 || task.fileName2">
+      ...
+    </div>
+
+    <!-- STATUS CHANGE ATTACHMENTS -->
+    <div class="attachment-section" *ngIf="task.fileName3 || task.fileName4">
+      ...
+    </div>
+  </div>
+</div>
 
   <!-- ACTION HISTORY CARD -->
   <div class="card section-card">
