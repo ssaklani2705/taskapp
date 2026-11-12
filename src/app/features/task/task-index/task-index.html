@@ -154,7 +154,7 @@
 </div>
 
         <!-- DATES -->
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-6 col-md-5 col-xl-2">
           <div class="input-group">
             <input matInput [matDatepicker]="fromPicker" class="form-control" [(ngModel)]="fromDate"
                    name="fromDate" placeholder="From Date" autocomplete="off" readonly />
@@ -163,7 +163,7 @@
           </div>
         </div>
 
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-6 col-md-5 col-xl-2">
           <div class="input-group">
             <input matInput [matDatepicker]="toPicker" class="form-control" [(ngModel)]="toDate"
                    name="toDate" placeholder="To Date" autocomplete="off" readonly [min]="fromDate" />
@@ -173,16 +173,13 @@
         </div>
 
         <!-- ACTIONS -->
-       <div class="col-12 col-xl d-flex flex-wrap gap-2">
-          <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-1" (click)="onSearch()">
+       
+      </div>
+         <div class="col-12 col-xl d-flex flex-wrap gap-1 mt-2">
+         <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-1" (click)="onSearch()">
             <mat-icon>search</mat-icon>Go
           </button>
           <button type="button" class="btn btn-outline-danger" (click)="clearFilters()" title="Clear Filters">Clear</button>
-         
-        </div>
-      </div>
-         <div class="col-12 col-xl d-flex flex-wrap gap-1 mt-2">
-         
           @if (exportExcelPer === 'Y') {
             <button type="button" class="btn btn-success exportbtn" (click)="exportToExcel()">
               Export to Excel <i class="fas fa-file-excel ms-1 " aria-hidden="true"></i>
