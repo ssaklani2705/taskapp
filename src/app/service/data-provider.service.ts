@@ -1028,7 +1028,7 @@ export class DataProviderService {
     dashboardFilter: string,
     isHod: any,
     taskId: number = 0,
-    assignmentFilter: number = 0,
+    assignedToMe: number = 0, assignedByMe: number = 0
   ): Observable<any> {
     let params = new HttpParams()
       .set('page', page.toString())
@@ -1046,7 +1046,9 @@ export class DataProviderService {
       .set('loginType', loginType || '')
       .set('dashboardFilter', dashboardFilter || '')
       .set('isHod', isHod || '')
-      .set('taskId', String(taskId));
+      .set('taskId', String(taskId))
+     .set('assignedToMe', assignedToMe)
+    .set('assignedByMe', assignedByMe);
 
     if (taskStatusIds && taskStatusIds.length > 0) {
       params = params.set('taskStatusIds', taskStatusIds.join(','));
@@ -1783,44 +1785,35 @@ export class DataProviderService {
     return this.http.get<any>(`${environment.apiBaseUrl}admin/transaction/getTransactionActionUsers`);
   }
 
-
   getReopenReport(page: number, size: number, search?: string, fromDate?: string, toDate?: string, assignedToId?: number | null, reopenById?: number | null) {
     let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
-
 
     if (search) {
       params = params.set('search', search);
     }
 
-
     if (fromDate) {
       params = params.set('fromDate', fromDate);
     }
-
 
     if (toDate) {
       params = params.set('toDate', toDate);
     }
 
-
     if (assignedToId != null && assignedToId !== 0) {
       params = params.set('assignedToId', assignedToId.toString());
     }
-
 
     if (reopenById != null && reopenById !== 0) {
       params = params.set('reopenById', reopenById.toString());
     }
 
-
     return this.http.get<any>(`${environment.apiBaseUrl}admin/reopen-report`, { params });
   }
-
 
   getReopenReportAssignedUsers() {
     return this.http.get<any[]>(`${environment.apiBaseUrl}admin/reopen-report/assigned-users`);
   }
-
 
   getReopenReportReopenedByUsers() {
     return this.http.get<any[]>(`${environment.apiBaseUrl}admin/reopen-report/reopened-by-users`);

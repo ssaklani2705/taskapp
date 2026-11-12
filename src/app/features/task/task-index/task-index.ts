@@ -179,7 +179,6 @@ export class TaskIndex implements OnInit {
     label: string;
     sortable: boolean;
   }[] = [
-
     {
       key: 'taskId',
       label: 'Task Id',
@@ -337,6 +336,7 @@ export class TaskIndex implements OnInit {
       console.log('dashboardFilter from session =>', parsed?.dashboardFilter);
 
       this.dashboardFilter = parsed?.dashboardFilter || '';
+      // this.selectedAssignmentFilter = 0;
       if (saved) {
         try {
           stateData = JSON.parse(saved);
@@ -347,6 +347,7 @@ export class TaskIndex implements OnInit {
     }
 
     if (!stateData) {
+     
       this.currentPage = 1;
       this.page = 0;
       this.size = environment.size;
@@ -427,6 +428,7 @@ export class TaskIndex implements OnInit {
       taskId: this.taskIdFilter,
       taskStatusIds: this.selectedTaskStatuses,
       dashboardFilter: this.dashboardFilter,
+      assignmentFilter: this.selectedAssignmentFilter,
     };
 
     sessionStorage.setItem(SESSION_KEYS.TASK_MASTER_FILTER, JSON.stringify(filterState));
@@ -486,7 +488,7 @@ export class TaskIndex implements OnInit {
     const fromDate = this.formatDateForApi(this.fromDate);
     const toDate = this.formatDateForApi(this.toDate);
     const taskStatusId = this.selectedTaskStatuses;
-
+    const { assignedToMe, assignedByMe } = this.getAssignmentIds(); // ADDED
     this.dataprovider
       .getTaskDetails(
         this.page,
@@ -506,6 +508,8 @@ export class TaskIndex implements OnInit {
         this.dashboardFilter,
         this.isHod,
         this.taskIdFilter,
+        assignedToMe, // ADDED (replaces this.selectedAssignmentFilter)
+        assignedByMe,
       )
       .subscribe({
         next: (response: any) => {
@@ -604,6 +608,7 @@ export class TaskIndex implements OnInit {
           toDate: toDate || null,
           taskStatusIds: this.selectedTaskStatuses.length ? this.selectedTaskStatuses.join(',') : null,
           taskType: this.dashboardFilter,
+          assignmentFilter: this.selectedAssignmentFilter,
         },
 
         replaceUrl: true,
@@ -821,6 +826,7 @@ export class TaskIndex implements OnInit {
     this.dashboardFilter = '';
     this.taskIdQuery = '';
     this.taskIdFilter = 0;
+    this.selectedAssignmentFilter = 0;
     this.saveFilterState();
 
     this.router
@@ -1398,7 +1404,6 @@ export class TaskIndex implements OnInit {
   }
 
   openAssignUserModal(task: any): void {
-
     this.originalAssignedUserId = Number(task.assignedTo || 0);
     this.lastAssignLoadKey = ''; // new modal session, allow a fresh load
 
@@ -1484,8 +1489,8 @@ export class TaskIndex implements OnInit {
       list.push({ userId: buddyId, firstName: this.selectedAssignTask?.buddyName || 'Current Buddy' });
     }
 
-    console.log("{emaill   -}"+ JSON.stringify(list))
-  //  alert(JSON.stringify(list))
+    console.log('{emaill   -}' + JSON.stringify(list));
+    //  alert(JSON.stringify(list))
     return list;
   }
 
@@ -1511,7 +1516,6 @@ export class TaskIndex implements OnInit {
   }
 
   assignUser(): void {
-    
     if (!this.selectedAssignTask || !this.selectedAssignTask.assignedTo || this.selectedAssignTask.assignedTo == 0) {
       return;
     }
@@ -1736,8 +1740,6 @@ export class TaskIndex implements OnInit {
   }
 
   canDisableChangeManager(task: any): boolean {
-
-
     if (Number(task.status) === 2 || Number(task.status) === 3) {
       return true;
     }
@@ -2448,24 +2450,22 @@ export class TaskIndex implements OnInit {
   //   const uid = Number(this.userId);
   //   return this.isAdmin === 'Y' || Number(task.addedBy) === uid || Number(task.assignedTo) === uid;
   // }
-  
-canManageBuddy(task: any): boolean {
-  if (Number(task.status) !== 1) return false; // Active only
 
-  if (!task.assignedToName || task.assignedToName === '0') return false;
+  canManageBuddy(task: any): boolean {
+    if (Number(task.status) !== 1) return false; // Active only
 
-  // Hide Add / Change Buddy for:
-  // 2 = Assignee Closure
-  // 4 = Assignee Re-Closure
-  // 5 = Assignor Closure
-  if ([2, 4, 5].includes(Number(task.taskStatus))) return false;
+    if (!task.assignedToName || task.assignedToName === '0') return false;
 
-  const uid = Number(this.userId);
+    // Hide Add / Change Buddy for:
+    // 2 = Assignee Closure
+    // 4 = Assignee Re-Closure
+    // 5 = Assignor Closure
+    if ([2, 4, 5].includes(Number(task.taskStatus))) return false;
 
-  return this.isAdmin === 'Y'
-    || Number(task.addedBy) === uid
-    || Number(task.assignedTo) === uid;
-}
+    const uid = Number(this.userId);
+
+    return this.isAdmin === 'Y' || Number(task.addedBy) === uid || Number(task.assignedTo) === uid;
+  }
 
   onTaskIdInput(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -2477,14 +2477,38 @@ canManageBuddy(task: any): boolean {
     this.taskIdQuery = digitsOnly; // keep the model in sync
   }
 
-// Hide Assign / Re-assign when the logged-in user is the buddy of this task.
-// Replace this.userId with whatever holds the logged-in user's id in your component.
-canAssignUser(task: any): boolean {
-  return Number(task.buddyId) !== Number(this.userId);
-}
+  // Hide Assign / Re-assign when the logged-in user is the buddy of this task.
+  // Replace this.userId with whatever holds the logged-in user's id in your component.
+  canAssignUser(task: any): boolean {
+    return Number(task.buddyId) !== Number(this.userId);
+  }
 
-getSortIcon(column: string): string {
-  if (this.sortColumn !== column) return 'fa-sort';
-  return this.sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
-}
+  getSortIcon(column: string): string {
+    if (this.sortColumn !== column) return 'fa-sort';
+    return this.sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+  }
+
+  AssignuserId = sessionStorage.getItem('userId');
+
+  assignStatusList = [
+    { id: 0, name: 'All Task' },
+    { id: 1, name: 'Assign to Me' },
+    { id: 2, name: 'Assign by Me' },
+  ];
+
+  selectedAssignmentFilter: number = 0;
+
+  onAssignmentFilterChange(value: number): void {
+    this.selectedAssignmentFilter = value;
+    this.onSearch();
+  }
+
+  // 0 = no filter. The logged-in user's id is sent only for the matching option.
+  private getAssignmentIds(): { assignedToMe: number; assignedByMe: number } {
+    const uid = Number(this.userId) || 0;
+    return {
+      assignedToMe: this.selectedAssignmentFilter === 1 ? uid : 0, // Assign to Me -> task.assignedTo == userId
+      assignedByMe: this.selectedAssignmentFilter === 2 ? uid : 0, // Assign by Me -> task.addedBy == userId
+    };
+  }
 }
