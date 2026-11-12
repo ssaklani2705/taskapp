@@ -1028,6 +1028,7 @@ export class DataProviderService {
     dashboardFilter: string,
     isHod: any,
     taskId: number = 0,
+    assignmentFilter: number = 0,
   ): Observable<any> {
     let params = new HttpParams()
       .set('page', page.toString())

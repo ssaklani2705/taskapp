@@ -128,6 +128,19 @@
           </select>
         </div>
 
+        <div class="col-6 col-md-4 col-xl-2">
+  <select class="form-select"
+          [(ngModel)]="selectedAssignmentFilter"
+          (change)="onSearch()">
+
+    <option *ngFor="let filter of assignStatusList"
+            [ngValue]="filter.id">
+      {{ filter.name }}
+    </option>
+
+  </select>
+</div>
+
         <!-- TASK STATUS (multi) -->
         <!-- TASK STATUS (multi) -->
 <div class="col-6 col-md-4 col-xl-2 status-dropdown position-relative" #statusDropdown>
