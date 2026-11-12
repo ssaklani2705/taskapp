@@ -141,194 +141,7 @@ export class Sidebar implements OnInit, OnDestroy {
     }
   }
 
-  // =========================================================
-  // MENU CONFIGURATION
-  // =========================================================
-
-//   private getInitialMenu(): MenuItem[] {
-//     // MANAGER MENU
-//     if (this.loginType === 'manager') {
-//       return [
-//         {
-//           moduleId: -1,
-//           label: 'Dashboard',
-//           icon: 'dashboard',
-//           route: '/dashboard',
-//         },
-//         {
-//           moduleId: 11,
-//           label: 'Recurring Master',
-//           icon: 'bar_chart',
-//           route: '/recurring-index',
-//         },
-//         {
-//           moduleId: 10,
-//           label: 'Tasks',
-//           icon: 'task_alt',
-//           route: '/task-index',
-//         },
-//       ];
-//     }
-
-//     // OTHER USERS MENU
-//     return [
-//       {
-//         moduleId: -1,
-//         label: 'Dashboard',
-//         icon: 'dashboard',
-//         route: '/employee-dashboard',
-//       },
-//       {
-//         moduleId: 12,
-//         label: 'Holiday Master',
-//         icon: 'event',
-//         route: '/hodiday-index',
-//       },
-//       {
-//         moduleId: 2,
-//         label: 'Department Master',
-//         icon: 'apartment',
-//         route: '/department-master',
-//       },
-//       {
-//         moduleId: 3,
-//         label: 'Designation Master',
-//         icon: 'badge',
-//         route: '/designation-master',
-//       },
-//       {
-//         moduleId: 5,
-//         label: 'Task Category Master',
-//         icon: 'task_alt',
-//         route: '/task-category-index',
-//       },
-//       {
-//         moduleId: 1,
-//         label: 'User Management',
-//         icon: 'groups',
-//         route: '/user-management-index',
-//       },
-//       {
-//         moduleId: 4,
-//         label: 'State Master',
-//         icon: 'location_on',
-//         route: '/state-index',
-//       },
-//       {
-//         moduleId: 9,
-//         label: 'Plan Master',
-//         icon: 'event_note',
-//         route: '/plan-index',
-//       },
-//       {
-//         moduleId: 8,
-//         label: 'Client Master',
-//         icon: 'business',
-//         route: '/client-index',
-//       },
-//       {
-//         moduleId: 11,
-//         label: 'Recurring Master',
-//         icon: 'bar_chart',
-//         route: '/recurring-index',
-//       },
-//       {
-//         moduleId: 10,
-//         label: 'Tasks',
-//         icon: 'task_alt',
-//         route: '/task-index',
-//       },
-//       {
-//         moduleId: 16,
-//         label: 'Company Master',
-//         icon: 'task_alt',
-//         route: '/company-index',
-//       },
-//        {
-//         moduleId: 15,
-//         label: 'Generic Recurring',
-//         icon: 'task_alt',
-//         route: '/generic-recurring-index',
-//       },
-//        {
-//         moduleId: 14,
-//         label: 'Service Master',
-//         icon: 'task_alt',
-//         route: '/service-index',
-//       },
-//       {
-//   label: 'Task Reports',
-//   icon: 'assessment',
-//   expanded: false,
-//   children: [
-//     {
-//       moduleId: 13,
-//       label: 'Workload Report',
-//       icon: 'insights',
-//       route: '/workload-report',
-//     },
-//     {
-//       moduleId: 17,
-//       label: 'Rating Report',
-//       icon: 'star_rate',
-//       route: '/rating-report',
-//     },
-//     {
-//       moduleId: 18,
-//       label: 'Reassign Report',
-//       icon: 'sync_alt',
-//       route: '/reassign-report-index',
-//     },
-//   ],
-// },
-      
-// {
-//   label: 'System Reports',
-//   icon: 'admin_panel_settings',
-//   expanded: false,
-//   children: [
-//     {
-//       moduleId: 7,
-//       label: 'Mail Log Report',
-//       icon: 'mail_outline',
-//       route: '/mail-log-report',
-//     },
-//     {
-//       moduleId: 6,
-//       label: 'Access Report',
-//       icon: 'security',
-//       route: '/access-report',
-//     },
-//   ],
-// },
-
-
-//       // {
-//       //   label: 'Reports',
-//       //   icon: 'assessment',
-//       //   expanded: false,
-//       //   children: [
-//       //     {
-//       //       moduleId: 7,
-//       //       label: 'Mail Log Report',
-//       //       icon: 'mail_outline',
-//       //       route: '/mail-log-report',
-//       //     },
-//       //     {
-//       //       moduleId: 6,
-//       //       label: 'Access Report',
-//       //       icon: 'admin_panel_settings',
-//       //       route: '/access-report',
-//       //     },
-//       //     { moduleId: 13, label: 'Workload Report', icon: 'insights', route: '/workload-report' },
-//       //     { moduleId: 17, label: 'Rating Report', icon: 'star_rate', route: '/rating-report' },
-//       //       { moduleId: 18, label: 'Reassign Report', icon: 'insights', route: '/reassign-report-index' },
-//       //   ],
-//       // },
-//     ];
-//   }
-
- private getInitialMenu(): MenuItem[] {
+  private getInitialMenu(): MenuItem[] {
     // MANAGER MENU
     if (this.loginType === 'manager') {
       return [
@@ -403,33 +216,32 @@ export class Sidebar implements OnInit, OnDestroy {
         ],
       },
 
-   // TASK REPORTS MENU
-  {
-    label: 'Task Reports',
-    icon: 'assessment',
-    expanded: false,
-    children: [
-      { moduleId: 13, label: 'Workload Report', icon: 'insights', route: '/workload-report' },
-      { moduleId: 17, label: 'Rating Report', icon: 'star_rate', route: '/rating-report' },
-      { moduleId: 18, label: 'Reassign Report', icon: 'sync_alt', route: '/reassign-report-index' },
-      { moduleId: 19, label: 'Reassign Summary Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
-    ],
-  },
+      // TASK REPORTS MENU
+      {
+        label: 'Task Reports',
+        icon: 'assessment',
+        expanded: false,
+        children: [
+          { moduleId: 13, label: 'Workload Report', icon: 'insights', route: '/workload-report' },
+          { moduleId: 17, label: 'Rating Report', icon: 'star_rate', route: '/rating-report' },
+          { moduleId: 18, label: 'Reassign Report', icon: 'sync_alt', route: '/reassign-report-index' },
+          { moduleId: 19, label: 'Reassign Summary Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
+          { moduleId: 21, label: 'Reopen Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
+        ],
+      },
 
-  // SYSTEM REPORTS MENU
-  {
-    label: 'System Reports',
-    icon: 'admin_panel_settings',
-    expanded: false,
-    children: [
-      { moduleId: 7, label: 'Mail Log Report', icon: 'mail_outline', route: '/mail-log-report' },
-      { moduleId: 6, label: 'Access Report', icon: 'security', route: '/access-report' },
-    ],
-  },
-
- 
-];
-
+      // SYSTEM REPORTS MENU
+      {
+        label: 'System Reports',
+        icon: 'admin_panel_settings',
+        expanded: false,
+        children: [
+          { moduleId: 7, label: 'Mail Log Report', icon: 'mail_outline', route: '/mail-log-report' },
+          { moduleId: 6, label: 'Access Report', icon: 'security', route: '/access-report' },
+          { moduleId: 20, label: 'Transaction Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
+        ],
+      },
+    ];
   }
 
   // =========================================================
