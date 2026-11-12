@@ -173,18 +173,22 @@
         </div>
 
         <!-- ACTIONS -->
-        <div class="col-12 col-xl d-flex flex-wrap gap-2">
+       <div class="col-12 col-xl d-flex flex-wrap gap-2">
           <button type="button" class="btn btn-primary d-inline-flex align-items-center gap-1" (click)="onSearch()">
             <mat-icon>search</mat-icon>Go
           </button>
           <button type="button" class="btn btn-outline-danger" (click)="clearFilters()" title="Clear Filters">Clear</button>
+         
+        </div>
+      </div>
+         <div class="col-12 col-xl d-flex flex-wrap gap-1 mt-2">
+         
           @if (exportExcelPer === 'Y') {
             <button type="button" class="btn btn-success exportbtn" (click)="exportToExcel()">
               Export to Excel <i class="fas fa-file-excel ms-1 " aria-hidden="true"></i>
             </button>
           }
         </div>
-      </div>
     </div>
 
     <!-- TOP: SUMMARY + PAGINATION -->
