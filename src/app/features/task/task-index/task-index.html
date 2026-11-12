@@ -260,7 +260,7 @@
               <!-- BUDDY -->
               <td data-label="Buddy">
                 <div>{{ task.buddyName || '-' }}</div>
-                @if (canAssignUser(task) && task.userType !== 2) {
+                @if (canBuddyUser(task) && task.userType !== 2) {
                   <span class="badge text-bg-primary-subtle text-primary reassign-text" role="button" (click)="openBuddyModal(task)">
                     <i class="fas fa-user-plus me-1"></i>{{ task.buddyId ? 'Change' : 'Add' }}
                   </span>
