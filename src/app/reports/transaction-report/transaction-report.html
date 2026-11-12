@@ -1,0 +1,264 @@
+<div class="container-fluid page-container">
+  <div class="main-card">
+    <!-- HEADER -->
+    <div class="page-header d-flex align-items-center">
+      <div class="page-title d-flex align-items-center">
+        <mat-icon>fact_check</mat-icon>
+        <span>Transaction Report</span>
+
+        <button type="button" class="collapse-btn" (click)="togglePanel()" [attr.aria-expanded]="isPanelVisible" title="Toggle Search Panel">
+          @if (isPanelVisible) {
+            <i class="fa-solid fa-angle-up"></i>
+          } @else {
+            <i class="fa-solid fa-angle-down"></i>
+          }
+        </button>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- SEARCH PANEL -->
+    <div class="search-panel" *ngIf="isPanelVisible">
+      <div class="row g-2 align-items-end">
+        <!-- ACTION / DESCRIPTION -->
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="search-wrapper">
+            <label class="field-label">Action / Description</label>
+
+            <div class="search-box input-group">
+              <input type="text" class="form-control search-input" [(ngModel)]="searchQuery" placeholder="Search by Action / Description" (keyup.enter)="onSearch()" />
+
+              <button type="button" class="btn search-button" (click)="onSearch()" title="Search">
+                <mat-icon>search</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTION BY -->
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="client-dropdown-container">
+            <label class="field-label">Action By</label>
+
+            <input type="text" class="form-control client-search-input" placeholder="Search Action By..." [(ngModel)]="actionBySearchText" (input)="filterActionBy()" (focus)="filterActionBy()" />
+
+            <button *ngIf="actionBySearchText" type="button" class="clear-search-btn" (click)="clearActionBySearch()">×</button>
+
+            <div class="client-dropdown-list" *ngIf="showActionByDropdown">
+              <div class="client-dropdown-item" *ngFor="let user of filteredActionBy" (click)="selectActionBy(user)">
+                {{ user.firstname }}
+              </div>
+
+              <div class="client-dropdown-item no-client-found" *ngIf="filteredActionBy.length === 0">No User Found</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODULE NAME -->
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="status-wrapper task-category-dropdown">
+            <label class="field-label">Module Name</label>
+
+            <button type="button" class="status-select cat-trigger" (click)="toggleModuleDropdown()">
+              <span class="cat-trigger-text">
+                {{ selectedModuleLabel }}
+              </span>
+              <span class="cat-caret">&#9662;</span>
+            </button>
+
+            <div class="cat-panel" *ngIf="showModuleDropdown">
+              <input id="moduleSearchInput" type="text" class="cat-search" placeholder="Search module..." [(ngModel)]="moduleSearchText" autocomplete="off" />
+
+              <div class="cat-list">
+                <div class="cat-item cat-all" [class.active]="!selectedModuleId" (click)="clearModule()">--All Modules--</div>
+
+                <div class="cat-item" *ngFor="let item of filteredModules" [class.active]="selectedModuleId === item.moduleId" (click)="selectModule(item)">
+                  {{ item.name }}
+                </div>
+
+                <div class="cat-empty" *ngIf="filteredModules.length === 0">No module found</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FROM DATE -->
+        <div class="col-12 col-md-6 col-xl-3">
+          <div class="status-wrapper date-filter-wrapper">
+            <label class="field-label-date">From Date</label>
+
+            <div class="date-filter-input">
+              <input
+                id="fromDate"
+                matInput
+                [matDatepicker]="fromPicker"
+                [(ngModel)]="fromDate"
+                name="fromDate"
+                placeholder="DD-MM-YYYY"
+                class="date-input"
+                autocomplete="off"
+                readonly
+                [max]="toDate"
+                (click)="fromPicker.open()"
+              />
+
+              <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
+                <mat-icon>calendar_today</mat-icon>
+              </button>
+
+              <mat-datepicker #fromPicker></mat-datepicker>
+            </div>
+          </div>
+        </div>
+
+        <!-- TO DATE -->
+        <div class="col-12 col-md-6 col-xl-3">
+          <div class="status-wrapper date-filter-wrapper">
+            <label class="field-label-date">To Date</label>
+
+            <div class="date-filter-input">
+              <input
+                id="toDate"
+                matInput
+                [matDatepicker]="toPicker"
+                [(ngModel)]="toDate"
+                name="toDate"
+                placeholder="DD-MM-YYYY"
+                class="date-input"
+                autocomplete="off"
+                readonly
+                [min]="fromDate"
+                (click)="toPicker.open()"
+              />
+
+              <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
+                <mat-icon>calendar_today</mat-icon>
+              </button>
+
+              <mat-datepicker #toPicker></mat-datepicker>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="col-12 col-xl-6">
+          <div class="filter-action d-flex align-items-center flex-wrap gap-2">
+            <button type="button" class="btn go-button" (click)="onSearch()">
+              <mat-icon>search</mat-icon>
+              Go
+            </button>
+
+            <button type="button" class="btn btn-clear" (click)="clearFilters()">Clear</button>
+
+            @if (exportExcel === 'Y') {
+              <button type="button" class="btn btn-export-excel" (click)="exportToCSV()">
+                Export to CSV
+                <i class="fas fa-file-excel" aria-hidden="true"></i>
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <!-- TABLE SECTION -->
+    <div class="table-section">
+      <!-- TOP PAGINATION -->
+      <div class="table-toolbar d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div class="record-summary">
+          {{ recordSummary }}
+        </div>
+
+        <div class="pagination d-flex align-items-center flex-wrap gap-1">
+          <button type="button" class="btn pagination-btn" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+
+          <button type="button" class="btn pagination-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+
+          <button type="button" class="btn pagination-btn" *ngFor="let p of pages()" (click)="goToPage(p)" [class.active-pagination]="p === currentPage">
+            {{ p }}
+          </button>
+
+          <button type="button" class="btn pagination-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+
+          <button type="button" class="btn pagination-btn" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+        </div>
+      </div>
+
+      <!-- RESPONSIVE TABLE -->
+      <div class="scroll-area" style="--table-min-width: 900px">
+        <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+          <div class="top-scroll-inner"></div>
+        </div>
+
+        <div class="table-responsive table-wrapper table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
+          <table class="table access-table mb-0">
+            <thead>
+              <tr>
+                <th>Sr. No.</th>
+
+                <th *ngFor="let col of columns; let i = index" [class.sticky-2]="i === 0" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
+                  <div class="column-header">
+                    <span>{{ col.label }}</span>
+
+                    <span *ngIf="col.sortable" class="sort-icons">
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'asc'"> ▲ </span>
+                      <span [class.sort-active]="sortColumn === col.key && sortDirection === 'desc'"> ▼ </span>
+                    </span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let r of rows; let i = index">
+                <td class="serial-cell">
+                  {{ (currentPage - 1) * recordsPerPage + i + 1 }}
+                </td>
+
+                <td class="text-left">{{ r.moduleName  || "-"}}</td>
+                <!-- <td class="text-left">{{ r.actionBy }}</td> -->
+                <td class="text-left">
+                  {{ r.userId == null || !r.userId || !r.actionBy?.trim() ? 'System' : r.actionBy }}
+                </td>
+                <td class="text-left">{{ formatDateTime(r.updatedOn)  || "--"}}</td>
+                <td class="text-left">{{ r.action  }}</td>
+              </tr>
+
+              <!-- NO DATA -->
+              <tr *ngIf="!isLoading && (!rows || rows.length === 0)">
+                <td colspan="5" class="no-records">
+                  <mat-icon>info_outline</mat-icon>
+                  <span>No records found</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BOTTOM PAGINATION -->
+        <div class="table-toolbar bottom-toolbar d-flex align-items-center justify-content-between flex-wrap gap-3">
+          <div class="record-summary">
+            {{ recordSummary }}
+          </div>
+
+          <div class="pagination d-flex align-items-center flex-wrap gap-1">
+            <button type="button" class="btn pagination-btn" (click)="goToFirstPage()" [disabled]="currentPage === 1">« First</button>
+
+            <button type="button" class="btn pagination-btn" (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">‹ Prev</button>
+
+            <button type="button" class="btn pagination-btn" *ngFor="let p of pages()" (click)="goToPage(p)" [class.active-pagination]="p === currentPage">
+              {{ p }}
+            </button>
+
+            <button type="button" class="btn pagination-btn" (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">Next ›</button>
+
+            <button type="button" class="btn pagination-btn" (click)="goToLastPage()" [disabled]="currentPage === totalPages">Last »</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

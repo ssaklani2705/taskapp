@@ -190,6 +190,19 @@ export const routes: Routes = [
         data: { moduleId: 19 },
         loadComponent: () => import('./reports/reassign-summary-report/reassign-summary-report').then((m) => m.ReassignSummaryReport),
       },
+       {
+        path: 'transaction-report',
+        canActivate: [moduleGuard],
+        data: { moduleId: 20 },
+        loadComponent: () => import('./reports/transaction-report/transaction-report').then((m) => m.TransactionReport),
+
+      },
+       {
+        path: 'reopen-report',
+        canActivate: [moduleGuard],
+        data: { moduleId: 21 },
+        loadComponent: () => import('./reports/reopen-report/reopen-report').then((m) => m.ReopenReport),
+      },
 
       // 9 - Plan Master
       {
@@ -230,6 +243,8 @@ export const routes: Routes = [
           { path: 'reassign-report-index', loadComponent: () => import('./reports/ReassignTaskReport/reassign-report/reassign-report').then((m) => m.ReassignReport) },
         ],
       },
+
+      
 
     ]
   },

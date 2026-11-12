@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TaskIndex } from './task-index';
+import { TransactionReport } from './transaction-report';
 
-describe('TaskIndex', () => {
-  let component: TaskIndex;
-  let fixture: ComponentFixture<TaskIndex>;
+describe('TransactionReport', () => {
+  let component: TransactionReport;
+  let fixture: ComponentFixture<TransactionReport>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskIndex],
+      imports: [TransactionReport],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TaskIndex);
+    fixture = TestBed.createComponent(TransactionReport);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

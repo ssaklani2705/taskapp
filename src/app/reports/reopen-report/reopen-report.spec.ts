@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewIndex } from './view-index';
+import { ReopenReport } from './reopen-report';
 
-describe('ViewIndex', () => {
-  let component: ViewIndex;
-  let fixture: ComponentFixture<ViewIndex>;
+describe('ReopenReport', () => {
+  let component: ReopenReport;
+  let fixture: ComponentFixture<ReopenReport>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ViewIndex],
+      imports: [ReopenReport],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ViewIndex);
+    fixture = TestBed.createComponent(ReopenReport);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

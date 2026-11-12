@@ -204,16 +204,16 @@
                   </span>
                 </div>
               </th>
-              <th class="action-column">Action</th>
+              <th class="action-column" >Action</th>
             </tr>
           </thead>
 
           <tbody>
             <tr *ngFor="let task of paginatedTasks; let i = index">
-              <td class="text-secondary">{{ task.taskId }}</td>
+              <td class="text-secondary" data-label="ID">{{ task.taskId }}</td>
 
               <!-- TITLE -->
-              <td>
+              <td data-label="Title">
                 <div class="title-cell d-flex align-items-start gap-2">
                   <span class="title-text fw-semibold">{{ task.title || '-' }}</span>
                   <button type="button" class="btn btn-sm btn-primary rounded-circle description-icon-button"
@@ -223,10 +223,10 @@
                 </div>
               </td>
 
-              <td>{{ task.clientName || 'Internal' }}</td>
+              <td data-label="Client">{{ task.clientName || 'Internal' }}</td>
 
               <!-- START DATE -->
-              <td>
+              <td data-label="Start Date">
                 <div class="border rounded bg-body-tertiary px-2 py-1 small d-inline-block text-nowrap" *ngIf="task.date; else noDate">
                   <div class="fw-bold"><i class="fa fa-calendar me-1 text-muted"></i>{{ task.date | date: 'dd-MM-yyyy' }}</div>
                   <div class="text-muted"><i class="fa fa-clock-o me-1"></i>{{ task.date | date: 'HH:mm' }}</div>
@@ -235,7 +235,7 @@
               </td>
 
               <!-- DUE DATE (getDueDateClass should return: due-overdue / due-today / due-upcoming) -->
-              <td>
+              <td data-label="Due Date">
                 <div class="rounded px-2 py-1 small d-inline-block text-nowrap border"
                      *ngIf="task.dueDateTime; else noDueDate" [ngClass]="getDueDateClass(task.dueDateTime)">
                   <div class="fw-bold"><i class="fa fa-calendar me-1"></i>{{ task.dueDateTime | date: 'dd-MM-yyyy' }}</div>
@@ -244,11 +244,11 @@
                 <ng-template #noDueDate>-</ng-template>
               </td>
 
-              <td>{{ task.taskCategoryName || '-' }}</td>
-              <td>{{ task.assignedbyName || '-' }}</td>
+              <td data-label="Category">{{ task.taskCategoryName || '-' }}</td>
+              <td data-label="Assigned By">{{ task.assignedbyName || '-' }}</td>
 
               <!-- BUDDY -->
-              <td>
+              <td data-label="Buddy">
                 <div>{{ task.buddyName || '-' }}</div>
                 @if (canAssignUser(task) && task.userType !== 2) {
                   <span class="badge text-bg-primary-subtle text-primary reassign-text" role="button" (click)="openBuddyModal(task)">
@@ -258,21 +258,21 @@
               </td>
 
               <!-- PRIORITY -->
-              <td class="text-center">
+              <td class="text-center" data-label="Priority">
                 <span class="badge priority-badge" [ngClass]="getPriorityClass(task.priority)">
                   {{ getPriorityLabel(task.priority) }}
                 </span>
               </td>
 
               <!-- STATUS -->
-              <td class="text-center">
+              <td class="text-center" data-label="Status">
                 <span class="badge status-badge" [ngClass]="common.getStatusClass(task.status)">
                   {{ common.getStatusLabel(task.status) }}
                 </span>
               </td>
 
               <!-- ASSIGNED TO (frozen) -->
-              <td>
+              <td data-label="Assigned To">
                 @if (canAssignUser(task)) {
                   <span
                     [class.unassigned-user]="task.status === 1 && (!task.assignedToName || task.assignedToName === '0')"
@@ -302,7 +302,7 @@
               </td>
 
               <!-- TASK STATUS (frozen) -->
-              <td>
+              <td data-label="Task Status">
                 <ng-container *ngIf="task.assignedToName && task.assignedToName !== '0'; else noStatus">
                   @if (canAssignUser(task)) {
                     <button type="button" class="btn btn-sm change-manager-button"
@@ -319,7 +319,7 @@
               </td>
 
               <!-- ACTION (frozen) -->
-              <td>
+              <td data-label="Action">
                 <div class="d-flex gap-1">
                   @if (viewPer === 'Y') {
                     <a role="button" class="btn btn-sm btn-outline-primary" (click)="viewTask(task.taskId)" title="View">

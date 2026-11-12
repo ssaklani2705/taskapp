@@ -42,6 +42,9 @@ export const SESSION_KEYS = {
 
   RATING_REPORT_FILTER: 'ratingReportFinter',
 
-  REASSIGN_SUMMARY_REPORT: 'reassignSummaryReport'
+  REASSIGN_SUMMARY_REPORT: 'reassignSummaryReport',
 
+  TRANSACTION_REPORT_FILTER: 'transactionReportFilter',
+  
+  REOPEN_REPORT_FILTER: 'reopenReportFilter',
 };
