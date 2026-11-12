@@ -226,7 +226,7 @@ export class Sidebar implements OnInit, OnDestroy {
           { moduleId: 17, label: 'Rating Report', icon: 'star_rate', route: '/rating-report' },
           { moduleId: 18, label: 'Reassign Report', icon: 'sync_alt', route: '/reassign-report-index' },
           { moduleId: 19, label: 'Reassign Summary Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
-          { moduleId: 21, label: 'Reopen Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
+          { moduleId: 21, label: 'Reopen Report', icon: 'refresh', route: '/reopen-report' },
         ],
       },
 
@@ -238,7 +238,7 @@ export class Sidebar implements OnInit, OnDestroy {
         children: [
           { moduleId: 7, label: 'Mail Log Report', icon: 'mail_outline', route: '/mail-log-report' },
           { moduleId: 6, label: 'Access Report', icon: 'security', route: '/access-report' },
-          { moduleId: 20, label: 'Transaction Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
+           { moduleId: 20, label: 'Transaction Report', icon: 'fact_check', route: '/transaction-report' },
         ],
       },
     ];
