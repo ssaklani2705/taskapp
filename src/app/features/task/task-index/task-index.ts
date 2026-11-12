@@ -2483,6 +2483,16 @@ canAssignUser(task: any): boolean {
   return Number(task.buddyId) !== Number(this.userId);
 }
 
+// Statuses where buddy can't be added or changed:
+// 2 = Assignee Closure, 4 = Assignee Re-Closure, 5 = Assignor Closure
+private readonly buddyLockedStatuses = [2, 4, 5];
+
+canBuddyUser(task: any): boolean {
+  const isOwnBuddy = Number(task.buddyId) === Number(this.userId);
+  const isClosed = this.buddyLockedStatuses.includes(Number(task.taskStatus));
+  return !isOwnBuddy && !isClosed;
+}
+
 getSortIcon(column: string): string {
   if (this.sortColumn !== column) return 'fa-sort';
   return this.sortDirection === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
