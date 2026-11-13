@@ -161,8 +161,7 @@ mat-divider,
 
 
 
-.btn-clear:hover { background: #dc3545; color: #fff; }
-.btn-clear:active { transform: scale(0.98); }
+
 
 /* ---------- Table section / toolbar ---------- */
 .table-section {
@@ -622,30 +621,6 @@ mat-divider,
   .action-button mat-icon { width: 16px; height: 16px; font-size: 16px; }
 }
 
-@media (max-width: 768px) {
-  .page-container { padding: 10px; margin-top: 10px; }
-  .page-header { padding: 14px; }
-  .page-title { font-size: 21px; line-height: 28px; }
-  .page-title mat-icon { width: 23px; height: 23px; font-size: 23px; flex-shrink: 0; }
-  .add-button { width: 100%; height: 40px; }
-  .search-section { padding: 14px; }
-  .go-button, .btn-clear { width: 100%; }
-  .table-section { padding: 0 14px 14px; }
-
-  /* frozen columns would cover too much of a phone screen */
-  .designation-table .sticky-1,
-  .designation-table .sticky-2,
-  .designation-table .action-column,
-  .designation-table .action-cell {
-    position: static;
-    box-shadow: none;
-  }
-
-  .designation-table thead th { padding: 6px 7px; font-size: 11px; }
-  .designation-table tbody td { padding: 6px 7px; font-size: 12px; }
-
-  .working-days-dropdown .cat-panel { width: 100%; max-width: 100%; }
-}
 
 @media (max-width: 480px) {
   .page-container { padding: 7px; }

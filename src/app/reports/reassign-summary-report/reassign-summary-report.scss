@@ -407,67 +407,11 @@ mat-divider {
 
 /* ================= ACTION BUTTONS ================= */
 
-.filter-action {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 10px;
-}
 
-.go-button {
-  width: 82px !important;
-  min-width: 82px !important;
-  max-width: 82px !important;
-  height: 40px;
-  flex: 0 0 82px !important;
-  padding: 0 10px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  border: 1px solid var(--primary-blue);
-  border-radius: 4px;
-  background: var(--primary-blue);
-  color: var(--white);
-  font-family: "Open Sans", sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
 
-  &:hover {
-    border-color: var(--primary-blue-dark);
-    background: var(--primary-blue-dark);
-  }
 
-  mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
-  }
-}
 
-.btn-clear {
-  width: 82px !important;
-  min-width: 82px !important;
-  height: 40px;
-  flex: 0 0 82px !important;
-  padding: 0 12px;
-  border: 1px solid var(--danger);
-  border-radius: 4px;
-  background: var(--white);
-  color: var(--danger);
-  font-family: "Open Sans", sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
 
-  &:hover {
-    background: var(--danger);
-    color: var(--white);
-  }
-}
 
 .btn-export-excel {
   width: auto;
@@ -723,6 +667,40 @@ mat-divider {
 }
 
 @media (max-width: 767.98px) {
+   .filter-action .go-button,
+  .filter-action .btn-clear {
+    width: 76px !important;
+    min-width: 76px !important;
+    max-width: 76px !important;
+    flex-basis: 76px !important;
+  }
+
+    .filter-action {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .filter-action .go-button,
+  .filter-action .btn-clear {
+    flex: 1 1 calc(50% - 5px) !important;   /* two equal halves */
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 44px !important;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .filter-action .btn-export-excel {
+    flex: 1 1 100% !important;   /* Export on its own row below */
+    width: 100% !important;
+    height: 44px;
+  }
   .page-container {
     padding: 10px;
   }
@@ -842,5 +820,40 @@ mat-divider {
     min-width: 130px;
     padding: 0 10px;
     font-size: 12px;
+  }
+}
+
+
+/* =========================================================
+   FINAL OVERRIDE: Go / Clear equal width on mobile
+   Keep this as the LAST block in styles.scss
+   ========================================================= */
+@media (max-width: 768px) {
+  .filter-action {
+    display: flex !important;      /* beats the earlier grid rule */
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .filter-action .btn.go-button,
+  .filter-action .btn.btn-clear {
+    flex: 1 1 calc(50% - 5px) !important;   /* two equal halves */
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 44px !important;
+    margin: 0;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .filter-action .btn.btn-export-excel {
+    flex: 1 1 100% !important;     /* Export on its own full-width row */
+    width: 100% !important;
+    height: 44px !important;
   }
 }

@@ -273,28 +273,6 @@
   background: var(--primary-blue-dark);
 }
 
-.btn-clear {
-  height: 38px;
-  width: 65px;
-  padding: 0 18px;
-  border: 1px solid #dc3545;
-  border-radius: 4px;
-  background: #fff;
-  color: #dc3545;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-clear:hover {
-  background: #dc3545;
-  color: #fff;
-}
-
-.btn-clear:active {
-  transform: scale(0.98);
-}
 
 .btn-upload-excel {
   height: 38px;
@@ -996,8 +974,7 @@
   }
 
   .btn-add-user,
-  .btn-go,
-  .btn-clear {
+  .btn-go {
     height: 39px;
     font-size: 13px;
   }
@@ -1282,8 +1259,7 @@
     width: 100%;
   }
 
-  .btn-go,
-  .btn-clear {
+  .btn-go {
     width: 100%;
     min-width: 0;
     height: 44px;
@@ -1409,4 +1385,30 @@
   .sort-icons {
     flex-shrink: 0;
   }
+
+  @media (max-width: 768px) {
+  .filter-action {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .filter-action .go-button,
+  .filter-action .btn-clear {
+    width: 100% !important;   /* overrides the global 65px on .btn-clear */
+    min-width: 0;
+    height: 44px !important;
+    padding: 0 12px;
+    margin: 0;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    box-sizing: border-box;
+  }
+}
 }

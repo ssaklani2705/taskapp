@@ -1,6 +1,5 @@
 <div class="page-container">
   <div class="main-card">
-
     <!-- ================= HEADER ================= -->
     <div class="page-header">
       <div class="page-title-block">
@@ -12,12 +11,8 @@
       </div>
 
       <div class="view-toggle">
-        <button type="button" [class.active-view]="viewMode === 'table'" (click)="setView('table')">
-          <mat-icon>table_rows</mat-icon> Table
-        </button>
-        <button type="button" [class.active-view]="viewMode === 'graph'" (click)="setView('graph')">
-          <mat-icon>bar_chart</mat-icon> Graph
-        </button>
+        <button type="button" [class.active-view]="viewMode === 'table'" (click)="setView('table')"><mat-icon>table_rows</mat-icon> Table</button>
+        <button type="button" [class.active-view]="viewMode === 'graph'" (click)="setView('graph')"><mat-icon>bar_chart</mat-icon> Graph</button>
       </div>
     </div>
 
@@ -29,8 +24,7 @@
         <div class="search-field">
           <label>From Date</label>
           <div class="search-input-wrapper">
-            <input type="text" [matDatepicker]="fromPicker" [(ngModel)]="fromDate"
-                   [max]="toDate" placeholder="DD-MM-YYYY" readonly (click)="fromPicker.open()" />
+            <input type="text" [matDatepicker]="fromPicker" [(ngModel)]="fromDate" [max]="toDate" placeholder="DD-MM-YYYY" readonly (click)="fromPicker.open()" />
             <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
               <mat-icon>calendar_today</mat-icon>
             </button>
@@ -41,8 +35,7 @@
         <div class="search-field">
           <label>To Date</label>
           <div class="search-input-wrapper">
-            <input type="text" [matDatepicker]="toPicker" [(ngModel)]="toDate"
-                   [min]="fromDate" placeholder="DD-MM-YYYY" readonly (click)="toPicker.open()" />
+            <input type="text" [matDatepicker]="toPicker" [(ngModel)]="toDate" [min]="fromDate" placeholder="DD-MM-YYYY" readonly (click)="toPicker.open()" />
             <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
               <mat-icon>calendar_today</mat-icon>
             </button>
@@ -53,8 +46,7 @@
         <div class="search-field">
           <label>User Name</label>
           <div class="search-input-wrapper">
-            <input type="text" [(ngModel)]="searchQuery" placeholder="Search by user name"
-                   (keyup.enter)="onSearch()" />
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Search by user name" (keyup.enter)="onSearch()" />
             <button type="button" class="search-button" (click)="onSearch()" title="Search">
               <mat-icon>search</mat-icon>
             </button>
@@ -62,93 +54,108 @@
         </div>
 
         <div class="search-field">
-  <label>Department</label>
-  <div class="status-dropdown" #departmentDropdown>
-    <button type="button" class="dropdown-btn" [disabled]="!departmentList.length" (click)="toggleDepartmentDropdown()">
-      <span class="selected-category-text">
-        {{ getSelectedDepartmentNames() || '-- Select Department --' }}
-      </span>
-    </button>
+          <label>Department</label>
+          <div class="status-dropdown" #departmentDropdown>
+            <button type="button" class="dropdown-btn" [disabled]="!departmentList.length" (click)="toggleDepartmentDropdown()">
+              <span class="selected-category-text">
+                {{ getSelectedDepartmentNames() || '-- Select Department --' }}
+              </span>
+            </button>
 
-    <div class="dropdown-menu" *ngIf="showDepartmentDropdown && departmentList.length" (click)="$event.stopPropagation()">
-      <input type="text" class="dropdown-search" placeholder="Search department..." [(ngModel)]="departmentSearch" />
+            <div class="dropdown-menu" *ngIf="showDepartmentDropdown && departmentList.length" (click)="$event.stopPropagation()">
+              <input type="text" class="dropdown-search" placeholder="Search department..." [(ngModel)]="departmentSearch" />
 
-      <label *ngFor="let dept of filteredDepartments">
-        <input type="checkbox" [checked]="isDepartmentChecked(dept.departmentId)" (change)="toggleDepartment(dept.departmentId, $event)" />
-        {{ dept.name }}
-      </label>
+              <label *ngFor="let dept of filteredDepartments">
+                <input type="checkbox" [checked]="isDepartmentChecked(dept.departmentId)" (change)="toggleDepartment(dept.departmentId, $event)" />
+                {{ dept.name }}
+              </label>
 
-      <div class="dropdown-empty" *ngIf="filteredDepartments.length === 0">No results found</div>
-    </div>
-  </div>
-</div>
+              <div class="dropdown-empty" *ngIf="filteredDepartments.length === 0">No results found</div>
+            </div>
+          </div>
+        </div>
 
-<div class="search-field">
-  <label>Task Category</label>
-  <div class="status-dropdown" #categoryDropdown>
-    <button type="button" class="dropdown-btn" [disabled]="!categoryList.length" (click)="toggleCategoryDropdown()">
-      <span class="selected-category-text">
-        {{ getSelectedCategoryNames() || 'All Categories' }}
-      </span>
-    </button>
+        <div class="search-field">
+          <label>Task Category</label>
+          <div class="status-dropdown" #categoryDropdown>
+            <button type="button" class="dropdown-btn" [disabled]="!categoryList.length" (click)="toggleCategoryDropdown()">
+              <span class="selected-category-text">
+                {{ getSelectedCategoryNames() || 'All Categories' }}
+              </span>
+            </button>
 
-    <div class="dropdown-menu" *ngIf="showCategoryDropdown && categoryList.length" (click)="$event.stopPropagation()">
-      <input type="text" class="dropdown-search" placeholder="Search category..." [(ngModel)]="categorySearch" />
+            <div class="dropdown-menu" *ngIf="showCategoryDropdown && categoryList.length" (click)="$event.stopPropagation()">
+              <input type="text" class="dropdown-search" placeholder="Search category..." [(ngModel)]="categorySearch" />
 
-      <label *ngFor="let category of filteredCategories">
-        <input type="checkbox" [checked]="isCategoryChecked(category.taskcategoryId)" (change)="toggleCategory(category.taskcategoryId, $event)" />
-        {{ category.name }}
-      </label>
+              <label *ngFor="let category of filteredCategories">
+                <input type="checkbox" [checked]="isCategoryChecked(category.taskcategoryId)" (change)="toggleCategory(category.taskcategoryId, $event)" />
+                {{ category.name }}
+              </label>
 
-      <div class="dropdown-empty" *ngIf="filteredCategories.length === 0">No results found</div>
-    </div>
-  </div>
-</div>
+              <div class="dropdown-empty" *ngIf="filteredCategories.length === 0">No results found</div>
+            </div>
+          </div>
+        </div>
 
         <div class="filter-action">
-          <button type="button" class="go-button" (click)="loadReport()">
-            <mat-icon>search</mat-icon> Go
-          </button>
-          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">
-            Clear
-          </button>
+          <button type="button" class="go-button" (click)="loadReport()"><mat-icon>search</mat-icon> Go</button>
+          <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
         </div>
       </div>
 
-      <p *ngIf="errorMessage" class="form-error">
-        <mat-icon>error_outline</mat-icon> {{ errorMessage }}
-      </p>
+      <p *ngIf="errorMessage" class="form-error"><mat-icon>error_outline</mat-icon> {{ errorMessage }}</p>
     </div>
 
     <!-- ================= KPI CARDS ================= -->
     <div class="kpi-grid" *ngIf="hasSearched && filteredRows.length">
       <div class="kpi-card kpi-navy">
         <div class="kpi-icon"><mat-icon>groups</mat-icon></div>
-        <div class="kpi-text"><span class="kpi-value">{{ filteredRows.length }}</span><span class="kpi-label">Users</span></div>
+        <div class="kpi-text">
+          <span class="kpi-value">{{ filteredRows.length }}</span
+          ><span class="kpi-label">Users</span>
+        </div>
       </div>
       <div class="kpi-card kpi-blue">
         <div class="kpi-icon"><mat-icon>assignment</mat-icon></div>
-        <div class="kpi-text"><span class="kpi-value">{{ totals.total }}</span><span class="kpi-label">Total Tasks</span></div>
+        <div class="kpi-text">
+          <span class="kpi-value">{{ totals.total }}</span
+          ><span class="kpi-label">Total Tasks</span>
+        </div>
       </div>
       <div class="kpi-card kpi-sky">
         <div class="kpi-icon"><mat-icon>folder_open</mat-icon></div>
-        <div class="kpi-text"><span class="kpi-value">{{ totals.open }}</span><span class="kpi-label">Open</span></div>
+        <div class="kpi-text">
+          <span class="kpi-value">{{ totals.open }}</span
+          ><span class="kpi-label">Open</span>
+        </div>
       </div>
       <div class="kpi-card kpi-amber">
         <div class="kpi-icon"><mat-icon>pending_actions</mat-icon></div>
-        <div class="kpi-text"><span class="kpi-value">{{ totals.pending }}</span><span class="kpi-label">Pending Review</span></div>
+        <div class="kpi-text">
+          <span class="kpi-value">{{ totals.pending }}</span
+          ><span class="kpi-label">Pending Review</span>
+        </div>
       </div>
       <div class="kpi-card kpi-green">
         <div class="kpi-icon"><mat-icon>task_alt</mat-icon></div>
-        <div class="kpi-text"><span class="kpi-value">{{ totals.completed }}</span><span class="kpi-label">Completed</span></div>
+        <div class="kpi-text">
+          <span class="kpi-value">{{ totals.completed }}</span
+          ><span class="kpi-label">Completed</span>
+        </div>
       </div>
       <div class="kpi-card kpi-red">
         <div class="kpi-icon"><mat-icon>warning_amber</mat-icon></div>
-        <div class="kpi-text"><span class="kpi-value">{{ totals.overdue }}</span><span class="kpi-label">Overdue</span></div>
+        <div class="kpi-text">
+          <span class="kpi-value">{{ totals.overdue }}</span
+          ><span class="kpi-label">Overdue</span>
+        </div>
       </div>
       <div class="kpi-card kpi-violet">
         <div class="kpi-icon"><mat-icon>schedule</mat-icon></div>
-        <div class="kpi-text"><span class="kpi-value">{{ totals.hours | number:'1.0-1' }}</span><span class="kpi-label">Open Hours</span></div>
+        <div class="kpi-text">
+          <span class="kpi-value">{{ totals.hours | number: '1.0-1' }}</span
+          ><span class="kpi-label">Open Hours</span>
+        </div>
       </div>
     </div>
 
@@ -177,84 +184,82 @@
             </tr>
           </thead> -->
           <thead>
-  <tr>
-    <th class="serial-column">#</th>
+            <tr>
+              <th class="serial-column">#</th>
 
-    <th
-      class="text-left sortable-column"
-      (click)="sortData('userName')">
-      <div class="column-header">
-        <span>User</span>
-        <span class="sort-icons">
-          <span [class.sort-active]="sortColumn === 'userName' && sortDirection === 'asc'"> ▲ </span>
-          <span [class.sort-active]="sortColumn === 'userName' && sortDirection === 'desc'"> ▼ </span>
-        </span>
-      </div>
-    </th>
+              <th class="text-left sortable-column" (click)="sortData('userName')">
+                <div class="column-header">
+                  <span>User</span>
+                  <span class="sort-icons">
+                    <span [class.sort-active]="sortColumn === 'userName' && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === 'userName' && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
 
-    <th class="sortable-column" (click)="sortData('totalTasks')">
-      <div class="column-header">
-        <span>Total</span>
-        <span class="sort-icons">
-          <span [class.sort-active]="sortColumn === 'totalTasks' && sortDirection === 'asc'"> ▲ </span>
-          <span [class.sort-active]="sortColumn === 'totalTasks' && sortDirection === 'desc'"> ▼ </span>
-        </span>
-      </div>
-    </th>
+              <th class="sortable-column" (click)="sortData('totalTasks')">
+                <div class="column-header">
+                  <span>Total</span>
+                  <span class="sort-icons">
+                    <span [class.sort-active]="sortColumn === 'totalTasks' && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === 'totalTasks' && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
 
-    <th class="sortable-column" (click)="sortData('openTasks')">
-      <div class="column-header">
-        <span>Open</span>
-        <span class="sort-icons">
-          <span [class.sort-active]="sortColumn === 'openTasks' && sortDirection === 'asc'"> ▲ </span>
-          <span [class.sort-active]="sortColumn === 'openTasks' && sortDirection === 'desc'"> ▼ </span>
-        </span>
-      </div>
-    </th>
+              <th class="sortable-column" (click)="sortData('openTasks')">
+                <div class="column-header">
+                  <span>Open</span>
+                  <span class="sort-icons">
+                    <span [class.sort-active]="sortColumn === 'openTasks' && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === 'openTasks' && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
 
-    <th class="sortable-column" (click)="sortData('pendingReview')">
-      <div class="column-header">
-        <span>Pending Review</span>
-        <span class="sort-icons">
-          <span [class.sort-active]="sortColumn === 'pendingReview' && sortDirection === 'asc'"> ▲ </span>
-          <span [class.sort-active]="sortColumn === 'pendingReview' && sortDirection === 'desc'"> ▼ </span>
-        </span>
-      </div>
-    </th>
+              <th class="sortable-column" (click)="sortData('pendingReview')">
+                <div class="column-header">
+                  <span>Pending Review</span>
+                  <span class="sort-icons">
+                    <span [class.sort-active]="sortColumn === 'pendingReview' && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === 'pendingReview' && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
 
-    <th class="sortable-column" (click)="sortData('completedTasks')">
-      <div class="column-header">
-        <span>Completed</span>
-        <span class="sort-icons">
-          <span [class.sort-active]="sortColumn === 'completedTasks' && sortDirection === 'asc'"> ▲ </span>
-          <span [class.sort-active]="sortColumn === 'completedTasks' && sortDirection === 'desc'"> ▼ </span>
-        </span>
-      </div>
-    </th>
+              <th class="sortable-column" (click)="sortData('completedTasks')">
+                <div class="column-header">
+                  <span>Completed</span>
+                  <span class="sort-icons">
+                    <span [class.sort-active]="sortColumn === 'completedTasks' && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === 'completedTasks' && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
 
-    <th class="sortable-column" (click)="sortData('overdueTasks')">
-      <div class="column-header">
-        <span>Overdue</span>
-        <span class="sort-icons">
-          <span [class.sort-active]="sortColumn === 'overdueTasks' && sortDirection === 'asc'"> ▲ </span>
-          <span [class.sort-active]="sortColumn === 'overdueTasks' && sortDirection === 'desc'"> ▼ </span>
-        </span>
-      </div>
-    </th>
+              <th class="sortable-column" (click)="sortData('overdueTasks')">
+                <div class="column-header">
+                  <span>Overdue</span>
+                  <span class="sort-icons">
+                    <span [class.sort-active]="sortColumn === 'overdueTasks' && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === 'overdueTasks' && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
 
-    <th class="sortable-column" (click)="sortData('openHours')">
-      <div class="column-header">
-        <span>Open Hours</span>
-        <span class="sort-icons">
-          <span [class.sort-active]="sortColumn === 'openHours' && sortDirection === 'asc'"> ▲ </span>
-          <span [class.sort-active]="sortColumn === 'openHours' && sortDirection === 'desc'"> ▼ </span>
-        </span>
-      </div>
-    </th>
+              <th class="sortable-column" (click)="sortData('openHours')">
+                <div class="column-header">
+                  <span>Open Hours</span>
+                  <span class="sort-icons">
+                    <span [class.sort-active]="sortColumn === 'openHours' && sortDirection === 'asc'"> ▲ </span>
+                    <span [class.sort-active]="sortColumn === 'openHours' && sortDirection === 'desc'"> ▼ </span>
+                  </span>
+                </div>
+              </th>
 
-    <th>Load</th>
-  </tr>
-</thead>
+              <th>Load</th>
+            </tr>
+          </thead>
 
           <tbody>
             <tr *ngFor="let r of filteredRows; let i = index">
@@ -265,11 +270,21 @@
                   <span class="user-name">{{ r.userName }}</span>
                 </div>
               </td>
-              <td><span class="pill pill-total" [class.pill-zero]="!r.totalTasks">{{ r.totalTasks }}</span></td>
-              <td><span class="pill pill-open" [class.pill-zero]="!r.openTasks">{{ r.openTasks }}</span></td>
-              <td><span class="pill pill-pending" [class.pill-zero]="!r.pendingReview">{{ r.pendingReview }}</span></td>
-              <td><span class="pill pill-done" [class.pill-zero]="!r.completedTasks">{{ r.completedTasks }}</span></td>
-              <td><span class="pill pill-overdue" [class.pill-zero]="!r.overdueTasks">{{ r.overdueTasks }}</span></td>
+              <td>
+                <span class="pill pill-total" [class.pill-zero]="!r.totalTasks">{{ r.totalTasks }}</span>
+              </td>
+              <td>
+                <span class="pill pill-open" [class.pill-zero]="!r.openTasks">{{ r.openTasks }}</span>
+              </td>
+              <td>
+                <span class="pill pill-pending" [class.pill-zero]="!r.pendingReview">{{ r.pendingReview }}</span>
+              </td>
+              <td>
+                <span class="pill pill-done" [class.pill-zero]="!r.completedTasks">{{ r.completedTasks }}</span>
+              </td>
+              <td>
+                <span class="pill pill-overdue" [class.pill-zero]="!r.overdueTasks">{{ r.overdueTasks }}</span>
+              </td>
               <td class="hours-cell">{{ r.openHours }}</td>
               <td>
                 <div class="load-cell">
@@ -297,7 +312,7 @@
               <td>{{ totals.pending }}</td>
               <td>{{ totals.completed }}</td>
               <td>{{ totals.overdue }}</td>
-              <td>{{ totals.hours | number:'1.0-1' }}</td>
+              <td>{{ totals.hours | number: '1.0-1' }}</td>
               <td></td>
             </tr>
           </tfoot>
@@ -333,7 +348,7 @@
       <ng-template #noGraphData>
         <div class="no-records graph-empty">
           <mat-icon>info_outline</mat-icon>
-          <span>{{ loading ? 'Loading...' : (hasSearched ? 'No records found' : 'Select a department and click Go to view the report') }}</span>
+          <span>{{ loading ? 'Loading...' : hasSearched ? 'No records found' : 'Select a department and click Go to view the report' }}</span>
         </div>
       </ng-template>
     </div>

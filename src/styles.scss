@@ -2,6 +2,32 @@
    Angular Material Datepicker
    ========================================================= */
 
+   
+:host {
+  --navy: #19345a;
+  --navy-dark: #152f54;
+  --primary-blue: #2f6fa3;
+  --primary-blue-dark: #285f8d;
+  --primary-blue-light: #eaf2f8;
+  --table-header: #edf4f8;
+  --table-hover: #f8fbfd;
+  --page-bg: #f8fafc;
+  --white: #ffffff;
+  --border: #d5dee7;
+  --border-dark: #c5d0db;
+  --text: #17375e;
+  --text-dark: #152f54;
+  --text-muted: #6d8299;
+  --success: #17805f;
+  --danger: #dc3545;
+  --control-h: 42px;
+  --table-min-width: 1320px;   /* add this line */
+
+  display: block;
+  width: 100%;
+  color: var(--text);
+}
+
 .mat-datepicker-content {
   background: #ffffff !important;
   border: 1px solid #dce4ec !important;
@@ -363,6 +389,7 @@ padding: 8px 4px;
   font-size: 20px;
 }
 //End No Record  Found
+
 .go-button {
   width: 100%;
   min-width: 0;
@@ -497,9 +524,8 @@ padding: 8px 4px;
 
 .btn-clear {
   height: 40px !important;
-  width: 65px;
   padding: 0 18px;
-  border: 1px solid #dc3545;
+  border: 1px solid #dc3545 !important;
   border-radius: 4px;
   background: #fff;
   color: #dc3545 !important;
@@ -507,12 +533,319 @@ padding: 8px 4px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
- .go-button,
-  .btn-go,
-  .btn-clear {
-    width: 100%;
-    min-width: 0;
-    height: 44px;
+
+
+.go-button mat-icon {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+}
+
+/* ---------- Go / Clear buttons ---------- */
+.action-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  height: var(--control-h, 40px);
+  padding: 0 14px;
+  white-space: nowrap;          /* stops "Clear" breaking into two lines */
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 3px;
+}
+
+
+
+
+
+.go-button mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  line-height: 18px;
+  color: inherit;
+}
+
+.btn-clear:hover { background: #dc3545 !important; color: #fff !important; }
+.btn-clear:active { transform: scale(0.98); }
+
+
+/* ---------- Go / Clear buttons ---------- */
+.action-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  height: var(--control-h, 40px);
+  padding: 0 14px;
+  white-space: nowrap;          /* stops "Clear" breaking into two lines */
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  border-radius: 3px;
+}
+
+.go-button {
+  background: var(--primary-blue);
+  border: 1px solid var(--primary-blue);
+  color: #fff;
+
+  &:hover {
+    background: var(--primary-blue-dark);
+    border-color: var(--primary-blue-dark);
+    color: #fff;
   }
+}
+
+.btn-clear {
+  background: #fff;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+
+  &:hover {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+  }
+  &:active { transform: scale(0.98); }
+}
+
+.go-button mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+  line-height: 18px;
+  color: inherit;
+}
+
+/* ---------- Go / Clear buttons ---------- */
+
+
+.btn.btn-clear {
+  background: #fff;
+  border: 1px solid #dc3545;
+  color: #dc3545;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover,
+  &:focus-visible,
+  &:active {
+    background: #dc3545;
+    border-color: #dc3545;
+    color: #fff !important;
+  }
+}
+
+
+
+.filter-action .go-button {
+  width: auto !important;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 10px;
+  border: 1px solid var(--primary-blue);
+  border-radius: 4px;
+  background: var(--primary-blue);
+  color: var(--white);
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px;
+  font-weight: 600;
+
+  &:hover {
+    border-color: var(--primary-blue-dark);
+    background: var(--primary-blue-dark);
+    color: var(--white);
+  }
+
+  mat-icon {
+    width: 18px;
+    height: 18px;
+    font-size: 18px;
+  }
+}
+
+.filter-action .btn-clear {
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--danger);
+  border-radius: 4px;
+  background: var(--white);
+  color: var(--danger);
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px;
+  font-weight: 600;
+
+  &:hover {
+    background: var(--danger);
+    color: var(--white);
+  }
+}
+
+.filter-action .btn-export-excel {
+  width: auto;
+  min-width: 145px;
+  height: 40px;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 0;
+  border-radius: 4px;
+  background: #2563eb;
+  color: var(--white);
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #1d4ed8;
+    color: var(--white);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  i {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-container { padding: 10px; margin-top: 10px; }
+  .page-header { padding: 14px; }
+  .page-title { font-size: 21px; line-height: 28px; }
+  .page-title mat-icon { width: 23px; height: 23px; font-size: 23px; flex-shrink: 0; }
+  .add-button { width: 100%; height: 40px; }
+  .search-section { padding: 14px; }
+  .go-button, .btn-clear { width: 100%; }
+  .table-section { padding: 0 14px 14px; }
+
+  /* frozen columns would cover too much of a phone screen */
+  .designation-table .sticky-1,
+  .designation-table .sticky-2,
+  .designation-table .action-column,
+  .designation-table .action-cell {
+    position: static;
+    box-shadow: none;
+  }
+
+  .designation-table thead th { padding: 6px 7px; font-size: 11px; }
+  .designation-table tbody td { padding: 6px 7px; font-size: 12px; }
+
+  .working-days-dropdown .cat-panel { width: 100%; max-width: 100%; }
+}
+
+
+.filter-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.filter-action .go-button,
+.filter-action .btn-clear {
+  flex: 0 0 auto;
+  width: auto !important;      /* overrides the global 65px / 100% */
+  height: 40px !important;
+  margin: 0;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.btn.btn-clear:hover,
+.btn.btn-clear:focus-visible,
+.btn.btn-clear:active,
+.filter-action .btn-clear:hover {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: #fff !important;
+}
+
+
+
+/* =========================================================
+   Go / Clear buttons - common responsive layout
+   ========================================================= */
+.filter-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+
+
+.btn.btn-clear:hover,
+.btn.btn-clear:focus-visible,
+.btn.btn-clear:active,
+.filter-action .btn-clear:hover {
+  background: #dc3545;
+  border-color: #dc3545;
+  color: #fff !important;
+}
+
+/* Mobile / tablet: two equal buttons across the full row */
+@media (max-width: 768px) {
+  .filter-action {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .filter-action .go-button,
+  .filter-action .btn-clear {
+    width: 100% !important;
+    min-width: 0;
+    height: 44px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-action {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .filter-action .go-button.go-button,
+  .filter-action .btn-clear.btn-clear {
+    flex: 1 1 calc(50% - 5px) !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 44px !important;
+    margin: 0;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .filter-action .btn-export-excel.btn-export-excel {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    height: 44px !important;
+  }
+}

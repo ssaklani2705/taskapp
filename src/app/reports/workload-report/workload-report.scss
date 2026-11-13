@@ -120,10 +120,26 @@ mat-divider {
 
 /* Go / Clear sit in the 3rd column of row 2 */
 .filter-action {
-  grid-column: 3;
   display: flex;
   align-items: flex-end;
   gap: 8px;
+  width: auto;          /* was 162px */
+}
+
+.filter-action .go-button,
+.filter-action .btn-clear {
+  flex: 0 0 auto;
+  width: 90px !important;
+  min-width: 90px !important;
+  max-width: none !important;
+  height: 40px !important;
+  margin: 0;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .search-field {
@@ -211,28 +227,7 @@ mat-divider {
 
 
 
-.btn-clear {
-  height: 40px;
-  min-width: 65px;
-  padding: 0 16px;
-  border: 1px solid #dc3545;
-  border-radius: 3px;
-  background: #fff;
-  color: #dc3545;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 
-  &:hover {
-    background: #dc3545;
-    color: #fff;
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-}
 
 
 /* =========================================================
@@ -762,6 +757,13 @@ mat-divider {
       height: 16px;
       font-size: 16px;
     }
+  }
+  .filter-action .go-button,
+  .filter-action .btn-clear {
+    flex: 1 1 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: 40px !important;
   }
 }
 

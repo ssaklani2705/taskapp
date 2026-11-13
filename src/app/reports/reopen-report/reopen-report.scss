@@ -622,103 +622,9 @@ mat-divider {
   text-align: center;
 }
 
-.filter-action {
-  width: 100%;
-  min-height: 40px; // New
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  gap: 10px;
-  // padding-top: 10px; // New
-}
 
-.filter-action .go-button {
-  width: 82px !important;
-  min-width: 82px !important;
-  max-width: 82px !important;
-  height: 40px;
-  flex: 0 0 82px !important;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  padding: 0 10px;
-  border: 1px solid var(--primary-blue);
-  border-radius: 4px;
-  background: var(--primary-blue);
-  color: var(--white);
-  font-family: 'Open Sans', sans-serif !important;
-  font-size: 13px;
-  font-weight: 600;
 
-  &:hover {
-    border-color: var(--primary-blue-dark);
-    background: var(--primary-blue-dark);
-    color: var(--white);
-  }
 
-  mat-icon {
-    width: 18px;
-    height: 18px;
-    font-size: 18px;
-  }
-}
-
-.filter-action .btn-clear {
-  width: 82px !important;
-  min-width: 82px !important;
-  height: 40px;
-  flex: 0 0 82px !important;
-  padding: 0 12px;
-  border: 1px solid var(--danger);
-  border-radius: 4px;
-  background: var(--white);
-  color: var(--danger);
-  font-family: 'Open Sans', sans-serif !important;
-  font-size: 13px;
-  font-weight: 600;
-
-  &:hover {
-    background: var(--danger);
-    color: var(--white);
-  }
-}
-
-.filter-action .btn-export-excel {
-  width: auto;
-  min-width: 145px;
-  height: 40px;
-  flex: 0 0 auto;
-  margin: 0;
-  padding: 0 15px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  border: 0;
-  border-radius: 4px;
-  background: #2563eb;
-  color: var(--white);
-  font-family: 'Open Sans', sans-serif !important;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:hover:not(:disabled) {
-    background: #1d4ed8;
-    color: var(--white);
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  i {
-    font-size: 15px;
-  }
-}
 
 .table-section {
   width: 100%;
@@ -1005,6 +911,41 @@ mat-divider {
 }
 
 @media (max-width: 767.98px) {
+
+   .filter-action .go-button,
+  .filter-action .btn-clear {
+    width: 76px !important;
+    min-width: 76px !important;
+    max-width: 76px !important;
+    flex-basis: 76px !important;
+  }
+
+    .filter-action {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .filter-action .go-button,
+  .filter-action .btn-clear {
+    flex: 1 1 calc(50% - 5px) !important;   /* two equal halves */
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 44px !important;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .filter-action .btn-export-excel {
+    flex: 1 1 100% !important;   /* Export on its own row below */
+    width: 100% !important;
+    height: 44px;
+  }
   .page-container {
     padding: 10px;
   }
@@ -1170,5 +1111,40 @@ mat-divider {
 
   .client-dropdown-list {
     max-height: 210px;
+  }
+}
+
+
+/* =========================================================
+   FINAL OVERRIDE: Go / Clear equal width on mobile
+   Keep this as the LAST block in styles.scss
+   ========================================================= */
+@media (max-width: 768px) {
+  .filter-action {
+    display: flex !important;      /* beats the earlier grid rule */
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .filter-action .btn.go-button,
+  .filter-action .btn.btn-clear {
+    flex: 1 1 calc(50% - 5px) !important;   /* two equal halves */
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 44px !important;
+    margin: 0;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .filter-action .btn.btn-export-excel {
+    flex: 1 1 100% !important;     /* Export on its own full-width row */
+    width: 100% !important;
+    height: 44px !important;
   }
 }

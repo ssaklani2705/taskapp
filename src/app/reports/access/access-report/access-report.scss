@@ -171,28 +171,7 @@ mat-divider {
 
 
 
-.btn-clear {
-  height: 40px;
-  min-width: 65px;
-  padding: 0 16px;
-  border: 1px solid #dc3545;
-  border-radius: 3px;
-  background: #fff;
-  color: #dc3545;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 
-  &:hover {
-    background: #dc3545;
-    color: #fff;
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-}
 
 /* ================= TABLE SECTION ================= */
 
@@ -545,4 +524,11 @@ mat-divider {
   .action-button {
     flex: 0 0 auto;
   }
+
+  
 }
+
+/* =========================================================
+   FINAL OVERRIDE: Go / Clear equal width on mobile
+   Keep this as the LAST block in styles.scss
+   ========================================================= */

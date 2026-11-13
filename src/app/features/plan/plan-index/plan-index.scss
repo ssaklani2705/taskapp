@@ -89,30 +89,9 @@
   mat-icon { width: 18px; height: 18px; font-size: 18px; }
 }
 
-.btn-theme {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: var(--primary-blue);
-  --bs-btn-border-color: var(--primary-blue);
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: var(--primary-blue-dark);
-  --bs-btn-hover-border-color: var(--primary-blue-dark);
-  --bs-btn-active-bg: var(--primary-blue-dark);
-  --bs-btn-active-border-color: var(--primary-blue-dark);
-  height: 40px;
-  font-size: 14px;
-  font-weight: 600;
 
-  mat-icon { width: 18px; height: 18px; font-size: 18px; }
-}
 
-.btn-outline-danger {
-  --bs-btn-color: #dc3545;
-  --bs-btn-border-color: #dc3545;
-  --bs-btn-hover-bg: #dc3545;
-  --bs-btn-hover-border-color: #dc3545;
-  height: 40px;
-  font-size: 14px;
-}
+
 
 /* ---------- Form controls ---------- */
 .field-label {

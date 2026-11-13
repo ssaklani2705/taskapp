@@ -871,4 +871,32 @@ mat-divider {
   .action-button {
     flex: 0 0 auto;
   }
+
+   .filter-action {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .filter-action .go-button.go-button,
+  .filter-action .btn-clear.btn-clear {
+    flex: 1 1 calc(50% - 5px) !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: 44px !important;
+    margin: 0;
+    padding: 0 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .filter-action .btn-export-excel.btn-export-excel {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    height: 44px !important;
+  }
 }
