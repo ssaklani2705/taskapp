@@ -10,7 +10,7 @@
         </a>
       </h4>
       @if (addPer === 'Y') {
-        <button type="button" class="btn btn-dark" (click)="addTask()"><i class="fa fa-plus me-1"></i> Add New</button>
+        <button type="button" class="btn btn-dark" (click)="addTask()">Add New <i class="fa fa-plus me-1"></i></button>
       }
     </div>
 
@@ -137,19 +137,55 @@
         </div>
 
         <!-- DATES -->
-        <div class="col-6 col-md-5 col-xl-2">
-          <div class="input-group">
-            <input matInput [matDatepicker]="fromPicker" class="form-control" [(ngModel)]="fromDate" name="fromDate" placeholder="From Date" autocomplete="off" readonly />
-            <span class="input-group-text p-0"><mat-datepicker-toggle [for]="fromPicker"></mat-datepicker-toggle></span>
-            <mat-datepicker #fromPicker></mat-datepicker>
+        <div class="col-6 col-md-5 col-xl-3">
+          <div class="status-wrapper date-filter-wrapper">
+            <div class="date-filter-input">
+              <input
+                id="fromDate"
+                matInput
+                [matDatepicker]="fromPicker"
+                [(ngModel)]="fromDate"
+                name="fromDate"
+                placeholder="From Date"
+                class="date-input"
+                autocomplete="off"
+                readonly
+                [max]="toDate"
+                (click)="fromPicker.open()"
+              />
+
+              <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
+                <mat-icon>calendar_today</mat-icon>
+              </button>
+
+              <mat-datepicker #fromPicker></mat-datepicker>
+            </div>
           </div>
         </div>
 
-        <div class="col-6 col-md-5 col-xl-2">
-          <div class="input-group">
-            <input matInput [matDatepicker]="toPicker" class="form-control" [(ngModel)]="toDate" name="toDate" placeholder="To Date" autocomplete="off" readonly [min]="fromDate" />
-            <span class="input-group-text p-0"><mat-datepicker-toggle [for]="toPicker"></mat-datepicker-toggle></span>
-            <mat-datepicker #toPicker></mat-datepicker>
+        <div class="col-6 col-md-5 col-xl-3">
+          <div class="status-wrapper date-filter-wrapper">
+            <div class="date-filter-input">
+              <input
+                id="toDate"
+                matInput
+                [matDatepicker]="toPicker"
+                [(ngModel)]="toDate"
+                name="toDate"
+                placeholder="To Date"
+                class="date-input"
+                autocomplete="off"
+                readonly
+                [min]="fromDate"
+                (click)="toPicker.open()"
+              />
+
+              <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
+                <mat-icon>calendar_today</mat-icon>
+              </button>
+
+              <mat-datepicker #toPicker></mat-datepicker>
+            </div>
           </div>
         </div>
 

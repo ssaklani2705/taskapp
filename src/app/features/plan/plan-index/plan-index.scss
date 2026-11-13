@@ -20,7 +20,7 @@
   --text-muted: #6d8299;
   --success: #17805f;
   --danger: #e84a4a;
-
+--white: #ffffff;
   /* Map palette onto Bootstrap's CSS variables */
   --bs-body-color: var(--text);
   --bs-border-color: var(--border);
@@ -116,7 +116,16 @@
     box-shadow: 0 0 0 2px rgba(47, 111, 163, 0.1);
   }
 }
-
+.btn-theme{
+  width: 50px;
+  flex: 0 0 50px;
+  border: none;
+  background: var(--primary-blue);
+  color: var(--white);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
 .input-group > .btn-theme {
   width: 42px;
   padding: 0;

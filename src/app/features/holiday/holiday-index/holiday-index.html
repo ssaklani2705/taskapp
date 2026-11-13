@@ -29,64 +29,76 @@
       </div>
 
       <div class="search-panel" *ngIf="isPanelVisible">
-        <!-- FIRST ROW: FILTERS -->
-        <div class="search-row filter-row">
+        <div class="row g-2 g-lg-3 align-items-center">
           <!-- SEARCH -->
-          <div class="search-wrapper">
-            <div class="search-box">
-              <input type="text" [(ngModel)]="searchQuery" placeholder="Search by Holiday Name" class="search-input" (keyup.enter)="onSearch()" />
-
-              <button type="button" class="search-btn" (click)="onSearch()" title="Search">
+          <div class="col-12 col-md-6 col-xl-4">
+            <div class="input-group">
+              <input type="text" class="form-control" [(ngModel)]="searchQuery" placeholder="Search by Holiday Name" (keyup.enter)="onSearch()" />
+              <button type="button" class="btn btn-theme search-btn" (click)="onSearch()" title="Search">
                 <i class="fa fa-search"></i>
               </button>
             </div>
           </div>
 
           <!-- FROM DATE -->
-          <div class="status-wrapper date-filter-wrapper">
-            <div class="date-filter-input">
-              <input
-                matInput
-                [matDatepicker]="fromPicker"
-                [(ngModel)]="fromDate"
-                name="fromDate"
-                placeholder="From Date"
-                class="date-input"
-                autocomplete="off"
-                readonly
-                (dateChange)="onDateFilterChange()"
-              />
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="status-wrapper date-filter-wrapper">
+              <div class="date-filter-input">
+                <input
+                  id="fromDate"
+                  matInput
+                  [matDatepicker]="fromPicker"
+                  [(ngModel)]="fromDate"
+                  name="fromDate"
+                  placeholder="From Date"
+                  class="date-input"
+                  autocomplete="off"
+                  readonly
+                  [max]="toDate"
+                  (click)="fromPicker.open()"
+                />
 
-              <mat-datepicker-toggle matSuffix [for]="fromPicker"> </mat-datepicker-toggle>
+                <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
+                  <mat-icon>calendar_today</mat-icon>
+                </button>
 
-              <mat-datepicker #fromPicker></mat-datepicker>
+                <mat-datepicker #fromPicker></mat-datepicker>
+              </div>
             </div>
           </div>
 
           <!-- TO DATE -->
-          <div class="status-wrapper date-filter-wrapper">
-            <div class="date-filter-input">
-              <input
-                matInput
-                [matDatepicker]="toPicker"
-                [(ngModel)]="toDate"
-                name="toDate"
-                placeholder="To Date"
-                class="date-input"
-                autocomplete="off"
-                readonly
-                [min]="fromDate"
-                (dateChange)="onDateFilterChange()"
-              />
+          <div class="col-6 col-md-3 col-xl-2">
+            <div class="status-wrapper date-filter-wrapper">
+             
 
-              <mat-datepicker-toggle matSuffix [for]="toPicker"> </mat-datepicker-toggle>
+              <div class="date-filter-input">
+                <input
+                  id="toDate"
+                  matInput
+                  [matDatepicker]="toPicker"
+                  [(ngModel)]="toDate"
+                  name="toDate"
+                  placeholder="To Date"
+                  class="date-input"
+                  autocomplete="off"
+                  readonly
+                  [min]="fromDate"
+                  (click)="toPicker.open()"
+                />
 
-              <mat-datepicker #toPicker></mat-datepicker>
+                <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
+                  <mat-icon>calendar_today</mat-icon>
+                </button>
+
+                <mat-datepicker #toPicker></mat-datepicker>
+              </div>
             </div>
+
           </div>
 
           <!-- STATUS -->
-          <div class="status-wrapper">
+          <div class="col-12 col-md-6 col-xl-2">
             <select class="status-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
               <option value="">--All Status--</option>
               <option value="1">Active</option>
@@ -96,33 +108,25 @@
           </div>
 
           <!-- GO + CLEAR -->
-
-          <div class="filter-action">
-            <button type="button" class="go-button" (click)="onSearch()"><i class="fa fa-search"></i> Go</button>
-            <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
+          <div class="col-12 col-md-6 col-xl-2">
+            <div class="filter-action">
+              <button type="button" class="go-button" (click)="onSearch()"><i class="fa fa-search"></i> Go</button>
+              <button type="button" class="btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
+            </div>
           </div>
-        </div>
 
-        <!-- SECOND ROW: EXCEL ACTIONS -->
-        <div class="search-row excel-row">
-          @if (addPer === 'Y' || editPer === 'Y') {
-            <button type="button" class="btn-upload-excel" (click)="openUploadModal()">
-              Upload Excel
-              <i class="fa fa-upload"></i>
-            </button>
-          }
-
-          @if (exportExcel === 'Y') {
-            <button type="button" class="btn-export-excel" (click)="exportToExcel()">
-              Export to Excel
-              <i class="fas fa-file-excel" aria-hidden="true"></i>
-            </button>
-          }
-
-          <a href="https://app.webelement.cc/taskapp/assets/template/Holiday_Master_Template.xlsx" class="btn-download-template" download="Holiday_Master_Template.xlsx">
-            Download Template
-            <i class="fa fa-cloud-download" aria-hidden="true"></i>
-          </a>
+          <!-- EXCEL ACTIONS -->
+          <div class="col-12 d-flex flex-wrap gap-2">
+            @if (addPer === 'Y' || editPer === 'Y') {
+              <button type="button" class="btn-upload-excel" (click)="openUploadModal()">Upload Excel <i class="fa fa-upload"></i></button>
+            }
+            @if (exportExcel === 'Y') {
+              <button type="button" class="btn-export-excel" (click)="exportToExcel()">Export to Excel <i class="fas fa-file-excel" aria-hidden="true"></i></button>
+            }
+            <a href="https://app.webelement.cc/taskapp/assets/template/Holiday_Master_Template.xlsx" class="btn-download-template" download="Holiday_Master_Template.xlsx">
+              Download Template <i class="fa fa-cloud-download" aria-hidden="true"></i>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -145,13 +149,12 @@
       </div>
 
       <div class="table-container scroll-area" style="--table-min-width: 700px">
+        <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
+          <div class="top-scroll-inner"></div>
+        </div>
 
-  <div class="top-scroll" #topScroll (scroll)="tableWrapper.scrollLeft = topScroll.scrollLeft">
-    <div class="top-scroll-inner"></div>
-  </div>
-
-  <div class="table-responsive table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
-    <table class="user-table">
+        <div class="table-responsive table-scroll" #tableWrapper (scroll)="topScroll.scrollLeft = tableWrapper.scrollLeft">
+          <table class="user-table">
             <thead>
               <tr>
                 <th class="serial-column">#</th>

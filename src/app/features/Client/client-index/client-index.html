@@ -133,38 +133,57 @@
 
         <!-- From Date -->
         <div class="col-12 col-sm-6 col-lg-3 col-xl-2">
-          <div class="date-filter-input">
-            <input
-              matInput
-              [matDatepicker]="fromPicker"
-              [(ngModel)]="fromDate"
-              name="fromDate"
-              placeholder="From Date"
-              class="form-control date-input"
-              autocomplete="off"
-              readonly
-            />
-            <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
-            <mat-datepicker #fromPicker></mat-datepicker>
+
+          <div class="status-wrapper date-filter-wrapper">
+
+            <div class="date-filter-input">
+              <input
+                id="fromDate"
+                matInput
+                [matDatepicker]="fromPicker"
+                [(ngModel)]="fromDate"
+                name="fromDate"
+                placeholder="From Date"
+                class="date-input"
+                autocomplete="off"
+                readonly
+                [max]="toDate"
+                (click)="fromPicker.open()"
+              />
+
+              <button type="button" class="search-button" (click)="fromPicker.open()" title="Select date">
+                <mat-icon>calendar_today</mat-icon>
+              </button>
+
+              <mat-datepicker #fromPicker></mat-datepicker>
+            </div>
           </div>
         </div>
 
         <!-- To Date -->
         <div class="col-12 col-sm-6 col-lg-3 col-xl-2">
-          <div class="date-filter-input">
-            <input
-              matInput
-              [matDatepicker]="toPicker"
-              [(ngModel)]="toDate"
-              name="toDate"
-              placeholder="To Date"
-              class="form-control date-input"
-              autocomplete="off"
-              readonly
-              [min]="fromDate"
-            />
-            <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
-            <mat-datepicker #toPicker></mat-datepicker>
+          <div class="status-wrapper date-filter-wrapper">
+            <div class="date-filter-input">
+              <input
+                id="toDate"
+                matInput
+                [matDatepicker]="toPicker"
+                [(ngModel)]="toDate"
+                name="toDate"
+                placeholder="To Date"
+                class="date-input"
+                autocomplete="off"
+                readonly
+                [min]="fromDate"
+                (click)="toPicker.open()"
+              />
+
+              <button type="button" class="search-button" (click)="toPicker.open()" title="Select date">
+                <mat-icon>calendar_today</mat-icon>
+              </button>
+
+              <mat-datepicker #toPicker></mat-datepicker>
+            </div>
           </div>
         </div>
 

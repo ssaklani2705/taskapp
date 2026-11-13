@@ -2,7 +2,6 @@
    Angular Material Datepicker
    ========================================================= */
 
-   
 :host {
   --navy: #19345a;
   --navy-dark: #152f54;
@@ -21,8 +20,7 @@
   --success: #17805f;
   --danger: #dc3545;
   --control-h: 42px;
-  --table-min-width: 1320px;   /* add this line */
-
+  --table-min-width: 1320px; /* add this line */
   display: block;
   width: 100%;
   color: var(--text);
@@ -160,7 +158,6 @@
   opacity: 1 !important;
 }
 
-
 /* =========================================================
    Small Delete Confirmation Popup
    ========================================================= */
@@ -194,10 +191,9 @@
   padding: 8px 16px !important;
 }
 
-.user-error{
+.user-error {
   font-size: 16px !important;
 }
-
 
 .owl-dt-container {
   width: 320px !important;
@@ -213,15 +209,14 @@
   height: 18px !important;
 }
 
-
-body{
-  font-family: "Open Sans", sans-serif !important;
+body {
+  font-family: 'Open Sans', sans-serif !important;
   margin: 0px;
 }
-.collapse-btn{font-size: 18px;margin-top: 5px;}
-
-
-
+.collapse-btn {
+  font-size: 18px;
+  margin-top: 5px;
+}
 
 .column-header {
   min-height: 25px;
@@ -235,12 +230,12 @@ body{
 table thead {
   height: 44px;
 }
-table thead tr th{
+table thead tr th {
   height: 44px;
 }
 
-table tbody td{
-padding: 8px 4px;
+table tbody td {
+  padding: 8px 4px;
 }
 
 // For Entire project Sorting
@@ -270,7 +265,6 @@ padding: 8px 4px;
   color: var(--primary-blue);
 }
 
-
 //Pagination for entire project
 .pagination {
   display: flex;
@@ -289,7 +283,7 @@ padding: 8px 4px;
   background: var(--white);
   color: #8290a0;
   // font-family: "Open Sans", sans-serif !important;
-  font-family: "Open Sans", sans-serif !important;
+  font-family: 'Open Sans', sans-serif !important;
   font-size: 13px;
   cursor: pointer;
   box-sizing: border-box;
@@ -326,13 +320,12 @@ padding: 8px 4px;
 }
 // End Pagination
 
-
 //record-summary FOr Entire project
 .record-summary {
   color: var(--text-muted);
   // font-family: "Open Sans", sans-serif !important;
-  font-family: "Open Sans", sans-serif !important;
-  
+  font-family: 'Open Sans', sans-serif !important;
+
   font-size: 14px;
   line-height: 20px;
   white-space: nowrap;
@@ -349,7 +342,7 @@ padding: 8px 4px;
   border-radius: 4px !important;
   background: #1b3b63 !important;
   color: #ffffff !important;
-  font-family: "Open Sans", sans-serif !important;
+  font-family: 'Open Sans', sans-serif !important;
   font-size: 14px !important;
   font-weight: 600 !important;
   cursor: pointer;
@@ -376,7 +369,7 @@ padding: 8px 4px;
   color: var(--text-muted) !important;
   text-align: center !important;
   vertical-align: middle !important;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
 }
 
@@ -403,7 +396,7 @@ padding: 8px 4px;
   border-radius: 3px;
   background: var(--primary-blue);
   color: var(--white);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -432,7 +425,7 @@ padding: 8px 4px;
 .field-label {
   margin-bottom: 6px;
   color: var(--text-dark);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   line-height: 20px;
@@ -440,21 +433,18 @@ padding: 8px 4px;
 
 .field-value {
   color: var(--text);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   line-height: 20px;
 }
 
-
 .page-title {
-    color: var(--navy);
-    font-family: "Open Sans", sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
+  color: var(--navy);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
 }
-
-
 
 /* =========================================================
    COMMON: table with horizontal scrollbars on top AND bottom
@@ -485,10 +475,15 @@ padding: 8px 4px;
 }
 
 .scroll-area .top-scroll::-webkit-scrollbar,
-.scroll-area .table-scroll::-webkit-scrollbar { height: 10px; }
+.scroll-area .table-scroll::-webkit-scrollbar {
+  height: 10px;
+}
 
 .scroll-area .top-scroll::-webkit-scrollbar-track,
-.scroll-area .table-scroll::-webkit-scrollbar-track { background: #edf1f4; border-radius: 6px; }
+.scroll-area .table-scroll::-webkit-scrollbar-track {
+  background: #edf1f4;
+  border-radius: 6px;
+}
 
 .scroll-area .top-scroll::-webkit-scrollbar-thumb,
 .scroll-area .table-scroll::-webkit-scrollbar-thumb {
@@ -498,7 +493,9 @@ padding: 8px 4px;
 }
 
 .scroll-area .top-scroll::-webkit-scrollbar-thumb:hover,
-.scroll-area .table-scroll::-webkit-scrollbar-thumb:hover { background: #6f8aa3; }
+.scroll-area .table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #6f8aa3;
+}
 /* Tablet and below */
 @media (max-width: 992px) {
   .back-index-btn {
@@ -536,8 +533,6 @@ padding: 8px 4px;
   white-space: nowrap;
 }
 
-
-
 .go-button mat-icon {
   width: 17px;
   height: 17px;
@@ -550,16 +545,12 @@ padding: 8px 4px;
   min-width: 0;
   height: var(--control-h, 40px);
   padding: 0 14px;
-  white-space: nowrap;          /* stops "Clear" breaking into two lines */
+  white-space: nowrap; /* stops "Clear" breaking into two lines */
   font-size: 14px;
   font-weight: 600;
   line-height: 1;
   border-radius: 3px;
 }
-
-
-
-
 
 .go-button mat-icon {
   width: 18px;
@@ -569,9 +560,13 @@ padding: 8px 4px;
   color: inherit;
 }
 
-.btn-clear:hover { background: #dc3545 !important; color: #fff !important; }
-.btn-clear:active { transform: scale(0.98); }
-
+.btn-clear:hover {
+  background: #dc3545 !important;
+  color: #fff !important;
+}
+.btn-clear:active {
+  transform: scale(0.98);
+}
 
 /* ---------- Go / Clear buttons ---------- */
 .action-btn {
@@ -579,7 +574,7 @@ padding: 8px 4px;
   min-width: 0;
   height: var(--control-h, 40px);
   padding: 0 14px;
-  white-space: nowrap;          /* stops "Clear" breaking into two lines */
+  white-space: nowrap; /* stops "Clear" breaking into two lines */
   font-size: 14px;
   font-weight: 600;
   line-height: 1;
@@ -608,7 +603,9 @@ padding: 8px 4px;
     border-color: var(--danger);
     color: #fff;
   }
-  &:active { transform: scale(0.98); }
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 .go-button mat-icon {
@@ -621,12 +618,13 @@ padding: 8px 4px;
 
 /* ---------- Go / Clear buttons ---------- */
 
-
 .btn.btn-clear {
   background: #fff;
   border: 1px solid #dc3545;
   color: #dc3545;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 
   &:hover,
   &:focus-visible,
@@ -636,8 +634,6 @@ padding: 8px 4px;
     color: #fff !important;
   }
 }
-
-
 
 .filter-action .go-button {
   width: auto !important;
@@ -721,14 +717,37 @@ padding: 8px 4px;
 }
 
 @media (max-width: 768px) {
-  .page-container { padding: 10px; margin-top: 10px; }
-  .page-header { padding: 14px; }
-  .page-title { font-size: 21px; line-height: 28px; }
-  .page-title mat-icon { width: 23px; height: 23px; font-size: 23px; flex-shrink: 0; }
-  .add-button { width: 100%; height: 40px; }
-  .search-section { padding: 14px; }
-  .go-button, .btn-clear { width: 100%; }
-  .table-section { padding: 0 14px 14px; }
+  .page-container {
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .page-header {
+    padding: 14px;
+  }
+  .page-title {
+    font-size: 21px;
+    line-height: 28px;
+  }
+  .page-title mat-icon {
+    width: 23px;
+    height: 23px;
+    font-size: 23px;
+    flex-shrink: 0;
+  }
+  .add-button {
+    width: 100%;
+    height: 40px;
+  }
+  .search-section {
+    padding: 14px;
+  }
+  .go-button,
+  .btn-clear {
+    width: 100%;
+  }
+  .table-section {
+    padding: 0 14px 14px;
+  }
 
   /* frozen columns would cover too much of a phone screen */
   .designation-table .sticky-1,
@@ -739,12 +758,20 @@ padding: 8px 4px;
     box-shadow: none;
   }
 
-  .designation-table thead th { padding: 6px 7px; font-size: 11px; }
-  .designation-table tbody td { padding: 6px 7px; font-size: 12px; }
+  .designation-table thead th {
+    padding: 6px 7px;
+    font-size: 11px;
+  }
+  .designation-table tbody td {
+    padding: 6px 7px;
+    font-size: 12px;
+  }
 
-  .working-days-dropdown .cat-panel { width: 100%; max-width: 100%; }
+  .working-days-dropdown .cat-panel {
+    width: 100%;
+    max-width: 100%;
+  }
 }
-
 
 .filter-action {
   display: flex;
@@ -757,7 +784,7 @@ padding: 8px 4px;
 .filter-action .go-button,
 .filter-action .btn-clear {
   flex: 0 0 auto;
-  width: auto !important;      /* overrides the global 65px / 100% */
+  width: auto !important; /* overrides the global 65px / 100% */
   height: 40px !important;
   margin: 0;
   padding: 0 18px;
@@ -779,8 +806,6 @@ padding: 8px 4px;
   color: #fff !important;
 }
 
-
-
 /* =========================================================
    Go / Clear buttons - common responsive layout
    ========================================================= */
@@ -791,8 +816,6 @@ padding: 8px 4px;
   gap: 8px;
   flex: 0 0 auto;
 }
-
-
 
 .btn.btn-clear:hover,
 .btn.btn-clear:focus-visible,
@@ -849,3 +872,96 @@ padding: 8px 4px;
     height: 44px !important;
   }
 }
+
+.date-filter-wrapper {
+  width: 100% !important;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.date-filter-input {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  height: 40px;
+  background: var(--white);
+  border: 1px solid #cbd8e6;
+  border-radius: 4px;
+  box-sizing: border-box;
+
+  &:focus-within {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 2px rgba(51, 120, 169, 0.08);
+  }
+}
+
+.date-input {
+  width: 100%;
+  min-width: 0;
+  flex: 1;
+  height: 38px;
+  padding: 0 11px !important;
+  border: 0 !important;
+  border-radius: 4px 0 0 4px;
+  outline: none;
+  background: transparent !important;
+  color: #333;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  &::placeholder {
+    color: #9aa5b1;
+    opacity: 1;
+  }
+}
+
+
+
+.field-label,
+.field-label-date {
+  display: block;
+  // margin-bottom: 7px;
+  color: var(--navy);
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.search-button {
+  width: 46px;
+  min-width: 46px;
+  height: 40px;
+  flex: 0 0 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: var(--primary-blue);
+  color: var(--white, #ffffff) !important;
+  border: 0;
+  border-radius: 0 3px 3px 0;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--primary-blue-dark);
+    color: var(--white);
+  }
+
+  mat-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 22px;
+  }
+}
+
+
+.search-button:hover {
+    background: var(--primary-blue-dark,#285f8d);
+}
+
+

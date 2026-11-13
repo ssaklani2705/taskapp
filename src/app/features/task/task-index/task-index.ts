@@ -2503,9 +2503,9 @@ canBuddyUser(task: any): boolean {
   AssignuserId = sessionStorage.getItem('userId');
 
   assignStatusList = [
-    { id: 0, name: 'All Task' },
-    { id: 1, name: 'Assign to Me' },
-    { id: 2, name: 'Assign by Me' },
+    { id: 0, name: 'All Task Assignment' },
+    { id: 1, name: 'Assign to me' },
+    { id: 2, name: 'Assign by me' },
   ];
 
   selectedAssignmentFilter: number = 0;
