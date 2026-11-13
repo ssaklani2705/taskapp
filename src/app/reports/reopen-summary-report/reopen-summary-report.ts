@@ -1,0 +1,605 @@
+import { CommonModule, DatePipe, isPlatformBrowser } from '@angular/common';
+import { Component, HostListener, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { OWL_DATE_TIME_FORMATS, OWL_DATE_TIME_LOCALE } from '@danielmoncada/angular-datetime-picker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import * as XLSX from 'xlsx';
+import Swal from 'sweetalert2';
+import { forkJoin, Observable } from 'rxjs';
+import { MyDateAdapter } from '../../classes/my-date-adapter';
+import { MY_DATE_TIME_FORMATS } from '../../features/task/task-index/task-index';
+import { DataProviderService } from '../../service/data-provider.service';
+import { SessionStorageService } from '../../service/session-storage.service';
+import { environment } from '../../../environments/environment';
+import { SESSION_KEYS } from '../../service/session-storage.keys';
+
+interface ReopenRow {
+  username: string;
+  taskCount: number;
+}
+
+interface AssignedUser {
+  userId: number;
+  firstName: string;
+}
+
+interface Department {
+  departmentId: number;
+  name: string;
+}
+
+@Component({
+  selector: 'app-reopen-summary-report',
+  imports: [CommonModule, FormsModule, RouterModule, MatCardModule, MatIconModule, MatDividerModule, MatDatepickerModule, MatNativeDateModule, MatFormFieldModule, MatInputModule],
+  providers: [
+    DatePipe,
+    {
+      provide: DateAdapter,
+      useClass: MyDateAdapter,
+    },
+    {
+      provide: MAT_DATE_LOCALE,
+      useValue: 'en-GB',
+    },
+    {
+      provide: OWL_DATE_TIME_LOCALE,
+      useValue: 'en-GB',
+    },
+    {
+      provide: OWL_DATE_TIME_FORMATS,
+      useValue: MY_DATE_TIME_FORMATS,
+    },
+  ],
+  templateUrl: './reopen-summary-report.html',
+  styleUrl: './reopen-summary-report.scss',
+})
+export class ReopenSummaryReport implements OnInit {
+  rows: ReopenRow[] = [];
+  apiResponse: any = {};
+
+  searchQuery = '';
+  search = '';
+
+  currentPage = 1;
+  page = 0;
+  size: number = environment.size;
+  recordsPerPage: number = environment.recordsPerPage;
+
+  isPanelVisible = true;
+  filterKey = SESSION_KEYS.REOPEN_SUMMARY_REPORT_FILTER;
+
+  fromDate: Date | null = null;
+  toDate: Date | null = null;
+
+  selectedTaskCategory = '';
+  selectedClientId = 0;
+  selectedUserId = 0;
+
+  assignedUsers: AssignedUser[] = [];
+  userSearchText = '';
+  showUserDropdown = false;
+  exportingExcel = false;
+  filteredUsers: AssignedUser[] = [];
+
+  departments: Department[] = [];
+  selectedDepartmentIds: number[] = [];
+  showDepartmentDropdown = false;
+
+  // Permissions
+  addPer = 'N';
+  editPer = 'N';
+  deletePer = 'N';
+  viewPer = 'N';
+  exportExcel = 'N';
+  moduleName = '';
+
+  constructor(
+    private dataprovider: DataProviderService,
+    private datePipe: DatePipe,
+    private sessionService: SessionStorageService,
+    @Inject(PLATFORM_ID) private platformId: Object,
+  ) {}
+
+  ngOnInit(): void {
+    this.sessionService.clearOtherSessions(this.filterKey);
+    const s = this.sessionService.getItem(this.filterKey);
+
+    if (isPlatformBrowser(this.platformId)) {
+      // this.userId = Number(sessionStorage.getItem('userId')) || 0;
+
+      const storedModules = sessionStorage.getItem('selectedModuleDetail');
+      if (storedModules) {
+        try {
+          const parsed = JSON.parse(storedModules);
+          this.moduleName = parsed.name ?? '';
+          this.addPer = parsed.addPer ?? 'N';
+          this.editPer = parsed.editPer ?? 'N';
+          this.deletePer = parsed.deletePer ?? 'N';
+          this.viewPer = parsed.viewPer ?? 'N';
+          this.exportExcel = parsed.exportExcel ?? 'N';
+        } catch (error) {
+          console.error('Invalid selectedModuleDetail:', error);
+        }
+      }
+    }
+
+    if (s) {
+      this.currentPage = s.currentPage ?? 1;
+      this.page = s.page ?? this.currentPage - 1;
+      this.size = s.size ?? environment.size;
+      this.recordsPerPage = this.size;
+      this.search = s.searchText ?? '';
+      this.searchQuery = this.search;
+      this.userSearchText = this.search;
+      this.selectedUserId = s.userId ?? 0;
+      this.selectedDepartmentIds = s.departmentIds ?? [];
+      this.fromDate = s.fromDate ? new Date(s.fromDate) : null;
+      this.toDate = s.toDate ? new Date(s.toDate) : null;
+    }
+
+    this.getReopenCountByAssignedUser();
+    this.loadActiveUsers();
+    this.loadDepartments();
+  }
+
+  getReopenCountByAssignedUser(): void {
+    const formattedFromDate = this.fromDate ? this.datePipe.transform(this.fromDate, 'yyyy-MM-dd') || '' : '';
+
+    const formattedToDate = this.toDate ? this.datePipe.transform(this.toDate, 'yyyy-MM-dd') || '' : '';
+
+    this.dataprovider.getReopenCountByAssignedUser(this.page, this.size, this.search, formattedFromDate, formattedToDate, this.selectedDepartmentIds).subscribe({
+      next: (response: any) => {
+        this.rows = response.content || [];
+        this.apiResponse = response;
+      },
+      error: (error: any) => {
+        console.error('Error fetching reopen assigned user count:', error);
+
+        this.rows = [];
+        this.apiResponse = {};
+      },
+    });
+  }
+
+  loadDepartments(): void {
+    this.dataprovider.getReassignSummaryReportDepartments().subscribe({
+      next: (response: any[]) => {
+        this.departments = (response ?? [])
+          .map((item: any) => ({
+            departmentId: Number(item.departmentId),
+            name: item.name,
+          }))
+          .filter((department: Department) => Number.isInteger(department.departmentId) && department.departmentId > 0)
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        const availableIds = new Set(this.departments.map((department) => department.departmentId));
+
+        const oldSelection = [...this.selectedDepartmentIds];
+
+        this.selectedDepartmentIds = oldSelection.filter((id) => availableIds.has(id));
+
+        this.saveFilterState();
+
+        if (oldSelection.length !== this.selectedDepartmentIds.length) {
+          this.currentPage = 1;
+          this.page = 0;
+          this.getReopenCountByAssignedUser();
+        }
+      },
+      error: (error) => {
+        console.error('Error loading departments:', error);
+        this.departments = [];
+        this.selectedDepartmentIds = [];
+      },
+    });
+  }
+
+  loadActiveUsers(): void {
+    this.dataprovider.getallUsers().subscribe({
+      next: (users) => {
+        this.assignedUsers = users || [];
+
+        if (this.selectedUserId && !this.userSearchText) {
+          const found: any = this.assignedUsers.find((u: any) => u.userId === this.selectedUserId);
+          if (found) this.userSearchText = found.firstName;
+        }
+      },
+      error: (err) => console.error('Error loading users:', err),
+    });
+  }
+
+  onSearch(): void {
+    this.searchQuery = this.userSearchText.trim();
+    this.search = this.searchQuery;
+
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+    this.getReopenCountByAssignedUser();
+    this.loadDepartments();
+  }
+
+  goToPage(pageNumber: number): void {
+    if (pageNumber < 1 || pageNumber > this.totalPages) return;
+
+    this.currentPage = pageNumber;
+    this.page = pageNumber - 1;
+    this.saveFilterState();
+    this.getReopenCountByAssignedUser();
+  }
+
+  saveFilterState(): void {
+    this.sessionService.setItem(this.filterKey, {
+      currentPage: this.currentPage,
+      page: this.page,
+      size: this.size,
+      searchText: this.userSearchText.trim(),
+      userId: this.selectedUserId,
+      departmentIds: this.selectedDepartmentIds,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
+    });
+  }
+
+  goToFirstPage(): void {
+    this.goToPage(1);
+  }
+  goToLastPage(): void {
+    this.goToPage(this.totalPages);
+  }
+
+  pages(): number[] {
+    const delta = 5;
+    const start = Math.max(1, this.currentPage - delta);
+    const end = Math.min(this.totalPages, this.currentPage + delta);
+    const arr: number[] = [];
+    for (let i = start; i <= end; i++) arr.push(i);
+    return arr;
+  }
+
+  get totalRecords(): number {
+    return this.apiResponse?.totalElements || 0;
+  }
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.totalRecords / this.recordsPerPage));
+  }
+
+  get recordSummary(): string {
+    const total = this.totalRecords;
+    const start = total === 0 ? 0 : (this.currentPage - 1) * this.recordsPerPage + 1;
+    const end = Math.min(this.currentPage * this.recordsPerPage, total);
+    return `Page ${this.currentPage} of ${this.totalPages}, (${start} - ${end} of ${total} record${total > 1 ? 's' : ''})`;
+  }
+
+  togglePanel(): void {
+    this.isPanelVisible = !this.isPanelVisible;
+  }
+
+  filterUsers(): void {
+    const search = this.userSearchText.toLowerCase().trim();
+
+    if (!search) {
+      this.selectedUserId = 0;
+      this.filteredUsers = [];
+      this.showUserDropdown = false;
+      return;
+    }
+
+    if (search.length < 3) {
+      this.filteredUsers = [];
+      this.showUserDropdown = false;
+      return;
+    }
+
+    this.filteredUsers = this.assignedUsers.filter((u: any) => (u.firstName || '').toLowerCase().includes(search));
+    this.showUserDropdown = true;
+  }
+
+  selectUser(user: AssignedUser): void {
+    this.userSearchText = user.firstName;
+    this.selectedUserId = Number(user.userId);
+    this.showUserDropdown = false;
+    this.onSearch();
+  }
+
+  clearUserSearch(): void {
+    this.userSearchText = '';
+    this.searchQuery = '';
+    this.search = '';
+    this.selectedUserId = 0;
+    this.filteredUsers = [];
+    this.showUserDropdown = false;
+    this.onSearch();
+  }
+
+  clearFilters(): void {
+    this.searchQuery = '';
+    this.search = '';
+    this.userSearchText = '';
+    this.selectedUserId = 0;
+
+    this.fromDate = null;
+    this.toDate = null;
+
+    this.selectedDepartmentIds = [];
+    this.showDepartmentDropdown = false;
+
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.filteredUsers = [];
+    this.userSearchText = '';
+    this.showUserDropdown = false;
+
+    this.saveFilterState();
+    this.getReopenCountByAssignedUser();
+  }
+
+  onDepartmentChange(departmentId: number, checked: boolean): void {
+    if (!Number.isInteger(departmentId) || departmentId <= 0) {
+      return;
+    }
+
+    if (checked) {
+      if (!this.selectedDepartmentIds.includes(departmentId)) {
+        this.selectedDepartmentIds = [...this.selectedDepartmentIds, departmentId];
+      }
+    } else {
+      this.selectedDepartmentIds = this.selectedDepartmentIds.filter((id) => id !== departmentId);
+    }
+
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+    this.getReopenCountByAssignedUser();
+  }
+
+  clearDepartments(): void {
+    this.selectedDepartmentIds = [];
+    this.currentPage = 1;
+    this.page = 0;
+
+    this.saveFilterState();
+    this.getReopenCountByAssignedUser();
+  }
+
+  // exportToExcel(): void {
+  //   if (this.exportingExcel) {
+  //     return;
+  //   }
+
+  //   this.exportingExcel = true;
+
+  //   const fromDate = this.fromDate ? (this.datePipe.transform(this.fromDate, 'yyyy-MM-dd') ?? undefined) : undefined;
+
+  //   const toDate = this.toDate ? (this.datePipe.transform(this.toDate, 'yyyy-MM-dd') ?? undefined) : undefined;
+
+  //   const username = this.searchQuery.trim();
+  //   const departmentIds = [...this.selectedDepartmentIds];
+
+  //   this.dataprovider.getReopenCountByAssignedUser(0, this.size, username, fromDate, toDate, departmentIds).subscribe({
+  //     next: (response: any) => {
+  //       const firstPageData: ReopenRow[] = response?.content ?? [];
+  //       const totalPages = response?.totalPages ?? 1;
+
+  //       if (totalPages <= 1) {
+  //         this.downloadExcel(firstPageData);
+  //         return;
+  //       }
+
+  //       const requests: Observable<any>[] = [];
+
+  //       for (let pageIndex = 1; pageIndex < totalPages; pageIndex++) {
+  //         requests.push(this.dataprovider.getReopenCountByAssignedUser(pageIndex, this.size, username, fromDate, toDate, departmentIds));
+  //       }
+
+  //       forkJoin(requests).subscribe({
+  //         next: (responses: any[]) => {
+  //           const allRows: ReopenRow[] = [...firstPageData, ...responses.flatMap((pageResponse: any) => pageResponse?.content ?? [])];
+
+  //           this.downloadExcel(allRows);
+  //         },
+  //         error: (error) => {
+  //           console.error('Error fetching reassign summary pages for export:', error);
+
+  //           this.exportingExcel = false;
+
+  //           Swal.fire({
+  //             icon: 'error',
+  //             title: 'Export Failed',
+  //             text: 'Unable to export the reassign summary report. Please try again.',
+  //           });
+  //         },
+  //       });
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching reassign summary report for export:', error);
+
+  //       this.exportingExcel = false;
+
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Export Failed',
+  //         text: 'Unable to fetch the report for Excel export. Please try again.',
+  //       });
+  //     },
+  //   });
+  // }
+
+  exportToExcel(): void {
+    if (this.exportingExcel) {
+      return;
+    }
+
+    this.exportingExcel = true;
+
+    const fromDate = this.fromDate ? (this.datePipe.transform(this.fromDate, 'yyyy-MM-dd') ?? '') : '';
+
+    const toDate = this.toDate ? (this.datePipe.transform(this.toDate, 'yyyy-MM-dd') ?? '') : '';
+
+    // Use the same search applied to the report
+    const search = this.search.trim();
+
+    // Preserve all selected department IDs
+    const departmentIds = [...this.selectedDepartmentIds];
+
+    // Fetch first page using the applied filters
+    this.dataprovider.getReopenCountByAssignedUser(0, this.size, search, fromDate, toDate, departmentIds).subscribe({
+      next: (response: any) => {
+        const firstPageData = response?.content ?? [];
+        const totalPages = response?.totalPages ?? 1;
+
+        if (totalPages <= 1) {
+          this.downloadExcel(firstPageData);
+          return;
+        }
+
+        const requests: Observable<any>[] = [];
+
+        for (let pageIndex = 1; pageIndex < totalPages; pageIndex++) {
+          requests.push(this.dataprovider.getReopenCountByAssignedUser(pageIndex, this.size, search, fromDate, toDate, departmentIds));
+        }
+
+        forkJoin(requests).subscribe({
+          next: (responses: any[]) => {
+            const allRows = [...firstPageData, ...responses.flatMap((pageResponse: any) => pageResponse?.content ?? [])];
+
+            this.downloadExcel(allRows);
+          },
+          error: (error) => {
+            console.error('Error fetching reopen report pages for export:', error);
+
+            this.exportingExcel = false;
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Export Failed',
+              text: 'Unable to export the reopen summary report. Please try again.',
+            });
+          },
+        });
+      },
+      error: (error) => {
+        console.error('Error fetching reopen report for export:', error);
+
+        this.exportingExcel = false;
+
+        Swal.fire({
+          icon: 'error',
+          title: 'Export Failed',
+          text: 'Unable to fetch the report for Excel export. Please try again.',
+        });
+      },
+    });
+  }
+
+  private downloadExcel(data: ReopenRow[]): void {
+    try {
+      const rows = data.map((row: any, index: number) => ({
+        '#': index + 1,
+        'User Name': row.username ?? '',
+        'Reopen Count': row.taskCount ?? 0,
+      }));
+
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+
+      worksheet['!cols'] = [{ wch: 10 }, { wch: 30 }, { wch: 18 }];
+
+      const workbook = XLSX.utils.book_new();
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Reopen Summary');
+
+      const filename = 'Reopen_Summary_Report.xlsx';
+
+      XLSX.writeFile(workbook, filename);
+    } catch (error) {
+      console.error('Error creating Excel file:', error);
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Export Failed',
+        text: 'Unable to create the Excel file. Please try again.',
+      });
+    } finally {
+      this.exportingExcel = false;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.department-dropdown')) {
+      this.showDepartmentDropdown = false;
+    }
+  }
+
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+  columns: {
+    key: string;
+    label: string;
+    sortable: boolean;
+  }[] = [
+    {
+      key: 'userName',
+      label: 'User Name',
+      sortable: true,
+    },
+    {
+      key: 'taskCount',
+      label: 'Count',
+      sortable: true,
+    },
+  ];
+
+  sortData(column: string): void {
+    if (!column) {
+      return;
+    }
+
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.rows.sort((a: any, b: any) => {
+      let valA = a[column];
+      let valB = b[column];
+
+      valA = valA ?? '';
+      valB = valB ?? '';
+
+      if (!isNaN(valA) && !isNaN(valB)) {
+        valA = Number(valA);
+        valB = Number(valB);
+      } else {
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+      }
+
+      if (valA < valB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+
+      if (valA > valB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+
+      return 0;
+    });
+  }
+}

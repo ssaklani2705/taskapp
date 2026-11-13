@@ -227,6 +227,7 @@ export class Sidebar implements OnInit, OnDestroy {
           { moduleId: 18, label: 'Reassign Report', icon: 'sync_alt', route: '/reassign-report-index' },
           { moduleId: 19, label: 'Reassign Summary Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
           { moduleId: 21, label: 'Reopen Report', icon: 'refresh', route: '/reopen-report' },
+              { moduleId: 22, label: 'Reopen Summary Report', icon: 'history', route: '/reopen-summary-report' },
         ],
       },
 

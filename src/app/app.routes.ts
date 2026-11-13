@@ -203,6 +203,12 @@ export const routes: Routes = [
         data: { moduleId: 21 },
         loadComponent: () => import('./reports/reopen-report/reopen-report').then((m) => m.ReopenReport),
       },
+        {
+        path: 'reopen-summary-report',
+        canActivate: [moduleGuard],
+        data: { moduleId: 22 },
+        loadComponent: () => import('./reports/reopen-summary-report/reopen-summary-report').then((m) => m.ReopenSummaryReport),
+      },
 
       // 9 - Plan Master
       {

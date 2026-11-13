@@ -47,4 +47,6 @@ export const SESSION_KEYS = {
   TRANSACTION_REPORT_FILTER: 'transactionReportFilter',
   
   REOPEN_REPORT_FILTER: 'reopenReportFilter',
+
+  REOPEN_SUMMARY_REPORT_FILTER: 'reopenSummaryReportFilter',
 };

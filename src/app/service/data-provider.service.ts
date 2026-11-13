@@ -1818,4 +1818,31 @@ export class DataProviderService {
   getReopenReportReopenedByUsers() {
     return this.http.get<any[]>(`${environment.apiBaseUrl}admin/reopen-report/reopened-by-users`);
   }
+
+  getReopenCountByAssignedUser(page: number, size: number, search: string, fromDate: string, toDate: string, departmentIds: number[]) {
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+
+
+    if (search?.trim()) {
+      params = params.set('search', search.trim());
+    }
+
+
+    if (fromDate) {
+      params = params.set('fromDate', fromDate);
+    }
+
+
+    if (toDate) {
+      params = params.set('toDate', toDate);
+    }
+
+
+    if (departmentIds?.length) {
+      params = params.set('departmentIds', departmentIds.join(','));
+    }
+
+
+    return this.http.get<any>(`${environment.apiBaseUrl}admin/reopen-report/assigned-user-count`, { params });
+  }
 }
