@@ -468,33 +468,7 @@ mat-divider {
   }
 }
 
-.btn-export-excel {
-  width: auto;
-  min-width: 145px;
-  height: 40px;
-  flex: 0 0 auto;
-  padding: 0 15px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  border: 0;
-  border-radius: 4px;
-  background: #2563eb;
-  color: var(--white);
-  font-family: 'Open Sans', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
 
-  &:hover {
-    background: #1d4ed8;
-  }
-
-  i {
-    font-size: 15px;
-  }
-}
 
 /* ================= TABLE SECTION ================= */
 

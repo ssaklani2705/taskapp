@@ -76,37 +76,6 @@
   align-items: center;
 }
 
-.add-button {
-  height: 38px;
-  min-width: 120px;
-  padding: 0 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: 0;
-  border-radius: 4px;
-  background: var(--navy);
-  color: var(--white);
-  font-family: "Open Sans", sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-.add-button:hover {
-  background: var(--navy-dark);
-  box-shadow: 0 2px 6px rgba(25, 52, 90, 0.18);
-}
-
-.plus-icon {
-  font-size: 17px;
-  font-weight: 700;
-}
-
 mat-divider {
   border-top-color: var(--border) !important;
 }

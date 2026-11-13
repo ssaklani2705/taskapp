@@ -62,35 +62,7 @@
 }
 
 /* Add New button (original colours) */
-.add-button {
-  height: 38px;
-  min-width: 120px;
-  padding: 0 18px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: 0;
-  border-radius: 4px;
-  background: var(--navy);
-  color: var(--white);
-  font-family: "Open Sans", sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
-}
 
-.add-button:hover {
-  background: var(--navy-dark);
-  box-shadow: 0 2px 6px rgba(25, 52, 90, 0.18);
-}
-
-.add-button mat-icon {
-  width: 18px;
-  height: 18px;
-  font-size: 18px;
-}
 
 mat-divider,
 ::ng-deep .mat-mdc-divider {

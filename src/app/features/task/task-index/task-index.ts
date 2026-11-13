@@ -826,7 +826,7 @@ export class TaskIndex implements OnInit {
     this.dashboardFilter = '';
     this.taskIdQuery = '';
     this.taskIdFilter = 0;
-    this.selectedAssignmentFilter = 0;
+    this.selectedAssignmentFilter = -1;
     this.saveFilterState();
 
     this.router
@@ -2503,12 +2503,12 @@ canBuddyUser(task: any): boolean {
   AssignuserId = sessionStorage.getItem('userId');
 
   assignStatusList = [
-    { id: 0, name: 'All Task Assignment' },
+    // { id: 0, name: 'All' },
     { id: 1, name: 'Assign to me' },
     { id: 2, name: 'Assign by me' },
   ];
 
-  selectedAssignmentFilter: number = 0;
+  selectedAssignmentFilter: number = -1;
 
   onAssignmentFilterChange(value: number): void {
     this.selectedAssignmentFilter = value;

@@ -10,9 +10,10 @@
         </a>
       </h4>
       @if (addPer === 'Y') {
-        <button type="button" class="btn btn-dark" (click)="addTask()">Add New <i class="fa fa-plus me-1"></i></button>
+        <button type="button" class="add-button" (click)="addTask()"><span class="plus-icon">+</span> Add New </button>
       }
     </div>
+    
 
     <!-- SEARCH PANEL -->
     <div class="card-body border-bottom" *ngIf="isPanelVisible">
@@ -115,6 +116,7 @@
 
         <div class="col-6 col-md-4 col-xl-2">
           <select class="form-select" [ngModel]="selectedAssignmentFilter" (ngModelChange)="onAssignmentFilterChange($event)">
+            <option value="-1">--Task Assignment--</option>
             <option *ngFor="let filter of assignStatusList" [ngValue]="filter.id">
               {{ filter.name }}
             </option>
@@ -199,7 +201,7 @@
           <button type="button" class="btn btn-clear" (click)="clearFilters()" title="Clear Filters">Clear</button>
         </div>
         @if (exportExcelPer === 'Y') {
-          <button type="button" class="btn btn-success exportbtn" (click)="exportToExcel()">Export to Excel <i class="fas fa-file-excel ms-1" aria-hidden="true"></i></button>
+          <button type="button" class="btn btn-export-excel" (click)="exportToExcel()">Export to Excel <i class="fas fa-file-excel ms-1" aria-hidden="true"></i></button>
         }
       </div>
     </div>
