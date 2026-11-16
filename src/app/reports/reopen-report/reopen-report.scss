@@ -735,7 +735,7 @@ mat-divider {
   th,
   td {
     white-space: normal;
-    text-align: left;
+    text-align: left !important;
     vertical-align: middle;
   }
 
@@ -762,34 +762,7 @@ mat-divider {
     background: var(--table-hover);
   }
 
-  // th:nth-child(1),
-  // td:nth-child(1) {
-  //   width: 70px;
-  //   min-width: 70px;
-  //   text-align: center;
-  //   white-space: nowrap;
-  // }
-
-  // th:nth-child(2),
-  // td:nth-child(2) {
-  //   min-width: 160px;
-  // }
-
-  // th:nth-child(3),
-  // td:nth-child(3) {
-  //   min-width: 170px;
-  // }
-
-  // th:nth-child(4),
-  // td:nth-child(4) {
-  //   min-width: 170px;
-  //   white-space: nowrap;
-  // }
-
-  // th:nth-child(5),
-  // td:nth-child(5) {
-  //   min-width: 300px;
-  // }
+  
 
   th:nth-child(1),
   td:nth-child(1) {
@@ -853,7 +826,7 @@ mat-divider {
 .serial-cell {
   color: var(--text-muted) !important;
   font-size: 14px;
-  text-align: center !important;
+  text-align: left !important;
 }
 
 .description-cell {
