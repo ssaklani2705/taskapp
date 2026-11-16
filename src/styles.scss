@@ -1190,3 +1190,123 @@ option {
 .designation-table tbody tr:last-child td {
   border-bottom: 1px solid var(--border);  /* one single closing line */
 }
+
+
+// Datepicker changes for entire project
+/* =========================================================
+   Compact blue datepicker popup (panelClass="user-date-datepicker")
+========================================================= */
+.user-date-datepicker {
+  width: 280px !important;
+  min-width: 280px !important;
+  max-width: 280px !important;
+  height: auto !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  background: #fff !important;
+  border-radius: 7px !important;
+  box-shadow: 0 6px 18px rgba(33, 75, 120, 0.18) !important;
+
+  .mat-datepicker-content-container,
+  .mat-calendar {
+    width: 280px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .mat-calendar-header {
+    height: 44px !important;
+    min-height: 44px !important;
+    padding: 4px 6px !important;
+    background: #214b78 !important;
+  }
+
+  .mat-calendar-controls { height: 36px !important; margin: 0 !important; }
+
+  .mat-calendar-period-button {
+    min-width: 0 !important;
+    height: 36px !important;
+    padding: 0 6px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #fff !important;
+  }
+
+  .mat-calendar-arrow { margin-left: 3px !important; fill: #fff !important; color: #fff !important; }
+
+  .mat-calendar-previous-button,
+  .mat-calendar-next-button {
+    width: 36px !important;
+    height: 36px !important;
+    padding: 7px !important;
+    color: #fff !important;
+
+    svg { fill: #fff !important; }
+  }
+
+  .mat-calendar-content { padding: 4px 6px 6px !important; background: #fff !important; }
+  .mat-calendar-table { width: 100% !important; table-layout: fixed !important; }
+  .mat-calendar-table-header-divider { display: none !important; }
+
+  .mat-calendar-table-header th {
+    height: 26px !important;
+    padding: 0 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    color: #214b78 !important;
+    text-align: center !important;
+  }
+
+  .mat-calendar-body-cell { width: 14.28% !important; height: 34px !important; padding: 0 !important; }
+
+  .mat-calendar-body-cell-content {
+    width: 28px !important;
+    height: 28px !important;
+    line-height: 28px !important;
+    font-size: 12px !important;
+    color: #333 !important;
+    border-radius: 50% !important;
+  }
+
+  .mat-calendar-body-selected,
+  .mat-calendar-body-selected .mat-calendar-body-cell-content {
+    background-color: #214b78 !important;
+    color: #fff !important;
+  }
+
+  .mat-calendar-body-today:not(.mat-calendar-body-selected) .mat-calendar-body-cell-content {
+    border: 1px solid #214b78 !important;
+    background: transparent !important;
+    color: #333 !important;
+  }
+
+  .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover .mat-calendar-body-cell-content,
+  .mat-calendar-body-active:not(.mat-calendar-body-selected) .mat-calendar-body-cell-content {
+    background-color: #e7f0f8 !important;
+    color: #214b78 !important;
+  }
+
+  .mat-calendar-body-disabled { opacity: 0.6 !important; }
+  .mat-calendar-body-disabled .mat-calendar-body-cell-content { color: #b8b8b8 !important; background: transparent !important; }
+
+  .mat-calendar-body-label { font-size: 11px !important; font-weight: 500 !important; color: #555 !important; }
+}
+
+@media (max-width: 600px) {
+  .user-date-datepicker,
+  .user-date-datepicker .mat-datepicker-content-container,
+  .user-date-datepicker .mat-calendar {
+    width: 270px !important;
+    min-width: 270px !important;
+    max-width: 270px !important;
+  }
+
+  .user-date-datepicker .mat-calendar-body-cell { height: 32px !important; }
+  .user-date-datepicker .mat-calendar-body-cell-content {
+    width: 27px !important;
+    height: 27px !important;
+    line-height: 27px !important;
+  }
+}
