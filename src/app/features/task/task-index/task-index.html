@@ -18,7 +18,7 @@
     <!-- SEARCH PANEL -->
     <div class="card-body border-bottom" *ngIf="isPanelVisible">
       <div class="row g-2 align-items-center">
-        <div class="col-12 col-md-6 col-xl-2">
+        <div class="col-12 col-md-6 col-xl-3">
           <div class="input-group">
             <input type="text" class="form-control" [(ngModel)]="searchQuery" placeholder="Search by Title" (keyup.enter)="onSearch()" />
             <button type="button" class="btn btn-primary" (click)="onSearch()" title="Search">
@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        <div class="col-12 col-md-6 col-xl-2">
+        <div class="col-12 col-md-6 col-xl-3">
           <div class="input-group">
             <input type="text" inputmode="numeric" class="form-control" [(ngModel)]="taskIdQuery" placeholder="Search by Task Id" (input)="onTaskIdInput($event)" (keyup.enter)="onSearch()" />
             <button type="button" class="btn btn-primary" (click)="onSearch()" title="Search">
@@ -37,7 +37,7 @@
         </div>
 
         <!-- CLIENT -->
-        <div class="col-12 col-md-6 col-xl-2">
+        <div class="col-12 col-md-6 col-xl-3">
           @if (loginType === 'manager') {
             <select class="form-select" [(ngModel)]="selectedClient" (change)="onSearch()">
               <option value="">--All Clients--</option>
@@ -59,7 +59,7 @@
         </div>
 
         <!-- TASK CATEGORY -->
-        <div class="col-12 col-md-6 col-xl-2 position-relative task-category-dropdown">
+        <div class="col-12 col-md-6 col-xl-3 position-relative task-category-dropdown">
           <button type="button" class="form-select text-start text-truncate" (click)="toggleTaskCategoryDropdown()">
             {{ selectedTaskCategoryLabel }}
           </button>
@@ -90,14 +90,14 @@
           </div>
         </div>
 
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-6 col-md-4 col-xl-3">
           <select class="form-select" [(ngModel)]="selectedAssignedTo" (change)="onSearch()">
             <option value="">--All Assigned To--</option>
             <option *ngFor="let user of assignedUsers" [value]="user.userId">{{ user.firstName }}</option>
           </select>
         </div>
 
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-6 col-md-4 col-xl-3">
           <select class="form-select" [(ngModel)]="selectedPriority" (change)="onSearch()">
             <option value="">--All Priority--</option>
             <option value="1">High</option>
@@ -106,7 +106,7 @@
           </select>
         </div>
 
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-6 col-md-4 col-xl-3">
           <select class="form-select" [(ngModel)]="selectedStatus" (change)="onSearch()">
             <option value="">--All Status--</option>
             <option value="1">Active</option>
@@ -114,7 +114,7 @@
           </select>
         </div>
 
-        <div class="col-6 col-md-4 col-xl-2">
+        <div class="col-6 col-md-4 col-xl-3">
           <select class="form-select" [ngModel]="selectedAssignmentFilter" (ngModelChange)="onAssignmentFilterChange($event)">
             <option value="-1">--Task Assignment--</option>
             <option *ngFor="let filter of assignStatusList" [ngValue]="filter.id">
@@ -125,7 +125,7 @@
 
         <!-- TASK STATUS (multi) -->
         <!-- TASK STATUS (multi) -->
-        <div class="col-6 col-md-4 col-xl-2 status-dropdown position-relative" #statusDropdown>
+        <div class="col-6 col-md-4 col-xl-3 status-dropdown position-relative" #statusDropdown>
           <button type="button" class="form-select text-start text-truncate" (click)="showStatusDropdown = !showStatusDropdown">
             {{ getSelectedTaskStatusLabel() }}
           </button>

@@ -49,7 +49,7 @@
         </div>
 
         <!-- DEPARTMENT -->
-        <div class="col-12 col-sm-6 col-lg-3 col-xl-2">
+        <div class="col-12 col-sm-6 col-lg-3 col-xl-3">
           <div class="task-category-dropdown" (click)="$event.stopPropagation()">
             <div class="form-select cat-trigger" [class.cat-placeholder]="selectedDepartmentId === null" (click)="toggleDeptDropdown()">
               <span class="cat-trigger-text">{{ selectedDepartmentName }}</span>
@@ -77,7 +77,7 @@
         </div>
 
         <!-- CATEGORY -->
-        <div class="col-12 col-sm-6 col-lg-3 col-xl-2">
+        <div class="col-12 col-sm-6 col-lg-3 col-xl-3">
           <div class="task-category-dropdown" (click)="$event.stopPropagation()">
             <div class="form-select cat-trigger" [class.cat-placeholder]="selectedCategoryId === null" (click)="toggleCatDropdown()">
               <span class="cat-trigger-text">{{ selectedCategoryName }}</span>
