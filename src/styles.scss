@@ -1146,3 +1146,47 @@ select,
 option {
   font-size: 13px !important;
 }
+
+/* =========================================================
+   Table with top + bottom scrollbar: clean borders
+   ========================================================= */
+
+/* 1. Top scrollbar: collapses to nothing when the table fits */
+.scroll-area .top-scroll {
+  height: auto;          /* was 12px, this caused the empty strip */
+  margin: 0 0 -1px;      /* cancels the 1px inner div when there is no overflow */
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.scroll-area .top-scroll-inner {
+  height: 1px;
+}
+
+/* 2. Outer wrapper: no border, no scroll, no spacing */
+.table-wrapper:has(> .scroll-area) {
+  border: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  background: transparent;
+}
+
+/* 3. Inner wrapper: no border either.
+      The table cells already draw the outline, so a wrapper border
+      would show as a double line at the top and bottom. */
+.table-wrapper:has(> .scroll-area) .table-scroll,
+.scroll-area .table-scroll {
+  border: 0 !important;
+  margin: 0;
+  padding: 0;
+}
+
+/* 4. No gap or extra line under the last row */
+.scroll-area .table-scroll > table {
+  margin: 0;
+}
+
+.designation-table tbody tr:last-child td {
+  border-bottom: 1px solid var(--border);  /* one single closing line */
+}
