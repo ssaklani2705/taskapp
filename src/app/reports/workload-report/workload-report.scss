@@ -1607,3 +1607,15 @@ mat-divider {
   letter-spacing: normal;
   text-transform: none;
 }
+
+.search-field .dropdown-menu {
+  display: block !important;   /* overrides Bootstrap's display: none */
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 240px;
+  overflow-y: auto;
+  /* ...rest stays the same... */
+}
