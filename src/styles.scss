@@ -992,12 +992,14 @@ table tbody td {
 .btn-export-excel i {
   font-size: 16px;
 }
-button, 
+button,
 .btn.btn-dark,
 .btn.btn-outline-secondary {
   font-size: 14px;
 }
-button span.plus-icon{font-size: 18px;}
+button span.plus-icon {
+  font-size: 18px;
+}
 
 .add-button {
   height: 38px;
@@ -1029,8 +1031,6 @@ button span.plus-icon{font-size: 18px;}
   line-height: 1;
   font-weight: 700;
 }
-
-
 
 .btn-upload-excel {
   height: 38px;
@@ -1128,4 +1128,21 @@ button span.plus-icon{font-size: 18px;}
 .btn-download-template i {
   margin-left: 7px;
   font-size: 16px;
+}
+table thead tr th {
+  font-size: 13px !important;
+}
+.client-search-input ,
+.department-dropdown button,
+.dropdown-btn,
+.client-search-input,
+.date-input,
+.search-input-wrapper input, 
+.search-input,
+.form-select,
+.form-control,
+.status-select,
+select,
+option {
+  font-size: 13px !important;
 }
