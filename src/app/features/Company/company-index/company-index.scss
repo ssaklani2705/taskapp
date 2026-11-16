@@ -435,8 +435,9 @@ mat-divider,
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
-    width: max(100%, 230px);
-    max-width: min(320px, calc(100vw - 40px));
+    width: 100%;
+    // width: max(100%, 230px);
+    // max-width: min(320px, calc(100vw - 40px));
     max-height: 300px;
     padding: 8px;
     overflow-x: hidden;
