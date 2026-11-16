@@ -1314,3 +1314,8 @@ option {
     line-height: 27px !important;
   }
 }
+
+.btn:focus-visible{
+  background: #2563eb;
+    color: #fff;
+}
