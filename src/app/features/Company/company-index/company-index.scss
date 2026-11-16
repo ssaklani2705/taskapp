@@ -637,3 +637,20 @@ mat-divider,
   width: var(--table-min-width);
   height: 1px;
 }
+
+/* Mobile: no frozen columns */
+@media (max-width: 768px) {
+  .designation-table .sticky-1,
+  .designation-table .sticky-2,
+  .designation-table .action-column,
+  .designation-table .action-cell,
+  .designation-table thead .sticky-1,
+  .designation-table thead .sticky-2,
+  .designation-table thead .action-column {
+    position: static !important;
+    left: auto !important;
+    right: auto !important;
+    z-index: auto !important;
+    box-shadow: none !important;
+  }
+}
