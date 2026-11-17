@@ -290,9 +290,9 @@
         </div>
 
         <!-- BUTTONS -->
-        <div class="d-flex flex-column flex-sm-row justify-content-center align-items-stretch gap-2 mt-4 pt-1">
-          <button type="button" class="btn btn-outline-dark action-btn" (click)="onReset()">Reset</button>
-          <button type="submit" class="btn btn-dark action-btn" [disabled]="taskForm.invalid || pdfError || zipError || holidayError">
+        <div class="user-buttons">
+          <button type="button" class="user-reset-btn" (click)="onReset()">Reset</button>
+          <button type="submit" class="user-submit-btn" [disabled]="taskForm.invalid || pdfError || zipError || holidayError">
             {{ isEditMode ? 'Update' : 'Submit' }}
           </button>
         </div>

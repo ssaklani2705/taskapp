@@ -1351,3 +1351,65 @@ option {
   text-align: left !important;
 }
 
+
+.user-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.user-reset-btn {
+  min-width: 90px;
+  height: 40px;
+  padding: 8px 20px;
+  border: 1px solid var(--navy) !important;
+  border-radius: 4px !important;
+  background: #ffffff !important;
+  color: var(--navy) !important;
+  font-family: "Open Sans", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.user-reset-btn:hover {
+  background: #eef4f9 !important;
+  border-color: var(--navy-hover) !important;
+  color: var(--navy-hover) !important;
+}
+
+.user-submit-btn {
+  min-width: 90px;
+  height: 40px;
+  padding: 8px 20px;
+  border: 1px solid var(--navy) !important;
+  border-radius: 4px !important;
+  background: var(--navy) !important;
+  color: #ffffff !important;
+  font-family: "Open Sans", sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.user-submit-btn:hover {
+  background: var(--navy-hover) !important;
+  border-color: var(--navy-hover) !important;
+}
+
+.user-submit-btn:active {
+  background: var(--navy-dark) !important;
+  border-color: var(--navy-dark) !important;
+}
+
+.user-submit-btn:disabled {
+  background: #7f91a5 !important;
+  border-color: #7f91a5 !important;
+  color: #ffffff !important;
+  opacity: 0.7;
+  cursor: not-allowed;
+}
