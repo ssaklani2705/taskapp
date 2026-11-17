@@ -199,7 +199,7 @@
           <table class="table access-table mb-0">
             <thead>
               <tr>
-                <th>Sr. No.</th>
+                <th class="serial-column">#</th>
 
                 <th *ngFor="let col of columns; let i = index" [class.sticky-2]="i === 0" [class.sortable-column]="col.sortable" (click)="col.sortable && sortData(col.key)">
                   <div class="column-header">

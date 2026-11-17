@@ -227,11 +227,11 @@ mat-divider,
 .designation-table tbody tr:hover td { background: var(--table-hover); }
 
 /* Column widths */
-.designation-table th:nth-child(1), .designation-table td:nth-child(1) { width: 2%; }
-.designation-table th:nth-child(2), .designation-table td:nth-child(2) { width: 30%; }
+.designation-table th:nth-child(1), .designation-table td:nth-child(1) { width: 3%; }
+.designation-table th:nth-child(2), .designation-table td:nth-child(2) { width: 25%; }
 .designation-table th:nth-child(3), .designation-table td:nth-child(3) { width: 5%; }
 .designation-table th:nth-child(4), .designation-table td:nth-child(4) { width: 5%; }
-.designation-table th:nth-child(5), .designation-table td:nth-child(5) { width: 5%; }
+.designation-table th:nth-child(5), .designation-table td:nth-child(5) { width: 8%; }
 
 .designation-table th.sortable {
   cursor: pointer;
@@ -389,7 +389,7 @@ mat-divider,
   .pagination::-webkit-scrollbar { display: none; }
   .pagination button { flex: 0 0 auto; min-width: 34px; height: 32px; padding: 0 7px; font-size: 12px; }
 
-  .designation-table { min-width: 700px; }
+  .designation-table { min-width: 1800px !important; }
   .designation-table thead th { padding: 7px 8px; font-size: 12px; white-space: normal; }
   .designation-table tbody td { padding: 7px 8px; font-size: 12px; }
     .designation-table th:nth-child(5),
@@ -428,7 +428,7 @@ mat-divider,
   .record-summary { font-size: 12px; }
   .pagination button { min-width: 31px; height: 30px; padding: 0 6px; font-size: 11px; }
   .designation-table { min-width: 680px; }
-  .designation-table thead th { padding: 6px 7px; font-size: 11px; width: 50px;}
+  .designation-table thead th { padding: 6px 7px; font-size: 11px;}
   .designation-table tbody td { padding: 6px 7px; font-size: 11px; }
   .status-badge { min-width: 62px; height: 27px; padding: 2px 7px; font-size: 10px; }
   .action-button { width: 31px; height: 31px; margin: 0; }

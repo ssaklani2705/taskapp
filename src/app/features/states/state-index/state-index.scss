@@ -223,7 +223,7 @@ mat-divider,
 .designation-table tbody tr:hover td { background: var(--table-hover); }
 
 /* Column widths */
-.designation-table th:nth-child(1), .designation-table td:nth-child(1) { width: 2%; }
+.designation-table th:nth-child(1), .designation-table td:nth-child(1) { width: 4%; }
 .designation-table th:nth-child(2), .designation-table td:nth-child(2) { width: 10%; }
 .designation-table th:nth-child(3), .designation-table td:nth-child(3) { width: 35%; }
 .designation-table th:nth-child(4), .designation-table td:nth-child(4) { width: 10%; }
@@ -337,6 +337,7 @@ mat-divider,
 }
 
 @media (max-width: 768px) {
+  .designation-table{width: 1200px;}
   .page-container { padding: 12px; }
   .page-header { min-height: auto; padding: 15px; }
   .page-title { font-size: 22px; }

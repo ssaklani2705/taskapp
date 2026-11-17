@@ -607,7 +607,7 @@ mat-divider {
 
   th:nth-child(2),
   td:nth-child(2) {
-    width: 45%;
+    width: 85%;
   }
 
   th:nth-child(3),
@@ -772,7 +772,7 @@ mat-divider {
   }
 
   .access-table {
-    min-width: 600px;
+    min-width: 400px !important;
 
     thead th,
     tbody td {

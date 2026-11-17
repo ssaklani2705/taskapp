@@ -236,6 +236,7 @@ table thead tr th {
 
 table tbody td {
   padding: 8px 4px;
+  font-size: 13px !important;
 }
 
 // For Entire project Sorting
@@ -1315,7 +1316,11 @@ option {
   }
 }
 
-.btn:focus-visible{
-  background: #2563eb;
+.btn:focus-visible, .btn:active:focus-visible, .btn-export-excel:active{
+  background: #2563eb !important;
     color: #fff;
+}
+
+.serial-column{
+  text-align: left !important;
 }
