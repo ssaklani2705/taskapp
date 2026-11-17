@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Inject, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { Component, EventEmitter, HostListener, inject, Inject, OnInit, Output, PLATFORM_ID } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LoginService } from '../../service/login.service';
@@ -9,6 +9,7 @@ import { NgForm, ReactiveFormsModule } from '@angular/forms';
 import { AbstractControl, FormBuilder, FormGroup, Validators, ValidationErrors } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { CryptoService } from '../../service/CryptoService';
+import { TabSyncService } from '../../service/tab-sync.service';
 
 @Component({
   selector: 'app-header',
@@ -47,6 +48,7 @@ export class Header implements OnInit {
   @Output()
   menuToggle = new EventEmitter<void>();
 
+private readonly tabSync = inject(TabSyncService);
   // username: string = '';
   // showProfileMenu: boolean = false;
 
@@ -115,37 +117,54 @@ export class Header implements OnInit {
   }
 
   onLogout(): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
+  if (!isPlatformBrowser(this.platformId)) return;
 
-    const loginType = sessionStorage.getItem('loginType') || 'other';
+  const redirectUrl = sessionStorage.getItem('loginType') === 'manager' ? '/manager-login' : '/login';
 
-    const redirectUrl = loginType === 'manager' ? '/manager-login' : '/login';
+  const finish = () => {
+    this.loginService.clearSession();
+    this.tabSync.announceLogout();          // logs out the other tabs too
+    this.router.navigate([redirectUrl]);
+  };
 
-    const logoutRequest = this.loginService.logout();
+  const logoutRequest = this.loginService.logout();
+  if (!logoutRequest) { finish(); return; }
 
-    if (!logoutRequest) {
-      this.loginService.clearSession();
+  logoutRequest.subscribe({ next: finish, error: finish });
+}
 
-      this.router.navigate([redirectUrl]);
+  // onLogout(): void {
+  //   if (!isPlatformBrowser(this.platformId)) {
+  //     return;
+  //   }
 
-      return;
-    }
+  //   const loginType = sessionStorage.getItem('loginType') || 'other';
 
-    logoutRequest.subscribe({
-      next: () => {
-        this.loginService.clearSession();
+  //   const redirectUrl = loginType === 'manager' ? '/manager-login' : '/login';
 
-        this.router.navigate([redirectUrl]);
-      },
-      error: () => {
-        this.loginService.clearSession();
+  //   const logoutRequest = this.loginService.logout();
 
-        this.router.navigate([redirectUrl]);
-      },
-    });
-  }
+  //   if (!logoutRequest) {
+  //     this.loginService.clearSession();
+
+  //     this.router.navigate([redirectUrl]);
+
+  //     return;
+  //   }
+
+  //   logoutRequest.subscribe({
+  //     next: () => {
+  //       this.loginService.clearSession();
+
+  //       this.router.navigate([redirectUrl]);
+  //     },
+  //     error: () => {
+  //       this.loginService.clearSession();
+
+  //       this.router.navigate([redirectUrl]);
+  //     },
+  //   });
+  // }
 
   // onProfileClick(): void {
   //   this.closeProfileMenu();

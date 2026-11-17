@@ -10,6 +10,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../../core/services/auth';
 import { LoginService } from '../../../service/login.service';
+import { TabSyncService } from '../../../service/tab-sync.service';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +24,7 @@ export class Login {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly tabSync = inject(TabSyncService);
   loading = false;
   errorMessage = '';
   hidePassword = true;
@@ -119,6 +121,7 @@ loadCaptcha() {
             'categoryIds',
             JSON.stringify(res.data.categoryIds || [])
           );
+          this.tabSync.announceLogin(res.data.userId);
 
           sessionStorage.removeItem('selectedModuleDetail');
           // Generate new CAPTCHA
