@@ -207,7 +207,7 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary modal-btn"
                   [disabled]="isSavingShift" (click)="closeShiftModal()">Cancel</button>
-          <button type="button" class="btn btn-navy modal-btn d-inline-flex align-items-center gap-1"
+          <button type="button" class="btn btn-navy modal-btn d-inline-flex align-items-center gap-1 modal-btn"
                   [disabled]="isSavingShift" (click)="saveShift()">
             <mat-icon>save</mat-icon>
             <span>{{ isSavingShift ? 'Saving...' : isEditShift ? 'Update Shift' : 'Save Shift' }}</span>

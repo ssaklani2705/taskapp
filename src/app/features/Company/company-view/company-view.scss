@@ -545,3 +545,38 @@
   background: var(--white);
 }
 
+@media (max-width: 600px) {
+  .section-header {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  /* title: icon always full size, text may wrap on two lines */
+  .section-title {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .section-title mat-icon {
+    flex: 0 0 24px;
+    width: 24px;
+    height: 24px;
+    font-size: 24px;
+  }
+
+  /* smaller button that never stretches */
+  .addbtn {
+    flex: 0 0 auto;
+    width: auto !important;
+    padding: 5px 10px;
+    font-size: 11px !important;
+    white-space: nowrap;
+  }
+
+  .addbtn mat-icon {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    line-height: 16px;
+  }
+}
