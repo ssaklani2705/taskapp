@@ -389,7 +389,7 @@ mat-divider,
   .pagination::-webkit-scrollbar { display: none; }
   .pagination button { flex: 0 0 auto; min-width: 34px; height: 32px; padding: 0 7px; font-size: 12px; }
 
-  .designation-table { min-width: 1800px !important; }
+  .designation-table { min-width: 1800px }
   .designation-table thead th { padding: 7px 8px; font-size: 12px; white-space: normal; }
   .designation-table tbody td { padding: 7px 8px; font-size: 12px; }
     .designation-table th:nth-child(5),
@@ -427,7 +427,7 @@ mat-divider,
   .table-section { padding: 0 11px 11px; }
   .record-summary { font-size: 12px; }
   .pagination button { min-width: 31px; height: 30px; padding: 0 6px; font-size: 11px; }
-  .designation-table { min-width: 680px; }
+  .designation-table { min-width: 680px !important; }
   .designation-table thead th { padding: 6px 7px; font-size: 11px;}
   .designation-table tbody td { padding: 6px 7px; font-size: 11px; }
   .status-badge { min-width: 62px; height: 27px; padding: 2px 7px; font-size: 10px; }

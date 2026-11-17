@@ -845,6 +845,32 @@ table tbody td {
 }
 
 @media (max-width: 768px) {
+.des-col-table thead tr th:nth-child(1){width: 2% !important;}
+.des-col-table thead tr th:nth-child(2){width: 11% !important;}
+.des-col-table thead tr th:nth-child(3){width: 6% !important;}
+.des-col-table thead tr th:nth-child(4){width: 4% !important;}
+.des-col-table thead tr th:nth-child(5){width: 6% !important;}
+
+.state-col-table{
+  width: 680px !important;
+}
+.ser-col-table{
+  // width: 680px !important;
+}
+.state-col-table thead tr th:nth-child(1){width: 1% !important;}
+.state-col-table thead tr th:nth-child(2){width: 2% !important;}
+.state-col-table thead tr th:nth-child(3){width: 5% !important;}
+.state-col-table thead tr th:nth-child(4){width: 3% !important;}
+.state-col-table thead tr th:nth-child(5){width: 3% !important;}
+
+.ser-col-table thead tr th:nth-child(1){width: 1% !important;}
+.ser-col-table thead tr th:nth-child(2){width: 40% !important;}
+.ser-col-table thead tr th:nth-child(3){width: 1% !important;}
+.ser-col-table thead tr th:nth-child(4){width: 3% !important;}
+
+
+
+
   .filter-action {
     display: flex !important;
     flex-wrap: wrap;
@@ -1324,3 +1350,4 @@ option {
 .serial-column{
   text-align: left !important;
 }
+
