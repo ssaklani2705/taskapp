@@ -83,6 +83,7 @@ export class ViewTaskCategoryComponent implements OnInit {
           regdate: data.regdate,
           moddate: data.moddate,
           dueDateTime: data.dueDateTime,
+          categoryType: data.categoryType
         };
 
         this.transactionHistory = data.transactionHistory || [];
@@ -121,4 +122,12 @@ export class ViewTaskCategoryComponent implements OnInit {
   backToIndexPage(): void {
     this.router.navigate(['/task-category-index']);
   }
+
+  getTypeLabel(type: number | null | undefined): string {
+  switch (Number(type)) {
+    case 1: return 'Internal';
+    case 2: return 'External';
+    default: return '-';
+  }
+}
 }

@@ -33,6 +33,13 @@
           <div class="info-value text-break">{{ taskCategory.departmentName || 'NA' }}</div>
         </div>
 
+        <!-- Type -->
+        <div class="col-12 col-sm-6 col-xl-3">
+          <div class="info-label">Type:</div>
+          <div class="info-value">{{ getTypeLabel(taskCategory.categoryType) }}</div>
+        </div>
+
+
         <!-- Max Hours -->
         <div class="col-12 col-sm-6 col-xl-3">
           <div class="info-label">Max Hours:</div>

@@ -55,6 +55,7 @@ export class AddTaskCategoryComponent implements OnInit {
     taskcategoryId: null,
     departmentId: null,
     serviceId: null,
+    categoryType: null,      // new
     name: '',
     status: null,
     dueDateTime: null,
@@ -80,6 +81,11 @@ export class AddTaskCategoryComponent implements OnInit {
   page = 0;
   size = 5;
   services: any[] = [];
+
+  readonly TYPE_INTERNAL = 1;
+readonly TYPE_EXTERNAL = 2;
+submitted = false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -122,6 +128,7 @@ export class AddTaskCategoryComponent implements OnInit {
               status: res.data.status,
               userId: res.data.userId,
               dueDateTime: res.data.dueDateTime,
+              categoryType: res.data.categoryType ?? null,
             };
 
             this.originalTaskCategory = {
@@ -140,6 +147,17 @@ export class AddTaskCategoryComponent implements OnInit {
       });
     }
   }
+
+  get isServiceRequired(): boolean {
+  return Number(this.taskCategory.categoryType) === this.TYPE_EXTERNAL;
+}
+
+onTypeChange(): void {
+  // Internal: Service is optional, so clear the validation message
+  if (!this.isServiceRequired) {
+    this.nameError = this.nameError; // no-op, keeps existing errors untouched
+  }
+}
 
   getDepartments(): void {
     this.dataprovider.getActiveDepartments().subscribe({
@@ -277,7 +295,11 @@ export class AddTaskCategoryComponent implements OnInit {
 
       userId: this.userId ? Number(this.userId) : null,
       departmentId: Number(this.taskCategory.departmentId),
-      serviceId: Number(this.taskCategory.serviceId),
+          categoryType: Number(this.taskCategory.categoryType),
+    // Internal may have no service; Number(null) would send 0
+    serviceId: this.taskCategory.serviceId ? Number(this.taskCategory.serviceId) : null,
+
+      // serviceId: Number(this.taskCategory.serviceId),
       dueDateTime: this.taskCategory.dueDateTime,
     };
 

@@ -60,8 +60,55 @@
               </div>
             </div>
 
+            <!-- Type -->
+<div class="col-12 col-md-6 col-xl-4">
+  <div class="user-form-group">
+    <label class="user-label">Type <span class="required">*</span></label>
+
+    <div class="user-radio-group">
+      <label class="user-radio">
+        <input type="radio" name="categoryType" [value]="TYPE_INTERNAL"
+               [(ngModel)]="taskCategory.categoryType" (ngModelChange)="onTypeChange()" required
+               #typeCtrl="ngModel" />
+        <span>Internal</span>
+      </label>
+
+      <label class="user-radio">
+        <input type="radio" name="categoryType" [value]="TYPE_EXTERNAL"
+               [(ngModel)]="taskCategory.categoryType" (ngModelChange)="onTypeChange()" required />
+        <span>External</span>
+      </label>
+    </div>
+
+    <div class="user-error" *ngIf="typeCtrl.invalid && (typeCtrl.touched || submitted)">
+      Type is required
+    </div>
+  </div>
+</div>
+
+<!-- Service (mandatory only for External) -->
+<div class="col-12 col-md-6 col-xl-4">
+  <div class="user-form-group">
+    <label class="user-label">
+      Service <span class="required" *ngIf="isServiceRequired">*</span>
+    </label>
+    <select class="user-input user-select" [(ngModel)]="taskCategory.serviceId"
+            name="serviceId" [required]="isServiceRequired" #serviceCtrl="ngModel">
+      <option [ngValue]="null">{{ isServiceRequired ? 'Select Service' : 'Select Service (optional)' }}</option>
+      <option *ngFor="let service of services" [ngValue]="service.serviceId">
+        {{ service.name }}
+      </option>
+    </select>
+    <div class="user-error" *ngIf="serviceCtrl.invalid && serviceCtrl.touched">
+      Service is required for External task categories
+    </div>
+  </div>
+</div>
+
+
+
             <!-- Service -->
-            <div class="col-12 col-md-6 col-xl-4">
+            <!-- <div class="col-12 col-md-6 col-xl-4">
               <div class="user-form-group">
                 <label class="user-label">Service <span class="required">*</span></label>
                 <select class="user-input user-select" [(ngModel)]="taskCategory.serviceId"
@@ -75,7 +122,7 @@
                   Service is required
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <!-- Max Hours -->
             <div class="col-12 col-md-6 col-xl-4">
