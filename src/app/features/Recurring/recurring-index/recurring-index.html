@@ -260,10 +260,12 @@
               </tr>
 
               <tr *ngIf="!recurring || recurring.length === 0">
-                <td colspan="8" class="no-records">
-                  <mat-icon> info_outline </mat-icon>
-
-                  <span> No records found </span>
+                <td colspan="8" class="no-records no-record-center">
+                   <div class="no-record-content">
+                    
+                    <mat-icon class="align-middle me-1">info_outline</mat-icon>
+                    <span class="align-middle">No records found</span>
+                  </div>
                 </td>
               </tr>
             </tbody>

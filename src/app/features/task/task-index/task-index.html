@@ -374,9 +374,12 @@
               </tr>
 
               <tr *ngIf="!paginatedTasks || paginatedTasks.length === 0">
-                <td colspan="13" class="text-center text-muted py-4">
-                  <mat-icon class="align-middle me-1">info_outline</mat-icon>
-                  <span class="align-middle">No records found</span>
+                <td colspan="13" class="text-center text-muted py-4  no-record-center">
+                  <div class="no-record-content">
+                    
+                    <mat-icon class="align-middle me-1">info_outline</mat-icon>
+                    <span class="align-middle">No records found</span>
+                  </div>
                 </td>
               </tr>
             </tbody>

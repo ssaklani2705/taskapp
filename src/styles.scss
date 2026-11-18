@@ -1420,3 +1420,31 @@ option {
   justify-content: center;
   gap: 4px;
 }
+
+
+.no-record-center {
+  text-align: center !important;
+  vertical-align: middle !important;
+  padding: 20px !important;
+}
+
+.no-record-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  color: #6d8299;
+  font-size: 14px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.no-record-content mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 20px;
+  color: #2f6fa3;
+  flex-shrink: 0;
+}
