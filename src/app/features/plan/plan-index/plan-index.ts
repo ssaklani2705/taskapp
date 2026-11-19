@@ -453,7 +453,7 @@ loadActiveServices(): void {
     },
     {
       key: 'rate',
-      label: 'Rate',
+      label: 'Rate (Yearly)',
       sortable: true,
     },
     {

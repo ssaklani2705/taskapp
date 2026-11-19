@@ -704,18 +704,18 @@ if (this.loginType !== 'manager' && !(this.clientSearchText || '').trim()) {
           return; // user already switched type; ignore this stale response
         }
         const data = res?.data || res;
-        this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
-          const aName = String(a.name || a.categoryName || a).trim();
-          const bName = String(b.name || b.categoryName || b).trim();
+        // this.taskCategories = (data?.taskCategories || []).sort((a: any, b: any) => {
+        //   const aName = String(a.name || a.categoryName || a).trim();
+        //   const bName = String(b.name || b.categoryName || b).trim();
 
-          if (aName.toLowerCase() === 'admin task') return -1;
-          if (bName.toLowerCase() === 'admin task') return 1;
-          if (aName.toLowerCase() === 'general task') return 1;
-          if (bName.toLowerCase() === 'general task') return -1;
+        //   if (aName.toLowerCase() === 'admin task') return -1;
+        //   if (bName.toLowerCase() === 'admin task') return 1;
+        //   if (aName.toLowerCase() === 'general task') return 1;
+        //   if (bName.toLowerCase() === 'general task') return -1;
 
-          return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' });
-        });
-
+        //   return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' });
+        // });
+this.taskCategories = (data?.taskCategories || [])
         this.buildGroupedCategories();
 
         // Show the already-selected category name, or clear it if it is
@@ -1416,10 +1416,17 @@ onTaskCategoryChange(): void {
 
     const asc = (x: string, y: string) => x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' });
 
-    this.groupedCategories = Array.from(map, ([department, items]) => ({
+    // this.groupedCategories = Array.from(map, ([department, items]) => ({
+    //   department,
+    //   items: [...items].sort((a, b) => asc(String(a.name || ''), String(b.name || ''))), // category A-Z
+    // })).sort((a, b) => asc(a.department, b.department)); // department A-Z
+
+     this.groupedCategories = Array.from(map, ([department, items]) => ({
       department,
-      items: [...items].sort((a, b) => asc(String(a.name || ''), String(b.name || ''))), // category A-Z
-    })).sort((a, b) => asc(a.department, b.department)); // department A-Z
+      items: [...items], // category A-Z
+    })); // department A-Z
+
+    
   }
 
   onUserTypeChange(type: number): void {

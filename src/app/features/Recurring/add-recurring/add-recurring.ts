@@ -205,34 +205,7 @@ export class AddRecurring implements OnInit {
   });
 }
 
-//   private loadTaskCategories(): void {
-//   this.dataprovider.getActiveTaskCategoriesForRecurring(this.userId, this.isAdmin, this.loginType, this.isHod).subscribe({
-//     next: (response: any) => {
-//       this.taskCategories = response || [];
-//       this.buildGroupedCategories();
-//       this.autoSelectSingleCategory();
-//     },
-//     error: (error) => {
-//       console.error('Error fetching task categories:', error);
-//       this.taskCategories = [];
-//       this.groupedCategories = [];
-//     },
-//   });
-// }
 
-// private buildGroupedCategories(): void {
-//   const map = new Map<string, TaskCategory[]>();
-
-//   for (const c of this.taskCategories) {
-//     const key = c.departmentName || 'Other';
-//     if (!map.has(key)) {
-//       map.set(key, []);
-//     }
-//     map.get(key)!.push(c);
-//   }
-
-//   this.groupedCategories = Array.from(map, ([department, items]) => ({ department, items }));
-// }
 private buildGroupedCategories(): void {
   const map = new Map<string, TaskCategory[]>();
 
@@ -248,8 +221,8 @@ private buildGroupedCategories(): void {
 
   this.groupedCategories = Array.from(map, ([department, items]) => ({
     department,
-    items: [...items].sort((a, b) => asc(a.name || '', b.name || '')),   // category A-Z
-  })).sort((a, b) => asc(a.department, b.department));                  // department A-Z
+    items: [...items],   // category A-Z
+  }));                  // department A-Z
 }
 
 // Auto-select when exactly one category matches the login's categoryIds

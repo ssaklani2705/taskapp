@@ -145,10 +145,16 @@ export class AddGenericRecurring implements OnInit {
 
     const asc = (x: string, y: string) => x.localeCompare(y, undefined, { numeric: true, sensitivity: 'base' });
 
+    // this.groupedCategories = Array.from(map, ([department, items]) => ({
+    //   department,
+    //   items: [...items].sort((a, b) => asc(a.name || '', b.name || '')),
+    // })).sort((a, b) => asc(a.department, b.department));
+
+    
     this.groupedCategories = Array.from(map, ([department, items]) => ({
       department,
-      items: [...items].sort((a, b) => asc(a.name || '', b.name || '')),
-    })).sort((a, b) => asc(a.department, b.department));
+      items: [...items],
+    }));
   }
 
   private autoSelectSingleCategory(): void {
