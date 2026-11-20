@@ -1,4 +1,3 @@
-
 :host {
   display: block;
   width: 100%;
@@ -61,7 +60,7 @@
   color: var(--navy);
   font-size: 22px;
   font-weight: 700;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
 
   mat-icon {
     width: 28px;
@@ -111,7 +110,7 @@ mat-divider {
   margin-left: 0;
 }
 
-.search-panel .row > [class*="col-"] {
+.search-panel .row > [class*='col-'] {
   min-width: 0;
 }
 
@@ -119,7 +118,7 @@ mat-divider {
   display: block;
   margin-bottom: 7px;
   color: var(--navy);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
 }
@@ -140,7 +139,7 @@ mat-divider {
   border-radius: 4px;
   background: var(--white);
   color: var(--text);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   box-sizing: border-box;
 
@@ -209,7 +208,7 @@ mat-divider {
   padding: 10px 13px;
   color: var(--text);
   font-size: 13px;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   cursor: pointer;
 
   &:hover {
@@ -247,7 +246,7 @@ mat-divider {
   border-radius: 4px;
   background: var(--white);
   color: var(--text);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   text-align: left;
   cursor: pointer;
@@ -306,7 +305,7 @@ mat-divider {
     background: var(--primary-blue-light);
   }
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     width: 16px;
     height: 16px;
     margin: 0;
@@ -368,7 +367,7 @@ mat-divider {
   outline: none;
   background: transparent !important;
   color: var(--text);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   box-shadow: none !important;
   cursor: pointer;
@@ -405,7 +404,6 @@ mat-divider {
   }
 }
 
-
 .table-section {
   width: 100%;
   padding: 0 20px 20px;
@@ -423,7 +421,7 @@ mat-divider {
 
 .record-summary {
   color: var(--text-muted);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 13px;
 }
 
@@ -450,7 +448,7 @@ mat-divider {
   border-radius: 3px;
   background: var(--white);
   color: var(--text);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 13px;
   cursor: pointer;
   transition: 0.15s ease;
@@ -505,7 +503,7 @@ mat-divider {
   border-collapse: collapse;
   background: var(--white);
   color: var(--text);
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 14px;
 
   thead th {
@@ -541,7 +539,7 @@ mat-divider {
 
   th:nth-child(2),
   td:nth-child(2) {
-    width: 85%;
+    width: 60%;
   }
 
   th:nth-child(3),
@@ -630,7 +628,7 @@ mat-divider {
 }
 
 @media (max-width: 767.98px) {
-   .filter-action .go-button,
+  .filter-action .go-button,
   .filter-action .btn-clear {
     width: 76px !important;
     min-width: 76px !important;
@@ -638,7 +636,7 @@ mat-divider {
     flex-basis: 76px !important;
   }
 
-    .filter-action {
+  .filter-action {
     display: flex !important;
     flex-wrap: wrap;
     gap: 10px;
@@ -647,7 +645,7 @@ mat-divider {
 
   .filter-action .go-button,
   .filter-action .btn-clear {
-    flex: 1 1 calc(50% - 5px) !important;   /* two equal halves */
+    flex: 1 1 calc(50% - 5px) !important; /* two equal halves */
     width: auto !important;
     min-width: 0 !important;
     max-width: none !important;
@@ -660,7 +658,7 @@ mat-divider {
   }
 
   .filter-action .btn-export-excel {
-    flex: 1 1 100% !important;   /* Export on its own row below */
+    flex: 1 1 100% !important; /* Export on its own row below */
     width: 100% !important;
     height: 44px;
   }
@@ -786,14 +784,13 @@ mat-divider {
   }
 }
 
-
 /* =========================================================
    FINAL OVERRIDE: Go / Clear equal width on mobile
    Keep this as the LAST block in styles.scss
    ========================================================= */
 @media (max-width: 768px) {
   .filter-action {
-    display: flex !important;      /* beats the earlier grid rule */
+    display: flex !important; /* beats the earlier grid rule */
     flex-wrap: wrap;
     gap: 10px;
     width: 100%;
@@ -801,7 +798,7 @@ mat-divider {
 
   .filter-action .btn.go-button,
   .filter-action .btn.btn-clear {
-    flex: 1 1 calc(50% - 5px) !important;   /* two equal halves */
+    flex: 1 1 calc(50% - 5px) !important; /* two equal halves */
     width: auto !important;
     min-width: 0 !important;
     max-width: none !important;
@@ -815,7 +812,7 @@ mat-divider {
   }
 
   .filter-action .btn.btn-export-excel {
-    flex: 1 1 100% !important;     /* Export on its own full-width row */
+    flex: 1 1 100% !important; /* Export on its own full-width row */
     width: 100% !important;
     height: 44px !important;
   }

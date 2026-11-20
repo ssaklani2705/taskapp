@@ -12,3 +12,5 @@ export const environment = {
   algorithm: 'DES',
   secretKey: 'PP@S@800',
 };
+
+// npx ng build --configuration production --base-href /taskapp/ --deploy-url /taskapp/

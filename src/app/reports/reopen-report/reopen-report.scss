@@ -622,10 +622,6 @@ mat-divider {
   text-align: center;
 }
 
-
-
-
-
 .table-section {
   width: 100%;
   padding: 0 20px 20px;
@@ -762,8 +758,6 @@ mat-divider {
     background: var(--table-hover);
   }
 
-  
-
   th:nth-child(1),
   td:nth-child(1) {
     width: 65px;
@@ -773,7 +767,7 @@ mat-divider {
 
   th:nth-child(2),
   td:nth-child(2) {
-    width: 90px;
+    width: 60px;
     white-space: nowrap;
   }
 
@@ -884,8 +878,7 @@ mat-divider {
 }
 
 @media (max-width: 767.98px) {
-
-   .filter-action .go-button,
+  .filter-action .go-button,
   .filter-action .btn-clear {
     width: 76px !important;
     min-width: 76px !important;
@@ -893,7 +886,7 @@ mat-divider {
     flex-basis: 76px !important;
   }
 
-    .filter-action {
+  .filter-action {
     display: flex !important;
     flex-wrap: wrap;
     gap: 10px;
@@ -902,7 +895,7 @@ mat-divider {
 
   .filter-action .go-button,
   .filter-action .btn-clear {
-    flex: 1 1 calc(50% - 5px) !important;   /* two equal halves */
+    flex: 1 1 calc(50% - 5px) !important; /* two equal halves */
     width: auto !important;
     min-width: 0 !important;
     max-width: none !important;
@@ -915,7 +908,7 @@ mat-divider {
   }
 
   .filter-action .btn-export-excel {
-    flex: 1 1 100% !important;   /* Export on its own row below */
+    flex: 1 1 100% !important; /* Export on its own row below */
     width: 100% !important;
     height: 44px;
   }
@@ -1087,14 +1080,13 @@ mat-divider {
   }
 }
 
-
 /* =========================================================
    FINAL OVERRIDE: Go / Clear equal width on mobile
    Keep this as the LAST block in styles.scss
    ========================================================= */
 @media (max-width: 768px) {
   .filter-action {
-    display: flex !important;      /* beats the earlier grid rule */
+    display: flex !important; /* beats the earlier grid rule */
     flex-wrap: wrap;
     gap: 10px;
     width: 100%;
@@ -1102,7 +1094,7 @@ mat-divider {
 
   .filter-action .btn.go-button,
   .filter-action .btn.btn-clear {
-    flex: 1 1 calc(50% - 5px) !important;   /* two equal halves */
+    flex: 1 1 calc(50% - 5px) !important; /* two equal halves */
     width: auto !important;
     min-width: 0 !important;
     max-width: none !important;
@@ -1116,7 +1108,7 @@ mat-divider {
   }
 
   .filter-action .btn.btn-export-excel {
-    flex: 1 1 100% !important;     /* Export on its own full-width row */
+    flex: 1 1 100% !important; /* Export on its own full-width row */
     width: 100% !important;
     height: 44px !important;
   }

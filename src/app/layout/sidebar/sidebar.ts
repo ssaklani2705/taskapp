@@ -152,16 +152,16 @@ export class Sidebar implements OnInit, OnDestroy {
           route: '/dashboard',
         },
         {
-          moduleId: 11,
-          label: 'Recurring Master',
-          icon: 'bar_chart',
-          route: '/recurring-index',
-        },
-        {
           moduleId: 10,
           label: 'Tasks',
           icon: 'task_alt',
           route: '/task-index',
+        },
+        {
+          moduleId: 11,
+          label: 'Recurring Master',
+          icon: 'bar_chart',
+          route: '/recurring-index',
         },
         { moduleId: 15, label: 'Generic Recurring', icon: 'autorenew', route: '/generic-recurring-index' },
       ];
@@ -227,7 +227,7 @@ export class Sidebar implements OnInit, OnDestroy {
           { moduleId: 18, label: 'Reassign Report', icon: 'sync_alt', route: '/reassign-report-index' },
           { moduleId: 19, label: 'Reassign Summary Report', icon: 'manage_accounts', route: '/reassign-summary-report' },
           { moduleId: 21, label: 'Reopen Report', icon: 'refresh', route: '/reopen-report' },
-              { moduleId: 22, label: 'Reopen Summary Report', icon: 'history', route: '/reopen-summary-report' },
+          { moduleId: 22, label: 'Reopen Summary Report', icon: 'history', route: '/reopen-summary-report' },
         ],
       },
 
@@ -239,7 +239,7 @@ export class Sidebar implements OnInit, OnDestroy {
         children: [
           { moduleId: 7, label: 'Mail Log Report', icon: 'mail_outline', route: '/mail-log-report' },
           { moduleId: 6, label: 'Access Report', icon: 'security', route: '/access-report' },
-           { moduleId: 20, label: 'Transaction Report', icon: 'fact_check', route: '/transaction-report' },
+          { moduleId: 20, label: 'Transaction Report', icon: 'fact_check', route: '/transaction-report' },
         ],
       },
     ];
